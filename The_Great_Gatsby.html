@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Great Gatsby Analysis</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cream: '#F7F5F2',
+                            dark: '#333333',
+                            pastelBlue: '#B0C4DE',
+                            pastelHover: '#E0EBF5',
+                            tooltipBg: '#D9EDF7',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'Noto Sans KR', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F7F5F2;
+            color: #333;
+            line-height: 1.8;
+            word-spacing: 0.15em;
+            -webkit-text-size-adjust: 100%;
+            overflow-x: hidden;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Span styling as requested */
+        span[data-definition] {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            padding: 0 1px;
+            border-bottom: 1px dashed #B0C4DE;
+            transition: all 0.2s ease;
+        }
+
+        span[data-definition]:hover {
+            background-color: #E0EBF5;
+            border-radius: 3px;
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: absolute;
+            background-color: #D9EDF7;
+            color: #222;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-out;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transform: translateY(5px);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+        /* Custom scrollbar for a premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F5F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B0C4DE;
+        }
+
+        @media (max-width: 600px) {
+            .content-container {
+                padding: 2rem 1.25rem;
+            }
+            body {
+                line-height: 1.6;
+                word-spacing: 0.1em;
+            }
+            .tooltip {
+                font-size: 0.85em;
+                padding: 6px 10px;
+            }
+            h1 {
+                font-size: 2.25rem !important;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 3rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        @media (max-width: 640px) {
+            .glass-card {
+                padding: 1.5rem;
+                background: transparent;
+                backdrop-filter: none;
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="content-container">
+        <!-- Title Section -->
+        <header class="mb-12 text-center">
+            <h1 class="font-display text-5xl font-bold tracking-tight text-gray-900 mb-4">
+                The Great Gatsby
+            </h1>
+            <div class="h-1.5 w-24 bg-brand-pastelBlue mx-auto rounded-full mb-6"></div>
+            <p class="text-gray-500 font-medium italic">Interactive Literary Analysis</p>
+        </header>
+
+        <!-- Primary Interactive Content -->
+        <div class="glass-card">
+            <div class="prose prose-lg max-w-none text-gray-800">
+                
+                <!-- Introduction Section -->
+                <p class="mb-8">
+                    <span data-definition="특정 관사">The</span> 
+                    <span data-definition="위대한">Great</span> 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="하나의">a</span> 
+                    <span data-definition="유명한">famous</span> 
+                    <span data-definition="이야기">story</span> 
+                    <span data-definition="~에 대한">about</span> 
+                    <span data-definition="닉 캐러웨이 (등장인물)">Nick</span> 
+                    <span data-definition="캐러웨이">Carraway</span>, 
+                    <span data-definition="관계대명사 (~하는 사람)">who</span> 
+                    <span data-definition="이사하다">moves</span> 
+                    <span data-definition="~로">to</span> 
+                    <span data-definition="웨스트 에그 (지명)">West</span> 
+                    <span data-definition="에그">Egg</span> 
+                    <span data-definition="~근처">near</span> 
+                    <span data-definition="뉴욕시">New</span> 
+                    <span data-definition="욕">York</span> 
+                    <span data-definition="시">City</span>. 
+                    <span data-definition="그의">His</span> 
+                    <span data-definition="이웃">neighbor</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="부유한">wealthy</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="신비로운">mysterious</span> 
+                    <span data-definition="제이 개츠비 (주인공)">Jay</span> 
+                    <span data-definition="개츠비">Gatsby</span>, 
+                    <span data-definition="관계대명사">who</span> 
+                    <span data-definition="살다">lives</span> 
+                    <span data-definition="~에">in</span> 
+                    <span data-definition="하나의">a</span> 
+                    <span data-definition="거대한">large</span>, 
+                    <span data-definition="아름다운">beautiful</span> 
+                    <span data-definition="집">house</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="주최하다">hosts</span> 
+                    <span data-definition="빈번한">frequent</span> 
+                    <span data-definition="파티">parties</span>. 
+                    <span data-definition="손님들">Guests</span> 
+                    <span data-definition="참석하다">attend</span>, 
+                    <span data-definition="그러나">but</span> 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="남아있다">remains</span> 
+                    <span data-definition="주로">largely</span> 
+                    <span data-definition="알려지지 않은">unknown</span> 
+                    <span data-definition="~에게">to</span> 
+                    <span data-definition="그들">them</span>, 
+                    <span data-definition="겉보기에">seemingly</span> 
+                    <span data-definition="기다리는">waiting</span> 
+                    <span data-definition="~을 위해">for</span> 
+                    <span data-definition="무언가">something</span>.
+                </p>
+
+                <!-- Gatsby's Secret and Love Section -->
+                <p class="mb-8">
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="~에 빠진">in</span> 
+                    <span data-definition="사랑">love</span> 
+                    <span data-definition="~와">with</span> 
+                    <span data-definition="데이지 뷰캐넌 (등장인물)">Daisy</span> 
+                    <span data-definition="뷰캐넌">Buchanan</span>, 
+                    <span data-definition="닉의">Nick's</span> 
+                    <span data-definition="사촌">cousin</span>, 
+                    <span data-definition="관계대명사">who</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="결혼한">married</span> 
+                    <span data-definition="~에게">to</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="부유한">rich</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="강한">strong</span> 
+                    <span data-definition="톰 뷰캐넌 (등장인물)">Tom</span> 
+                    <span data-definition="뷰캐넌">Buchanan</span>. 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="열망하다">desires</span> 
+                    <span data-definition="~하는 것">to</span> 
+                    <span data-definition="다시 불붙이다">rekindle</span> 
+                    <span data-definition="그들의">their</span> 
+                    <span data-definition="과거의">past</span> 
+                    <span data-definition="로맨스">romance</span>. 
+                    <span data-definition="닉">Nick</span> 
+                    <span data-definition="돕다/용이하게 하다">facilitates</span> 
+                    <span data-definition="그들의">their</span> 
+                    <span data-definition="재회">reunion</span>, 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="그들">they</span> 
+                    <span data-definition="시작하다">begin</span> 
+                    <span data-definition="보내는 것">spending</span> 
+                    <span data-definition="시간">time</span> 
+                    <span data-definition="함께">together</span>. 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="믿다">believes</span> 
+                    <span data-definition="그">he</span> 
+                    <span data-definition="~할 수 있다">can</span> 
+                    <span data-definition="얻다/이기다">win</span> 
+                    <span data-definition="데이지의">Daisy's</span> 
+                    <span data-definition="마음">heart</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="확보하다">secure</span> 
+                    <span data-definition="하나의">a</span> 
+                    <span data-definition="미래">future</span> 
+                    <span data-definition="~와">with</span> 
+                    <span data-definition="그녀">her</span>, 
+                    <span data-definition="생각하며">thinking</span> 
+                    <span data-definition="그의">his</span> 
+                    <span data-definition="부">wealth</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="열쇠">key</span>.
+                </p>
+
+                <!-- Conflict and Tragedy Section -->
+                <p class="mb-8">
+                    <span data-definition="톰">Tom</span> 
+                    <span data-definition="뷰캐넌">Buchanan</span> 
+                    <span data-definition="발견하다">discovers</span> 
+                    <span data-definition="개츠비의">Gatsby's</span> 
+                    <span data-definition="관계">relationship</span> 
+                    <span data-definition="~와">with</span> 
+                    <span data-definition="데이지">Daisy</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="~하게 되다">becomes</span> 
+                    <span data-definition="격분한">enraged</span>. 
+                    <span data-definition="그">He</span> 
+                    <span data-definition="폭로하다">reveals</span> 
+                    <span data-definition="접속사 (~라는 것)">that</span> 
+                    <span data-definition="개츠비의">Gatsby's</span> 
+                    <span data-definition="부">wealth</span> 
+                    <span data-definition="기인하다">stems</span> 
+                    <span data-definition="~로부터">from</span> 
+                    <span data-definition="불법적인">illegal</span> 
+                    <span data-definition="활동들">activities</span>. 
+                    <span data-definition="하나의">A</span> 
+                    <span data-definition="비극적인">tragic</span> 
+                    <span data-definition="차">car</span> 
+                    <span data-definition="사고">accident</span> 
+                    <span data-definition="발생하다">occurs</span> 
+                    <span data-definition="관계대명사 (~하는 곳)">where</span> 
+                    <span data-definition="톰의">Tom's</span> 
+                    <span data-definition="정부(애인)">mistress</span>, 
+                    <span data-definition="머틀 윌슨 (등장인물)">Myrtle</span> 
+                    <span data-definition="윌슨">Wilson</span>, 
+                    <span data-definition="죽다">dies</span>. 
+                    <span data-definition="머틀의">Myrtle's</span> 
+                    <span data-definition="남편">husband</span>, 
+                    <span data-definition="조지 윌슨 (등장인물)">George</span> 
+                    <span data-definition="윌슨">Wilson</span>, 
+                    <span data-definition="잘못">mistakenly</span> 
+                    <span data-definition="믿다">believes</span> 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="~였다">was</span> 
+                    <span data-definition="운전하는">driving</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="치명적인">fatal</span> 
+                    <span data-definition="차">car</span>. 
+                    <span data-definition="비록 ~일지라도">Although</span> 
+                    <span data-definition="데이지">Daisy</span> 
+                    <span data-definition="~였다">was</span> 
+                    <span data-definition="운전하는">driving</span>, 
+                    <span data-definition="개츠비">Gatsby</span> 
+                    <span data-definition="택하다">takes</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="책임/비난">blame</span> 
+                    <span data-definition="~하기 위해">to</span> 
+                    <span data-definition="보호하다">protect</span> 
+                    <span data-definition="그녀">her</span>. 
+                    <span data-definition="이끌려">Driven</span> 
+                    <span data-definition="~에 의해">by</span> 
+                    <span data-definition="슬픔">grief</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="분노">anger</span>, 
+                    <span data-definition="조지">George</span> 
+                    <span data-definition="윌슨">Wilson</span> 
+                    <span data-definition="찾다">finds</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="죽이다">kills</span> 
+                    <span data-definition="개츠비">Gatsby</span>.
+                </p>
+
+                <!-- Nick's Reflection and Themes -->
+                <p>
+                    <span data-definition="~에 따라">Following</span> 
+                    <span data-definition="개츠비의">Gatsby's</span> 
+                    <span data-definition="죽음">death</span>, 
+                    <span data-definition="닉">Nick</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="깊게">deeply</span> 
+                    <span data-definition="슬퍼하는">saddened</span>. 
+                    <span data-definition="그">He</span> 
+                    <span data-definition="관찰하다">observes</span> 
+                    <span data-definition="접속사 (~라는 것)">that</span> 
+                    <span data-definition="개츠비의">Gatsby's</span> 
+                    <span data-definition="꿈">dream</span> 
+                    <span data-definition="~의">of</span> 
+                    <span data-definition="사랑">love</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="행복">happiness</span>, 
+                    <span data-definition="지어진">built</span> 
+                    <span data-definition="~위에">upon</span> 
+                    <span data-definition="부">wealth</span>, 
+                    <span data-definition="절정에 달하다">culminates</span> 
+                    <span data-definition="~로">in</span> 
+                    <span data-definition="비극">tragedy</span>. 
+                    <span data-definition="특정 관사">The</span> 
+                    <span data-definition="이야기">story</span> 
+                    <span data-definition="설명하다">illustrates</span> 
+                    <span data-definition="특정 관사">the</span> 
+                    <span data-definition="어려움">difficulty</span> 
+                    <span data-definition="~의">of</span> 
+                    <span data-definition="성취하는 것">achieving</span> 
+                    <span data-definition="오래된">old</span> 
+                    <span data-definition="꿈들">dreams</span> 
+                    <span data-definition="그리고">and</span> 
+                    <span data-definition="강조하다">emphasizes</span> 
+                    <span data-definition="접속사 (~라는 것)">that</span> 
+                    <span data-definition="돈">money</span> 
+                    <span data-definition="~할 수 없다">cannot</span> 
+                    <span data-definition="구매하다">purchase</span> 
+                    <span data-definition="진정한">true</span> 
+                    <span data-definition="사랑">love</span>, 
+                    <span data-definition="행복">happiness</span>, 
+                    <span data-definition="또는">or</span> 
+                    <span data-definition="하나의">a</span> 
+                    <span data-definition="의미 있는">meaningful</span> 
+                    <span data-definition="과거">past</span>. 
+                    <span data-definition="개츠비의">Gatsby's</span> 
+                    <span data-definition="꿈">dream</span> 
+                    <span data-definition="~이다">is</span> 
+                    <span data-definition="궁극적으로">ultimately</span> 
+                    <span data-definition="산산조각난">shattered</span>.
+                </p>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const spans = document.querySelectorAll('span[data-definition]');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+
+            let activeSpan = null;
+            let hideTimeout = null;
+
+            const showTooltip = (span) => {
+                if (hideTimeout) clearTimeout(hideTimeout);
+                
+                if (activeSpan && activeSpan !== span) {
+                    tooltip.classList.remove('visible');
+                }
+
+                activeSpan = span;
+                tooltip.textContent = span.getAttribute('data-definition');
+                tooltip.classList.add('visible');
+                positionTooltip(span);
+            };
+
+            const hideTooltip = () => {
+                hideTimeout = setTimeout(() => {
+                    tooltip.classList.remove('visible');
+                    activeSpan = null;
+                }, 100);
+            };
+
+            const positionTooltip = (span) => {
+                tooltip.style.left = '0px';
+                tooltip.style.top = '0px';
+
+                requestAnimationFrame(() => {
+                    const rect = span.getBoundingClientRect();
+                    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+                    let top = rect.top + scrollY - tooltip.offsetHeight - 10;
+                    let left = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+
+                    // Viewport boundary check for horizontal
+                    const padding = 10;
+                    if (left < padding) left = padding;
+                    if (left + tooltip.offsetWidth > window.innerWidth - padding) {
+                        left = window.innerWidth - tooltip.offsetWidth - padding;
+                    }
+
+                    // Top check
+                    if (rect.top < tooltip.offsetHeight + 20) {
+                        top = rect.bottom + scrollY + 10;
+                    }
+
+                    tooltip.style.top = `${top}px`;
+                    tooltip.style.left = `${left}px`;
+                });
+            };
+
+            // Event Listeners
+            spans.forEach(span => {
+                // Desktop
+                span.addEventListener('mouseover', () => showTooltip(span));
+                span.addEventListener('mouseout', hideTooltip);
+
+                // Mobile
+                span.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (activeSpan === span) {
+                        hideTooltip();
+                    } else {
+                        showTooltip(span);
+                    }
+                }, { passive: false });
+            });
+
+            // Global cleanup
+            document.addEventListener('touchstart', (e) => {
+                if (activeSpan && !activeSpan.contains(e.target)) {
+                    hideTooltip();
+                }
+            }, { passive: true });
+
+            window.addEventListener('scroll', () => {
+                if (activeSpan) {
+                    if ('ontouchstart' in window) {
+                        hideTooltip();
+                    } else {
+                        positionTooltip(activeSpan);
+                    }
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (activeSpan) {
+                    positionTooltip(activeSpan);
+                } else {
+                    hideTooltip();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
