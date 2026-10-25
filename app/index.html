@@ -15,9 +15,21 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif; line-height: 1.6; }
-  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
-  header.top h1 { margin: 0; font-size: 1.05rem; cursor: pointer; }
-  header.top .who { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
+  header.top h1 { margin: 0; font-size: 1.05rem; cursor: pointer; white-space: nowrap; }
+  header.top .who { display: flex; align-items: center; gap: 6px 10px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
+  .who .whoinfo, .who .whobtn { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+  .who .nick { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+  @media (max-width: 600px) {
+    header.top { position: static; flex-direction: column; align-items: stretch; padding: 8px 12px 10px; gap: 6px; }
+    header.top h1 { font-size: 1rem; }
+    header.top .who { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .who .btn.small { padding: 3px 10px; font-size: .78rem; }
+    main { padding: 12px; }
+    .card { padding: 14px 12px; }
+    .shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .book { min-height: 180px; padding: 12px; }
+  }
   main { max-width: 860px; margin: 0 auto; padding: 16px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
   .card h2 { margin: 0 0 10px; font-size: 1.05rem; }
@@ -98,7 +110,7 @@
   <div class="who hidden" id="who"></div>
 </header>
 <main id="app"><p class="muted center">불러오는 중...</p></main>
-<script src="books.js"></script>
-<script src="app.js"></script>
+<script src="books.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

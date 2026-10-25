@@ -104,12 +104,12 @@
     var p = state.profile || {};
     var isSchool = p.role === "school";
     $who.innerHTML =
-      '<span class="badge ' + (isSchool ? "school" : "external") + '">' + (isSchool ? SCHOOL_LABEL : "외부 이용자") + "</span>" +
+      '<div class="whoinfo"><span class="badge ' + (isSchool ? "school" : "external") + '">' + (isSchool ? SCHOOL_LABEL : "외부 이용자") + "</span>" +
       (state.isAdmin ? '<span class="badge school">교사</span>' : "") +
-      "<b>" + esc(p.nickname || "") + "</b>" +
-      '<button class="btn ghost small" id="nickbtn">✏️ 닉네임 바꾸기</button>' +
-      (state.isAdmin ? '<button class="btn ghost small" id="goteacher">교사 화면</button>' : "") +
-      '<button class="btn ghost small" id="signout">로그아웃</button>';
+      '<b class="nick">' + esc(p.nickname || "") + "</b></div>" +
+      '<div class="whobtn"><button class="btn ghost small" id="nickbtn">✏️ 닉네임</button>' +
+      (state.isAdmin ? '<button class="btn ghost small" id="goteacher">👩‍🏫 교사 화면</button>' : "") +
+      '<button class="btn ghost small" id="signout">로그아웃</button></div>';
     $who.classList.remove("hidden");
     document.getElementById("nickbtn").onclick = openNickDialog;
     document.getElementById("signout").onclick = signOut;
