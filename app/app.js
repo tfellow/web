@@ -5,6 +5,8 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
+  var ASSET_V = "5"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var LEVELS = ["A1", "A2", "B1", "B2", "C1"];
   var MEDALS = {
     gold: { em: "🥇", name: "금메달" },
     silver: { em: "🥈", name: "은메달" },
@@ -14,8 +16,9 @@
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var $app = document.getElementById("app");
   var $who = document.getElementById("who");
-  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", revealed: {} };
+  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", revealed: {}, shelf: { level: "all", status: "all", q: "" } };
   var timer = null;
+  var contentLoads = {};
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -23,6 +26,23 @@
     });
   }
   function findBook(id) { return (window.BOOKS || []).filter(function (b) { return b.id === id; })[0]; }
+  function levelOf(b) { return String((b && b.cefr) || "").toUpperCase().slice(0, 2); }
+  // 책 본문은 열 때만 불러와요 (목록은 books.js, 본문은 books/<id>.js)
+  function loadContent(id) {
+    if (window.BOOK_CONTENT && window.BOOK_CONTENT[id]) return Promise.resolve(window.BOOK_CONTENT[id]);
+    if (contentLoads[id]) return contentLoads[id];
+    contentLoads[id] = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "books/" + encodeURIComponent(id) + ".js?v=" + ASSET_V;
+      s.onload = function () {
+        if (window.BOOK_CONTENT && window.BOOK_CONTENT[id]) resolve(window.BOOK_CONTENT[id]);
+        else { delete contentLoads[id]; reject(new Error("책 내용을 찾지 못했어요.")); }
+      };
+      s.onerror = function () { delete contentLoads[id]; reject(new Error("책 내용을 불러오지 못했어요. 잠시 뒤 다시 해 주세요.")); };
+      document.head.appendChild(s);
+    });
+    return contentLoads[id];
+  }
   function toast(msg) {
     var t = document.createElement("div");
     t.className = "toast"; t.textContent = msg;
@@ -169,26 +189,58 @@
   }
   async function renderHome() {
     loading();
-    var res = await Promise.all([sb.rpc("my_summary"), sb.rpc("leaderboard")]);
+    var res = await Promise.all([sb.rpc("my_summary"), sb.rpc("leaderboard"), sb.from("books").select("id,featured")]);
     if (res[0].error) throw res[0].error;
     var sum = res[0].data || { books: [], gold: 0, silver: 0, bronze: 0, stars: 0, words: 0 };
     var board = res[1].data || [];
+    var featured = {};
+    (res[2].data || []).forEach(function (r) { if (r.featured) featured[r.id] = true; });
     var byId = {};
     (sum.books || []).forEach(function (b) { byId[b.book_id] = b; });
     var books = window.BOOKS || [];
-    var done = books.filter(function (b) { return byId[b.id] && byId[b.id].medal; }).length;
+    function st(b) { var r = byId[b.id]; return !r ? "new" : (r.medal ? "done" : "trying"); }
+    var done = books.filter(function (b) { return st(b) === "done"; }).length;
     var pct = books.length ? Math.round((done / books.length) * 100) : 0;
 
-    var shelf = books.map(function (b) {
+    function card(b) {
       var r = byId[b.id];
       var medal = r && r.medal;
-      return '<div class="book ' + (medal ? "" : "todo") + '" style="background:' + b.color + '" data-id="' + esc(b.id) + '">' +
+      return '<div class="book ' + (st(b) === "new" ? "todo" : "") + '" style="background:' + esc(b.color) + '" data-id="' + esc(b.id) + '">' +
         (medal ? '<div class="stamp-corner">' + MEDALS[medal].em + "</div>" : "") +
-        '<div class="cover">' + b.emoji + "</div>" +
+        '<div class="cover">' + esc(b.emoji) + "</div>" +
         '<div><div class="t">' + esc(b.title) + '</div><div class="a">' + esc(b.titleKo) + " · " + esc(b.authorKo) + "</div></div>" +
-        '<div><span class="lv">' + esc(b.cefr) + " · " + b.words + "단어</span>" +
+        '<div><span class="lv">' + esc(levelOf(b)) + " · " + b.words + "단어" + (b.country ? " · " + esc(b.country) : "") + "</span>" +
         '<div class="a" style="margin-top:4px">' + (r ? "최고 " + r.best + "/" + r.total + " · " + r.attempts + "회 도전" + (r.star ? " ⭐" : "") : "아직 도전 전") + "</div></div></div>";
+    }
+    function section(title, list, note) {
+      if (!list.length) return "";
+      return '<div class="card"><h2>' + title + "</h2>" + (note ? '<p class="muted">' + note + "</p>" : "") +
+        '<div class="shelf">' + list.map(card).join("") + "</div></div>";
+    }
+    function bindCards(root) {
+      Array.prototype.forEach.call(root.querySelectorAll(".book"), function (el) {
+        el.onclick = function () { state.bookTab = "story"; location.hash = "#/book/" + encodeURIComponent(el.getAttribute("data-id")); };
+      });
+    }
+
+    // 수준별 진행도
+    var lvRows = LEVELS.map(function (lv) {
+      var inLv = books.filter(function (b) { return levelOf(b) === lv; });
+      if (!inLv.length) return "";
+      var d = inLv.filter(function (b) { return st(b) === "done"; }).length;
+      return '<div class="lvrow"><span class="lvname">' + lv + '</span><div class="progress sm"><div style="width:' + Math.round((d / inLv.length) * 100) + '%"></div></div><span class="lvcount">' + d + "/" + inLv.length + "</span></div>";
     }).join("");
+
+    // 추천 영역
+    var featuredList = books.filter(function (b) { return featured[b.id]; });
+    var trying = books.filter(function (b) { return st(b) === "trying"; });
+    var doneLv = books.filter(function (b) { return st(b) === "done"; }).map(function (b) { return LEVELS.indexOf(levelOf(b)); });
+    var cur = doneLv.length ? Math.max.apply(null, doneLv) : -1;
+    var rec = books.filter(function (b) { return st(b) === "new" && !featured[b.id]; }).sort(function (a, b) {
+      var ka = LEVELS.indexOf(levelOf(a)), kb = LEVELS.indexOf(levelOf(b));
+      function key(k) { return cur < 0 ? k : (k >= cur ? k - cur : cur - k + 0.5); }
+      return key(ka) - key(kb);
+    }).slice(0, 3);
 
     var boardHtml = board.length
       ? "<ol>" + board.map(function (r, i) {
@@ -199,21 +251,80 @@
 
     var show = state.profile && state.profile.show_on_board;
     var isSchool = state.profile && state.profile.role === "school";
+    var S = state.shelf;
+    function pillsHtml() {
+      var lv = [["all", "전체", books.length]].concat(LEVELS.map(function (l) {
+        return [l, l, books.filter(function (b) { return levelOf(b) === l; }).length];
+      }));
+      var stt = [["all", "전체"], ["new", "안 읽음"], ["trying", "도전 중"], ["done", "완료"]];
+      return '<div class="pills" id="lvpills">' + lv.map(function (x) {
+        return '<button class="pill ' + (S.level === x[0] ? "on" : "") + (x[2] ? "" : " empty") + '" data-lv="' + x[0] + '">' + x[1] + " <small>" + x[2] + "</small></button>";
+      }).join("") + '</div><div class="pills" id="stpills">' + stt.map(function (x) {
+        return '<button class="pill ' + (S.status === x[0] ? "on" : "") + '" data-st="' + x[0] + '">' + x[1] + "</button>";
+      }).join("") + "</div>";
+    }
+
     $app.innerHTML =
       '<div class="card"><h2>🛂 내 독서 여권</h2>' +
       "<div><b>" + done + " / " + books.length + "</b> 작품 완료 <span class=\"muted\">(60점 이상이면 완료)</span></div>" +
       '<div class="progress"><div style="width:0%" id="bar"></div></div>' +
-      '<div class="muted">읽은 단어 수: <b>' + (sum.words || 0).toLocaleString() + "</b> 단어</div><br>" +
+      '<div class="muted">읽은 단어 수: <b>' + (sum.words || 0).toLocaleString() + "</b> 단어</div>" +
+      (lvRows ? '<div class="lvbox">' + lvRows + "</div>" : "") + "<br>" +
       '<div class="medals">' + medalBox("🥇", sum.gold || 0, "금메달") + medalBox("🥈", sum.silver || 0, "은메달") + medalBox("🥉", sum.bronze || 0, "동메달") + medalBox("⭐", sum.stars || 0, "무힌트") + "</div></div>" +
-      '<div class="card"><h2>📚 책장</h2><div class="shelf">' + shelf + "</div></div>" +
+      section("🌟 선생님 추천", featuredList, "선생님이 골라 준 책이에요.") +
+      section("🔥 이어서 도전하기", trying, "아직 메달을 받지 못한 책이에요. 한 번 더 도전해 볼까요?") +
+      section("🧭 다음에 읽을 책", rec, cur < 0 ? "쉬운 책부터 시작해 보세요." : "내 수준에 맞춰 골랐어요.") +
+      '<div class="card"><h2>📚 책장</h2>' + pillsHtml() +
+      '<input id="q" class="search" type="search" placeholder="🔍 제목, 작가, 나라 검색" value="' + esc(S.q) + '"><div id="shelfres"></div></div>' +
       '<div class="card board"><h2>🏆 메달 순위 TOP 10</h2>' + boardHtml +
       '<p class="muted" style="margin-top:10px">금 → 은 → 동 → ⭐ 순으로 정렬돼요. 순위에는 닉네임이 보여요.' + (isSchool ? "" : " (외부 이용자는 순위에 나오지 않아요.)") + "</p>" +
       (isSchool ? '<label class="muted"><input type="checkbox" id="showboard" ' + (show ? "checked" : "") + "> 내 닉네임을 순위표에 보이기</label>" : "") + "</div>";
 
-    setTimeout(function () { var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%"; }, 80);
-    Array.prototype.forEach.call(document.querySelectorAll(".book"), function (el) {
-      el.onclick = function () { state.bookTab = "story"; location.hash = "#/book/" + encodeURIComponent(el.getAttribute("data-id")); };
+    function drawShelf() {
+      var q = S.q.trim().toLowerCase();
+      var list = books.filter(function (b) {
+        if (S.level !== "all" && levelOf(b) !== S.level) return false;
+        if (S.status !== "all" && st(b) !== S.status) return false;
+        if (q) {
+          var hay = [b.title, b.titleKo, b.author, b.authorKo, b.country].join(" ").toLowerCase();
+          if (hay.indexOf(q) < 0) return false;
+        }
+        return true;
+      });
+      var html;
+      if (!list.length) {
+        html = '<p class="muted">' + (S.level !== "all" && S.status === "all" && !q ? S.level + " 수준의 책은 아직 준비 중이에요." : "조건에 맞는 책이 없어요.") + "</p>";
+      } else if (S.status === "all" && !q) {
+        var open = list.filter(function (b) { return st(b) !== "done"; });
+        var dn = list.filter(function (b) { return st(b) === "done"; });
+        html = (open.length ? '<div class="shelf">' + open.map(card).join("") + "</div>" : '<p class="muted">읽을 책을 모두 완료했어요! 🎉</p>') +
+          (dn.length ? '<details class="donebox"><summary>🏅 완료한 책 ' + dn.length + '권</summary><div class="shelf" style="margin-top:10px">' + dn.map(card).join("") + "</div></details>" : "");
+      } else {
+        html = '<p class="muted">' + list.length + '권</p><div class="shelf">' + list.map(card).join("") + "</div>";
+      }
+      var box = document.getElementById("shelfres");
+      box.innerHTML = html;
+      bindCards(box);
+    }
+    drawShelf();
+    bindCards($app);
+    Array.prototype.forEach.call(document.querySelectorAll("#lvpills .pill"), function (el) {
+      el.onclick = function () {
+        S.level = el.getAttribute("data-lv");
+        Array.prototype.forEach.call(document.querySelectorAll("#lvpills .pill"), function (o) { o.classList.toggle("on", o === el); });
+        drawShelf();
+      };
     });
+    Array.prototype.forEach.call(document.querySelectorAll("#stpills .pill"), function (el) {
+      el.onclick = function () {
+        S.status = el.getAttribute("data-st");
+        Array.prototype.forEach.call(document.querySelectorAll("#stpills .pill"), function (o) { o.classList.toggle("on", o === el); });
+        drawShelf();
+      };
+    });
+    document.getElementById("q").oninput = function () { S.q = this.value; drawShelf(); };
+
+    setTimeout(function () { var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%"; }, 80);
     var cb = document.getElementById("showboard");
     if (cb) cb.onchange = async function () {
       var r = await sb.rpc("set_show_on_board", { p_show: cb.checked });
@@ -230,8 +341,10 @@
   async function renderBook(id) {
     var b = findBook(id);
     if (!b) return showError("책을 찾을 수 없어요.");
-    var hc = await sb.rpc("my_hint_count", { p_book_id: id });
-    var hintCount = hc.data || 0;
+    loading();
+    var got = await Promise.all([loadContent(id), sb.rpc("my_hint_count", { p_book_id: id })]);
+    var c = got[0];
+    var hintCount = got[1].data || 0;
     var rv = state.revealed[id] || (state.revealed[id] = {});
     var tabs = [["story", "📖 이야기"], ["analysis", "🔎 분석"], ["chars", "🎭 인물"], ["vocab", "🔤 단어장"]];
     var body = "";
@@ -239,25 +352,25 @@
       body = '<div class="hintnote">처음에는 영어만 보여요. 어려운 단락은 <b>🇰🇷 한국어 보기</b>를 눌러 힌트를 볼 수 있어요. ' +
         "이 책에서 번역을 한 번도 보지 않고 퀴즈를 통과하면 <b>⭐ 무힌트 보너스</b>를 받아요! " +
         "(지금까지 본 번역: <b>" + hintCount + "</b>개 단락)</div>" +
-        b.story.map(function (p, i) {
+        c.story.map(function (p, i) {
           var key = "p" + i;
           return '<div class="para"><div>' + esc(p.en) + "</div>" +
             (rv[key] ? '<div class="ko">' + esc(p.ko) + "</div>" : revealBtn(key, "🇰🇷 한국어 보기 (힌트)", i)) + "</div>";
         }).join("");
     } else if (state.bookTab === "analysis") {
-      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.analysis.map(function (a, i) {
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + c.analysis.map(function (a, i) {
         var key = "a" + i;
         return '<div class="kv"><b>' + esc(a.label) + "</b>" + esc(a.en) +
           (rv[key] ? '<div class="muted">' + esc(a.ko) + "</div>" : "<div>" + revealBtn(key, "🇰🇷 보기") + "</div>") + "</div>";
       }).join("");
     } else if (state.bookTab === "chars") {
-      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.characters.map(function (c, i) {
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + c.characters.map(function (ch, i) {
         var key = "c" + i;
-        return '<div class="kv"><b>' + esc(c.name) + "</b>" + esc(c.en) +
-          (rv[key] ? '<div class="muted">' + esc(c.ko) + "</div>" : "<div>" + revealBtn(key, "🇰🇷 보기") + "</div>") + "</div>";
+        return '<div class="kv"><b>' + esc(ch.name) + "</b>" + esc(ch.en) +
+          (rv[key] ? '<div class="muted">' + esc(ch.ko) + "</div>" : "<div>" + revealBtn(key, "🇰🇷 보기") + "</div>") + "</div>";
       }).join("");
     } else {
-      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.vocab.map(function (g, gi) {
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + c.vocab.map(function (g, gi) {
         return "<h3>" + esc(g.level) + '</h3><div class="scroll"><table><tr><th>단어</th><th>뜻</th><th>영영 풀이</th></tr>' +
           g.items.map(function (w, wi) {
             var key = "v" + gi + "-" + wi;
@@ -268,9 +381,10 @@
     }
     $app.innerHTML =
       '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button>' +
-      "<h2 style=\"margin-top:12px\">" + b.emoji + " " + esc(b.title) + "</h2>" +
+      "<h2 style=\"margin-top:12px\">" + esc(b.emoji) + " " + esc(b.title) + "</h2>" +
       '<div class="muted">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
-      '<div style="margin:8px 0"><span class="badge school">CEFR ' + esc(b.cefr) + '</span> <span class="badge external">Lexile ' + esc(b.lexile) + '</span> <span class="badge school">AR ' + esc(b.ar) + '</span> <span class="badge external">' + b.words + "단어</span></div></div>" +
+      '<div style="margin:8px 0"><span class="badge school">CEFR ' + esc(b.cefr) + '</span> <span class="badge external">Lexile ' + esc(b.lexile) + '</span> <span class="badge school">AR ' + esc(b.ar) + '</span> <span class="badge external">' + b.words + "단어</span>" +
+      (b.country ? ' <span class="badge school">' + esc(b.country) + "</span>" : "") + "</div></div>" +
       '<div class="card"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
       '<div class="center" style="margin-top:18px"><button class="btn" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
@@ -401,17 +515,26 @@
   async function renderTeacher() {
     if (!state.isAdmin) { location.hash = "#/"; return; }
     loading();
-    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats")]);
+    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats"), sb.from("books").select("id,featured")]);
     for (var k = 0; k < 3; k++) if (res[k].error) throw res[k].error;
     var ov = res[0].data || [], sc = res[1].data || [], hs = res[2].data || [];
+    var feat = {};
+    (res[3].data || []).forEach(function (r) { feat[r.id] = !!r.featured; });
+    var hsBooks = {};
+    hs.forEach(function (h) { hsBooks[h.book_id] = 1; });
+    await Promise.all(Object.keys(hsBooks).map(function (bid) { return loadContent(bid).catch(function () { return null; }); }));
     var classes = {};
     ov.forEach(function (r) { classes[r.grade ? r.grade + "-" + r.class_no : "미지정"] = 1; });
     var opts = '<option value="">전체</option>' + Object.keys(classes).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
 
     var hintRows = hs.map(function (h) {
       var bk = findBook(h.book_id);
-      var para = bk && bk.story[h.para] ? bk.story[h.para].en.slice(0, 60) + "…" : "";
+      var cont = window.BOOK_CONTENT && window.BOOK_CONTENT[h.book_id];
+      var para = cont && cont.story[h.para] ? cont.story[h.para].en.slice(0, 60) + "…" : "";
       return "<tr><td>" + esc(bk ? bk.titleKo : h.book_id) + "</td><td>" + (h.para + 1) + "단락</td><td>" + esc(para) + "</td><td>" + h.students + "명</td><td>" + h.clicks + "회</td></tr>";
+    }).join("");
+    var featRows = (window.BOOKS || []).map(function (b) {
+      return '<label style="display:block;padding:4px 0"><input type="checkbox" class="featcb" data-id="' + esc(b.id) + '" ' + (feat[b.id] ? "checked" : "") + "> " + esc(b.emoji) + " " + esc(b.title) + ' <span class="muted">(' + esc(levelOf(b)) + ")</span></label>";
     }).join("");
 
     $app.innerHTML =
@@ -420,10 +543,19 @@
       '반 선택 <select id="cls">' + opts + '</select> <button class="btn ghost small" id="csv1">요약 CSV</button> <button class="btn ghost small" id="csv2">작품별 점수 CSV</button>' +
       '<div class="scroll" style="margin-top:12px"><table id="tbl"></table></div>' +
       '<p class="muted">닉네임이 부적절하면 ✏️로 바꾸거나 ↺로 랜덤 이름으로 되돌릴 수 있어요.</p></div>' +
+      '<div class="card"><h2>🌟 선생님 추천 책</h2><p class="muted">체크한 책은 학생 책장 맨 위 "선생님 추천" 칸에 나와요.</p>' + featRows + "</div>" +
       '<div class="card"><h2>🇰🇷 단락별 번역(힌트) 열람</h2><p class="muted">학생들이 어느 단락에서 한국어 번역을 많이 봤는지 보여 줘요. 어려운 단락을 찾는 데 쓸 수 있어요.</p>' +
       (hintRows ? '<div class="scroll"><table><tr><th>작품</th><th>단락</th><th>내용</th><th>본 학생 수</th><th>누른 횟수</th></tr>' + hintRows + "</table></div>" : '<p class="muted">아직 기록이 없어요.</p>') + "</div>" +
       '<div class="card"><h2>📋 명단 올리기</h2><p class="muted">한 줄에 한 명: <code>이메일,이름,학년,반,번호</code> (엑셀에서 복사해 붙여넣어도 돼요). 이미 가입한 학생에게도 바로 적용돼요.</p>' +
       '<textarea id="roster" placeholder="student005@smy.ms.kr,문영학생5,1,2,5"></textarea><br><button class="btn" id="saveroster">명단 저장</button></div>';
+
+    Array.prototype.forEach.call(document.querySelectorAll(".featcb"), function (cb) {
+      cb.onchange = async function () {
+        var r = await sb.from("books").update({ featured: cb.checked }).eq("id", cb.getAttribute("data-id"));
+        if (r.error) { cb.checked = !cb.checked; return toast("저장 실패: " + r.error.message); }
+        toast(cb.checked ? "추천 책으로 지정했어요" : "추천을 해제했어요");
+      };
+    });
 
     function draw() {
       var f = document.getElementById("cls").value;
