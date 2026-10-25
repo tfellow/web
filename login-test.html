@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로그인 테스트</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  body { font-family: Arial, "Malgun Gothic", sans-serif; max-width: 480px; margin: 10vh auto; padding: 0 16px; text-align: center; color: #222; }
+  h1 { font-size: 1.4rem; }
+  .note { color: #666; font-size: .9rem; }
+  #result { margin-top: 24px; text-align: left; display: none; border: 1px solid #ddd; border-radius: 8px; padding: 16px; }
+  #result dt { font-weight: bold; margin-top: 8px; }
+  #result dd { margin: 2px 0 0; word-break: break-all; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-weight: bold; }
+  .student { background: #d9f2e0; color: #1b6b35; }
+  .outside { background: #fff1cc; color: #8a6100; }
+  #error { color: #b00020; margin-top: 16px; }
+</style>
+</head>
+<body>
+  <h1>로그인 테스트</h1>
+  <p class="note">학교 계정(@smy.ms.kr)으로 Google 로그인이 되는지 확인하는 시험 화면입니다.</p>
+
+  <div id="g_id_onload"
+       data-client_id="359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com"
+       data-callback="handleCredential"
+       data-auto_prompt="false"></div>
+  <div class="g_id_signin" data-type="standard" data-size="large" data-text="signin_with" data-locale="ko"></div>
+
+  <div id="error"></div>
+
+  <dl id="result">
+    <dt>구분</dt><dd id="role"></dd>
+    <dt>이름</dt><dd id="name"></dd>
+    <dt>이메일</dt><dd id="email"></dd>
+    <dt>소속 도메인(hd)</dt><dd id="hd"></dd>
+  </dl>
+
+  <p class="note">이 화면은 시험용입니다. 실제 서비스에서는 서버에서 로그인 정보를 다시 검증합니다.</p>
+
+<script>
+  var SCHOOL_DOMAIN = "smy.ms.kr";
+
+  function decodeJwt(token) {
+    var payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    var json = decodeURIComponent(atob(payload).split("").map(function (c) {
+      return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(""));
+    return JSON.parse(json);
+  }
+
+  function handleCredential(response) {
+    try {
+      var info = decodeJwt(response.credential);
+      var email = info.email || "";
+      var isStudent = email.toLowerCase().endsWith("@" + SCHOOL_DOMAIN) && info.email_verified;
+      document.getElementById("role").innerHTML = isStudent
+        ? '<span class="badge student">우리 학생 (@' + SCHOOL_DOMAIN + ')</span>'
+        : '<span class="badge outside">외부 이용자</span>';
+      document.getElementById("name").textContent = info.name || "(없음)";
+      document.getElementById("email").textContent = email;
+      document.getElementById("hd").textContent = info.hd || "(없음 - 일반 Google 계정)";
+      document.getElementById("result").style.display = "block";
+      document.getElementById("error").textContent = "";
+    } catch (e) {
+      document.getElementById("error").textContent = "로그인 정보를 읽지 못했습니다: " + e.message;
+    }
+  }
+</script>
+</body>
+</html>
