@@ -21,10 +21,15 @@
   .who .whoinfo, .who .whobtn { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
   .who .nick { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
   @media (max-width: 600px) {
-    header.top { position: static; flex-direction: column; align-items: stretch; padding: 8px 12px 10px; gap: 6px; }
-    header.top h1 { font-size: 1rem; }
-    header.top .who { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .who .btn.small { padding: 3px 10px; font-size: .78rem; }
+    header.top { position: static; flex-direction: column; align-items: stretch; padding: 14px 12px 12px; gap: 8px; }
+    header.top h1 { font-size: 1.7rem; text-align: center; letter-spacing: -.02em; line-height: 1.2; }
+    header.top .who { flex-direction: column; align-items: stretch; gap: 8px; }
+    .who .whoinfo { justify-content: center; }
+    .who .nick { font-size: .95rem; max-width: 60vw; }
+    .who .whobtn { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
+    .who .whobtn .btn.small { width: 100%; padding: 7px 4px; font-size: .82rem; white-space: nowrap; }
+    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .tabs button { padding: 7px 2px; font-size: .8rem; white-space: nowrap; border-radius: 10px; }
     main { padding: 12px; }
     .card { padding: 14px 12px; }
     .shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; }
