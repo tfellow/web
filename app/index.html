@@ -123,7 +123,10 @@
     main { padding: 12px; }
     .card { padding: 14px 12px; }
     .card h2 { font-size: 1rem; }
-    .shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .shelf > .book { min-width: 0; }
+    .pills { gap: 4px; }
+    .pill { padding: 5px 9px; font-size: .82rem; }
     .book { min-height: 180px; padding: 12px; }
     .book .t { font-size: .95rem; }
   }
