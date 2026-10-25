@@ -43,5 +43,19 @@ window.BOOKS = [
   "lexile": "640L",
   "ar": "3.8",
   "words": 226
+ },
+ {
+  "id": "journey-to-the-center-of-the-earth",
+  "title": "Journey to the Center of the Earth",
+  "titleKo": "지구 속 여행",
+  "author": "Jules Verne",
+  "authorKo": "쥘 베른",
+  "country": "France",
+  "emoji": "🌋",
+  "color": "#a8452f",
+  "cefr": "B1",
+  "lexile": "약 1100L (추정)",
+  "ar": "약 7.0 (추정)",
+  "words": 316
  }
 ];
