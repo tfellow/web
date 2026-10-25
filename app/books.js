@@ -28,5 +28,20 @@ window.BOOKS = [
   "lexile": "830L",
   "ar": "5.5",
   "words": 367
+ },
+ {
+  "id": "dr-jekyll-and-mr-hyde",
+  "title": "Dr. Jekyll and Mr. Hyde",
+  "titleKo": "지킬 박사와 하이드",
+  "author": "Robert Louis Stevenson",
+  "authorKo": "로버트 루이스 스티븐슨",
+  "country": "United Kingdom",
+  "emoji": "🧪",
+  "color": "#3f7a6b",
+  "cefr": "A2",
+  "cefrLabel": "A2 - B1",
+  "lexile": "640L",
+  "ar": "3.8",
+  "words": 226
  }
 ];
