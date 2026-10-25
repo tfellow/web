@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "5"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "6"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var LEVELS = ["A1", "A2", "B1", "B2", "C1"];
   var MEDALS = {
     gold: { em: "🥇", name: "금메달" },
@@ -383,7 +383,7 @@
       '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button>' +
       "<h2 style=\"margin-top:12px\">" + esc(b.emoji) + " " + esc(b.title) + "</h2>" +
       '<div class="muted">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
-      '<div style="margin:8px 0"><span class="badge school">CEFR ' + esc(b.cefr) + '</span> <span class="badge external">Lexile ' + esc(b.lexile) + '</span> <span class="badge school">AR ' + esc(b.ar) + '</span> <span class="badge external">' + b.words + "단어</span>" +
+      '<div style="margin:8px 0"><span class="badge school">CEFR ' + esc(b.cefrLabel || b.cefr) + '</span> <span class="badge external">Lexile ' + esc(b.lexile) + '</span> <span class="badge school">AR ' + esc(b.ar) + '</span> <span class="badge external">' + b.words + "단어</span>" +
       (b.country ? ' <span class="badge school">' + esc(b.country) + "</span>" : "") + "</div></div>" +
       '<div class="card"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
       '<div class="center" style="margin-top:18px"><button class="btn" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';
