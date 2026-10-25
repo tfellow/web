@@ -20,21 +20,6 @@
   header.top .who { display: flex; align-items: center; gap: 6px 10px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
   .who .whoinfo, .who .whobtn { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
   .who .nick { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
-  @media (max-width: 600px) {
-    header.top { position: static; flex-direction: column; align-items: stretch; padding: 14px 12px 12px; gap: 8px; }
-    header.top h1 { font-size: 1.7rem; text-align: center; letter-spacing: -.02em; line-height: 1.2; }
-    header.top .who { flex-direction: column; align-items: stretch; gap: 8px; }
-    .who .whoinfo { justify-content: center; }
-    .who .nick { font-size: .95rem; max-width: 60vw; }
-    .who .whobtn { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
-    .who .whobtn .btn.small { width: 100%; padding: 7px 4px; font-size: .82rem; white-space: nowrap; }
-    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-    .tabs button { padding: 7px 2px; font-size: .8rem; white-space: nowrap; border-radius: 10px; }
-    main { padding: 12px; }
-    .card { padding: 14px 12px; }
-    .shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .book { min-height: 180px; padding: 12px; }
-  }
   main { max-width: 860px; margin: 0 auto; padding: 16px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
   .card h2 { margin: 0 0 10px; font-size: 1.05rem; }
@@ -107,6 +92,24 @@
   textarea { width: 100%; min-height: 110px; font: inherit; border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
   .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: #2b2a33; color: #fff; padding: 8px 16px; border-radius: 999px; z-index: 60; font-size: .9rem; }
   @media (max-width: 520px) { .stamp { width: 140px; height: 140px; } }
+  /* 모바일 세로 화면 (반드시 스타일 맨 끝에 둘 것: 앞의 기본 규칙을 덮어쓰기 위해) */
+  @media (max-width: 600px) {
+    header.top { position: static; flex-direction: column; align-items: stretch; padding: 14px 12px 12px; gap: 8px; }
+    header.top h1 { font-size: 1.7rem; text-align: center; letter-spacing: -.02em; line-height: 1.2; }
+    header.top .who { flex-direction: column; align-items: stretch; gap: 8px; }
+    .who .whoinfo { justify-content: center; }
+    .who .nick { font-size: .95rem; max-width: 60vw; }
+    .who .whobtn { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
+    .who .whobtn .btn.small { width: 100%; padding: 7px 4px; font-size: .82rem; white-space: nowrap; }
+    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .tabs button { padding: 7px 2px; font-size: .8rem; white-space: nowrap; border-radius: 10px; }
+    main { padding: 12px; }
+    .card { padding: 14px 12px; }
+    .card h2 { font-size: 1rem; }
+    .shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .book { min-height: 180px; padding: 12px; }
+    .book .t { font-size: .95rem; }
+  }
 </style>
 </head>
 <body>
