@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>문영 독서 여권</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --bg: #fbf7ef; --card: #ffffff; --ink: #2b2a33; --muted: #6f6c7a; --line: #e8e1d2;
+    --brand: #5a4fcf; --brand-soft: #ece9ff; --gold: #e0a800; --silver: #8d99a6; --bronze: #b4691f;
+    --ok: #1f8a4c; --warn: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif; line-height: 1.6; }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  header.top h1 { margin: 0; font-size: 1.05rem; cursor: pointer; }
+  header.top .who { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
+  main { max-width: 860px; margin: 0 auto; padding: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 10px; font-size: 1.05rem; }
+  .btn { appearance: none; border: 1px solid var(--brand); background: var(--brand); color: #fff; padding: 8px 14px; border-radius: 10px; font: inherit; cursor: pointer; }
+  .btn.ghost { background: #fff; color: var(--brand); }
+  .btn.small { padding: 4px 10px; font-size: .85rem; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+  .badge.school { background: #d9f2e0; color: #1b6b35; }
+  .badge.external { background: #fff1cc; color: #8a6100; }
+  .muted { color: var(--muted); font-size: .9rem; }
+  .center { text-align: center; }
+  .hidden { display: none !important; }
+  .login { text-align: center; padding: 48px 16px; }
+  .login .big { font-size: 3rem; }
+  .login #gbtn { display: inline-block; margin-top: 16px; }
+
+  .medals { display: flex; gap: 10px; flex-wrap: wrap; }
+  .medal { flex: 1 1 90px; text-align: center; padding: 10px 6px; border-radius: 12px; background: #faf7f0; border: 1px solid var(--line); }
+  .medal .em { font-size: 1.8rem; display: block; }
+  .medal .n { font-size: 1.4rem; font-weight: 800; }
+  .progress { height: 14px; border-radius: 999px; background: #eee7d8; overflow: hidden; margin: 8px 0 4px; }
+  .progress > div { height: 100%; background: linear-gradient(90deg, #8f84ff, var(--brand)); transition: width .8s ease; }
+
+  .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+  .book { position: relative; border-radius: 14px; padding: 14px; color: #fff; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,.12); }
+  .book.todo { filter: grayscale(.85) brightness(1.05); }
+  .book .cover { font-size: 2.4rem; }
+  .book .t { font-weight: 800; line-height: 1.25; }
+  .book .a { font-size: .8rem; opacity: .9; }
+  .book .lv { font-size: .75rem; background: rgba(255,255,255,.25); border-radius: 999px; padding: 1px 8px; display: inline-block; }
+  .stamp-corner { position: absolute; top: 8px; right: 8px; font-size: 2rem; transform: rotate(12deg); filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+
+  .board ol { margin: 0; padding-left: 0; list-style: none; }
+  .board li { display: flex; align-items: center; gap: 10px; padding: 7px 4px; border-bottom: 1px dashed var(--line); }
+  .board li:last-child { border-bottom: 0; }
+  .board .rk { width: 28px; text-align: center; font-weight: 800; }
+  .board .nm { flex: 1; }
+  .board .ms { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tabs button { border: 1px solid var(--line); background: #fff; padding: 6px 12px; border-radius: 999px; font: inherit; cursor: pointer; }
+  .tabs button.on { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); font-weight: 700; }
+  .para { margin: 0 0 14px; }
+  .para .ko { color: #4a4757; background: #f6f3ff; border-radius: 8px; padding: 8px 10px; margin-top: 6px; }
+  .kv { margin-bottom: 12px; }
+  .kv b { display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #faf7f0; white-space: nowrap; }
+  .scroll { overflow-x: auto; }
+
+  .q { margin-bottom: 18px; }
+  .q .qt { font-weight: 700; margin-bottom: 6px; }
+  .opt { display: block; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; cursor: pointer; background: #fff; }
+  .opt:hover { border-color: var(--brand); }
+  .opt input { margin-right: 8px; }
+  .opt.sel { background: var(--brand-soft); border-color: var(--brand); }
+
+  .result { text-align: center; padding: 20px 8px; }
+  .stamp { width: 170px; height: 170px; border-radius: 50%; margin: 10px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 6px double currentColor; font-weight: 800; transform: rotate(-12deg); animation: slam .7s cubic-bezier(.2,1.6,.4,1) both; background: rgba(255,255,255,.6); }
+  .stamp .em { font-size: 3.4rem; line-height: 1; }
+  .stamp.gold { color: var(--gold); } .stamp.silver { color: var(--silver); } .stamp.bronze { color: var(--bronze); } .stamp.none { color: #9a95a8; }
+  @keyframes slam { 0% { transform: scale(3.2) rotate(-40deg); opacity: 0; } 60% { opacity: 1; } 100% { transform: scale(1) rotate(-12deg); opacity: 1; } }
+  .confetti { position: fixed; top: -10px; width: 10px; height: 14px; z-index: 50; animation: fall 2.4s linear forwards; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(540deg); opacity: .9; } }
+  .err { color: var(--warn); margin-top: 8px; }
+  textarea { width: 100%; min-height: 110px; font: inherit; border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
+  .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: #2b2a33; color: #fff; padding: 8px 16px; border-radius: 999px; z-index: 60; font-size: .9rem; }
+  @media (max-width: 520px) { .stamp { width: 140px; height: 140px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1 id="home-link">📖 문영 독서 여권</h1>
+  <div class="who hidden" id="who"></div>
+</header>
+<main id="app"><p class="muted center">불러오는 중...</p></main>
+<script src="books.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
