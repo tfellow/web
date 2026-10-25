@@ -14,7 +14,7 @@
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var $app = document.getElementById("app");
   var $who = document.getElementById("who");
-  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", showKo: true };
+  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", revealed: {} };
   var timer = null;
 
   function esc(s) {
@@ -34,6 +34,7 @@
     var d = new Date(s);
     return (d.getMonth() + 1) + "/" + d.getDate() + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
   }
+  function cleanMsg(m) { return String(m || "").replace(/^[a-z]+:\s*/i, ""); }
   function clearTimer() { if (timer) { clearInterval(timer); timer = null; } }
   function loading() { $app.innerHTML = '<p class="muted center">불러오는 중...</p>'; }
   function showError(e) {
@@ -79,7 +80,7 @@
   async function signOut() {
     await sb.auth.signOut();
     if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect();
-    state.user = null; state.profile = null; state.isAdmin = false;
+    state.user = null; state.profile = null; state.isAdmin = false; state.revealed = {};
     location.hash = "#/";
     boot();
   }
@@ -102,24 +103,47 @@
   function renderWho() {
     var p = state.profile || {};
     var isSchool = p.role === "school";
-    var html =
+    $who.innerHTML =
       '<span class="badge ' + (isSchool ? "school" : "external") + '">' + (isSchool ? SCHOOL_LABEL : "외부 이용자") + "</span>" +
       (state.isAdmin ? '<span class="badge school">교사</span>' : "") +
       "<b>" + esc(p.nickname || "") + "</b>" +
-      '<button class="btn ghost small" id="reroll">🎲 닉네임 바꾸기</button>' +
+      '<button class="btn ghost small" id="nickbtn">✏️ 닉네임 바꾸기</button>' +
       (state.isAdmin ? '<button class="btn ghost small" id="goteacher">교사 화면</button>' : "") +
       '<button class="btn ghost small" id="signout">로그아웃</button>';
-    $who.innerHTML = html;
     $who.classList.remove("hidden");
-    document.getElementById("reroll").onclick = async function () {
-      var r = await sb.rpc("reroll_nickname");
-      if (r.error) return toast("닉네임을 바꾸지 못했어요");
-      state.profile.nickname = r.data; renderWho(); toast("새 닉네임: " + r.data);
-      if ((location.hash || "#/") === "#/") route();
-    };
+    document.getElementById("nickbtn").onclick = openNickDialog;
     document.getElementById("signout").onclick = signOut;
     var gt = document.getElementById("goteacher");
     if (gt) gt.onclick = function () { location.hash = "#/teacher"; };
+  }
+  function openNickDialog() {
+    var ov = document.createElement("div");
+    ov.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:70;display:flex;align-items:center;justify-content:center;padding:16px";
+    ov.innerHTML =
+      '<div class="card" style="max-width:380px;width:100%;margin:0"><h2>✏️ 닉네임 바꾸기</h2>' +
+      '<p class="muted">2~12글자로 원하는 이름을 정해 보세요. 순위표에 이 이름이 보여요. 부적절한 이름은 선생님이 바꿀 수 있어요.</p>' +
+      '<input id="nickin" maxlength="12" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;font:inherit" value="' + esc((state.profile && state.profile.nickname) || "") + '">' +
+      '<div class="err" id="nickerr"></div>' +
+      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="nicksave">저장</button><button class="btn ghost" id="nickrand">🎲 랜덤 이름</button><button class="btn ghost" id="nickcancel">취소</button></div></div>';
+    document.body.appendChild(ov);
+    var input = document.getElementById("nickin");
+    input.focus(); input.select();
+    function done(nick) {
+      state.profile.nickname = nick; renderWho(); ov.remove(); toast("닉네임: " + nick);
+      if ((location.hash || "#/") === "#/") route();
+    }
+    document.getElementById("nickcancel").onclick = function () { ov.remove(); };
+    document.getElementById("nickrand").onclick = async function () {
+      var r = await sb.rpc("reroll_nickname");
+      if (r.error) return (document.getElementById("nickerr").textContent = cleanMsg(r.error.message));
+      done(r.data);
+    };
+    document.getElementById("nicksave").onclick = async function () {
+      var r = await sb.rpc("set_nickname", { p_nick: input.value });
+      if (r.error) return (document.getElementById("nickerr").textContent = cleanMsg(r.error.message));
+      done(r.data);
+    };
+    input.onkeydown = function (e) { if (e.key === "Enter") document.getElementById("nicksave").click(); };
   }
 
   /* ---------- 라우터 ---------- */
@@ -140,14 +164,14 @@
   document.getElementById("home-link").onclick = function () { location.hash = "#/"; };
 
   /* ---------- 홈 ---------- */
-  function medalBox(key, n) {
-    return '<div class="medal"><span class="em">' + MEDALS[key].em + '</span><span class="n">' + n + "</span><div class=\"muted\">" + MEDALS[key].name + "</div></div>";
+  function medalBox(em, n, label) {
+    return '<div class="medal"><span class="em">' + em + '</span><span class="n">' + n + '</span><div class="muted">' + label + "</div></div>";
   }
   async function renderHome() {
     loading();
     var res = await Promise.all([sb.rpc("my_summary"), sb.rpc("leaderboard")]);
     if (res[0].error) throw res[0].error;
-    var sum = res[0].data || { books: [], gold: 0, silver: 0, bronze: 0, words: 0 };
+    var sum = res[0].data || { books: [], gold: 0, silver: 0, bronze: 0, stars: 0, words: 0 };
     var board = res[1].data || [];
     var byId = {};
     (sum.books || []).forEach(function (b) { byId[b.book_id] = b; });
@@ -163,13 +187,13 @@
         '<div class="cover">' + b.emoji + "</div>" +
         '<div><div class="t">' + esc(b.title) + '</div><div class="a">' + esc(b.titleKo) + " · " + esc(b.authorKo) + "</div></div>" +
         '<div><span class="lv">' + esc(b.cefr) + " · " + b.words + "단어</span>" +
-        '<div class="a" style="margin-top:4px">' + (r ? "최고 " + r.best + "/" + r.total + " · " + r.attempts + "회 도전" : "아직 도전 전") + "</div></div></div>";
+        '<div class="a" style="margin-top:4px">' + (r ? "최고 " + r.best + "/" + r.total + " · " + r.attempts + "회 도전" + (r.star ? " ⭐" : "") : "아직 도전 전") + "</div></div></div>";
     }).join("");
 
     var boardHtml = board.length
       ? "<ol>" + board.map(function (r, i) {
           var rk = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1;
-          return '<li><span class="rk">' + rk + '</span><span class="nm">' + esc(r.nickname) + '</span><span class="ms">🥇' + r.gold + " 🥈" + r.silver + " 🥉" + r.bronze + "</span></li>";
+          return '<li><span class="rk">' + rk + '</span><span class="nm">' + esc(r.nickname) + '</span><span class="ms">🥇' + r.gold + " 🥈" + r.silver + " 🥉" + r.bronze + " ⭐" + r.stars + "</span></li>";
         }).join("") + "</ol>"
       : '<p class="muted">아직 순위가 없어요. 첫 메달의 주인공이 되어 보세요!</p>';
 
@@ -180,10 +204,10 @@
       "<div><b>" + done + " / " + books.length + "</b> 작품 완료 <span class=\"muted\">(60점 이상이면 완료)</span></div>" +
       '<div class="progress"><div style="width:0%" id="bar"></div></div>' +
       '<div class="muted">읽은 단어 수: <b>' + (sum.words || 0).toLocaleString() + "</b> 단어</div><br>" +
-      '<div class="medals">' + medalBox("gold", sum.gold || 0) + medalBox("silver", sum.silver || 0) + medalBox("bronze", sum.bronze || 0) + "</div></div>" +
+      '<div class="medals">' + medalBox("🥇", sum.gold || 0, "금메달") + medalBox("🥈", sum.silver || 0, "은메달") + medalBox("🥉", sum.bronze || 0, "동메달") + medalBox("⭐", sum.stars || 0, "무힌트") + "</div></div>" +
       '<div class="card"><h2>📚 책장</h2><div class="shelf">' + shelf + "</div></div>" +
       '<div class="card board"><h2>🏆 메달 순위 TOP 10</h2>' + boardHtml +
-      '<p class="muted" style="margin-top:10px">순위에는 자동으로 만들어진 닉네임만 보여요. 금 → 은 → 동 순으로 정렬돼요.' + (isSchool ? "" : " (외부 이용자는 순위에 나오지 않아요.)") + "</p>" +
+      '<p class="muted" style="margin-top:10px">금 → 은 → 동 → ⭐ 순으로 정렬돼요. 순위에는 닉네임이 보여요.' + (isSchool ? "" : " (외부 이용자는 순위에 나오지 않아요.)") + "</p>" +
       (isSchool ? '<label class="muted"><input type="checkbox" id="showboard" ' + (show ? "checked" : "") + "> 내 닉네임을 순위표에 보이기</label>" : "") + "</div>";
 
     setTimeout(function () { var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%"; }, 80);
@@ -200,29 +224,46 @@
   }
 
   /* ---------- 책 읽기 ---------- */
+  function revealBtn(key, label, hintIdx) {
+    return '<button class="btn ghost small reveal" data-k="' + key + '"' + (hintIdx != null ? ' data-hint="' + hintIdx + '"' : "") + ">" + label + "</button>";
+  }
   async function renderBook(id) {
     var b = findBook(id);
     if (!b) return showError("책을 찾을 수 없어요.");
+    var hc = await sb.rpc("my_hint_count", { p_book_id: id });
+    var hintCount = hc.data || 0;
+    var rv = state.revealed[id] || (state.revealed[id] = {});
     var tabs = [["story", "📖 이야기"], ["analysis", "🔎 분석"], ["chars", "🎭 인물"], ["vocab", "🔤 단어장"]];
     var body = "";
     if (state.bookTab === "story") {
-      body = '<label class="muted"><input type="checkbox" id="ko" ' + (state.showKo ? "checked" : "") + "> 한글 번역 보기</label><br><br>" +
-        b.story.map(function (p) {
-          return '<div class="para"><div>' + esc(p.en) + "</div>" + (state.showKo ? '<div class="ko">' + esc(p.ko) + "</div>" : "") + "</div>";
+      body = '<div class="hintnote">처음에는 영어만 보여요. 어려운 단락은 <b>🇰🇷 한국어 보기</b>를 눌러 힌트를 볼 수 있어요. ' +
+        "이 책에서 번역을 한 번도 보지 않고 퀴즈를 통과하면 <b>⭐ 무힌트 보너스</b>를 받아요! " +
+        "(지금까지 본 번역: <b>" + hintCount + "</b>개 단락)</div>" +
+        b.story.map(function (p, i) {
+          var key = "p" + i;
+          return '<div class="para"><div>' + esc(p.en) + "</div>" +
+            (rv[key] ? '<div class="ko">' + esc(p.ko) + "</div>" : revealBtn(key, "🇰🇷 한국어 보기 (힌트)", i)) + "</div>";
         }).join("");
     } else if (state.bookTab === "analysis") {
-      body = b.analysis.map(function (a) {
-        return '<div class="kv"><b>' + esc(a.label) + "</b>" + esc(a.en) + '<div class="muted">' + esc(a.ko) + "</div></div>";
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.analysis.map(function (a, i) {
+        var key = "a" + i;
+        return '<div class="kv"><b>' + esc(a.label) + "</b>" + esc(a.en) +
+          (rv[key] ? '<div class="muted">' + esc(a.ko) + "</div>" : "<div>" + revealBtn(key, "🇰🇷 보기") + "</div>") + "</div>";
       }).join("");
     } else if (state.bookTab === "chars") {
-      body = b.characters.map(function (c) {
-        return '<div class="kv"><b>' + esc(c.name) + "</b>" + esc(c.en) + '<div class="muted">' + esc(c.ko) + "</div></div>";
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.characters.map(function (c, i) {
+        var key = "c" + i;
+        return '<div class="kv"><b>' + esc(c.name) + "</b>" + esc(c.en) +
+          (rv[key] ? '<div class="muted">' + esc(c.ko) + "</div>" : "<div>" + revealBtn(key, "🇰🇷 보기") + "</div>") + "</div>";
       }).join("");
     } else {
-      body = b.vocab.map(function (g) {
+      body = '<p class="muted">분석·인물·단어장의 한국어는 힌트로 세지 않아요.</p>' + b.vocab.map(function (g, gi) {
         return "<h3>" + esc(g.level) + '</h3><div class="scroll"><table><tr><th>단어</th><th>뜻</th><th>영영 풀이</th></tr>' +
-          g.items.map(function (w) { return "<tr><td><b>" + esc(w[0]) + '</b> <span class="muted">' + esc(w[1]) + "</span></td><td>" + esc(w[2]) + "</td><td>" + esc(w[3]) + "</td></tr>"; }).join("") +
-          "</table></div>";
+          g.items.map(function (w, wi) {
+            var key = "v" + gi + "-" + wi;
+            return "<tr><td><b>" + esc(w[0]) + '</b> <span class="muted">' + esc(w[1]) + "</span></td><td>" +
+              (rv[key] ? esc(w[2]) : revealBtn(key, "뜻 보기")) + "</td><td>" + esc(w[3]) + "</td></tr>";
+          }).join("") + "</table></div>";
       }).join("");
     }
     $app.innerHTML =
@@ -235,10 +276,20 @@
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("goquiz").onclick = function () { location.hash = "#/quiz/" + encodeURIComponent(b.id); };
     Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function (el) {
-      el.onclick = function () { state.bookTab = el.getAttribute("data-t"); renderBook(id); };
+      el.onclick = function () { state.bookTab = el.getAttribute("data-t"); renderBook(id).catch(showError); };
     });
-    var ko = document.getElementById("ko");
-    if (ko) ko.onchange = function () { state.showKo = ko.checked; renderBook(id); };
+    Array.prototype.forEach.call(document.querySelectorAll(".reveal"), function (el) {
+      el.onclick = async function () {
+        el.disabled = true;
+        var hint = el.getAttribute("data-hint");
+        if (hint != null) {
+          var r = await sb.rpc("log_hint", { p_book_id: id, p_para: parseInt(hint, 10) });
+          if (r.error) { el.disabled = false; return toast("기록하지 못했어요. 다시 눌러 주세요."); }
+        }
+        rv[el.getAttribute("data-k")] = true;
+        renderBook(id).catch(showError);
+      };
+    });
   }
 
   /* ---------- 퀴즈 ---------- */
@@ -246,9 +297,10 @@
     var b = findBook(id);
     if (!b) return showError("책을 찾을 수 없어요.");
     loading();
-    var st = await sb.rpc("quiz_status", { p_book_id: id });
-    if (st.error) throw st.error;
-    var info = st.data || {};
+    var res = await Promise.all([sb.rpc("quiz_status", { p_book_id: id }), sb.rpc("my_hint_count", { p_book_id: id })]);
+    if (res[0].error) throw res[0].error;
+    var info = res[0].data || {};
+    var hintCount = res[1].data || 0;
     var wait = info.next_allowed_at ? new Date(info.next_allowed_at).getTime() - Date.now() : 0;
     if (wait > 0) return renderWait(b, info);
 
@@ -262,9 +314,10 @@
       "<h2 style=\"margin-top:12px\">✏️ " + esc(b.title) + " 퀴즈</h2>" +
       '<p class="muted">총 ' + qs.length + "문항 · 문제와 보기 순서는 매번 달라져요. 한 번 제출하면 10분 뒤에 다시 도전할 수 있어요." +
       (info.best != null ? " (내 최고 점수: " + info.best + "/" + info.total + ")" : "") + "</p>" +
+      '<div class="hintnote">' + (hintCount === 0 ? "지금까지 번역을 보지 않았어요. 이대로 통과하면 <b>⭐ 무힌트 보너스</b>!" : "번역을 본 단락: <b>" + hintCount + "</b>개 (이 책에서는 ⭐ 무힌트 보너스를 받을 수 없어요)") + "</div>" +
       qs.map(function (q, i) {
         return '<div class="q"><div class="qt">' + (i + 1) + ". " + esc(q.question) + "</div>" +
-          q.choices.map(function (c, j) {
+          q.choices.map(function (c) {
             return '<label class="opt"><input type="radio" name="q' + q.no + '" value="' + esc(c) + '">' + esc(c) + "</label>";
           }).join("") + "</div>";
       }).join("") +
@@ -317,22 +370,30 @@
     var medal = r.medal;
     var msg = medal === "gold" ? "만점! 금메달이에요 🎉" : medal === "silver" ? "훌륭해요! 은메달이에요" : medal === "bronze" ? "잘했어요! 동메달이에요" : "아쉬워요. 60점부터 메달을 받아요. 다시 도전해 봐요!";
     var better = r.best_medal && r.best_medal !== medal;
+    var starMsg = r.star ? '<p><b>⭐ 무힌트 보너스를 받았어요!</b></p>'
+      : (medal && r.hints > 0 ? '<p class="muted">번역을 본 단락이 ' + r.hints + '개라서 이번에는 ⭐ 보너스가 없어요. 다음 책에서는 영어로만 도전해 봐요!</p>' : "");
     $app.innerHTML =
       '<div class="card result"><h2>' + esc(b.title) + "</h2>" +
       '<div class="stamp ' + (medal || "none") + '"><span class="em">' + (medal ? MEDALS[medal].em : "📘") + "</span><span>" + (medal ? MEDALS[medal].name : "도전 중") + "</span></div>" +
-      '<div style="font-size:2rem;font-weight:800">' + r.score + " / " + r.total + "</div>" +
-      "<p><b>" + msg + "</b></p>" +
+      '<div style="font-size:2rem;font-weight:800">' + r.score + " / " + r.total + (r.star ? " ⭐" : "") + "</div>" +
+      "<p><b>" + msg + "</b></p>" + starMsg +
       '<p class="muted">' + r.attempt + "번째 도전 · 내 최고 점수 " + r.best + "/" + r.total + (better ? " (" + MEDALS[r.best_medal].name + " 유지)" : "") + "</p>" +
       '<p class="muted">같은 책은 10분 뒤에 다시 도전할 수 있어요.</p>' +
       '<button class="btn" id="tohome">책장으로</button> <button class="btn ghost" id="reread">다시 읽기</button></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("reread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(b.id); };
     if (medal === "gold") confetti(70); else if (medal) confetti(30);
+    if (r.star) setTimeout(function () { confetti(40); }, 600);
   }
 
   /* ---------- 교사 화면 ---------- */
+  function csvCell(v) {
+    v = v == null ? "" : String(v);
+    if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; // 엑셀 수식 방지
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
   function csvDownload(name, rows) {
-    var text = rows.map(function (r) { return r.map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
+    var text = rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
     var a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" }));
     a.download = name; a.click();
@@ -340,19 +401,27 @@
   async function renderTeacher() {
     if (!state.isAdmin) { location.hash = "#/"; return; }
     loading();
-    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores")]);
-    if (res[0].error) throw res[0].error;
-    if (res[1].error) throw res[1].error;
-    var ov = res[0].data || [], sc = res[1].data || [];
+    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats")]);
+    for (var k = 0; k < 3; k++) if (res[k].error) throw res[k].error;
+    var ov = res[0].data || [], sc = res[1].data || [], hs = res[2].data || [];
     var classes = {};
     ov.forEach(function (r) { classes[r.grade ? r.grade + "-" + r.class_no : "미지정"] = 1; });
-    var opts = '<option value="">전체</option>' + Object.keys(classes).sort().map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + "</option>"; }).join("");
+    var opts = '<option value="">전체</option>' + Object.keys(classes).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
+
+    var hintRows = hs.map(function (h) {
+      var bk = findBook(h.book_id);
+      var para = bk && bk.story[h.para] ? bk.story[h.para].en.slice(0, 60) + "…" : "";
+      return "<tr><td>" + esc(bk ? bk.titleKo : h.book_id) + "</td><td>" + (h.para + 1) + "단락</td><td>" + esc(para) + "</td><td>" + h.students + "명</td><td>" + h.clicks + "회</td></tr>";
+    }).join("");
 
     $app.innerHTML =
       '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button><h2 style="margin-top:12px">👩‍🏫 교사 화면</h2>' +
       '<div class="muted">가입한 사용자 ' + ov.length + "명 · 퀴즈 기록 " + sc.length + "건</div><br>" +
       '반 선택 <select id="cls">' + opts + '</select> <button class="btn ghost small" id="csv1">요약 CSV</button> <button class="btn ghost small" id="csv2">작품별 점수 CSV</button>' +
-      '<div class="scroll" style="margin-top:12px"><table id="tbl"></table></div></div>' +
+      '<div class="scroll" style="margin-top:12px"><table id="tbl"></table></div>' +
+      '<p class="muted">닉네임이 부적절하면 ✏️로 바꾸거나 ↺로 랜덤 이름으로 되돌릴 수 있어요.</p></div>' +
+      '<div class="card"><h2>🇰🇷 단락별 번역(힌트) 열람</h2><p class="muted">학생들이 어느 단락에서 한국어 번역을 많이 봤는지 보여 줘요. 어려운 단락을 찾는 데 쓸 수 있어요.</p>' +
+      (hintRows ? '<div class="scroll"><table><tr><th>작품</th><th>단락</th><th>내용</th><th>본 학생 수</th><th>누른 횟수</th></tr>' + hintRows + "</table></div>" : '<p class="muted">아직 기록이 없어요.</p>') + "</div>" +
       '<div class="card"><h2>📋 명단 올리기</h2><p class="muted">한 줄에 한 명: <code>이메일,이름,학년,반,번호</code> (엑셀에서 복사해 붙여넣어도 돼요). 이미 가입한 학생에게도 바로 적용돼요.</p>' +
       '<textarea id="roster" placeholder="student005@smy.ms.kr,문영학생5,1,2,5"></textarea><br><button class="btn" id="saveroster">명단 저장</button></div>';
 
@@ -360,22 +429,40 @@
       var f = document.getElementById("cls").value;
       var rows = ov.filter(function (r) { return !f || (r.grade ? r.grade + "-" + r.class_no : "미지정") === f; });
       document.getElementById("tbl").innerHTML =
-        "<tr><th>학년-반-번호</th><th>이름</th><th>구분</th><th>완료</th><th>🥇</th><th>🥈</th><th>🥉</th><th>단어</th><th>도전</th><th>최근</th></tr>" +
+        "<tr><th>학년-반-번호</th><th>이름</th><th>닉네임</th><th>구분</th><th>완료</th><th>🥇</th><th>🥈</th><th>🥉</th><th>⭐</th><th>단어</th><th>도전</th><th>최근</th></tr>" +
         rows.map(function (r) {
-          return "<tr><td>" + (r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no : "-") + "</td><td>" + esc(r.name || r.email) + "</td><td>" + (r.role === "school" ? "학교" : "외부") +
-            "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.words + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
+          return "<tr><td>" + (r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no : "-") + "</td><td>" + esc(r.name || r.email) + "</td>" +
+            "<td>" + esc(r.nickname || "") + ' <button class="btn ghost small nick-edit" data-e="' + esc(r.email) + '" data-n="' + esc(r.nickname || "") + '">✏️</button>' +
+            '<button class="btn ghost small nick-reset" data-e="' + esc(r.email) + '">↺</button></td><td>' + (r.role === "school" ? "학교" : "외부") +
+            "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.stars + "</td><td>" + r.words + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
         }).join("");
+      Array.prototype.forEach.call(document.querySelectorAll(".nick-edit"), function (el) {
+        el.onclick = async function () {
+          var v = window.prompt("새 닉네임 (비우면 랜덤 이름으로 초기화)", el.getAttribute("data-n"));
+          if (v === null) return;
+          var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: v });
+          if (r.error) return toast("저장 실패: " + r.error.message);
+          toast("닉네임을 바꿨어요"); renderTeacher();
+        };
+      });
+      Array.prototype.forEach.call(document.querySelectorAll(".nick-reset"), function (el) {
+        el.onclick = async function () {
+          var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: "" });
+          if (r.error) return toast("저장 실패: " + r.error.message);
+          toast("랜덤 이름으로 되돌렸어요"); renderTeacher();
+        };
+      });
     }
     draw();
     document.getElementById("cls").onchange = draw;
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("csv1").onclick = function () {
-      csvDownload("독서현황.csv", [["이메일", "이름", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "단어", "도전", "최근활동"]].concat(
-        ov.map(function (r) { return [r.email, r.name, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.words, r.attempts, r.last_activity]; })));
+      csvDownload("독서현황.csv", [["이메일", "이름", "닉네임", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "무힌트별", "단어", "도전", "최근활동"]].concat(
+        ov.map(function (r) { return [r.email, r.name, r.nickname, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.stars, r.words, r.attempts, r.last_activity]; })));
     };
     document.getElementById("csv2").onclick = function () {
-      csvDownload("작품별점수.csv", [["이메일", "이름", "학년", "반", "번호", "작품", "최고점수", "만점", "도전횟수", "메달", "최근"]].concat(
-        sc.map(function (r) { return [r.email, r.name, r.grade, r.class_no, r.student_no, r.book_id, r.best, r.total, r.attempts, r.medal, r.last_at]; })));
+      csvDownload("작품별점수.csv", [["이메일", "이름", "학년", "반", "번호", "작품", "최고점수", "만점", "도전횟수", "메달", "무힌트별", "본번역단락", "최근"]].concat(
+        sc.map(function (r) { return [r.email, r.name, r.grade, r.class_no, r.student_no, r.book_id, r.best, r.total, r.attempts, r.medal, r.star ? "O" : "", r.hints, r.last_at]; })));
     };
     document.getElementById("saveroster").onclick = async function () {
       var lines = document.getElementById("roster").value.split(/\r?\n/);
