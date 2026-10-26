@@ -107,5 +107,165 @@ window.BOOKS = [
   "places": [
    "France"
   ]
+ },
+ {
+  "id": "the-tortoise-and-the-hare",
+  "title": "The Tortoise and the Hare",
+  "titleKo": "토끼와 거북",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐢",
+  "color": "#5f8a4a",
+  "cefr": "A1",
+  "lexile": "약 300L (추정)",
+  "words": 157,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-ant-and-the-grasshopper",
+  "title": "The Ant and the Grasshopper",
+  "titleKo": "개미와 베짱이",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐜",
+  "color": "#8a6d3b",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 159,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-boy-who-cried-wolf",
+  "title": "The Boy Who Cried Wolf",
+  "titleKo": "양치기 소년",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐺",
+  "color": "#5d6b7d",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 162,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-north-wind-and-the-sun",
+  "title": "The North Wind and the Sun",
+  "titleKo": "북풍과 태양",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "☀️",
+  "color": "#c98a2a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 159,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-town-mouse-and-the-country-mouse",
+  "title": "The Town Mouse and the Country Mouse",
+  "titleKo": "시골 쥐와 도시 쥐",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐭",
+  "color": "#9a6a8a",
+  "cefr": "A1",
+  "lexile": "약 320L (추정)",
+  "words": 166,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fox-and-the-grapes",
+  "title": "The Fox and the Grapes",
+  "titleKo": "여우와 신 포도",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🍇",
+  "color": "#6a4a8a",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 160,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-goose-that-laid-the-golden-eggs",
+  "title": "The Goose That Laid the Golden Eggs",
+  "titleKo": "황금알을 낳는 거위",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🥚",
+  "color": "#b08a24",
+  "cefr": "A1",
+  "lexile": "약 350L (추정)",
+  "words": 170,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-crow-and-the-pitcher",
+  "title": "The Crow and the Pitcher",
+  "titleKo": "까마귀와 물병",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐦",
+  "color": "#3d4f6b",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 160,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fox-and-the-stork",
+  "title": "The Fox and the Stork",
+  "titleKo": "여우와 두루미",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦊",
+  "color": "#b5602a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 163,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-lion-and-the-mouse",
+  "title": "The Lion and the Mouse",
+  "titleKo": "사자와 생쥐",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦁",
+  "color": "#a8742f",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 167,
+  "places": [
+   "Greece"
+  ]
  }
 ];
