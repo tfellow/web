@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "13"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "14"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -65,6 +65,9 @@
     "Chile": { map: "Chile", ko: "칠레", iso: "CL", at: [-71, -33] },
     "Argentina": { map: "Argentina", ko: "아르헨티나", iso: "AR", at: [-64, -34] },
     "Mexico": { map: "Mexico", ko: "멕시코", iso: "MX", at: [-102, 23.5] },
+    "Cuba": { map: "Cuba", ko: "쿠바", iso: "CU", at: [-79.5, 21.8] },
+    "Algeria": { map: "Algeria", ko: "알제리", iso: "DZ", at: [2.6, 28] },
+    "Romania": { map: "Romania", ko: "루마니아", iso: "RO", at: [25, 45.9] },
     "Australia": { map: "Australia", ko: "호주", iso: "AU", at: [134, -25] }
   };
   // 대륙 배지: 각 대륙에 첫 여권 도장을 찍으면 받아요 (지도 이름 → 대륙)
@@ -77,7 +80,7 @@
     "Ireland": "EU", "Iceland": "EU", "Norway": "EU", "Sweden": "EU", "Denmark": "EU", "Netherlands": "EU", "Belgium": "EU",
     "Austria": "EU", "Switzerland": "EU", "Poland": "EU", "Greece": "EU", "Portugal": "EU",
     "Turkey": "AS", "Japan": "AS", "China": "AS", "South Korea": "AS", "India": "AS",
-    "United States of America": "NA", "Canada": "NA", "Mexico": "NA",
+    "United States of America": "NA", "Canada": "NA", "Mexico": "NA", "Cuba": "NA", "Algeria": "AF", "Romania": "EU",
     "Brazil": "SA", "Colombia": "SA", "Chile": "SA", "Argentina": "SA",
     "Egypt": "AF", "Nigeria": "AF", "Australia": "OC"
   };

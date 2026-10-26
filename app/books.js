@@ -765,5 +765,166 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "demian",
+  "title": "Demian",
+  "titleKo": "데미안",
+  "author": "Hermann Hesse",
+  "authorKo": "헤르만 헤세",
+  "country": "Germany",
+  "emoji": "🦅",
+  "color": "#3a4a5a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 225,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "animal-farm",
+  "title": "Animal Farm",
+  "titleKo": "동물농장",
+  "author": "George Orwell",
+  "authorKo": "조지 오웰",
+  "country": "United Kingdom",
+  "emoji": "🐷",
+  "color": "#8a5a5a",
+  "cefr": "A2",
+  "lexile": "약 620L (추정)",
+  "words": 212,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-adventures-of-tom-sawyer",
+  "title": "The Adventures of Tom Sawyer",
+  "titleKo": "톰 소여의 모험",
+  "author": "Mark Twain",
+  "authorKo": "마크 트웨인",
+  "country": "United States",
+  "emoji": "🛶",
+  "color": "#a87a3a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 221,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "my-sweet-orange-tree",
+  "title": "My Sweet Orange Tree",
+  "titleKo": "나의 라임오렌지나무",
+  "author": "José Mauro de Vasconcelos",
+  "authorKo": "주제 마우루 지 바스콘셀로스",
+  "country": "Brazil",
+  "emoji": "🍊",
+  "color": "#c4782a",
+  "cefr": "A2",
+  "lexile": "약 560L (추정)",
+  "words": 213,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "the-catcher-in-the-rye",
+  "title": "The Catcher in the Rye",
+  "titleKo": "호밀밭의 파수꾼",
+  "author": "J. D. Salinger",
+  "authorKo": "J. D. 샐린저",
+  "country": "United States",
+  "emoji": "🧢",
+  "color": "#a83a3a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 217,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-old-man-and-the-sea",
+  "title": "The Old Man and the Sea",
+  "titleKo": "노인과 바다",
+  "author": "Ernest Hemingway",
+  "authorKo": "어니스트 헤밍웨이",
+  "country": "United States",
+  "emoji": "🎣",
+  "color": "#2a6a8a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 215,
+  "places": [
+   "United States",
+   "Cuba"
+  ]
+ },
+ {
+  "id": "alice-in-wonderland",
+  "title": "Alice in Wonderland",
+  "titleKo": "이상한 나라의 앨리스",
+  "author": "Lewis Carroll",
+  "authorKo": "루이스 캐럴",
+  "country": "United Kingdom",
+  "emoji": "🐰",
+  "color": "#7a6aaa",
+  "cefr": "A2",
+  "lexile": "약 580L (추정)",
+  "words": 200,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-sorrows-of-young-werther",
+  "title": "The Sorrows of Young Werther",
+  "titleKo": "젊은 베르테르의 슬픔",
+  "author": "Johann Wolfgang von Goethe",
+  "authorKo": "요한 볼프강 폰 괴테",
+  "country": "Germany",
+  "emoji": "💌",
+  "color": "#7a3a5a",
+  "cefr": "A2",
+  "lexile": "약 640L (추정)",
+  "words": 196,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "beneath-the-wheel",
+  "title": "Beneath the Wheel",
+  "titleKo": "수레바퀴 아래서",
+  "author": "Hermann Hesse",
+  "authorKo": "헤르만 헤세",
+  "country": "Germany",
+  "emoji": "⚙️",
+  "color": "#5a6a7a",
+  "cefr": "A2",
+  "lexile": "약 620L (추정)",
+  "words": 210,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "jonathan-livingston-seagull",
+  "title": "Jonathan Livingston Seagull",
+  "titleKo": "갈매기의 꿈",
+  "author": "Richard Bach",
+  "authorKo": "리처드 바크",
+  "country": "United States",
+  "emoji": "🌊",
+  "color": "#3a8ab0",
+  "cefr": "A2",
+  "lexile": "약 580L (추정)",
+  "words": 209,
+  "places": [
+   "United States"
+  ]
  }
 ];
