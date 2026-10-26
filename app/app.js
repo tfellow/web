@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "9"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "10"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -716,7 +716,7 @@
       '<div class="book-hero" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="tohome">← 책장</button>' +
       '<div class="cover" style="margin-top:10px">' + esc(b.emoji) + "</div><h2>" + esc(b.title) + "</h2>" +
       '<div class="by">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
-      '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || b.cefr) + "</span><span>Lexile " + esc(b.lexile) + "</span><span>AR " + esc(b.ar) + "</span><span>" + b.words + "단어</span>" +
+      '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || b.cefr) + "</span>" + (b.lexile ? "<span>Lexile " + esc(b.lexile) + "</span>" : "") + (b.ar ? "<span>AR " + esc(b.ar) + "</span>" : "") + "<span>" + b.words + "단어</span>" +
       (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div>" + stampBoxHtml(b, myRecord(b.id)) + "</div>" +
       '<div class="card" id="bookbody"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
       '<div class="quiz-cta"><button class="btn gold big" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';

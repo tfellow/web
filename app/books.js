@@ -91,5 +91,21 @@ window.BOOKS = [
   "places": [
    "Japan"
   ]
+ },
+ {
+  "id": "the-little-prince",
+  "title": "The Little Prince",
+  "titleKo": "어린 왕자",
+  "author": "Antoine de Saint-Exupéry",
+  "authorKo": "앙투안 드 생텍쥐페리",
+  "country": "France",
+  "emoji": "🌹",
+  "color": "#c4882b",
+  "cefr": "A1",
+  "lexile": "약 350L (추정)",
+  "words": 159,
+  "places": [
+   "France"
+  ]
  }
 ];
