@@ -427,5 +427,343 @@ window.BOOKS = [
   "places": [
    "Denmark"
   ]
+ },
+ {
+  "id": "the-gift-of-the-magi",
+  "title": "The Gift of the Magi",
+  "titleKo": "크리스마스 선물",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🎁",
+  "color": "#8a3a4a",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 169,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-last-leaf",
+  "title": "The Last Leaf",
+  "titleKo": "마지막 잎새",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🍃",
+  "color": "#6a7a3a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 164,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "after-twenty-years",
+  "title": "After Twenty Years",
+  "titleKo": "20년 후",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🌃",
+  "color": "#3d4a6b",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 175,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-cop-and-the-anthem",
+  "title": "The Cop and the Anthem",
+  "titleKo": "경찰관과 찬송가",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🎵",
+  "color": "#5a5a8a",
+  "cefr": "A1",
+  "lexile": "약 370L (추정)",
+  "words": 165,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-ransom-of-red-chief",
+  "title": "The Ransom of Red Chief",
+  "titleKo": "붉은 추장의 몸값",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🏕️",
+  "color": "#a85a2a",
+  "cefr": "A1",
+  "lexile": "약 390L (추정)",
+  "words": 174,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-necklace",
+  "title": "The Necklace",
+  "titleKo": "목걸이",
+  "author": "Guy de Maupassant",
+  "authorKo": "기 드 모파상",
+  "country": "France",
+  "emoji": "💎",
+  "color": "#5a4a8a",
+  "cefr": "A1",
+  "lexile": "약 390L (추정)",
+  "words": 166,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-last-lesson",
+  "title": "The Last Lesson",
+  "titleKo": "마지막 수업",
+  "author": "Alphonse Daudet",
+  "authorKo": "알퐁스 도데",
+  "country": "France",
+  "emoji": "📖",
+  "color": "#4a6a8a",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 164,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-stars",
+  "title": "The Stars",
+  "titleKo": "별",
+  "author": "Alphonse Daudet",
+  "authorKo": "알퐁스 도데",
+  "country": "France",
+  "emoji": "🌌",
+  "color": "#2a3a6a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 168,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-happy-prince",
+  "title": "The Happy Prince",
+  "titleKo": "행복한 왕자",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🏛️",
+  "color": "#b08a2a",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 170,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-nightingale",
+  "title": "The Nightingale",
+  "titleKo": "나이팅게일",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🎶",
+  "color": "#3a7a6a",
+  "cefr": "A1",
+  "lexile": "약 370L (추정)",
+  "words": 167,
+  "places": [
+   "Denmark",
+   "China"
+  ]
+ },
+ {
+  "id": "ivan-the-fool",
+  "title": "Ivan the Fool",
+  "titleKo": "바보 이반",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "🌾",
+  "color": "#7a6a3a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 166,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "what-men-live-by",
+  "title": "What Men Live By",
+  "titleKo": "사람은 무엇으로 사는가",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "👞",
+  "color": "#6a4a3a",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 180,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "moonlight",
+  "title": "Moonlight",
+  "titleKo": "달빛",
+  "author": "Guy de Maupassant",
+  "authorKo": "기 드 모파상",
+  "country": "France",
+  "emoji": "🌙",
+  "color": "#3a4a7a",
+  "cefr": "A1",
+  "lexile": "약 370L (추정)",
+  "words": 165,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-great-stone-face",
+  "title": "The Great Stone Face",
+  "titleKo": "큰 바위 얼굴",
+  "author": "Nathaniel Hawthorne",
+  "authorKo": "너새니얼 호손",
+  "country": "United States",
+  "emoji": "🗿",
+  "color": "#6a6a5a",
+  "cefr": "A1",
+  "lexile": "약 380L (추정)",
+  "words": 175,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "snow-white",
+  "title": "Snow White",
+  "titleKo": "백설공주",
+  "author": "The Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🍎",
+  "color": "#a83a3a",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 170,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "rapunzel",
+  "title": "Rapunzel",
+  "titleKo": "라푼젤",
+  "author": "The Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🗼",
+  "color": "#7a5a9a",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 176,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "cinderella",
+  "title": "Cinderella",
+  "titleKo": "신데렐라",
+  "author": "Charles Perrault",
+  "authorKo": "샤를 페로",
+  "country": "France",
+  "emoji": "👠",
+  "color": "#4a6aa8",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 164,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-giving-tree",
+  "title": "The Giving Tree",
+  "titleKo": "아낌없이 주는 나무",
+  "author": "Shel Silverstein",
+  "authorKo": "셸 실버스타인",
+  "country": "United States",
+  "emoji": "🌳",
+  "color": "#4a8a4a",
+  "cefr": "A1",
+  "lexile": "약 300L (추정)",
+  "words": 176,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-dot",
+  "title": "The Dot",
+  "titleKo": "점",
+  "author": "Peter H. Reynolds",
+  "authorKo": "피터 H. 레이놀즈",
+  "country": "United States",
+  "emoji": "🎨",
+  "color": "#c4502a",
+  "cefr": "A1",
+  "lexile": "약 320L (추정)",
+  "words": 167,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "ish",
+  "title": "Ish",
+  "titleKo": "느끼는 대로",
+  "author": "Peter H. Reynolds",
+  "authorKo": "피터 H. 레이놀즈",
+  "country": "United States",
+  "emoji": "🖍️",
+  "color": "#3a8a9a",
+  "cefr": "A1",
+  "lexile": "약 320L (추정)",
+  "words": 157,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "sky-color",
+  "title": "Sky Color",
+  "titleKo": "하늘 색깔",
+  "author": "Peter H. Reynolds",
+  "authorKo": "피터 H. 레이놀즈",
+  "country": "United States",
+  "emoji": "🌅",
+  "color": "#4a7ac0",
+  "cefr": "A1",
+  "lexile": "약 320L (추정)",
+  "words": 164,
+  "places": [
+   "United States"
+  ]
  }
 ];
