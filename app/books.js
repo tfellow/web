@@ -926,5 +926,333 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "momo",
+  "title": "Momo",
+  "titleKo": "모모",
+  "author": "Michael Ende",
+  "authorKo": "미하엘 엔데",
+  "country": "Germany",
+  "emoji": "⏳",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 210,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "don-quixote",
+  "title": "Don Quixote",
+  "titleKo": "돈키호테",
+  "author": "Miguel de Cervantes",
+  "authorKo": "미겔 데 세르반테스",
+  "country": "Spain",
+  "emoji": "🐎",
+  "color": "#a86a2a",
+  "cefr": "A2",
+  "lexile": "약 640L (추정)",
+  "words": 193,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "brave-new-world",
+  "title": "Brave New World",
+  "titleKo": "멋진 신세계",
+  "author": "Aldous Huxley",
+  "authorKo": "올더스 헉슬리",
+  "country": "United Kingdom",
+  "emoji": "🏙️",
+  "color": "#4a8a8a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 190,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "nineteen-eighty-four",
+  "title": "1984",
+  "titleKo": "1984",
+  "author": "George Orwell",
+  "authorKo": "조지 오웰",
+  "country": "United Kingdom",
+  "emoji": "👁️",
+  "color": "#5a5a5a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 190,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-great-gatsby",
+  "title": "The Great Gatsby",
+  "titleKo": "위대한 개츠비",
+  "author": "F. Scott Fitzgerald",
+  "authorKo": "F. 스콧 피츠제럴드",
+  "country": "United States",
+  "emoji": "💚",
+  "color": "#2a6a4a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 194,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "frankenstein",
+  "title": "Frankenstein",
+  "titleKo": "프랑켄슈타인",
+  "author": "Mary Shelley",
+  "authorKo": "메리 셸리",
+  "country": "United Kingdom",
+  "emoji": "⚡",
+  "color": "#4a5a3a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 207,
+  "places": [
+   "United Kingdom",
+   "Switzerland"
+  ]
+ },
+ {
+  "id": "anne-of-green-gables",
+  "title": "Anne of Green Gables",
+  "titleKo": "빨강 머리 앤",
+  "author": "Lucy Maud Montgomery",
+  "authorKo": "루시 모드 몽고메리",
+  "country": "Canada",
+  "emoji": "🌸",
+  "color": "#c4602a",
+  "cefr": "A2",
+  "lexile": "약 620L (추정)",
+  "words": 208,
+  "places": [
+   "Canada"
+  ]
+ },
+ {
+  "id": "romeo-and-juliet",
+  "title": "Romeo and Juliet",
+  "titleKo": "로미오와 줄리엣",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "💔",
+  "color": "#a82a4a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 198,
+  "places": [
+   "United Kingdom",
+   "Italy"
+  ]
+ },
+ {
+  "id": "around-the-world-in-eighty-days",
+  "title": "Around the World in Eighty Days",
+  "titleKo": "80일간의 세계 일주",
+  "author": "Jules Verne",
+  "authorKo": "쥘 베른",
+  "country": "France",
+  "emoji": "🎈",
+  "color": "#3a6aa8",
+  "cefr": "A2",
+  "lexile": "약 650L (추정)",
+  "words": 215,
+  "places": [
+   "France",
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "twenty-thousand-leagues-under-the-seas",
+  "title": "Twenty Thousand Leagues Under the Seas",
+  "titleKo": "해저 2만 리",
+  "author": "Jules Verne",
+  "authorKo": "쥘 베른",
+  "country": "France",
+  "emoji": "🐙",
+  "color": "#2a4a7a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 196,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-diary-of-a-young-girl",
+  "title": "The Diary of a Young Girl",
+  "titleKo": "안네의 일기",
+  "author": "Anne Frank",
+  "authorKo": "안네 프랑크",
+  "country": "Netherlands",
+  "emoji": "📔",
+  "color": "#7a5a3a",
+  "cefr": "A2",
+  "lexile": "약 640L (추정)",
+  "words": 198,
+  "places": [
+   "Netherlands",
+   "Germany"
+  ]
+ },
+ {
+  "id": "treasure-island",
+  "title": "Treasure Island",
+  "titleKo": "보물섬",
+  "author": "Robert Louis Stevenson",
+  "authorKo": "로버트 루이스 스티븐슨",
+  "country": "United Kingdom",
+  "emoji": "🏴‍☠️",
+  "color": "#8a6a2a",
+  "cefr": "A2",
+  "lexile": "약 640L (추정)",
+  "words": 203,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "jane-eyre",
+  "title": "Jane Eyre",
+  "titleKo": "제인 에어",
+  "author": "Charlotte Brontë",
+  "authorKo": "샬럿 브론테",
+  "country": "United Kingdom",
+  "emoji": "🏚️",
+  "color": "#5a3a4a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 211,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "daddy-long-legs",
+  "title": "Daddy-Long-Legs",
+  "titleKo": "키다리 아저씨",
+  "author": "Jean Webster",
+  "authorKo": "진 웹스터",
+  "country": "United States",
+  "emoji": "✉️",
+  "color": "#3a6a8a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 194,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "les-miserables",
+  "title": "Les Misérables",
+  "titleKo": "레 미제라블",
+  "author": "Victor Hugo",
+  "authorKo": "빅토르 위고",
+  "country": "France",
+  "emoji": "⛓️",
+  "color": "#4a4a6a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 203,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "gullivers-travels",
+  "title": "Gulliver’s Travels",
+  "titleKo": "걸리버 여행기",
+  "author": "Jonathan Swift",
+  "authorKo": "조너선 스위프트",
+  "country": "Ireland",
+  "emoji": "⛵",
+  "color": "#3a7a8a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 196,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-metamorphosis",
+  "title": "The Metamorphosis",
+  "titleKo": "변신",
+  "author": "Franz Kafka",
+  "authorKo": "프란츠 카프카",
+  "country": "Czechia",
+  "emoji": "🚪",
+  "color": "#6a5a3a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 212,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "the-alchemist",
+  "title": "The Alchemist",
+  "titleKo": "연금술사",
+  "author": "Paulo Coelho",
+  "authorKo": "파울루 코엘류",
+  "country": "Brazil",
+  "emoji": "🏜️",
+  "color": "#c4943a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 202,
+  "places": [
+   "Brazil",
+   "Spain",
+   "Egypt"
+  ]
+ },
+ {
+  "id": "a-christmas-carol",
+  "title": "A Christmas Carol",
+  "titleKo": "크리스마스 캐럴",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🎄",
+  "color": "#2a6a3a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 205,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "crime-and-punishment",
+  "title": "Crime and Punishment",
+  "titleKo": "죄와 벌",
+  "author": "Fyodor Dostoevsky",
+  "authorKo": "표도르 도스토옙스키",
+  "country": "Russia",
+  "emoji": "⚖️",
+  "color": "#6a3a3a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 190,
+  "places": [
+   "Russia"
+  ]
  }
 ];
