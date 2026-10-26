@@ -250,6 +250,32 @@ select { border: 1px solid var(--line); border-radius: 10px; padding: 5px 8px; b
 .overlay input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
 
 /* 모바일 세로 화면 (반드시 스타일 맨 끝에 둘 것: 앞의 기본 규칙을 덮어쓰기 위해) */
+/* v9: 내 지도 / 우리 반 지도 · 대륙 배지 · 도장 고르기 */
+.pp-stats { grid-template-columns: repeat(4, 1fr); }
+.pp-stats.three { grid-template-columns: repeat(3, 1fr); }
+.seg { display: inline-flex; background: #eef2f9; border-radius: 999px; padding: 3px; margin-bottom: 10px; gap: 2px; }
+.seg button { border: 0; background: transparent; border-radius: 999px; padding: 6px 14px; font: inherit; font-size: .86rem; cursor: pointer; color: var(--muted); }
+.seg button.on { background: var(--navy); color: #fff; font-weight: 700; }
+.mapbox .cty.lv1 { fill: #f6dfa0; cursor: pointer; }
+.mapbox .cty.lv2 { fill: #ecc664; cursor: pointer; }
+.mapbox .cty.lv3 { fill: #e0a92e; cursor: pointer; }
+.mapbox .cty.lv1:hover, .mapbox .cty.lv2:hover, .mapbox .cty.lv3:hover { fill: #c98f12; }
+.mapbox .pin.count text { fill: #fff; font-weight: 800; font-size: 12px; }
+.conts-title { margin-top: 16px; font-weight: 700; }
+.conts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.cont { border: 1px dashed var(--line); border-radius: 14px; padding: 10px 4px; text-align: center; color: var(--muted); background: #f7f8fb; filter: grayscale(1); opacity: .7; }
+.cont .em { display: block; font-size: 1.6rem; }
+.cont b { display: block; font-size: .85rem; color: inherit; }
+.cont small { font-size: .7rem; }
+.cont.on { border: 1px solid #ead9ad; background: var(--gold-soft); color: var(--navy); filter: none; opacity: 1; }
+.stampbox { margin-top: 14px; background: rgba(255,255,255,.14); border: 1px dashed rgba(255,255,255,.6); border-radius: 14px; padding: 10px 12px; text-align: left; }
+.stampbox .sb-sub { font-size: .78rem; opacity: .85; margin-top: 2px; }
+.stampbox .chips { margin-top: 8px; }
+.stampbox .chip { color: var(--ink, #1d2433); }
+.stampbox .chip:disabled { cursor: default; opacity: .9; }
+.stampbox .chip.on { color: #fff; }
+.result .stampbox { background: var(--gold-soft); border-color: #ead9ad; color: var(--navy); text-align: center; margin: 12px auto; max-width: 460px; }
+.result .stampbox .chips { justify-content: center; }
 @media (max-width: 640px) {
   header.top { position: static; flex-direction: column; align-items: stretch; padding: 18px 12px 14px; gap: 16px; }
   header.top h1 { font-size: 1.7rem; text-align: center; line-height: 1.2; }
@@ -282,4 +308,9 @@ select { border: 1px solid var(--line); border-radius: 10px; padding: 5px 8px; b
   .para .en { font-size: 1rem; }
   .book-hero h2 { font-size: 1.25rem; }
   .stamp { width: 146px; height: 146px; }
+  .pp-stats { grid-template-columns: repeat(2, 1fr); }
+  .pp-stats.three { grid-template-columns: repeat(3, 1fr); }
+  .conts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .seg { display: flex; }
+  .seg button { flex: 1; padding: 6px 4px; }
 }

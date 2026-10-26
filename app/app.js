@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "8"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "9"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -44,6 +44,7 @@
     "South Korea": { map: "South Korea", ko: "한국", iso: "KR", at: [127.8, 36.4] },
     "Korea": { map: "South Korea", ko: "한국", iso: "KR", at: [127.8, 36.4] },
     "Ireland": { map: "Ireland", ko: "아일랜드", iso: "IE", at: [-8, 53.2] },
+    "Iceland": { map: "Iceland", ko: "아이슬란드", iso: "IS", at: [-18.6, 64.9] },
     "Canada": { map: "Canada", ko: "캐나다", iso: "CA", at: [-100, 57] },
     "India": { map: "India", ko: "인도", iso: "IN", at: [79, 22] },
     "Norway": { map: "Norway", ko: "노르웨이", iso: "NO", at: [9, 61] },
@@ -66,6 +67,20 @@
     "Mexico": { map: "Mexico", ko: "멕시코", iso: "MX", at: [-102, 23.5] },
     "Australia": { map: "Australia", ko: "호주", iso: "AU", at: [134, -25] }
   };
+  // 대륙 배지: 각 대륙에 첫 여권 도장을 찍으면 받아요 (지도 이름 → 대륙)
+  var CONTINENTS = [
+    { id: "EU", name: "유럽", em: "🏰" }, { id: "AS", name: "아시아", em: "🏯" }, { id: "NA", name: "북아메리카", em: "🗽" },
+    { id: "SA", name: "남아메리카", em: "🦙" }, { id: "AF", name: "아프리카", em: "🦁" }, { id: "OC", name: "오세아니아", em: "🦘" }
+  ];
+  var CONT_OF = {
+    "Czechia": "EU", "United Kingdom": "EU", "France": "EU", "Germany": "EU", "Italy": "EU", "Spain": "EU", "Russia": "EU",
+    "Ireland": "EU", "Iceland": "EU", "Norway": "EU", "Sweden": "EU", "Denmark": "EU", "Netherlands": "EU", "Belgium": "EU",
+    "Austria": "EU", "Switzerland": "EU", "Poland": "EU", "Greece": "EU", "Portugal": "EU",
+    "Turkey": "AS", "Japan": "AS", "China": "AS", "South Korea": "AS", "India": "AS",
+    "United States of America": "NA", "Canada": "NA", "Mexico": "NA",
+    "Brazil": "SA", "Colombia": "SA", "Chile": "SA", "Argentina": "SA",
+    "Egypt": "AF", "Nigeria": "AF", "Australia": "OC"
+  };
 
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var $app = document.getElementById("app");
@@ -86,6 +101,15 @@
   function levelOf(b) { return String((b && b.cefr) || "").toUpperCase().slice(0, 2); }
   function countryOf(b) { return (b && COUNTRIES[b.country]) || null; }
   function countryKo(b) { var c = countryOf(b); return c ? c.ko : (b && b.country) || ""; }
+  // 여권 도장 후보 나라 (첫 번째 = 작가 나라 = 기본값)
+  function placesOf(b) { return b && b.places && b.places.length ? b.places : (b && b.country ? [b.country] : []); }
+  function sameCountry(a, b) { var x = COUNTRIES[a], y = COUNTRIES[b]; return a === b || (!!x && !!y && x.map === y.map); }
+  function countryLabel(key) { var c = COUNTRIES[key]; return c ? flag(c.iso) + " " + esc(c.ko) : esc(key); }
+  // 내가 이 책으로 찍은 도장 나라 (고르지 않았으면 작가 나라)
+  function stampOf(b, r) {
+    var p = placesOf(b);
+    return r && r.stamp && p.indexOf(r.stamp) >= 0 ? r.stamp : p[0];
+  }
   // 국기 이모지는 Windows에서 글자(FR, GB)로 보여서 작은 이미지로 표시해요
   function flag(iso) {
     if (!iso || !/^[A-Za-z]{2}$/.test(iso)) return "🌐";
@@ -277,8 +301,19 @@
 
     var byId = {};
     (sum.books || []).forEach(function (b) { byId[b.book_id] = b; });
+    state.summary = sum;
     var books = window.BOOKS || [];
     function st(b) { var r = byId[b.id]; return !r ? "new" : (r.medal ? "done" : "trying"); }
+
+    // 내 여권 도장 · 여행한 나라 · 대륙 배지
+    var myStamp = {};
+    books.forEach(function (b) { var r = byId[b.id]; if (r && r.medal) myStamp[b.id] = stampOf(b, r); });
+    var visited = {};
+    Object.keys(myStamp).forEach(function (bid) { var c = COUNTRIES[myStamp[bid]]; visited[c ? c.map : myStamp[bid]] = true; });
+    var visitedN = Object.keys(visited).length;
+    var contDone = {};
+    Object.keys(visited).forEach(function (m) { if (CONT_OF[m]) contDone[CONT_OF[m]] = true; });
+    var contN = Object.keys(contDone).length;
     var done = books.filter(function (b) { return st(b) === "done"; }).length;
     var pct = books.length ? Math.round((done / books.length) * 100) : 0;
 
@@ -352,7 +387,8 @@
       '<div class="pp-level">' + (title ? title.lv + " " + LEVEL_INFO[title.lv].name : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div></div></div>" +
       '<div class="pp-stats"><div class="pp-stat"><b>' + done + "/" + books.length + "</b><span>작품 완료</span></div>" +
       '<div class="pp-stat"><b>' + (sum.words || 0).toLocaleString() + "</b><span>읽은 단어</span></div>" +
-      '<div class="pp-stat"><b>' + (streak ? "🔥" + streak + "주" : "-") + "</b><span>연속 독서</span></div></div>" +
+      '<div class="pp-stat"><b>' + (streak ? "🔥" + streak + "주" : "-") + "</b><span>연속 독서</span></div>" +
+      '<div class="pp-stat"><b>🌍 ' + visitedN + "</b><span>여행한 나라</span></div></div>" +
       '<div class="progress"><div id="bar"></div></div>' +
       '<div class="pp-medals">' + medalRing("🥇", sum.gold || 0, "금메달") + medalRing("🥈", sum.silver || 0, "은메달") + medalRing("🥉", sum.bronze || 0, "동메달") + medalRing("⭐", sum.stars || 0, "무힌트") + "</div></section>" +
 
@@ -379,10 +415,15 @@
       section("🔥 이어서 도전하기", "", trying, "아직 메달을 받지 못한 책이에요. 한 번 더 도전해 볼까요?") +
       section("🧭 다음에 읽을 책", "", rec, cur < 0 ? "쉬운 책부터 시작해 보세요." : "내 수준에 맞춰 골랐어요.") +
 
-      '<div class="card"><h2>🗺️ 세계 문학 지도<span class="sub">나라를 누르면 그 나라 책만 보여요</span></h2>' +
+      '<div class="card" id="mapcard"><h2>🗺️ 세계 문학 지도<span class="sub">나라를 누르면 그 나라 책만 보여요</span></h2>' +
+      (cls ? '<div class="seg" id="mapseg"><button data-m="me">🛂 내 지도</button><button data-m="class">🤝 우리 반 지도</button></div>' : "") +
       '<div class="mapbox" id="worldmap"><div class="map-loading">지도를 펼치는 중...</div></div>' +
-      '<div class="legend"><span><i style="background:#f0cf7a"></i>메달 받은 나라</span><span><i style="background:#b9c9ea"></i>읽을 책이 있는 나라</span></div>' +
-      '<div class="chips" id="countrychips"></div></div>' +
+      '<div class="legend" id="maplegend"></div>' +
+      '<div class="chips" id="countrychips"></div>' +
+      '<div class="conts-title">🏅 대륙 배지 <span class="muted">' + contN + "/" + CONTINENTS.length + "</span></div>" +
+      '<div class="conts">' + CONTINENTS.map(function (c) {
+        return '<div class="cont ' + (contDone[c.id] ? "on" : "") + '"><div class="em">' + c.em + "</div><b>" + c.name + "</b><small>" + (contDone[c.id] ? "첫 도장 완료!" : "아직이에요") + "</small></div>";
+      }).join("") + "</div></div>" +
 
       '<div class="card" id="shelfcard"><h2>📚 책장</h2><div class="pills" id="lvpills"></div><div class="pills" id="stpills"></div>' +
       '<input id="q" class="search" type="search" placeholder="🔍 제목, 작가, 나라 검색" value="' + esc(state.shelf.q) + '">' +
@@ -418,7 +459,7 @@
       var list = books.filter(function (b) {
         if (S.level !== "all" && levelOf(b) !== S.level) return false;
         if (S.status !== "all" && st(b) !== S.status) return false;
-        if (S.country && b.country !== S.country) return false;
+        if (S.country && !placesOf(b).some(function (k) { return sameCountry(k, S.country); })) return false;
         if (q) {
           var hay = [b.title, b.titleKo, b.author, b.authorKo, b.country, countryKo(b)].join(" ").toLowerCase();
           if (hay.indexOf(q) < 0) return false;
@@ -446,8 +487,8 @@
       bindCards(box);
       var cc = document.getElementById("clearcountry");
       if (cc) cc.onclick = function () { pickCountry(""); };
-      each("#countrychips .chip", function (el) { el.classList.toggle("on", el.getAttribute("data-c") === S.country); });
-      each("#worldmap .cty", function (el) { el.classList.toggle("sel", !!S.country && el.getAttribute("data-c") === S.country); });
+      each("#countrychips .chip", function (el) { el.classList.toggle("on", !!S.country && sameCountry(el.getAttribute("data-c"), S.country)); });
+      each("#worldmap .cty", function (el) { el.classList.toggle("sel", !!S.country && sameCountry(el.getAttribute("data-c"), S.country)); });
     }
     function pickCountry(key) {
       S.country = S.country === key ? "" : key;
@@ -459,26 +500,73 @@
     bindCards($app);
     document.getElementById("q").oninput = function () { S.q = this.value; drawShelf(); };
 
-    // 나라 칩 (지도가 없어도 쓸 수 있게)
-    var byCountry = {};
-    books.forEach(function (b) {
-      if (!b.country) return;
-      var k = b.country;
-      byCountry[k] = byCountry[k] || { key: k, info: COUNTRIES[k], total: 0, done: 0, best: null };
-      byCountry[k].total++;
-      var r = byId[b.id];
-      if (r && r.medal) {
-        byCountry[k].done++;
-        var order = { gold: 3, silver: 2, bronze: 1 };
-        if (!byCountry[k].best || order[r.medal] > order[byCountry[k].best]) byCountry[k].best = r.medal;
-      }
+    // 지도 데이터: 내 지도 = 내가 찍은 도장, 우리 반 지도 = 반 친구들 도장 합계(누가 찍었는지는 보이지 않음)
+    var ORDER = { gold: 3, silver: 2, bronze: 1 };
+    var MEDAL_FILL = { gold: "#d4a017", silver: "#8d99ab", bronze: "#b8702e" };
+    function myEntries() {
+      var by = {};
+      books.forEach(function (b) {
+        placesOf(b).forEach(function (k, idx) {
+          var info = COUNTRIES[k];
+          if (!info) return;
+          var e = by[info.map] || (by[info.map] = { key: k, info: info, books: 0, stamps: 0, best: null, author: false });
+          e.books++;
+          if (idx === 0) e.author = true;
+        });
+        var r = byId[b.id];
+        var si = r && r.medal ? COUNTRIES[myStamp[b.id]] : null;
+        if (si && by[si.map]) {
+          var e2 = by[si.map];
+          e2.stamps++; e2.key = myStamp[b.id];
+          if (!e2.best || ORDER[r.medal] > ORDER[e2.best]) e2.best = r.medal;
+        }
+      });
+      return Object.keys(by).map(function (m) {
+        var e = by[m];
+        return { key: e.key, info: e.info, level: e.stamps ? 3 : 0, done: e.stamps > 0,
+          pin: e.stamps ? MEDALS[e.best].em : (e.author ? "📘" : ""), pinFill: e.stamps ? MEDAL_FILL[e.best] : "#2d5291",
+          title: e.info.ko + (e.stamps ? " · 내 도장 " + e.stamps + "개" : " · 관련 책 " + e.books + "권"),
+          chip: e.stamps ? MEDALS[e.best].em + " " + e.stamps : e.books + "권" };
+      });
+    }
+    function classEntries() {
+      var by = {};
+      ((cls && cls.countries) || []).forEach(function (x) {
+        var info = COUNTRIES[x.country];
+        if (!info) return;
+        var e = by[info.map] || (by[info.map] = { key: x.country, info: info, count: 0 });
+        e.count += x.count;
+      });
+      books.forEach(function (b) {
+        placesOf(b).forEach(function (k) { var info = COUNTRIES[k]; if (info && !by[info.map]) by[info.map] = { key: k, info: info, count: 0 }; });
+      });
+      var max = 1;
+      Object.keys(by).forEach(function (m) { max = Math.max(max, by[m].count); });
+      return Object.keys(by).map(function (m) {
+        var e = by[m];
+        return { key: e.key, info: e.info, level: e.count ? Math.max(1, Math.ceil((e.count / max) * 3)) : 0, done: e.count > 0,
+          pin: e.count ? String(e.count) : "", pinFill: "#2d5291", count: true,
+          title: e.info.ko + " · 우리 반 도장 " + e.count + "개", chip: "도장 " + e.count };
+      });
+    }
+    var mapMode = cls && state.mapMode === "class" ? "class" : "me";
+    function drawMapUI() {
+      var entries = mapMode === "class" ? classEntries() : myEntries();
+      document.getElementById("maplegend").innerHTML = mapMode === "class"
+        ? '<span><i style="background:#f6dfa0"></i>도장 조금</span><span><i style="background:#e0a92e"></i>도장 많이</span><span><i style="background:#b9c9ea"></i>아직 아무도 안 간 나라</span>'
+        : '<span><i style="background:#ebc35a"></i>내 도장을 찍은 나라</span><span><i style="background:#b9c9ea"></i>관련 책이 있는 나라</span>';
+      entries.sort(function (a, b) { return (b.done ? 1 : 0) - (a.done ? 1 : 0); });
+      document.getElementById("countrychips").innerHTML = entries.map(function (e) {
+        return '<button class="chip ' + (e.done ? "done" : "") + '" data-c="' + esc(e.key) + '">' + flag(e.info.iso) + " " + esc(e.info.ko) + " <small>" + esc(e.chip) + "</small></button>";
+      }).join("");
+      each("#countrychips .chip", function (el) { el.onclick = function () { pickCountry(el.getAttribute("data-c")); }; });
+      each("#mapseg button", function (el) { el.classList.toggle("on", el.getAttribute("data-m") === mapMode); });
+      drawWorldMap(entries, pickCountry).then(function () { drawShelf(); }, function () {});
+    }
+    each("#mapseg button", function (el) {
+      el.onclick = function () { mapMode = state.mapMode = el.getAttribute("data-m"); drawMapUI(); };
     });
-    var clist = Object.keys(byCountry).map(function (k) { return byCountry[k]; });
-    document.getElementById("countrychips").innerHTML = clist.map(function (c) {
-      return '<button class="chip ' + (c.done ? "done" : "") + '" data-c="' + esc(c.key) + '">' + (c.info ? flag(c.info.iso) + " " + esc(c.info.ko) : esc(c.key)) + " " + (c.best ? MEDALS[c.best].em : "") + " <small>" + c.done + "/" + c.total + "</small></button>";
-    }).join("");
-    each("#countrychips .chip", function (el) { el.onclick = function () { pickCountry(el.getAttribute("data-c")); }; });
-    drawWorldMap(clist, pickCountry).then(function () { drawShelf(); }, function () {});
+    drawMapUI();
 
     setTimeout(function () {
       var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%";
@@ -494,6 +582,7 @@
   }
 
   /* ---------- 세계 지도 ---------- */
+  // entries: [{ key, info, level(0~3), pin, pinFill, title, count }]
   async function drawWorldMap(clist, onPick) {
     var box = document.getElementById("worldmap");
     if (!box) return;
@@ -514,12 +603,12 @@
     clist.forEach(function (c) { if (c.info) byMap[c.info.map] = c; });
     var paths = feats.map(function (f) {
       var c = byMap[f.properties.name];
-      var cls = c ? (c.done ? "cty done" : "cty has") : "cty";
-      return '<path class="' + cls + '" d="' + path(f) + '"' + (c ? ' data-c="' + esc(c.key) + '"' : "") + "><title>" + esc(c ? (c.info.ko + " · " + c.done + "/" + c.total + "작품") : f.properties.name) + "</title></path>";
+      var cls = c ? (c.level ? "cty lv" + c.level : "cty has") : "cty";
+      return '<path class="' + cls + '" d="' + path(f) + '"' + (c ? ' data-c="' + esc(c.key) + '"' : "") + "><title>" + esc(c ? c.title : f.properties.name) + "</title></path>";
     }).join("");
     // 핀 위치: 유럽처럼 가까운 나라는 핀이 겹치지 않게 조금씩 밀어내고, 원래 위치까지 선을 그어요
     var R = 13, GAP = 2 * R + 4;
-    var pinList = clist.filter(function (c) { return c.info && c.info.at; }).map(function (c) {
+    var pinList = clist.filter(function (c) { return c.info && c.info.at && c.pin; }).map(function (c) {
       var p = proj(c.info.at);
       return p ? { c: c, ox: p[0], oy: p[1], x: p[0], y: p[1] } : null;
     }).filter(Boolean);
@@ -538,10 +627,9 @@
     }
     var pins = pinList.map(function (p) {
       var c = p.c;
-      var fill = c.best === "gold" ? "#d4a017" : c.best === "silver" ? "#8d99ab" : c.best === "bronze" ? "#b8702e" : "#2d5291";
       var moved = Math.abs(p.x - p.ox) + Math.abs(p.y - p.oy) > 3;
       return (moved ? '<line x1="' + p.ox.toFixed(1) + '" y1="' + p.oy.toFixed(1) + '" x2="' + p.x.toFixed(1) + '" y2="' + p.y.toFixed(1) + '" stroke="#2d5291" stroke-width="1.2" stroke-dasharray="2 2"></line><circle cx="' + p.ox.toFixed(1) + '" cy="' + p.oy.toFixed(1) + '" r="2.5" fill="#2d5291"></circle>' : "") +
-        '<g class="pin" data-c="' + esc(c.key) + '" transform="translate(' + p.x.toFixed(1) + "," + p.y.toFixed(1) + ')"><circle r="' + R + '" fill="' + fill + '"></circle><text y="1">' + (c.best ? MEDALS[c.best].em : "📘") + "</text><title>" + esc(c.info.ko) + "</title></g>";
+        '<g class="pin' + (c.count ? " count" : "") + '" data-c="' + esc(c.key) + '" transform="translate(' + p.x.toFixed(1) + "," + p.y.toFixed(1) + ')"><circle r="' + R + '" fill="' + c.pinFill + '"></circle><text y="1">' + esc(c.pin) + "</text><title>" + esc(c.title) + "</title></g>";
     }).join("");
     box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="세계 문학 지도">' + paths + pins + "</svg>";
     each("[data-c]", function (el) { el.onclick = function () { onPick(el.getAttribute("data-c")); }; }, box);
@@ -551,11 +639,41 @@
   function revealBtn(key, label, hintIdx) {
     return '<button class="btn ghost small reveal" data-k="' + key + '"' + (hintIdx != null ? ' data-hint="' + hintIdx + '"' : "") + ">" + label + "</button>";
   }
+  // 여권 도장: 메달을 받은 책은 후보 나라 중 한 곳을 골라 도장을 찍고, 나중에 바꿀 수 있어요
+  function myRecord(bookId) {
+    return ((state.summary && state.summary.books) || []).filter(function (x) { return x.book_id === bookId; })[0] || null;
+  }
+  function stampBoxHtml(b, r) {
+    var p = placesOf(b).filter(function (k) { return COUNTRIES[k]; });
+    if (!p.length) return "";
+    var cur = r && r.medal ? stampOf(b, r) : null;
+    var head = cur ? "🛂 내 여권 도장: <b>" + countryLabel(cur) + "</b>" : "🛂 메달을 받으면 여권에 도장을 찍을 수 있어요";
+    var sub = p.length > 1 ? (cur ? "다른 나라로 바꿀 수 있어요 (첫 번째는 작가의 나라예요)" : "후보 나라 (첫 번째는 작가의 나라예요)") : "작가의 나라예요";
+    return '<div class="stampbox"><div class="sb-head">' + head + '</div><div class="sb-sub">' + sub + '</div><div class="chips">' +
+      p.map(function (k, i) {
+        return '<button class="chip' + (k === cur ? " on" : "") + '" data-stamp="' + esc(k) + '"' + (cur && p.length > 1 ? "" : " disabled") + ">" + countryLabel(k) + (i === 0 ? " <small>작가</small>" : "") + "</button>";
+      }).join("") + "</div></div>";
+  }
+  function bindStampBox(b, after) {
+    each(".stampbox [data-stamp]", function (el) {
+      el.onclick = async function () {
+        var k = el.getAttribute("data-stamp");
+        each(".stampbox [data-stamp]", function (x) { x.disabled = true; });
+        var res = await sb.rpc("set_stamp", { p_book_id: b.id, p_country: k });
+        if (res.error) { toast("도장을 바꾸지 못했어요: " + cleanMsg(res.error.message)); return after(); }
+        var r = myRecord(b.id);
+        if (r) r.stamp = k;
+        toast("🛂 " + (COUNTRIES[k] ? COUNTRIES[k].ko : k) + "에 도장을 찍었어요!");
+        after();
+      };
+    });
+  }
   async function renderBook(id) {
     var b = findBook(id);
     if (!b) return showError("책을 찾을 수 없어요.");
     if (!document.getElementById("bookbody")) loading();
-    var got = await Promise.all([loadContent(id), sb.rpc("my_hint_count", { p_book_id: id })]);
+    var got = await Promise.all([loadContent(id), sb.rpc("my_hint_count", { p_book_id: id }), state.summary ? null : sb.rpc("my_summary")]);
+    if (got[2] && !got[2].error) state.summary = got[2].data || {};
     var c = got[0];
     var hintCount = got[1].data || 0;
     var rv = state.revealed[id] || (state.revealed[id] = {});
@@ -599,12 +717,13 @@
       '<div class="cover" style="margin-top:10px">' + esc(b.emoji) + "</div><h2>" + esc(b.title) + "</h2>" +
       '<div class="by">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
       '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || b.cefr) + "</span><span>Lexile " + esc(b.lexile) + "</span><span>AR " + esc(b.ar) + "</span><span>" + b.words + "단어</span>" +
-      (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div></div>" +
+      (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div>" + stampBoxHtml(b, myRecord(b.id)) + "</div>" +
       '<div class="card" id="bookbody"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
       '<div class="quiz-cta"><button class="btn gold big" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';
     window.scrollTo(0, scrollY);
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("goquiz").onclick = function () { location.hash = "#/quiz/" + encodeURIComponent(b.id); };
+    bindStampBox(b, function () { renderBook(id).catch(showError); });
     each(".tabs button", function (el) {
       el.onclick = function () { state.bookTab = el.getAttribute("data-t"); renderBook(id).catch(showError); };
     });
@@ -719,13 +838,27 @@
       '<div class="stamp ' + (medal || "none") + '"><span class="em">' + (medal ? MEDALS[medal].em : "📘") + "</span><span>" + (medal ? MEDALS[medal].name : "도전 중") + "</span></div>" +
       '<div class="score-big">' + r.score + " / " + r.total + (r.star ? " ⭐" : "") + "</div>" +
       "<p><b>" + msg + "</b></p>" + starMsg +
-      (medal && c ? '<p class="muted">🗺️ 세계 문학 지도의 ' + flag(c.iso) + " " + esc(c.ko) + "에 스탬프가 찍혔어요.</p>" : "") +
+      '<div id="resstamp"></div>' +
       '<p class="muted">' + r.attempt + "번째 도전 · 내 최고 점수 " + r.best + "/" + r.total + (better ? " (" + MEDALS[r.best_medal].name + " 유지)" : "") + " · 같은 책은 10분 뒤 다시 도전할 수 있어요.</p>" +
       '<div style="margin-top:14px"><button class="btn" id="tohome">책장으로</button> <button class="btn ghost" id="reread">다시 읽기</button></div></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("reread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(b.id); };
     if (medal === "gold") confetti(70); else if (medal) confetti(30);
     if (r.star) setTimeout(function () { confetti(40); }, 600);
+    // 새 기록으로 요약을 다시 받아 도장 고르기를 보여 줘요
+    state.summary = null;
+    if (!r.best_medal && !medal) return;
+    function drawStamp() {
+      var box = document.getElementById("resstamp");
+      if (!box) return;
+      box.innerHTML = stampBoxHtml(b, myRecord(b.id));
+      bindStampBox(b, drawStamp);
+    }
+    sb.rpc("my_summary").then(function (s) {
+      if (s.error) return;
+      state.summary = s.data || {};
+      drawStamp();
+    });
   }
 
   /* ---------- 교사 화면 ---------- */
@@ -778,7 +911,7 @@
 
     $app.innerHTML =
       '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button><h2 style="margin-top:12px">👩‍🏫 교사 화면</h2>' +
-      '<div class="pp-stats" style="margin:4px 0 14px"><div class="kv center" style="margin:0"><b>' + school.length + '</b><span class="muted">가입한 학교 학생</span></div>' +
+      '<div class="pp-stats three" style="margin:4px 0 14px"><div class="kv center" style="margin:0"><b>' + school.length + '</b><span class="muted">가입한 학교 학생</span></div>' +
       '<div class="kv center" style="margin:0"><b>' + activeN + '</b><span class="muted">퀴즈에 도전한 사람</span></div>' +
       '<div class="kv center" style="margin:0"><b>' + totalMedals + '</b><span class="muted">받은 메달</span></div></div>' +
       '반 선택 <select id="cls">' + opts + '</select> <button class="btn ghost small" id="csv1">요약 CSV</button> <button class="btn ghost small" id="csv2">작품별 점수 CSV</button>' +
