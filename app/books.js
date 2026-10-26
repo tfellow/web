@@ -267,5 +267,165 @@ window.BOOKS = [
   "places": [
    "Greece"
   ]
+ },
+ {
+  "id": "the-honest-woodcutter",
+  "title": "The Honest Woodcutter",
+  "titleKo": "정직한 나무꾼",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🪓",
+  "color": "#6b5a3a",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 172,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "belling-the-cat",
+  "title": "Belling the Cat",
+  "titleKo": "고양이 목에 방울 달기",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🔔",
+  "color": "#7a6e9a",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 172,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-wolf-and-the-crane",
+  "title": "The Wolf and the Crane",
+  "titleKo": "늑대와 두루미",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦴",
+  "color": "#4f6a7a",
+  "cefr": "A1",
+  "lexile": "약 350L (추정)",
+  "words": 164,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-frog-and-the-ox",
+  "title": "The Frog and the Ox",
+  "titleKo": "개구리와 황소",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐸",
+  "color": "#4f8a5b",
+  "cefr": "A1",
+  "lexile": "약 320L (추정)",
+  "words": 152,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-ant-and-the-dove",
+  "title": "The Ant and the Dove",
+  "titleKo": "개미와 비둘기",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🕊️",
+  "color": "#4a7aa0",
+  "cefr": "A1",
+  "lexile": "약 330L (추정)",
+  "words": 166,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-father-his-son-and-their-donkey",
+  "title": "The Father, His Son, and Their Donkey",
+  "titleKo": "당나귀를 팔러 간 아버지와 아들",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐴",
+  "color": "#8a7a5a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 162,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-donkey-in-the-lions-skin",
+  "title": "The Donkey in the Lion’s Skin",
+  "titleKo": "사자 가죽을 쓴 당나귀",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🎭",
+  "color": "#9a7b3a",
+  "cefr": "A1",
+  "lexile": "약 340L (추정)",
+  "words": 162,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "thumbelina",
+  "title": "Thumbelina",
+  "titleKo": "엄지 공주",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🌷",
+  "color": "#c46a8a",
+  "cefr": "A1",
+  "lexile": "약 360L (추정)",
+  "words": 168,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "the-little-match-girl",
+  "title": "The Little Match Girl",
+  "titleKo": "성냥팔이 소녀",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🕯️",
+  "color": "#6a4058",
+  "cefr": "A1",
+  "lexile": "약 370L (추정)",
+  "words": 168,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "the-ugly-duckling",
+  "title": "The Ugly Duckling",
+  "titleKo": "미운 오리 새끼",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🦢",
+  "color": "#5a8aa8",
+  "cefr": "A1",
+  "lexile": "약 350L (추정)",
+  "words": 161,
+  "places": [
+   "Denmark"
+  ]
  }
 ];
