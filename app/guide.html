@@ -50,7 +50,7 @@ button { cursor: pointer; }
 .prog button.done { background: var(--navy-2); }
 .prog button.on { background: var(--gold); }
 .count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; white-space: nowrap; }
-.back { font-size: .85rem; color: var(--navy); text-decoration: none; font-weight: 700; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; background: var(--chip); }
+.back-link { font-size: .85rem; color: var(--navy); text-decoration: none; font-weight: 700; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; background: var(--chip); }
 
 .stage { flex: 1; min-height: 0; position: relative; }
 .slide { position: absolute; inset: 0; background: var(--page); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); overflow: auto; padding: clamp(22px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
@@ -218,7 +218,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
   .conts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .nav .hint { display: none; }
   .brand { display: none; }
-  .back { padding: 4px 10px; }
+  .back-link { padding: 4px 10px; }
 }
 </style>
 </head>
@@ -228,7 +228,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     <a class="brand" href="./">문영 독서 여권 <span>안내</span></a>
     <div class="prog" id="prog" aria-label="슬라이드 이동"></div>
     <div class="count" id="count">1 / 13</div>
-    <a class="back" href="./">독서 여권 →</a>
+    <a class="back-link" href="./">독서 여권 →</a>
   </div>
 
   <div class="stage" id="stage">
