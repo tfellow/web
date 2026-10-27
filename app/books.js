@@ -2439,5 +2439,102 @@ window.BOOKS = [
   "places": [
    "South Korea"
   ]
+ },
+ {
+  "id": "the-snow-queen",
+  "title": "The Snow Queen",
+  "titleKo": "눈의 여왕",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "❄️",
+  "color": "#5a8ac0",
+  "cefr": "A2",
+  "lexile": "약 560L",
+  "words": 218,
+  "places": [
+   "Denmark",
+   "Finland"
+  ]
+ },
+ {
+  "id": "the-adventures-of-pinocchio",
+  "title": "The Adventures of Pinocchio",
+  "titleKo": "피노키오의 모험",
+  "author": "Carlo Collodi",
+  "authorKo": "카를로 콜로디",
+  "country": "Italy",
+  "emoji": "🤥",
+  "color": "#b0603a",
+  "cefr": "A2",
+  "lexile": "약 580L",
+  "words": 213,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-little-mermaid",
+  "title": "The Little Mermaid",
+  "titleKo": "인어공주",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🧜‍♀️",
+  "color": "#3a8aa0",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 158,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "the-emperors-new-clothes",
+  "title": "The Emperor’s New Clothes",
+  "titleKo": "벌거벗은 임금님",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "👑",
+  "color": "#b08a3a",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 158,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "hansel-and-gretel",
+  "title": "Hansel and Gretel",
+  "titleKo": "헨젤과 그레텔",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🍬",
+  "color": "#a0623a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 176,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-town-musicians-of-bremen",
+  "title": "The Town Musicians of Bremen",
+  "titleKo": "브레멘 음악대",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🎺",
+  "color": "#6a8a3a",
+  "cefr": "A1",
+  "lexile": "약 390L",
+  "words": 178,
+  "places": [
+   "Germany"
+  ]
  }
 ];
