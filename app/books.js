@@ -2119,5 +2119,37 @@ window.BOOKS = [
    "Czechia",
    "Switzerland"
   ]
+ },
+ {
+  "id": "the-vegetarian",
+  "title": "The Vegetarian",
+  "titleKo": "채식주의자",
+  "author": "Han Kang",
+  "authorKo": "한강",
+  "country": "South Korea",
+  "emoji": "🌳",
+  "color": "#4f7a52",
+  "cefr": "B2",
+  "lexile": "약 950L",
+  "words": 373,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "human-acts",
+  "title": "Human Acts",
+  "titleKo": "소년이 온다",
+  "author": "Han Kang",
+  "authorKo": "한강",
+  "country": "South Korea",
+  "emoji": "🕯️",
+  "color": "#5a4f7a",
+  "cefr": "B2",
+  "lexile": "약 980L",
+  "words": 379,
+  "places": [
+   "South Korea"
+  ]
  }
 ];
