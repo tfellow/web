@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "22"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "23"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -1209,9 +1209,42 @@
         '<input id="goalin" type="number" min="100" step="100" value="' + goalWords + '" style="width:140px;padding:7px 10px;border:1px solid var(--line);border-radius:10px"> 단어 <button class="btn small" id="goalsave">저장</button></div>' +
         '<div class="card"><h2>🌐 외부 이용자 퀴즈</h2><label><input type="checkbox" id="extcb" ' + (ext ? "checked" : "") + "> 학교 계정이 아닌 사람(개인 Gmail)도 퀴즈를 풀 수 있게 하기</label>" +
         '<p class="muted">끄면 학교 계정(@smy.ms.kr)과 교사만 퀴즈를 풀 수 있어요. 외부 이용자는 어느 경우에도 TOP 10에 나오지 않아요.</p></div>' +
+        '<div class="card"><h2>👩‍🏫 교사 계정 관리</h2><p class="muted">여기 있는 Google 계정으로 로그인하면 교사 화면이 열려요. 교사는 학생 실명·점수를 보고 설정을 바꿀 수 있으니 꼭 필요한 분만 추가해 주세요. 지금 로그인한 본인 계정과 마지막 남은 교사 계정은 지울 수 없어요.</p>' +
+        '<div id="adminlist" class="muted">불러오는 중...</div>' +
+        '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><input id="adminin" type="email" placeholder="teacher@gmail.com" style="flex:1;min-width:200px;padding:7px 10px;border:1px solid var(--line);border-radius:10px"><button class="btn small" id="adminadd">교사 추가</button></div></div>' +
         '<div class="card"><h2>🌟 선생님 추천 책</h2><p class="muted">체크한 책은 학생 책장 맨 위 “선생님 추천” 칸에 나와요.</p><div style="max-height:420px;overflow-y:auto">' + featRows + "</div></div>" +
         '<div class="card"><h2>📋 명단 올리기</h2><p class="muted">한 줄에 한 명: <code>이메일,이름,학년,반,번호</code> (엑셀에서 복사해 붙여넣어도 돼요). 이미 가입한 학생에게도 바로 적용돼요.</p>' +
         '<textarea id="roster" placeholder="202610101@smy.ms.kr,이름,1,1,1"></textarea><br><button class="btn" id="saveroster" style="margin-top:8px">명단 저장</button></div>';
+      async function loadAdmins() {
+        var box = document.getElementById("adminlist");
+        if (!box) return;
+        var r = await sb.rpc("admin_list_admins");
+        if (r.error) { box.textContent = "불러오지 못했어요: " + cleanMsg(r.error.message); return; }
+        var list = r.data || [];
+        box.className = "";
+        box.innerHTML = '<div class="scroll"><table><tr><th>이메일</th><th>상태</th><th></th></tr>' + list.map(function (a) {
+          return "<tr><td>" + esc(a.email) + (a.me ? ' <span class="badge gold">나</span>' : "") + "</td><td>" + (a.joined ? "로그인한 적 있음" : '<span class="muted">아직 로그인 전</span>') + "</td><td>" +
+            (a.me || list.length <= 1 ? "" : '<button class="btn ghost small admindel" data-e="' + esc(a.email) + '">삭제</button>') + "</td></tr>";
+        }).join("") + "</table></div>";
+        each(".admindel", function (b) {
+          b.onclick = async function () {
+            var e = b.getAttribute("data-e");
+            if (!window.confirm(e + " 계정의 교사 권한을 없앨까요?")) return;
+            var d = await sb.rpc("admin_remove_admin", { p_email: e });
+            if (d.error) return toast("삭제 실패: " + cleanMsg(d.error.message));
+            toast(e + " 교사 권한을 없앴어요"); loadAdmins();
+          };
+        });
+      }
+      loadAdmins();
+      document.getElementById("adminadd").onclick = async function () {
+        var inp = document.getElementById("adminin"), e = inp.value.trim().toLowerCase();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return toast("이메일 주소를 정확히 넣어 주세요.");
+        if (!window.confirm(e + " 계정을 교사로 추가할까요? 이 계정은 학생 실명과 점수를 볼 수 있어요.")) return;
+        var r = await sb.rpc("admin_add_admin", { p_email: e });
+        if (r.error) return toast("추가 실패: " + cleanMsg(r.error.message));
+        inp.value = ""; toast(e + " 계정을 교사로 추가했어요"); loadAdmins();
+      };
       document.getElementById("goalsave").onclick = async function () {
         var v = parseInt(document.getElementById("goalin").value, 10);
         if (!(v >= 100)) return toast("100 이상의 숫자를 넣어 주세요.");
