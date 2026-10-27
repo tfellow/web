@@ -65,8 +65,8 @@ window.BOOKS = [
   "emoji": "🌋",
   "color": "#a8452f",
   "cefr": "B1",
-  "lexile": "약 1100L (추정)",
-  "ar": "약 7.0 (추정)",
+  "lexile": "약 1100L",
+  "ar": "약 7.0",
   "words": 316,
   "places": [
    "France",
@@ -85,8 +85,8 @@ window.BOOKS = [
   "emoji": "🚂",
   "color": "#2f3f7a",
   "cefr": "B1",
-  "lexile": "약 900L (추정)",
-  "ar": "약 5.5 (추정)",
+  "lexile": "약 900L",
+  "ar": "약 5.5",
   "words": 340,
   "places": [
    "Japan"
@@ -102,7 +102,7 @@ window.BOOKS = [
   "emoji": "🌹",
   "color": "#c4882b",
   "cefr": "A1",
-  "lexile": "약 350L (추정)",
+  "lexile": "약 350L",
   "words": 159,
   "places": [
    "France"
@@ -118,7 +118,7 @@ window.BOOKS = [
   "emoji": "🐢",
   "color": "#5f8a4a",
   "cefr": "A1",
-  "lexile": "약 300L (추정)",
+  "lexile": "약 300L",
   "words": 157,
   "places": [
    "Greece"
@@ -134,7 +134,7 @@ window.BOOKS = [
   "emoji": "🐜",
   "color": "#8a6d3b",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 159,
   "places": [
    "Greece"
@@ -150,7 +150,7 @@ window.BOOKS = [
   "emoji": "🐺",
   "color": "#5d6b7d",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 162,
   "places": [
    "Greece"
@@ -166,7 +166,7 @@ window.BOOKS = [
   "emoji": "☀️",
   "color": "#c98a2a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 159,
   "places": [
    "Greece"
@@ -182,7 +182,7 @@ window.BOOKS = [
   "emoji": "🐭",
   "color": "#9a6a8a",
   "cefr": "A1",
-  "lexile": "약 320L (추정)",
+  "lexile": "약 320L",
   "words": 166,
   "places": [
    "Greece"
@@ -198,7 +198,7 @@ window.BOOKS = [
   "emoji": "🍇",
   "color": "#6a4a8a",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 160,
   "places": [
    "Greece"
@@ -214,7 +214,7 @@ window.BOOKS = [
   "emoji": "🥚",
   "color": "#b08a24",
   "cefr": "A1",
-  "lexile": "약 350L (추정)",
+  "lexile": "약 350L",
   "words": 170,
   "places": [
    "Greece"
@@ -230,7 +230,7 @@ window.BOOKS = [
   "emoji": "🐦",
   "color": "#3d4f6b",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 160,
   "places": [
    "Greece"
@@ -246,7 +246,7 @@ window.BOOKS = [
   "emoji": "🦊",
   "color": "#b5602a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 163,
   "places": [
    "Greece"
@@ -262,7 +262,7 @@ window.BOOKS = [
   "emoji": "🦁",
   "color": "#a8742f",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 167,
   "places": [
    "Greece"
@@ -278,7 +278,7 @@ window.BOOKS = [
   "emoji": "🪓",
   "color": "#6b5a3a",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 172,
   "places": [
    "Greece"
@@ -294,7 +294,7 @@ window.BOOKS = [
   "emoji": "🔔",
   "color": "#7a6e9a",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 172,
   "places": [
    "Greece"
@@ -310,7 +310,7 @@ window.BOOKS = [
   "emoji": "🦴",
   "color": "#4f6a7a",
   "cefr": "A1",
-  "lexile": "약 350L (추정)",
+  "lexile": "약 350L",
   "words": 164,
   "places": [
    "Greece"
@@ -326,7 +326,7 @@ window.BOOKS = [
   "emoji": "🐸",
   "color": "#4f8a5b",
   "cefr": "A1",
-  "lexile": "약 320L (추정)",
+  "lexile": "약 320L",
   "words": 152,
   "places": [
    "Greece"
@@ -342,7 +342,7 @@ window.BOOKS = [
   "emoji": "🕊️",
   "color": "#4a7aa0",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 166,
   "places": [
    "Greece"
@@ -358,7 +358,7 @@ window.BOOKS = [
   "emoji": "🐴",
   "color": "#8a7a5a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 162,
   "places": [
    "Greece"
@@ -374,7 +374,7 @@ window.BOOKS = [
   "emoji": "🎭",
   "color": "#9a7b3a",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 162,
   "places": [
    "Greece"
@@ -390,7 +390,7 @@ window.BOOKS = [
   "emoji": "🌷",
   "color": "#c46a8a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 168,
   "places": [
    "Denmark"
@@ -406,7 +406,7 @@ window.BOOKS = [
   "emoji": "🕯️",
   "color": "#6a4058",
   "cefr": "A1",
-  "lexile": "약 370L (추정)",
+  "lexile": "약 370L",
   "words": 168,
   "places": [
    "Denmark"
@@ -422,7 +422,7 @@ window.BOOKS = [
   "emoji": "🦢",
   "color": "#5a8aa8",
   "cefr": "A1",
-  "lexile": "약 350L (추정)",
+  "lexile": "약 350L",
   "words": 161,
   "places": [
    "Denmark"
@@ -438,7 +438,7 @@ window.BOOKS = [
   "emoji": "🎁",
   "color": "#8a3a4a",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 169,
   "places": [
    "United States"
@@ -454,7 +454,7 @@ window.BOOKS = [
   "emoji": "🍃",
   "color": "#6a7a3a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 164,
   "places": [
    "United States"
@@ -470,7 +470,7 @@ window.BOOKS = [
   "emoji": "🌃",
   "color": "#3d4a6b",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 175,
   "places": [
    "United States"
@@ -486,7 +486,7 @@ window.BOOKS = [
   "emoji": "🎵",
   "color": "#5a5a8a",
   "cefr": "A1",
-  "lexile": "약 370L (추정)",
+  "lexile": "약 370L",
   "words": 165,
   "places": [
    "United States"
@@ -502,7 +502,7 @@ window.BOOKS = [
   "emoji": "🏕️",
   "color": "#a85a2a",
   "cefr": "A1",
-  "lexile": "약 390L (추정)",
+  "lexile": "약 390L",
   "words": 174,
   "places": [
    "United States"
@@ -518,7 +518,7 @@ window.BOOKS = [
   "emoji": "💎",
   "color": "#5a4a8a",
   "cefr": "A1",
-  "lexile": "약 390L (추정)",
+  "lexile": "약 390L",
   "words": 166,
   "places": [
    "France"
@@ -534,7 +534,7 @@ window.BOOKS = [
   "emoji": "📖",
   "color": "#4a6a8a",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 164,
   "places": [
    "France"
@@ -550,7 +550,7 @@ window.BOOKS = [
   "emoji": "🌌",
   "color": "#2a3a6a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 168,
   "places": [
    "France"
@@ -566,7 +566,7 @@ window.BOOKS = [
   "emoji": "🏛️",
   "color": "#b08a2a",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 170,
   "places": [
    "Ireland",
@@ -583,7 +583,7 @@ window.BOOKS = [
   "emoji": "🎶",
   "color": "#3a7a6a",
   "cefr": "A1",
-  "lexile": "약 370L (추정)",
+  "lexile": "약 370L",
   "words": 167,
   "places": [
    "Denmark",
@@ -600,7 +600,7 @@ window.BOOKS = [
   "emoji": "🌾",
   "color": "#7a6a3a",
   "cefr": "A1",
-  "lexile": "약 360L (추정)",
+  "lexile": "약 360L",
   "words": 166,
   "places": [
    "Russia"
@@ -616,7 +616,7 @@ window.BOOKS = [
   "emoji": "👞",
   "color": "#6a4a3a",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 180,
   "places": [
    "Russia"
@@ -632,7 +632,7 @@ window.BOOKS = [
   "emoji": "🌙",
   "color": "#3a4a7a",
   "cefr": "A1",
-  "lexile": "약 370L (추정)",
+  "lexile": "약 370L",
   "words": 165,
   "places": [
    "France"
@@ -648,7 +648,7 @@ window.BOOKS = [
   "emoji": "🗿",
   "color": "#6a6a5a",
   "cefr": "A1",
-  "lexile": "약 380L (추정)",
+  "lexile": "약 380L",
   "words": 175,
   "places": [
    "United States"
@@ -664,7 +664,7 @@ window.BOOKS = [
   "emoji": "🍎",
   "color": "#a83a3a",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 170,
   "places": [
    "Germany"
@@ -680,7 +680,7 @@ window.BOOKS = [
   "emoji": "🗼",
   "color": "#7a5a9a",
   "cefr": "A1",
-  "lexile": "약 340L (추정)",
+  "lexile": "약 340L",
   "words": 176,
   "places": [
    "Germany"
@@ -696,7 +696,7 @@ window.BOOKS = [
   "emoji": "👠",
   "color": "#4a6aa8",
   "cefr": "A1",
-  "lexile": "약 330L (추정)",
+  "lexile": "약 330L",
   "words": 164,
   "places": [
    "France"
@@ -712,7 +712,7 @@ window.BOOKS = [
   "emoji": "🌳",
   "color": "#4a8a4a",
   "cefr": "A1",
-  "lexile": "약 300L (추정)",
+  "lexile": "약 300L",
   "words": 176,
   "places": [
    "United States"
@@ -728,7 +728,7 @@ window.BOOKS = [
   "emoji": "🎨",
   "color": "#c4502a",
   "cefr": "A1",
-  "lexile": "약 320L (추정)",
+  "lexile": "약 320L",
   "words": 167,
   "places": [
    "United States"
@@ -744,7 +744,7 @@ window.BOOKS = [
   "emoji": "🖍️",
   "color": "#3a8a9a",
   "cefr": "A1",
-  "lexile": "약 320L (추정)",
+  "lexile": "약 320L",
   "words": 157,
   "places": [
    "United States"
@@ -760,7 +760,7 @@ window.BOOKS = [
   "emoji": "🌅",
   "color": "#4a7ac0",
   "cefr": "A1",
-  "lexile": "약 320L (추정)",
+  "lexile": "약 320L",
   "words": 164,
   "places": [
    "United States"
@@ -776,7 +776,7 @@ window.BOOKS = [
   "emoji": "🦅",
   "color": "#3a4a5a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 225,
   "places": [
    "Germany"
@@ -792,7 +792,7 @@ window.BOOKS = [
   "emoji": "🐷",
   "color": "#8a5a5a",
   "cefr": "A2",
-  "lexile": "약 620L (추정)",
+  "lexile": "약 620L",
   "words": 212,
   "places": [
    "United Kingdom"
@@ -808,7 +808,7 @@ window.BOOKS = [
   "emoji": "🛶",
   "color": "#a87a3a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 221,
   "places": [
    "United States"
@@ -824,7 +824,7 @@ window.BOOKS = [
   "emoji": "🍊",
   "color": "#c4782a",
   "cefr": "A2",
-  "lexile": "약 560L (추정)",
+  "lexile": "약 560L",
   "words": 213,
   "places": [
    "Brazil"
@@ -840,7 +840,7 @@ window.BOOKS = [
   "emoji": "🧢",
   "color": "#a83a3a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 217,
   "places": [
    "United States"
@@ -856,7 +856,7 @@ window.BOOKS = [
   "emoji": "🎣",
   "color": "#2a6a8a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 215,
   "places": [
    "United States",
@@ -873,7 +873,7 @@ window.BOOKS = [
   "emoji": "🐰",
   "color": "#7a6aaa",
   "cefr": "A2",
-  "lexile": "약 580L (추정)",
+  "lexile": "약 580L",
   "words": 200,
   "places": [
    "United Kingdom"
@@ -889,7 +889,7 @@ window.BOOKS = [
   "emoji": "💌",
   "color": "#7a3a5a",
   "cefr": "A2",
-  "lexile": "약 640L (추정)",
+  "lexile": "약 640L",
   "words": 196,
   "places": [
    "Germany"
@@ -905,7 +905,7 @@ window.BOOKS = [
   "emoji": "⚙️",
   "color": "#5a6a7a",
   "cefr": "A2",
-  "lexile": "약 620L (추정)",
+  "lexile": "약 620L",
   "words": 210,
   "places": [
    "Germany"
@@ -921,7 +921,7 @@ window.BOOKS = [
   "emoji": "🌊",
   "color": "#3a8ab0",
   "cefr": "A2",
-  "lexile": "약 580L (추정)",
+  "lexile": "약 580L",
   "words": 209,
   "places": [
    "United States"
@@ -937,7 +937,7 @@ window.BOOKS = [
   "emoji": "⏳",
   "color": "#8a6a3a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 210,
   "places": [
    "Germany"
@@ -953,7 +953,7 @@ window.BOOKS = [
   "emoji": "🐎",
   "color": "#a86a2a",
   "cefr": "A2",
-  "lexile": "약 640L (추정)",
+  "lexile": "약 640L",
   "words": 193,
   "places": [
    "Spain"
@@ -969,7 +969,7 @@ window.BOOKS = [
   "emoji": "🏙️",
   "color": "#4a8a8a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 190,
   "places": [
    "United Kingdom"
@@ -985,7 +985,7 @@ window.BOOKS = [
   "emoji": "👁️",
   "color": "#5a5a5a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 190,
   "places": [
    "United Kingdom"
@@ -1001,7 +1001,7 @@ window.BOOKS = [
   "emoji": "💚",
   "color": "#2a6a4a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 194,
   "places": [
    "United States"
@@ -1017,7 +1017,7 @@ window.BOOKS = [
   "emoji": "⚡",
   "color": "#4a5a3a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 207,
   "places": [
    "United Kingdom",
@@ -1034,7 +1034,7 @@ window.BOOKS = [
   "emoji": "🌸",
   "color": "#c4602a",
   "cefr": "A2",
-  "lexile": "약 620L (추정)",
+  "lexile": "약 620L",
   "words": 208,
   "places": [
    "Canada"
@@ -1050,7 +1050,7 @@ window.BOOKS = [
   "emoji": "💔",
   "color": "#a82a4a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 198,
   "places": [
    "United Kingdom",
@@ -1067,7 +1067,7 @@ window.BOOKS = [
   "emoji": "🎈",
   "color": "#3a6aa8",
   "cefr": "A2",
-  "lexile": "약 650L (추정)",
+  "lexile": "약 650L",
   "words": 215,
   "places": [
    "France",
@@ -1085,7 +1085,7 @@ window.BOOKS = [
   "emoji": "🐙",
   "color": "#2a4a7a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 196,
   "places": [
    "France"
@@ -1101,7 +1101,7 @@ window.BOOKS = [
   "emoji": "📔",
   "color": "#7a5a3a",
   "cefr": "A2",
-  "lexile": "약 640L (추정)",
+  "lexile": "약 640L",
   "words": 198,
   "places": [
    "Netherlands",
@@ -1118,7 +1118,7 @@ window.BOOKS = [
   "emoji": "🏴‍☠️",
   "color": "#8a6a2a",
   "cefr": "A2",
-  "lexile": "약 640L (추정)",
+  "lexile": "약 640L",
   "words": 203,
   "places": [
    "United Kingdom"
@@ -1134,7 +1134,7 @@ window.BOOKS = [
   "emoji": "🏚️",
   "color": "#5a3a4a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 211,
   "places": [
    "United Kingdom"
@@ -1150,7 +1150,7 @@ window.BOOKS = [
   "emoji": "✉️",
   "color": "#3a6a8a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 194,
   "places": [
    "United States"
@@ -1166,7 +1166,7 @@ window.BOOKS = [
   "emoji": "⛓️",
   "color": "#4a4a6a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 203,
   "places": [
    "France"
@@ -1182,7 +1182,7 @@ window.BOOKS = [
   "emoji": "⛵",
   "color": "#3a7a8a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 196,
   "places": [
    "Ireland",
@@ -1199,7 +1199,7 @@ window.BOOKS = [
   "emoji": "🚪",
   "color": "#6a5a3a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 212,
   "places": [
    "Czechia"
@@ -1215,7 +1215,7 @@ window.BOOKS = [
   "emoji": "🏜️",
   "color": "#c4943a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 202,
   "places": [
    "Brazil",
@@ -1233,7 +1233,7 @@ window.BOOKS = [
   "emoji": "🎄",
   "color": "#2a6a3a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 205,
   "places": [
    "United Kingdom"
@@ -1249,7 +1249,7 @@ window.BOOKS = [
   "emoji": "⚖️",
   "color": "#6a3a3a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 190,
   "places": [
    "Russia"
@@ -1265,7 +1265,7 @@ window.BOOKS = [
   "emoji": "🌞",
   "color": "#c49a3a",
   "cefr": "A2",
-  "lexile": "약 650L (추정)",
+  "lexile": "약 650L",
   "words": 195,
   "places": [
    "France",
@@ -1282,7 +1282,7 @@ window.BOOKS = [
   "emoji": "🪙",
   "color": "#8a6a3a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 193,
   "places": [
    "United Kingdom",
@@ -1299,7 +1299,7 @@ window.BOOKS = [
   "emoji": "💀",
   "color": "#3a3a5a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 196,
   "places": [
    "United Kingdom",
@@ -1316,7 +1316,7 @@ window.BOOKS = [
   "emoji": "🕊️",
   "color": "#6a7a4a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 194,
   "places": [
    "United States"
@@ -1332,7 +1332,7 @@ window.BOOKS = [
   "emoji": "🐚",
   "color": "#5a7a3a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 201,
   "places": [
    "United Kingdom"
@@ -1348,7 +1348,7 @@ window.BOOKS = [
   "emoji": "🧚",
   "color": "#3a8a5a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 197,
   "places": [
    "United Kingdom"
@@ -1364,7 +1364,7 @@ window.BOOKS = [
   "emoji": "🌫️",
   "color": "#4a4a5a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 182,
   "places": [
    "United Kingdom"
@@ -1380,7 +1380,7 @@ window.BOOKS = [
   "emoji": "🐻",
   "color": "#4a7a3a",
   "cefr": "A2",
-  "lexile": "약 620L (추정)",
+  "lexile": "약 620L",
   "words": 204,
   "places": [
    "United Kingdom",
@@ -1397,7 +1397,7 @@ window.BOOKS = [
   "emoji": "🌪️",
   "color": "#a84a2a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 196,
   "places": [
    "United States"
@@ -1413,7 +1413,7 @@ window.BOOKS = [
   "emoji": "🍫",
   "color": "#6a3a2a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 203,
   "places": [
    "United Kingdom"
@@ -1429,7 +1429,7 @@ window.BOOKS = [
   "emoji": "🗡️",
   "color": "#7a3a3a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 198,
   "places": [
    "United Kingdom",
@@ -1446,7 +1446,7 @@ window.BOOKS = [
   "emoji": "💃",
   "color": "#8a5a7a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 204,
   "places": [
    "United Kingdom"
@@ -1462,7 +1462,7 @@ window.BOOKS = [
   "emoji": "🌈",
   "color": "#4a8a3a",
   "cefr": "A2",
-  "lexile": "약 600L (추정)",
+  "lexile": "약 600L",
   "words": 220,
   "places": [
    "United States"
@@ -1478,7 +1478,7 @@ window.BOOKS = [
   "emoji": "🎩",
   "color": "#6a6a6a",
   "cefr": "A2",
-  "lexile": "약 650L (추정)",
+  "lexile": "약 650L",
   "words": 199,
   "places": [
    "Ireland",
@@ -1495,7 +1495,7 @@ window.BOOKS = [
   "emoji": "🚚",
   "color": "#8a6a3a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 209,
   "places": [
    "United States"
@@ -1511,7 +1511,7 @@ window.BOOKS = [
   "emoji": "⛪",
   "color": "#5a5a7a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 184,
   "places": [
    "France"
@@ -1527,7 +1527,7 @@ window.BOOKS = [
   "emoji": "🌿",
   "color": "#4a8a6a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 212,
   "places": [
    "United Kingdom",
@@ -1544,7 +1544,7 @@ window.BOOKS = [
   "emoji": "☕",
   "color": "#7a6a8a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 195,
   "places": [
    "United Kingdom"
@@ -1560,7 +1560,7 @@ window.BOOKS = [
   "emoji": "🏝️",
   "color": "#6a8a4a",
   "cefr": "A2",
-  "lexile": "약 660L (추정)",
+  "lexile": "약 660L",
   "words": 191,
   "places": [
    "United Kingdom"
@@ -1576,7 +1576,7 @@ window.BOOKS = [
   "emoji": "🗝️",
   "color": "#3a4a6a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 216,
   "places": [
    "France"
@@ -1592,7 +1592,7 @@ window.BOOKS = [
   "emoji": "🎩",
   "color": "#6a5a4a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 207,
   "places": [
    "United Kingdom"
@@ -1608,7 +1608,7 @@ window.BOOKS = [
   "emoji": "🅰️",
   "color": "#a33a3a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 201,
   "places": [
    "United States"
@@ -1624,7 +1624,7 @@ window.BOOKS = [
   "emoji": "🐋",
   "color": "#2a5a7a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 203,
   "places": [
    "United States"
@@ -1640,7 +1640,7 @@ window.BOOKS = [
   "emoji": "👂",
   "color": "#5a7a9a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 199,
   "places": [
    "United Kingdom"
@@ -1656,7 +1656,7 @@ window.BOOKS = [
   "emoji": "🧀",
   "color": "#c9a227",
   "cefr": "A2",
-  "lexile": "약 650L (추정)",
+  "lexile": "약 650L",
   "words": 210,
   "places": [
    "United States"
@@ -1672,7 +1672,7 @@ window.BOOKS = [
   "emoji": "🗡️",
   "color": "#4a2a2a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 203,
   "places": [
    "United Kingdom"
@@ -1688,7 +1688,7 @@ window.BOOKS = [
   "emoji": "👑",
   "color": "#5a4a6a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 211,
   "places": [
    "United Kingdom"
@@ -1704,7 +1704,7 @@ window.BOOKS = [
   "emoji": "🧣",
   "color": "#3a3a5a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 193,
   "places": [
    "Italy"
@@ -1720,7 +1720,7 @@ window.BOOKS = [
   "emoji": "🎭",
   "color": "#a35a3a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 215,
   "places": [
    "Italy"
@@ -1736,7 +1736,7 @@ window.BOOKS = [
   "emoji": "🛡️",
   "color": "#8a6a3a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 214,
   "places": [
    "Greece",
@@ -1753,7 +1753,7 @@ window.BOOKS = [
   "emoji": "⛵",
   "color": "#2a6a8a",
   "cefr": "A2",
-  "lexile": "약 710L (추정)",
+  "lexile": "약 710L",
   "words": 226,
   "places": [
    "Greece"
@@ -1769,7 +1769,7 @@ window.BOOKS = [
   "emoji": "📜",
   "color": "#4a5a3a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 228,
   "places": [
    "United States"
@@ -1785,7 +1785,7 @@ window.BOOKS = [
   "emoji": "💃",
   "color": "#3a7aa3",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 227,
   "places": [
    "Greece"
@@ -1801,7 +1801,7 @@ window.BOOKS = [
   "emoji": "🐀",
   "color": "#6a6a5a",
   "cefr": "A2",
-  "lexile": "약 710L (추정)",
+  "lexile": "약 710L",
   "words": 228,
   "places": [
    "France",
@@ -1818,7 +1818,7 @@ window.BOOKS = [
   "emoji": "🪷",
   "color": "#c98a3a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 214,
   "places": [
    "Germany",
@@ -1835,7 +1835,7 @@ window.BOOKS = [
   "emoji": "🛶",
   "color": "#7a5a3a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 232,
   "places": [
    "United States"
@@ -1851,7 +1851,7 @@ window.BOOKS = [
   "emoji": "🥣",
   "color": "#6a5a5a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 227,
   "places": [
    "United Kingdom"
@@ -1867,7 +1867,7 @@ window.BOOKS = [
   "emoji": "🐕",
   "color": "#7a8a5a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 241,
   "places": [
    "United Kingdom",
@@ -1884,7 +1884,7 @@ window.BOOKS = [
   "emoji": "🦇",
   "color": "#3a1a2a",
   "cefr": "A2",
-  "lexile": "약 710L (추정)",
+  "lexile": "약 710L",
   "words": 223,
   "places": [
    "Ireland",
@@ -1902,7 +1902,7 @@ window.BOOKS = [
   "emoji": "🌹",
   "color": "#5a8a4a",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 216,
   "places": [
    "United Kingdom",
@@ -1919,7 +1919,7 @@ window.BOOKS = [
   "emoji": "👸",
   "color": "#a37aa3",
   "cefr": "A2",
-  "lexile": "약 670L (추정)",
+  "lexile": "약 670L",
   "words": 236,
   "places": [
    "United Kingdom",
@@ -1936,7 +1936,7 @@ window.BOOKS = [
   "emoji": "🏔️",
   "color": "#4a8a9a",
   "cefr": "A2",
-  "lexile": "약 660L (추정)",
+  "lexile": "약 660L",
   "words": 222,
   "places": [
    "Switzerland",
@@ -1953,7 +1953,7 @@ window.BOOKS = [
   "emoji": "⛪",
   "color": "#5a3a3a",
   "cefr": "A2",
-  "lexile": "약 730L (추정)",
+  "lexile": "약 730L",
   "words": 225,
   "places": [
    "Russia"
@@ -1969,7 +1969,7 @@ window.BOOKS = [
   "emoji": "📕",
   "color": "#6a2a2a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 230,
   "places": [
    "Germany"
@@ -1985,7 +1985,7 @@ window.BOOKS = [
   "emoji": "🗿",
   "color": "#8a7a4a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 223,
   "places": [
    "Germany"
@@ -2001,7 +2001,7 @@ window.BOOKS = [
   "emoji": "🐉",
   "color": "#6a7a3a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 234,
   "places": [
    "United Kingdom"
@@ -2017,7 +2017,7 @@ window.BOOKS = [
   "emoji": "💍",
   "color": "#8a6a2a",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 242,
   "places": [
    "United Kingdom"
@@ -2033,7 +2033,7 @@ window.BOOKS = [
   "emoji": "📝",
   "color": "#a35a6a",
   "cefr": "A2",
-  "lexile": "약 690L (추정)",
+  "lexile": "약 690L",
   "words": 235,
   "places": [
    "United States"
@@ -2049,7 +2049,7 @@ window.BOOKS = [
   "emoji": "🎃",
   "color": "#a35a1a",
   "cefr": "A2",
-  "lexile": "약 700L (추정)",
+  "lexile": "약 700L",
   "words": 232,
   "places": [
    "United States"
@@ -2065,7 +2065,7 @@ window.BOOKS = [
   "emoji": "🎭",
   "color": "#2a2a3a",
   "cefr": "A2",
-  "lexile": "약 710L (추정)",
+  "lexile": "약 710L",
   "words": 246,
   "places": [
    "France"
@@ -2081,7 +2081,7 @@ window.BOOKS = [
   "emoji": "🐾",
   "color": "#3a4a3a",
   "cefr": "A2",
-  "lexile": "약 710L (추정)",
+  "lexile": "약 710L",
   "words": 236,
   "places": [
    "United Kingdom"
@@ -2097,7 +2097,7 @@ window.BOOKS = [
   "emoji": "🍂",
   "color": "#c9722f",
   "cefr": "A2",
-  "lexile": "약 680L (추정)",
+  "lexile": "약 680L",
   "words": 230,
   "places": [
    "United States"
@@ -2113,7 +2113,7 @@ window.BOOKS = [
   "emoji": "🪶",
   "color": "#7c6bb0",
   "cefr": "A2",
-  "lexile": "약 720L (추정)",
+  "lexile": "약 720L",
   "words": 234,
   "places": [
    "Czechia",
