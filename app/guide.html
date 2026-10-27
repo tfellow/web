@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1e3768">
+<title>문영 독서 여권 사용 설명서</title>
+<meta name="description" content="문영 독서 여권 학생용 사용 설명서 · 로그인부터 퀴즈, 메달, 여권 도장까지">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 사용 설명서 버전: 앱 v17 · 130권 (A1 42 · A2 84 · B1 4). 앱이 바뀌면 이 파일도 같이 고쳐요. */
+:root {
+  --bg: #eef1f7; --page: #fbfaf6; --ink: #18264a; --muted: #5b6684; --line: #d9dfeb;
+  --navy: #1e3768; --navy-2: #2d5291; --gold: #c9971c; --gold-soft: #f7ecd0; --gold-ink: #7a5807;
+  --ok: #2f7d5b; --warn: #b5532a; --chip: #ffffff; --shadow: 0 18px 50px rgba(24, 38, 74, .14);
+  --display: "Gowun Batang", "Nanum Myeongjo", Georgia, serif;
+  --body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1426; --page: #151f38; --ink: #e9edf7; --muted: #a3aecb; --line: #2b3a5f;
+    --navy: #8fb0ee; --navy-2: #6f95e0; --gold: #e2b545; --gold-soft: #3a3018; --gold-ink: #f3d68b;
+    --ok: #6cc79d; --warn: #f08d62; --chip: #1c2846; --shadow: 0 18px 50px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1426; --page: #151f38; --ink: #e9edf7; --muted: #a3aecb; --line: #2b3a5f;
+  --navy: #8fb0ee; --navy-2: #6f95e0; --gold: #e2b545; --gold-soft: #3a3018; --gold-ink: #f3d68b;
+  --ok: #6cc79d; --warn: #f08d62; --chip: #1c2846; --shadow: 0 18px 50px rgba(0,0,0,.45);
+  color-scheme: dark;
+}
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.65; padding-inline: 16px; box-sizing: border-box; }
+* { box-sizing: border-box; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.app { max-width: 1080px; height: 100%; margin-inline: auto; display: flex; flex-direction: column; gap: 14px; padding-block: 16px; }
+.top { display: flex; align-items: center; gap: 14px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 1.05rem; white-space: nowrap; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--gold); }
+.prog { flex: 1; display: flex; gap: 4px; min-width: 0; }
+.prog button { flex: 1; height: 6px; border: 0; border-radius: 3px; background: var(--line); padding: 0; }
+.prog button.done { background: var(--navy-2); }
+.prog button.on { background: var(--gold); }
+.count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; white-space: nowrap; }
+.back { font-size: .85rem; color: var(--navy); text-decoration: none; font-weight: 700; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; background: var(--chip); }
+
+.stage { flex: 1; min-height: 0; position: relative; }
+.slide { position: absolute; inset: 0; background: var(--page); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); overflow: auto; padding: clamp(22px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
+.slide[hidden] { display: none !important; }
+.slide.in { animation: turn .45s cubic-bezier(.2,.7,.2,1); }
+.slide.back.in { animation-name: turnback; }
+@keyframes turn { from { opacity: .3; transform: translateX(26px) rotateY(-4deg); } to { opacity: 1; transform: none; } }
+@keyframes turnback { from { opacity: .3; transform: translateX(-26px) rotateY(4deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .slide.in { animation: none; } .stamped { animation: none !important; } }
+
+.eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-ink); font-weight: 700; }
+h1, h2 { font-family: var(--display); font-weight: 700; text-wrap: balance; line-height: 1.25; margin: 6px 0 14px; }
+h1 { font-size: clamp(2rem, 5vw, 3.3rem); }
+h2 { font-size: clamp(1.5rem, 3.2vw, 2.25rem); }
+.lead { color: var(--muted); font-size: 1.04rem; max-width: 34em; margin: 0 0 14px; }
+.points { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.points li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; }
+.points li::before { content: ""; width: 10px; height: 10px; margin: 8px 0 0 6px; border-radius: 50%; border: 2px solid var(--gold); }
+.points b { color: var(--ink); }
+
+.try { background: var(--bg); border: 1px dashed var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.try-label { font-size: .75rem; letter-spacing: .12em; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.card { background: var(--page); border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 0; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--navy); background: var(--navy); color: var(--page); border-radius: 999px; padding: 8px 18px; font-weight: 600; }
+.btn.ghost { background: transparent; color: var(--navy); }
+.btn.gold { background: var(--gold); border-color: var(--gold); color: #1d1606; }
+.btn:disabled { opacity: .45; cursor: default; }
+.chip { border: 1px solid var(--line); background: var(--chip); border-radius: 999px; padding: 5px 13px; font-size: .9rem; }
+.chip.on { background: var(--navy); border-color: var(--navy); color: var(--page); }
+.field { width: 100%; border: 1px solid var(--line); background: var(--chip); border-radius: 10px; padding: 10px 12px; }
+.badge { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: .82rem; font-weight: 700; }
+.badge.school { background: #dcefe4; color: #1f5c40; }
+.badge.ext { background: #f6e2d6; color: #8a3a17; }
+.msg { font-size: .9rem; min-height: 1.4em; }
+.msg.ok { color: var(--ok); } .msg.bad { color: var(--warn); }
+.muted { color: var(--muted); }
+.big { font-family: var(--display); font-size: 2.6rem; font-weight: 700; line-height: 1; }
+
+/* 표지 */
+.cover { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); background: linear-gradient(150deg, #1e3768, #13244a); color: #f6f2e6; border-color: transparent; }
+.cover .lead { color: #c9d4ee; }
+.cover .eyebrow { color: #e9c766; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 4px 0 14px; max-width: 30em; }
+.stats div { border: 1px solid rgba(233,199,102,.45); border-radius: 12px; padding: 8px 6px; text-align: center; }
+.stats b { display: block; font-family: var(--display); font-size: 1.45rem; color: #f3d68b; line-height: 1.2; }
+.stats small { font-size: .74rem; color: #c9d4ee; }
+.passport { aspect-ratio: 3 / 4; max-width: 100%; width: 300px; justify-self: center; border-radius: 18px; background: linear-gradient(160deg, #233f78, #0f1d3d); border: 2px solid #c9971c; box-shadow: 0 24px 50px rgba(0,0,0,.35), inset 0 0 0 8px #1a3163, inset 0 0 0 9px rgba(201,151,28,.6); display: grid; place-items: center; text-align: center; padding: 26px; color: #e9c766; }
+.passport .crest { width: 92px; height: 92px; border-radius: 50%; border: 2px solid #e9c766; display: grid; place-items: center; font-family: var(--display); font-size: 2.2rem; }
+.passport .pt { font-family: var(--display); font-size: 1.5rem; font-weight: 700; letter-spacing: .04em; }
+.passport .ps { font-size: .72rem; letter-spacing: .3em; }
+.cover .btn.gold { margin-top: 4px; padding: 12px 24px; font-size: 1.05rem; }
+.keys { margin-top: 18px; font-size: .85rem; color: #aebbe0; }
+kbd { border: 1px solid currentColor; border-radius: 5px; padding: 0 6px; font-family: var(--body); font-size: .8rem; }
+
+/* 로그인 */
+.gbtn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; border: 1px solid var(--line); background: var(--chip); border-radius: 999px; padding: 10px; font-weight: 600; }
+.gdot { width: 20px; height: 20px; border-radius: 50%; background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0); }
+
+/* 책장 */
+.shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.book { border-radius: 12px; padding: 12px 12px 12px 16px; color: #fff; min-height: 104px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.book::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: rgba(0,0,0,.22); }
+.book b { font-size: .92rem; line-height: 1.3; }
+.book small { font-size: .74rem; opacity: .92; }
+.book[hidden] { display: none !important; }
+.lvcount { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; text-align: center; font-size: .8rem; }
+.lvcount div { border: 1px solid var(--line); background: var(--page); border-radius: 10px; padding: 6px 4px; }
+.lvcount b { display: block; font-size: 1.1rem; color: var(--navy); }
+
+/* 힌트 */
+.para { display: grid; grid-template-columns: 26px 1fr; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); }
+.para:first-of-type { border-top: 0; }
+.para .n { width: 24px; height: 24px; border-radius: 50%; background: var(--gold-soft); color: var(--gold-ink); font-size: .78rem; display: grid; place-items: center; font-weight: 700; }
+.para .en { font-size: .95rem; }
+.para .ko { font-size: .9rem; color: var(--muted); margin-top: 6px; }
+.starbar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; background: var(--gold-soft); color: var(--gold-ink); font-size: .92rem; }
+.starbar.off { background: var(--line); color: var(--muted); }
+
+/* 퀴즈 */
+.q { display: grid; gap: 6px; }
+.q + .q { margin-top: 10px; }
+.q p { margin: 0; font-weight: 600; font-size: .95rem; }
+.opt { text-align: left; border: 1px solid var(--line); background: var(--chip); border-radius: 10px; padding: 7px 12px; font-size: .9rem; }
+.opt.sel { border-color: var(--navy); box-shadow: inset 0 0 0 1px var(--navy); }
+.opt.right { border-color: var(--ok); color: var(--ok); }
+.opt.wrong { border-color: var(--warn); color: var(--warn); }
+
+/* 메달 */
+.medal { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+.ring { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; font-size: 2.8rem; border: 3px solid var(--line); background: var(--chip); transition: transform .3s; }
+.ring.pop { transform: scale(1.08); }
+input[type=range] { width: 100%; accent-color: var(--gold); }
+.scale { display: grid; grid-template-columns: 6fr 2fr 2fr 1fr; gap: 3px; font-size: .74rem; text-align: center; }
+.scale div { border-radius: 6px; padding: 4px 2px; }
+
+/* 도장 */
+.stampzone { display: grid; place-items: center; min-height: 170px; background: var(--page); border: 1px solid var(--line); border-radius: 14px; position: relative; overflow: hidden; }
+.stampzone::before { content: "PASSPORT · 문영"; position: absolute; top: 10px; left: 14px; font-size: .7rem; letter-spacing: .2em; color: var(--muted); }
+.stamp { width: 140px; height: 140px; border-radius: 50%; border: 4px double var(--warn); color: var(--warn); display: grid; place-items: center; text-align: center; transform: rotate(-12deg); font-family: var(--display); font-weight: 700; line-height: 1.25; padding: 12px; }
+.stamp small { display: block; font-family: var(--body); font-size: .66rem; letter-spacing: .12em; font-weight: 500; }
+.stamped { animation: thunk .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes thunk { from { transform: rotate(-12deg) scale(1.7); opacity: 0; } to { transform: rotate(-12deg) scale(1); opacity: 1; } }
+
+/* 지도 */
+.seg { display: inline-flex; background: var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; border-radius: 999px; padding: 6px 14px; font-size: .88rem; color: var(--muted); }
+.seg button.on { background: var(--navy); color: var(--page); font-weight: 700; }
+.bars { display: grid; gap: 7px; }
+.bar { display: grid; grid-template-columns: 92px 1fr 34px; gap: 8px; align-items: center; font-size: .88rem; }
+.bar .track { height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.bar .fill { height: 100%; background: var(--gold); border-radius: 6px; transition: width .5s; }
+.bar span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+.conts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.cont { border: 1px dashed var(--line); border-radius: 12px; padding: 8px 2px; text-align: center; font-size: .74rem; color: var(--muted); filter: grayscale(1); opacity: .7; background: transparent; }
+.cont .e { display: block; font-size: 1.4rem; }
+.cont.on { border: 1px solid var(--gold); background: var(--gold-soft); color: var(--gold-ink); filter: none; opacity: 1; }
+
+/* 목표 */
+.weeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 5px; }
+.wk { aspect-ratio: 1; max-width: 100%; border-radius: 8px; background: var(--line); border: 0; }
+.wk.lit { background: var(--gold); }
+.road { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; text-align: center; font-size: .74rem; }
+.lv .c { width: 46px; height: 46px; margin: 0 auto 4px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line); background: var(--chip); font-size: 1.2rem; }
+.lv.earned .c { border-color: var(--gold); background: var(--gold-soft); }
+.lv b { display: block; font-size: .8rem; }
+
+/* TOP 10 */
+.switch { display: flex; align-items: center; gap: 10px; }
+.switch input { width: 44px; height: 24px; accent-color: var(--navy); }
+.board { display: grid; gap: 4px; font-size: .9rem; }
+.board div { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; padding: 6px 10px; border-radius: 8px; background: var(--page); border: 1px solid var(--line); }
+.board .me { border-color: var(--gold); background: var(--gold-soft); color: var(--gold-ink); font-weight: 700; }
+
+/* 질문 */
+details { border-bottom: 1px solid var(--line); padding: 10px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
+.url { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.url code { background: var(--chip); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: .9rem; word-break: break-all; }
+
+.nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.nav .hint { color: var(--muted); font-size: .82rem; text-align: center; }
+
+@media (max-width: 760px) {
+  .slide, .cover { grid-template-columns: minmax(0, 1fr); align-items: start; padding: 22px 18px; }
+  .passport { width: 190px; }
+  .conts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .nav .hint { display: none; }
+  .brand { display: none; }
+  .back { padding: 4px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <a class="brand" href="./">문영 독서 여권 <span>안내</span></a>
+    <div class="prog" id="prog" aria-label="슬라이드 이동"></div>
+    <div class="count" id="count">1 / 12</div>
+    <a class="back" href="./">독서 여권 →</a>
+  </div>
+
+  <div class="stage" id="stage">
+
+    <!-- 1 표지 -->
+    <section class="slide cover" data-name="표지">
+      <div>
+        <div class="eyebrow">서울문영여자중학교 · 영어 독서</div>
+        <h1>문영 독서 여권<br>사용 설명서</h1>
+        <p class="lead">세계 문학을 영어로 읽고, 퀴즈로 메달을 모으고, 여권에 나라 도장을 찍는 앱이에요. 한 장씩 넘기며 직접 눌러 보세요.</p>
+        <div class="stats" aria-label="지금 읽을 수 있는 책">
+          <div><b>130</b><small>권</small></div>
+          <div><b>42</b><small>A1 · 쉬움</small></div>
+          <div><b>84</b><small>A2 · 보통</small></div>
+          <div><b>4</b><small>B1 · 도전</small></div>
+        </div>
+        <button class="btn gold" data-go="1">시작하기 →</button>
+        <p class="keys">넘기기: <kbd>←</kbd> <kbd>→</kbd> 키, 아래 버튼, 또는 휴대폰에서 옆으로 밀기</p>
+      </div>
+      <div class="passport" aria-hidden="true">
+        <div style="display:grid;gap:14px;justify-items:center">
+          <div class="ps">READING PASSPORT</div>
+          <div class="crest">文</div>
+          <div class="pt">독서 여권</div>
+          <div class="ps">MUNYOUNG</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 로그인 -->
+    <section class="slide" data-name="로그인">
+      <div>
+        <div class="eyebrow">Step 1 · 로그인</div>
+        <h2>학교 구글 계정으로 들어가요</h2>
+        <p class="lead">비밀번호를 따로 만들 필요가 없어요. 학교에서 받은 구글 계정으로 로그인하면 내 기록이 저장돼요.</p>
+        <ul class="points">
+          <li><span><b>학번@smy.ms.kr</b> 계정으로 로그인해요.</span></li>
+          <li><span>학교 계정이면 <b>서울문영여자중학교</b> 배지가, 개인 Gmail이면 <b>외부 이용자</b> 배지가 붙어요.</span></li>
+          <li><span>개인 계정으로 들어가면 기록이 따로 쌓이고 반 기록과 TOP 10에 들어가지 않아요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기</div>
+        <div class="card" style="display:grid;gap:12px">
+          <label for="email" class="muted" style="font-size:.88rem">이메일을 넣어 보세요</label>
+          <input id="email" class="field" placeholder="예: 101123456@smy.ms.kr" autocomplete="off">
+          <button class="gbtn" id="gbtn"><span class="gdot"></span>Google 계정으로 로그인</button>
+          <div id="loginOut" class="msg muted">어떤 배지가 붙는지 확인해 보세요.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 닉네임 -->
+    <section class="slide" data-name="닉네임">
+      <div>
+        <div class="eyebrow">Step 2 · 닉네임</div>
+        <h2>여권에 들어갈 이름을 정해요</h2>
+        <p class="lead">처음에는 랜덤 이름이 정해져 있어요. 오른쪽 위 <b>✏️ 닉네임</b>을 눌러 원하는 이름으로 바꿀 수 있어요.</p>
+        <ul class="points">
+          <li><span><b>2~12자</b>, 다른 친구와 겹치지 않는 이름이어야 해요.</span></li>
+          <li><span>TOP 10에는 실명 대신 닉네임이 보여요.</span></li>
+          <li><span>친구가 불쾌할 수 있는 이름은 선생님이 바꿀 수 있어요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기</div>
+        <div class="card" style="display:grid;gap:10px">
+          <label for="nick" class="muted" style="font-size:.88rem">새 닉네임</label>
+          <input id="nick" class="field" value="별빛독서가" maxlength="16" autocomplete="off">
+          <div id="nickMsg" class="msg ok">사용할 수 있어요.</div>
+        </div>
+        <div class="card" style="background:linear-gradient(150deg,#1e3768,#13244a);color:#f6f2e6;border:0">
+          <div style="font-size:.7rem;letter-spacing:.25em;color:#e9c766">READING PASSPORT</div>
+          <div id="nickShow" style="font-family:var(--display);font-size:1.5rem;font-weight:700">별빛독서가</div>
+          <div style="font-size:.85rem;color:#c9d4ee">여행 준비 중 · 첫 메달에 도전해 보세요</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 책장 -->
+    <section class="slide" data-name="책장">
+      <div>
+        <div class="eyebrow">Step 3 · 책 고르기</div>
+        <h2>130권 중에서 내 수준에 맞는 책을 골라요</h2>
+        <p class="lead">책장 위의 <b>CEFR 단계</b>를 누르면 그 수준의 책만 보여요. <b>A1</b>은 이솝 우화와 동화처럼 짧고 쉬운 이야기, <b>A2</b>는 세계 명작 소설, <b>B1</b>은 조금 더 긴 도전 작품이에요.</p>
+        <ul class="points">
+          <li><span>맨 위에 <b>선생님 추천</b>, <b>이어서 도전하기</b>, 그리고 내 수준에 맞춘 <b>다음에 읽을 책 4권</b>이 먼저 보여요.</span></li>
+          <li><span>제목(영어·한국어), 작가, 나라 이름으로 검색할 수 있어요.</span></li>
+          <li><span>책 카드에서 단계, 단어 수, 나라를 미리 볼 수 있어요. 책 페이지에는 Lexile 지수도 나와요.</span></li>
+          <li><span>처음이라면 A1부터 시작해 메달을 모은 뒤 A2로 올라가 보세요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기</div>
+        <div class="lvcount"><div><b>42</b>A1</div><div><b>84</b>A2</div><div><b>4</b>B1</div></div>
+        <div class="row" id="lvpills">
+          <button class="chip on" data-lv="">전체</button>
+          <button class="chip" data-lv="A1">A1</button>
+          <button class="chip" data-lv="A2">A2</button>
+          <button class="chip" data-lv="B1">B1</button>
+        </div>
+        <input id="shelfq" class="field" placeholder="검색: 예) 이솝, Hemingway, 영국" autocomplete="off">
+        <div class="shelf" id="shelf"></div>
+        <div id="shelfEmpty" class="msg muted" hidden>이 예시에는 맞는 책이 없어요. 실제 앱에서는 130권 중에서 찾아 줘요.</div>
+      </div>
+    </section>
+
+    <!-- 5 읽기와 힌트 -->
+    <section class="slide" data-name="읽기와 힌트">
+      <div>
+        <div class="eyebrow">Step 4 · 읽기</div>
+        <h2>영어로 먼저 읽고, 어려우면 힌트</h2>
+        <p class="lead">처음에는 영어만 보여요. 어려운 단락은 <b>💬 한국어 보기</b>를 눌러 번역을 볼 수 있어요.</p>
+        <ul class="points">
+          <li><span>이야기 번역을 <b>한 번도 보지 않고</b> 퀴즈를 통과하면 <b>⭐ 무힌트 보너스</b>를 받아요.</span></li>
+          <li><span>번역을 봐도 감점은 없어요. ⭐만 못 받을 뿐이에요.</span></li>
+          <li><span>분석·인물·단어장 탭의 한국어는 힌트로 세지 않아요. 단어장은 어려운 단어부터 정리되어 있어요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기 · 토끼와 거북 (A1)</div>
+        <div class="starbar" id="starbar"><span style="font-size:1.3rem">⭐</span><span id="starTxt">아직 번역을 보지 않았어요. 이대로 통과하면 무힌트 보너스!</span></div>
+        <div class="card">
+          <div class="para"><div class="n">1</div><div><div class="en">A hare lives in a green field. He can run very fast, and he is very proud. Every day, he laughs at a slow tortoise.</div><div class="ko" hidden>토끼 한 마리가 푸른 들판에 삽니다. 그는 아주 빨리 달릴 수 있고, 무척 자만합니다. 날마다 그는 느린 거북을 비웃습니다.</div><button class="chip reveal" style="margin-top:6px">💬 한국어 보기 (힌트)</button></div></div>
+          <div class="para"><div class="n">2</div><div><div class="en">The race starts. The hare runs very fast, and soon the tortoise is far behind him. He lies down under a big tree and falls asleep.</div><div class="ko" hidden>경주가 시작됩니다. 토끼는 아주 빨리 달리고, 곧 거북은 저 멀리 뒤처집니다. 그는 큰 나무 아래에 누워 잠이 듭니다.</div><button class="chip reveal" style="margin-top:6px">💬 한국어 보기 (힌트)</button></div></div>
+        </div>
+        <button class="btn ghost" id="hintReset" style="justify-self:start">처음 상태로</button>
+      </div>
+    </section>
+
+    <!-- 6 퀴즈 -->
+    <section class="slide" data-name="퀴즈">
+      <div>
+        <div class="eyebrow">Step 5 · 퀴즈</div>
+        <h2>다 읽었으면 10문항 퀴즈</h2>
+        <p class="lead">책 아래의 <b>다 읽었어요 · 퀴즈 풀기</b>를 눌러요. 모든 문항에 답해야 제출할 수 있어요.</p>
+        <ul class="points">
+          <li><span>130권 모두 <b>10문항</b>이고, 그중 한 문항은 이야기의 <b>주제</b>를 묻는 문제예요.</span></li>
+          <li><span>문제와 보기 순서는 <b>매번 섞여요</b>. 친구 답 순서를 외워도 소용없어요.</span></li>
+          <li><span>채점은 서버에서 해요. 정답은 화면에 미리 나오지 않아요.</span></li>
+          <li><span>제출한 뒤 같은 책은 <b>10분 뒤</b>에 다시 도전할 수 있어요. 그동안 책을 한 번 더 읽어 봐요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기 · 3문항 맛보기</div>
+        <div class="card" id="quiz"></div>
+        <div class="row"><button class="btn" id="qsubmit">제출하기</button><button class="btn ghost" id="qreset">다시 섞기</button></div>
+        <div id="qout" class="msg muted">3문항에 모두 답해 보세요.</div>
+      </div>
+    </section>
+
+    <!-- 7 메달 -->
+    <section class="slide" data-name="메달">
+      <div>
+        <div class="eyebrow">Step 6 · 메달</div>
+        <h2>점수에 따라 메달을 받아요</h2>
+        <p class="lead">10문항 중 6개부터 메달이에요. 여러 번 도전하면 <b>가장 높은 점수</b>가 기록돼요.</p>
+        <ul class="points">
+          <li><span><b>🥉 동메달</b>: 60점, 70점</span></li>
+          <li><span><b>🥈 은메달</b>: 80점, 90점</span></li>
+          <li><span><b>🥇 금메달</b>: 100점</span></li>
+          <li><span>점수가 낮게 나와도 이전 최고 메달은 그대로 남아요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기 · 맞힌 개수를 움직여 보세요</div>
+        <div class="card medal">
+          <div class="ring" id="ring">📘</div>
+          <div>
+            <div class="big"><span id="sc">5</span><span class="muted" style="font-size:1.2rem"> / 10</span></div>
+            <div id="mname" style="font-weight:700">아직 메달이 없어요</div>
+            <div id="mbest" class="muted" style="font-size:.88rem">내 최고 기록: 없음</div>
+          </div>
+        </div>
+        <label for="range" class="muted" style="font-size:.85rem">맞힌 문항 수</label>
+        <input type="range" id="range" min="0" max="10" value="5">
+        <div class="scale" aria-hidden="true">
+          <div style="background:var(--line)">0~5 · 다시 도전</div>
+          <div style="background:#ecd2b8;color:#6b3d12">6~7 🥉</div>
+          <div style="background:#dfe3ea;color:#3d4757">8~9 🥈</div>
+          <div style="background:var(--gold-soft);color:var(--gold-ink)">10 🥇</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 여권 도장 -->
+    <section class="slide" data-name="여권 도장">
+      <div>
+        <div class="eyebrow">Step 7 · 여권 도장</div>
+        <h2>메달을 받으면 나라 도장을 찍어요</h2>
+        <p class="lead">메달을 받은 책은 여권에 그 나라 도장이 찍혀요. 기본은 <b>작가의 나라</b>예요. 지금 책들로 <b>25개 나라</b>를 여행할 수 있어요.</p>
+        <ul class="points">
+          <li><span>배경이 다른 나라인 책은 <b>후보 나라 중에서 골라</b> 찍을 수 있어요.</span></li>
+          <li><span>책 페이지 맨 위나 퀴즈 결과 화면에서 고르고, <b>언제든 다시 바꿀 수 있어요</b>.</span></li>
+          <li><span>예: 『일리아스』는 그리스(작가)나 트로이가 있던 튀르키예, 『노인과 바다』는 미국이나 쿠바를 골라요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기 · 일리아스 (금메달)</div>
+        <div class="stampzone"><div class="stamp stamped" id="stamp"><div><small>VISITED</small><span id="stampName">그리스</span><small>일리아스</small></div></div></div>
+        <div class="row" id="stampChips">
+          <button class="chip on" data-c="그리스">그리스 · 작가</button>
+          <button class="chip" data-c="튀르키예">튀르키예 · 배경</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 지도와 대륙 배지 -->
+    <section class="slide" data-name="지도와 대륙 배지">
+      <div>
+        <div class="eyebrow">Step 8 · 세계 문학 지도</div>
+        <h2>내 지도, 우리 반 지도, 대륙 배지</h2>
+        <p class="lead">홈 화면의 세계 지도에서 내가 도장을 찍은 나라가 금색으로 칠해져요. 나라를 누르면 그 나라 책만 보여요.</p>
+        <ul class="points">
+          <li><span><b>우리 반 지도</b>는 반 친구들이 찍은 도장 수를 합쳐서 보여 줘요. 누가 찍었는지는 나오지 않아요.</span></li>
+          <li><span>한 대륙에 처음 도장을 찍으면 그 <b>대륙 배지</b>가 켜져요.</span></li>
+          <li><span>유럽·아시아·북아메리카뿐 아니라 <b>브라질</b>(나의 라임오렌지나무)로 남아메리카, <b>알제리</b>(이방인·페스트)로 아프리카 배지도 받을 수 있어요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기</div>
+        <div class="seg" id="mapseg"><button class="on" data-m="me">내 지도</button><button data-m="class">우리 반 지도</button></div>
+        <div class="card bars" id="bars"></div>
+        <div class="try-label" style="margin-top:2px">대륙 배지 · 눌러서 도장을 찍어 보세요</div>
+        <div class="conts" id="conts"></div>
+      </div>
+    </section>
+
+    <!-- 10 목표와 레벨 -->
+    <section class="slide" data-name="목표와 레벨">
+      <div>
+        <div class="eyebrow">Step 9 · 꾸준히 읽기</div>
+        <h2>주간 목표와 레벨 로드</h2>
+        <p class="lead">일주일에 <b>한 작품</b> 메달을 받으면 그 주에 불이 켜져요. 매주 이어 가면 <b>🔥 연속 독서</b> 기록이 늘어요.</p>
+        <ul class="points">
+          <li><span>레벨 로드: 한 단계에서 메달 책 <b>3권</b>을 모으면 칭호를 받아요. (그 단계 책이 3권보다 적으면 전부)</span></li>
+          <li><span>A1 🌱 새싹 독자 → A2 🧭 꼬마 탐험가 → B1 🎒 용감한 여행자 → B2 🗺️ 노련한 모험가 → C1 🌍 세계 시민</span></li>
+          <li><span><b>우리 반 함께 읽기</b>: 반 친구들이 메달로 읽은 단어 수를 모아 반 목표에 도전해요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기 · 주를 눌러 불을 켜 보세요</div>
+        <div class="card" style="display:grid;gap:10px">
+          <div class="weeks" id="weeks"></div>
+          <div id="streak" style="font-weight:700">🔥 연속 독서 0주</div>
+        </div>
+        <div class="card road" id="road"></div>
+        <div class="row"><button class="btn ghost" id="lvAdd">A1 메달 책 +1</button><span id="lvMsg" class="muted" style="font-size:.88rem">A1: 0 / 3</span></div>
+      </div>
+    </section>
+
+    <!-- 11 TOP 10 -->
+    <section class="slide" data-name="TOP 10">
+      <div>
+        <div class="eyebrow">Step 10 · 메달 순위</div>
+        <h2>TOP 10 메달 보드</h2>
+        <p class="lead">메달을 많이 모은 학교 학생 10명이 닉네임으로 보여요. 실명은 나오지 않아요.</p>
+        <ul class="points">
+          <li><span>순위에 나오고 싶지 않으면 홈 화면에서 <b>TOP 10에 내 이름 보이기</b>를 꺼요.</span></li>
+          <li><span>꺼도 내 메달과 기록은 그대로예요. 보드에서만 빠져요.</span></li>
+          <li><span>외부 이용자(개인 Gmail)는 보드에 나오지 않아요.</span></li>
+        </ul>
+      </div>
+      <div class="try">
+        <div class="try-label">직접 해 보기</div>
+        <div class="card switch"><input type="checkbox" id="showMe" checked><label for="showMe">TOP 10에 내 이름 보이기</label></div>
+        <div class="board" id="board"></div>
+      </div>
+    </section>
+
+    <!-- 12 마무리 -->
+    <section class="slide" data-name="자주 묻는 질문">
+      <div>
+        <div class="eyebrow">이제 출발</div>
+        <h2>자주 묻는 질문</h2>
+        <details><summary>로그인이 안 돼요.</summary><p>학교 구글 계정(학번@smy.ms.kr)으로 로그인했는지 확인하세요. 크롬이나 사파리 같은 일반 브라우저로 열어 주세요. 카카오톡 안에서 열면 구글 로그인이 막힐 수 있어요.</p></details>
+        <details><summary>어떤 책부터 읽어야 해요?</summary><p>홈 화면의 “다음에 읽을 책” 4권이 내 기록에 맞춰 골라 준 책이에요. 처음이라면 A1 이솝 우화나 동화부터 시작해 보세요.</p></details>
+        <details><summary>퀴즈를 다시 풀 수 없어요.</summary><p>제출하고 10분이 지나야 같은 책에 다시 도전할 수 있어요. 남은 시간이 화면에 나와요.</p></details>
+        <details><summary>번역을 실수로 눌렀어요.</summary><p>이야기 단락 번역을 한 번 보면 그 책에서는 ⭐ 보너스를 받을 수 없어요. 메달과 점수에는 영향이 없어요.</p></details>
+        <details><summary>같은 제목이 두 권 있어요.</summary><p>『모리와 함께한 화요일』과 『참을 수 없는 존재의 가벼움』은 B1판과 더 쉬운 A2판이 따로 있어요. 둘 다 읽고 메달을 받을 수 있어요.</p></details>
+        <details><summary>휴대폰에서도 되나요?</summary><p>네. 휴대폰, 태블릿, 컴퓨터 모두 같은 계정으로 이어서 쓸 수 있어요.</p></details>
+        <details><summary>수행평가 점수에 들어가나요?</summary><p>아니요. 스스로 읽고 기록을 모으는 독서 활동이에요. 궁금한 점은 영어 선생님께 물어보세요.</p></details>
+      </div>
+      <div class="try">
+        <div class="try-label">앱 주소</div>
+        <div class="card" style="display:grid;gap:12px">
+          <div class="url"><code id="appurl">https://tfellow.github.io/web/app/</code><button class="btn ghost" id="copy">주소 복사</button></div>
+          <div id="copyMsg" class="msg muted"></div>
+          <a class="btn gold" href="./" style="text-align:center;text-decoration:none">독서 여권 열기 →</a>
+        </div>
+        <div class="card">
+          <b>오늘 해 볼 일</b>
+          <ol style="margin:8px 0 0;padding-left:20px;color:var(--muted)">
+            <li>학교 계정으로 로그인하기</li>
+            <li>닉네임 정하기</li>
+            <li>A1 책 한 권 골라 영어로 읽기</li>
+            <li>퀴즈 풀고 첫 도장 찍기</li>
+          </ol>
+        </div>
+        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v17 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="nav">
+    <button class="btn ghost" id="prev">← 이전</button>
+    <div class="hint" id="slideName">표지</div>
+    <button class="btn" id="next">다음 →</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var cur = 0;
+  var prog = document.getElementById("prog");
+  slides.forEach(function (s, i) {
+    var b = document.createElement("button");
+    b.setAttribute("aria-label", (i + 1) + "번째: " + s.dataset.name);
+    b.onclick = function () { go(i); };
+    prog.appendChild(b);
+  });
+  function go(i) {
+    if (i < 0 || i >= slides.length) return;
+    var back = i < cur;
+    cur = i;
+    slides.forEach(function (s, k) { s.hidden = k !== i; s.classList.remove("in", "back"); });
+    var s = slides[i];
+    void s.offsetWidth;
+    s.classList.add("in");
+    if (back) s.classList.add("back");
+    s.scrollTop = 0;
+    Array.prototype.forEach.call(prog.children, function (b, k) { b.className = k === i ? "on" : (k < i ? "done" : ""); });
+    document.getElementById("count").textContent = (i + 1) + " / " + slides.length;
+    document.getElementById("slideName").textContent = s.dataset.name;
+    document.getElementById("prev").disabled = i === 0;
+    document.getElementById("next").disabled = i === slides.length - 1;
+    try { history.replaceState(null, "", "#s" + (i + 1)); } catch (e) {}
+  }
+  document.getElementById("prev").onclick = function () { go(cur - 1); };
+  document.getElementById("next").onclick = function () { go(cur + 1); };
+  document.querySelectorAll("[data-go]").forEach(function (b) { b.onclick = function () { go(+b.dataset.go); }; });
+  document.addEventListener("keydown", function (e) {
+    if (/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === "ArrowRight" || e.key === "PageDown") { go(cur + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { go(cur - 1); e.preventDefault(); }
+  });
+  var sx = null, sy = 0;
+  var stage = document.getElementById("stage");
+  stage.addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener("touchend", function (e) {
+    if (sx == null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !e.target.closest("input")) go(cur + (dx < 0 ? 1 : -1));
+    sx = null;
+  });
+
+  // 로그인
+  document.getElementById("gbtn").onclick = function () {
+    var v = document.getElementById("email").value.trim().toLowerCase();
+    var out = document.getElementById("loginOut");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { out.className = "msg bad"; out.textContent = "이메일 형식으로 넣어 주세요. 예: 101123456@smy.ms.kr"; return; }
+    if (/@smy\.ms\.kr$/.test(v)) { out.className = "msg"; out.innerHTML = '<span class="badge school">서울문영여자중학교</span> 학교 계정이에요. 반 기록과 TOP 10에 들어가요.'; }
+    else { out.className = "msg"; out.innerHTML = '<span class="badge ext">외부 이용자</span> 개인 계정이에요. 학교 계정으로 다시 로그인해 주세요.'; }
+  };
+
+  // 닉네임
+  var taken = ["책벌레", "무지개", "북극곰"];
+  var nick = document.getElementById("nick");
+  nick.oninput = function () {
+    var v = nick.value.trim(), m = document.getElementById("nickMsg");
+    document.getElementById("nickShow").textContent = v || "닉네임";
+    if (v.length < 2) { m.className = "msg bad"; m.textContent = "2자 이상 써 주세요."; }
+    else if (v.length > 12) { m.className = "msg bad"; m.textContent = "12자 이하로 써 주세요."; }
+    else if (taken.indexOf(v) >= 0) { m.className = "msg bad"; m.textContent = "이미 다른 친구가 쓰는 이름이에요. (예시: 책벌레, 무지개, 북극곰)"; }
+    else { m.className = "msg ok"; m.textContent = "사용할 수 있어요."; }
+  };
+
+  // 책장 (실제 130권 중 예시 8권)
+  var BOOKS = [
+    ["토끼와 거북", "Aesop · 그리스", "A1", "157단어", "#5f8a4a", "tortoise hare 이솝 aesop 그리스 토끼 거북"],
+    ["어린 왕자", "Saint-Exupéry · 프랑스", "A1", "159단어", "#c4882b", "little prince 생텍쥐페리 프랑스 어린 왕자"],
+    ["크리스마스 선물", "O. Henry · 미국", "A1", "169단어", "#8a3a4a", "gift magi 오 헨리 o. henry 미국 크리스마스"],
+    ["지킬 박사와 하이드", "Stevenson · 영국", "A2", "226단어", "#3f7a6b", "jekyll hyde 지킬 영국 stevenson 스티븐슨"],
+    ["노인과 바다", "Hemingway · 미국", "A2", "215단어", "#2a6a8a", "old man sea 헤밍웨이 hemingway 미국 쿠바 노인 바다"],
+    ["호빗", "Tolkien · 영국", "A2", "234단어", "#6a7a3a", "hobbit 호빗 tolkien 톨킨 영국"],
+    ["지구 속 여행", "Verne · 프랑스", "B1", "316단어", "#a8452f", "journey verne 베른 프랑스 지구"],
+    ["은하철도의 밤", "Miyazawa · 일본", "B1", "340단어", "#2f3f7a", "galactic railroad miyazawa 미야자와 일본 은하철도 겐지"]
+  ];
+  var shelf = document.getElementById("shelf"), lv = "";
+  BOOKS.forEach(function (b) {
+    var d = document.createElement("div");
+    d.className = "book"; d.style.background = b[4];
+    d.dataset.lv = b[2]; d.dataset.k = (b[0] + " " + b[1] + " " + b[5]).toLowerCase();
+    d.innerHTML = "<b>" + b[0] + "</b><small>" + b[1] + "<br>" + b[2] + " · " + b[3] + "</small>";
+    shelf.appendChild(d);
+  });
+  function drawShelf() {
+    var q = document.getElementById("shelfq").value.trim().toLowerCase(), n = 0;
+    Array.prototype.forEach.call(shelf.children, function (d) {
+      var ok = (!lv || d.dataset.lv === lv) && (!q || d.dataset.k.indexOf(q) >= 0);
+      d.hidden = !ok; if (ok) n++;
+    });
+    document.getElementById("shelfEmpty").hidden = n > 0;
+  }
+  document.querySelectorAll("#lvpills .chip").forEach(function (c) {
+    c.onclick = function () {
+      lv = c.dataset.lv;
+      document.querySelectorAll("#lvpills .chip").forEach(function (x) { x.classList.toggle("on", x === c); });
+      drawShelf();
+    };
+  });
+  document.getElementById("shelfq").oninput = drawShelf;
+
+  // 힌트
+  var hints = 0;
+  function drawStar() {
+    var bar = document.getElementById("starbar"), t = document.getElementById("starTxt");
+    bar.classList.toggle("off", hints > 0);
+    t.textContent = hints ? "번역을 본 단락 " + hints + "개 · 이 책에서는 ⭐ 보너스를 받을 수 없어요. 메달은 그대로 받을 수 있어요." : "아직 번역을 보지 않았어요. 이대로 통과하면 무힌트 보너스!";
+  }
+  document.querySelectorAll(".reveal").forEach(function (b) {
+    b.onclick = function () { b.previousElementSibling.hidden = false; b.hidden = true; hints++; drawStar(); };
+  });
+  document.getElementById("hintReset").onclick = function () {
+    hints = 0;
+    document.querySelectorAll(".reveal").forEach(function (b) { b.hidden = false; b.previousElementSibling.hidden = true; });
+    drawStar();
+  };
+
+  // 퀴즈
+  var QS = [
+    ["Why does the hare laugh at the tortoise?", ["The tortoise is slow.", "The tortoise is small.", "The tortoise cannot swim.", "The tortoise is sleepy."], 0],
+    ["What does the hare do during the race?", ["He eats lunch.", "He helps the tortoise.", "He falls asleep.", "He goes home."], 2],
+    ["What is the main message of this story?", ["Fast animals always win.", "Never run in a race.", "Sleep is important.", "Slow and steady wins the race."], 3]
+  ];
+  var picked = {}, order = [];
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function drawQuiz() {
+    picked = {};
+    order = shuffle([0, 1, 2]);
+    var box = document.getElementById("quiz"); box.innerHTML = "";
+    order.forEach(function (qi, n) {
+      var q = QS[qi], d = document.createElement("div"); d.className = "q";
+      d.innerHTML = "<p>" + (n + 1) + ". " + q[0] + "</p>";
+      shuffle([0, 1, 2, 3]).forEach(function (ci) {
+        var o = document.createElement("button"); o.className = "opt"; o.textContent = q[1][ci];
+        o.onclick = function () {
+          if (box.dataset.done) return;
+          picked[qi] = ci;
+          d.querySelectorAll(".opt").forEach(function (x) { x.classList.toggle("sel", x === o); });
+        };
+        o.dataset.ci = ci; d.appendChild(o);
+      });
+      box.appendChild(d);
+    });
+    delete box.dataset.done;
+    document.getElementById("qsubmit").disabled = false;
+    var out = document.getElementById("qout"); out.className = "msg muted"; out.textContent = "3문항에 모두 답해 보세요. 다시 섞기를 누르면 순서가 바뀌어요.";
+  }
+  document.getElementById("qsubmit").onclick = function () {
+    var out = document.getElementById("qout");
+    var miss = order.filter(function (qi) { return picked[qi] == null; });
+    if (miss.length) { out.className = "msg bad"; out.textContent = "아직 답하지 않은 문항이 " + miss.length + "개 있어요."; return; }
+    var box = document.getElementById("quiz"), right = 0;
+    box.dataset.done = "1";
+    box.querySelectorAll(".q").forEach(function (d, n) {
+      var qi = order[n];
+      d.querySelectorAll(".opt").forEach(function (o) {
+        var ci = +o.dataset.ci;
+        if (ci === QS[qi][2]) o.classList.add("right");
+        else if (ci === picked[qi]) o.classList.add("wrong");
+      });
+      if (picked[qi] === QS[qi][2]) right++;
+    });
+    this.disabled = true;
+    out.className = "msg " + (right === 3 ? "ok" : "muted");
+    out.textContent = "3문항 중 " + right + "개 맞혔어요. 실제 앱에서는 10문항이고, 정답은 제출한 뒤에만 알 수 있어요.";
+  };
+  document.getElementById("qreset").onclick = drawQuiz;
+  drawQuiz();
+
+  // 메달
+  var best = -1;
+  var MED = { gold: ["🥇", "금메달"], silver: ["🥈", "은메달"], bronze: ["🥉", "동메달"] };
+  function medalOf(s) { return s >= 10 ? "gold" : s >= 8 ? "silver" : s >= 6 ? "bronze" : null; }
+  function drawMedal() {
+    var s = +document.getElementById("range").value, m = medalOf(s), ring = document.getElementById("ring");
+    document.getElementById("sc").textContent = s;
+    ring.textContent = m ? MED[m][0] : "📘";
+    ring.style.borderColor = m === "gold" ? "var(--gold)" : m === "silver" ? "#8d99ab" : m === "bronze" ? "#b8702e" : "var(--line)";
+    ring.classList.add("pop"); setTimeout(function () { ring.classList.remove("pop"); }, 250);
+    document.getElementById("mname").textContent = m ? MED[m][1] + "을 받았어요! (" + s * 10 + "점)" : "아직 메달이 없어요 (" + s * 10 + "점) · 60점부터 메달";
+    if (s > best) best = s;
+    var bm = medalOf(best);
+    document.getElementById("mbest").textContent = "내 최고 기록: " + best * 10 + "점" + (bm ? " · " + MED[bm][1] + " 유지" : "");
+  }
+  document.getElementById("range").oninput = drawMedal;
+  drawMedal();
+
+  // 도장
+  document.querySelectorAll("#stampChips .chip").forEach(function (c) {
+    c.onclick = function () {
+      document.querySelectorAll("#stampChips .chip").forEach(function (x) { x.classList.toggle("on", x === c); });
+      var st = document.getElementById("stamp");
+      document.getElementById("stampName").textContent = c.dataset.c;
+      st.classList.remove("stamped"); void st.offsetWidth; st.classList.add("stamped");
+    };
+  });
+
+  // 지도
+  var MAP = {
+    me: [["그리스", 3], ["영국", 2], ["프랑스", 1], ["미국", 1], ["덴마크", 1]],
+    class: [["그리스", 18], ["영국", 14], ["미국", 11], ["프랑스", 9], ["덴마크", 6], ["독일", 4]]
+  };
+  function drawBars(m) {
+    var rows = MAP[m], max = Math.max.apply(null, rows.map(function (r) { return r[1]; }).concat([1]));
+    document.getElementById("bars").innerHTML = rows.map(function (r) {
+      return '<div class="bar"><span>' + r[0] + '</span><div class="track"><div class="fill" style="width:' + (r[1] / max * 100) + '%"></div></div><span>' + r[1] + "</span></div>";
+    }).join("") + '<div class="muted" style="font-size:.82rem">' + (m === "me" ? "내가 찍은 도장 수예요. (예시)" : "반 친구들 도장을 합친 수예요. 이름은 보이지 않아요. (예시)") + "</div>";
+    document.querySelectorAll("#mapseg button").forEach(function (b) { b.classList.toggle("on", b.dataset.m === m); });
+  }
+  document.querySelectorAll("#mapseg button").forEach(function (b) { b.onclick = function () { drawBars(b.dataset.m); }; });
+  drawBars("me");
+  var CONTS = [["🏰", "유럽", true], ["🏯", "아시아", false], ["🗽", "북아메리카", true], ["🦙", "남아메리카", false], ["🦁", "아프리카", false], ["🦘", "오세아니아", false]];
+  var conts = document.getElementById("conts");
+  CONTS.forEach(function (c) {
+    var b = document.createElement("button");
+    b.className = "cont" + (c[2] ? " on" : "");
+    b.innerHTML = '<span class="e">' + c[0] + "</span>" + c[1];
+    b.setAttribute("aria-pressed", c[2] ? "true" : "false");
+    b.onclick = function () { var on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); };
+    conts.appendChild(b);
+  });
+
+  // 주간 목표 · 레벨
+  var weeks = document.getElementById("weeks"), lit = [false, false, true, false, true, true, false, false];
+  function drawWeeks() {
+    weeks.innerHTML = "";
+    lit.forEach(function (v, i) {
+      var b = document.createElement("button"); b.className = "wk" + (v ? " lit" : "");
+      b.setAttribute("aria-label", (i === 7 ? "이번 주" : (7 - i) + "주 전") + (v ? " · 메달 받음" : " · 기록 없음"));
+      b.onclick = function () { lit[i] = !lit[i]; drawWeeks(); };
+      weeks.appendChild(b);
+    });
+    var s = 0, start = lit[7] ? 7 : 6;
+    for (var i = start; i >= 0 && lit[i]; i--) s++;
+    document.getElementById("streak").textContent = "🔥 연속 독서 " + s + "주" + (lit[7] ? " · 이번 주 목표 달성!" : " · 이번 주에 한 작품 완료해 볼까요?");
+  }
+  drawWeeks();
+  var LV = [["🌱", "A1", "새싹 독자"], ["🧭", "A2", "꼬마 탐험가"], ["🎒", "B1", "용감한 여행자"], ["🗺️", "B2", "노련한 모험가"], ["🌍", "C1", "세계 시민"]];
+  var a1 = 0;
+  function drawRoad() {
+    document.getElementById("road").innerHTML = LV.map(function (l, i) {
+      var earned = i === 0 && a1 >= 3;
+      return '<div class="lv' + (earned ? " earned" : "") + '"><div class="c">' + l[0] + "</div><b>" + l[1] + "</b>" + l[2] + "</div>";
+    }).join("");
+    document.getElementById("lvMsg").textContent = a1 >= 3 ? "A1 칭호 획득! 🌱 새싹 독자 · 이제 A2에 도전!" : "A1: " + a1 + " / 3";
+    document.getElementById("lvAdd").textContent = a1 >= 3 ? "처음부터" : "A1 메달 책 +1";
+  }
+  document.getElementById("lvAdd").onclick = function () { a1 = a1 >= 3 ? 0 : a1 + 1; drawRoad(); };
+  drawRoad();
+
+  // TOP 10
+  var BOARD = [["은하수소녀", "🥇9 🥈3"], ["책먹는여우", "🥇7 🥈4"], ["별빛독서가", "🥇5 🥈2 🥉1"], ["새벽산책", "🥇4 🥈3"], ["오로라", "🥇3 🥈5"]];
+  function drawBoard() {
+    var show = document.getElementById("showMe").checked;
+    var rows = BOARD.filter(function (r) { return show || r[0] !== "별빛독서가"; });
+    document.getElementById("board").innerHTML = rows.map(function (r, i) {
+      return '<div class="' + (r[0] === "별빛독서가" ? "me" : "") + '"><span>' + (i + 1) + "</span><span>" + r[0] + (r[0] === "별빛독서가" ? " (나)" : "") + "</span><span>" + r[1] + "</span></div>";
+    }).join("") + '<p class="muted" style="font-size:.82rem;margin:4px 0 0">' + (show ? "내 닉네임이 보드에 보여요. (예시 순위)" : "보드에서 빠졌어요. 내 메달은 그대로 있어요.") + "</p>";
+  }
+  document.getElementById("showMe").onchange = drawBoard;
+  drawBoard();
+
+  // 주소 복사
+  document.getElementById("copy").onclick = function () {
+    var t = document.getElementById("appurl").textContent, m = document.getElementById("copyMsg");
+    function sel() { var r = document.createRange(); r.selectNodeContents(document.getElementById("appurl")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = "주소를 선택했어요. 복사해서 쓰세요."; }
+    try { navigator.clipboard.writeText(t).then(function () { m.textContent = "주소를 복사했어요."; }, sel); } catch (e) { sel(); }
+  };
+
+  var start = /^#s(\d+)$/.exec(location.hash);
+  go(start ? Math.min(slides.length, +start[1]) - 1 : 0);
+})();
+</script>
+</body>
+</html>

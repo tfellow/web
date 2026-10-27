@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "16"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "17"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -188,6 +188,7 @@
       "<p>세계문학을 영어로 읽고, 퀴즈를 풀고, 메달과 스탬프를 모아 보세요.</p>" +
       '<div id="gbtn"></div>' +
       '<p style="font-size:.88rem">학교 계정(@smy.ms.kr)으로 로그인하세요.</p>' +
+      '<a class="btn gold small guide-link" href="guide.html" target="_blank" rel="noopener">📘 처음이라면? 사용 설명서 보기</a>' +
       '<div class="err">' + esc(msg || "") + "</div></div>" +
       '<div class="feature-row">' +
       '<div class="feature"><div class="em">📚</div><b>영어로 먼저 읽기</b><span class="muted">어려운 단락만 한국어 힌트</span></div>' +
@@ -232,7 +233,7 @@
       '<div class="whoinfo"><span class="badge ' + (isSchool ? "school" : "external") + '">' + (isSchool ? SCHOOL_LABEL : "외부 이용자") + "</span>" +
       (state.isAdmin ? '<span class="badge gold">교사</span>' : "") +
       '<b class="nick">' + esc(p.nickname || "") + "</b></div>" +
-      '<div class="whobtn"><button class="btn ghost small" id="nickbtn">✏️ 닉네임</button>' +
+      '<div class="whobtn"><a class="btn ghost small guide-link" href="guide.html" target="_blank" rel="noopener">📘 사용 설명서</a><button class="btn ghost small" id="nickbtn">✏️ 닉네임</button>' +
       (state.isAdmin ? '<button class="btn ghost small" id="goteacher">👩‍🏫 교사 화면</button>' : "") +
       '<button class="btn ghost small" id="signout">로그아웃</button></div>';
     $who.classList.remove("hidden");
@@ -375,7 +376,7 @@
     var rec = books.filter(function (b) { return st(b) === "new" && !featured[b.id]; }).sort(function (a, b) {
       function key(k) { return cur < 0 ? k : (k >= cur ? k - cur : cur - k + 0.5); }
       return key(LEVELS.indexOf(levelOf(a))) - key(LEVELS.indexOf(levelOf(b)));
-    }).slice(0, 3);
+    }).slice(0, 4);
 
     var nick = (state.profile && state.profile.nickname) || "";
     var show = state.profile && state.profile.show_on_board;
