@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* 사용 설명서 버전: 앱 v18 · 130권 (A1 42 · A2 84 · B1 4). 앱이 바뀌면 이 파일도 같이 고쳐요. */
+/* 사용 설명서 버전: 앱 v19 · 130권 (A1 42 · A2 84 · B1 4). 앱이 바뀌면 이 파일도 같이 고쳐요. */
 :root {
   --bg: #eef1f7; --page: #fbfaf6; --ink: #18264a; --muted: #5b6684; --line: #d9dfeb;
   --navy: #1e3768; --navy-2: #2d5291; --gold: #c9971c; --gold-soft: #f7ecd0; --gold-ink: #7a5807;
@@ -462,10 +462,10 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
       <div>
         <div class="eyebrow">Step 9 · 매일 읽기</div>
         <h2>🔥 오늘이 며칠째 연속 독서일까?</h2>
-        <p class="lead">퀴즈를 <b>제출한 날</b>이 독서한 날이에요. 하루도 빠지지 않고 이어 가면 홈 화면의 불꽃 숫자가 하루씩 올라가요.</p>
+        <p class="lead">퀴즈에서 <b>메달(60점 이상)을 받은 날</b>이 독서한 날이에요. 하루도 빠지지 않고 이어 가면 홈 화면의 불꽃 숫자가 하루씩 올라가요.</p>
         <ul class="points">
-          <li><span>점수와 상관없이 그날 퀴즈를 <b>한 번만</b> 내도 불꽃이 켜져요.</span></li>
-          <li><span>오늘 아직 안 했어도 어제까지 이어졌다면 불꽃은 살아 있어요. <b>자정(밤 12시)</b>이 지나기 전에 퀴즈를 풀면 이어져요.</span></li>
+          <li><span>그날 어떤 책이든 <b>메달을 하나</b> 받으면 불꽃이 켜져요. 동메달도 괜찮아요. 60점이 안 되면 불꽃은 켜지지 않아요.</span></li>
+          <li><span>오늘 아직 안 했어도 어제까지 이어졌다면 불꽃은 살아 있어요. <b>자정(밤 12시)</b>이 지나기 전에 메달을 받으면 이어져요.</span></li>
           <li><span>하루를 건너뛰면 0일부터 다시 시작해요. 내 <b>최고 기록</b>은 따로 남아요.</span></li>
           <li><span>여권 카드의 <b>연속 독서</b> 칸과 퀴즈 결과 화면에서도 며칠째인지 볼 수 있어요.</span></li>
         </ul>
@@ -533,7 +533,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <details><summary>로그인이 안 돼요.</summary><p>학교 구글 계정(학번@smy.ms.kr)으로 로그인했는지 확인하세요. 크롬이나 사파리 같은 일반 브라우저로 열어 주세요. 카카오톡 안에서 열면 구글 로그인이 막힐 수 있어요.</p></details>
         <details><summary>어떤 책부터 읽어야 해요?</summary><p>홈 화면의 “다음에 읽을 책” 4권이 내 기록에 맞춰 골라 준 책이에요. 처음이라면 A1 이솝 우화나 동화부터 시작해 보세요.</p></details>
         <details><summary>퀴즈를 다시 풀 수 없어요.</summary><p>제출하고 10분이 지나야 같은 책에 다시 도전할 수 있어요. 남은 시간이 화면에 나와요.</p></details>
-        <details><summary>연속 독서가 0일이 됐어요.</summary><p>하루(밤 12시 기준) 동안 퀴즈를 하나도 내지 않으면 연속 기록이 끊겨요. 오늘 퀴즈를 하나 풀면 1일부터 다시 시작해요. 최고 기록은 그대로 남아요.</p></details>
+        <details><summary>연속 독서가 0일이 됐어요.</summary><p>하루(밤 12시 기준) 동안 메달을 하나도 받지 못하면 연속 기록이 끊겨요. 오늘 메달을 하나 받으면 1일부터 다시 시작해요. 최고 기록은 그대로 남아요.</p></details>
         <details><summary>번역을 실수로 눌렀어요.</summary><p>이야기 단락 번역을 한 번 보면 그 책에서는 ⭐ 보너스를 받을 수 없어요. 메달과 점수에는 영향이 없어요.</p></details>
         <details><summary>같은 제목이 두 권 있어요.</summary><p>『모리와 함께한 화요일』과 『참을 수 없는 존재의 가벼움』은 B1판과 더 쉬운 A2판이 따로 있어요. 둘 다 읽고 메달을 받을 수 있어요.</p></details>
         <details><summary>휴대폰에서도 되나요?</summary><p>네. 휴대폰, 태블릿, 컴퓨터 모두 같은 계정으로 이어서 쓸 수 있어요.</p></details>
@@ -555,7 +555,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
             <li>퀴즈 풀고 첫 도장 찍기</li>
           </ol>
         </div>
-        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v18 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
+        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v19 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
       </div>
     </section>
   </div>
@@ -809,7 +809,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     var fl = document.getElementById("dsFlame");
     fl.className = "ds-flame" + (today ? "" : n ? " warn" : " off");
     document.getElementById("dsNum").textContent = n;
-    document.getElementById("dsMsg").textContent = today ? "오늘 " + n + "일째 연속 독서 완료!" : n ? n + "일 연속 독서 중! 오늘 퀴즈를 풀면 " + (n + 1) + "일째" : "오늘 퀴즈 하나로 시작해 보세요.";
+    document.getElementById("dsMsg").textContent = today ? "오늘 " + n + "일째 연속 독서 완료!" : n ? n + "일 연속 독서 중! 오늘 메달을 받으면 " + (n + 1) + "일째" : "오늘 메달 하나로 시작해 보세요.";
     document.getElementById("dsSub").textContent = today ? "불꽃이 켜졌어요. 내일도 이어 가요." : n ? "자정이 지나면 불꽃이 꺼져요. 오늘을 눌러 보세요." : "하루를 건너뛰면 0일부터 다시 시작해요.";
   }
   drawDays();

@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "18"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "19"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -153,7 +153,7 @@
     return (d.getMonth() + 1) + "/" + d.getDate() + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
   }
   function addDays(iso, n) { var d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
-  // 하루 연속 독서: 퀴즈를 제출한 날(서울 시간)이 독서한 날이에요. 오늘 아직 안 했어도 어제까지 이어졌으면 불꽃은 살아 있어요.
+  // 하루 연속 독서: 메달(60점 이상)을 받은 날(서울 시간)이 독서한 날이에요. 오늘 아직 안 했어도 어제까지 이어졌으면 불꽃은 살아 있어요.
   function dayStreak(data) {
     var today = (data && data.today) || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
     var list = (data && data.days) || [];
@@ -172,9 +172,9 @@
   var DOW = ["일", "월", "화", "수", "목", "금", "토"];
   function streakCardHtml(ds) {
     var msg = ds.today ? "오늘 " + ds.n + "일째 연속 독서 완료! 내일도 이어 가요."
-      : ds.n ? ds.n + "일 연속 독서 중! 오늘 퀴즈를 풀면 " + (ds.n + 1) + "일째가 돼요."
-      : "오늘 퀴즈 하나로 연속 독서를 시작해 보세요.";
-    var sub = ds.today ? "불꽃이 켜졌어요 🔥" : ds.n ? "자정이 지나면 불꽃이 꺼져요." : "퀴즈를 제출한 날이 독서한 날로 기록돼요.";
+      : ds.n ? ds.n + "일 연속 독서 중! 오늘 메달을 받으면 " + (ds.n + 1) + "일째가 돼요."
+      : "오늘 메달 하나로 연속 독서를 시작해 보세요.";
+    var sub = ds.today ? "불꽃이 켜졌어요 🔥" : ds.n ? "자정이 지나면 불꽃이 꺼져요." : "메달(60점 이상)을 받은 날이 독서한 날로 기록돼요.";
     return '<div class="card streak-card' + (ds.today ? " lit" : ds.n ? " warn" : " off") + '">' +
       '<div class="sc-flame"><span class="fl">🔥</span><b>' + ds.n + "</b><small>일째</small></div>" +
       '<div class="sc-body"><b>' + msg + '</b><div class="muted">' + sub + (ds.best ? " · 최고 기록 " + ds.best + "일" : "") + "</div>" +
@@ -884,7 +884,8 @@
       var box = document.getElementById("resstreak");
       if (d.error || !box) return;
       var s = dayStreak(d.data);
-      if (s.n) box.innerHTML = '<div class="res-streak"><span>🔥</span><b>' + s.n + "일째 연속 독서!</b>" + (s.n > 1 ? " 오늘도 불꽃을 지켰어요." : " 내일도 이어 가 봐요.") + "</div>";
+      if (s.today) box.innerHTML = '<div class="res-streak"><span>🔥</span><b>' + s.n + "일째 연속 독서!</b>" + (s.n > 1 ? " 오늘도 불꽃을 지켰어요." : " 내일도 이어 가 봐요.") + "</div>";
+      else if (s.n) box.innerHTML = '<div class="res-streak"><span>🔥</span><b>' + s.n + "일 연속 독서 중</b> · 오늘 메달을 받으면 " + (s.n + 1) + "일째가 돼요.</div>";
     });
     // 새 기록으로 요약을 다시 받아 도장 고르기를 보여 줘요
     state.summary = null;
