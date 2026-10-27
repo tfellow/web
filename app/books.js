@@ -1254,5 +1254,870 @@ window.BOOKS = [
   "places": [
    "Russia"
   ]
+ },
+ {
+  "id": "the-stranger",
+  "title": "The Stranger",
+  "titleKo": "이방인",
+  "author": "Albert Camus",
+  "authorKo": "알베르 카뮈",
+  "country": "France",
+  "emoji": "🌞",
+  "color": "#c49a3a",
+  "cefr": "A2",
+  "lexile": "약 650L (추정)",
+  "words": 195,
+  "places": [
+   "France",
+   "Algeria"
+  ]
+ },
+ {
+  "id": "the-merchant-of-venice",
+  "title": "The Merchant of Venice",
+  "titleKo": "베니스의 상인",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "🪙",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 193,
+  "places": [
+   "United Kingdom",
+   "Italy"
+  ]
+ },
+ {
+  "id": "hamlet",
+  "title": "Hamlet",
+  "titleKo": "햄릿",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "💀",
+  "color": "#3a3a5a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 196,
+  "places": [
+   "United Kingdom",
+   "Denmark"
+  ]
+ },
+ {
+  "id": "to-kill-a-mockingbird",
+  "title": "To Kill a Mockingbird",
+  "titleKo": "앵무새 죽이기",
+  "author": "Harper Lee",
+  "authorKo": "하퍼 리",
+  "country": "United States",
+  "emoji": "🕊️",
+  "color": "#6a7a4a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 194,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "lord-of-the-flies",
+  "title": "Lord of the Flies",
+  "titleKo": "파리대왕",
+  "author": "William Golding",
+  "authorKo": "윌리엄 골딩",
+  "country": "United Kingdom",
+  "emoji": "🐚",
+  "color": "#5a7a3a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 201,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "peter-pan",
+  "title": "Peter Pan",
+  "titleKo": "피터 팬",
+  "author": "J. M. Barrie",
+  "authorKo": "J. M. 배리",
+  "country": "United Kingdom",
+  "emoji": "🧚",
+  "color": "#3a8a5a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 197,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "wuthering-heights",
+  "title": "Wuthering Heights",
+  "titleKo": "폭풍의 언덕",
+  "author": "Emily Brontë",
+  "authorKo": "에밀리 브론테",
+  "country": "United Kingdom",
+  "emoji": "🌫️",
+  "color": "#4a4a5a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 182,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-jungle-book",
+  "title": "The Jungle Book",
+  "titleKo": "정글북",
+  "author": "Rudyard Kipling",
+  "authorKo": "러디어드 키플링",
+  "country": "United Kingdom",
+  "emoji": "🐻",
+  "color": "#4a7a3a",
+  "cefr": "A2",
+  "lexile": "약 620L (추정)",
+  "words": 204,
+  "places": [
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "gone-with-the-wind",
+  "title": "Gone with the Wind",
+  "titleKo": "바람과 함께 사라지다",
+  "author": "Margaret Mitchell",
+  "authorKo": "마거릿 미첼",
+  "country": "United States",
+  "emoji": "🌪️",
+  "color": "#a84a2a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 196,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "charlie-and-the-chocolate-factory",
+  "title": "Charlie and the Chocolate Factory",
+  "titleKo": "찰리와 초콜릿 공장",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "🍫",
+  "color": "#6a3a2a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 203,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-tale-of-two-cities",
+  "title": "A Tale of Two Cities",
+  "titleKo": "두 도시 이야기",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🗡️",
+  "color": "#7a3a3a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 198,
+  "places": [
+   "United Kingdom",
+   "France"
+  ]
+ },
+ {
+  "id": "pride-and-prejudice",
+  "title": "Pride and Prejudice",
+  "titleKo": "오만과 편견",
+  "author": "Jane Austen",
+  "authorKo": "제인 오스틴",
+  "country": "United Kingdom",
+  "emoji": "💃",
+  "color": "#8a5a7a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 204,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-wonderful-wizard-of-oz",
+  "title": "The Wonderful Wizard of Oz",
+  "titleKo": "오즈의 마법사",
+  "author": "L. Frank Baum",
+  "authorKo": "L. 프랭크 바움",
+  "country": "United States",
+  "emoji": "🌈",
+  "color": "#4a8a3a",
+  "cefr": "A2",
+  "lexile": "약 600L (추정)",
+  "words": 220,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "waiting-for-godot",
+  "title": "Waiting for Godot",
+  "titleKo": "고도를 기다리며",
+  "author": "Samuel Beckett",
+  "authorKo": "사뮈엘 베케트",
+  "country": "Ireland",
+  "emoji": "🎩",
+  "color": "#6a6a6a",
+  "cefr": "A2",
+  "lexile": "약 650L (추정)",
+  "words": 199,
+  "places": [
+   "Ireland",
+   "France"
+  ]
+ },
+ {
+  "id": "the-grapes-of-wrath",
+  "title": "The Grapes of Wrath",
+  "titleKo": "분노의 포도",
+  "author": "John Steinbeck",
+  "authorKo": "존 스타인벡",
+  "country": "United States",
+  "emoji": "🚚",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 209,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-hunchback-of-notre-dame",
+  "title": "The Hunchback of Notre-Dame",
+  "titleKo": "노트르담의 꼽추",
+  "author": "Victor Hugo",
+  "authorKo": "빅토르 위고",
+  "country": "France",
+  "emoji": "⛪",
+  "color": "#5a5a7a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 184,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "a-midsummer-nights-dream",
+  "title": "A Midsummer Night’s Dream",
+  "titleKo": "한여름 밤의 꿈",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "🌿",
+  "color": "#4a8a6a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 212,
+  "places": [
+   "United Kingdom",
+   "Greece"
+  ]
+ },
+ {
+  "id": "sense-and-sensibility",
+  "title": "Sense and Sensibility",
+  "titleKo": "이성과 감성",
+  "author": "Jane Austen",
+  "authorKo": "제인 오스틴",
+  "country": "United Kingdom",
+  "emoji": "☕",
+  "color": "#7a6a8a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 195,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "robinson-crusoe",
+  "title": "Robinson Crusoe",
+  "titleKo": "로빈슨 크루소",
+  "author": "Daniel Defoe",
+  "authorKo": "대니얼 디포",
+  "country": "United Kingdom",
+  "emoji": "🏝️",
+  "color": "#6a8a4a",
+  "cefr": "A2",
+  "lexile": "약 660L (추정)",
+  "words": 191,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-count-of-monte-cristo",
+  "title": "The Count of Monte Cristo",
+  "titleKo": "몬테크리스토 백작",
+  "author": "Alexandre Dumas",
+  "authorKo": "알렉상드르 뒤마",
+  "country": "France",
+  "emoji": "🗝️",
+  "color": "#3a4a6a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 216,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "great-expectations",
+  "title": "Great Expectations",
+  "titleKo": "위대한 유산",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🎩",
+  "color": "#6a5a4a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 207,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-scarlet-letter",
+  "title": "The Scarlet Letter",
+  "titleKo": "주홍 글씨",
+  "author": "Nathaniel Hawthorne",
+  "authorKo": "너새니얼 호손",
+  "country": "United States",
+  "emoji": "🅰️",
+  "color": "#a33a3a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 201,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "moby-dick",
+  "title": "Moby Dick",
+  "titleKo": "모비 딕",
+  "author": "Herman Melville",
+  "authorKo": "허먼 멜빌",
+  "country": "United States",
+  "emoji": "🐋",
+  "color": "#2a5a7a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 203,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-bfg",
+  "title": "The BFG",
+  "titleKo": "내 친구 꼬마 거인",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "👂",
+  "color": "#5a7a9a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 199,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "who-moved-my-cheese",
+  "title": "Who Moved My Cheese?",
+  "titleKo": "누가 내 치즈를 옮겼을까?",
+  "author": "Spencer Johnson",
+  "authorKo": "스펜서 존슨",
+  "country": "United States",
+  "emoji": "🧀",
+  "color": "#c9a227",
+  "cefr": "A2",
+  "lexile": "약 650L (추정)",
+  "words": 210,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "macbeth",
+  "title": "Macbeth",
+  "titleKo": "맥베스",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "🗡️",
+  "color": "#4a2a2a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 203,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "king-lear",
+  "title": "King Lear",
+  "titleKo": "리어 왕",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "👑",
+  "color": "#5a4a6a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 211,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "othello",
+  "title": "Othello",
+  "titleKo": "오셀로",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "Italy",
+  "emoji": "🧣",
+  "color": "#3a3a5a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 193,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-taming-of-the-shrew",
+  "title": "The Taming of the Shrew",
+  "titleKo": "말괄량이 길들이기",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "Italy",
+  "emoji": "🎭",
+  "color": "#a35a3a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 215,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-iliad",
+  "title": "The Iliad",
+  "titleKo": "일리아스",
+  "author": "Homer",
+  "authorKo": "호메로스",
+  "country": "Greece",
+  "emoji": "🛡️",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 214,
+  "places": [
+   "Greece",
+   "Turkey"
+  ]
+ },
+ {
+  "id": "the-odyssey",
+  "title": "The Odyssey",
+  "titleKo": "오디세이아",
+  "author": "Homer",
+  "authorKo": "호메로스",
+  "country": "Greece",
+  "emoji": "⛵",
+  "color": "#2a6a8a",
+  "cefr": "A2",
+  "lexile": "약 710L (추정)",
+  "words": 226,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "dead-poets-society",
+  "title": "Dead Poets Society",
+  "titleKo": "죽은 시인의 사회",
+  "author": "N. H. Kleinbaum",
+  "authorKo": "N. H. 클라인바움",
+  "country": "United States",
+  "emoji": "📜",
+  "color": "#4a5a3a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 228,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "zorba-the-greek",
+  "title": "Zorba the Greek",
+  "titleKo": "그리스인 조르바",
+  "author": "Nikos Kazantzakis",
+  "authorKo": "니코스 카잔차키스",
+  "country": "Greece",
+  "emoji": "💃",
+  "color": "#3a7aa3",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 227,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-plague",
+  "title": "The Plague",
+  "titleKo": "페스트",
+  "author": "Albert Camus",
+  "authorKo": "알베르 카뮈",
+  "country": "France",
+  "emoji": "🐀",
+  "color": "#6a6a5a",
+  "cefr": "A2",
+  "lexile": "약 710L (추정)",
+  "words": 228,
+  "places": [
+   "France",
+   "Algeria"
+  ]
+ },
+ {
+  "id": "siddhartha",
+  "title": "Siddhartha",
+  "titleKo": "싯다르타",
+  "author": "Hermann Hesse",
+  "authorKo": "헤르만 헤세",
+  "country": "Germany",
+  "emoji": "🪷",
+  "color": "#c98a3a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 214,
+  "places": [
+   "Germany",
+   "India"
+  ]
+ },
+ {
+  "id": "the-adventures-of-huckleberry-finn",
+  "title": "The Adventures of Huckleberry Finn",
+  "titleKo": "허클베리 핀의 모험",
+  "author": "Mark Twain",
+  "authorKo": "마크 트웨인",
+  "country": "United States",
+  "emoji": "🛶",
+  "color": "#7a5a3a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 232,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "oliver-twist",
+  "title": "Oliver Twist",
+  "titleKo": "올리버 트위스트",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🥣",
+  "color": "#6a5a5a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 227,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-dog-of-flanders",
+  "title": "A Dog of Flanders",
+  "titleKo": "플랜더스의 개",
+  "author": "Ouida",
+  "authorKo": "위다",
+  "country": "United Kingdom",
+  "emoji": "🐕",
+  "color": "#7a8a5a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 241,
+  "places": [
+   "United Kingdom",
+   "Belgium"
+  ]
+ },
+ {
+  "id": "dracula",
+  "title": "Dracula",
+  "titleKo": "드라큘라",
+  "author": "Bram Stoker",
+  "authorKo": "브램 스토커",
+  "country": "Ireland",
+  "emoji": "🦇",
+  "color": "#3a1a2a",
+  "cefr": "A2",
+  "lexile": "약 710L (추정)",
+  "words": 223,
+  "places": [
+   "Ireland",
+   "Romania",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-secret-garden",
+  "title": "The Secret Garden",
+  "titleKo": "비밀의 화원",
+  "author": "Frances Hodgson Burnett",
+  "authorKo": "프랜시스 호지슨 버넷",
+  "country": "United Kingdom",
+  "emoji": "🌹",
+  "color": "#5a8a4a",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 216,
+  "places": [
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "a-little-princess",
+  "title": "A Little Princess",
+  "titleKo": "소공녀",
+  "author": "Frances Hodgson Burnett",
+  "authorKo": "프랜시스 호지슨 버넷",
+  "country": "United Kingdom",
+  "emoji": "👸",
+  "color": "#a37aa3",
+  "cefr": "A2",
+  "lexile": "약 670L (추정)",
+  "words": 236,
+  "places": [
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "heidi",
+  "title": "Heidi",
+  "titleKo": "하이디",
+  "author": "Johanna Spyri",
+  "authorKo": "요하나 슈피리",
+  "country": "Switzerland",
+  "emoji": "🏔️",
+  "color": "#4a8a9a",
+  "cefr": "A2",
+  "lexile": "약 660L (추정)",
+  "words": 222,
+  "places": [
+   "Switzerland",
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-brothers-karamazov",
+  "title": "The Brothers Karamazov",
+  "titleKo": "카라마조프가의 형제들",
+  "author": "Fyodor Dostoevsky",
+  "authorKo": "표도르 도스토옙스키",
+  "country": "Russia",
+  "emoji": "⛪",
+  "color": "#5a3a3a",
+  "cefr": "A2",
+  "lexile": "약 730L (추정)",
+  "words": 225,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "faust",
+  "title": "Faust",
+  "titleKo": "파우스트",
+  "author": "Johann Wolfgang von Goethe",
+  "authorKo": "요한 볼프강 폰 괴테",
+  "country": "Germany",
+  "emoji": "📕",
+  "color": "#6a2a2a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 230,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "narcissus-and-goldmund",
+  "title": "Narcissus and Goldmund",
+  "titleKo": "지와 사랑",
+  "author": "Hermann Hesse",
+  "authorKo": "헤르만 헤세",
+  "country": "Germany",
+  "emoji": "🗿",
+  "color": "#8a7a4a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 223,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-hobbit",
+  "title": "The Hobbit",
+  "titleKo": "호빗",
+  "author": "J. R. R. Tolkien",
+  "authorKo": "J. R. R. 톨킨",
+  "country": "United Kingdom",
+  "emoji": "🐉",
+  "color": "#6a7a3a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 234,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-lord-of-the-rings",
+  "title": "The Lord of the Rings",
+  "titleKo": "반지의 제왕",
+  "author": "J. R. R. Tolkien",
+  "authorKo": "J. R. R. 톨킨",
+  "country": "United Kingdom",
+  "emoji": "💍",
+  "color": "#8a6a2a",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 242,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "little-women",
+  "title": "Little Women",
+  "titleKo": "작은 아씨들",
+  "author": "Louisa May Alcott",
+  "authorKo": "루이자 메이 올콧",
+  "country": "United States",
+  "emoji": "📝",
+  "color": "#a35a6a",
+  "cefr": "A2",
+  "lexile": "약 690L (추정)",
+  "words": 235,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-legend-of-sleepy-hollow",
+  "title": "The Legend of Sleepy Hollow",
+  "titleKo": "슬리피 할로우의 전설",
+  "author": "Washington Irving",
+  "authorKo": "워싱턴 어빙",
+  "country": "United States",
+  "emoji": "🎃",
+  "color": "#a35a1a",
+  "cefr": "A2",
+  "lexile": "약 700L (추정)",
+  "words": 232,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-phantom-of-the-opera",
+  "title": "The Phantom of the Opera",
+  "titleKo": "오페라의 유령",
+  "author": "Gaston Leroux",
+  "authorKo": "가스통 르루",
+  "country": "France",
+  "emoji": "🎭",
+  "color": "#2a2a3a",
+  "cefr": "A2",
+  "lexile": "약 710L (추정)",
+  "words": 246,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-hound-of-the-baskervilles",
+  "title": "The Hound of the Baskervilles",
+  "titleKo": "바스커빌가의 개",
+  "author": "Arthur Conan Doyle",
+  "authorKo": "아서 코넌 도일",
+  "country": "United Kingdom",
+  "emoji": "🐾",
+  "color": "#3a4a3a",
+  "cefr": "A2",
+  "lexile": "약 710L (추정)",
+  "words": 236,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "tuesdays-with-morrie-a2",
+  "title": "Tuesdays with Morrie",
+  "titleKo": "모리와 함께한 화요일",
+  "author": "Mitch Albom",
+  "authorKo": "미치 앨봄",
+  "country": "United States",
+  "emoji": "🍂",
+  "color": "#c9722f",
+  "cefr": "A2",
+  "lexile": "약 680L (추정)",
+  "words": 230,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "unbearable-lightness-a2",
+  "title": "The Unbearable Lightness of Being",
+  "titleKo": "참을 수 없는 존재의 가벼움",
+  "author": "Milan Kundera",
+  "authorKo": "밀란 쿤데라",
+  "country": "Czechia",
+  "emoji": "🪶",
+  "color": "#7c6bb0",
+  "cefr": "A2",
+  "lexile": "약 720L (추정)",
+  "words": 234,
+  "places": [
+   "Czechia",
+   "Switzerland"
+  ]
  }
 ];
