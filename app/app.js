@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "17"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "18"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -153,6 +153,35 @@
     return (d.getMonth() + 1) + "/" + d.getDate() + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
   }
   function addDays(iso, n) { var d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  // 하루 연속 독서: 퀴즈를 제출한 날(서울 시간)이 독서한 날이에요. 오늘 아직 안 했어도 어제까지 이어졌으면 불꽃은 살아 있어요.
+  function dayStreak(data) {
+    var today = (data && data.today) || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+    var list = (data && data.days) || [];
+    var set = {};
+    list.forEach(function (d) { set[d] = 1; });
+    var doneToday = !!set[today];
+    var from = doneToday ? today : addDays(today, -1);
+    var n = 0;
+    while (set[addDays(from, -n)]) n++;
+    var best = 0, run = 0, prev = null;
+    list.slice().sort().forEach(function (d) { run = prev && addDays(prev, 1) === d ? run + 1 : 1; prev = d; if (run > best) best = run; });
+    var week = [];
+    for (var i = 6; i >= 0; i--) { var d = addDays(today, -i); week.push({ d: d, on: !!set[d], today: i === 0 }); }
+    return { n: n, today: doneToday, best: Math.max(best, n), week: week, ok: !!data };
+  }
+  var DOW = ["일", "월", "화", "수", "목", "금", "토"];
+  function streakCardHtml(ds) {
+    var msg = ds.today ? "오늘 " + ds.n + "일째 연속 독서 완료! 내일도 이어 가요."
+      : ds.n ? ds.n + "일 연속 독서 중! 오늘 퀴즈를 풀면 " + (ds.n + 1) + "일째가 돼요."
+      : "오늘 퀴즈 하나로 연속 독서를 시작해 보세요.";
+    var sub = ds.today ? "불꽃이 켜졌어요 🔥" : ds.n ? "자정이 지나면 불꽃이 꺼져요." : "퀴즈를 제출한 날이 독서한 날로 기록돼요.";
+    return '<div class="card streak-card' + (ds.today ? " lit" : ds.n ? " warn" : " off") + '">' +
+      '<div class="sc-flame"><span class="fl">🔥</span><b>' + ds.n + "</b><small>일째</small></div>" +
+      '<div class="sc-body"><b>' + msg + '</b><div class="muted">' + sub + (ds.best ? " · 최고 기록 " + ds.best + "일" : "") + "</div>" +
+      '<div class="sc-week">' + ds.week.map(function (w) {
+        return '<div class="sd' + (w.on ? " on" : "") + (w.today ? " now" : "") + '"><div class="dot">' + (w.on ? "🔥" : "") + "</div>" + (w.today ? "오늘" : DOW[new Date(w.d + "T00:00:00Z").getUTCDay()]) + "</div>";
+      }).join("") + "</div></div></div>";
+  }
   function cleanMsg(m) { return String(m || "").replace(/^[a-z]+:\s*/i, ""); }
   function clearTimer() { if (timer) { clearInterval(timer); timer = null; } }
   function loading() { $app.innerHTML = '<p class="muted center" style="padding:40px 0">불러오는 중...</p>'; }
@@ -184,7 +213,7 @@
     clearTimer();
     $who.classList.add("hidden");
     $app.innerHTML =
-      '<div class="card login"><div class="emblem">📖</div><div class="kicker" style="margin-top:10px">READING PASSPORT</div><h2>문영 독서 여권</h2>' +
+      '<div class="card login"><img class="emblem" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"><div class="kicker" style="margin-top:10px">MOONYOUNG READING PASSPORT</div><h2>문영 독서 여권</h2>' +
       "<p>세계문학을 영어로 읽고, 퀴즈를 풀고, 메달과 스탬프를 모아 보세요.</p>" +
       '<div id="gbtn"></div>' +
       '<p style="font-size:.88rem">학교 계정(@smy.ms.kr)으로 로그인하세요.</p>' +
@@ -233,7 +262,7 @@
       '<div class="whoinfo"><span class="badge ' + (isSchool ? "school" : "external") + '">' + (isSchool ? SCHOOL_LABEL : "외부 이용자") + "</span>" +
       (state.isAdmin ? '<span class="badge gold">교사</span>' : "") +
       '<b class="nick">' + esc(p.nickname || "") + "</b></div>" +
-      '<div class="whobtn"><a class="btn ghost small guide-link" href="guide.html" target="_blank" rel="noopener">📘 사용 설명서</a><button class="btn ghost small" id="nickbtn">✏️ 닉네임</button>' +
+      '<div class="whobtn"><a class="btn ghost small guide-link" href="guide.html" target="_blank" rel="noopener">📘 설명서</a><button class="btn ghost small" id="nickbtn">✏️ 닉네임</button>' +
       (state.isAdmin ? '<button class="btn ghost small" id="goteacher">👩‍🏫 교사 화면</button>' : "") +
       '<button class="btn ghost small" id="signout">로그아웃</button></div>';
     $who.classList.remove("hidden");
@@ -293,7 +322,7 @@
   /* ---------- 홈 ---------- */
   async function renderHome() {
     loading();
-    var calls = [sb.rpc("my_summary"), sb.rpc("leaderboard"), sb.from("books").select("id,featured")];
+    var calls = [sb.rpc("my_summary"), sb.rpc("leaderboard"), sb.from("books").select("id,featured"), sb.rpc("my_days")];
     if (isStudentSchool() && state.profile.grade) calls.push(sb.rpc("class_progress"));
     var res = await Promise.all(calls);
     if (res[0].error) throw res[0].error;
@@ -301,7 +330,8 @@
     var board = res[1].data || [];
     var featured = {};
     (res[2].data || []).forEach(function (r) { if (r.featured) featured[r.id] = true; });
-    var cls = res[3] && !res[3].error ? res[3].data : null;
+    var ds = dayStreak(res[3] && !res[3].error ? res[3].data : null);
+    var cls = res[4] && !res[4].error ? res[4].data : null;
 
     var byId = {};
     (sum.books || []).forEach(function (b) { byId[b.book_id] = b; });
@@ -386,20 +416,21 @@
     };
 
     var html =
-      '<section class="passport"><div class="pp-head"><div class="pp-emblem">' + (title ? LEVEL_INFO[title.lv].em : "📖") + "</div><div>" +
-      '<div class="pp-kicker">READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
-      '<div class="pp-level">' + (title ? title.lv + " " + LEVEL_INFO[title.lv].name : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div></div></div>" +
+      '<section class="passport"><div class="pp-head"><div class="pp-emblem"><img src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"></div><div>' +
+      '<div class="pp-kicker">MOONYOUNG READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
+      '<div class="pp-level">' + (title ? LEVEL_INFO[title.lv].em + " " + title.lv + " " + LEVEL_INFO[title.lv].name : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div></div></div>" +
       '<div class="pp-stats"><div class="pp-stat"><b>' + done + "/" + books.length + "</b><span>작품 완료</span></div>" +
       '<div class="pp-stat"><b>' + (sum.words || 0).toLocaleString() + "</b><span>읽은 단어</span></div>" +
-      '<div class="pp-stat"><b>' + (streak ? "🔥" + streak + "주" : "-") + "</b><span>연속 독서</span></div>" +
+      '<div class="pp-stat"><b>' + (ds.n ? "🔥" + ds.n + "일" : "-") + "</b><span>연속 독서</span></div>" +
       '<div class="pp-stat"><b>🌍 ' + visitedN + "</b><span>여행한 나라</span></div></div>" +
       '<div class="progress"><div id="bar"></div></div>' +
       '<div class="pp-medals">' + medalRing("🥇", sum.gold || 0, "금메달") + medalRing("🥈", sum.silver || 0, "은메달") + medalRing("🥉", sum.bronze || 0, "동메달") + medalRing("⭐", sum.stars || 0, "무힌트") + "</div></section>" +
+      (ds.ok ? streakCardHtml(ds) : "") +
 
       '<div class="grid2"><div class="card"><h2>🎯 이번 주 목표<span class="sub">한 주에 ' + WEEK_GOAL + "작품</span></h2>" +
       '<div class="goal-big"><div class="icon">' + (weekBooks >= WEEK_GOAL ? "✅" : "📖") + "</div><div><b>" +
       (weekBooks >= WEEK_GOAL ? "이번 주 목표 달성! (" + weekBooks + "작품)" : "이번 주에 한 작품 완료해 볼까요?") + '</b><div class="muted">' +
-      (streak ? "🔥 " + streak + "주 연속 독서 중이에요." : "메달을 받으면 이번 주에 불이 켜져요.") + "</div></div></div>" +
+      (streak ? "🏆 " + streak + "주 연속 주간 목표 달성 중이에요." : "메달을 받으면 이번 주에 불이 켜져요.") + "</div></div></div>" +
       '<div class="weeks">' + weekDots.join("") + "</div></div>" +
       (cls
         ? '<div class="card"><h2>🤝 우리 반 함께 읽기<span class="sub">' + cls.grade + "학년 " + cls.class_no + "반</span></h2>" +
@@ -842,13 +873,19 @@
       '<div class="stamp ' + (medal || "none") + '"><span class="em">' + (medal ? MEDALS[medal].em : "📘") + "</span><span>" + (medal ? MEDALS[medal].name : "도전 중") + "</span></div>" +
       '<div class="score-big">' + r.score + " / " + r.total + (r.star ? " ⭐" : "") + "</div>" +
       "<p><b>" + msg + "</b></p>" + starMsg +
-      '<div id="resstamp"></div>' +
+      '<div id="resstreak"></div><div id="resstamp"></div>' +
       '<p class="muted">' + r.attempt + "번째 도전 · 내 최고 점수 " + r.best + "/" + r.total + (better ? " (" + MEDALS[r.best_medal].name + " 유지)" : "") + " · 같은 책은 10분 뒤 다시 도전할 수 있어요.</p>" +
       '<div style="margin-top:14px"><button class="btn" id="tohome">책장으로</button> <button class="btn ghost" id="reread">다시 읽기</button></div></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("reread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(b.id); };
     if (medal === "gold") confetti(70); else if (medal) confetti(30);
     if (r.star) setTimeout(function () { confetti(40); }, 600);
+    sb.rpc("my_days").then(function (d) {
+      var box = document.getElementById("resstreak");
+      if (d.error || !box) return;
+      var s = dayStreak(d.data);
+      if (s.n) box.innerHTML = '<div class="res-streak"><span>🔥</span><b>' + s.n + "일째 연속 독서!</b>" + (s.n > 1 ? " 오늘도 불꽃을 지켰어요." : " 내일도 이어 가 봐요.") + "</div>";
+    });
     // 새 기록으로 요약을 다시 받아 도장 고르기를 보여 줘요
     state.summary = null;
     if (!r.best_medal && !medal) return;
