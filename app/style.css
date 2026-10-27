@@ -276,6 +276,12 @@ select { border: 1px solid var(--line); border-radius: 10px; padding: 5px 8px; b
 /* ---------- 대화상자 ---------- */
 .overlay { position: fixed; inset: 0; background: rgba(15,20,35,.45); z-index: 70; display: flex; align-items: center; justify-content: center; padding: 16px; }
 .overlay .card { max-width: 400px; width: 100%; margin: 0; }
+.overlay .card.wide { max-width: 760px; max-height: 90vh; overflow-y: auto; }
+/* 교사 화면 */
+.tstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 6px 0 4px; }
+.tstats .kv b { font-size: 1.4rem; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--navy); font-weight: 700; text-decoration: underline; cursor: pointer; font: inherit; }
+td .rate { min-width: 120px; margin-top: 4px; }
 .overlay input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
 
 /* 모바일 세로 화면 (반드시 스타일 맨 끝에 둘 것: 앞의 기본 규칙을 덮어쓰기 위해) */

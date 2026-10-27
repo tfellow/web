@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "21"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "22"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -915,120 +915,352 @@
     a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" }));
     a.download = name; a.click();
   }
+  // 교사 화면: 반별 현황 · 학생 · 작품 · TOP 10 · 문항/힌트 · 설정 탭
   async function renderTeacher() {
     if (!state.isAdmin) { location.hash = "#/"; return; }
     loading();
-    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats"), sb.from("books").select("id,featured"), sb.rpc("admin_question_stats")]);
+    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats"), sb.from("books").select("id,featured"),
+      sb.rpc("admin_question_stats"), sb.rpc("admin_extras"), sb.rpc("leaderboard")]);
     for (var k = 0; k < 3; k++) if (res[k].error) throw res[k].error;
     var ov = res[0].data || [], sc = res[1].data || [], hs = res[2].data || [];
     var qstats = (res[4] && !res[4].error && res[4].data) || [];
+    var ex = (res[5] && !res[5].error && res[5].data) || {};
+    var board = (res[6] && !res[6].error && res[6].data) || [];
     var feat = {};
     (res[3].data || []).forEach(function (r) { feat[r.id] = !!r.featured; });
-    var hsBooks = {};
-    hs.forEach(function (h) { hsBooks[h.book_id] = 1; });
-    await Promise.all(Object.keys(hsBooks).map(function (bid) { return loadContent(bid).catch(function () { return null; }); }));
-    var classes = {};
-    ov.forEach(function (r) { classes[r.grade ? r.grade + "-" + r.class_no : "미지정"] = 1; });
-    var opts = '<option value="">전체</option>' + Object.keys(classes).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
+    var books = window.BOOKS || [];
+    var settings = ex.settings || {};
+    var goalWords = parseInt(settings.class_goal_words, 10) || 10000;
+    var roster = ex.roster || [];
+    var weekStart = ex.week_start || "";
+    function low(s) { return String(s || "").toLowerCase(); }
+    function clsKey(r) { return r.grade ? r.grade + "-" + r.class_no : "미지정"; }
+    function pct(a, b) { return b ? Math.round((a / b) * 100) : 0; }
+    function rateBar(p) { return '<div class="rate ' + (p < 50 ? "low" : "") + '"><div class="progress sm"><div style="width:' + Math.min(100, p) + '%"></div></div><b>' + p + "%</b></div>"; }
 
-    var school = ov.filter(function (r) { return r.role === "school"; });
-    var activeN = ov.filter(function (r) { return r.attempts > 0; }).length;
-    var totalMedals = ov.reduce(function (n, r) { return n + r.gold + r.silver + r.bronze; }, 0);
-
-    var hintRows = hs.map(function (h) {
-      var bk = findBook(h.book_id);
-      var cont = window.BOOK_CONTENT && window.BOOK_CONTENT[h.book_id];
-      var para = cont && cont.story[h.para] ? cont.story[h.para].en.slice(0, 60) + "…" : "";
-      return "<tr><td>" + esc(bk ? bk.titleKo : h.book_id) + "</td><td>" + (h.para + 1) + "단락</td><td>" + esc(para) + "</td><td>" + h.students + "명</td><td>" + h.clicks + "회</td></tr>";
-    }).join("");
-    var qRows = qstats.filter(function (q) { return q.attempts > 0; }).map(function (q) {
-      q.rate = Math.round((q.correct / q.attempts) * 100); return q;
-    }).sort(function (a, b) { return a.rate - b.rate; }).slice(0, 20).map(function (q) {
-      var bk = findBook(q.book_id);
-      return "<tr><td>" + esc(bk ? bk.titleKo : q.book_id) + "</td><td>" + q.no + '번</td><td class="qtext">' + esc(q.question) + "</td><td>" + q.attempts + '회</td><td><div class="rate ' + (q.rate < 50 ? "low" : "") + '"><div class="progress sm"><div style="width:' + q.rate + '%"></div></div><b>' + q.rate + "%</b></div></td></tr>";
-    }).join("");
-    var featRows = (window.BOOKS || []).map(function (b) {
-      return '<label style="display:block;padding:5px 0"><input type="checkbox" class="featcb" data-id="' + esc(b.id) + '" ' + (feat[b.id] ? "checked" : "") + "> " + esc(b.emoji) + " " + esc(b.title) + ' <span class="muted">(' + esc(levelOf(b)) + ")</span></label>";
-    }).join("");
-
-    $app.innerHTML =
-      '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button><h2 style="margin-top:12px">👩‍🏫 교사 화면</h2>' +
-      '<div class="pp-stats three" style="margin:4px 0 14px"><div class="kv center" style="margin:0"><b>' + school.length + '</b><span class="muted">가입한 학교 학생</span></div>' +
-      '<div class="kv center" style="margin:0"><b>' + activeN + '</b><span class="muted">퀴즈에 도전한 사람</span></div>' +
-      '<div class="kv center" style="margin:0"><b>' + totalMedals + '</b><span class="muted">받은 메달</span></div></div>' +
-      '반 선택 <select id="cls">' + opts + '</select> <button class="btn ghost small" id="csv1">요약 CSV</button> <button class="btn ghost small" id="csv2">작품별 점수 CSV</button>' +
-      '<div class="scroll" style="margin-top:12px"><table id="tbl"></table></div>' +
-      '<p class="muted">닉네임이 부적절하면 ✏️로 바꾸거나 ↺로 랜덤 이름으로 되돌릴 수 있어요.</p></div>' +
-      '<div class="card"><h2>📉 정답률이 낮은 문항</h2><p class="muted">학생들이 많이 틀린 문항부터 보여 줘요 (응시 기록 기준, 최대 20개).</p>' +
-      (qRows ? '<div class="scroll"><table><tr><th>작품</th><th>문항</th><th>문제</th><th>응시</th><th>정답률</th></tr>' + qRows + "</table></div>" : '<p class="muted">아직 응시 기록이 없어요.</p>') + "</div>" +
-      '<div class="card"><h2>💬 단락별 번역(힌트) 열람</h2><p class="muted">학생들이 어느 단락에서 한국어 번역을 많이 봤는지 보여 줘요.</p>' +
-      (hintRows ? '<div class="scroll"><table><tr><th>작품</th><th>단락</th><th>내용</th><th>본 학생 수</th><th>누른 횟수</th></tr>' + hintRows + "</table></div>" : '<p class="muted">아직 기록이 없어요.</p>') + "</div>" +
-      '<div class="card"><h2>🌟 선생님 추천 책</h2><p class="muted">체크한 책은 학생 책장 맨 위 "선생님 추천" 칸에 나와요.</p>' + featRows + "</div>" +
-      '<div class="card"><h2>📋 명단 올리기</h2><p class="muted">한 줄에 한 명: <code>이메일,이름,학년,반,번호</code> (엑셀에서 복사해 붙여넣어도 돼요). 이미 가입한 학생에게도 바로 적용돼요.</p>' +
-      '<textarea id="roster" placeholder="202610101@smy.ms.kr,이름,1,1,1"></textarea><br><button class="btn" id="saveroster" style="margin-top:8px">명단 저장</button></div>';
-
-    each(".featcb", function (cb) {
-      cb.onchange = async function () {
-        var r = await sb.from("books").update({ featured: cb.checked }).eq("id", cb.getAttribute("data-id"));
-        if (r.error) { cb.checked = !cb.checked; return toast("저장 실패: " + r.error.message); }
-        toast(cb.checked ? "추천 책으로 지정했어요" : "추천을 해제했어요");
+    // 학생별 추가 정보 (연속 독서, 이번 주 목표, 나라, 대륙, 칭호)
+    var exBy = {};
+    (ex.students || []).forEach(function (s) { exBy[low(s.email)] = s; });
+    var scBy = {};
+    sc.forEach(function (r) { (scBy[low(r.email)] = scBy[low(r.email)] || []).push(r); });
+    var lvTotal = {};
+    books.forEach(function (b) { var lv = levelOf(b); lvTotal[lv] = (lvTotal[lv] || 0) + 1; });
+    var info = {};
+    ov.forEach(function (r) {
+      var e = exBy[low(r.email)] || {};
+      var ds = dayStreak({ today: ex.today, days: e.days || [] });
+      var maps = {}, conts = {};
+      (e.stamps || []).forEach(function (s) {
+        var c = COUNTRIES[s.country], m = c ? c.map : s.country;
+        maps[m] = 1; if (CONT_OF[m]) conts[CONT_OF[m]] = 1;
+      });
+      var lvDone = {};
+      (scBy[low(r.email)] || []).forEach(function (x) { if (x.medal) { var lv = levelOf(findBook(x.book_id)); lvDone[lv] = (lvDone[lv] || 0) + 1; } });
+      var title = null;
+      LEVELS.forEach(function (lv) { if (lvTotal[lv] && (lvDone[lv] || 0) >= Math.min(LEVEL_GOAL, lvTotal[lv])) title = lv; });
+      info[low(r.email)] = {
+        ds: ds, week: (e.days || []).some(function (d) { return d >= weekStart; }), countries: Object.keys(maps), conts: Object.keys(conts).length,
+        title: title, show: e.show !== false, weekTries: e.week_tries || 0
       };
     });
 
-    function draw() {
-      var f = document.getElementById("cls").value;
-      var rows = ov.filter(function (r) { return !f || (r.grade ? r.grade + "-" + r.class_no : "미지정") === f; });
-      document.getElementById("tbl").innerHTML =
-        "<tr><th>학년-반-번호</th><th>이름</th><th>닉네임</th><th>구분</th><th>완료</th><th>🥇</th><th>🥈</th><th>🥉</th><th>⭐</th><th>단어</th><th>도전</th><th>최근</th></tr>" +
-        rows.map(function (r) {
-          return "<tr><td>" + (r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no : "-") + "</td><td>" + esc(r.name || r.email) + "</td>" +
-            "<td>" + esc(r.nickname || "") + ' <button class="btn ghost small nick-edit" data-e="' + esc(r.email) + '" data-n="' + esc(r.nickname || "") + '">✏️</button>' +
-            '<button class="btn ghost small nick-reset" data-e="' + esc(r.email) + '">↺</button></td><td>' + (r.role === "school" ? "학교" : "외부") +
-            "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.stars + "</td><td>" + r.words + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
-        }).join("");
-      each(".nick-edit", function (el) {
-        el.onclick = async function () {
-          var v = window.prompt("새 닉네임 (비우면 랜덤 이름으로 초기화)", el.getAttribute("data-n"));
-          if (v === null) return;
-          var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: v });
-          if (r.error) return toast("저장 실패: " + r.error.message);
-          toast("닉네임을 바꿨어요"); renderTeacher();
-        };
+    // 반 목록 (명단 + 가입자)
+    var classes = {};
+    roster.forEach(function (r) { classes[clsKey(r)] = 1; });
+    ov.forEach(function (r) { classes[clsKey(r)] = 1; });
+    var classList = Object.keys(classes).sort(function (a, b) {
+      if (a === "미지정") return 1; if (b === "미지정") return -1;
+      var x = a.split("-").map(Number), y = b.split("-").map(Number);
+      return x[0] - y[0] || x[1] - y[1];
+    });
+    var opts = '<option value="">전체</option>' + classList.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c === "미지정" ? c : c.replace("-", "학년 ") + "반") + "</option>"; }).join("");
+
+    // 반별 통계
+    function classStats(key) {
+      var mem = ov.filter(function (r) { return clsKey(r) === key; });
+      var ros = roster.filter(function (r) { return clsKey(r) === key; });
+      var s = { key: key, roster: ros.length, joined: mem.length, active: 0, medalists: 0, gold: 0, silver: 0, bronze: 0, stars: 0, words: 0, completed: 0, week: 0, streak: 0, countries: {}, notJoined: ros.filter(function (r) { return !r.joined; }) };
+      mem.forEach(function (r) {
+        var i = info[low(r.email)];
+        if (r.attempts > 0) s.active++;
+        if (r.completed > 0) s.medalists++;
+        s.gold += r.gold; s.silver += r.silver; s.bronze += r.bronze; s.stars += r.stars; s.words += r.words; s.completed += r.completed;
+        if (i.week) s.week++;
+        if (i.ds.n > 0) s.streak++;
+        i.countries.forEach(function (c) { s.countries[c] = 1; });
       });
-      each(".nick-reset", function (el) {
-        el.onclick = async function () {
-          var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: "" });
-          if (r.error) return toast("저장 실패: " + r.error.message);
-          toast("랜덤 이름으로 되돌렸어요"); renderTeacher();
-        };
-      });
+      s.size = Math.max(s.roster, s.joined);
+      return s;
     }
-    draw();
-    document.getElementById("cls").onchange = draw;
-    document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
-    document.getElementById("csv1").onclick = function () {
-      csvDownload("독서현황.csv", [["이메일", "이름", "닉네임", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "무힌트별", "단어", "도전", "최근활동"]].concat(
-        ov.map(function (r) { return [r.email, r.name, r.nickname, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.stars, r.words, r.attempts, r.last_activity]; })));
-    };
-    document.getElementById("csv2").onclick = function () {
-      csvDownload("작품별점수.csv", [["이메일", "이름", "학년", "반", "번호", "작품", "최고점수", "만점", "도전횟수", "메달", "무힌트별", "본번역단락", "최근"]].concat(
-        sc.map(function (r) { return [r.email, r.name, r.grade, r.class_no, r.student_no, r.book_id, r.best, r.total, r.attempts, r.medal, r.star ? "O" : "", r.hints, r.last_at]; })));
-    };
-    document.getElementById("saveroster").onclick = async function () {
-      var lines = document.getElementById("roster").value.split(/\r?\n/);
-      var rows = [];
-      lines.forEach(function (line) {
-        var p = line.split(/[,\t]/).map(function (x) { return x.trim(); });
-        if (p.length < 5 || p[0].indexOf("@") < 0) return;
-        rows.push({ email: p[0].toLowerCase(), name: p[1], grade: parseInt(p[2], 10) || null, class_no: parseInt(p[3], 10) || null, student_no: parseInt(p[4], 10) || null });
+    var allStats = classList.map(classStats);
+    var school = ov.filter(function (r) { return r.role === "school"; });
+    var activeN = ov.filter(function (r) { return r.attempts > 0; }).length;
+    var totalMedals = ov.reduce(function (n, r) { return n + r.gold + r.silver + r.bronze; }, 0);
+    var weekN = ov.filter(function (r) { return info[low(r.email)].week; }).length;
+    var streakN = ov.filter(function (r) { return info[low(r.email)].ds.n > 0; }).length;
+    var notJoinedN = roster.filter(function (r) { return !r.joined; }).length;
+    function stat(n, label) { return '<div class="kv center" style="margin:0"><b>' + n + '</b><span class="muted">' + label + "</span></div>"; }
+
+    var TABS = [["class", "📊 반별 현황"], ["students", "👤 학생"], ["books", "📚 작품"], ["board", "🏅 TOP 10"], ["quiz", "🧩 문항·힌트"], ["settings", "⚙️ 설정"]];
+    state.tTab = state.tTab || "class";
+    state.tCls = state.tCls || "";
+
+    $app.innerHTML =
+      '<div class="card"><button class="btn ghost small" id="tohome">← 책장</button><h2 style="margin-top:12px">👩‍🏫 교사 화면</h2>' +
+      '<div class="tstats">' + stat(school.length, "가입한 학교 학생") + stat(activeN, "퀴즈에 도전한 사람") + stat(totalMedals, "받은 메달") +
+      stat(weekN, "이번 주 목표 달성") + stat(streakN, "🔥 연속 독서 중") + stat(notJoinedN, "명단 중 미가입") + "</div></div>" +
+      '<div class="tabs" id="ttabs">' + TABS.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.tTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" +
+      '<div id="tbody"></div>';
+
+    function clsPicker() { return '<label class="muted" style="margin-right:6px">반 선택</label><select id="cls">' + opts + "</select>"; }
+    function bindCls(fn) {
+      var el = document.getElementById("cls");
+      if (!el) return;
+      el.value = state.tCls;
+      el.onchange = function () { state.tCls = el.value; fn(); };
+    }
+    function inCls(r) { return !state.tCls || clsKey(r) === state.tCls; }
+
+    // 📊 반별 현황
+    function drawClass() {
+      var rows = allStats.filter(function (s) { return s.key !== "미지정" || s.joined; });
+      var nj = allStats.filter(function (s) { return s.notJoined.length; });
+      document.getElementById("tbody").innerHTML =
+        '<div class="card"><h2>📊 반별 현황<span class="sub">반 목표 ' + goalWords.toLocaleString() + "단어</span></h2>" +
+        '<p class="muted" style="margin-top:-6px">참여 = 퀴즈에 한 번 이상 도전, 메달 = 메달 받은 작품이 1개 이상인 학생. 반 목표는 학생 화면 “우리 반 함께 읽기”와 같은 기준(메달 받은 작품의 단어 수)이에요.</p>' +
+        '<div class="scroll"><table><tr><th>반</th><th>명단</th><th>가입</th><th>참여</th><th>메달 학생</th><th>🥇</th><th>🥈</th><th>🥉</th><th>⭐</th><th>1인 평균 완료</th><th>읽은 단어 · 반 목표</th><th>이번 주 목표</th><th>🔥 연속 중</th><th>🌍 나라</th></tr>' +
+        rows.map(function (s) {
+          return '<tr><td><b>' + esc(s.key) + "</b></td><td>" + s.roster + "</td><td>" + s.joined + "</td><td>" + s.active + " <span class=\"muted\">(" + pct(s.active, s.size) + "%)</span></td><td>" + s.medalists +
+            "</td><td>" + s.gold + "</td><td>" + s.silver + "</td><td>" + s.bronze + "</td><td>" + s.stars + "</td><td>" + (s.joined ? (s.completed / s.joined).toFixed(1) : "0") +
+            "</td><td>" + s.words.toLocaleString() + rateBar(pct(s.words, goalWords)) + "</td><td>" + s.week + "명</td><td>" + s.streak + "명</td><td>" + Object.keys(s.countries).length + "</td></tr>";
+        }).join("") + "</table></div>" +
+        '<p style="margin-top:10px"><button class="btn ghost small" id="csv0">반별 현황 CSV</button></p></div>' +
+        '<div class="card"><h2>🙋 아직 가입하지 않은 학생<span class="sub">명단 기준</span></h2>' +
+        (nj.length ? nj.map(function (s) {
+          return '<p style="margin:6px 0"><b>' + esc(s.key) + "</b> <span class=\"muted\">(" + s.notJoined.length + "명)</span> " + s.notJoined.map(function (r) { return esc(r.student_no + "번 " + (r.name || "")); }).join(", ") + "</p>";
+        }).join("") : '<p class="muted">명단의 모든 학생이 가입했어요.</p>') + "</div>";
+      document.getElementById("csv0").onclick = function () {
+        csvDownload("반별현황.csv", [["반", "명단", "가입", "참여", "메달학생", "금", "은", "동", "무힌트별", "평균완료", "읽은단어", "반목표", "이번주목표달성", "연속독서중", "나라수"]].concat(rows.map(function (s) {
+          return [s.key, s.roster, s.joined, s.active, s.medalists, s.gold, s.silver, s.bronze, s.stars, s.joined ? (s.completed / s.joined).toFixed(1) : 0, s.words, goalWords, s.week, s.streak, Object.keys(s.countries).length];
+        })));
+      };
+    }
+
+    // 👤 학생
+    function drawStudents() {
+      document.getElementById("tbody").innerHTML =
+        '<div class="card"><h2>👤 학생별 기록</h2>' + clsPicker() + ' <button class="btn ghost small" id="csv1">요약 CSV</button> <button class="btn ghost small" id="csv2">작품별 점수 CSV</button>' +
+        '<p class="muted">이름을 누르면 작품별 기록을 볼 수 있어요. 🔥은 오늘까지 이어진 연속 독서(메달 받은 날), ✅는 이번 주 목표 달성, 🙈는 TOP 10에서 이름을 숨긴 학생이에요.</p>' +
+        '<div class="scroll"><table id="tbl"></table></div>' +
+        '<p class="muted">닉네임이 부적절하면 ✏️로 바꾸거나 ↺로 랜덤 이름으로 되돌릴 수 있어요.</p></div>';
+      function draw() {
+        var rows = ov.filter(inCls).sort(function (a, b) { return (a.grade || 99) - (b.grade || 99) || (a.class_no || 99) - (b.class_no || 99) || (a.student_no || 999) - (b.student_no || 999); });
+        document.getElementById("tbl").innerHTML =
+          "<tr><th>학년-반-번호</th><th>이름</th><th>닉네임</th><th>구분</th><th>완료</th><th>🥇</th><th>🥈</th><th>🥉</th><th>⭐</th><th>단어</th><th>🔥 연속</th><th>최고</th><th>이번 주</th><th>🌍</th><th>대륙</th><th>칭호</th><th>도전</th><th>최근</th></tr>" +
+          rows.map(function (r) {
+            var i = info[low(r.email)];
+            return "<tr><td>" + (r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no : "-") + '</td><td><button class="linkbtn stu" data-e="' + esc(r.email) + '">' + esc(r.name || r.email) + "</button></td>" +
+              "<td>" + esc(r.nickname || "") + (i.show ? "" : " 🙈") + ' <button class="btn ghost small nick-edit" data-e="' + esc(r.email) + '" data-n="' + esc(r.nickname || "") + '">✏️</button>' +
+              '<button class="btn ghost small nick-reset" data-e="' + esc(r.email) + '">↺</button></td><td>' + (r.role === "school" ? "학교" : "외부") +
+              "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.stars + "</td><td>" + r.words +
+              "</td><td>" + (i.ds.n ? (i.ds.today ? "🔥" : "") + i.ds.n + "일" : "-") + "</td><td>" + (i.ds.best ? i.ds.best + "일" : "-") + "</td><td>" + (i.week ? "✅" : "") +
+              "</td><td>" + i.countries.length + "</td><td>" + i.conts + "/6</td><td>" + (i.title ? LEVEL_INFO[i.title].em + " " + i.title : "-") + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
+          }).join("");
+        each(".stu", function (el) { el.onclick = function () { openStudent(el.getAttribute("data-e")); }; });
+        each(".nick-edit", function (el) {
+          el.onclick = async function () {
+            var v = window.prompt("새 닉네임 (비우면 랜덤 이름으로 초기화)", el.getAttribute("data-n"));
+            if (v === null) return;
+            var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: v });
+            if (r.error) return toast("저장 실패: " + r.error.message);
+            toast("닉네임을 바꿨어요"); renderTeacher();
+          };
+        });
+        each(".nick-reset", function (el) {
+          el.onclick = async function () {
+            var r = await sb.rpc("admin_set_nickname", { p_email: el.getAttribute("data-e"), p_nick: "" });
+            if (r.error) return toast("저장 실패: " + r.error.message);
+            toast("랜덤 이름으로 되돌렸어요"); renderTeacher();
+          };
+        });
+      }
+      draw();
+      bindCls(draw);
+      document.getElementById("csv1").onclick = function () {
+        csvDownload("독서현황.csv", [["이메일", "이름", "닉네임", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "무힌트별", "단어", "연속독서(일)", "최고연속(일)", "이번주목표", "나라수", "대륙수", "칭호", "TOP10공개", "도전", "최근활동"]].concat(
+          ov.filter(inCls).map(function (r) {
+            var i = info[low(r.email)];
+            return [r.email, r.name, r.nickname, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.stars, r.words, i.ds.n, i.ds.best, i.week ? "O" : "", i.countries.length, i.conts, i.title || "", i.show ? "O" : "X", r.attempts, r.last_activity];
+          })));
+      };
+      document.getElementById("csv2").onclick = function () {
+        csvDownload("작품별점수.csv", [["이메일", "이름", "학년", "반", "번호", "작품", "수준", "최고점수", "만점", "도전횟수", "메달", "무힌트별", "본번역단락", "최근"]].concat(
+          sc.filter(inCls).map(function (r) { var b = findBook(r.book_id); return [r.email, r.name, r.grade, r.class_no, r.student_no, b ? b.titleKo : r.book_id, b ? levelOf(b) : "", r.best, r.total, r.attempts, r.medal, r.star ? "O" : "", r.hints, r.last_at]; })));
+      };
+    }
+
+    // 학생 상세 (작품별 기록)
+    function openStudent(email) {
+      var r = ov.filter(function (x) { return low(x.email) === low(email); })[0];
+      if (!r) return;
+      var i = info[low(email)];
+      var list = (scBy[low(email)] || []).slice().sort(function (a, b) { return String(b.last_at).localeCompare(String(a.last_at)); });
+      var o = document.createElement("div");
+      o.className = "overlay";
+      o.innerHTML = '<div class="card wide"><h2>' + esc(r.name || r.email) + ' <span class="muted" style="font-size:.9rem">' + esc(r.nickname || "") + "</span></h2>" +
+        '<p class="muted">' + (r.grade ? r.grade + "학년 " + r.class_no + "반 " + r.student_no + "번 · " : "") + "완료 " + r.completed + "작품 · 🔥 " + i.ds.n + "일 연속 (최고 " + i.ds.best + "일) · 🌍 " + i.countries.length + "개 나라" +
+        (i.title ? " · " + LEVEL_INFO[i.title].em + " " + LEVEL_INFO[i.title].name : "") + "</p>" +
+        (i.countries.length ? '<p style="margin:4px 0 10px">' + i.countries.map(function (m) {
+          var key = Object.keys(COUNTRIES).filter(function (k) { return COUNTRIES[k].map === m; })[0];
+          return key ? countryLabel(key) : esc(m);
+        }).join(" · ") + "</p>" : "") +
+        (list.length ? '<div class="scroll" style="max-height:55vh;overflow-y:auto"><table><tr><th>작품</th><th>수준</th><th>최고</th><th>메달</th><th>⭐</th><th>도전</th><th>번역 본 단락</th><th>최근</th></tr>' + list.map(function (x) {
+          var b = findBook(x.book_id);
+          return "<tr><td>" + esc(b ? b.titleKo : x.book_id) + "</td><td>" + esc(b ? levelOf(b) : "") + "</td><td>" + x.best + "/" + x.total + "</td><td>" + (x.medal ? MEDALS[x.medal].em : "") + "</td><td>" + (x.star ? "⭐" : "") + "</td><td>" + x.attempts + "</td><td>" + (x.hints || 0) + "</td><td>" + fmtDate(x.last_at) + "</td></tr>";
+        }).join("") + "</table></div>" : '<p class="muted">아직 퀴즈 기록이 없어요.</p>') +
+        '<div style="margin-top:12px"><button class="btn" id="stuclose">닫기</button></div></div>';
+      document.body.appendChild(o);
+      o.onclick = function (e) { if (e.target === o) o.remove(); };
+      document.getElementById("stuclose").onclick = function () { o.remove(); };
+    }
+
+    // 📚 작품
+    function drawBooks() {
+      document.getElementById("tbody").innerHTML =
+        '<div class="card"><h2>📚 작품별 현황</h2>' + clsPicker() + ' <button class="btn ghost small" id="csv3">작품별 현황 CSV</button>' +
+        '<p class="muted">도전한 학생이 많은 순서예요. 평균 점수는 학생별 최고 점수의 평균이에요.</p><div class="scroll"><table id="btbl"></table></div><p class="muted" id="bnone"></p></div>';
+      var rowsCache = [];
+      function draw() {
+        var by = {};
+        sc.filter(inCls).forEach(function (r) {
+          var s = by[r.book_id] = by[r.book_id] || { tried: 0, medal: 0, gold: 0, sum: 0, stars: 0, hints: 0 };
+          s.tried++; if (r.medal) s.medal++; if (r.medal === "gold") s.gold++;
+          s.sum += r.total ? r.best / r.total : 0; if (r.star) s.stars++; s.hints += r.hints || 0;
+        });
+        rowsCache = books.filter(function (b) { return by[b.id]; }).map(function (b) { return { b: b, s: by[b.id] }; })
+          .sort(function (x, y) { return y.s.tried - x.s.tried || y.s.medal - x.s.medal; });
+        document.getElementById("btbl").innerHTML = "<tr><th>작품</th><th>수준</th><th>도전 학생</th><th>메달 학생</th><th>🥇</th><th>평균 점수</th><th>⭐ 무힌트</th><th>평균 번역 단락</th></tr>" +
+          rowsCache.map(function (x) {
+            var avg = Math.round((x.s.sum / x.s.tried) * 100);
+            return "<tr><td>" + esc(x.b.emoji) + " " + esc(x.b.titleKo) + "</td><td>" + esc(levelOf(x.b)) + "</td><td>" + x.s.tried + "</td><td>" + x.s.medal + " <span class=\"muted\">(" + pct(x.s.medal, x.s.tried) + "%)</span></td><td>" + x.s.gold +
+              "</td><td>" + rateBar(avg) + "</td><td>" + x.s.stars + "</td><td>" + (x.s.hints / x.s.tried).toFixed(1) + "</td></tr>";
+          }).join("");
+        var none = books.length - rowsCache.length;
+        document.getElementById("bnone").textContent = none ? "아직 아무도 도전하지 않은 작품: " + none + "권" : "";
+      }
+      draw();
+      bindCls(draw);
+      document.getElementById("csv3").onclick = function () {
+        csvDownload("작품별현황.csv", [["작품", "영어 제목", "수준", "도전학생", "메달학생", "금메달", "평균점수(%)", "무힌트별", "평균번역단락"]].concat(rowsCache.map(function (x) {
+          return [x.b.titleKo, x.b.title, levelOf(x.b), x.s.tried, x.s.medal, x.s.gold, Math.round((x.s.sum / x.s.tried) * 100), x.s.stars, (x.s.hints / x.s.tried).toFixed(1)];
+        })));
+      };
+    }
+
+    // 🏅 TOP 10 (학생 화면과 같은 순위)
+    function drawBoard() {
+      var nickTo = {};
+      ov.forEach(function (r) { if (r.nickname) nickTo[r.nickname] = r; });
+      document.getElementById("tbody").innerHTML =
+        '<div class="card board"><h2>🏅 메달 순위 TOP 10</h2><p class="muted">학생 화면과 같은 순위예요. 학교 학생 중 이름 공개를 켠 학생만 나와요. 교사 화면에서만 실명이 함께 보여요.</p>' +
+        (board.length ? "<ol>" + board.map(function (r, i) {
+          var rk = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1;
+          var who = nickTo[r.nickname];
+          return '<li class="' + (i < 3 ? "top3" : "") + '"><span class="rk">' + rk + '</span><span class="nm">' + esc(r.nickname) +
+            (who ? ' <span class="muted" style="font-size:.85rem">' + esc((who.grade ? who.grade + "-" + who.class_no + " " : "") + (who.name || "")) + "</span>" : "") +
+            '</span><span class="ms">🥇' + r.gold + " 🥈" + r.silver + " 🥉" + r.bronze + " ⭐" + r.stars + "</span></li>";
+        }).join("") + "</ol>" : '<p class="muted">아직 메달을 받은 학생이 없어요.</p>') + "</div>";
+    }
+
+    // 🧩 문항·힌트
+    async function drawQuiz() {
+      var hsBooks = {};
+      hs.forEach(function (h) { hsBooks[h.book_id] = 1; });
+      document.getElementById("tbody").innerHTML = '<p class="muted center" style="padding:20px 0">불러오는 중...</p>';
+      await Promise.all(Object.keys(hsBooks).map(function (bid) { return loadContent(bid).catch(function () { return null; }); }));
+      var hintRows = hs.map(function (h) {
+        var bk = findBook(h.book_id);
+        var cont = window.BOOK_CONTENT && window.BOOK_CONTENT[h.book_id];
+        var para = cont && cont.story[h.para] ? cont.story[h.para].en.slice(0, 60) + "…" : "";
+        return "<tr><td>" + esc(bk ? bk.titleKo : h.book_id) + "</td><td>" + (h.para + 1) + "단락</td><td>" + esc(para) + "</td><td>" + h.students + "명</td><td>" + h.clicks + "회</td></tr>";
+      }).join("");
+      var qRows = qstats.filter(function (q) { return q.attempts > 0; }).map(function (q) {
+        q.rate = Math.round((q.correct / q.attempts) * 100); return q;
+      }).sort(function (a, b) { return a.rate - b.rate; }).slice(0, 20).map(function (q) {
+        var bk = findBook(q.book_id);
+        return "<tr><td>" + esc(bk ? bk.titleKo : q.book_id) + "</td><td>" + q.no + '번</td><td class="qtext">' + esc(q.question) + "</td><td>" + q.attempts + "회</td><td>" + rateBar(q.rate) + "</td></tr>";
+      }).join("");
+      if (state.tTab !== "quiz") return;
+      document.getElementById("tbody").innerHTML =
+        '<div class="card"><h2>📉 정답률이 낮은 문항</h2><p class="muted">학생들이 많이 틀린 문항부터 보여 줘요 (응시 기록 기준, 최대 20개).</p>' +
+        (qRows ? '<div class="scroll"><table><tr><th>작품</th><th>문항</th><th>문제</th><th>응시</th><th>정답률</th></tr>' + qRows + "</table></div>" : '<p class="muted">아직 응시 기록이 없어요.</p>') + "</div>" +
+        '<div class="card"><h2>💬 단락별 번역(힌트) 열람</h2><p class="muted">학생들이 어느 단락에서 한국어 번역을 많이 봤는지 보여 줘요.</p>' +
+        (hintRows ? '<div class="scroll"><table><tr><th>작품</th><th>단락</th><th>내용</th><th>본 학생 수</th><th>누른 횟수</th></tr>' + hintRows + "</table></div>" : '<p class="muted">아직 기록이 없어요.</p>') + "</div>";
+    }
+
+    // ⚙️ 설정
+    function drawSettings() {
+      var ext = settings.allow_external === "true";
+      var featRows = books.map(function (b) {
+        return '<label style="display:block;padding:5px 0"><input type="checkbox" class="featcb" data-id="' + esc(b.id) + '" ' + (feat[b.id] ? "checked" : "") + "> " + esc(b.emoji) + " " + esc(b.title) + ' <span class="muted">(' + esc(b.titleKo) + " · " + esc(levelOf(b)) + ")</span></label>";
+      }).join("");
+      document.getElementById("tbody").innerHTML =
+        '<div class="card"><h2>🎯 반 목표 단어 수</h2><p class="muted">학생 화면 “우리 반 함께 읽기”의 목표예요. 반 친구들이 메달 받은 작품의 단어 수를 모아 이 숫자에 도전해요.</p>' +
+        '<input id="goalin" type="number" min="100" step="100" value="' + goalWords + '" style="width:140px;padding:7px 10px;border:1px solid var(--line);border-radius:10px"> 단어 <button class="btn small" id="goalsave">저장</button></div>' +
+        '<div class="card"><h2>🌐 외부 이용자 퀴즈</h2><label><input type="checkbox" id="extcb" ' + (ext ? "checked" : "") + "> 학교 계정이 아닌 사람(개인 Gmail)도 퀴즈를 풀 수 있게 하기</label>" +
+        '<p class="muted">끄면 학교 계정(@smy.ms.kr)과 교사만 퀴즈를 풀 수 있어요. 외부 이용자는 어느 경우에도 TOP 10에 나오지 않아요.</p></div>' +
+        '<div class="card"><h2>🌟 선생님 추천 책</h2><p class="muted">체크한 책은 학생 책장 맨 위 “선생님 추천” 칸에 나와요.</p><div style="max-height:420px;overflow-y:auto">' + featRows + "</div></div>" +
+        '<div class="card"><h2>📋 명단 올리기</h2><p class="muted">한 줄에 한 명: <code>이메일,이름,학년,반,번호</code> (엑셀에서 복사해 붙여넣어도 돼요). 이미 가입한 학생에게도 바로 적용돼요.</p>' +
+        '<textarea id="roster" placeholder="202610101@smy.ms.kr,이름,1,1,1"></textarea><br><button class="btn" id="saveroster" style="margin-top:8px">명단 저장</button></div>';
+      document.getElementById("goalsave").onclick = async function () {
+        var v = parseInt(document.getElementById("goalin").value, 10);
+        if (!(v >= 100)) return toast("100 이상의 숫자를 넣어 주세요.");
+        var r = await sb.rpc("admin_set_setting", { p_key: "class_goal_words", p_value: String(v) });
+        if (r.error) return toast("저장 실패: " + r.error.message);
+        settings.class_goal_words = String(v); goalWords = v; toast("반 목표를 " + v.toLocaleString() + "단어로 바꿨어요");
+      };
+      document.getElementById("extcb").onchange = async function () {
+        var cb = this;
+        var r = await sb.rpc("admin_set_setting", { p_key: "allow_external", p_value: cb.checked ? "true" : "false" });
+        if (r.error) { cb.checked = !cb.checked; return toast("저장 실패: " + r.error.message); }
+        settings.allow_external = cb.checked ? "true" : "false";
+        toast(cb.checked ? "외부 이용자도 퀴즈를 풀 수 있어요" : "학교 계정만 퀴즈를 풀 수 있어요");
+      };
+      each(".featcb", function (cb) {
+        cb.onchange = async function () {
+          var r = await sb.from("books").update({ featured: cb.checked }).eq("id", cb.getAttribute("data-id"));
+          if (r.error) { cb.checked = !cb.checked; return toast("저장 실패: " + r.error.message); }
+          feat[cb.getAttribute("data-id")] = cb.checked;
+          toast(cb.checked ? "추천 책으로 지정했어요" : "추천을 해제했어요");
+        };
       });
-      if (!rows.length) return toast("올릴 줄이 없어요. 형식을 확인해 주세요.");
-      var u = await sb.from("roster").upsert(rows, { onConflict: "email" });
-      if (u.error) return toast("저장 실패: " + u.error.message);
-      var a = await sb.rpc("apply_roster");
-      toast("명단 " + rows.length + "명 저장 · 가입자 " + (a.data || 0) + "명에게 적용");
-      renderTeacher();
-    };
+      document.getElementById("saveroster").onclick = async function () {
+        var lines = document.getElementById("roster").value.split(/\r?\n/);
+        var rows = [];
+        lines.forEach(function (line) {
+          var p = line.split(/[,\t]/).map(function (x) { return x.trim(); });
+          if (p.length < 5 || p[0].indexOf("@") < 0) return;
+          rows.push({ email: p[0].toLowerCase(), name: p[1], grade: parseInt(p[2], 10) || null, class_no: parseInt(p[3], 10) || null, student_no: parseInt(p[4], 10) || null });
+        });
+        if (!rows.length) return toast("올릴 줄이 없어요. 형식을 확인해 주세요.");
+        var u = await sb.from("roster").upsert(rows, { onConflict: "email" });
+        if (u.error) return toast("저장 실패: " + u.error.message);
+        var a = await sb.rpc("apply_roster");
+        toast("명단 " + rows.length + "명 저장 · 가입자 " + (a.data || 0) + "명에게 적용");
+        renderTeacher();
+      };
+    }
+
+    var DRAW = { "class": drawClass, students: drawStudents, books: drawBooks, board: drawBoard, quiz: drawQuiz, settings: drawSettings };
+    function show(t) {
+      state.tTab = t;
+      each("#ttabs button", function (b) { b.classList.toggle("on", b.getAttribute("data-t") === t); });
+      var p = DRAW[t]();
+      if (p && p.catch) p.catch(showError);
+    }
+    each("#ttabs button", function (b) { b.onclick = function () { show(b.getAttribute("data-t")); }; });
+    document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
+    show(state.tTab);
   }
 
   sb.auth.onAuthStateChange(function (evt, session) {
