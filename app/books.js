@@ -2151,5 +2151,293 @@ window.BOOKS = [
   "places": [
    "South Korea"
   ]
+ },
+ {
+  "id": "heungbu-and-nolbu",
+  "title": "Heungbu and Nolbu",
+  "titleKo": "흥부와 놀부",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🐦",
+  "color": "#8a6a2a",
+  "cefr": "A1",
+  "lexile": "약 350L",
+  "words": 145,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-old-man-with-a-lump",
+  "title": "The Old Man with a Lump",
+  "titleKo": "혹부리 영감",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "👴",
+  "color": "#7a5a8a",
+  "cefr": "A1",
+  "lexile": "약 330L",
+  "words": 152,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-goblins-magic-club",
+  "title": "The Goblins’ Magic Club",
+  "titleKo": "도깨비 방망이",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🏏",
+  "color": "#3a6a8a",
+  "cefr": "A1",
+  "lexile": "약 340L",
+  "words": 156,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-three-year-hill",
+  "title": "The Three-Year Hill",
+  "titleKo": "삼년 고개",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "⛰️",
+  "color": "#6a8a5a",
+  "cefr": "A1",
+  "lexile": "약 330L",
+  "words": 153,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-tiger-and-the-dried-persimmon",
+  "title": "The Tiger and the Dried Persimmon",
+  "titleKo": "호랑이와 곶감",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🐯",
+  "color": "#c9721a",
+  "cefr": "A1",
+  "lexile": "약 340L",
+  "words": 158,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-red-bean-porridge-grandma",
+  "title": "The Red Bean Porridge Grandma and the Tiger",
+  "titleKo": "팥죽 할머니와 호랑이",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🥣",
+  "color": "#8a3a3a",
+  "cefr": "A1",
+  "lexile": "약 340L",
+  "words": 153,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "kongjwi-and-patjwi",
+  "title": "Kongjwi and Patjwi",
+  "titleKo": "콩쥐 팥쥐",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "👡",
+  "color": "#a35a7a",
+  "cefr": "A1",
+  "lexile": "약 350L",
+  "words": 160,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-story-of-shim-cheong",
+  "title": "The Story of Shim Cheong",
+  "titleKo": "효녀 심청",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🪷",
+  "color": "#c95a7a",
+  "cefr": "A1",
+  "lexile": "약 360L",
+  "words": 169,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-good-brothers",
+  "title": "The Good Brothers",
+  "titleKo": "의좋은 형제",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🌾",
+  "color": "#b58a2a",
+  "cefr": "A1",
+  "lexile": "약 320L",
+  "words": 140,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-sun-and-the-moon",
+  "title": "The Brother and Sister Who Became the Sun and the Moon",
+  "titleKo": "해와 달이 된 오누이",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🌙",
+  "color": "#2a3a6a",
+  "cefr": "A1",
+  "lexile": "약 350L",
+  "words": 155,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-rabbits-liver",
+  "title": "The Rabbit’s Liver",
+  "titleKo": "별주부전(토끼와 자라)",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🐇",
+  "color": "#3a8a8a",
+  "cefr": "A1",
+  "lexile": "약 360L",
+  "words": 148,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-snail-bride",
+  "title": "The Snail Bride",
+  "titleKo": "우렁각시",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🐌",
+  "color": "#5a8a7a",
+  "cefr": "A1",
+  "lexile": "약 340L",
+  "words": 160,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-water-of-youth",
+  "title": "The Water of Youth",
+  "titleKo": "젊어지는 샘물",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "💧",
+  "color": "#3a7aa3",
+  "cefr": "A1",
+  "lexile": "약 320L",
+  "words": 147,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "why-the-sea-is-salty",
+  "title": "Why the Sea Is Salty",
+  "titleKo": "바닷물이 짠 이유",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🧂",
+  "color": "#4a6a9a",
+  "cefr": "A1",
+  "lexile": "약 330L",
+  "words": 145,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "gyeonu-and-jiknyeo",
+  "title": "Gyeonu and Jiknyeo",
+  "titleKo": "견우와 직녀",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🌌",
+  "color": "#3a2a6a",
+  "cefr": "A1",
+  "lexile": "약 350L",
+  "words": 168,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-grateful-magpie",
+  "title": "The Grateful Magpie",
+  "titleKo": "은혜 갚은 까치",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🔔",
+  "color": "#2a5a5a",
+  "cefr": "A1",
+  "lexile": "약 360L",
+  "words": 165,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-green-frog",
+  "title": "The Green Frog",
+  "titleKo": "청개구리 이야기",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🐸",
+  "color": "#4a8a3a",
+  "cefr": "A1",
+  "lexile": "약 310L",
+  "words": 152,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-grateful-toad",
+  "title": "The Grateful Toad",
+  "titleKo": "은혜 갚은 두꺼비",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🍚",
+  "color": "#7a6a3a",
+  "cefr": "A1",
+  "lexile": "약 350L",
+  "words": 151,
+  "places": [
+   "South Korea"
+  ]
  }
 ];
