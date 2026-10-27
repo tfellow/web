@@ -34,7 +34,8 @@
   color-scheme: dark;
 }
 html, body { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.65; padding-inline: 16px; box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.65; padding-inline: 16px; box-sizing: border-box; word-break: keep-all; overflow-wrap: break-word; }
+code, .url code { word-break: break-all; }
 * { box-sizing: border-box; }
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -98,7 +99,7 @@ h2 { font-size: clamp(1.5rem, 3.2vw, 2.25rem); }
 .stats b { display: block; font-family: var(--display); font-size: 1.45rem; color: #f3d68b; line-height: 1.2; }
 .stats small { font-size: .74rem; color: #c9d4ee; }
 .passport { aspect-ratio: 3 / 4; max-width: 100%; width: 300px; justify-self: center; border-radius: 18px; background: linear-gradient(160deg, #233f78, #0f1d3d); border: 2px solid #c9971c; box-shadow: 0 24px 50px rgba(0,0,0,.35), inset 0 0 0 8px #1a3163, inset 0 0 0 9px rgba(201,151,28,.6); display: grid; place-items: center; text-align: center; padding: 26px; color: #e9c766; }
-.passport .crest { width: 92px; height: 92px; border-radius: 50%; border: 2px solid #e9c766; display: grid; place-items: center; font-family: var(--display); font-size: 2.2rem; }
+.passport .crest { width: 120px; height: auto; display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
 .passport .pt { font-family: var(--display); font-size: 1.5rem; font-weight: 700; letter-spacing: .04em; }
 .passport .ps { font-size: .72rem; letter-spacing: .3em; }
 .cover .btn.gold { margin-top: 4px; padding: 12px 24px; font-size: 1.05rem; }
@@ -197,6 +198,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
 @media (max-width: 760px) {
   .slide, .cover { grid-template-columns: minmax(0, 1fr); align-items: start; padding: 22px 18px; }
   .passport { width: 190px; }
+  .passport .crest { width: 84px; }
   .conts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .nav .hint { display: none; }
   .brand { display: none; }
@@ -233,9 +235,9 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
       <div class="passport" aria-hidden="true">
         <div style="display:grid;gap:14px;justify-items:center">
           <div class="ps">READING PASSPORT</div>
-          <div class="crest">文</div>
+          <img class="crest" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표">
           <div class="pt">독서 여권</div>
-          <div class="ps">MUNYOUNG</div>
+          <div class="ps">MOONYOUNG</div>
         </div>
       </div>
     </section>
@@ -547,11 +549,13 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     document.getElementById("count").textContent = (i + 1) + " / " + slides.length;
     document.getElementById("slideName").textContent = s.dataset.name;
     document.getElementById("prev").disabled = i === 0;
-    document.getElementById("next").disabled = i === slides.length - 1;
+    var last = i === slides.length - 1, nx = document.getElementById("next");
+    nx.textContent = last ? "↺ 처음으로" : "다음 →";
+    nx.classList.toggle("gold", last);
     try { history.replaceState(null, "", "#s" + (i + 1)); } catch (e) {}
   }
   document.getElementById("prev").onclick = function () { go(cur - 1); };
-  document.getElementById("next").onclick = function () { go(cur + 1); };
+  document.getElementById("next").onclick = function () { go(cur === slides.length - 1 ? 0 : cur + 1); };
   document.querySelectorAll("[data-go]").forEach(function (b) { b.onclick = function () { go(+b.dataset.go); }; });
   document.addEventListener("keydown", function (e) {
     if (/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
