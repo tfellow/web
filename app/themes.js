@@ -368,5 +368,17 @@ window.BOOK_THEMES = {
   "the-ramayana": "love,adventure,myth|myth",
   "rostam-and-the-seven-trials": "adventure,myth,friend|myth",
   "journey-to-the-west": "adventure,friend,myth|fantasy",
-  "romance-of-the-three-kingdoms": "friend,history,wisdom|hist"
+  "romance-of-the-three-kingdoms": "friend,history,wisdom|hist",
+  "the-boy-in-the-striped-pyjamas": "friend,history,justice|hist",
+  "the-book-thief": "history,friend,family|hist",
+  "all-quiet-on-the-western-front": "history,justice,friend|hist",
+  "uncle-toms-cabin": "justice,history|classic",
+  "persepolis": "growth,history,family|true",
+  "the-good-earth": "family,nature|classic",
+  "the-monkeys-paw": "family,wisdom|mystery",
+  "of-mice-and-men": "friend,dream,justice|classic",
+  "and-then-there-were-none": "justice,wisdom|mystery",
+  "the-murder-of-roger-ackroyd": "justice,wisdom|mystery",
+  "rebecca": "love,justice|mystery",
+  "the-tell-tale-heart": "honesty,justice|mystery"
 };

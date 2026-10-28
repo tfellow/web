@@ -5478,5 +5478,205 @@ window.BOOKS = [
   "places": [
    "China"
   ]
+ },
+ {
+  "id": "the-boy-in-the-striped-pyjamas",
+  "title": "The Boy in the Striped Pyjamas",
+  "titleKo": "줄무늬 파자마를 입은 소년",
+  "author": "John Boyne",
+  "authorKo": "존 보인",
+  "country": "Ireland",
+  "emoji": "🧒",
+  "color": "#4a5a6a",
+  "cefr": "B1",
+  "lexile": "약 1080L",
+  "words": 252,
+  "places": [
+   "Ireland",
+   "Germany",
+   "Poland"
+  ]
+ },
+ {
+  "id": "the-book-thief",
+  "title": "The Book Thief",
+  "titleKo": "책도둑",
+  "author": "Markus Zusak",
+  "authorKo": "마커스 주삭",
+  "country": "Australia",
+  "emoji": "📕",
+  "color": "#5a3a2a",
+  "cefr": "B1",
+  "lexile": "약 730L",
+  "words": 250,
+  "places": [
+   "Australia",
+   "Germany"
+  ]
+ },
+ {
+  "id": "all-quiet-on-the-western-front",
+  "title": "All Quiet on the Western Front",
+  "titleKo": "서부 전선 이상 없다",
+  "author": "Erich Maria Remarque",
+  "authorKo": "에리히 마리아 레마르크",
+  "country": "Germany",
+  "emoji": "🪖",
+  "color": "#5a5a3a",
+  "cefr": "B1",
+  "lexile": "약 830L",
+  "words": 257,
+  "places": [
+   "Germany",
+   "France"
+  ]
+ },
+ {
+  "id": "uncle-toms-cabin",
+  "title": "Uncle Tom’s Cabin",
+  "titleKo": "톰 아저씨의 오두막",
+  "author": "Harriet Beecher Stowe",
+  "authorKo": "해리엇 비처 스토",
+  "country": "United States",
+  "emoji": "🛖",
+  "color": "#6a4a2a",
+  "cefr": "B1",
+  "lexile": "약 1070L",
+  "words": 251,
+  "places": [
+   "United States",
+   "Canada"
+  ]
+ },
+ {
+  "id": "persepolis",
+  "title": "Persepolis",
+  "titleKo": "페르세폴리스",
+  "author": "Marjane Satrapi",
+  "authorKo": "마르잔 사트라피",
+  "country": "Iran",
+  "emoji": "🧕",
+  "color": "#2a2a2a",
+  "cefr": "B1",
+  "lexile": "약 380L",
+  "words": 250,
+  "places": [
+   "Iran",
+   "Austria"
+  ]
+ },
+ {
+  "id": "the-good-earth",
+  "title": "The Good Earth",
+  "titleKo": "대지",
+  "author": "Pearl S. Buck",
+  "authorKo": "펄 S. 벅",
+  "country": "United States",
+  "emoji": "🌾",
+  "color": "#7a6a3a",
+  "cefr": "B1",
+  "lexile": "약 1030L",
+  "words": 252,
+  "places": [
+   "United States",
+   "China"
+  ]
+ },
+ {
+  "id": "the-monkeys-paw",
+  "title": "The Monkey’s Paw",
+  "titleKo": "원숭이 손",
+  "author": "W. W. Jacobs",
+  "authorKo": "W. W. 제이콥스",
+  "country": "United Kingdom",
+  "emoji": "🐾",
+  "color": "#4a3a2a",
+  "cefr": "A2",
+  "lexile": "약 870L",
+  "words": 195,
+  "places": [
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "of-mice-and-men",
+  "title": "Of Mice and Men",
+  "titleKo": "생쥐와 인간",
+  "author": "John Steinbeck",
+  "authorKo": "존 스타인벡",
+  "country": "United States",
+  "emoji": "🐇",
+  "color": "#7a6a4a",
+  "cefr": "B1",
+  "lexile": "약 630L",
+  "words": 256,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "and-then-there-were-none",
+  "title": "And Then There Were None",
+  "titleKo": "그리고 아무도 없었다",
+  "author": "Agatha Christie",
+  "authorKo": "애거사 크리스티",
+  "country": "United Kingdom",
+  "emoji": "🏝️",
+  "color": "#2a3a4a",
+  "cefr": "B1",
+  "lexile": "약 510L",
+  "words": 252,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-murder-of-roger-ackroyd",
+  "title": "The Murder of Roger Ackroyd",
+  "titleKo": "애크로이드 살인 사건",
+  "author": "Agatha Christie",
+  "authorKo": "애거사 크리스티",
+  "country": "United Kingdom",
+  "emoji": "🕵️",
+  "color": "#4a3a3a",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 250,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "rebecca",
+  "title": "Rebecca",
+  "titleKo": "레베카",
+  "author": "Daphne du Maurier",
+  "authorKo": "대프니 듀 모리에",
+  "country": "United Kingdom",
+  "emoji": "🏰",
+  "color": "#3a2a3a",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 255,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-tell-tale-heart",
+  "title": "The Tell-Tale Heart",
+  "titleKo": "고자질하는 심장",
+  "author": "Edgar Allan Poe",
+  "authorKo": "에드거 앨런 포",
+  "country": "United States",
+  "emoji": "🫀",
+  "color": "#5a1a1a",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 266,
+  "places": [
+   "United States"
+  ]
  }
 ];
