@@ -404,5 +404,10 @@ window.BOOK_THEMES = {
   "dr-jekyll-and-mr-hyde-b2": "honesty,justice|mystery",
   "a-christmas-carol-b2": "honesty,family,growth|classic",
   "nineteen-eighty-four-b2": "justice,history|sf",
-  "frankenstein-b2": "justice,family|sf"
+  "frankenstein-b2": "justice,family|sf",
+  "les-miserables-b2": "justice,growth,history|classic",
+  "jane-eyre-b2": "growth,honesty,family|classic",
+  "to-kill-a-mockingbird-b2": "justice,family,growth|classic",
+  "pride-and-prejudice-b2": "honesty,family,growth|classic",
+  "the-metamorphosis-b2": "family,growth|classic"
 };

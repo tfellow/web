@@ -6070,5 +6070,85 @@ window.BOOKS = [
    "United Kingdom",
    "Switzerland"
   ]
+ },
+ {
+  "id": "les-miserables-b2",
+  "title": "Les Misérables (B2)",
+  "titleKo": "레 미제라블 (B2)",
+  "author": "Victor Hugo",
+  "authorKo": "빅토르 위고",
+  "country": "France",
+  "emoji": "🕯️",
+  "color": "#4a3a5a",
+  "cefr": "B2",
+  "lexile": "약 1150L",
+  "words": 370,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "jane-eyre-b2",
+  "title": "Jane Eyre (B2)",
+  "titleKo": "제인 에어 (B2)",
+  "author": "Charlotte Brontë",
+  "authorKo": "샬럿 브론테",
+  "country": "United Kingdom",
+  "emoji": "🕊️",
+  "color": "#5a4a6a",
+  "cefr": "B2",
+  "lexile": "약 1110L",
+  "words": 368,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "to-kill-a-mockingbird-b2",
+  "title": "To Kill a Mockingbird (B2)",
+  "titleKo": "앵무새 죽이기 (B2)",
+  "author": "Harper Lee",
+  "authorKo": "하퍼 리",
+  "country": "United States",
+  "emoji": "🐦",
+  "color": "#6a5a3a",
+  "cefr": "B2",
+  "lexile": "약 1040L",
+  "words": 373,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "pride-and-prejudice-b2",
+  "title": "Pride and Prejudice (B2)",
+  "titleKo": "오만과 편견 (B2)",
+  "author": "Jane Austen",
+  "authorKo": "제인 오스틴",
+  "country": "United Kingdom",
+  "emoji": "💌",
+  "color": "#8a5a6a",
+  "cefr": "B2",
+  "lexile": "약 1100L",
+  "words": 357,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-metamorphosis-b2",
+  "title": "The Metamorphosis (B2)",
+  "titleKo": "변신 (B2)",
+  "author": "Franz Kafka",
+  "authorKo": "프란츠 카프카",
+  "country": "Czechia",
+  "emoji": "🪲",
+  "color": "#4a4a3a",
+  "cefr": "B2",
+  "lexile": "약 1060L",
+  "words": 370,
+  "places": [
+   "Czechia"
+  ]
  }
 ];
