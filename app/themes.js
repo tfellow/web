@@ -319,5 +319,21 @@ window.BOOK_THEMES = {
   "bambi": "nature,growth,family|ya",
   "pollyanna": "dream,family,growth|ya",
   "the-railway-children": "family,adventure,justice|ya",
-  "diary-of-a-wimpy-kid": "friend,growth,wisdom|ya"
+  "diary-of-a-wimpy-kid": "friend,growth,wisdom|ya",
+  "the-nightingale-and-the-rose": "love,nature|short",
+  "the-devoted-friend": "friend,honesty,justice|short",
+  "the-remarkable-rocket": "honesty,wisdom|short",
+  "how-much-land-does-a-man-need": "honesty,wisdom|short",
+  "the-chameleon": "justice,wisdom|short",
+  "vanka": "family,dream|short",
+  "the-lottery-ticket": "honesty,family|short",
+  "the-death-of-a-government-clerk": "justice,wisdom|short",
+  "the-piece-of-string": "honesty,justice|short",
+  "master-cornilles-secret": "family,honesty,wisdom|short",
+  "the-man-with-the-golden-brain": "love,family,honesty|short",
+  "the-open-window": "wisdom|short",
+  "all-summer-in-a-day": "friend,justice,dream|sf",
+  "there-will-come-soft-rains": "history,nature,justice|sf",
+  "thank-you-mam": "honesty,growth,justice|short",
+  "the-secret-life-of-walter-mitty": "dream,family|short"
 };

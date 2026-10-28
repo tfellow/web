@@ -4681,5 +4681,264 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "the-nightingale-and-the-rose",
+  "title": "The Nightingale and the Rose",
+  "titleKo": "나이팅게일과 장미",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🌹",
+  "color": "#9a2a3a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 207,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-devoted-friend",
+  "title": "The Devoted Friend",
+  "titleKo": "헌신적인 친구",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🛒",
+  "color": "#6a7a3a",
+  "cefr": "A2",
+  "lexile": "약 980L",
+  "words": 197,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-remarkable-rocket",
+  "title": "The Remarkable Rocket",
+  "titleKo": "잘난 척하는 로켓 폭죽",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🎆",
+  "color": "#3a3a7a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 191,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "how-much-land-does-a-man-need",
+  "title": "How Much Land Does a Man Need?",
+  "titleKo": "사람에게는 얼마만큼의 땅이 필요한가",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "🌾",
+  "color": "#8a7a2a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 187,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-chameleon",
+  "title": "The Chameleon",
+  "titleKo": "카멜레온",
+  "author": "Anton Chekhov",
+  "authorKo": "안톤 체호프",
+  "country": "Russia",
+  "emoji": "🦎",
+  "color": "#3a7a5a",
+  "cefr": "A2",
+  "lexile": "약 850L",
+  "words": 181,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "vanka",
+  "title": "Vanka",
+  "titleKo": "반카",
+  "author": "Anton Chekhov",
+  "authorKo": "안톤 체호프",
+  "country": "Russia",
+  "emoji": "✉️",
+  "color": "#4a5a7a",
+  "cefr": "A2",
+  "lexile": "약 880L",
+  "words": 180,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-lottery-ticket",
+  "title": "The Lottery Ticket",
+  "titleKo": "복권",
+  "author": "Anton Chekhov",
+  "authorKo": "안톤 체호프",
+  "country": "Russia",
+  "emoji": "🎟️",
+  "color": "#7a5a2a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 199,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-death-of-a-government-clerk",
+  "title": "The Death of a Government Clerk",
+  "titleKo": "관리의 죽음",
+  "author": "Anton Chekhov",
+  "authorKo": "안톤 체호프",
+  "country": "Russia",
+  "emoji": "🤧",
+  "color": "#5a4a6a",
+  "cefr": "A2",
+  "lexile": "약 880L",
+  "words": 183,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-piece-of-string",
+  "title": "The Piece of String",
+  "titleKo": "끈 한 오라기",
+  "author": "Guy de Maupassant",
+  "authorKo": "기 드 모파상",
+  "country": "France",
+  "emoji": "🧵",
+  "color": "#6a5a3a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 200,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "master-cornilles-secret",
+  "title": "Master Cornille’s Secret",
+  "titleKo": "코르니유 영감의 비밀",
+  "author": "Alphonse Daudet",
+  "authorKo": "알퐁스 도데",
+  "country": "France",
+  "emoji": "🌬️",
+  "color": "#7a6a4a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 184,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-man-with-the-golden-brain",
+  "title": "The Man with the Golden Brain",
+  "titleKo": "황금 뇌를 가진 사나이",
+  "author": "Alphonse Daudet",
+  "authorKo": "알퐁스 도데",
+  "country": "France",
+  "emoji": "🧠",
+  "color": "#a8842a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 216,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-open-window",
+  "title": "The Open Window",
+  "titleKo": "열린 창문",
+  "author": "Saki",
+  "authorKo": "사키",
+  "country": "United Kingdom",
+  "emoji": "🪟",
+  "color": "#4a6a5a",
+  "cefr": "A2",
+  "lexile": "약 990L",
+  "words": 199,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "all-summer-in-a-day",
+  "title": "All Summer in a Day",
+  "titleKo": "하루뿐인 여름",
+  "author": "Ray Bradbury",
+  "authorKo": "레이 브래드버리",
+  "country": "United States",
+  "emoji": "☀️",
+  "color": "#c08a2a",
+  "cefr": "A2",
+  "lexile": "약 800L",
+  "words": 181,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "there-will-come-soft-rains",
+  "title": "There Will Come Soft Rains",
+  "titleKo": "부드러운 비가 내리리",
+  "author": "Ray Bradbury",
+  "authorKo": "레이 브래드버리",
+  "country": "United States",
+  "emoji": "🏠",
+  "color": "#4a4a5a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 184,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "thank-you-mam",
+  "title": "Thank You, M’am",
+  "titleKo": "고마워요, 아주머니",
+  "author": "Langston Hughes",
+  "authorKo": "랭스턴 휴스",
+  "country": "United States",
+  "emoji": "👟",
+  "color": "#6a3a5a",
+  "cefr": "A2",
+  "lexile": "약 660L",
+  "words": 190,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-secret-life-of-walter-mitty",
+  "title": "The Secret Life of Walter Mitty",
+  "titleKo": "월터 미티의 은밀한 생활",
+  "author": "James Thurber",
+  "authorKo": "제임스 서버",
+  "country": "United States",
+  "emoji": "💭",
+  "color": "#3a5a7a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 193,
+  "places": [
+   "United States"
+  ]
  }
 ];
