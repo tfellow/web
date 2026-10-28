@@ -3746,5 +3746,453 @@ window.BOOKS = [
    "United Kingdom",
    "Turkey"
   ]
+ },
+ {
+  "id": "the-velveteen-rabbit",
+  "title": "The Velveteen Rabbit",
+  "titleKo": "헝겊 토끼의 눈물",
+  "author": "Margery Williams",
+  "authorKo": "마저리 윌리엄스",
+  "country": "United Kingdom",
+  "emoji": "🐰",
+  "color": "#a08a7a",
+  "cefr": "A1",
+  "lexile": "약 820L",
+  "words": 169,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-rainbow-fish",
+  "title": "The Rainbow Fish",
+  "titleKo": "무지개 물고기",
+  "author": "Marcus Pfister",
+  "authorKo": "마르쿠스 피스터",
+  "country": "Switzerland",
+  "emoji": "🐠",
+  "color": "#3a7ab0",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 177,
+  "places": [
+   "Switzerland"
+  ]
+ },
+ {
+  "id": "little-red-riding-hood",
+  "title": "Little Red Riding Hood",
+  "titleKo": "빨간 모자",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🧺",
+  "color": "#b03a3a",
+  "cefr": "A2",
+  "lexile": "약 380L",
+  "words": 192,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "jack-and-the-beanstalk",
+  "title": "Jack and the Beanstalk",
+  "titleKo": "잭과 콩나무",
+  "author": "English Fairy Tale",
+  "authorKo": "영국 전래동화",
+  "country": "United Kingdom",
+  "emoji": "🌱",
+  "color": "#4a8a3a",
+  "cefr": "A2",
+  "lexile": "약 400L",
+  "words": 200,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-three-little-pigs",
+  "title": "The Three Little Pigs",
+  "titleKo": "아기 돼지 삼형제",
+  "author": "English Fairy Tale",
+  "authorKo": "영국 전래동화",
+  "country": "United Kingdom",
+  "emoji": "🐷",
+  "color": "#c07a8a",
+  "cefr": "A2",
+  "lexile": "약 360L",
+  "words": 206,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "sleeping-beauty",
+  "title": "Sleeping Beauty",
+  "titleKo": "잠자는 숲속의 공주",
+  "author": "Charles Perrault",
+  "authorKo": "샤를 페로",
+  "country": "France",
+  "emoji": "🌹",
+  "color": "#9a5a8a",
+  "cefr": "A2",
+  "lexile": "약 410L",
+  "words": 221,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "beauty-and-the-beast",
+  "title": "Beauty and the Beast",
+  "titleKo": "미녀와 야수",
+  "author": "Jeanne-Marie Leprince de Beaumont",
+  "authorKo": "잔마리 르프랭스 드 보몽",
+  "country": "France",
+  "emoji": "🥀",
+  "color": "#8a3a5a",
+  "cefr": "A2",
+  "lexile": "약 420L",
+  "words": 222,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "puss-in-boots",
+  "title": "Puss in Boots",
+  "titleKo": "장화 신은 고양이",
+  "author": "Charles Perrault",
+  "authorKo": "샤를 페로",
+  "country": "France",
+  "emoji": "🐈",
+  "color": "#a07a3a",
+  "cefr": "A2",
+  "lexile": "약 430L",
+  "words": 222,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "goldilocks-and-the-three-bears",
+  "title": "Goldilocks and the Three Bears",
+  "titleKo": "골디락스와 곰 세 마리",
+  "author": "Robert Southey",
+  "authorKo": "로버트 사우디",
+  "country": "United Kingdom",
+  "emoji": "🐻",
+  "color": "#b0803a",
+  "cefr": "A2",
+  "lexile": "약 350L",
+  "words": 214,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-nutcracker",
+  "title": "The Nutcracker",
+  "titleKo": "호두까기 인형",
+  "author": "E. T. A. Hoffmann",
+  "authorKo": "E. T. A. 호프만",
+  "country": "Germany",
+  "emoji": "🎄",
+  "color": "#7a2a3a",
+  "cefr": "A2",
+  "lexile": "약 450L",
+  "words": 209,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-tale-of-peter-rabbit",
+  "title": "The Tale of Peter Rabbit",
+  "titleKo": "피터 래빗 이야기",
+  "author": "Beatrix Potter",
+  "authorKo": "베아트릭스 포터",
+  "country": "United Kingdom",
+  "emoji": "🐇",
+  "color": "#5a7a9a",
+  "cefr": "A2",
+  "lexile": "약 450L",
+  "words": 205,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "winnie-the-pooh",
+  "title": "Winnie-the-Pooh",
+  "titleKo": "곰돌이 푸",
+  "author": "A. A. Milne",
+  "authorKo": "A. A. 밀른",
+  "country": "United Kingdom",
+  "emoji": "🍯",
+  "color": "#c09a3a",
+  "cefr": "A2",
+  "lexile": "약 520L",
+  "words": 225,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-gruffalo",
+  "title": "The Gruffalo",
+  "titleKo": "그루팔로",
+  "author": "Julia Donaldson",
+  "authorKo": "줄리아 도널드슨",
+  "country": "United Kingdom",
+  "emoji": "🐭",
+  "color": "#6a5a3a",
+  "cefr": "A2",
+  "lexile": "약 350L",
+  "words": 212,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-polar-express",
+  "title": "The Polar Express",
+  "titleKo": "폴라 익스프레스",
+  "author": "Chris Van Allsburg",
+  "authorKo": "크리스 반 알스버그",
+  "country": "United States",
+  "emoji": "🚂",
+  "color": "#3a4a7a",
+  "cefr": "A2",
+  "lexile": "약 520L",
+  "words": 196,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "jumanji",
+  "title": "Jumanji",
+  "titleKo": "쥬만지",
+  "author": "Chris Van Allsburg",
+  "authorKo": "크리스 반 알스버그",
+  "country": "United States",
+  "emoji": "🎲",
+  "color": "#4a6a3a",
+  "cefr": "A2",
+  "lexile": "약 620L",
+  "words": 196,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-dog-and-his-reflection",
+  "title": "The Dog and His Reflection",
+  "titleKo": "욕심 많은 개",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐕",
+  "color": "#8a6a4a",
+  "cefr": "A1",
+  "lexile": "약 360L",
+  "words": 148,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-lion-and-the-three-bulls",
+  "title": "The Lion and the Three Bulls",
+  "titleKo": "사자와 황소 세 마리",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐂",
+  "color": "#7a5a3a",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 161,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fox-and-the-goat",
+  "title": "The Fox and the Goat",
+  "titleKo": "여우와 염소",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐐",
+  "color": "#8a7a4a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 174,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-hares-and-the-frogs",
+  "title": "The Hares and the Frogs",
+  "titleKo": "겁쟁이 토끼들",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐸",
+  "color": "#5a8a5a",
+  "cefr": "A1",
+  "lexile": "약 390L",
+  "words": 163,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-monkey-and-the-cat",
+  "title": "The Monkey and the Cat",
+  "titleKo": "원숭이와 고양이",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐒",
+  "color": "#9a6a3a",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 172,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-stag-at-the-pool",
+  "title": "The Stag at the Pool",
+  "titleKo": "사슴과 사자",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦌",
+  "color": "#7a6a4a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 178,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-crab-and-his-mother",
+  "title": "The Crab and His Mother",
+  "titleKo": "게와 엄마 게",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦀",
+  "color": "#c05a3a",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 160,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-bat-and-the-weasels",
+  "title": "The Bat and the Weasels",
+  "titleKo": "박쥐와 족제비",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦇",
+  "color": "#4a3a5a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 179,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-peacock-and-the-crane",
+  "title": "The Peacock and the Crane",
+  "titleKo": "공작과 두루미",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦚",
+  "color": "#2a6a6a",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 164,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fox-and-the-woodcutter",
+  "title": "The Fox and the Woodcutter",
+  "titleKo": "여우와 나무꾼",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦊",
+  "color": "#b0602a",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 165,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-trees-and-the-axe",
+  "title": "The Trees and the Axe",
+  "titleKo": "나무와 도끼",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🪓",
+  "color": "#5a6a3a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 172,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-bee-and-jupiter",
+  "title": "The Bee and Jupiter",
+  "titleKo": "꿀벌과 제우스",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐝",
+  "color": "#c0a02a",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 177,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-lion-in-love",
+  "title": "The Lion in Love",
+  "titleKo": "사랑에 빠진 사자",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦁",
+  "color": "#b08a3a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 177,
+  "places": [
+   "Greece"
+  ]
  }
 ];
