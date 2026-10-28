@@ -5907,5 +5907,87 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "the-little-prince-b2",
+  "title": "The Little Prince (B2)",
+  "titleKo": "어린 왕자 (B2)",
+  "author": "Antoine de Saint-Exupéry",
+  "authorKo": "앙투안 드 생텍쥐페리",
+  "country": "France",
+  "emoji": "🌹",
+  "color": "#c4882b",
+  "cefr": "B2",
+  "lexile": "약 1000L",
+  "words": 358,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "animal-farm-b2",
+  "title": "Animal Farm (B2)",
+  "titleKo": "동물농장 (B2)",
+  "author": "George Orwell",
+  "authorKo": "조지 오웰",
+  "country": "United Kingdom",
+  "emoji": "🐖",
+  "color": "#8a4a3a",
+  "cefr": "B2",
+  "lexile": "약 1170L",
+  "words": 354,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-old-man-and-the-sea-b2",
+  "title": "The Old Man and the Sea (B2)",
+  "titleKo": "노인과 바다 (B2)",
+  "author": "Ernest Hemingway",
+  "authorKo": "어니스트 헤밍웨이",
+  "country": "United States",
+  "emoji": "🎣",
+  "color": "#2a6a8a",
+  "cefr": "B2",
+  "lexile": "약 940L",
+  "words": 358,
+  "places": [
+   "United States",
+   "Cuba"
+  ]
+ },
+ {
+  "id": "demian-b2",
+  "title": "Demian (B2)",
+  "titleKo": "데미안 (B2)",
+  "author": "Hermann Hesse",
+  "authorKo": "헤르만 헤세",
+  "country": "Germany",
+  "emoji": "🥚",
+  "color": "#3a4a6a",
+  "cefr": "B2",
+  "lexile": "약 1050L",
+  "words": 355,
+  "places": [
+   "Germany",
+   "Switzerland"
+  ]
+ },
+ {
+  "id": "the-great-gatsby-b2",
+  "title": "The Great Gatsby (B2)",
+  "titleKo": "위대한 개츠비 (B2)",
+  "author": "F. Scott Fitzgerald",
+  "authorKo": "F. 스콧 피츠제럴드",
+  "country": "United States",
+  "emoji": "💚",
+  "color": "#2a5a4a",
+  "cefr": "B2",
+  "lexile": "약 1070L",
+  "words": 354,
+  "places": [
+   "United States"
+  ]
  }
 ];
