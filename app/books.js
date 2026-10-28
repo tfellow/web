@@ -4354,5 +4354,332 @@ window.BOOKS = [
   "places": [
    "Ukraine"
   ]
+ },
+ {
+  "id": "cloudy-with-a-chance-of-meatballs",
+  "title": "Cloudy with a Chance of Meatballs",
+  "titleKo": "하늘에서 음식이 내린다면",
+  "author": "Judi Barrett",
+  "authorKo": "주디 바레트",
+  "country": "United States",
+  "emoji": "🍝",
+  "color": "#c0602a",
+  "cefr": "A1",
+  "lexile": "약 730L",
+  "words": 130,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "strega-nona",
+  "title": "Strega Nona",
+  "titleKo": "마법 냄비 할머니 스트레가 노나",
+  "author": "Tomie dePaola",
+  "authorKo": "토미 드 파올라",
+  "country": "United States",
+  "emoji": "🍜",
+  "color": "#7a5a9a",
+  "cefr": "A1",
+  "lexile": "약 640L",
+  "words": 148,
+  "places": [
+   "United States",
+   "Italy"
+  ]
+ },
+ {
+  "id": "hope-for-the-flowers",
+  "title": "Hope for the Flowers",
+  "titleKo": "꽃들에게 희망을",
+  "author": "Trina Paulus",
+  "authorKo": "트리나 폴러스",
+  "country": "United States",
+  "emoji": "🦋",
+  "color": "#d29a2a",
+  "cefr": "A1",
+  "lexile": "약 560L",
+  "words": 134,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-selfish-giant",
+  "title": "The Selfish Giant",
+  "titleKo": "거인의 정원",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🌸",
+  "color": "#5a8a6a",
+  "cefr": "A1",
+  "lexile": "약 650L",
+  "words": 171,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-three-questions",
+  "title": "The Three Questions",
+  "titleKo": "세 가지 질문",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "❓",
+  "color": "#4a6a8a",
+  "cefr": "A1",
+  "lexile": "약 620L",
+  "words": 150,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-spiders-thread",
+  "title": "The Spider’s Thread",
+  "titleKo": "거미줄",
+  "author": "Ryunosuke Akutagawa",
+  "authorKo": "아쿠타가와 류노스케",
+  "country": "Japan",
+  "emoji": "🕸️",
+  "color": "#5a5a7a",
+  "cefr": "A1",
+  "lexile": "약 600L",
+  "words": 136,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "charlottes-web",
+  "title": "Charlotte’s Web",
+  "titleKo": "샬롯의 거미줄",
+  "author": "E. B. White",
+  "authorKo": "E. B. 화이트",
+  "country": "United States",
+  "emoji": "🕷️",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 680L",
+  "words": 184,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "stuart-little",
+  "title": "Stuart Little",
+  "titleKo": "스튜어트 리틀",
+  "author": "E. B. White",
+  "authorKo": "E. B. 화이트",
+  "country": "United States",
+  "emoji": "🐭",
+  "color": "#5a7a9a",
+  "cefr": "A2",
+  "lexile": "약 920L",
+  "words": 187,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-trumpet-of-the-swan",
+  "title": "The Trumpet of the Swan",
+  "titleKo": "트럼펫 부는 백조",
+  "author": "E. B. White",
+  "authorKo": "E. B. 화이트",
+  "country": "United States",
+  "emoji": "🎺",
+  "color": "#3a7a8a",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 180,
+  "places": [
+   "United States",
+   "Canada"
+  ]
+ },
+ {
+  "id": "pippi-longstocking",
+  "title": "Pippi Longstocking",
+  "titleKo": "말괄량이 삐삐",
+  "author": "Astrid Lindgren",
+  "authorKo": "아스트리드 린드그렌",
+  "country": "Sweden",
+  "emoji": "🧦",
+  "color": "#c0502a",
+  "cefr": "A2",
+  "lexile": "약 870L",
+  "words": 183,
+  "places": [
+   "Sweden"
+  ]
+ },
+ {
+  "id": "mary-poppins",
+  "title": "Mary Poppins",
+  "titleKo": "메리 포핀스",
+  "author": "P. L. Travers",
+  "authorKo": "P. L. 트래버스",
+  "country": "United Kingdom",
+  "emoji": "☂️",
+  "color": "#2f4f7a",
+  "cefr": "A2",
+  "lexile": "약 760L",
+  "words": 183,
+  "places": [
+   "United Kingdom",
+   "Australia"
+  ]
+ },
+ {
+  "id": "a-bear-called-paddington",
+  "title": "A Bear Called Paddington",
+  "titleKo": "내 이름은 패딩턴",
+  "author": "Michael Bond",
+  "authorKo": "마이클 본드",
+  "country": "United Kingdom",
+  "emoji": "🧸",
+  "color": "#2a5a8a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 181,
+  "places": [
+   "United Kingdom",
+   "Peru"
+  ]
+ },
+ {
+  "id": "matilda",
+  "title": "Matilda",
+  "titleKo": "마틸다",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "📚",
+  "color": "#8a3a5a",
+  "cefr": "A2",
+  "lexile": "약 840L",
+  "words": 185,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-witches",
+  "title": "The Witches",
+  "titleKo": "마녀를 잡아라",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "🧙‍♀️",
+  "color": "#4a3a6a",
+  "cefr": "A2",
+  "lexile": "약 740L",
+  "words": 195,
+  "places": [
+   "United Kingdom",
+   "Norway"
+  ]
+ },
+ {
+  "id": "james-and-the-giant-peach",
+  "title": "James and the Giant Peach",
+  "titleKo": "제임스와 슈퍼 복숭아",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "🍑",
+  "color": "#d0703a",
+  "cefr": "A2",
+  "lexile": "약 870L",
+  "words": 196,
+  "places": [
+   "United Kingdom",
+   "United States"
+  ]
+ },
+ {
+  "id": "the-wind-in-the-willows",
+  "title": "The Wind in the Willows",
+  "titleKo": "버드나무에 부는 바람",
+  "author": "Kenneth Grahame",
+  "authorKo": "케네스 그레이엄",
+  "country": "United Kingdom",
+  "emoji": "🐸",
+  "color": "#4a7a4a",
+  "cefr": "A2",
+  "lexile": "약 1140L",
+  "words": 187,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "bambi",
+  "title": "Bambi, a Life in the Woods",
+  "titleKo": "밤비",
+  "author": "Felix Salten",
+  "authorKo": "펠릭스 잘텐",
+  "country": "Austria",
+  "emoji": "🦌",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 870L",
+  "words": 191,
+  "places": [
+   "Austria"
+  ]
+ },
+ {
+  "id": "pollyanna",
+  "title": "Pollyanna",
+  "titleKo": "폴리애나",
+  "author": "Eleanor H. Porter",
+  "authorKo": "엘리너 H. 포터",
+  "country": "United States",
+  "emoji": "😊",
+  "color": "#c08a3a",
+  "cefr": "A2",
+  "lexile": "약 1050L",
+  "words": 183,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-railway-children",
+  "title": "The Railway Children",
+  "titleKo": "철도의 아이들",
+  "author": "Edith Nesbit",
+  "authorKo": "이디스 네스빗",
+  "country": "United Kingdom",
+  "emoji": "🚂",
+  "color": "#7a3a2a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 188,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "diary-of-a-wimpy-kid",
+  "title": "Diary of a Wimpy Kid",
+  "titleKo": "윔피 키드",
+  "author": "Jeff Kinney",
+  "authorKo": "제프 키니",
+  "country": "United States",
+  "emoji": "📓",
+  "color": "#3a6a3a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 188,
+  "places": [
+   "United States"
+  ]
  }
 ];
