@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "30"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "31"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -18,8 +18,10 @@
     bronze: { em: "🥉", name: "동메달" }
   };
   // 레벨 로드: 한 수준에서 책 3권(책이 그보다 적으면 전부)을 메달로 완료하면 칭호를 받아요
-  var LEVELS = ["A1", "A2", "B1", "B2", "C1"];
+  // A0 = Pre-A1 (화면에는 lvName()으로 "Pre-A1"이라고 보여요)
+  var LEVELS = ["A0", "A1", "A2", "B1", "B2", "C1"];
   var LEVEL_INFO = {
+    A0: { em: "🌰", name: "씨앗 독자" },
     A1: { em: "🌱", name: "새싹 독자" },
     A2: { em: "🧭", name: "꼬마 탐험가" },
     B1: { em: "🎒", name: "용감한 여행자" },
@@ -28,7 +30,7 @@
   };
   var LEVEL_GOAL = 3;
   // 내 레벨 찾기: 단계별 샘플 책(80% 이상이면 통과), 레벨 올리기 기준
-  var LEVEL_SAMPLES = { A1: "the-happy-prince", A2: "the-old-man-and-the-sea", B1: "the-giver" };
+  var LEVEL_SAMPLES = { A0: "the-little-red-hen", A1: "the-happy-prince", A2: "the-old-man-and-the-sea", B1: "the-giver" };
   var PLACE_PASS = 0.8;
   var LEVEL_UP_BOOKS = 10;
   var LEVEL_UP_AVG = 80;
@@ -55,6 +57,46 @@
     return { cur: i >= 0 ? readTitleAt(i) : null, next: readTitleAt(i + 1), idx: i };
   }
   function readTitleLabel(t) { return t ? t.em + " " + t.en + " " + t.ko : ""; }
+  // 칭호 인증서: 칭호마다 색과 문구가 달라요 (Master Reader는 금색)
+  var CERT_STYLES = [
+    { a: "#2f7d5b", b: "#e6f4ec", line: "첫 메달로 독서 여행을 시작했어요." },
+    { a: "#2d6fa3", b: "#e5f0fa", line: "세 권의 이야기 속을 탐험했어요." },
+    { a: "#1f5f8b", b: "#e2eef7", line: "열 권의 바다를 건너 항해했어요." },
+    { a: "#7a4fa0", b: "#f0e9f7", line: "스무 권의 길을 스스로 찾아 걸었어요." },
+    { a: "#a0522d", b: "#f8ece4", line: "서른 권의 산을 넘은 모험가예요." },
+    { a: "#c0392b", b: "#fbe9e7", line: "쉰 권으로 세계를 여행했어요." },
+    { a: "#6d4c41", b: "#f3ece6", line: "백 권의 이야기를 마음에 간직했어요." },
+    { a: "#283593", b: "#e8eaf6", line: "백오십 권, 새로운 길을 여는 개척자예요." }
+  ];
+  function certStyle(i) { return CERT_STYLES[i] || { a: "#a07816", b: "#fbf3dc", line: "책과 함께하는 여정의 마스터예요." }; }
+  function openCertificate(i) {
+    var t = readTitleAt(i), cs = certStyle(i);
+    var nick = (state.profile && state.profile.nickname) || "";
+    var d = new Date(), date = d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + ".";
+    var ov = document.createElement("div");
+    ov.className = "overlay cert-ov";
+    ov.innerHTML =
+      '<div class="cert-wrap">' +
+      '<div class="cert" style="--ca:' + cs.a + ";--cb:" + cs.b + '">' +
+      '<div class="cert-in"><div class="cert-top"><img src="emblem.png" alt="" width="60" height="53"><div><b>MY READING PASSPORT</b><small>문영 독서 여권 · MOONYOUNG</small></div></div>' +
+      '<div class="cert-kind">CERTIFICATE OF ACHIEVEMENT · 독서 칭호 인증서</div>' +
+      '<div class="cert-em">' + t.em + "</div>" +
+      '<div class="cert-title">' + esc(t.en) + "</div><div class=\"cert-ko\">" + esc(t.ko) + "</div>" +
+      '<div class="cert-name" id="certname">' + esc(nick) + "</div>" +
+      '<p class="cert-text">This certifies that the reader above has finished <b>' + t.n + " books</b> with medals <br>and earned the title of <b>" + esc(t.en) + "</b>.</p>" +
+      '<p class="cert-text ko">위 독서가는 메달 받은 책 <b>' + t.n + "권</b>을 읽고 <b>" + esc(t.ko) + "</b> 칭호를 받았습니다. <br>" + esc(cs.line) + "</p>" +
+      '<div class="cert-foot"><span>' + date + '</span><span class="cert-seal">' + t.em + '<small>MY</small></span><span>서울문영여자중학교<br>MY Reading Passport</span></div></div></div>' +
+      '<div class="cert-tools"><label>인증서에 넣을 이름 <input id="certin" maxlength="20" value="' + esc(nick) + '" placeholder="이름 또는 닉네임"></label>' +
+      '<div class="cert-btns"><button class="btn gold" id="certprint">🖨️ 인쇄 · PDF로 저장</button><button class="btn ghost" id="certclose">닫기</button></div>' +
+      '<p class="muted">이름은 저장되지 않고 이 인증서에만 들어가요. 인쇄 창에서 “PDF로 저장”을 고르면 파일로 받을 수 있어요.</p></div></div>';
+    document.body.appendChild(ov);
+    document.body.classList.add("cert-open");
+    function close() { ov.remove(); document.body.classList.remove("cert-open"); }
+    ov.onclick = function (e) { if (e.target === ov) close(); };
+    document.getElementById("certclose").onclick = close;
+    document.getElementById("certin").oninput = function () { document.getElementById("certname").textContent = this.value; };
+    document.getElementById("certprint").onclick = function () { window.print(); };
+  }
   var WEEK_GOAL = 1; // 주간 목표: 한 주에 메달 받은 작품 수
   // 책의 country 값 → 지도 이름(world-atlas), 한국어, 국기, 핀 위치(경도, 위도)
   var COUNTRIES = {
@@ -98,6 +140,7 @@
     "Cuba": { map: "Cuba", ko: "쿠바", iso: "CU", at: [-79.5, 21.8] },
     "Algeria": { map: "Algeria", ko: "알제리", iso: "DZ", at: [2.6, 28] },
     "Romania": { map: "Romania", ko: "루마니아", iso: "RO", at: [25, 45.9] },
+    "Ukraine": { map: "Ukraine", ko: "우크라이나", iso: "UA", at: [31.5, 49] },
     "Ghana": { map: "Ghana", ko: "가나", iso: "GH", at: [-1, 7.9] },
     "Ethiopia": { map: "Ethiopia", ko: "에티오피아", iso: "ET", at: [39.5, 9] },
     "Malawi": { map: "Malawi", ko: "말라위", iso: "MW", at: [34.3, -13.3] },
@@ -120,7 +163,7 @@
     "Ireland": "EU", "Iceland": "EU", "Norway": "EU", "Sweden": "EU", "Finland": "EU", "Denmark": "EU", "Netherlands": "EU", "Belgium": "EU",
     "Austria": "EU", "Switzerland": "EU", "Poland": "EU", "Greece": "EU", "Portugal": "EU",
     "Turkey": "AS", "Georgia": "AS", "Japan": "AS", "China": "AS", "South Korea": "AS", "India": "AS",
-    "United States of America": "NA", "Canada": "NA", "Mexico": "NA", "Cuba": "NA", "Algeria": "AF", "Romania": "EU",
+    "United States of America": "NA", "Canada": "NA", "Mexico": "NA", "Cuba": "NA", "Algeria": "AF", "Romania": "EU", "Ukraine": "EU",
     "Brazil": "SA", "Colombia": "SA", "Chile": "SA", "Argentina": "SA",
     "Egypt": "AF", "Nigeria": "AF", "Ghana": "AF", "Ethiopia": "AF", "Malawi": "AF", "South Africa": "AF",
     "Peru": "SA", "Iraq": "AS", "Mongolia": "AS", "Vietnam": "AS", "Philippines": "AS", "Australia": "OC", "New Zealand": "OC"
@@ -142,7 +185,8 @@
     });
   }
   function findBook(id) { return (window.BOOKS || []).filter(function (b) { return b.id === id; })[0]; }
-  function levelOf(b) { return String((b && b.cefr) || "").toUpperCase().slice(0, 2); }
+  function levelOf(b) { var c = String((b && b.cefr) || "").toUpperCase(); return c.indexOf("PRE") === 0 ? "A0" : c.slice(0, 2); }
+  function lvName(l) { return l === "A0" ? "Pre-A1" : l; }
   function countryOf(b) { return (b && COUNTRIES[b.country]) || null; }
   function countryKo(b) { var c = countryOf(b); return c ? c.ko : (b && b.country) || ""; }
   // 여권 도장 후보 나라 (첫 번째 = 작가 나라 = 기본값)
@@ -434,7 +478,7 @@
         (medal ? '<div class="stamp-corner' + (r.star ? " star" : "") + '">' + MEDALS[medal].em + "</div>" : "") +
         '<div class="cover">' + esc(b.emoji) + "</div>" +
         '<div><div class="t">' + esc(b.title) + '</div><div class="a">' + esc(b.titleKo) + " · " + esc(b.authorKo) + "</div></div>" +
-        '<div><span class="lv-tag">' + esc(levelOf(b)) + " · " + b.words + "단어" + (c ? " · " + flag(c.iso) + " " + esc(c.ko) : "") + "</span>" +
+        '<div><span class="lv-tag">' + esc(lvName(levelOf(b))) + " · " + b.words + "단어" + (c ? " · " + flag(c.iso) + " " + esc(c.ko) : "") + "</span>" +
         '<div class="st">' + (r ? "최고 " + r.best + "/" + r.total + " · " + r.attempts + "회 도전" : "아직 도전 전") + "</div></div></div>";
     }
     function section(title, sub, list, note) {
@@ -456,7 +500,7 @@
     var myLv = (state.profile && state.profile.reading_level) || "";
     function pctOf(r) { return r && r.total ? r.best / r.total : 0; }
     var sampleLvs = Object.keys(LEVEL_SAMPLES);
-    var suggestLv = "A1";
+    var suggestLv = sampleLvs[0];
     for (var si = 0; si < sampleLvs.length; si++) {
       var sr = byId[LEVEL_SAMPLES[sampleLvs[si]]];
       if (sr && pctOf(sr) >= PLACE_PASS) suggestLv = sampleLvs[si]; else break;
@@ -488,24 +532,24 @@
     var levelCardHtml =
       '<div class="card" id="levelcard"><h2>🔎 내 레벨<span class="sub">레벨에 맞춰 책을 추천해요</span></h2>' +
       (myLv
-        ? '<div class="lv-now"><div class="lv-badge">' + LEVEL_INFO[myLv].em + "<b>" + myLv + "</b></div><div><b>지금 내 레벨은 " + myLv + " · " + esc(LEVEL_INFO[myLv].name) + "</b>" +
-          '<div class="muted">이 레벨 메달 ' + lvDoneList.length + "권 · 평균 " + lvAvg + "점" + (nextLv ? " · " + nextLv + "로 올라가려면 메달 " + LEVEL_UP_BOOKS + "권, 평균 " + LEVEL_UP_AVG + "점 이상" : "") + "</div></div></div>" +
+        ? '<div class="lv-now"><div class="lv-badge">' + LEVEL_INFO[myLv].em + "<b>" + lvName(myLv) + "</b></div><div><b>지금 내 레벨은 " + lvName(myLv) + " · " + esc(LEVEL_INFO[myLv].name) + "</b>" +
+          '<div class="muted">이 레벨 메달 ' + lvDoneList.length + "권 · 평균 " + lvAvg + "점" + (nextLv ? " · " + lvName(nextLv) + "(으)로 올라가려면 메달 " + LEVEL_UP_BOOKS + "권, 평균 " + LEVEL_UP_AVG + "점 이상" : "") + "</div></div></div>" +
           (nextLv ? '<div class="progress"><div id="lvupbar"></div></div>' : "") +
-          (readyUp ? '<div class="lv-up">🎉 ' + nextLv + "로 올라갈 준비가 됐어요! <button class=\"btn gold small\" id=\"lvupbtn\">" + nextLv + "로 올리기</button></div>" : "") +
-          '<p class="muted" style="margin:10px 0 0">아래 “다음에 읽을 책”은 ' + myLv + " 책 위주로" + (nextLv ? ", 한 권은 " + nextLv + " 도전 책으로" : "") + ' 골랐어요. <button class="linkbtn" id="lvchange">레벨 바꾸기</button></p>'
+          (readyUp ? '<div class="lv-up">🎉 ' + lvName(nextLv) + "(으)로 올라갈 준비가 됐어요! <button class=\"btn gold small\" id=\"lvupbtn\">" + lvName(nextLv) + "(으)로 올리기</button></div>" : "") +
+          '<p class="muted" style="margin:10px 0 0">아래 “다음에 읽을 책”은 ' + lvName(myLv) + " 책 위주로" + (nextLv ? ", 한 권은 " + lvName(nextLv) + " 도전 책으로" : "") + ' 골랐어요. <button class="linkbtn" id="lvchange">레벨 바꾸기</button></p>'
         : '<p class="muted" style="margin-top:-4px">단계별 샘플 책을 읽고 퀴즈를 풀어 보세요. <b>8점 이상</b>이면 다음 단계에 도전해요. 결과를 보고 내 레벨을 정하면, 그 레벨 책을 먼저 추천해 줘요.</p>' +
           '<div class="lv-steps">' + sampleLvs.map(function (lv, i) {
             var b = findBook(LEVEL_SAMPLES[lv]); var r = byId[LEVEL_SAMPLES[lv]];
             var pass = r && pctOf(r) >= PLACE_PASS;
             var open = i === 0 || (byId[LEVEL_SAMPLES[sampleLvs[i - 1]]] && pctOf(byId[LEVEL_SAMPLES[sampleLvs[i - 1]]]) >= PLACE_PASS);
-            return '<div class="lv-step ' + (pass ? "pass" : "") + (open ? "" : " locked") + '"><div class="lv-step-h">' + LEVEL_INFO[lv].em + " <b>" + lv + "</b> 샘플</div>" +
+            return '<div class="lv-step ' + (pass ? "pass" : "") + (open ? "" : " locked") + '"><div class="lv-step-h">' + LEVEL_INFO[lv].em + " <b>" + lvName(lv) + "</b> 샘플</div>" +
               '<div class="lv-step-t">' + (b ? esc(b.emoji) + " " + esc(b.title) : "") + "</div>" +
               '<div class="muted">' + (r ? "최고 " + r.best + "/" + r.total + (pass ? " · 통과 ✅" : " · 8점이 안 돼요") : open ? "아직 안 풀었어요" : "🔒 앞 단계를 통과하면 열려요") + "</div>" +
               (open && b ? '<button class="btn ghost small lv-go" data-id="' + esc(b.id) + '">' + (r ? "다시 풀기" : "읽고 풀기") + "</button>" : "") + "</div>";
           }).join("") + "</div>" +
-          '<div class="lv-pick"><span>추천 레벨: <b>' + suggestLv + "</b></span> <button class=\"btn gold small lv-set\" data-lv=\"" + suggestLv + '">' + suggestLv + "로 정하기</button></div>") +
+          '<div class="lv-pick"><span>추천 레벨: <b>' + lvName(suggestLv) + "</b></span> <button class=\"btn gold small lv-set\" data-lv=\"" + suggestLv + '">' + lvName(suggestLv) + "(으)로 정하기</button></div>") +
       '<div class="lv-manual" id="lvmanual"' + (myLv ? " hidden" : "") + '><span class="muted">직접 고르기:</span> ' + lvAvail.map(function (l) {
-        return '<button class="pill lv-set ' + (l === myLv ? "on" : "") + '" data-lv="' + l + '">' + LEVEL_INFO[l].em + " " + l + "</button>";
+        return '<button class="pill lv-set ' + (l === myLv ? "on" : "") + '" data-lv="' + l + '">' + LEVEL_INFO[l].em + " " + lvName(l) + "</button>";
       }).join("") + "</div></div>";
 
     var nick = (state.profile && state.profile.nickname) || "";
@@ -519,7 +563,7 @@
       '<section class="passport"><div class="pp-head"><div class="pp-emblem"><img src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"></div><div>' +
       '<div class="pp-kicker">MY READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
       '<div class="pp-level">' + (rt.cur ? readTitleLabel(rt.cur) : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div>" +
-      (title ? '<div class="pp-sublevel">' + LEVEL_INFO[title.lv].em + " " + title.lv + " " + LEVEL_INFO[title.lv].name + "</div>" : "") + "</div></div>" +
+      (title ? '<div class="pp-sublevel">' + LEVEL_INFO[title.lv].em + " " + lvName(title.lv) + " " + LEVEL_INFO[title.lv].name + "</div>" : "") + "</div></div>" +
       '<div class="pp-stats"><div class="pp-stat"><b>' + done + "/" + books.length + "</b><span>작품 완료</span></div>" +
       '<div class="pp-stat"><b>' + (sum.words || 0).toLocaleString() + "</b><span>읽은 단어</span></div>" +
       '<div class="pp-stat"><b>' + (ds.n ? "🔥" + ds.n + "일" : "-") + "</b><span>연속 독서</span></div>" +
@@ -543,11 +587,13 @@
 
       '<div class="card"><h2>🏅 독서 칭호<span class="sub">메달 받은 책 권수로 올라가요</span></h2>' +
       '<div class="rt-now"><div class="rt-em">' + (rt.cur ? rt.cur.em : "🛫") + '</div><div><b>' + (rt.cur ? esc(rt.cur.en) + " · " + esc(rt.cur.ko) : "아직 칭호가 없어요") + "</b>" +
-      '<div class="muted">메달 ' + done + "권 · 다음 칭호 " + rt.next.em + " " + esc(rt.next.en) + "까지 " + (rt.next.n - done) + "권</div></div></div>" +
+      '<div class="muted">메달 ' + done + "권 · 다음 칭호 " + rt.next.em + " " + esc(rt.next.en) + "까지 " + (rt.next.n - done) + "권</div></div>" +
+      (rt.cur ? '<button class="btn gold small rt-cert" data-i="' + rt.idx + '">🎓 인증서</button>' : "") + "</div>" +
       '<div class="progress"><div id="rtbar"></div></div>' +
       '<div class="rt-ladder">' + READ_TITLES.concat([readTitleAt(READ_TITLES.length)]).map(function (t, i) {
-        return '<div class="rt ' + (done >= t.n ? "on" : "") + (i === rt.idx + 1 ? " next" : "") + '"><div class="em">' + t.em + "</div><b>" + t.n + "권</b><small>" + esc(t.ko) + "</small></div>";
-      }).join("") + "</div></div>" +
+        var on = done >= t.n;
+        return '<' + (on ? 'button class="rt on rt-cert" data-i="' + i + '" title="인증서 보기"' : 'div class="rt' + (i === rt.idx + 1 ? " next" : "") + '"') + '><div class="em">' + t.em + "</div><b>" + t.n + "권</b><small>" + esc(t.ko) + "</small>" + (on ? '<i class="rt-c">🎓</i>' : "") + "</" + (on ? "button" : "div") + ">";
+      }).join("") + "</div>" + (rt.cur ? '<p class="muted" style="margin:6px 0 0">받은 칭호를 누르면 인증서를 볼 수 있어요.</p>' : "") + "</div>" +
 
       '<div class="card"><h2>🎨 테마 여행<span class="sub">주제로 책 고르기</span></h2><div class="theme-grid">' +
       (window.THEME_DEFS || []).map(function (t) {
@@ -559,13 +605,13 @@
       '<div class="card"><h2>🛤️ 레벨 로드<span class="sub">수준별 ' + LEVEL_GOAL + "작품 완료 시 칭호</span></h2><div class=\"road\">" +
       lvData.map(function (x) {
         var info = LEVEL_INFO[x.lv];
-        return '<div class="lv ' + (x.total ? "has " : "") + (x.earned ? "earned " : "") + (x.lv === currentLv ? "current" : "") + '"><div class="circle">' + info.em + '</div><div class="code">' + x.lv + '</div><div class="name">' + info.name + '</div><div class="count">' + (x.total ? x.done + "/" + Math.min(LEVEL_GOAL, x.total) : "준비 중") + "</div></div>";
+        return '<div class="lv ' + (x.total ? "has " : "") + (x.earned ? "earned " : "") + (x.lv === currentLv ? "current" : "") + '"><div class="circle">' + info.em + '</div><div class="code">' + lvName(x.lv) + '</div><div class="name">' + info.name + '</div><div class="count">' + (x.total ? x.done + "/" + Math.min(LEVEL_GOAL, x.total) : "준비 중") + "</div></div>";
       }).join("") + "</div></div>" +
 
       section("🌟 선생님 추천", "", featuredList, "선생님이 골라 준 책이에요.") +
       section("🔥 이어서 도전하기", "", trying, "아직 메달을 받지 못한 책이에요. 한 번 더 도전해 볼까요?") +
       levelCardHtml +
-      section("🧭 다음에 읽을 책", myLv ? myLv + " 레벨" : "", rec, myLv ? "내 레벨 책 3권과 도전 책 1권이에요. 날마다 바뀌어요." : cur < 0 ? "쉬운 책부터 시작해 보세요. 위에서 내 레벨을 찾아보세요." : "내 수준에 맞춰 골랐어요.") +
+      section("🧭 다음에 읽을 책", myLv ? lvName(myLv) + " 레벨" : "", rec, myLv ? "내 레벨 책 3권과 도전 책 1권이에요. 날마다 바뀌어요." : cur < 0 ? "쉬운 책부터 시작해 보세요. 위에서 내 레벨을 찾아보세요." : "내 수준에 맞춰 골랐어요.") +
 
       '<div class="card" id="mapcard"><h2>🗺️ 세계 문학 지도<span class="sub">나라를 누르면 그 나라 책만 보여요</span></h2>' +
       (cls ? '<div class="seg" id="mapseg"><button data-m="me">🛂 내 지도</button><button data-m="class">🤝 우리 반 지도</button></div>' : "") +
@@ -596,7 +642,7 @@
     // 책장
     var S = state.shelf;
     function drawPills() {
-      var lv = [["all", "전체", books.length]].concat(LEVELS.map(function (l) { return [l, l, books.filter(function (b) { return levelOf(b) === l; }).length]; }));
+      var lv = [["all", "전체", books.length]].concat(LEVELS.map(function (l) { return [l, lvName(l), books.filter(function (b) { return levelOf(b) === l; }).length]; }));
       var stt = [["all", "전체"], ["new", "안 읽음"], ["trying", "도전 중"], ["done", "완료"]];
       document.getElementById("lvpills").innerHTML = lv.map(function (x) {
         return '<button class="pill ' + (S.level === x[0] ? "on" : "") + (x[2] ? "" : " empty") + '" data-lv="' + x[0] + '">' + x[1] + " <small>" + x[2] + "</small></button>";
@@ -759,9 +805,10 @@
       var r = await sb.rpc("set_my_level", { p_level: lv });
       if (r.error) return toast("레벨을 저장하지 못했어요");
       state.profile.reading_level = lv;
-      toast(lv + " 레벨로 정했어요"); renderHome();
+      toast(lvName(lv) + " 레벨로 정했어요"); renderHome();
     }
     each(".lv-set", function (el) { el.onclick = function () { setMyLevel(el.getAttribute("data-lv")); }; });
+    each(".rt-cert", function (el) { el.onclick = function () { openCertificate(Number(el.getAttribute("data-i"))); }; });
     each(".lv-go", function (el) { el.onclick = function () { state.bookTab = "story"; location.hash = "#/book/" + encodeURIComponent(el.getAttribute("data-id")); }; });
     var lub = document.getElementById("lvupbtn"); if (lub) lub.onclick = function () { setMyLevel(nextLv); };
     var lvc = document.getElementById("lvchange"); if (lvc) lvc.onclick = function () { var m = document.getElementById("lvmanual"); m.hidden = !m.hidden; };
@@ -909,7 +956,7 @@
       '<div class="book-hero" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="tohome">← 책장</button>' +
       '<div class="cover" style="margin-top:10px">' + esc(b.emoji) + "</div><h2>" + esc(b.title) + "</h2>" +
       '<div class="by">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
-      '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || b.cefr) + "</span>" + (b.lexile ? "<span>Lexile " + esc(b.lexile) + "</span>" : "") + (b.ar ? "<span>AR " + esc(b.ar) + "</span>" : "") + "<span>" + b.words + "단어</span>" +
+      '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || lvName(levelOf(b))) + "</span>" + (b.lexile ? "<span>Lexile " + esc(b.lexile) + "</span>" : "") + (b.ar ? "<span>AR " + esc(b.ar) + "</span>" : "") + "<span>" + b.words + "단어</span>" +
       (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div>" +
       (function () {
         var tg = tagsOf(b), g = genreDef(tg.genre);
@@ -1051,6 +1098,8 @@
       else if (s.n) box.innerHTML = '<div class="res-streak"><span>🔥</span><b>' + s.n + "일 연속 독서 중</b> · 오늘 메달을 받으면 " + (s.n + 1) + "일째가 돼요.</div>";
     });
     // 새 기록으로 요약을 다시 받아 도장 고르기를 보여 줘요
+    function medalCount() { return ((state.summary && state.summary.books) || []).filter(function (x) { return x.medal && findBook(x.book_id); }).length; }
+    var hadSummary = !!state.summary, prevDone = medalCount();
     state.summary = null;
     if (!r.best_medal && !medal) return;
     function drawStamp() {
@@ -1063,6 +1112,18 @@
       if (s.error) return;
       state.summary = s.data || {};
       drawStamp();
+      var now = readTitle(medalCount());
+      if (hadSummary && now.cur && now.idx > readTitle(prevDone).idx) {
+        var box = document.getElementById("resstreak");
+        if (!box) return;
+        var nt = document.createElement("div");
+        nt.className = "res-title";
+        nt.innerHTML = '<span class="em">' + now.cur.em + "</span><div><b>새 칭호를 받았어요! " + esc(now.cur.en) + " · " + esc(now.cur.ko) + '</b><div class="muted">메달 ' + now.cur.n + "권 달성</div></div>" +
+          '<button class="btn gold small" id="rescert">🎓 인증서 받기</button>';
+        box.parentNode.insertBefore(nt, box);
+        document.getElementById("rescert").onclick = function () { openCertificate(now.idx); };
+        setTimeout(function () { confetti(60); }, 900);
+      }
     });
   }
 
@@ -1229,7 +1290,7 @@
               '<button class="btn ghost small nick-reset" data-e="' + esc(r.email) + '">↺</button></td><td>' + (r.role === "school" ? "학교" : "외부") +
               "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.stars + "</td><td>" + r.words +
               "</td><td>" + (i.ds.n ? (i.ds.today ? "🔥" : "") + i.ds.n + "일" : "-") + "</td><td>" + (i.ds.best ? i.ds.best + "일" : "-") + "</td><td>" + (i.week ? "✅" : "") +
-              "</td><td>" + i.countries.length + "</td><td>" + i.conts + "/6</td><td>" + (readTitle(r.completed || 0).cur ? readTitle(r.completed || 0).cur.em + " " + esc(readTitle(r.completed || 0).cur.en) : "-") + (i.title ? " · " + i.title : "") + (i.myLv ? " · 🔎" + i.myLv : "") + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
+              "</td><td>" + i.countries.length + "</td><td>" + i.conts + "/6</td><td>" + (readTitle(r.completed || 0).cur ? readTitle(r.completed || 0).cur.em + " " + esc(readTitle(r.completed || 0).cur.en) : "-") + (i.title ? " · " + lvName(i.title) : "") + (i.myLv ? " · 🔎" + lvName(i.myLv) : "") + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
           }).join("");
         each(".stu", function (el) { el.onclick = function () { openStudent(el.getAttribute("data-e")); }; });
         each(".nick-edit", function (el) {
@@ -1282,7 +1343,7 @@
         }).join(" · ") + "</p>" : "") +
         (list.length ? '<div class="scroll" style="max-height:55vh;overflow-y:auto"><table><tr><th>작품</th><th>수준</th><th>최고</th><th>메달</th><th>⭐</th><th>도전</th><th>번역 본 단락</th><th>최근</th></tr>' + list.map(function (x) {
           var b = findBook(x.book_id);
-          return "<tr><td>" + esc(b ? b.titleKo : x.book_id) + "</td><td>" + esc(b ? levelOf(b) : "") + "</td><td>" + x.best + "/" + x.total + "</td><td>" + (x.medal ? MEDALS[x.medal].em : "") + "</td><td>" + (x.star ? "⭐" : "") + "</td><td>" + x.attempts + "</td><td>" + (x.hints || 0) + "</td><td>" + fmtDate(x.last_at) + "</td></tr>";
+          return "<tr><td>" + esc(b ? b.titleKo : x.book_id) + "</td><td>" + esc(b ? lvName(levelOf(b)) : "") + "</td><td>" + x.best + "/" + x.total + "</td><td>" + (x.medal ? MEDALS[x.medal].em : "") + "</td><td>" + (x.star ? "⭐" : "") + "</td><td>" + x.attempts + "</td><td>" + (x.hints || 0) + "</td><td>" + fmtDate(x.last_at) + "</td></tr>";
         }).join("") + "</table></div>" : '<p class="muted">아직 퀴즈 기록이 없어요.</p>') +
         '<div style="margin-top:12px"><button class="btn" id="stuclose">닫기</button></div></div>';
       document.body.appendChild(o);
@@ -1308,7 +1369,7 @@
         document.getElementById("btbl").innerHTML = "<tr><th>작품</th><th>수준</th><th>도전 학생</th><th>메달 학생</th><th>🥇</th><th>평균 점수</th><th>⭐ 무힌트</th><th>평균 번역 단락</th></tr>" +
           rowsCache.map(function (x) {
             var avg = Math.round((x.s.sum / x.s.tried) * 100);
-            return "<tr><td>" + esc(x.b.emoji) + " " + esc(x.b.titleKo) + "</td><td>" + esc(levelOf(x.b)) + "</td><td>" + x.s.tried + "</td><td>" + x.s.medal + " <span class=\"muted\">(" + pct(x.s.medal, x.s.tried) + "%)</span></td><td>" + x.s.gold +
+            return "<tr><td>" + esc(x.b.emoji) + " " + esc(x.b.titleKo) + "</td><td>" + esc(lvName(levelOf(x.b))) + "</td><td>" + x.s.tried + "</td><td>" + x.s.medal + " <span class=\"muted\">(" + pct(x.s.medal, x.s.tried) + "%)</span></td><td>" + x.s.gold +
               "</td><td>" + rateBar(avg) + "</td><td>" + x.s.stars + "</td><td>" + (x.s.hints / x.s.tried).toFixed(1) + "</td></tr>";
           }).join("");
         var none = books.length - rowsCache.length;
@@ -1368,7 +1429,7 @@
     function drawSettings() {
       var ext = settings.allow_external === "true";
       var featRows = books.map(function (b) {
-        return '<label style="display:block;padding:5px 0"><input type="checkbox" class="featcb" data-id="' + esc(b.id) + '" ' + (feat[b.id] ? "checked" : "") + "> " + esc(b.emoji) + " " + esc(b.title) + ' <span class="muted">(' + esc(b.titleKo) + " · " + esc(levelOf(b)) + ")</span></label>";
+        return '<label style="display:block;padding:5px 0"><input type="checkbox" class="featcb" data-id="' + esc(b.id) + '" ' + (feat[b.id] ? "checked" : "") + "> " + esc(b.emoji) + " " + esc(b.title) + ' <span class="muted">(' + esc(b.titleKo) + " · " + esc(lvName(levelOf(b))) + ")</span></label>";
       }).join("");
       document.getElementById("tbody").innerHTML =
         '<div class="card"><h2>🎯 반 목표 단어 수</h2><p class="muted">학생 화면 “우리 반 함께 읽기”의 목표예요. 반 친구들이 메달 받은 작품의 단어 수를 모아 이 숫자에 도전해요.</p>' +

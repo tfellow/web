@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* 사용 설명서 버전: 앱 v30 · 259권 (A1 106 · A2 109 · B1 42 · B2 2). 앱이 바뀌면 이 파일도 같이 고쳐요. */
+/* 사용 설명서 버전: 앱 v31 · 269권 (Pre-A1 10 · A1 106 · A2 109 · B1 42 · B2 2). 앱이 바뀌면 이 파일도 같이 고쳐요. */
 :root {
   --bg: #eef1f7; --page: #fbfaf6; --ink: #18264a; --muted: #5b6684; --line: #d9dfeb;
   --navy: #1e3768; --navy-2: #2d5291; --gold: #c9971c; --gold-soft: #f7ecd0; --gold-ink: #7a5807;
@@ -189,7 +189,7 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
 .weeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 5px; }
 .wk { aspect-ratio: 1; max-width: 100%; border-radius: 8px; background: var(--line); border: 0; }
 .wk.lit { background: var(--gold); }
-.road { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; text-align: center; font-size: .74rem; }
+.road { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; text-align: center; font-size: .74rem; }
 .lv .c { width: 46px; height: 46px; margin: 0 auto 4px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line); background: var(--chip); font-size: 1.2rem; }
 .lv.earned .c { border-color: var(--gold); background: var(--gold-soft); }
 .lv b { display: block; font-size: .8rem; }
@@ -240,7 +240,8 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <h1>MY Reading Passport<br>사용 설명서</h1>
         <p class="lead"><b>MY</b>는 우리 학교 <b>MOONYOUNG</b>의 머리글자이자 ‘나의’라는 뜻이에요. 세계 문학을 영어로 읽고, 퀴즈로 메달을 모으고, 여권에 나라 도장을 찍는 앱이에요. 한 장씩 넘기며 직접 눌러 보세요.</p>
         <div class="stats" aria-label="지금 읽을 수 있는 책">
-          <div><b>259</b><small>권</small></div>
+          <div><b>269</b><small>권</small></div>
+          <div><b>10</b><small>Pre-A1 · 첫걸음</small></div>
           <div><b>106</b><small>A1 · 쉬움</small></div>
           <div><b>109</b><small>A2 · 보통</small></div>
           <div><b>42</b><small>B1 · 도전</small></div>
@@ -313,20 +314,20 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     <section class="slide" data-name="책장">
       <div>
         <div class="eyebrow">Step 3 · 책 고르기</div>
-        <h2>259권 중에서 내 수준에 맞는 책을 골라요</h2>
-        <p class="lead">책장 위의 <b>CEFR 단계</b>를 누르면 그 수준의 책만 보여요. <b>A1</b>은 이솝 우화, 세계 동화, 흥부와 놀부 같은 우리 전래동화처럼 짧고 쉬운 이야기, <b>A2</b>는 세계 명작 소설, <b>B1</b>은 조금 더 긴 도전 작품, <b>B2</b>는 한강 작가의 소설처럼 깊이 생각해 볼 작품이에요.</p>
+        <h2>269권 중에서 내 수준에 맞는 책을 골라요</h2>
+        <p class="lead">책장 위의 <b>CEFR 단계</b>를 누르면 그 수준의 책만 보여요. <b>Pre-A1</b>은 100단어 안팎의 그림책·옛이야기로 영어 읽기를 처음 시작하는 친구를 위한 단계, <b>A1</b>은 이솝 우화, 세계 동화, 흥부와 놀부 같은 우리 전래동화처럼 짧고 쉬운 이야기, <b>A2</b>는 세계 명작 소설, <b>B1</b>은 조금 더 긴 도전 작품, <b>B2</b>는 한강 작가의 소설처럼 깊이 생각해 볼 작품이에요.</p>
         <ul class="points">
           <li><span>맨 위에 <b>선생님 추천</b>, <b>이어서 도전하기</b>, 그리고 내 수준에 맞춘 <b>다음에 읽을 책 4권</b>이 먼저 보여요.</span></li>
           <li><span>제목(영어·한국어), 작가, 나라, 테마 이름으로 검색할 수 있어요.</span></li>
-          <li><span><b>🎨 테마 여행</b>: 우정, 가족, 사랑, 용기와 모험, 신화와 전설 등 <b>12가지 주제</b>로 책을 고를 수 있어요. 책장에서는 <b>장르</b>(우화, 동화·민담, 신화·전설, 단편, 소설, 희곡, 실화)로도 골라 보세요.</span></li>
+          <li><span><b>🎨 테마 여행</b>: 우정, 가족, 사랑, 용기와 모험, 신화와 전설 등 <b>12가지 주제</b>로 책을 고를 수 있어요. 책장에서는 <b>14가지 장르</b>(우화, 동화·민담, 그림책, 신화·전설, 단편, 고전·문학 소설, 성장·청소년 소설, 모험 소설, 판타지, SF·미래, 추리·미스터리, 역사·전쟁 소설, 희곡, 실화·전기)로도 골라 보세요.</span></li>
           <li><span>책 카드에서 단계, 단어 수, 나라를 미리 볼 수 있어요. 책 페이지에는 Lexile 지수도 나와요.</span></li>
-          <li><span><b>🔎 내 레벨 찾기</b>: A1 → A2 → B1 샘플 책을 차례로 읽고 퀴즈를 풀어요. <b>8점 이상</b>이면 다음 단계가 열려요. 추천 레벨을 정하면 그 레벨 책 3권과 한 단계 위 도전 책 1권을 추천해 줘요.</span></li>
+          <li><span><b>🔎 내 레벨 찾기</b>: Pre-A1 → A1 → A2 → B1 샘플 책을 차례로 읽고 퀴즈를 풀어요. <b>8점 이상</b>이면 다음 단계가 열려요. 추천 레벨을 정하면 그 레벨 책 3권과 한 단계 위 도전 책 1권을 추천해 줘요.</span></li>
           <li><span>내 레벨에서 메달 <b>10권</b>, 평균 <b>80점</b> 이상이 되면 다음 레벨로 올라갈 수 있어요. 레벨은 언제든 직접 바꿀 수도 있어요.</span></li>
         </ul>
       </div>
       <div class="try">
         <div class="try-label">직접 해 보기</div>
-        <div class="lvcount"><div><b>106</b>A1</div><div><b>109</b>A2</div><div><b>42</b>B1</div><div><b>2</b>B2</div></div>
+        <div class="lvcount"><div><b>10</b>Pre-A1</div><div><b>106</b>A1</div><div><b>109</b>A2</div><div><b>42</b>B1</div><div><b>2</b>B2</div></div>
         <div class="row" id="lvpills">
           <button class="chip on" data-lv="">전체</button>
           <button class="chip" data-lv="A1">A1</button>
@@ -336,7 +337,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         </div>
         <input id="shelfq" class="field" placeholder="검색: 예) 이솝, 전래동화, 한강" autocomplete="off">
         <div class="shelf" id="shelf"></div>
-        <div id="shelfEmpty" class="msg muted" hidden>이 예시에는 맞는 책이 없어요. 실제 앱에서는 259권 중에서 찾아 줘요.</div>
+        <div id="shelfEmpty" class="msg muted" hidden>이 예시에는 맞는 책이 없어요. 실제 앱에서는 269권 중에서 찾아 줘요.</div>
       </div>
     </section>
 
@@ -370,7 +371,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <h2>다 읽었으면 10문항 퀴즈</h2>
         <p class="lead">책 아래의 <b>다 읽었어요 · 퀴즈 풀기</b>를 눌러요. 모든 문항에 답해야 제출할 수 있어요.</p>
         <ul class="points">
-          <li><span>259권 모두 <b>10문항</b>이고, 그중 한 문항은 이야기의 <b>주제</b>를 묻는 문제예요.</span></li>
+          <li><span>269권 모두 <b>10문항</b>이고, 그중 한 문항은 이야기의 <b>주제</b>를 묻는 문제예요.</span></li>
           <li><span>문제와 보기 순서는 <b>매번 섞여요</b>. 친구 답 순서를 외워도 소용없어요.</span></li>
           <li><span>채점은 서버에서 해요. 정답은 화면에 미리 나오지 않아요.</span></li>
           <li><span>제출한 뒤 같은 책은 <b>10분 뒤</b>에 다시 도전할 수 있어요. 그동안 책을 한 번 더 읽어 봐요.</span></li>
@@ -496,8 +497,9 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <p class="lead">일주일에 <b>한 작품</b> 메달을 받으면 그 주에 불이 켜져요. 매주 이어 가면 <b>🏆 연속 주간 목표</b> 기록이 늘어요.</p>
         <ul class="points">
           <li><span><b>🏅 독서 칭호</b>: 메달 받은 책이 늘면 칭호가 올라가요. 1권 🎒 Traveler 여행자 → 3권 🧭 Explorer 탐험가 → 10권 ⛵ Voyager 항해자 → 20권 🗺️ Navigator 길잡이 → 30권 🏔️ Adventurer 모험가 → 50권 🌍 Globetrotter 세계 여행가 → 100권 📜 Story Keeper 이야기 수호자 → 150권 🔭 Pathfinder 개척자 → 200권부터 100권마다 👑 Master Reader 마스터 리더</span></li>
+          <li><span><b>🎓 칭호 인증서</b>: 새 칭호를 받으면 결과 화면에 “인증서 받기” 버튼이 나와요. 홈의 독서 칭호 카드에서 받은 칭호를 누르면 언제든 다시 볼 수 있어요. 이름이나 닉네임을 넣고 인쇄하거나 PDF로 저장하세요.</span></li>
           <li><span>레벨 로드: 한 단계에서 메달 책 <b>3권</b>을 모으면 칭호를 받아요. (그 단계 책이 3권보다 적으면 전부)</span></li>
-          <li><span>A1 🌱 새싹 독자 → A2 🧭 꼬마 탐험가 → B1 🎒 용감한 여행자 → B2 🗺️ 노련한 모험가 → C1 🌍 세계 시민</span></li>
+          <li><span>Pre-A1 🌰 씨앗 독자 → A1 🌱 새싹 독자 → A2 🧭 꼬마 탐험가 → B1 🎒 용감한 여행자 → B2 🗺️ 노련한 모험가 → C1 🌍 세계 시민</span></li>
           <li><span><b>우리 반 함께 읽기</b>: 반 친구들이 메달로 읽은 단어 수를 모아 반 목표에 도전해요.</span></li>
         </ul>
       </div>
@@ -537,7 +539,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <div class="eyebrow">이제 출발</div>
         <h2>자주 묻는 질문</h2>
         <details><summary>로그인이 안 돼요.</summary><p>학교 구글 계정(학번@smy.ms.kr)으로 로그인했는지 확인하세요. 크롬이나 사파리 같은 일반 브라우저로 열어 주세요. 카카오톡 안에서 열면 구글 로그인이 막힐 수 있어요.</p></details>
-        <details><summary>어떤 책부터 읽어야 해요?</summary><p>홈 화면의 “다음에 읽을 책” 4권이 내 기록에 맞춰 골라 준 책이에요. 처음이라면 A1 이솝 우화나 동화부터 시작해 보세요.</p></details>
+        <details><summary>어떤 책부터 읽어야 해요?</summary><p>홈 화면의 “다음에 읽을 책” 4권이 내 기록에 맞춰 골라 준 책이에요. 처음이라면 Pre-A1 그림책이나 A1 이솝 우화부터 시작해 보세요.</p></details>
         <details><summary>퀴즈를 다시 풀 수 없어요.</summary><p>제출하고 10분이 지나야 같은 책에 다시 도전할 수 있어요. 남은 시간이 화면에 나와요.</p></details>
         <details><summary>연속 독서가 0일이 됐어요.</summary><p>하루(밤 12시 기준) 동안 메달을 하나도 받지 못하면 연속 기록이 끊겨요. 오늘 메달을 하나 받으면 1일부터 다시 시작해요. 최고 기록은 그대로 남아요.</p></details>
         <details><summary>번역을 실수로 눌렀어요.</summary><p>이야기 단락 번역을 한 번 보면 그 책에서는 ⭐ 보너스를 받을 수 없어요. 메달과 점수에는 영향이 없어요.</p></details>
@@ -561,7 +563,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
             <li>퀴즈 풀고 첫 도장 찍기</li>
           </ol>
         </div>
-        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v30 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
+        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v31 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
       </div>
     </section>
   </div>
@@ -642,7 +644,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     else { m.className = "msg ok"; m.textContent = "사용할 수 있어요."; }
   };
 
-  // 책장 (실제 259권 중 예시 10권)
+  // 책장 (실제 269권 중 예시 10권)
   var BOOKS = [
     ["토끼와 거북", "Aesop · 그리스", "A1", "157단어", "#5f8a4a", "tortoise hare 이솝 aesop 그리스 토끼 거북"],
     ["어린 왕자", "Saint-Exupéry · 프랑스", "A1", "159단어", "#c4882b", "little prince 생텍쥐페리 프랑스 어린 왕자"],
@@ -837,11 +839,11 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     document.getElementById("streak").textContent = "🏆 연속 주간 목표 " + s + "주" + (lit[7] ? " · 이번 주 목표 달성!" : " · 이번 주에 한 작품 완료해 볼까요?");
   }
   drawWeeks();
-  var LV = [["🌱", "A1", "새싹 독자"], ["🧭", "A2", "꼬마 탐험가"], ["🎒", "B1", "용감한 여행자"], ["🗺️", "B2", "노련한 모험가"], ["🌍", "C1", "세계 시민"]];
+  var LV = [["🌰", "Pre-A1", "씨앗 독자"], ["🌱", "A1", "새싹 독자"], ["🧭", "A2", "꼬마 탐험가"], ["🎒", "B1", "용감한 여행자"], ["🗺️", "B2", "노련한 모험가"], ["🌍", "C1", "세계 시민"]];
   var a1 = 0;
   function drawRoad() {
     document.getElementById("road").innerHTML = LV.map(function (l, i) {
-      var earned = i === 0 && a1 >= 3;
+      var earned = i === 1 && a1 >= 3;
       return '<div class="lv' + (earned ? " earned" : "") + '"><div class="c">' + l[0] + "</div><b>" + l[1] + "</b>" + l[2] + "</div>";
     }).join("");
     document.getElementById("lvMsg").textContent = a1 >= 3 ? "A1 칭호 획득! 🌱 새싹 독자 · 이제 A2에 도전!" : "A1: " + a1 + " / 3";

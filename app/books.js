@@ -4194,5 +4194,165 @@ window.BOOKS = [
   "places": [
    "Greece"
   ]
+ },
+ {
+  "id": "the-very-hungry-caterpillar",
+  "title": "The Very Hungry Caterpillar",
+  "titleKo": "배고픈 애벌레",
+  "author": "Eric Carle",
+  "authorKo": "에릭 칼",
+  "country": "United States",
+  "emoji": "🐛",
+  "color": "#4f8a3c",
+  "cefr": "A0",
+  "lexile": "약 460L",
+  "words": 106,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-little-red-hen",
+  "title": "The Little Red Hen",
+  "titleKo": "빨간 암탉",
+  "author": "English Folktale",
+  "authorKo": "영국 민담",
+  "country": "United Kingdom",
+  "emoji": "🐔",
+  "color": "#b5452f",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 109,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-gingerbread-man",
+  "title": "The Gingerbread Man",
+  "titleKo": "진저브레드맨",
+  "author": "American Folktale",
+  "authorKo": "미국 민담",
+  "country": "United States",
+  "emoji": "🍪",
+  "color": "#a8642c",
+  "cefr": "A0",
+  "lexile": "약 450L",
+  "words": 106,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-enormous-turnip",
+  "title": "The Enormous Turnip",
+  "titleKo": "커다란 순무",
+  "author": "Russian Folktale",
+  "authorKo": "러시아 민담",
+  "country": "Russia",
+  "emoji": "🥬",
+  "color": "#7a4f8f",
+  "cefr": "A0",
+  "lexile": "약 350L",
+  "words": 100,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "henny-penny",
+  "title": "Henny Penny",
+  "titleKo": "하늘이 무너진대요",
+  "author": "English Folktale",
+  "authorKo": "영국 민담",
+  "country": "United Kingdom",
+  "emoji": "🌰",
+  "color": "#c08a2e",
+  "cefr": "A0",
+  "lexile": "약 420L",
+  "words": 98,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "three-billy-goats-gruff",
+  "title": "Three Billy Goats Gruff",
+  "titleKo": "염소 삼형제",
+  "author": "Norwegian Folktale",
+  "authorKo": "노르웨이 민담",
+  "country": "Norway",
+  "emoji": "🐐",
+  "color": "#5b7d3a",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 98,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "where-the-wild-things-are",
+  "title": "Where the Wild Things Are",
+  "titleKo": "괴물들이 사는 나라",
+  "author": "Maurice Sendak",
+  "authorKo": "모리스 샌닥",
+  "country": "United States",
+  "emoji": "👑",
+  "color": "#3f6e6a",
+  "cefr": "A0",
+  "lexile": "약 740L",
+  "words": 99,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-elves-and-the-shoemaker",
+  "title": "The Elves and the Shoemaker",
+  "titleKo": "요정과 구두장이",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "👞",
+  "color": "#6b4a8a",
+  "cefr": "A0",
+  "lexile": "약 500L",
+  "words": 106,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "stone-soup",
+  "title": "Stone Soup",
+  "titleKo": "돌멩이 수프",
+  "author": "French Folktale",
+  "authorKo": "프랑스 민담",
+  "country": "France",
+  "emoji": "🍲",
+  "color": "#8a5a2b",
+  "cefr": "A0",
+  "lexile": "약 450L",
+  "words": 103,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-mitten",
+  "title": "The Mitten",
+  "titleKo": "털장갑",
+  "author": "Ukrainian Folktale",
+  "authorKo": "우크라이나 민담",
+  "country": "Ukraine",
+  "emoji": "🧤",
+  "color": "#3a6ea5",
+  "cefr": "A0",
+  "lexile": "약 500L",
+  "words": 95,
+  "places": [
+   "Ukraine"
+  ]
  }
 ];
