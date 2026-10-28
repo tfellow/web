@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1e3768">
-<title>문영 독서 여권 사용 설명서</title>
-<meta name="description" content="문영 독서 여권 학생용 사용 설명서 · 로그인부터 퀴즈, 메달, 여권 도장까지">
+<title>MY Reading Passport 사용 설명서</title>
+<meta name="description" content="MY Reading Passport(문영 독서 여권) 학생용 사용 설명서 · 로그인부터 퀴즈, 메달, 여권 도장까지">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* 사용 설명서 버전: 앱 v26 · 193권 (A1 91 · A2 96 · B1 4 · B2 2). 앱이 바뀌면 이 파일도 같이 고쳐요. */
+/* 사용 설명서 버전: 앱 v27 · 193권 (A1 91 · A2 96 · B1 4 · B2 2). 앱이 바뀌면 이 파일도 같이 고쳐요. */
 :root {
   --bg: #eef1f7; --page: #fbfaf6; --ink: #18264a; --muted: #5b6684; --line: #d9dfeb;
   --navy: #1e3768; --navy-2: #2d5291; --gold: #c9971c; --gold-soft: #f7ecd0; --gold-ink: #7a5807;
@@ -225,7 +225,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
 <body>
 <div class="app">
   <div class="top">
-    <a class="brand" href="./">문영 독서 여권 <span>안내</span></a>
+    <a class="brand" href="./">MY Reading Passport <span>안내</span></a>
     <div class="prog" id="prog" aria-label="슬라이드 이동"></div>
     <div class="count" id="count">1 / 13</div>
     <a class="back-link" href="./">독서 여권 →</a>
@@ -237,8 +237,8 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     <section class="slide cover" data-name="표지">
       <div>
         <div class="eyebrow">서울문영여자중학교 · 영어 독서</div>
-        <h1>문영 독서 여권<br>사용 설명서</h1>
-        <p class="lead">세계 문학을 영어로 읽고, 퀴즈로 메달을 모으고, 여권에 나라 도장을 찍는 앱이에요. 한 장씩 넘기며 직접 눌러 보세요.</p>
+        <h1>MY Reading Passport<br>사용 설명서</h1>
+        <p class="lead"><b>MY</b>는 우리 학교 <b>MOONYOUNG</b>의 머리글자이자 ‘나의’라는 뜻이에요. 세계 문학을 영어로 읽고, 퀴즈로 메달을 모으고, 여권에 나라 도장을 찍는 앱이에요. 한 장씩 넘기며 직접 눌러 보세요.</p>
         <div class="stats" aria-label="지금 읽을 수 있는 책">
           <div><b>193</b><small>권</small></div>
           <div><b>91</b><small>A1 · 쉬움</small></div>
@@ -251,7 +251,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
       </div>
       <div class="passport" aria-hidden="true">
         <div style="display:grid;gap:14px;justify-items:center">
-          <div class="ps">READING PASSPORT</div>
+          <div class="ps">MY READING PASSPORT</div>
           <img class="crest" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표">
           <div class="pt">독서 여권</div>
           <div class="ps">MOONYOUNG</div>
@@ -302,7 +302,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
           <div id="nickMsg" class="msg ok">사용할 수 있어요.</div>
         </div>
         <div class="card" style="background:linear-gradient(150deg,#1e3768,#13244a);color:#f6f2e6;border:0">
-          <div style="font-size:.7rem;letter-spacing:.25em;color:#e9c766">READING PASSPORT</div>
+          <div style="font-size:.7rem;letter-spacing:.25em;color:#e9c766">MY READING PASSPORT</div>
           <div id="nickShow" style="font-family:var(--display);font-size:1.5rem;font-weight:700">별빛독서가</div>
           <div style="font-size:.85rem;color:#c9d4ee">여행 준비 중 · 첫 메달에 도전해 보세요</div>
         </div>
@@ -317,7 +317,8 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
         <p class="lead">책장 위의 <b>CEFR 단계</b>를 누르면 그 수준의 책만 보여요. <b>A1</b>은 이솝 우화, 세계 동화, 흥부와 놀부 같은 우리 전래동화처럼 짧고 쉬운 이야기, <b>A2</b>는 세계 명작 소설, <b>B1</b>은 조금 더 긴 도전 작품, <b>B2</b>는 한강 작가의 소설처럼 깊이 생각해 볼 작품이에요.</p>
         <ul class="points">
           <li><span>맨 위에 <b>선생님 추천</b>, <b>이어서 도전하기</b>, 그리고 내 수준에 맞춘 <b>다음에 읽을 책 4권</b>이 먼저 보여요.</span></li>
-          <li><span>제목(영어·한국어), 작가, 나라 이름으로 검색할 수 있어요.</span></li>
+          <li><span>제목(영어·한국어), 작가, 나라, 테마 이름으로 검색할 수 있어요.</span></li>
+          <li><span><b>🎨 테마 여행</b>: 우정, 가족, 사랑, 용기와 모험, 신화와 전설 등 <b>12가지 주제</b>로 책을 고를 수 있어요. 책장에서는 <b>장르</b>(우화, 동화·민담, 신화·전설, 단편, 소설, 희곡, 실화)로도 골라 보세요.</span></li>
           <li><span>책 카드에서 단계, 단어 수, 나라를 미리 볼 수 있어요. 책 페이지에는 Lexile 지수도 나와요.</span></li>
           <li><span>처음이라면 A1부터 시작해 메달을 모은 뒤 A2로 올라가 보세요.</span></li>
         </ul>
@@ -490,9 +491,10 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
     <section class="slide" data-name="목표와 레벨">
       <div>
         <div class="eyebrow">Step 10 · 꾸준히 읽기</div>
-        <h2>주간 목표와 레벨 로드</h2>
+        <h2>주간 목표, 독서 칭호, 레벨 로드</h2>
         <p class="lead">일주일에 <b>한 작품</b> 메달을 받으면 그 주에 불이 켜져요. 매주 이어 가면 <b>🏆 연속 주간 목표</b> 기록이 늘어요.</p>
         <ul class="points">
+          <li><span><b>🏅 독서 칭호</b>: 메달 받은 책이 늘면 칭호가 올라가요. 1권 🎒 Traveler → 3권 🧭 Explorer → 10권 ⛵ Voyager → 20권 🗺️ Navigator → 30권 🏔️ Adventurer → 50권 🌍 Globetrotter → 100권 📜 Story Keeper → 150권 🌟 Legend → 200권부터 100권마다 👑 Master Reader</span></li>
           <li><span>레벨 로드: 한 단계에서 메달 책 <b>3권</b>을 모으면 칭호를 받아요. (그 단계 책이 3권보다 적으면 전부)</span></li>
           <li><span>A1 🌱 새싹 독자 → A2 🧭 꼬마 탐험가 → B1 🎒 용감한 여행자 → B2 🗺️ 노련한 모험가 → C1 🌍 세계 시민</span></li>
           <li><span><b>우리 반 함께 읽기</b>: 반 친구들이 메달로 읽은 단어 수를 모아 반 목표에 도전해요.</span></li>
@@ -558,7 +560,7 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
             <li>퀴즈 풀고 첫 도장 찍기</li>
           </ol>
         </div>
-        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v26 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
+        <p class="muted" style="font-size:.78rem;margin:0">이 설명서는 독서 여권 v27 기준이에요. 앱이 바뀌면 설명서도 함께 바뀌어요.</p>
       </div>
     </section>
   </div>

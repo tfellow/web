@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "26"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "27"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -27,6 +27,29 @@
     C1: { em: "🌍", name: "세계 시민" }
   };
   var LEVEL_GOAL = 3;
+  // 독서 칭호: 메달 받은 책 권수에 따라 받아요. 200권부터는 100권마다 Master Reader 단계가 올라가요
+  var READ_TITLES = [
+    { n: 1, em: "🎒", en: "Traveler", ko: "여행자" },
+    { n: 3, em: "🧭", en: "Explorer", ko: "탐험가" },
+    { n: 10, em: "⛵", en: "Voyager", ko: "항해자" },
+    { n: 20, em: "🗺️", en: "Navigator", ko: "길잡이" },
+    { n: 30, em: "🏔️", en: "Adventurer", ko: "모험가" },
+    { n: 50, em: "🌍", en: "Globetrotter", ko: "세계 여행가" },
+    { n: 100, em: "📜", en: "Story Keeper", ko: "이야기 수호자" },
+    { n: 150, em: "🌟", en: "Legend", ko: "전설" }
+  ];
+  var ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+  function readTitleAt(i) {
+    if (i < READ_TITLES.length) return READ_TITLES[i];
+    var k = i - READ_TITLES.length; // 0 → 200권
+    return { n: 200 + k * 100, em: "👑", en: "Master Reader " + (ROMAN[k] || k + 1), ko: "마스터 리더 " + (k + 1) + "단계" };
+  }
+  function readTitle(n) {
+    var i = -1;
+    while (n >= readTitleAt(i + 1).n) i++;
+    return { cur: i >= 0 ? readTitleAt(i) : null, next: readTitleAt(i + 1), idx: i };
+  }
+  function readTitleLabel(t) { return t ? t.em + " " + t.en + " " + t.ko : ""; }
   var WEEK_GOAL = 1; // 주간 목표: 한 주에 메달 받은 작품 수
   // 책의 country 값 → 지도 이름(world-atlas), 한국어, 국기, 핀 위치(경도, 위도)
   var COUNTRIES = {
@@ -101,7 +124,7 @@
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var $app = document.getElementById("app");
   var $who = document.getElementById("who");
-  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", revealed: {}, shelf: { level: "all", status: "all", q: "", country: "" } };
+  var state = { user: null, profile: null, isAdmin: false, bookTab: "story", revealed: {}, shelf: { level: "all", status: "all", q: "", country: "", theme: "", genre: "" } };
   var timer = null;
   var contentLoads = {};
   var scriptLoads = {};
@@ -119,6 +142,13 @@
   function countryKo(b) { var c = countryOf(b); return c ? c.ko : (b && b.country) || ""; }
   // 여권 도장 후보 나라 (첫 번째 = 작가 나라 = 기본값)
   function placesOf(b) { return b && b.places && b.places.length ? b.places : (b && b.country ? [b.country] : []); }
+  function tagsOf(b) {
+    var raw = (window.BOOK_THEMES || {})[b && b.id] || "";
+    var p = raw.split("|");
+    return { themes: p[0] ? p[0].split(",") : [], genre: p[1] || "" };
+  }
+  function themeDef(id) { return (window.THEME_DEFS || []).filter(function (t) { return t.id === id; })[0]; }
+  function genreDef(id) { return (window.GENRE_DEFS || []).filter(function (g) { return g.id === id; })[0]; }
   function sameCountry(a, b) { var x = COUNTRIES[a], y = COUNTRIES[b]; return a === b || (!!x && !!y && x.map === y.map); }
   function countryLabel(key) { var c = COUNTRIES[key]; return c ? flag(c.iso) + " " + esc(c.ko) : esc(key); }
   // 내가 이 책으로 찍은 도장 나라 (고르지 않았으면 작가 나라)
@@ -226,7 +256,7 @@
     clearTimer();
     $who.classList.add("hidden");
     $app.innerHTML =
-      '<div class="card login"><img class="emblem" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"><div class="kicker" style="margin-top:10px">MOONYOUNG READING PASSPORT</div><h2>문영 독서 여권</h2>' +
+      '<div class="card login"><img class="emblem" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"><div class="kicker" style="margin-top:10px">문영 독서 여권</div><h2>MY Reading Passport</h2>' +
       "<p>세계문학을 영어로 읽고, 퀴즈를 풀고, 메달과 스탬프를 모아 보세요.</p>" +
       '<div id="gbtn"></div>' +
       '<p style="font-size:.88rem">학교 계정(@smy.ms.kr)으로 로그인하세요.</p>' +
@@ -363,6 +393,7 @@
     var contN = Object.keys(contDone).length;
     var done = books.filter(function (b) { return st(b) === "done"; }).length;
     var pct = books.length ? Math.round((done / books.length) * 100) : 0;
+    var rt = readTitle(done);
 
     // 레벨 로드 계산
     var lvData = LEVELS.map(function (lv) {
@@ -430,8 +461,9 @@
 
     var html =
       '<section class="passport"><div class="pp-head"><div class="pp-emblem"><img src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"></div><div>' +
-      '<div class="pp-kicker">MOONYOUNG READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
-      '<div class="pp-level">' + (title ? LEVEL_INFO[title.lv].em + " " + title.lv + " " + LEVEL_INFO[title.lv].name : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div></div></div>" +
+      '<div class="pp-kicker">MY READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
+      '<div class="pp-level">' + (rt.cur ? readTitleLabel(rt.cur) : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div>" +
+      (title ? '<div class="pp-sublevel">' + LEVEL_INFO[title.lv].em + " " + title.lv + " " + LEVEL_INFO[title.lv].name + "</div>" : "") + "</div></div>" +
       '<div class="pp-stats"><div class="pp-stat"><b>' + done + "/" + books.length + "</b><span>작품 완료</span></div>" +
       '<div class="pp-stat"><b>' + (sum.words || 0).toLocaleString() + "</b><span>읽은 단어</span></div>" +
       '<div class="pp-stat"><b>' + (ds.n ? "🔥" + ds.n + "일" : "-") + "</b><span>연속 독서</span></div>" +
@@ -452,6 +484,21 @@
           '<div class="class-nums"><span>참여 ' + (cls.active || 0) + "/" + (cls.members || 0) + "명</span><span>메달 " + (cls.medals || 0) + "개</span></div></div>"
         : '<div class="card"><h2>🧭 오늘의 추천</h2><p class="muted">' + (rec.length ? "아래 \"다음에 읽을 책\"에서 하나 골라 시작해 보세요." : "모든 책에 도전했어요. 새 책을 기다려 주세요!") + "</p></div>") +
       "</div>" +
+
+      '<div class="card"><h2>🏅 독서 칭호<span class="sub">메달 받은 책 권수로 올라가요</span></h2>' +
+      '<div class="rt-now"><div class="rt-em">' + (rt.cur ? rt.cur.em : "🛫") + '</div><div><b>' + (rt.cur ? esc(rt.cur.en) + " · " + esc(rt.cur.ko) : "아직 칭호가 없어요") + "</b>" +
+      '<div class="muted">메달 ' + done + "권 · 다음 칭호 " + rt.next.em + " " + esc(rt.next.en) + "까지 " + (rt.next.n - done) + "권</div></div></div>" +
+      '<div class="progress"><div id="rtbar"></div></div>' +
+      '<div class="rt-ladder">' + READ_TITLES.concat([readTitleAt(READ_TITLES.length)]).map(function (t, i) {
+        return '<div class="rt ' + (done >= t.n ? "on" : "") + (i === rt.idx + 1 ? " next" : "") + '"><div class="em">' + t.em + "</div><b>" + t.n + "권</b><small>" + esc(t.ko) + "</small></div>";
+      }).join("") + "</div></div>" +
+
+      '<div class="card"><h2>🎨 테마 여행<span class="sub">주제로 책 고르기</span></h2><div class="theme-grid">' +
+      (window.THEME_DEFS || []).map(function (t) {
+        var n = books.filter(function (b) { return tagsOf(b).themes.indexOf(t.id) >= 0; }).length;
+        var d = books.filter(function (b) { return st(b) === "done" && tagsOf(b).themes.indexOf(t.id) >= 0; }).length;
+        return '<button class="theme-tile" data-theme="' + t.id + '"><span class="em">' + t.em + "</span><b>" + esc(t.name) + "</b><small>" + d + "/" + n + "권</small></button>";
+      }).join("") + "</div></div>" +
 
       '<div class="card"><h2>🛤️ 레벨 로드<span class="sub">수준별 ' + LEVEL_GOAL + "작품 완료 시 칭호</span></h2><div class=\"road\">" +
       lvData.map(function (x) {
@@ -474,6 +521,7 @@
       }).join("") + "</div></div>" +
 
       '<div class="card" id="shelfcard"><h2>📚 책장</h2><div class="pills" id="lvpills"></div><div class="pills" id="stpills"></div>' +
+      '<div class="pills" id="gnpills"></div><div class="pills theme-pills" id="thpills"></div>' +
       '<input id="q" class="search" type="search" placeholder="🔍 제목, 작가, 나라 검색" value="' + esc(state.shelf.q) + '">' +
       '<div id="shelfres"></div></div>' +
 
@@ -499,6 +547,17 @@
       document.getElementById("stpills").innerHTML = stt.map(function (x) {
         return '<button class="pill ' + (S.status === x[0] ? "on" : "") + '" data-st="' + x[0] + '">' + x[1] + "</button>";
       }).join("");
+      var gn = [["", "모든 장르"]].concat((window.GENRE_DEFS || []).map(function (g) { return [g.id, g.name]; }));
+      document.getElementById("gnpills").innerHTML = gn.map(function (x) {
+        var n = x[0] ? books.filter(function (b) { return tagsOf(b).genre === x[0]; }).length : books.length;
+        return n ? '<button class="pill ' + (S.genre === x[0] ? "on" : "") + '" data-gn="' + x[0] + '">' + esc(x[1]) + " <small>" + n + "</small></button>" : "";
+      }).join("");
+      document.getElementById("thpills").innerHTML = '<button class="pill ' + (!S.theme ? "on" : "") + '" data-th="">모든 테마</button>' +
+        (window.THEME_DEFS || []).map(function (t) {
+          return '<button class="pill ' + (S.theme === t.id ? "on" : "") + '" data-th="' + t.id + '">' + t.em + " " + esc(t.name) + "</button>";
+        }).join("");
+      each("#gnpills .pill", function (el) { el.onclick = function () { S.genre = el.getAttribute("data-gn"); drawPills(); drawShelf(); }; });
+      each("#thpills .pill", function (el) { el.onclick = function () { S.theme = el.getAttribute("data-th"); drawPills(); drawShelf(); }; });
       each("#lvpills .pill", function (el) { el.onclick = function () { S.level = el.getAttribute("data-lv"); drawPills(); drawShelf(); }; });
       each("#stpills .pill", function (el) { el.onclick = function () { S.status = el.getAttribute("data-st"); drawPills(); drawShelf(); }; });
     }
@@ -508,8 +567,11 @@
         if (S.level !== "all" && levelOf(b) !== S.level) return false;
         if (S.status !== "all" && st(b) !== S.status) return false;
         if (S.country && !placesOf(b).some(function (k) { return sameCountry(k, S.country); })) return false;
+        var tg = tagsOf(b);
+        if (S.theme && tg.themes.indexOf(S.theme) < 0) return false;
+        if (S.genre && tg.genre !== S.genre) return false;
         if (q) {
-          var hay = [b.title, b.titleKo, b.author, b.authorKo, b.country, countryKo(b)].join(" ").toLowerCase();
+          var hay = [b.title, b.titleKo, b.author, b.authorKo, b.country, countryKo(b)].concat(tg.themes.map(function (t) { var d = themeDef(t); return d ? d.name : ""; }), [genreDef(tg.genre) ? genreDef(tg.genre).name : ""]).join(" ").toLowerCase();
           if (hay.indexOf(q) < 0) return false;
         }
         return true;
@@ -520,9 +582,13 @@
         note = '<div class="filter-note"><span class="badge navy">' + (c ? flag(c.iso) + " " + esc(c.ko) : esc(S.country)) + ' 책만 보는 중</span><button class="btn ghost small" id="clearcountry">✕ 전체 보기</button></div>';
       }
       var out;
+      if (S.theme) {
+        var td = themeDef(S.theme);
+        note += '<div class="filter-note"><span class="badge navy">' + (td ? td.em + " " + esc(td.name) : "") + ' 테마</span><button class="btn ghost small" id="cleartheme">✕ 테마 해제</button></div>';
+      }
       if (!list.length) {
-        out = '<p class="muted">' + (S.level !== "all" && S.status === "all" && !q && !S.country ? S.level + " 수준의 책은 아직 준비 중이에요." : "조건에 맞는 책이 없어요.") + "</p>";
-      } else if (S.status === "all" && !q && !S.country) {
+        out = '<p class="muted">' + (S.level !== "all" && S.status === "all" && !q && !S.country && !S.theme && !S.genre ? S.level + " 수준의 책은 아직 준비 중이에요." : "조건에 맞는 책이 없어요.") + "</p>";
+      } else if (S.status === "all" && !q && !S.country && !S.theme && !S.genre) {
         var open = list.filter(function (b) { return st(b) !== "done"; });
         var dn = list.filter(function (b) { return st(b) === "done"; });
         out = (open.length ? '<div class="shelf">' + open.map(card).join("") + "</div>" : '<p class="muted">읽을 책을 모두 완료했어요! 🎉</p>') +
@@ -535,6 +601,8 @@
       bindCards(box);
       var cc = document.getElementById("clearcountry");
       if (cc) cc.onclick = function () { pickCountry(""); };
+      var ct = document.getElementById("cleartheme");
+      if (ct) ct.onclick = function () { S.theme = ""; drawPills(); drawShelf(); };
       each("#countrychips .chip", function (el) { el.classList.toggle("on", !!S.country && sameCountry(el.getAttribute("data-c"), S.country)); });
       each("#worldmap .cty", function (el) { el.classList.toggle("sel", !!S.country && sameCountry(el.getAttribute("data-c"), S.country)); });
     }
@@ -546,6 +614,14 @@
     drawPills();
     drawShelf();
     bindCards($app);
+    each(".theme-tile", function (el) {
+      el.onclick = function () {
+        S.theme = el.getAttribute("data-theme"); S.level = "all"; S.status = "all"; S.genre = ""; S.country = ""; S.q = "";
+        document.getElementById("q").value = "";
+        drawPills(); drawShelf();
+        document.getElementById("shelfcard").scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+    });
     document.getElementById("q").oninput = function () { S.q = this.value; drawShelf(); };
 
     // 지도 데이터: 내 지도 = 내가 찍은 도장, 우리 반 지도 = 반 친구들 도장 합계(누가 찍었는지는 보이지 않음)
@@ -618,6 +694,7 @@
 
     setTimeout(function () {
       var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%";
+      var rb = document.getElementById("rtbar"); if (rb) { var lo = rt.cur ? rt.cur.n : 0; rb.style.width = Math.round(((done - lo) / Math.max(1, rt.next.n - lo)) * 100) + "%"; }
       var cb = document.getElementById("clsbar"); if (cb && cls) cb.style.width = Math.min(100, Math.round((cls.words || 0) / Math.max(1, cls.goal || 1) * 100)) + "%";
     }, 80);
     var sbx = document.getElementById("showboard");
@@ -765,7 +842,12 @@
       '<div class="cover" style="margin-top:10px">' + esc(b.emoji) + "</div><h2>" + esc(b.title) + "</h2>" +
       '<div class="by">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
       '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || b.cefr) + "</span>" + (b.lexile ? "<span>Lexile " + esc(b.lexile) + "</span>" : "") + (b.ar ? "<span>AR " + esc(b.ar) + "</span>" : "") + "<span>" + b.words + "단어</span>" +
-      (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div>" + stampBoxHtml(b, myRecord(b.id)) + "</div>" +
+      (cinfo ? "<span>" + flag(cinfo.iso) + " " + esc(cinfo.ko) + "</span>" : "") + "</div>" +
+      (function () {
+        var tg = tagsOf(b), g = genreDef(tg.genre);
+        var chips = (g ? ["<span>" + esc(g.name) + "</span>"] : []).concat(tg.themes.map(function (t) { var d = themeDef(t); return d ? "<span>" + d.em + " " + esc(d.name) + "</span>" : ""; }));
+        return chips.length ? '<div class="tags theme-tags">' + chips.join("") + "</div>" : "";
+      })() + stampBoxHtml(b, myRecord(b.id)) + "</div>" +
       '<div class="card" id="bookbody"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
       '<div class="quiz-cta"><button class="btn gold big" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';
     window.scrollTo(0, scrollY);
@@ -1077,7 +1159,7 @@
               '<button class="btn ghost small nick-reset" data-e="' + esc(r.email) + '">↺</button></td><td>' + (r.role === "school" ? "학교" : "외부") +
               "</td><td>" + r.completed + "</td><td>" + r.gold + "</td><td>" + r.silver + "</td><td>" + r.bronze + "</td><td>" + r.stars + "</td><td>" + r.words +
               "</td><td>" + (i.ds.n ? (i.ds.today ? "🔥" : "") + i.ds.n + "일" : "-") + "</td><td>" + (i.ds.best ? i.ds.best + "일" : "-") + "</td><td>" + (i.week ? "✅" : "") +
-              "</td><td>" + i.countries.length + "</td><td>" + i.conts + "/6</td><td>" + (i.title ? LEVEL_INFO[i.title].em + " " + i.title : "-") + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
+              "</td><td>" + i.countries.length + "</td><td>" + i.conts + "/6</td><td>" + (readTitle(r.completed || 0).cur ? readTitle(r.completed || 0).cur.em + " " + esc(readTitle(r.completed || 0).cur.en) : "-") + (i.title ? " · " + i.title : "") + "</td><td>" + r.attempts + "</td><td>" + fmtDate(r.last_activity) + "</td></tr>";
           }).join("");
         each(".stu", function (el) { el.onclick = function () { openStudent(el.getAttribute("data-e")); }; });
         each(".nick-edit", function (el) {
@@ -1100,10 +1182,10 @@
       draw();
       bindCls(draw);
       document.getElementById("csv1").onclick = function () {
-        csvDownload("독서현황.csv", [["이메일", "이름", "닉네임", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "무힌트별", "단어", "연속독서(일)", "최고연속(일)", "이번주목표", "나라수", "대륙수", "칭호", "TOP10공개", "도전", "최근활동"]].concat(
+        csvDownload("독서현황.csv", [["이메일", "이름", "닉네임", "구분", "학년", "반", "번호", "완료", "금", "은", "동", "무힌트별", "단어", "연속독서(일)", "최고연속(일)", "이번주목표", "나라수", "대륙수", "독서칭호", "레벨칭호", "TOP10공개", "도전", "최근활동"]].concat(
           ov.filter(inCls).map(function (r) {
             var i = info[low(r.email)];
-            return [r.email, r.name, r.nickname, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.stars, r.words, i.ds.n, i.ds.best, i.week ? "O" : "", i.countries.length, i.conts, i.title || "", i.show ? "O" : "X", r.attempts, r.last_activity];
+            return [r.email, r.name, r.nickname, r.role, r.grade, r.class_no, r.student_no, r.completed, r.gold, r.silver, r.bronze, r.stars, r.words, i.ds.n, i.ds.best, i.week ? "O" : "", i.countries.length, i.conts, (readTitle(r.completed || 0).cur || {}).en || "", i.title || "", i.show ? "O" : "X", r.attempts, r.last_activity];
           })));
       };
       document.getElementById("csv2").onclick = function () {
@@ -1122,6 +1204,7 @@
       o.className = "overlay";
       o.innerHTML = '<div class="card wide"><h2>' + esc(r.name || r.email) + ' <span class="muted" style="font-size:.9rem">' + esc(r.nickname || "") + "</span></h2>" +
         '<p class="muted">' + (r.grade ? r.grade + "학년 " + r.class_no + "반 " + r.student_no + "번 · " : "") + "완료 " + r.completed + "작품 · 🔥 " + i.ds.n + "일 연속 (최고 " + i.ds.best + "일) · 🌍 " + i.countries.length + "개 나라" +
+        (readTitle(r.completed || 0).cur ? " · " + readTitleLabel(readTitle(r.completed || 0).cur) : "") +
         (i.title ? " · " + LEVEL_INFO[i.title].em + " " + LEVEL_INFO[i.title].name : "") + "</p>" +
         (i.countries.length ? '<p style="margin:4px 0 10px">' + i.countries.map(function (m) {
           var key = Object.keys(COUNTRIES).filter(function (k) { return COUNTRIES[k].map === m; })[0];

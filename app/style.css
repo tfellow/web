@@ -357,3 +357,31 @@ td .rate { min-width: 120px; margin-top: 4px; }
   .sd .dot { height: 26px; font-size: .8rem; }
   header.top h1 .logo { width: 36px; vertical-align: -7px; }
 }
+
+/* v27: 이름 부제, 독서 칭호, 테마 여행 */
+header.top h1 .h-sub { display: inline-block; margin-left: 8px; font-size: .62em; font-weight: 600; color: #cfd9f0; letter-spacing: 0; vertical-align: middle; }
+.pp-sublevel { font-size: .8rem; color: #b9c7e6; margin-top: 2px; }
+.rt-now { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.rt-now .rt-em { width: 56px; height: 56px; flex: 0 0 56px; border-radius: 50%; display: grid; place-items: center; font-size: 1.7rem; background: radial-gradient(circle at 35% 30%, #fff3c9, var(--gold-2)); border: 3px solid var(--gold); }
+.rt-ladder { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 4px; scrollbar-width: none; }
+.rt-ladder::-webkit-scrollbar { display: none; }
+.rt { flex: 0 0 72px; text-align: center; border: 1px dashed var(--line); border-radius: 14px; padding: 8px 4px; background: #f7f8fb; color: var(--muted); filter: grayscale(1); opacity: .65; }
+.rt .em { font-size: 1.4rem; }
+.rt b { display: block; font-size: .82rem; color: inherit; }
+.rt small { font-size: .7rem; line-height: 1.2; display: block; word-break: keep-all; }
+.rt.on { border: 1px solid #ead9ad; background: var(--gold-soft); color: var(--navy); filter: none; opacity: 1; }
+.rt.next { border: 2px solid var(--navy-2); filter: none; opacity: 1; }
+.theme-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.theme-tile { appearance: none; border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 10px 4px; cursor: pointer; text-align: center; font: inherit; transition: transform .08s, box-shadow .15s; }
+.theme-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(30,55,104,.12); }
+.theme-tile .em { display: block; font-size: 1.5rem; }
+.theme-tile b { display: block; font-size: .82rem; color: var(--navy); word-break: keep-all; }
+.theme-tile small { font-size: .72rem; color: var(--muted); }
+.theme-tags { margin-top: 6px; }
+@media (max-width: 640px) {
+  .theme-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  header.top h1 .h-sub { display: none; }
+}
+@media (max-width: 380px) {
+  .theme-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
