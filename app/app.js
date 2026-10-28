@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "24"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "25"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -58,6 +58,7 @@
     "Poland": { map: "Poland", ko: "폴란드", iso: "PL", at: [19.4, 52] },
     "Greece": { map: "Greece", ko: "그리스", iso: "GR", at: [22, 39.5] },
     "Portugal": { map: "Portugal", ko: "포르투갈", iso: "PT", at: [-8.2, 39.6] },
+    "Georgia": { map: "Georgia", ko: "조지아", iso: "GE", at: [43.5, 42.2] },
     "Turkey": { map: "Turkey", ko: "튀르키예", iso: "TR", at: [35, 39] },
     "Egypt": { map: "Egypt", ko: "이집트", iso: "EG", at: [30, 26.5] },
     "Nigeria": { map: "Nigeria", ko: "나이지리아", iso: "NG", at: [8, 9.5] },
@@ -80,7 +81,7 @@
     "Czechia": "EU", "United Kingdom": "EU", "France": "EU", "Germany": "EU", "Italy": "EU", "Spain": "EU", "Russia": "EU",
     "Ireland": "EU", "Iceland": "EU", "Norway": "EU", "Sweden": "EU", "Finland": "EU", "Denmark": "EU", "Netherlands": "EU", "Belgium": "EU",
     "Austria": "EU", "Switzerland": "EU", "Poland": "EU", "Greece": "EU", "Portugal": "EU",
-    "Turkey": "AS", "Japan": "AS", "China": "AS", "South Korea": "AS", "India": "AS",
+    "Turkey": "AS", "Georgia": "AS", "Japan": "AS", "China": "AS", "South Korea": "AS", "India": "AS",
     "United States of America": "NA", "Canada": "NA", "Mexico": "NA", "Cuba": "NA", "Algeria": "AF", "Romania": "EU",
     "Brazil": "SA", "Colombia": "SA", "Chile": "SA", "Argentina": "SA",
     "Egypt": "AF", "Nigeria": "AF", "Australia": "OC"
