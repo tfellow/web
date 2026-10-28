@@ -394,5 +394,10 @@ window.BOOK_THEMES = {
   "araby": "love,growth|short",
   "chess-story": "history,wisdom|short",
   "young-goodman-brown": "honesty,justice|short",
-  "the-fall-of-the-house-of-usher": "family|mystery"
+  "the-fall-of-the-house-of-usher": "family|mystery",
+  "the-little-prince-b2": "friend,love,growth|classic",
+  "animal-farm-b2": "justice,history|classic",
+  "the-old-man-and-the-sea-b2": "adventure,nature,dream|classic",
+  "demian-b2": "growth|ya",
+  "the-great-gatsby-b2": "love,dream|classic"
 };
