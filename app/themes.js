@@ -360,5 +360,13 @@ window.BOOK_THEMES = {
   "the-camellias": "love,growth|short",
   "breaking-the-pig": "family,love|short",
   "the-luncheon": "wisdom,honesty|short",
-  "the-ant-and-the-grasshopper-maugham": "justice,wisdom,family|short"
+  "the-ant-and-the-grasshopper-maugham": "justice,wisdom,family|short",
+  "the-monkey-and-the-crocodile": "friend,wisdom|fable",
+  "the-lion-and-the-clever-rabbit": "wisdom,nature|fable",
+  "the-tortoise-and-the-geese": "wisdom,friend|fable",
+  "the-epic-of-gilgamesh": "friend,myth,history|myth",
+  "the-ramayana": "love,adventure,myth|myth",
+  "rostam-and-the-seven-trials": "adventure,myth,friend|myth",
+  "journey-to-the-west": "adventure,friend,myth|fantasy",
+  "romance-of-the-three-kingdoms": "friend,history,wisdom|hist"
 };

@@ -5348,5 +5348,135 @@ window.BOOKS = [
   "places": [
    "United Kingdom"
   ]
+ },
+ {
+  "id": "the-monkey-and-the-crocodile",
+  "title": "The Monkey and the Crocodile",
+  "titleKo": "원숭이와 악어",
+  "author": "Panchatantra",
+  "authorKo": "판차탄트라",
+  "country": "India",
+  "emoji": "🐊",
+  "color": "#4a7a3a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 135,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-lion-and-the-clever-rabbit",
+  "title": "The Lion and the Clever Rabbit",
+  "titleKo": "사자와 꾀 많은 토끼",
+  "author": "Panchatantra",
+  "authorKo": "판차탄트라",
+  "country": "India",
+  "emoji": "🐇",
+  "color": "#a8842a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 140,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-tortoise-and-the-geese",
+  "title": "The Tortoise and the Geese",
+  "titleKo": "거북과 기러기",
+  "author": "Panchatantra",
+  "authorKo": "판차탄트라",
+  "country": "India",
+  "emoji": "🐢",
+  "color": "#3a7a6a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 132,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-epic-of-gilgamesh",
+  "title": "The Epic of Gilgamesh",
+  "titleKo": "길가메시 서사시",
+  "author": "Ancient Mesopotamia",
+  "authorKo": "고대 메소포타미아",
+  "country": "Iraq",
+  "emoji": "🏛️",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 226,
+  "places": [
+   "Iraq"
+  ]
+ },
+ {
+  "id": "the-ramayana",
+  "title": "The Ramayana",
+  "titleKo": "라마야나",
+  "author": "Valmiki",
+  "authorKo": "발미키",
+  "country": "India",
+  "emoji": "🏹",
+  "color": "#c0602a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 207,
+  "places": [
+   "India",
+   "Sri Lanka"
+  ]
+ },
+ {
+  "id": "rostam-and-the-seven-trials",
+  "title": "Rostam and the Seven Trials",
+  "titleKo": "로스탐의 일곱 가지 시련 (샤나메)",
+  "author": "Ferdowsi",
+  "authorKo": "페르도우시",
+  "country": "Iran",
+  "emoji": "🐎",
+  "color": "#9a3a2a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 210,
+  "places": [
+   "Iran"
+  ]
+ },
+ {
+  "id": "journey-to-the-west",
+  "title": "Journey to the West",
+  "titleKo": "서유기",
+  "author": "Wu Cheng’en",
+  "authorKo": "오승은",
+  "country": "China",
+  "emoji": "🐒",
+  "color": "#c08a2a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 212,
+  "places": [
+   "China",
+   "India"
+  ]
+ },
+ {
+  "id": "romance-of-the-three-kingdoms",
+  "title": "Romance of the Three Kingdoms",
+  "titleKo": "삼국지: 도원결의와 삼고초려",
+  "author": "Luo Guanzhong",
+  "authorKo": "나관중",
+  "country": "China",
+  "emoji": "🍑",
+  "color": "#8a2a3a",
+  "cefr": "A2",
+  "lexile": "약 950L",
+  "words": 225,
+  "places": [
+   "China"
+  ]
  }
 ];
