@@ -5989,5 +5989,86 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "alice-in-wonderland-b2",
+  "title": "Alice’s Adventures in Wonderland (B2)",
+  "titleKo": "이상한 나라의 앨리스 (B2)",
+  "author": "Lewis Carroll",
+  "authorKo": "루이스 캐럴",
+  "country": "United Kingdom",
+  "emoji": "🐇",
+  "color": "#5a7ab0",
+  "cefr": "B2",
+  "lexile": "약 1090L",
+  "words": 353,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "dr-jekyll-and-mr-hyde-b2",
+  "title": "Dr Jekyll and Mr Hyde (B2)",
+  "titleKo": "지킬 박사와 하이드 (B2)",
+  "author": "Robert Louis Stevenson",
+  "authorKo": "로버트 루이스 스티븐슨",
+  "country": "United Kingdom",
+  "emoji": "🧪",
+  "color": "#3f5a4b",
+  "cefr": "B2",
+  "lexile": "약 1120L",
+  "words": 356,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-christmas-carol-b2",
+  "title": "A Christmas Carol (B2)",
+  "titleKo": "크리스마스 캐럴 (B2)",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🎄",
+  "color": "#7a2a2a",
+  "cefr": "B2",
+  "lexile": "약 1080L",
+  "words": 359,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "nineteen-eighty-four-b2",
+  "title": "Nineteen Eighty-Four (B2)",
+  "titleKo": "1984 (B2)",
+  "author": "George Orwell",
+  "authorKo": "조지 오웰",
+  "country": "United Kingdom",
+  "emoji": "👁️",
+  "color": "#3a3a3a",
+  "cefr": "B2",
+  "lexile": "약 1090L",
+  "words": 358,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "frankenstein-b2",
+  "title": "Frankenstein (B2)",
+  "titleKo": "프랑켄슈타인 (B2)",
+  "author": "Mary Shelley",
+  "authorKo": "메리 셸리",
+  "country": "United Kingdom",
+  "emoji": "⚡",
+  "color": "#3a4a3a",
+  "cefr": "B2",
+  "lexile": "약 1170L",
+  "words": 353,
+  "places": [
+   "United Kingdom",
+   "Switzerland"
+  ]
  }
 ];

@@ -399,5 +399,10 @@ window.BOOK_THEMES = {
   "animal-farm-b2": "justice,history|classic",
   "the-old-man-and-the-sea-b2": "adventure,nature,dream|classic",
   "demian-b2": "growth|ya",
-  "the-great-gatsby-b2": "love,dream|classic"
+  "the-great-gatsby-b2": "love,dream|classic",
+  "alice-in-wonderland-b2": "adventure,wisdom|fantasy",
+  "dr-jekyll-and-mr-hyde-b2": "honesty,justice|mystery",
+  "a-christmas-carol-b2": "honesty,family,growth|classic",
+  "nineteen-eighty-four-b2": "justice,history|sf",
+  "frankenstein-b2": "justice,family|sf"
 };
