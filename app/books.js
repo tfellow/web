@@ -5678,5 +5678,234 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "the-lottery",
+  "title": "The Lottery",
+  "titleKo": "제비뽑기",
+  "author": "Shirley Jackson",
+  "authorKo": "셜리 잭슨",
+  "country": "United States",
+  "emoji": "📦",
+  "color": "#4a4a3a",
+  "cefr": "B1",
+  "lexile": "약 1010L",
+  "words": 251,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "lamb-to-the-slaughter",
+  "title": "Lamb to the Slaughter",
+  "titleKo": "도살장으로 가는 어린 양",
+  "author": "Roald Dahl",
+  "authorKo": "로알드 달",
+  "country": "United Kingdom",
+  "emoji": "🍖",
+  "color": "#6a3a3a",
+  "cefr": "B1",
+  "lexile": "약 810L",
+  "words": 251,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-most-dangerous-game",
+  "title": "The Most Dangerous Game",
+  "titleKo": "가장 위험한 게임",
+  "author": "Richard Connell",
+  "authorKo": "리처드 코넬",
+  "country": "United States",
+  "emoji": "🏹",
+  "color": "#3a5a3a",
+  "cefr": "B1",
+  "lexile": "약 1080L",
+  "words": 251,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-ones-who-walk-away-from-omelas",
+  "title": "The Ones Who Walk Away from Omelas",
+  "titleKo": "오멜라스를 떠나는 사람들",
+  "author": "Ursula K. Le Guin",
+  "authorKo": "어슐러 K. 르 귄",
+  "country": "United States",
+  "emoji": "🚶",
+  "color": "#5a6a8a",
+  "cefr": "B1",
+  "lexile": "약 1100L",
+  "words": 252,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "sophies-world",
+  "title": "Sophie’s World",
+  "titleKo": "소피의 세계",
+  "author": "Jostein Gaarder",
+  "authorKo": "요슈타인 가아더",
+  "country": "Norway",
+  "emoji": "🤔",
+  "color": "#3a6a8a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 252,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "a-monster-calls",
+  "title": "A Monster Calls",
+  "titleKo": "몬스터 콜",
+  "author": "Patrick Ness",
+  "authorKo": "패트릭 네스",
+  "country": "United Kingdom",
+  "emoji": "🌳",
+  "color": "#2a4a3a",
+  "cefr": "B1",
+  "lexile": "약 730L",
+  "words": 250,
+  "places": [
+   "United Kingdom",
+   "United States"
+  ]
+ },
+ {
+  "id": "life-of-pi",
+  "title": "Life of Pi",
+  "titleKo": "파이 이야기",
+  "author": "Yann Martel",
+  "authorKo": "얀 마텔",
+  "country": "Canada",
+  "emoji": "🐅",
+  "color": "#2a6a8a",
+  "cefr": "B1",
+  "lexile": "약 830L",
+  "words": 256,
+  "places": [
+   "Canada",
+   "India",
+   "Mexico"
+  ]
+ },
+ {
+  "id": "the-picture-of-dorian-gray",
+  "title": "The Picture of Dorian Gray",
+  "titleKo": "도리언 그레이의 초상",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "Ireland",
+  "emoji": "🖼️",
+  "color": "#4a2a4a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 264,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-death-of-ivan-ilyich",
+  "title": "The Death of Ivan Ilyich",
+  "titleKo": "이반 일리치의 죽음",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "🕯️",
+  "color": "#4a4a4a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 261,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "strait-is-the-gate",
+  "title": "Strait Is the Gate",
+  "titleKo": "좁은 문",
+  "author": "André Gide",
+  "authorKo": "앙드레 지드",
+  "country": "France",
+  "emoji": "🚪",
+  "color": "#5a6a5a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 252,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "araby",
+  "title": "Araby",
+  "titleKo": "애러비",
+  "author": "James Joyce",
+  "authorKo": "제임스 조이스",
+  "country": "Ireland",
+  "emoji": "🏮",
+  "color": "#3a4a5a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 257,
+  "places": [
+   "Ireland"
+  ]
+ },
+ {
+  "id": "chess-story",
+  "title": "Chess Story",
+  "titleKo": "체스 이야기",
+  "author": "Stefan Zweig",
+  "authorKo": "슈테판 츠바이크",
+  "country": "Austria",
+  "emoji": "♟️",
+  "color": "#2a2a3a",
+  "cefr": "B1",
+  "lexile": "약 1100L",
+  "words": 258,
+  "places": [
+   "Austria",
+   "Argentina"
+  ]
+ },
+ {
+  "id": "young-goodman-brown",
+  "title": "Young Goodman Brown",
+  "titleKo": "젊은 굿맨 브라운",
+  "author": "Nathaniel Hawthorne",
+  "authorKo": "너새니얼 호손",
+  "country": "United States",
+  "emoji": "🌲",
+  "color": "#2a3a2a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 261,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-fall-of-the-house-of-usher",
+  "title": "The Fall of the House of Usher",
+  "titleKo": "어셔가의 몰락",
+  "author": "Edgar Allan Poe",
+  "authorKo": "에드거 앨런 포",
+  "country": "United States",
+  "emoji": "🏚️",
+  "color": "#2a2a2a",
+  "cefr": "B1",
+  "lexile": "약 1180L",
+  "words": 263,
+  "places": [
+   "United States"
+  ]
  }
 ];

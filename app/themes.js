@@ -380,5 +380,19 @@ window.BOOK_THEMES = {
   "and-then-there-were-none": "justice,wisdom|mystery",
   "the-murder-of-roger-ackroyd": "justice,wisdom|mystery",
   "rebecca": "love,justice|mystery",
-  "the-tell-tale-heart": "honesty,justice|mystery"
+  "the-tell-tale-heart": "honesty,justice|mystery",
+  "the-lottery": "justice,wisdom|short",
+  "lamb-to-the-slaughter": "wisdom,justice|mystery",
+  "the-most-dangerous-game": "adventure,justice|adv",
+  "the-ones-who-walk-away-from-omelas": "justice,wisdom|short",
+  "sophies-world": "wisdom,growth|ya",
+  "a-monster-calls": "family,growth,love|fantasy",
+  "life-of-pi": "adventure,nature,dream|adv",
+  "the-picture-of-dorian-gray": "honesty,growth|classic",
+  "the-death-of-ivan-ilyich": "wisdom,family|short",
+  "strait-is-the-gate": "love,dream|classic",
+  "araby": "love,growth|short",
+  "chess-story": "history,wisdom|short",
+  "young-goodman-brown": "honesty,justice|short",
+  "the-fall-of-the-house-of-usher": "family|mystery"
 };
