@@ -4940,5 +4940,300 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "the-bet",
+  "title": "The Bet",
+  "titleKo": "내기",
+  "author": "Anton Chekhov",
+  "authorKo": "안톤 체호프",
+  "country": "Russia",
+  "emoji": "📖",
+  "color": "#5a4a3a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 262,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-gold-bug",
+  "title": "The Gold-Bug",
+  "titleKo": "황금 벌레",
+  "author": "Edgar Allan Poe",
+  "authorKo": "에드거 앨런 포",
+  "country": "United States",
+  "emoji": "🪲",
+  "color": "#a8842a",
+  "cefr": "B1",
+  "lexile": "약 1060L",
+  "words": 251,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-purloined-letter",
+  "title": "The Purloined Letter",
+  "titleKo": "도둑맞은 편지",
+  "author": "Edgar Allan Poe",
+  "authorKo": "에드거 앨런 포",
+  "country": "United States",
+  "emoji": "✉️",
+  "color": "#3a4a6a",
+  "cefr": "B1",
+  "lexile": "약 1150L",
+  "words": 250,
+  "places": [
+   "United States",
+   "France"
+  ]
+ },
+ {
+  "id": "the-last-question",
+  "title": "The Last Question",
+  "titleKo": "마지막 질문",
+  "author": "Isaac Asimov",
+  "authorKo": "아이작 아시모프",
+  "country": "United States",
+  "emoji": "🌌",
+  "color": "#1f2a5a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 254,
+  "places": [
+   "United States",
+   "Russia"
+  ]
+ },
+ {
+  "id": "harrison-bergeron",
+  "title": "Harrison Bergeron",
+  "titleKo": "해리슨 버저론",
+  "author": "Kurt Vonnegut",
+  "authorKo": "커트 보니것",
+  "country": "United States",
+  "emoji": "⚖️",
+  "color": "#5a3a3a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 255,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "everyday-use",
+  "title": "Everyday Use",
+  "titleKo": "일상의 쓰임",
+  "author": "Alice Walker",
+  "authorKo": "앨리스 워커",
+  "country": "United States",
+  "emoji": "🧵",
+  "color": "#8a4a2a",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 263,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-lesson",
+  "title": "The Lesson",
+  "titleKo": "수업",
+  "author": "Toni Cade Bambara",
+  "authorKo": "토니 케이드 뱀바라",
+  "country": "United States",
+  "emoji": "⛵",
+  "color": "#3a6a8a",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 260,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-curious-case-of-benjamin-button",
+  "title": "The Curious Case of Benjamin Button",
+  "titleKo": "벤자민 버튼의 시간은 거꾸로 간다",
+  "author": "F. Scott Fitzgerald",
+  "authorKo": "F. 스콧 피츠제럴드",
+  "country": "United States",
+  "emoji": "⏳",
+  "color": "#5a6a7a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 254,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "to-build-a-fire",
+  "title": "To Build a Fire",
+  "titleKo": "불을 지피다",
+  "author": "Jack London",
+  "authorKo": "잭 런던",
+  "country": "United States",
+  "emoji": "🔥",
+  "color": "#3a5a7a",
+  "cefr": "B1",
+  "lexile": "약 970L",
+  "words": 265,
+  "places": [
+   "United States",
+   "Canada"
+  ]
+ },
+ {
+  "id": "a-piece-of-steak",
+  "title": "A Piece of Steak",
+  "titleKo": "스테이크 한 조각",
+  "author": "Jack London",
+  "authorKo": "잭 런던",
+  "country": "United States",
+  "emoji": "🥩",
+  "color": "#8a3a3a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 257,
+  "places": [
+   "United States",
+   "Australia"
+  ]
+ },
+ {
+  "id": "my-old-home",
+  "title": "My Old Home",
+  "titleKo": "고향",
+  "author": "Lu Xun",
+  "authorKo": "루쉰",
+  "country": "China",
+  "emoji": "🏡",
+  "color": "#6a5a4a",
+  "cefr": "B1",
+  "lexile": "약 950L",
+  "words": 255,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "a-lucky-day",
+  "title": "A Lucky Day",
+  "titleKo": "운수 좋은 날",
+  "author": "Hyun Jin-geon",
+  "authorKo": "현진건",
+  "country": "South Korea",
+  "emoji": "🌧️",
+  "color": "#4a5a6a",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 255,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "a-very-old-man-with-enormous-wings",
+  "title": "A Very Old Man with Enormous Wings",
+  "titleKo": "거대한 날개를 가진 아주 늙은 남자",
+  "author": "Gabriel García Márquez",
+  "authorKo": "가브리엘 가르시아 마르케스",
+  "country": "Colombia",
+  "emoji": "🪽",
+  "color": "#6a7a5a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 257,
+  "places": [
+   "Colombia"
+  ]
+ },
+ {
+  "id": "the-paper-menagerie",
+  "title": "The Paper Menagerie",
+  "titleKo": "종이 동물원",
+  "author": "Ken Liu",
+  "authorKo": "켄 리우",
+  "country": "United States",
+  "emoji": "🐅",
+  "color": "#b05a2a",
+  "cefr": "B1",
+  "lexile": "약 950L",
+  "words": 261,
+  "places": [
+   "United States",
+   "China"
+  ]
+ },
+ {
+  "id": "the-invisible-collection",
+  "title": "The Invisible Collection",
+  "titleKo": "보이지 않는 소장품",
+  "author": "Stefan Zweig",
+  "authorKo": "슈테판 츠바이크",
+  "country": "Austria",
+  "emoji": "🖼️",
+  "color": "#5a4a6a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 253,
+  "places": [
+   "Austria",
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-overcoat",
+  "title": "The Overcoat",
+  "titleKo": "외투",
+  "author": "Nikolai Gogol",
+  "authorKo": "니콜라이 고골",
+  "country": "Russia",
+  "emoji": "🧥",
+  "color": "#4a4a5a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 254,
+  "places": [
+   "Russia",
+   "Ukraine"
+  ]
+ },
+ {
+  "id": "the-country-of-the-blind",
+  "title": "The Country of the Blind",
+  "titleKo": "눈먼 자들의 나라",
+  "author": "H. G. Wells",
+  "authorKo": "H. G. 웰스",
+  "country": "United Kingdom",
+  "emoji": "🏔️",
+  "color": "#3a5a4a",
+  "cefr": "B1",
+  "lexile": "약 1100L",
+  "words": 256,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-door-in-the-wall",
+  "title": "The Door in the Wall",
+  "titleKo": "벽 속의 문",
+  "author": "H. G. Wells",
+  "authorKo": "H. G. 웰스",
+  "country": "United Kingdom",
+  "emoji": "🚪",
+  "color": "#2f6a4a",
+  "cefr": "B1",
+  "lexile": "약 1100L",
+  "words": 258,
+  "places": [
+   "United Kingdom"
+  ]
  }
 ];
