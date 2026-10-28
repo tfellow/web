@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "29"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "30"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -41,7 +41,7 @@
     { n: 30, em: "🏔️", en: "Adventurer", ko: "모험가" },
     { n: 50, em: "🌍", en: "Globetrotter", ko: "세계 여행가" },
     { n: 100, em: "📜", en: "Story Keeper", ko: "이야기 수호자" },
-    { n: 150, em: "🌟", en: "Legend", ko: "전설" }
+    { n: 150, em: "🔭", en: "Pathfinder", ko: "개척자" }
   ];
   var ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
   function readTitleAt(i) {
