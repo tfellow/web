@@ -2778,5 +2778,358 @@ window.BOOKS = [
   "places": [
    "Greece"
   ]
+ },
+ {
+  "id": "anansi-and-the-pot-of-wisdom",
+  "title": "Anansi and the Pot of Wisdom",
+  "titleKo": "아난시와 지혜의 항아리",
+  "author": "Ghanaian Folktale",
+  "authorKo": "가나 민담",
+  "country": "Ghana",
+  "emoji": "🕷️",
+  "color": "#a0602a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 169,
+  "places": [
+   "Ghana"
+  ]
+ },
+ {
+  "id": "why-the-sky-is-far-away",
+  "title": "Why the Sky Is Far Away",
+  "titleKo": "하늘은 왜 멀어졌을까",
+  "author": "Nigerian Folktale",
+  "authorKo": "나이지리아 민담",
+  "country": "Nigeria",
+  "emoji": "☁️",
+  "color": "#4a7ab0",
+  "cefr": "A1",
+  "lexile": "약 390L",
+  "words": 172,
+  "places": [
+   "Nigeria"
+  ]
+ },
+ {
+  "id": "why-mosquitoes-buzz",
+  "title": "Why Mosquitoes Buzz in People’s Ears",
+  "titleKo": "모기는 왜 귓가에서 윙윙거릴까",
+  "author": "West African Folktale",
+  "authorKo": "서아프리카 민담",
+  "country": "Nigeria",
+  "emoji": "🦟",
+  "color": "#5a7a3a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 173,
+  "places": [
+   "Nigeria"
+  ]
+ },
+ {
+  "id": "isis-and-osiris",
+  "title": "Isis and Osiris",
+  "titleKo": "이시스와 오시리스",
+  "author": "Egyptian Myth",
+  "authorKo": "이집트 신화",
+  "country": "Egypt",
+  "emoji": "🏺",
+  "color": "#c09a3a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 168,
+  "places": [
+   "Egypt"
+  ]
+ },
+ {
+  "id": "the-lions-whisker",
+  "title": "The Lion’s Whisker",
+  "titleKo": "사자의 수염",
+  "author": "Ethiopian Folktale",
+  "authorKo": "에티오피아 민담",
+  "country": "Ethiopia",
+  "emoji": "🦁",
+  "color": "#b07a2a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 178,
+  "places": [
+   "Ethiopia"
+  ]
+ },
+ {
+  "id": "tiddalik-the-frog",
+  "title": "Tiddalik the Frog",
+  "titleKo": "개구리 티달릭",
+  "author": "Aboriginal Australian Story",
+  "authorKo": "오스트레일리아 원주민 이야기",
+  "country": "Australia",
+  "emoji": "🐸",
+  "color": "#3a8a6a",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 175,
+  "places": [
+   "Australia"
+  ]
+ },
+ {
+  "id": "the-rainbow-serpent",
+  "title": "The Rainbow Serpent",
+  "titleKo": "무지개 뱀",
+  "author": "Aboriginal Australian Story",
+  "authorKo": "오스트레일리아 원주민 이야기",
+  "country": "Australia",
+  "emoji": "🌈",
+  "color": "#7a5ab0",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 177,
+  "places": [
+   "Australia"
+  ]
+ },
+ {
+  "id": "maui-and-the-sun",
+  "title": "Maui and the Sun",
+  "titleKo": "마우이와 태양",
+  "author": "Māori Myth",
+  "authorKo": "마오리 신화",
+  "country": "New Zealand",
+  "emoji": "🌞",
+  "color": "#d0802a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 177,
+  "places": [
+   "New Zealand"
+  ]
+ },
+ {
+  "id": "popocatepetl-and-iztaccihuatl",
+  "title": "Popocatépetl and Iztaccíhuatl",
+  "titleKo": "포포카테페틀과 이스타시와틀",
+  "author": "Aztec Legend",
+  "authorKo": "아스테카 전설",
+  "country": "Mexico",
+  "emoji": "🌋",
+  "color": "#8a4a5a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 179,
+  "places": [
+   "Mexico"
+  ]
+ },
+ {
+  "id": "manco-capac-the-first-inca",
+  "title": "Manco Cápac, the First Inca",
+  "titleKo": "잉카의 첫 왕 망코 카팍",
+  "author": "Inca Legend",
+  "authorKo": "잉카 전설",
+  "country": "Peru",
+  "emoji": "🏔️",
+  "color": "#b0702a",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 178,
+  "places": [
+   "Peru"
+  ]
+ },
+ {
+  "id": "ali-baba-and-the-forty-thieves",
+  "title": "Ali Baba and the Forty Thieves",
+  "titleKo": "알리바바와 40인의 도둑",
+  "author": "One Thousand and One Nights",
+  "authorKo": "아라비안나이트",
+  "country": "Iraq",
+  "emoji": "🏺",
+  "color": "#9a6a2a",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 177,
+  "places": [
+   "Iraq"
+  ]
+ },
+ {
+  "id": "aladdin-and-the-magic-lamp",
+  "title": "Aladdin and the Magic Lamp",
+  "titleKo": "알라딘과 요술 램프",
+  "author": "One Thousand and One Nights",
+  "authorKo": "아라비안나이트",
+  "country": "Iraq",
+  "emoji": "🪔",
+  "color": "#5a4a9a",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 179,
+  "places": [
+   "Iraq",
+   "China"
+  ]
+ },
+ {
+  "id": "suho-and-the-white-horse",
+  "title": "Suho and the White Horse",
+  "titleKo": "수호의 하얀 말",
+  "author": "Mongolian Folktale",
+  "authorKo": "몽골 민담",
+  "country": "Mongolia",
+  "emoji": "🐎",
+  "color": "#6a8ab0",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 178,
+  "places": [
+   "Mongolia"
+  ]
+ },
+ {
+  "id": "the-legend-of-the-returned-sword",
+  "title": "The Legend of the Returned Sword",
+  "titleKo": "환검 호수의 거북 전설",
+  "author": "Vietnamese Legend",
+  "authorKo": "베트남 전설",
+  "country": "Vietnam",
+  "emoji": "🐢",
+  "color": "#3a7a6a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 179,
+  "places": [
+   "Vietnam"
+  ]
+ },
+ {
+  "id": "the-legend-of-the-pineapple",
+  "title": "The Legend of the Pineapple",
+  "titleKo": "파인애플 전설",
+  "author": "Filipino Legend",
+  "authorKo": "필리핀 전설",
+  "country": "Philippines",
+  "emoji": "🍍",
+  "color": "#b0a02a",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 177,
+  "places": [
+   "Philippines"
+  ]
+ },
+ {
+  "id": "the-boy-who-harnessed-the-wind",
+  "title": "The Boy Who Harnessed the Wind",
+  "titleKo": "바람을 길들인 풍차 소년",
+  "author": "William Kamkwamba",
+  "authorKo": "윌리엄 캄쾀바",
+  "country": "Malawi",
+  "emoji": "🌬️",
+  "color": "#4a8aa0",
+  "cefr": "A2",
+  "lexile": "약 690L",
+  "words": 230,
+  "places": [
+   "Malawi"
+  ]
+ },
+ {
+  "id": "things-fall-apart",
+  "title": "Things Fall Apart",
+  "titleKo": "모든 것이 산산이 무너지다",
+  "author": "Chinua Achebe",
+  "authorKo": "치누아 아체베",
+  "country": "Nigeria",
+  "emoji": "🥁",
+  "color": "#8a5a2a",
+  "cefr": "A2",
+  "lexile": "약 720L",
+  "words": 222,
+  "places": [
+   "Nigeria"
+  ]
+ },
+ {
+  "id": "long-walk-to-freedom",
+  "title": "Long Walk to Freedom",
+  "titleKo": "자유를 향한 머나먼 길",
+  "author": "Nelson Mandela",
+  "authorKo": "넬슨 만델라",
+  "country": "South Africa",
+  "emoji": "✊",
+  "color": "#3a6a3a",
+  "cefr": "A2",
+  "lexile": "약 710L",
+  "words": 215,
+  "places": [
+   "South Africa"
+  ]
+ },
+ {
+  "id": "the-whale-rider",
+  "title": "The Whale Rider",
+  "titleKo": "웨일 라이더",
+  "author": "Witi Ihimaera",
+  "authorKo": "위티 이히마에라",
+  "country": "New Zealand",
+  "emoji": "🐋",
+  "color": "#2a6a8a",
+  "cefr": "A2",
+  "lexile": "약 700L",
+  "words": 249,
+  "places": [
+   "New Zealand"
+  ]
+ },
+ {
+  "id": "storm-boy",
+  "title": "Storm Boy",
+  "titleKo": "스톰 보이",
+  "author": "Colin Thiele",
+  "authorKo": "콜린 실레",
+  "country": "Australia",
+  "emoji": "🐦",
+  "color": "#4a7a9a",
+  "cefr": "A2",
+  "lexile": "약 660L",
+  "words": 239,
+  "places": [
+   "Australia"
+  ]
+ },
+ {
+  "id": "the-handsomest-drowned-man",
+  "title": "The Handsomest Drowned Man in the World",
+  "titleKo": "세상에서 가장 잘생긴 익사체",
+  "author": "Gabriel García Márquez",
+  "authorKo": "가브리엘 가르시아 마르케스",
+  "country": "Colombia",
+  "emoji": "🌊",
+  "color": "#3a5a8a",
+  "cefr": "A2",
+  "lexile": "약 720L",
+  "words": 242,
+  "places": [
+   "Colombia"
+  ]
+ },
+ {
+  "id": "the-voyages-of-sinbad",
+  "title": "The Voyages of Sinbad the Sailor",
+  "titleKo": "신드바드의 모험",
+  "author": "One Thousand and One Nights",
+  "authorKo": "아라비안나이트",
+  "country": "Iraq",
+  "emoji": "⛵",
+  "color": "#2a5a7a",
+  "cefr": "A2",
+  "lexile": "약 680L",
+  "words": 242,
+  "places": [
+   "Iraq"
+  ]
  }
 ];
