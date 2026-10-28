@@ -353,5 +353,12 @@ window.BOOK_THEMES = {
   "the-invisible-collection": "family,love,history|short",
   "the-overcoat": "justice|short",
   "the-country-of-the-blind": "adventure,wisdom,love|short",
-  "the-door-in-the-wall": "dream,growth|short"
+  "the-door-in-the-wall": "dream,growth|short",
+  "rip-van-winkle": "history,dream|short",
+  "the-nose": "honesty,wisdom|short",
+  "the-grasshopper-and-the-bell-cricket": "love,nature|short",
+  "the-camellias": "love,growth|short",
+  "breaking-the-pig": "family,love|short",
+  "the-luncheon": "wisdom,honesty|short",
+  "the-ant-and-the-grasshopper-maugham": "justice,wisdom,family|short"
 };
