@@ -2536,5 +2536,247 @@ window.BOOKS = [
   "places": [
    "Germany"
   ]
+ },
+ {
+  "id": "the-twelve-labors-of-heracles",
+  "title": "The Twelve Labors of Heracles",
+  "titleKo": "헤라클레스의 12가지 과업",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🦁",
+  "color": "#a0702a",
+  "cefr": "A2",
+  "lexile": "약 620L",
+  "words": 226,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-trojan-horse",
+  "title": "The Trojan Horse",
+  "titleKo": "트로이 목마",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🐴",
+  "color": "#8a6a3a",
+  "cefr": "A2",
+  "lexile": "약 640L",
+  "words": 225,
+  "places": [
+   "Greece",
+   "Turkey"
+  ]
+ },
+ {
+  "id": "jason-and-the-golden-fleece",
+  "title": "Jason and the Golden Fleece",
+  "titleKo": "이아손과 황금 양털",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🐏",
+  "color": "#b08a2a",
+  "cefr": "A2",
+  "lexile": "약 630L",
+  "words": 219,
+  "places": [
+   "Greece",
+   "Georgia"
+  ]
+ },
+ {
+  "id": "pandoras-box",
+  "title": "Pandora’s Box",
+  "titleKo": "판도라의 상자",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "📦",
+  "color": "#8a5a9a",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 148,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "king-midas",
+  "title": "King Midas and the Golden Touch",
+  "titleKo": "미다스 왕의 황금 손",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🪙",
+  "color": "#c09a2a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 164,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "daedalus-and-icarus",
+  "title": "Daedalus and Icarus",
+  "titleKo": "이카로스의 날개",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🪶",
+  "color": "#d08a3a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 157,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "prometheus-and-the-fire",
+  "title": "Prometheus and the Fire",
+  "titleKo": "프로메테우스의 불",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🔥",
+  "color": "#c0502a",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 161,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "narcissus-and-echo",
+  "title": "Narcissus and Echo",
+  "titleKo": "나르키소스와 에코",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🌼",
+  "color": "#4a8a7a",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 177,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "arachne-and-athena",
+  "title": "Arachne and Athena",
+  "titleKo": "아라크네와 아테나",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🕷️",
+  "color": "#6a5a8a",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 149,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "orpheus-and-eurydice",
+  "title": "Orpheus and Eurydice",
+  "titleKo": "오르페우스와 에우리디케",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🎵",
+  "color": "#4a5a9a",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 160,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "persephone-and-the-seasons",
+  "title": "Persephone and the Seasons",
+  "titleKo": "페르세포네와 사계절",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🌸",
+  "color": "#9a5a7a",
+  "cefr": "A1",
+  "lexile": "약 440L",
+  "words": 164,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "theseus-and-the-minotaur",
+  "title": "Theseus and the Minotaur",
+  "titleKo": "테세우스와 미노타우로스",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🐂",
+  "color": "#8a4a3a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 160,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "perseus-and-medusa",
+  "title": "Perseus and Medusa",
+  "titleKo": "페르세우스와 메두사",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🛡️",
+  "color": "#3a6a5a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 171,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "pygmalion-myth",
+  "title": "Pygmalion",
+  "titleKo": "피그말리온",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🗿",
+  "color": "#a07a6a",
+  "cefr": "A1",
+  "lexile": "약 400L",
+  "words": 165,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "phaethon-and-the-sun-chariot",
+  "title": "Phaethon and the Sun Chariot",
+  "titleKo": "파에톤과 태양 마차",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "☀️",
+  "color": "#d0702a",
+  "cefr": "A1",
+  "lexile": "약 440L",
+  "words": 168,
+  "places": [
+   "Greece"
+  ]
  }
 ];
