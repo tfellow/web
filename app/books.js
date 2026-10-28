@@ -5235,5 +5235,118 @@ window.BOOKS = [
   "places": [
    "United Kingdom"
   ]
+ },
+ {
+  "id": "rip-van-winkle",
+  "title": "Rip Van Winkle",
+  "titleKo": "립 밴 윙클",
+  "author": "Washington Irving",
+  "authorKo": "워싱턴 어빙",
+  "country": "United States",
+  "emoji": "😴",
+  "color": "#6a5a3a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 200,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-nose",
+  "title": "The Nose",
+  "titleKo": "코",
+  "author": "Ryunosuke Akutagawa",
+  "authorKo": "아쿠타가와 류노스케",
+  "country": "Japan",
+  "emoji": "👃",
+  "color": "#8a5a4a",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 215,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-grasshopper-and-the-bell-cricket",
+  "title": "The Grasshopper and the Bell Cricket",
+  "titleKo": "메뚜기와 방울벌레",
+  "author": "Yasunari Kawabata",
+  "authorKo": "가와바타 야스나리",
+  "country": "Japan",
+  "emoji": "🏮",
+  "color": "#a8642c",
+  "cefr": "A2",
+  "lexile": "약 900L",
+  "words": 206,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-camellias",
+  "title": "The Camellias",
+  "titleKo": "동백꽃",
+  "author": "Kim Yu-jeong",
+  "authorKo": "김유정",
+  "country": "South Korea",
+  "emoji": "🌼",
+  "color": "#c8962a",
+  "cefr": "A2",
+  "lexile": "약 850L",
+  "words": 225,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "breaking-the-pig",
+  "title": "Breaking the Pig",
+  "titleKo": "돼지 저금통 깨기",
+  "author": "Etgar Keret",
+  "authorKo": "에트가르 케레트",
+  "country": "Israel",
+  "emoji": "🐷",
+  "color": "#c06a7a",
+  "cefr": "A2",
+  "lexile": "약 800L",
+  "words": 230,
+  "places": [
+   "Israel"
+  ]
+ },
+ {
+  "id": "the-luncheon",
+  "title": "The Luncheon",
+  "titleKo": "점심",
+  "author": "W. Somerset Maugham",
+  "authorKo": "서머싯 몸",
+  "country": "United Kingdom",
+  "emoji": "🍽️",
+  "color": "#7a4a3a",
+  "cefr": "A2",
+  "lexile": "약 1000L",
+  "words": 233,
+  "places": [
+   "United Kingdom",
+   "France"
+  ]
+ },
+ {
+  "id": "the-ant-and-the-grasshopper-maugham",
+  "title": "The Ant and the Grasshopper (Maugham)",
+  "titleKo": "개미와 베짱이 (서머싯 몸)",
+  "author": "W. Somerset Maugham",
+  "authorKo": "서머싯 몸",
+  "country": "United Kingdom",
+  "emoji": "🦗",
+  "color": "#5a7a3a",
+  "cefr": "A2",
+  "lexile": "약 1050L",
+  "words": 213,
+  "places": [
+   "United Kingdom"
+  ]
  }
 ];
