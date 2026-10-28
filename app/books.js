@@ -3131,5 +3131,620 @@ window.BOOKS = [
   "places": [
    "Iraq"
   ]
+ },
+ {
+  "id": "the-giver",
+  "title": "The Giver",
+  "titleKo": "기억 전달자",
+  "author": "Lois Lowry",
+  "authorKo": "로이스 로리",
+  "country": "United States",
+  "emoji": "🍎",
+  "color": "#5a6a7a",
+  "cefr": "B1",
+  "lexile": "약 760L",
+  "words": 273,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "holes",
+  "title": "Holes",
+  "titleKo": "구덩이",
+  "author": "Louis Sachar",
+  "authorKo": "루이스 새커",
+  "country": "United States",
+  "emoji": "🕳️",
+  "color": "#b08a4a",
+  "cefr": "B1",
+  "lexile": "약 660L",
+  "words": 289,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "wonder",
+  "title": "Wonder",
+  "titleKo": "원더",
+  "author": "R.J. Palacio",
+  "authorKo": "R. J. 팔라시오",
+  "country": "United States",
+  "emoji": "🚀",
+  "color": "#4a7ab0",
+  "cefr": "B1",
+  "lexile": "약 790L",
+  "words": 286,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "flipped",
+  "title": "Flipped",
+  "titleKo": "플립",
+  "author": "Wendelin Van Draanen",
+  "authorKo": "웬들린 밴 드라닌",
+  "country": "United States",
+  "emoji": "🌳",
+  "color": "#6a9a4a",
+  "cefr": "B1",
+  "lexile": "약 720L",
+  "words": 289,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "number-the-stars",
+  "title": "Number the Stars",
+  "titleKo": "별을 헤아리며",
+  "author": "Lois Lowry",
+  "authorKo": "로이스 로리",
+  "country": "Denmark",
+  "emoji": "⭐",
+  "color": "#3a5a8a",
+  "cefr": "B1",
+  "lexile": "약 670L",
+  "words": 306,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "bridge-to-terabithia",
+  "title": "Bridge to Terabithia",
+  "titleKo": "비밀의 숲 테라비시아",
+  "author": "Katherine Paterson",
+  "authorKo": "캐서린 패터슨",
+  "country": "United States",
+  "emoji": "🌉",
+  "color": "#4a7a5a",
+  "cefr": "B1",
+  "lexile": "약 810L",
+  "words": 311,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "stargirl",
+  "title": "Stargirl",
+  "titleKo": "스타걸",
+  "author": "Jerry Spinelli",
+  "authorKo": "제리 스피넬리",
+  "country": "United States",
+  "emoji": "🌟",
+  "color": "#c07a3a",
+  "cefr": "B1",
+  "lexile": "약 590L",
+  "words": 283,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "my-side-of-the-mountain",
+  "title": "My Side of the Mountain",
+  "titleKo": "나의 산에서",
+  "author": "Jean Craighead George",
+  "authorKo": "진 크레이그헤드 조지",
+  "country": "United States",
+  "emoji": "🦅",
+  "color": "#5a7a3a",
+  "cefr": "B1",
+  "lexile": "약 810L",
+  "words": 301,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "a-wrinkle-in-time",
+  "title": "A Wrinkle in Time",
+  "titleKo": "시간의 주름",
+  "author": "Madeleine L’Engle",
+  "authorKo": "매들렌 렝글",
+  "country": "United States",
+  "emoji": "🌀",
+  "color": "#4a3a8a",
+  "cefr": "B1",
+  "lexile": "약 740L",
+  "words": 292,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "flowers-for-algernon",
+  "title": "Flowers for Algernon",
+  "titleKo": "앨저넌에게 꽃을",
+  "author": "Daniel Keyes",
+  "authorKo": "대니얼 키스",
+  "country": "United States",
+  "emoji": "🐭",
+  "color": "#7a8a9a",
+  "cefr": "B1",
+  "lexile": "약 910L",
+  "words": 292,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-miracles-of-the-namiya-general-store",
+  "title": "The Miracles of the Namiya General Store",
+  "titleKo": "나미야 잡화점의 기적",
+  "author": "Keigo Higashino",
+  "authorKo": "히가시노 게이고",
+  "country": "Japan",
+  "emoji": "✉️",
+  "color": "#8a6a4a",
+  "cefr": "B1",
+  "lexile": "약 760L",
+  "words": 295,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-call-of-the-wild",
+  "title": "The Call of the Wild",
+  "titleKo": "야성의 부름",
+  "author": "Jack London",
+  "authorKo": "잭 런던",
+  "country": "United States",
+  "emoji": "🐺",
+  "color": "#6a7a8a",
+  "cefr": "B1",
+  "lexile": "약 1120L",
+  "words": 310,
+  "places": [
+   "United States",
+   "Canada"
+  ]
+ },
+ {
+  "id": "white-fang",
+  "title": "White Fang",
+  "titleKo": "화이트 팽",
+  "author": "Jack London",
+  "authorKo": "잭 런던",
+  "country": "United States",
+  "emoji": "🐺",
+  "color": "#8a9aaa",
+  "cefr": "B1",
+  "lexile": "약 970L",
+  "words": 297,
+  "places": [
+   "United States",
+   "Canada"
+  ]
+ },
+ {
+  "id": "black-beauty",
+  "title": "Black Beauty",
+  "titleKo": "블랙 뷰티",
+  "author": "Anna Sewell",
+  "authorKo": "애나 슈얼",
+  "country": "United Kingdom",
+  "emoji": "🐎",
+  "color": "#3a3a4a",
+  "cefr": "B1",
+  "lexile": "약 1010L",
+  "words": 318,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-pearl",
+  "title": "The Pearl",
+  "titleKo": "진주",
+  "author": "John Steinbeck",
+  "authorKo": "존 스타인벡",
+  "country": "United States",
+  "emoji": "🦪",
+  "color": "#4a8a9a",
+  "cefr": "B1",
+  "lexile": "약 680L",
+  "words": 308,
+  "places": [
+   "United States",
+   "Mexico"
+  ]
+ },
+ {
+  "id": "the-prince-and-the-pauper",
+  "title": "The Prince and the Pauper",
+  "titleKo": "왕자와 거지",
+  "author": "Mark Twain",
+  "authorKo": "마크 트웨인",
+  "country": "United States",
+  "emoji": "👑",
+  "color": "#8a5a3a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 317,
+  "places": [
+   "United States",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "little-lord-fauntleroy",
+  "title": "Little Lord Fauntleroy",
+  "titleKo": "소공자",
+  "author": "Frances Hodgson Burnett",
+  "authorKo": "프랜시스 호지슨 버넷",
+  "country": "United Kingdom",
+  "emoji": "🎩",
+  "color": "#6a4a7a",
+  "cefr": "B1",
+  "lexile": "약 990L",
+  "words": 293,
+  "places": [
+   "United Kingdom",
+   "United States"
+  ]
+ },
+ {
+  "id": "sounder",
+  "title": "Sounder",
+  "titleKo": "사운더",
+  "author": "William H. Armstrong",
+  "authorKo": "윌리엄 H. 암스트롱",
+  "country": "United States",
+  "emoji": "🐕",
+  "color": "#7a5a3a",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 307,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-time-machine",
+  "title": "The Time Machine",
+  "titleKo": "타임머신",
+  "author": "H. G. Wells",
+  "authorKo": "H. G. 웰스",
+  "country": "United Kingdom",
+  "emoji": "⏳",
+  "color": "#6a5a3a",
+  "cefr": "B1",
+  "lexile": "약 1050L",
+  "words": 288,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-war-of-the-worlds",
+  "title": "The War of the Worlds",
+  "titleKo": "우주 전쟁",
+  "author": "H. G. Wells",
+  "authorKo": "H. G. 웰스",
+  "country": "United Kingdom",
+  "emoji": "👽",
+  "color": "#7a3a2a",
+  "cefr": "B1",
+  "lexile": "약 1060L",
+  "words": 300,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "fahrenheit-451",
+  "title": "Fahrenheit 451",
+  "titleKo": "화씨 451",
+  "author": "Ray Bradbury",
+  "authorKo": "레이 브래드버리",
+  "country": "United States",
+  "emoji": "🔥",
+  "color": "#a04a2a",
+  "cefr": "B1",
+  "lexile": "약 890L",
+  "words": 315,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "i-robot",
+  "title": "I, Robot",
+  "titleKo": "아이, 로봇",
+  "author": "Isaac Asimov",
+  "authorKo": "아이작 아시모프",
+  "country": "United States",
+  "emoji": "🤖",
+  "color": "#4a6a8a",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 315,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "planet-of-the-apes",
+  "title": "Planet of the Apes",
+  "titleKo": "혹성 탈출",
+  "author": "Pierre Boulle",
+  "authorKo": "피에르 불",
+  "country": "France",
+  "emoji": "🦍",
+  "color": "#6a5a4a",
+  "cefr": "B1",
+  "lexile": "약 980L",
+  "words": 318,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-lion-the-witch-and-the-wardrobe",
+  "title": "The Lion, the Witch and the Wardrobe",
+  "titleKo": "사자와 마녀와 옷장",
+  "author": "C. S. Lewis",
+  "authorKo": "C. S. 루이스",
+  "country": "United Kingdom",
+  "emoji": "🦁",
+  "color": "#7a6a2a",
+  "cefr": "B1",
+  "lexile": "약 940L",
+  "words": 334,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-neverending-story",
+  "title": "The Neverending Story",
+  "titleKo": "끝없는 이야기",
+  "author": "Michael Ende",
+  "authorKo": "미하엘 엔데",
+  "country": "Germany",
+  "emoji": "📖",
+  "color": "#8a3a4a",
+  "cefr": "B1",
+  "lexile": "약 1010L",
+  "words": 312,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "howls-moving-castle",
+  "title": "Howl’s Moving Castle",
+  "titleKo": "하울의 움직이는 성",
+  "author": "Diana Wynne Jones",
+  "authorKo": "다이애나 윈 존스",
+  "country": "United Kingdom",
+  "emoji": "🏰",
+  "color": "#5a6a9a",
+  "cefr": "B1",
+  "lexile": "약 800L",
+  "words": 314,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-wizard-of-earthsea",
+  "title": "A Wizard of Earthsea",
+  "titleKo": "어스시의 마법사",
+  "author": "Ursula K. Le Guin",
+  "authorKo": "어슐러 K. 르 귄",
+  "country": "United States",
+  "emoji": "🧙",
+  "color": "#3a5a6a",
+  "cefr": "B1",
+  "lexile": "약 1150L",
+  "words": 326,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-phantom-tollbooth",
+  "title": "The Phantom Tollbooth",
+  "titleKo": "팬텀 톨부스",
+  "author": "Norton Juster",
+  "authorKo": "노턴 저스터",
+  "country": "United States",
+  "emoji": "🚗",
+  "color": "#3a7a8a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 323,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "through-the-looking-glass",
+  "title": "Through the Looking-Glass",
+  "titleKo": "거울 나라의 앨리스",
+  "author": "Lewis Carroll",
+  "authorKo": "루이스 캐럴",
+  "country": "United Kingdom",
+  "emoji": "♟️",
+  "color": "#8a4a6a",
+  "cefr": "B1",
+  "lexile": "약 1000L",
+  "words": 305,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "harry-potter-and-the-philosophers-stone",
+  "title": "Harry Potter and the Philosopher’s Stone",
+  "titleKo": "해리 포터와 마법사의 돌",
+  "author": "J. K. Rowling",
+  "authorKo": "J. K. 롤링",
+  "country": "United Kingdom",
+  "emoji": "⚡",
+  "color": "#7a2a2a",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 301,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "cyrano-de-bergerac",
+  "title": "Cyrano de Bergerac",
+  "titleKo": "시라노",
+  "author": "Edmond Rostand",
+  "authorKo": "에드몽 로스탕",
+  "country": "France",
+  "emoji": "🎭",
+  "color": "#6a3a5a",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 334,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "pygmalion-shaw",
+  "title": "Pygmalion (Shaw)",
+  "titleKo": "피그말리온(버나드 쇼)",
+  "author": "George Bernard Shaw",
+  "authorKo": "조지 버나드 쇼",
+  "country": "Ireland",
+  "emoji": "🌹",
+  "color": "#7a4a5a",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 323,
+  "places": [
+   "Ireland",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-dolls-house",
+  "title": "A Doll’s House",
+  "titleKo": "인형의 집",
+  "author": "Henrik Ibsen",
+  "authorKo": "헨리크 입센",
+  "country": "Norway",
+  "emoji": "🏠",
+  "color": "#9a6a4a",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 324,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "antigone",
+  "title": "Antigone",
+  "titleKo": "안티고네",
+  "author": "Sophocles",
+  "authorKo": "소포클레스",
+  "country": "Greece",
+  "emoji": "🏛️",
+  "color": "#8a7a5a",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 316,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-speckled-band",
+  "title": "The Adventure of the Speckled Band",
+  "titleKo": "셜록 홈즈: 얼룩 끈",
+  "author": "Arthur Conan Doyle",
+  "authorKo": "아서 코난 도일",
+  "country": "United Kingdom",
+  "emoji": "🐍",
+  "color": "#4a5a3a",
+  "cefr": "B1",
+  "lexile": "약 960L",
+  "words": 338,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-scandal-in-bohemia",
+  "title": "A Scandal in Bohemia",
+  "titleKo": "셜록 홈즈: 보헤미아 스캔들",
+  "author": "Arthur Conan Doyle",
+  "authorKo": "아서 코난 도일",
+  "country": "United Kingdom",
+  "emoji": "📷",
+  "color": "#5a4a6a",
+  "cefr": "B1",
+  "lexile": "약 940L",
+  "words": 334,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "arsene-lupin-gentleman-thief",
+  "title": "Arsène Lupin, Gentleman-Thief",
+  "titleKo": "괴도 신사 아르센 뤼팽",
+  "author": "Maurice Leblanc",
+  "authorKo": "모리스 르블랑",
+  "country": "France",
+  "emoji": "🎩",
+  "color": "#2a2a4a",
+  "cefr": "B1",
+  "lexile": "약 950L",
+  "words": 327,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "murder-on-the-orient-express",
+  "title": "Murder on the Orient Express",
+  "titleKo": "오리엔트 특급 살인",
+  "author": "Agatha Christie",
+  "authorKo": "애거사 크리스티",
+  "country": "United Kingdom",
+  "emoji": "🚂",
+  "color": "#5a3a2a",
+  "cefr": "B1",
+  "lexile": "약 640L",
+  "words": 304,
+  "places": [
+   "United Kingdom",
+   "Turkey"
+  ]
  }
 ];
