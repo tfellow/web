@@ -3,20 +3,20 @@ window.BOOK_CONTENT = window.BOOK_CONTENT || {};
 window.BOOK_CONTENT["bathtime-for-biscuit"] = {
  "story": [
   {
-   "en": "It is time for a bath. The girl has soap and warm water. But Biscuit does not want a bath!",
-   "ko": "목욕할 시간이에요. 소녀는 비누와 따뜻한 물을 준비했어요. 하지만 비스킷은 목욕하기 싫어요!"
+   "en": "It is time for a bath. The bath is ready. But where is Biscuit? He is not near the tub!",
+   "ko": "목욕할 시간이에요. 목욕물이 준비되었어요. 그런데 비스킷은 어디 있을까요? 비스킷은 욕조 근처에 없어요!"
   },
   {
-   "en": "Biscuit runs away. He meets his friend Puddles, another little dog. They play in the yard. They roll in the mud. Now they are very dirty!",
-   "ko": "비스킷은 도망쳐요. 비스킷은 또 다른 작은 개인 친구 퍼들스를 만나요. 둘은 마당에서 놀아요. 진흙 속에서 뒹굴어요. 이제 둘 다 아주 더러워졌어요!"
+   "en": "Biscuit does not want a bath. He wants to play. He runs away with his friend Puddles, another little dog.",
+   "ko": "비스킷은 목욕하기 싫어요. 놀고 싶어요. 비스킷은 또 다른 작은 개인 친구 퍼들스와 함께 도망쳐요."
   },
   {
-   "en": "The girl finds them. She puts Biscuit in the tub. Puddles jumps in, too! There are bubbles everywhere.",
-   "ko": "소녀가 둘을 찾아내요. 소녀는 비스킷을 욕조에 넣어요. 퍼들스도 뛰어들어요! 거품이 사방에 가득해요."
+   "en": "Biscuit and Puddles play outside. They get muddy. Now they are very dirty! A bath is a good idea, but Biscuit still wants to play.",
+   "ko": "비스킷과 퍼들스는 밖에서 놀아요. 둘은 진흙투성이가 돼요. 이제 아주 더러워졌어요! 목욕하면 좋겠지만, 비스킷은 여전히 놀고 싶어요."
   },
   {
-   "en": "Now Biscuit and Puddles are clean. The girl is all wet. Bathtime can be fun!",
-   "ko": "이제 비스킷과 퍼들스는 깨끗해졌어요. 소녀는 흠뻑 젖었어요. 목욕 시간도 재미있을 수 있어요!"
+   "en": "The girl calls, “Time for a bath, Biscuit!” Will Biscuit take his bath? Read and find out!",
+   "ko": "소녀가 불러요. “비스킷, 목욕할 시간이야!” 비스킷은 목욕을 할까요? 책을 읽고 알아보세요!"
   }
  ],
  "analysis": [
@@ -27,20 +27,20 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
   },
   {
    "label": "Main Idea (요지)",
-   "en": "Biscuit runs away from his bath and gets muddy, but in the end he and his friend have a fun bath.",
-   "ko": "비스킷은 목욕을 피해 달아나 진흙투성이가 되지만, 결국 친구와 함께 즐겁게 목욕한다."
+   "en": "Biscuit runs away from his bath and plays in the mud with his friend Puddles.",
+   "ko": "비스킷은 목욕을 피해 달아나 친구 퍼들스와 진흙 속에서 논다."
   },
   {
    "label": "Theme (주제)",
-   "en": "Even things we do not like can be fun with a friend.",
-   "ko": "싫어하는 일도 친구와 함께라면 즐거울 수 있다."
+   "en": "Playing is fun, but sometimes we need to get clean.",
+   "ko": "노는 것은 즐겁지만, 때로는 깨끗이 씻어야 한다."
   }
  ],
  "characters": [
   {
    "name": "Biscuit (비스킷)",
-   "en": "A little yellow puppy who hates baths.",
-   "ko": "목욕을 싫어하는 작은 노란 강아지."
+   "en": "A little yellow puppy who does not want a bath.",
+   "ko": "목욕하기 싫어하는 작은 노란 강아지."
   },
   {
    "name": "Puddles (퍼들스)",
@@ -49,8 +49,8 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
   },
   {
    "name": "The Girl (소녀)",
-   "en": "Biscuit's owner who gives him a bath.",
-   "ko": "비스킷을 목욕시키는 주인."
+   "en": "Biscuit's owner who wants to give him a bath.",
+   "ko": "비스킷을 목욕시키려는 주인."
   }
  ],
  "vocab": [
@@ -58,10 +58,10 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
    "level": "B1 - Intermediate",
    "items": [
     [
-     "Bubble",
-     "n.",
-     "거품",
-     "A small ball of air in soap and water."
+     "Muddy",
+     "adj.",
+     "진흙투성이의",
+     "Covered with wet, soft dirt."
     ]
    ]
   },
@@ -69,16 +69,10 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
    "level": "A2 - Elementary",
    "items": [
     [
-     "Roll",
-     "v.",
-     "뒹굴다",
-     "To turn over and over on the ground."
-    ],
-    [
-     "Mud",
-     "n.",
-     "진흙",
-     "Wet, soft dirt."
+     "Ready",
+     "adj.",
+     "준비된",
+     "Prepared to be used."
     ],
     [
      "Tub",
@@ -87,16 +81,16 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
      "A large container for taking a bath."
     ],
     [
-     "Soap",
-     "n.",
-     "비누",
-     "Something you use with water to wash."
+     "Near",
+     "prep.",
+     "~ 근처에",
+     "Not far from something."
     ],
     [
-     "Yard",
-     "n.",
-     "마당",
-     "The land next to a house."
+     "Run away",
+     "v.",
+     "도망치다",
+     "To leave a place quickly so no one can catch you."
     ]
    ]
   },
@@ -114,6 +108,12 @@ window.BOOK_CONTENT["bathtime-for-biscuit"] = {
      "n.",
      "목욕",
      "Washing your body in water."
+    ],
+    [
+     "Play",
+     "v.",
+     "놀다",
+     "To have fun with games or toys."
     ]
    ]
   }

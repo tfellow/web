@@ -3,20 +3,20 @@ window.BOOK_CONTENT = window.BOOK_CONTENT || {};
 window.BOOK_CONTENT["father-bear-comes-home"] = {
  "story": [
   {
-   "en": "Little Bear’s father is away. He is fishing on the sea. Little Bear misses him very much. He goes out to look for his father, and he talks with his friend Owl. Little Bear wants his father to come home soon.",
-   "ko": "꼬마 곰의 아빠는 집에 없어요. 바다에서 물고기를 잡고 있거든요. 꼬마 곰은 아빠가 몹시 보고 싶어요. 꼬마 곰은 아빠를 찾으러 나가서 친구 부엉이와 이야기를 나눠요. 꼬마 곰은 아빠가 빨리 집에 오면 좋겠어요."
+   "en": "Little Bear’s father is a fisherman. He is away, fishing on the sea. Little Bear misses him. He talks with his friend Owl about his father.",
+   "ko": "꼬마 곰의 아빠는 어부예요. 아빠는 바다에 물고기를 잡으러 가서 집에 없어요. 꼬마 곰은 아빠가 보고 싶어요. 꼬마 곰은 친구 부엉이와 아빠 이야기를 나눠요."
   },
   {
-   "en": "One day, Little Bear gets the hiccups. Hic! Hic! His friends Hen, Duck, and Cat try to help him. They tell him to drink water and to hold his breath. Nothing works. Then, suddenly, the hiccups stop all by themselves.",
-   "ko": "어느 날, 꼬마 곰이 딸꾹질을 해요. 딸꾹! 딸꾹! 친구인 암탉, 오리, 고양이가 꼬마 곰을 도우려고 해요. 친구들은 물을 마셔 보라고, 숨을 참아 보라고 말해요. 하지만 아무것도 소용없어요. 그러다 갑자기, 딸꾹질이 저절로 멈춰요."
+   "en": "Little Bear hopes his father will bring home a mermaid from the sea. At last, Father Bear comes home! Little Bear is so happy to see him. But Father Bear does not have a mermaid.",
+   "ko": "꼬마 곰은 아빠가 바다에서 인어를 데려오기를 바라요. 마침내 아빠 곰이 집에 와요! 꼬마 곰은 아빠를 보고 무척 기뻐요. 하지만 아빠 곰은 인어를 데려오지 않았어요."
   },
   {
-   "en": "Little Bear also wants to see a mermaid. He asks his father, “Did you see a mermaid on the sea?” Father Bear says he has never seen one. But Little Bear still dreams about mermaids.",
-   "ko": "꼬마 곰은 인어도 보고 싶어 해요. 꼬마 곰이 아빠에게 물어요. “바다에서 인어 봤어요?” 아빠 곰은 한 번도 본 적이 없다고 말해요. 그래도 꼬마 곰은 여전히 인어를 꿈꿔요."
+   "en": "One day, Little Bear gets the hiccups. Hic! Hic! His friends try to help him, but nothing works. Then Father Bear helps in his own funny way, and the hiccups stop!",
+   "ko": "어느 날, 꼬마 곰이 딸꾹질을 해요. 딸꾹! 딸꾹! 친구들이 도우려고 하지만, 아무것도 소용없어요. 그러자 아빠 곰이 아빠만의 재미있는 방법으로 도와주고, 딸꾹질이 멈춰요!"
   },
   {
-   "en": "At last, Father Bear comes home. Little Bear runs to him and gives him a big hug. The whole family is together again, and Little Bear is very happy.",
-   "ko": "마침내 아빠 곰이 집에 와요. 꼬마 곰은 아빠에게 달려가 꼭 안아요. 온 가족이 다시 함께 모였고, 꼬마 곰은 아주 행복해요."
+   "en": "Later, the bear family has a picnic by the river with their friends. Little Bear still thinks about mermaids. He is happy, because his father is home again.",
+   "ko": "나중에 곰 가족은 친구들과 함께 강가로 소풍을 가요. 꼬마 곰은 여전히 인어 생각을 해요. 꼬마 곰은 행복해요. 아빠가 다시 집에 왔으니까요."
   }
  ],
  "analysis": [
@@ -27,8 +27,8 @@ window.BOOK_CONTENT["father-bear-comes-home"] = {
   },
   {
    "label": "Main Idea (요지)",
-   "en": "While Father Bear is away fishing, Little Bear has small adventures, and he is happy when his father comes home.",
-   "ko": "아빠 곰이 물고기를 잡으러 간 동안 꼬마 곰은 작은 모험을 하고, 아빠가 돌아오자 행복해한다."
+   "en": "Little Bear misses his father, welcomes him home from the sea, and gets help from him with the hiccups.",
+   "ko": "꼬마 곰은 아빠를 그리워하다가 바다에서 돌아온 아빠를 반기고, 딸꾹질도 아빠의 도움으로 멈춘다."
   },
   {
    "label": "Theme (주제)",
@@ -44,13 +44,13 @@ window.BOOK_CONTENT["father-bear-comes-home"] = {
   },
   {
    "name": "Father Bear (아빠 곰)",
-   "en": "Little Bear's father, who fishes on the sea.",
-   "ko": "바다에서 물고기를 잡는 꼬마 곰의 아빠."
+   "en": "Little Bear's father, a fisherman.",
+   "ko": "어부인 꼬마 곰의 아빠."
   },
   {
    "name": "Owl (부엉이)",
-   "en": "Little Bear's wise friend.",
-   "ko": "꼬마 곰의 지혜로운 친구."
+   "en": "Little Bear's friend.",
+   "ko": "꼬마 곰의 친구."
   }
  ],
  "vocab": [
@@ -75,16 +75,16 @@ window.BOOK_CONTENT["father-bear-comes-home"] = {
    "level": "A2 - Elementary",
    "items": [
     [
-     "Breath",
+     "Fisherman",
      "n.",
-     "숨",
-     "The air that goes into and out of your body."
+     "어부",
+     "A person whose job is catching fish."
     ],
     [
-     "Suddenly",
-     "adv.",
-     "갑자기",
-     "Very quickly and not expected."
+     "Picnic",
+     "n.",
+     "소풍",
+     "A meal you eat outside, often in a park."
     ],
     [
      "Miss",
@@ -99,10 +99,10 @@ window.BOOK_CONTENT["father-bear-comes-home"] = {
      "A bird with big eyes that is awake at night."
     ],
     [
-     "Hug",
-     "n.",
-     "포옹",
-     "Holding someone close with your arms."
+     "Hope",
+     "v.",
+     "바라다",
+     "To want something to happen."
     ]
    ]
   },
@@ -110,22 +110,22 @@ window.BOOK_CONTENT["father-bear-comes-home"] = {
    "level": "A1 - Beginner",
    "items": [
     [
-     "Fishing",
-     "n.",
-     "낚시, 고기잡이",
-     "Catching fish."
-    ],
-    [
      "Sea",
      "n.",
      "바다",
      "A very large area of salt water."
     ],
     [
-     "Together",
-     "adv.",
-     "함께",
-     "With each other."
+     "River",
+     "n.",
+     "강",
+     "A long line of water that flows across land."
+    ],
+    [
+     "Happy",
+     "adj.",
+     "행복한",
+     "Feeling good."
     ]
    ]
   }

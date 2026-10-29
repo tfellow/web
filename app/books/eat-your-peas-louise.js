@@ -3,20 +3,20 @@ window.BOOK_CONTENT = window.BOOK_CONTENT || {};
 window.BOOK_CONTENT["eat-your-peas-louise"] = {
  "story": [
   {
-   "en": "Louise is at the dinner table. There are green peas on her plate. Louise does not eat her peas.",
-   "ko": "루이스는 저녁 식탁에 앉아 있어요. 접시 위에 초록색 완두콩이 있어요. 루이스는 완두콩을 먹지 않아요."
+   "en": "Louise is at the table. There are little green peas on her plate. Louise does not eat her peas.",
+   "ko": "루이스는 식탁에 앉아 있어요. 접시 위에 작은 초록색 완두콩이 있어요. 루이스는 완두콩을 먹지 않아요."
   },
   {
-   "en": "Her mother says, “Eat your peas, Louise! Then you can have ice cream.” Louise does not eat them. Her mother offers more and more treats. Louise still does not eat one pea.",
-   "ko": "엄마가 말해요. “완두콩 먹어, 루이스! 그러면 아이스크림을 먹을 수 있어.” 루이스는 먹지 않아요. 엄마는 점점 더 많은 선물을 주겠다고 해요. 그래도 루이스는 완두콩을 한 알도 먹지 않아요."
+   "en": "Her father wants her to eat them. He has many ideas. “You can put some cheese on them,” he says. Louise says no. “We can go fishing if you eat them,” he says. Louise still says no.",
+   "ko": "아빠는 루이스가 완두콩을 먹기를 바라요. 아빠에게는 여러 가지 생각이 있어요. “치즈를 조금 얹어 먹어도 돼.” 아빠가 말해요. 루이스는 싫다고 해요. “완두콩을 먹으면 같이 낚시하러 가자.” 아빠가 말해요. 루이스는 그래도 싫다고 해요."
   },
   {
-   "en": "Then her little brother says, “You did not say please.” So her mother says, “Please eat your peas, Louise.”",
-   "ko": "그때 남동생이 말해요. “‘부탁해’라고 말하지 않았잖아요.” 그래서 엄마가 말해요. “루이스, 완두콩 좀 먹어 줄래? 부탁해.”"
+   "en": "Her father tries and tries. Louise says no again and again.",
+   "ko": "아빠는 계속 애를 써요. 루이스는 몇 번이고 싫다고 해요."
   },
   {
-   "en": "Louise smiles. She eats all of her peas! A kind word can work like magic.",
-   "ko": "루이스가 웃어요. 루이스는 완두콩을 모두 먹어요! 다정한 한마디는 마법처럼 통할 수 있어요."
+   "en": "At last, her father says one small word: “Please.” Louise says yes! She eats her peas. A kind word can work like magic.",
+   "ko": "마침내 아빠가 짧은 한마디를 해요. “부탁해.” 루이스는 좋다고 해요! 루이스는 완두콩을 먹어요. 다정한 한마디는 마법처럼 통할 수 있어요."
   }
  ],
  "analysis": [
@@ -27,8 +27,8 @@ window.BOOK_CONTENT["eat-your-peas-louise"] = {
   },
   {
    "label": "Main Idea (요지)",
-   "en": "Louise will not eat her peas for any treat, but she eats them when her mother says please.",
-   "ko": "루이스는 어떤 선물에도 완두콩을 먹지 않지만, 엄마가 ‘부탁해’라고 말하자 먹는다."
+   "en": "Louise says no to all of her father's ideas, but she eats her peas when he says please.",
+   "ko": "루이스는 아빠의 모든 제안을 거절하지만, 아빠가 ‘부탁해’라고 말하자 완두콩을 먹는다."
   },
   {
    "label": "Theme (주제)",
@@ -43,37 +43,21 @@ window.BOOK_CONTENT["eat-your-peas-louise"] = {
    "ko": "완두콩을 먹기 싫어하는 소녀."
   },
   {
-   "name": "Mother (엄마)",
-   "en": "Louise's mother, who wants her to eat.",
-   "ko": "루이스가 먹기를 바라는 엄마."
-  },
-  {
-   "name": "Little Brother (남동생)",
-   "en": "Louise's brother, who has a good idea.",
-   "ko": "좋은 생각을 떠올리는 남동생."
+   "name": "Father (아빠)",
+   "en": "Louise's father, who wants her to eat.",
+   "ko": "루이스가 먹기를 바라는 아빠."
   }
  ],
  "vocab": [
   {
-   "level": "B1 - Intermediate",
-   "items": [
-    [
-     "Offer",
-     "v.",
-     "주겠다고 하다",
-     "To say you will give something."
-    ],
-    [
-     "Treat",
-     "n.",
-     "특별한 선물, 간식",
-     "Something special that makes someone happy."
-    ]
-   ]
-  },
-  {
    "level": "A2 - Elementary",
    "items": [
+    [
+     "Idea",
+     "n.",
+     "생각, 아이디어",
+     "A plan or thought about what to do."
+    ],
     [
      "Pea",
      "n.",
@@ -98,22 +82,28 @@ window.BOOK_CONTENT["eat-your-peas-louise"] = {
    "level": "A1 - Beginner",
    "items": [
     [
+     "Cheese",
+     "n.",
+     "치즈",
+     "A yellow or white food made from milk."
+    ],
+    [
+     "Fishing",
+     "n.",
+     "낚시",
+     "Catching fish."
+    ],
+    [
      "Please",
      "adv.",
      "부디, 부탁해요",
      "A polite word you use when you ask for something."
     ],
     [
-     "Dinner",
+     "Table",
      "n.",
-     "저녁 식사",
-     "The meal you eat in the evening."
-    ],
-    [
-     "Smile",
-     "v.",
-     "웃다, 미소 짓다",
-     "To make a happy face."
+     "식탁, 탁자",
+     "A piece of furniture you eat at."
     ]
    ]
   }
