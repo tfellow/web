@@ -6600,5 +6600,247 @@ window.BOOKS = [
   "places": [
    "United Kingdom"
   ]
+ },
+ {
+  "id": "momotaro-the-peach-boy",
+  "title": "Momotaro, the Peach Boy",
+  "titleKo": "모모타로",
+  "author": "Japanese Folktale",
+  "authorKo": "일본 민담",
+  "country": "Japan",
+  "emoji": "🍑",
+  "color": "#ffb6c1",
+  "cefr": "A0",
+  "lexile": "약 450L",
+  "words": 91,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-golden-goose",
+  "title": "The Golden Goose",
+  "titleKo": "황금 거위",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🪿",
+  "color": "#ffd700",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 89,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-princess-and-the-pea",
+  "title": "The Princess and the Pea",
+  "titleKo": "공주와 완두콩",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🫛",
+  "color": "#8fbc8f",
+  "cefr": "A0",
+  "lexile": "약 300L",
+  "words": 87,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "rumpelstiltskin",
+  "title": "Rumpelstiltskin",
+  "titleKo": "룸펠슈틸츠헨",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🧵",
+  "color": "#d2b48c",
+  "cefr": "A1",
+  "lexile": "약 520L",
+  "words": 132,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-brave-little-tailor",
+  "title": "The Brave Little Tailor",
+  "titleKo": "용감한 꼬마 재봉사",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "✂️",
+  "color": "#b0c4de",
+  "cefr": "A1",
+  "lexile": "약 550L",
+  "words": 131,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-frog-prince",
+  "title": "The Frog Prince",
+  "titleKo": "개구리 왕자",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🐸",
+  "color": "#3cb371",
+  "cefr": "A1",
+  "lexile": "약 500L",
+  "words": 142,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-magic-paintbrush",
+  "title": "The Magic Paintbrush",
+  "titleKo": "마술 붓",
+  "author": "Chinese Folktale",
+  "authorKo": "중국 민담",
+  "country": "China",
+  "emoji": "🖌️",
+  "color": "#e23d28",
+  "cefr": "A1",
+  "lexile": "약 600L",
+  "words": 139,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "the-twelve-dancing-princesses",
+  "title": "The Twelve Dancing Princesses",
+  "titleKo": "춤추는 열두 공주",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🩰",
+  "color": "#dda0dd",
+  "cefr": "A1",
+  "lexile": "약 580L",
+  "words": 124,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "kidnapped",
+  "title": "Kidnapped",
+  "titleKo": "납치",
+  "author": "Robert Louis Stevenson",
+  "authorKo": "로버트 루이스 스티븐슨",
+  "country": "United Kingdom",
+  "emoji": "⛵",
+  "color": "#708090",
+  "cefr": "A2",
+  "lexile": "약 800L",
+  "words": 193,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-swiss-family-robinson",
+  "title": "The Swiss Family Robinson",
+  "titleKo": "스위스 가족 로빈슨",
+  "author": "Johann David Wyss",
+  "authorKo": "요한 다비드 비스",
+  "country": "Switzerland",
+  "emoji": "🌴",
+  "color": "#228b22",
+  "cefr": "A2",
+  "lexile": "약 850L",
+  "words": 195,
+  "places": [
+   "Switzerland"
+  ]
+ },
+ {
+  "id": "the-tale-of-the-bamboo-cutter",
+  "title": "The Tale of the Bamboo Cutter",
+  "titleKo": "대나무꾼 이야기 (카구야 공주)",
+  "author": "Japanese Folktale",
+  "authorKo": "일본 민담",
+  "country": "Japan",
+  "emoji": "🎋",
+  "color": "#98fb98",
+  "cefr": "A2",
+  "lexile": "약 700L",
+  "words": 195,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-three-musketeers",
+  "title": "The Three Musketeers",
+  "titleKo": "삼총사",
+  "author": "Alexandre Dumas",
+  "authorKo": "알렉상드르 뒤마",
+  "country": "France",
+  "emoji": "⚔️",
+  "color": "#4169e1",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 193,
+  "places": [
+   "France",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-prisoner-of-zenda",
+  "title": "The Prisoner of Zenda",
+  "titleKo": "젠다성의 포로",
+  "author": "Anthony Hope",
+  "authorKo": "앤서니 호프",
+  "country": "United Kingdom",
+  "emoji": "🏰",
+  "color": "#800000",
+  "cefr": "B1",
+  "lexile": "약 900L",
+  "words": 297,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-scarlet-pimpernel",
+  "title": "The Scarlet Pimpernel",
+  "titleKo": "스칼렛 핌퍼넬",
+  "author": "Baroness Orczy",
+  "authorKo": "오르치 남작부인",
+  "country": "France",
+  "emoji": "🌺",
+  "color": "#ff2400",
+  "cefr": "B1",
+  "lexile": "약 950L",
+  "words": 277,
+  "places": [
+   "France",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "emma",
+  "title": "Emma",
+  "titleKo": "에마",
+  "author": "Jane Austen",
+  "authorKo": "제인 오스틴",
+  "country": "United Kingdom",
+  "emoji": "☕",
+  "color": "#ffb6c1",
+  "cefr": "B2",
+  "lexile": "약 1050L",
+  "words": 455,
+  "places": [
+   "United Kingdom"
+  ]
  }
 ];

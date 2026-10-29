@@ -438,5 +438,20 @@ window.BOOK_THEMES = {
   "the-canterville-ghost": "friend,growth|short",
   "exam-practice-1": "wisdom,growth|exam",
   "exam-practice-2": "nature,wisdom|exam",
-  "the-red-headed-league": "justice,wisdom|mystery"
+  "the-red-headed-league": "justice,wisdom|mystery",
+  "momotaro-the-peach-boy": "adventure,friend|tale",
+  "the-golden-goose": "honesty,wisdom|tale",
+  "the-princess-and-the-pea": "wisdom,love|tale",
+  "rumpelstiltskin": "wisdom,family|tale",
+  "the-brave-little-tailor": "wisdom,adventure|tale",
+  "the-frog-prince": "honesty,growth|tale",
+  "the-magic-paintbrush": "justice,dream|tale",
+  "the-twelve-dancing-princesses": "adventure,wisdom|tale",
+  "kidnapped": "adventure,justice|adv",
+  "the-swiss-family-robinson": "family,nature|adv",
+  "the-tale-of-the-bamboo-cutter": "family,myth|myth",
+  "the-three-musketeers": "friend,adventure|adv",
+  "the-prisoner-of-zenda": "justice,adventure|adv",
+  "the-scarlet-pimpernel": "justice,love|hist",
+  "emma": "growth,love|classic"
 };
