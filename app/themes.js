@@ -28,7 +28,8 @@ window.GENRE_DEFS = [
   { id: "mystery", name: "추리·미스터리" },
   { id: "hist", name: "역사·전쟁 소설" },
   { id: "play", name: "희곡" },
-  { id: "true", name: "실화·전기" }
+  { id: "true", name: "실화·전기" },
+  { id: "exam", name: "수능 유형" }
 ];
 window.BOOK_THEMES = {
   "unbearable-lightness": "love,growth|classic",
@@ -430,5 +431,12 @@ window.BOOK_THEMES = {
   "splat-the-cat-sings-flat": "growth,family|picture",
   "biscuit-goes-to-school": "friend,adventure|picture",
   "messy-bessey": "growth,family|picture",
-  "amelia-bedelia-makes-a-friend": "friend,growth|picture"
+  "amelia-bedelia-makes-a-friend": "friend,growth|picture",
+  "the-steadfast-tin-soldier": "love,growth|tale",
+  "urashima-taro": "honesty,myth|tale",
+  "the-pied-piper-of-hamelin": "honesty,justice|myth",
+  "the-canterville-ghost": "friend,growth|short",
+  "exam-practice-1": "wisdom,growth|exam",
+  "exam-practice-2": "nature,wisdom|exam",
+  "the-red-headed-league": "justice,wisdom|mystery"
 };
