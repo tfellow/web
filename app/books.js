@@ -6150,5 +6150,86 @@ window.BOOKS = [
   "places": [
    "Czechia"
   ]
+ },
+ {
+  "id": "great-expectations-b2",
+  "title": "Great Expectations (B2)",
+  "titleKo": "위대한 유산 (B2)",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🎩",
+  "color": "#4a5a6a",
+  "cefr": "B2",
+  "lexile": "약 1120L",
+  "words": 384,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "wuthering-heights-b2",
+  "title": "Wuthering Heights (B2)",
+  "titleKo": "폭풍의 언덕 (B2)",
+  "author": "Emily Brontë",
+  "authorKo": "에밀리 브론테",
+  "country": "United Kingdom",
+  "emoji": "🌫️",
+  "color": "#4a5058",
+  "cefr": "B2",
+  "lexile": "약 1100L",
+  "words": 359,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "oliver-twist-b2",
+  "title": "Oliver Twist (B2)",
+  "titleKo": "올리버 트위스트 (B2)",
+  "author": "Charles Dickens",
+  "authorKo": "찰스 디킨스",
+  "country": "United Kingdom",
+  "emoji": "🥣",
+  "color": "#6a5a4a",
+  "cefr": "B2",
+  "lexile": "약 1080L",
+  "words": 380,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-count-of-monte-cristo-b2",
+  "title": "The Count of Monte Cristo (B2)",
+  "titleKo": "몬테크리스토 백작 (B2)",
+  "author": "Alexandre Dumas",
+  "authorKo": "알렉상드르 뒤마",
+  "country": "France",
+  "emoji": "🗝️",
+  "color": "#3a4a6a",
+  "cefr": "B2",
+  "lexile": "약 1110L",
+  "words": 385,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "hamlet-b2",
+  "title": "Hamlet (B2)",
+  "titleKo": "햄릿 (B2)",
+  "author": "William Shakespeare",
+  "authorKo": "윌리엄 셰익스피어",
+  "country": "United Kingdom",
+  "emoji": "💀",
+  "color": "#3a3a4a",
+  "cefr": "B2",
+  "lexile": "약 1120L",
+  "words": 384,
+  "places": [
+   "United Kingdom",
+   "Denmark"
+  ]
  }
 ];

@@ -409,5 +409,10 @@ window.BOOK_THEMES = {
   "jane-eyre-b2": "growth,honesty,family|classic",
   "to-kill-a-mockingbird-b2": "justice,family,growth|classic",
   "pride-and-prejudice-b2": "honesty,family,growth|classic",
-  "the-metamorphosis-b2": "family,growth|classic"
+  "the-metamorphosis-b2": "family,growth|classic",
+  "great-expectations-b2": "growth,honesty,family|classic",
+  "wuthering-heights-b2": "family,justice|classic",
+  "oliver-twist-b2": "justice,family,honesty|classic",
+  "the-count-of-monte-cristo-b2": "justice,honesty|adv",
+  "hamlet-b2": "justice,family|play"
 };
