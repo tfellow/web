@@ -414,5 +414,15 @@ window.BOOK_THEMES = {
   "wuthering-heights-b2": "family,justice|classic",
   "oliver-twist-b2": "justice,family,honesty|classic",
   "the-count-of-monte-cristo-b2": "justice,honesty|adv",
-  "hamlet-b2": "justice,family|play"
+  "hamlet-b2": "justice,family|play",
+  "biscuit": "family,friend|picture",
+  "biscuit-finds-a-friend": "friend,nature|picture",
+  "bathtime-for-biscuit": "friend,family|picture",
+  "eat-your-peas-louise": "family,honesty|picture",
+  "danny-and-the-dinosaur": "friend,adventure|picture",
+  "little-bear": "family,dream|picture",
+  "father-bear-comes-home": "family,friend|picture",
+  "amelia-bedelia": "honesty,wisdom|picture",
+  "fancy-nancy-and-the-boy-from-paris": "friend,honesty|picture",
+  "ruby-bridges-through-my-eyes": "justice,history,growth|true"
 };

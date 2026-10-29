@@ -6231,5 +6231,165 @@ window.BOOKS = [
    "United Kingdom",
    "Denmark"
   ]
+ },
+ {
+  "id": "biscuit",
+  "title": "Biscuit",
+  "titleKo": "비스킷",
+  "author": "Alyssa Satin Capucilli",
+  "authorKo": "앨리사 사틴 카푸칠리",
+  "country": "United States",
+  "emoji": "🐶",
+  "color": "#d9a441",
+  "cefr": "A0",
+  "lexile": "약 150L",
+  "words": 72,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "biscuit-finds-a-friend",
+  "title": "Biscuit Finds a Friend",
+  "titleKo": "비스킷, 친구를 찾았어요",
+  "author": "Alyssa Satin Capucilli",
+  "authorKo": "앨리사 사틴 카푸칠리",
+  "country": "United States",
+  "emoji": "🦆",
+  "color": "#e0b34a",
+  "cefr": "A0",
+  "lexile": "약 190L",
+  "words": 77,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "bathtime-for-biscuit",
+  "title": "Bathtime for Biscuit",
+  "titleKo": "비스킷, 목욕할 시간이야",
+  "author": "Alyssa Satin Capucilli",
+  "authorKo": "앨리사 사틴 카푸칠리",
+  "country": "United States",
+  "emoji": "🛁",
+  "color": "#5ba4cf",
+  "cefr": "A0",
+  "lexile": "약 170L",
+  "words": 79,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "eat-your-peas-louise",
+  "title": "Eat Your Peas, Louise!",
+  "titleKo": "완두콩 먹어, 루이스!",
+  "author": "Pegeen Snow",
+  "authorKo": "피전 스노",
+  "country": "United States",
+  "emoji": "🫛",
+  "color": "#6aa84f",
+  "cefr": "A0",
+  "lexile": "약 120L",
+  "words": 85,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "danny-and-the-dinosaur",
+  "title": "Danny and the Dinosaur",
+  "titleKo": "대니와 공룡",
+  "author": "Syd Hoff",
+  "authorKo": "시드 호프",
+  "country": "United States",
+  "emoji": "🦕",
+  "color": "#5f9e6e",
+  "cefr": "A1",
+  "lexile": "약 250L",
+  "words": 161,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "little-bear",
+  "title": "Little Bear",
+  "titleKo": "꼬마 곰",
+  "author": "Else Holmelund Minarik",
+  "authorKo": "엘세 홀메룬 미나릭",
+  "country": "United States",
+  "emoji": "🐻",
+  "color": "#8b6b4a",
+  "cefr": "A1",
+  "lexile": "약 370L",
+  "words": 157,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "father-bear-comes-home",
+  "title": "Father Bear Comes Home",
+  "titleKo": "아빠 곰이 돌아왔어요",
+  "author": "Else Holmelund Minarik",
+  "authorKo": "엘세 홀메룬 미나릭",
+  "country": "United States",
+  "emoji": "🎣",
+  "color": "#6b5a3e",
+  "cefr": "A1",
+  "lexile": "약 320L",
+  "words": 145,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "amelia-bedelia",
+  "title": "Amelia Bedelia",
+  "titleKo": "아멜리아 베델리아",
+  "author": "Peggy Parish",
+  "authorKo": "페기 패리시",
+  "country": "United States",
+  "emoji": "🥧",
+  "color": "#c0504d",
+  "cefr": "A1",
+  "lexile": "약 140L",
+  "words": 153,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "fancy-nancy-and-the-boy-from-paris",
+  "title": "Fancy Nancy and the Boy from Paris",
+  "titleKo": "팬시 낸시와 파리에서 온 소년",
+  "author": "Jane O'Connor",
+  "authorKo": "제인 오코너",
+  "country": "United States",
+  "emoji": "🗼",
+  "color": "#c27ba0",
+  "cefr": "A1",
+  "lexile": "약 380L",
+  "words": 133,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "ruby-bridges-through-my-eyes",
+  "title": "Through My Eyes: Ruby Bridges",
+  "titleKo": "루비 브리지스: 내 눈으로 본 이야기",
+  "author": "Ruby Bridges",
+  "authorKo": "루비 브리지스",
+  "country": "United States",
+  "emoji": "🎒",
+  "color": "#4a6fa5",
+  "cefr": "A1",
+  "lexile": "약 860L",
+  "words": 140,
+  "places": [
+   "United States"
+  ]
  }
 ];
