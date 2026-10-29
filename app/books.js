@@ -6259,7 +6259,7 @@ window.BOOKS = [
   "color": "#e0b34a",
   "cefr": "A0",
   "lexile": "약 190L",
-  "words": 77,
+  "words": 82,
   "places": [
    "United States"
   ]
@@ -6275,7 +6275,7 @@ window.BOOKS = [
   "color": "#5ba4cf",
   "cefr": "A0",
   "lexile": "약 170L",
-  "words": 79,
+  "words": 82,
   "places": [
    "United States"
   ]
@@ -6290,8 +6290,8 @@ window.BOOKS = [
   "emoji": "🫛",
   "color": "#6aa84f",
   "cefr": "A0",
-  "lexile": "약 120L",
-  "words": 85,
+  "lexile": "약 150L",
+  "words": 90,
   "places": [
    "United States"
   ]
@@ -6307,7 +6307,7 @@ window.BOOKS = [
   "color": "#5f9e6e",
   "cefr": "A1",
   "lexile": "약 250L",
-  "words": 161,
+  "words": 153,
   "places": [
    "United States"
   ]
@@ -6339,7 +6339,7 @@ window.BOOKS = [
   "color": "#6b5a3e",
   "cefr": "A1",
   "lexile": "약 320L",
-  "words": 145,
+  "words": 120,
   "places": [
    "United States"
   ]
@@ -6371,7 +6371,7 @@ window.BOOKS = [
   "color": "#c27ba0",
   "cefr": "A1",
   "lexile": "약 380L",
-  "words": 133,
+  "words": 140,
   "places": [
    "United States"
   ]
