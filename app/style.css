@@ -453,3 +453,6 @@ button.rt:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(30,55
   .cert-in { padding: 40px 50px 30px; }
   .cert-title { font-size: 2.8rem; }
 }
+
+/* v46 exam practice: keep line breaks for (A)(B)(C) parts */
+.para .body > div { white-space: pre-line; }

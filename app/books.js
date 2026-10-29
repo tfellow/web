@@ -6487,5 +6487,118 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "the-steadfast-tin-soldier",
+  "title": "The Steadfast Tin Soldier",
+  "titleKo": "꿋꿋한 주석 병정",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "💂",
+  "color": "#b03a3a",
+  "cefr": "A1",
+  "lexile": "약 680L",
+  "words": 159,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "urashima-taro",
+  "title": "Urashima Taro",
+  "titleKo": "우라시마 타로",
+  "author": "Japanese Folktale",
+  "authorKo": "일본 옛이야기",
+  "country": "Japan",
+  "emoji": "🐢",
+  "color": "#2e7d8c",
+  "cefr": "A1",
+  "lexile": "약 560L",
+  "words": 146,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-pied-piper-of-hamelin",
+  "title": "The Pied Piper of Hamelin",
+  "titleKo": "하멜른의 피리 부는 사나이",
+  "author": "German Legend",
+  "authorKo": "독일 전설",
+  "country": "Germany",
+  "emoji": "🪈",
+  "color": "#8a5a2b",
+  "cefr": "A1",
+  "lexile": "약 620L",
+  "words": 153,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-canterville-ghost",
+  "title": "The Canterville Ghost",
+  "titleKo": "캔터빌의 유령",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "United Kingdom",
+  "emoji": "👻",
+  "color": "#5b5f7a",
+  "cefr": "A2",
+  "lexile": "약 1040L",
+  "words": 194,
+  "places": [
+   "United Kingdom",
+   "United States"
+  ]
+ },
+ {
+  "id": "exam-practice-1",
+  "title": "Exam Practice 1: Everyday Life",
+  "titleKo": "수능 유형 맛보기 1: 일상생활",
+  "author": "MY Reading Passport",
+  "authorKo": "MY 리딩 패스포트",
+  "country": "South Korea",
+  "emoji": "📝",
+  "color": "#3b6ea5",
+  "cefr": "A2",
+  "lexile": "약 600L",
+  "words": 188,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "exam-practice-2",
+  "title": "Exam Practice 2: Science and Society",
+  "titleKo": "수능 유형 맛보기 2: 과학과 사회",
+  "author": "MY Reading Passport",
+  "authorKo": "MY 리딩 패스포트",
+  "country": "South Korea",
+  "emoji": "📝",
+  "color": "#2f5d50",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 281,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-red-headed-league",
+  "title": "The Red-Headed League",
+  "titleKo": "빨간 머리 연맹",
+  "author": "Arthur Conan Doyle",
+  "authorKo": "아서 코넌 도일",
+  "country": "United Kingdom",
+  "emoji": "🔍",
+  "color": "#a0452c",
+  "cefr": "B1",
+  "lexile": "약 1070L",
+  "words": 265,
+  "places": [
+   "United Kingdom"
+  ]
  }
 ];
