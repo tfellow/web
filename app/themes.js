@@ -424,5 +424,11 @@ window.BOOK_THEMES = {
   "father-bear-comes-home": "family,friend|picture",
   "amelia-bedelia": "honesty,wisdom|picture",
   "fancy-nancy-and-the-boy-from-paris": "friend,honesty|picture",
-  "ruby-bridges-through-my-eyes": "justice,history,growth|true"
+  "ruby-bridges-through-my-eyes": "justice,history,growth|true",
+  "pete-at-the-beach": "family,growth|picture",
+  "mia-and-the-too-big-tutu": "friend,growth|picture",
+  "splat-the-cat-sings-flat": "growth,family|picture",
+  "biscuit-goes-to-school": "friend,adventure|picture",
+  "messy-bessey": "growth,family|picture",
+  "amelia-bedelia-makes-a-friend": "friend,growth|picture"
 };

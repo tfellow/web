@@ -6391,5 +6391,101 @@ window.BOOKS = [
   "places": [
    "United States"
   ]
+ },
+ {
+  "id": "pete-at-the-beach",
+  "title": "Pete the Cat: Pete at the Beach",
+  "titleKo": "피트 더 캣: 바닷가에 간 피트",
+  "author": "James Dean",
+  "authorKo": "제임스 딘",
+  "country": "United States",
+  "emoji": "🏄",
+  "color": "#3d7ab8",
+  "cefr": "A0",
+  "lexile": "약 200L",
+  "words": 96,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "mia-and-the-too-big-tutu",
+  "title": "Mia and the Too Big Tutu",
+  "titleKo": "미아와 너무 큰 발레 치마",
+  "author": "Robin Farley",
+  "authorKo": "로빈 팔리",
+  "country": "United States",
+  "emoji": "🩰",
+  "color": "#e48fb0",
+  "cefr": "A0",
+  "lexile": "약 240L",
+  "words": 87,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "splat-the-cat-sings-flat",
+  "title": "Splat the Cat Sings Flat",
+  "titleKo": "스플랫, 노래 부르기는 어려워",
+  "author": "Chris Strathearn",
+  "authorKo": "크리스 스트래선",
+  "country": "United States",
+  "emoji": "🎤",
+  "color": "#4a4a6a",
+  "cefr": "A0",
+  "lexile": "약 430L",
+  "words": 87,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "biscuit-goes-to-school",
+  "title": "Biscuit Goes to School",
+  "titleKo": "비스킷, 학교에 가요",
+  "author": "Alyssa Satin Capucilli",
+  "authorKo": "앨리사 사틴 카푸칠리",
+  "country": "United States",
+  "emoji": "🏫",
+  "color": "#e3b04b",
+  "cefr": "A0",
+  "lexile": "약 170L",
+  "words": 74,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "messy-bessey",
+  "title": "Messy Bessey",
+  "titleKo": "엉망진창 베시",
+  "author": "Patricia and Fredrick McKissack",
+  "authorKo": "퍼트리샤·프레드릭 매키색",
+  "country": "United States",
+  "emoji": "🧹",
+  "color": "#c9822f",
+  "cefr": "A0",
+  "lexile": "약 200L",
+  "words": 76,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "amelia-bedelia-makes-a-friend",
+  "title": "Amelia Bedelia Makes a Friend",
+  "titleKo": "아멜리아 베델리아, 친구를 사귀어요",
+  "author": "Herman Parish",
+  "authorKo": "허먼 패리시",
+  "country": "United States",
+  "emoji": "🏡",
+  "color": "#c0504d",
+  "cefr": "A0",
+  "lexile": "약 380L",
+  "words": 81,
+  "places": [
+   "United States"
+  ]
  }
 ];
