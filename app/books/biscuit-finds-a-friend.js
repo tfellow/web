@@ -3,20 +3,20 @@ window.BOOK_CONTENT = window.BOOK_CONTENT || {};
 window.BOOK_CONTENT["biscuit-finds-a-friend"] = {
  "story": [
   {
-   "en": "Biscuit is outside with the girl. He finds something in the grass. It is a little duck!",
-   "ko": "비스킷은 소녀와 함께 밖에 있어요. 비스킷이 풀밭에서 무언가를 찾아요. 작은 오리예요!"
+   "en": "Biscuit is in the yard. He finds something under the house. Is it a ball? Is it a bone? No! It is a little duck.",
+   "ko": "비스킷은 마당에 있어요. 비스킷이 집 밑에서 무언가를 찾아요. 공일까요? 뼈다귀일까요? 아니에요! 작은 오리예요."
   },
   {
    "en": "The little duck is lost. It is far from its home. Biscuit wants to help.",
    "ko": "작은 오리는 길을 잃었어요. 집에서 멀리 떨어져 있어요. 비스킷은 오리를 돕고 싶어요."
   },
   {
-   "en": "Biscuit and the girl take the duck to the pond. The duck's family is there. The little duck jumps into the water. Splash! Now Biscuit is all wet.",
-   "ko": "비스킷과 소녀는 오리를 연못으로 데려가요. 그곳에 오리 가족이 있어요. 작은 오리가 물속으로 뛰어들어요. 첨벙! 이제 비스킷은 흠뻑 젖었어요."
+   "en": "Biscuit and the girl take the little duck to the pond. Its mother and father are there. They are very happy to see their baby.",
+   "ko": "비스킷과 소녀는 작은 오리를 연못으로 데려가요. 그곳에 엄마 오리와 아빠 오리가 있어요. 엄마 아빠 오리는 아기를 보고 아주 기뻐해요."
   },
   {
-   "en": "Biscuit is not sad. He has a new friend. The little duck says, “Quack!” Biscuit says, “Woof!”",
-   "ko": "비스킷은 슬프지 않아요. 새 친구가 생겼으니까요. 작은 오리가 “꽥!” 하고 말해요. 비스킷은 “멍!” 하고 말해요."
+   "en": "The little duck says, “Quack!” Biscuit says, “Woof!” Biscuit is happy, too. He has a new friend.",
+   "ko": "작은 오리가 “꽥!” 하고 말해요. 비스킷은 “멍!” 하고 말해요. 비스킷도 기뻐요. 새 친구가 생겼으니까요."
   }
  ],
  "analysis": [
@@ -27,8 +27,8 @@ window.BOOK_CONTENT["biscuit-finds-a-friend"] = {
   },
   {
    "label": "Main Idea (요지)",
-   "en": "Biscuit finds a lost little duck, takes it back to the pond, and makes a new friend.",
-   "ko": "비스킷은 길 잃은 작은 오리를 찾아 연못에 데려다주고 새 친구를 사귄다."
+   "en": "Biscuit finds a lost little duck, takes it back to its family at the pond, and makes a new friend.",
+   "ko": "비스킷은 길 잃은 작은 오리를 찾아 연못의 가족에게 데려다주고 새 친구를 사귄다."
   },
   {
    "label": "Theme (주제)",
@@ -50,17 +50,6 @@ window.BOOK_CONTENT["biscuit-finds-a-friend"] = {
  ],
  "vocab": [
   {
-   "level": "B1 - Intermediate",
-   "items": [
-    [
-     "Splash",
-     "n.",
-     "첨벙(하는 소리)",
-     "The sound of something hitting water."
-    ]
-   ]
-  },
-  {
    "level": "A2 - Elementary",
    "items": [
     [
@@ -76,10 +65,16 @@ window.BOOK_CONTENT["biscuit-finds-a-friend"] = {
      "Not able to find the way home."
     ],
     [
-     "Wet",
-     "adj.",
-     "젖은",
-     "Covered with water."
+     "Bone",
+     "n.",
+     "뼈다귀",
+     "A hard white part inside an animal's body; dogs like to chew it."
+    ],
+    [
+     "Yard",
+     "n.",
+     "마당",
+     "The land next to a house."
     ]
    ]
   },
@@ -87,10 +82,10 @@ window.BOOK_CONTENT["biscuit-finds-a-friend"] = {
    "level": "A1 - Beginner",
    "items": [
     [
-     "Grass",
-     "n.",
-     "풀, 잔디",
-     "Thin green plants on the ground."
+     "Under",
+     "prep.",
+     "~ 밑에",
+     "Below something."
     ],
     [
      "Duck",
