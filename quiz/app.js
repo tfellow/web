@@ -8,6 +8,7 @@ const ALLOWED_SCHOOL_DOMAIN = '@smy.ms.kr';
 const GOOGLE_CLIENT_ID = '359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com';
 const SUPABASE_URL = 'https://jkxdhyvnrvsiokbbbjtu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF';
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzem2As4a_5FqOJ5KTF49AiVgT8M4h_cDrOEMMlZZmEvbD-bHZD-RSDDKHOKL3o_copYQ/exec';
 
 let sbClient = null;
 try {
@@ -46,7 +47,7 @@ let state = {
   allUsers: {},
   quizLogs: [], // { date: 'YYYY-MM-DD', email, classId, category, isCorrect }
   questions: [],
-  gasUrl: '',
+  gasUrl: DEFAULT_GAS_URL,
   showDemoData: true,
   soundEnabled: true,
   adminPeriod: 'all', // today, thisWeek, thisMonth, last7, last30, customDay, all
@@ -337,11 +338,15 @@ function loadPersistentState() {
     const demoCheck = document.getElementById('toggleDemoDataCheckbox');
     if (demoCheck) demoCheck.checked = state.showDemoData;
 
-    const savedGasUrl = localStorage.getItem(STORAGE_KEYS.GAS_URL);
+    const savedGasUrl = localStorage.getItem(STORAGE_KEYS.GAS_URL) || DEFAULT_GAS_URL;
     if (savedGasUrl) {
       state.gasUrl = savedGasUrl;
       const gasInput = document.getElementById('gasUrlInput');
       if (gasInput) gasInput.value = savedGasUrl;
+      const box = document.getElementById('gasStatusBox');
+      if (box) {
+        box.textContent = `✅ 구글 시트 실시간 클라우드 연동 완료 (${savedGasUrl.slice(0, 48)}...)`;
+      }
     }
 
     const customQs = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOM_QUESTIONS) || '[]');
@@ -691,6 +696,10 @@ function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin, 
   saveUserState();
   closeLoginModal();
   refreshAllUI();
+
+  if (state.gasUrl && state.currentUser) {
+    postToGoogleSheets({ action: 'syncUser', user: state.currentUser });
+  }
 
   if (state.currentUser.isAdmin) {
     showToast(`👩‍🏫 환영합니다, ${state.currentUser.name}님! 교사용 모드에서는 전교생의 닉네임과 실명을 모두 열람할 수 있습니다.`);
@@ -2639,7 +2648,17 @@ async function syncWithGoogleSheets(showNotification = true) {
       const data = await res.json();
       if (data.users && Array.isArray(data.users)) {
         data.users.forEach(u => {
-          if (u.email) state.allUsers[u.email] = u;
+          if (u.email) {
+            const key = u.email.toLowerCase().trim();
+            const prev = state.allUsers[key];
+            const merged = prev && (prev.totalSolved || 0) > (u.totalSolved || 0)
+              ? { ...u, ...prev, email: key, profileConfirmed: true, isAdmin: ADMIN_EMAILS.includes(key) }
+              : { ...(prev || {}), ...u, email: key, profileConfirmed: true, isAdmin: ADMIN_EMAILS.includes(key) };
+            state.allUsers[key] = merged;
+            if (state.currentUser && state.currentUser.email === key) {
+              state.currentUser = merged;
+            }
+          }
         });
         saveUserState();
       }
