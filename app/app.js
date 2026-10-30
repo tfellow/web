@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "47"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "48"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -1146,6 +1146,7 @@
   async function renderTeacher() {
     if (!state.isAdmin) { location.hash = "#/"; return; }
     loading();
+    state.tAtt = null;
     var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats"), sb.from("books").select("id,featured"),
       sb.rpc("admin_question_stats"), sb.rpc("admin_extras"), sb.rpc("leaderboard"), sb.from("profiles").select("email,reading_level")]);
     var lvByEmail = {};
@@ -1230,7 +1231,7 @@
     var notJoinedN = roster.filter(function (r) { return !r.joined; }).length;
     function stat(n, label) { return '<div class="kv center" style="margin:0"><b>' + n + '</b><span class="muted">' + label + "</span></div>"; }
 
-    var TABS = [["class", "📊 반별 현황"], ["students", "👤 학생"], ["books", "📚 작품"], ["board", "🏅 TOP 10"], ["quiz", "🧩 문항·힌트"], ["settings", "⚙️ 설정"]];
+    var TABS = [["class", "📊 반별 현황"], ["range", "📅 기간별"], ["students", "👤 학생"], ["books", "📚 작품"], ["board", "🏅 TOP 10"], ["quiz", "🧩 문항·힌트"], ["settings", "⚙️ 설정"]];
     state.tTab = state.tTab || "class";
     state.tCls = state.tCls || "";
 
@@ -1273,6 +1274,156 @@
           return [s.key, s.roster, s.joined, s.active, s.medalists, s.gold, s.silver, s.bronze, s.stars, s.joined ? (s.completed / s.joined).toFixed(1) : 0, s.words, goalWords, s.week, s.streak, Object.keys(s.countries).length];
         })));
       };
+    }
+
+    // 📅 기간별 (날짜·기간으로 통계 보기와 검색)
+    function kstDate(ts) { return new Date(new Date(ts).getTime() + 9 * 3600000).toISOString().slice(0, 10); }
+    function addDays(s, n) { var p = s.split("-").map(Number); return new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)).toISOString().slice(0, 10); }
+    function kstTime(ts) { return new Date(new Date(ts).getTime() + 9 * 3600000).toISOString().slice(5, 16).replace("T", " "); }
+    function bucketKey(d, by) {
+      if (by === "month") return d.slice(0, 7);
+      if (by === "week") { var dow = new Date(d + "T00:00:00Z").getUTCDay(); return addDays(d, -((dow + 6) % 7)); }
+      return d;
+    }
+    async function drawRange() {
+      var today = ex.today || kstDate(new Date());
+      var R = state.tRange = state.tRange || { from: addDays(today, -6), to: today, by: "day", q: "" };
+      var body = document.getElementById("tbody");
+      if (!state.tAtt || Date.now() - state.tAttAt > 60000) {
+        body.innerHTML = '<p class="muted center" style="padding:20px 0">불러오는 중...</p>';
+        var ar = await sb.rpc("admin_attempts");
+        if (state.tTab !== "range") return;
+        if (ar.error) {
+          body.innerHTML = '<div class="card"><h2>📅 기간별</h2><p class="muted">기록을 불러오지 못했어요: ' + esc(cleanMsg(ar.error.message)) + '</p><p class="muted">서버에 admin_attempts 함수를 한 번 만들어야 해요 (admin_attempts.sql 참고).</p></div>';
+          return;
+        }
+        state.tAtt = (ar.data || []).map(function (a) { a.date = kstDate(a.attempt_at); return a; });
+        state.tAttAt = Date.now();
+      }
+      var att = state.tAtt;
+      var byEmail = {};
+      ov.forEach(function (r) { byEmail[low(r.email)] = r; });
+      // 작품별 첫 메달 시각 (새로 받은 메달 구분용)
+      var firstMedal = {};
+      att.forEach(function (a) {
+        if (!a.medal) return;
+        var k = low(a.email) + "|" + a.book_id;
+        if (!firstMedal[k] || a.attempt_at < firstMedal[k]) firstMedal[k] = a.attempt_at;
+      });
+      body.innerHTML =
+        '<div class="card"><h2>📅 기간별 통계 · 검색</h2>' +
+        '<div class="rangebar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+        '<input type="date" id="rfrom"> ~ <input type="date" id="rto"> ' + clsPicker() +
+        ' <select id="rby"><option value="day">일별</option><option value="week">주별</option><option value="month">월별</option></select></div>' +
+        '<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">' +
+        '<button class="btn ghost small rp" data-p="today">오늘</button><button class="btn ghost small rp" data-p="7">최근 7일</button>' +
+        '<button class="btn ghost small rp" data-p="week">이번 주</button><button class="btn ghost small rp" data-p="30">최근 30일</button>' +
+        '<button class="btn ghost small rp" data-p="month">이번 달</button><button class="btn ghost small rp" data-p="all">전체</button></div>' +
+        '<input id="rq" type="search" placeholder="🔍 학생 이름·닉네임·작품 이름으로 검색" style="width:100%;max-width:420px;padding:7px 10px;border:1px solid var(--line);border-radius:10px">' +
+        '<p class="muted" style="margin-bottom:0">날짜는 한국 시간 기준이고, 퀴즈에 응시한 기록으로 계산해요. “새 메달”은 그 작품에서 처음 받은 메달이에요.</p></div>' +
+        '<div id="rout"></div>';
+      var elF = document.getElementById("rfrom"), elT = document.getElementById("rto"), elB = document.getElementById("rby"), elQ = document.getElementById("rq");
+      elF.value = R.from; elT.value = R.to; elB.value = R.by; elQ.value = R.q;
+      var cur = null;
+      function draw() {
+        var q = low(R.q).trim();
+        var rows = att.filter(function (a) {
+          var m = byEmail[low(a.email)];
+          return m && inCls(m) && a.date >= R.from && a.date <= R.to;
+        });
+        var stu = {}, bk = {}, per = {}, st = { tries: 0, medals: 0, gold: 0, silver: 0, bronze: 0, newMedal: 0, words: 0, sum: 0 };
+        rows.forEach(function (a) {
+          var k = low(a.email), pr = a.total ? a.score / a.total : 0;
+          st.tries++; st.sum += pr;
+          var isNew = !!a.medal && firstMedal[k + "|" + a.book_id] === a.attempt_at;
+          if (a.medal) { st.medals++; st[a.medal]++; }
+          var b = findBook(a.book_id);
+          if (isNew) { st.newMedal++; st.words += (b && b.words) || 0; }
+          var s = stu[k] = stu[k] || { tries: 0, newMedal: 0, sum: 0, last: "" };
+          s.tries++; s.sum += pr; if (isNew) s.newMedal++; if (a.attempt_at > s.last) s.last = a.attempt_at;
+          var bb = bk[a.book_id] = bk[a.book_id] || { tries: 0, students: {}, medals: 0, sum: 0 };
+          bb.tries++; bb.students[k] = 1; if (a.medal) bb.medals++; bb.sum += pr;
+          var pk = bucketKey(a.date, R.by), p = per[pk] = per[pk] || { tries: 0, students: {}, newMedal: 0, sum: 0 };
+          p.tries++; p.students[k] = 1; p.sum += pr; if (isNew) p.newMedal++;
+        });
+        var members = ov.filter(inCls), activeKeys = Object.keys(stu);
+        var idle = members.filter(function (r) { return !stu[low(r.email)]; });
+        function nameOf(e) { var m = byEmail[e]; return m ? (m.grade ? m.grade + "-" + m.class_no + "-" + m.student_no + " " : "") + (m.name || m.email) : e; }
+        function matchRow(a) {
+          if (!q) return true;
+          var m = byEmail[low(a.email)] || {}, b = findBook(a.book_id) || {};
+          return low([m.name, m.nickname, m.email, b.title, b.titleKo].join(" ")).indexOf(q) >= 0;
+        }
+        var perRows = Object.keys(per).sort().reverse();
+        var stuRows = activeKeys.filter(function (k) { var m = byEmail[k]; return !q || low([m.name, m.nickname, m.email].join(" ")).indexOf(q) >= 0; })
+          .sort(function (a, b) { return stu[b].tries - stu[a].tries; });
+        var bookRows = Object.keys(bk).filter(function (id) { var b = findBook(id) || {}; return !q || low([b.title, b.titleKo].join(" ")).indexOf(q) >= 0; })
+          .sort(function (a, b) { return bk[b].tries - bk[a].tries; });
+        var detail = rows.filter(matchRow).sort(function (a, b) { return a.attempt_at < b.attempt_at ? 1 : -1; });
+        var label = { day: "날짜", week: "주(월요일 시작)", month: "월" }[R.by];
+        cur = { per: perRows.map(function (k) { return [k, per[k].tries, Object.keys(per[k].students).length, per[k].newMedal, Math.round(per[k].sum / per[k].tries * 100)]; }), stu: stuRows, detail: detail, nameOf: nameOf, stuMap: stu };
+        document.getElementById("rout").innerHTML =
+          '<div class="card"><div class="tstats">' + stat(st.tries, "퀴즈 응시") + stat(activeKeys.length, "참여 학생") + stat(st.newMedal, "새 메달") +
+          stat(st.gold + "·" + st.silver + "·" + st.bronze, "🥇·🥈·🥉 (응시 기준)") + stat(st.words.toLocaleString(), "새로 읽은 단어") + stat(st.tries ? Math.round(st.sum / st.tries * 100) + "%" : "-", "평균 점수") + "</div>" +
+          '<p class="muted" style="margin-bottom:0">' + esc(R.from) + " ~ " + esc(R.to) + " · " + (state.tCls ? esc(state.tCls.replace("-", "학년 ") + "반") : "전체") + " · 이 기간에 활동이 없는 학생 " + idle.length + "명" +
+          (idle.length && idle.length <= 40 ? ' <button class="linkbtn" id="ridle">명단 보기</button>' : "") + "</p><div id=\"ridlebox\"></div></div>" +
+          '<div class="card"><h2>🗓 ' + {day: "일별", week: "주별", month: "월별"}[R.by] + ' 추이 <button class="btn ghost small" id="rcsv1">CSV</button></h2>' +
+          (perRows.length ? '<div class="scroll"><table><tr><th>' + label + "</th><th>응시</th><th>참여 학생</th><th>새 메달</th><th>평균 점수</th></tr>" + cur.per.map(function (r) {
+            return "<tr><td>" + esc(r[0]) + "</td><td>" + r[1] + "</td><td>" + r[2] + "명</td><td>" + r[3] + "</td><td>" + rateBar(r[4]) + "</td></tr>";
+          }).join("") + "</table></div>" : '<p class="muted">이 기간에는 응시 기록이 없어요.</p>') + "</div>" +
+          '<div class="card"><h2>👤 학생별 (이 기간) <button class="btn ghost small" id="rcsv2">CSV</button></h2>' +
+          (stuRows.length ? '<div class="scroll"><table><tr><th>학생</th><th>응시</th><th>새 메달</th><th>평균 점수</th><th>마지막 응시</th></tr>' + stuRows.map(function (k) {
+            var s = stu[k];
+            return '<tr><td><button class="linkbtn stu" data-e="' + esc(k) + '">' + esc(nameOf(k)) + "</button></td><td>" + s.tries + "</td><td>" + s.newMedal + "</td><td>" + Math.round(s.sum / s.tries * 100) + "%</td><td>" + kstTime(s.last) + "</td></tr>";
+          }).join("") + "</table></div>" : '<p class="muted">해당하는 학생이 없어요.</p>') + "</div>" +
+          '<div class="card"><h2>📚 작품별 (이 기간)</h2>' +
+          (bookRows.length ? '<div class="scroll"><table><tr><th>작품</th><th>응시</th><th>학생</th><th>메달</th><th>평균 점수</th></tr>' + bookRows.slice(0, 30).map(function (id) {
+            var b = findBook(id), x = bk[id];
+            return "<tr><td>" + esc(b ? b.emoji + " " + b.titleKo : id) + "</td><td>" + x.tries + "</td><td>" + Object.keys(x.students).length + "</td><td>" + x.medals + "</td><td>" + rateBar(Math.round(x.sum / x.tries * 100)) + "</td></tr>";
+          }).join("") + "</table></div>" + (bookRows.length > 30 ? '<p class="muted">상위 30개만 보여 줘요.</p>' : "") : '<p class="muted">해당하는 작품이 없어요.</p>') + "</div>" +
+          '<div class="card"><h2>🔎 응시 기록 (' + detail.length + "건) <button class=\"btn ghost small\" id=\"rcsv3\">CSV</button></h2>" +
+          (detail.length ? '<div class="scroll" style="max-height:60vh;overflow-y:auto"><table><tr><th>일시</th><th>학생</th><th>작품</th><th>점수</th><th>메달</th></tr>' + detail.slice(0, 300).map(function (a) {
+            var b = findBook(a.book_id);
+            return "<tr><td>" + kstTime(a.attempt_at) + "</td><td>" + esc(nameOf(low(a.email))) + "</td><td>" + esc(b ? b.titleKo : a.book_id) + "</td><td>" + a.score + "/" + a.total + "</td><td>" + (a.medal ? MEDALS[a.medal].em : "") + "</td></tr>";
+          }).join("") + "</table></div>" + (detail.length > 300 ? '<p class="muted">최근 300건만 보여 줘요. 전체는 CSV로 받을 수 있어요.</p>' : "") : '<p class="muted">해당하는 기록이 없어요.</p>') + "</div>";
+        each("#rout .stu", function (el) { el.onclick = function () { openStudent(el.getAttribute("data-e")); }; });
+        var ib = document.getElementById("ridle");
+        if (ib) ib.onclick = function () {
+          document.getElementById("ridlebox").innerHTML = '<p style="margin:8px 0 0">' + idle.map(function (r) { return esc((r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no + " " : "") + (r.name || r.email)); }).join(", ") + "</p>";
+          ib.remove();
+        };
+        var tag = R.from + "_" + R.to;
+        document.getElementById("rcsv1").onclick = function () { csvDownload("기간별추이_" + tag + ".csv", [[label, "응시", "참여학생", "새메달", "평균점수(%)"]].concat(cur.per)); };
+        document.getElementById("rcsv2").onclick = function () {
+          csvDownload("기간별학생_" + tag + ".csv", [["학년", "반", "번호", "이름", "응시", "새메달", "평균점수(%)", "마지막응시"]].concat(cur.stu.map(function (k) {
+            var m = byEmail[k], s = cur.stuMap[k]; return [m.grade, m.class_no, m.student_no, m.name, s.tries, s.newMedal, Math.round(s.sum / s.tries * 100), s.last];
+          })));
+        };
+        document.getElementById("rcsv3").onclick = function () {
+          csvDownload("응시기록_" + tag + ".csv", [["일시", "학년", "반", "번호", "이름", "작품", "수준", "점수", "만점", "메달"]].concat(cur.detail.map(function (a) {
+            var m = byEmail[low(a.email)] || {}, b = findBook(a.book_id);
+            return [kstTime(a.attempt_at), m.grade, m.class_no, m.student_no, m.name, b ? b.titleKo : a.book_id, b ? levelOf(b) : "", a.score, a.total, a.medal || ""];
+          })));
+        };
+      }
+      function setRange(f, t) { R.from = f; R.to = t; elF.value = f; elT.value = t; draw(); }
+      each(".rp", function (b) {
+        b.onclick = function () {
+          var p = b.getAttribute("data-p");
+          if (p === "today") setRange(today, today);
+          else if (p === "7") setRange(addDays(today, -6), today);
+          else if (p === "30") setRange(addDays(today, -29), today);
+          else if (p === "week") setRange(weekStart || bucketKey(today, "week"), today);
+          else if (p === "month") setRange(today.slice(0, 7) + "-01", today);
+          else setRange("2020-01-01", today);
+        };
+      });
+      elF.onchange = function () { if (elF.value) { R.from = elF.value; if (R.to < R.from) { R.to = R.from; elT.value = R.to; } draw(); } };
+      elT.onchange = function () { if (elT.value) { R.to = elT.value; if (R.from > R.to) { R.from = R.to; elF.value = R.from; } draw(); } };
+      elB.onchange = function () { R.by = elB.value; draw(); };
+      elQ.oninput = function () { R.q = elQ.value; draw(); };
+      bindCls(draw);
+      draw();
     }
 
     // 👤 학생
@@ -1514,7 +1665,7 @@
       };
     }
 
-    var DRAW = { "class": drawClass, students: drawStudents, books: drawBooks, board: drawBoard, quiz: drawQuiz, settings: drawSettings };
+    var DRAW = { "class": drawClass, range: drawRange, students: drawStudents, books: drawBooks, board: drawBoard, quiz: drawQuiz, settings: drawSettings };
     function show(t) {
       state.tTab = t;
       each("#ttabs button", function (b) { b.classList.toggle("on", b.getAttribute("data-t") === t); });
