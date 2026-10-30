@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "50"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "51"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -417,15 +417,38 @@
   }
   function speak(text, onend) {
     if (!ttsOk()) { toast("이 기기에서는 읽어주기를 쓸 수 없어요."); return; }
-    try { speechSynthesis.cancel(); } catch (e) {}
     var tok = ++tts.tok;
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US"; u.rate = tts.rate;
-    var vs = speechSynthesis.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang); });
-    var pick = vs.filter(function (v) { return /en[-_]US/i.test(v.lang); })[0] || vs[0];
-    if (pick) u.voice = pick;
-    u.onend = u.onerror = function () { if (tok === tts.tok && onend) onend(); };
-    speechSynthesis.speak(u);
+    try { if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel(); } catch (e) {}
+    // 모바일 브라우저는 긴 문장을 중간에 멈추거나 건너뛰어서, 짧은 덩어리(문장 묶음)로 나눠 이어서 읽어요
+    var sents = String(text).match(/[^.!?]+[.!?]+["'”’)\]]*\s*|[^.!?]+$/g) || [String(text)];
+    var chunks = [], cur = "";
+    sents.forEach(function (s) {
+      if (cur && (cur + s).length > 140) { chunks.push(cur); cur = ""; }
+      cur += s;
+    });
+    if (cur.trim()) chunks.push(cur);
+    function say(i) {
+      if (tok !== tts.tok) return;
+      if (i >= chunks.length) { if (onend) onend(); return; }
+      var u = new SpeechSynthesisUtterance(chunks[i].trim());
+      u.lang = "en-US"; u.rate = tts.rate;
+      var vs = speechSynthesis.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang); });
+      var pick = vs.filter(function (v) { return /en[-_]US/i.test(v.lang); })[0] || vs[0];
+      if (pick) u.voice = pick;
+      var moved = false;
+      function next() { if (moved) return; moved = true; clearInterval(poll); if (tok === tts.tok) say(i + 1); }
+      u.onend = next;
+      u.onerror = function (ev) { if (ev && (ev.error === "canceled" || ev.error === "interrupted")) return; next(); };
+      // 일부 모바일 브라우저는 onend 를 보내지 않아서, 말이 끝났는지 직접 확인해요
+      var started = Date.now();
+      var poll = setInterval(function () {
+        if (tok !== tts.tok) return clearInterval(poll);
+        if (Date.now() - started > 2000 && !speechSynthesis.speaking && !speechSynthesis.pending) next();
+      }, 400);
+      try { speechSynthesis.resume(); } catch (e) {}
+      speechSynthesis.speak(u);
+    }
+    setTimeout(function () { say(0); }, 80);
   }
   function ttsPlayAll(story, i) {
     each(".para.reading", function (el) { el.classList.remove("reading"); });
