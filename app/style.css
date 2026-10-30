@@ -284,6 +284,27 @@ select { border: 1px solid var(--line); border-radius: 10px; padding: 5px 8px; b
 td .rate { min-width: 120px; margin-top: 4px; }
 .overlay input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
 
+/* v50: 읽어주기 · 단어 카드 · 반 챌린지 */
+.ttsbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; }
+.ttsbar select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+.tts-p { font-size: 15px; text-decoration: none; margin-left: 4px; }
+.para.reading { background: var(--gold-soft); border-radius: 12px; }
+.fc-wrap { text-align: center; }
+.fc-prog { font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.fc { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 100%; min-height: 220px; margin: 14px 0; padding: 20px; border: 2px solid var(--gold); border-radius: 20px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+.fc.back { background: var(--navy-soft); border-color: var(--navy-2); }
+.fc-w { font-size: 34px; font-weight: 800; color: var(--navy); }
+.fc-p, .fc-s { color: var(--muted); }
+.fc-t { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.fc-m { font-size: 26px; font-weight: 800; color: var(--navy); }
+.fc-d { color: var(--muted); max-width: 440px; }
+.fc-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.chal { margin-top: 10px; }
+.chal-steps { display: flex; gap: 8px; }
+.chal-steps span { flex: 1; text-align: center; padding: 6px 0; border-radius: 12px; background: var(--navy-soft); font-size: 18px; opacity: .65; }
+.chal-steps span.on { background: var(--gold-soft); opacity: 1; }
+.chal-steps small { display: block; font-size: 11px; color: var(--muted); }
+
 /* 모바일 세로 화면 (반드시 스타일 맨 끝에 둘 것: 앞의 기본 규칙을 덮어쓰기 위해) */
 /* v9: 내 지도 / 우리 반 지도 · 대륙 배지 · 도장 고르기 */
 .pp-stats { grid-template-columns: repeat(4, 1fr); }
