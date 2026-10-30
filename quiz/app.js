@@ -227,6 +227,29 @@ function isTeacherEmail(email) {
   return getAdminEmailsList().includes(String(email).toLowerCase().trim());
 }
 
+/**
+ * 구글 시트가 '2-2' 등의 학급 문자열을 날짜(예: "Mon Feb 02 2026...")로 자동 변환한 경우
+ * 원래의 '1-1' ~ '3-4' 학급 문자열로 즉시 복원합니다.
+ */
+function normalizeClassId(raw) {
+  if (!raw) return '1-1';
+  const s = String(raw).trim();
+  const mDirect = s.match(/^([1-3])-([1-4])$/);
+  if (mDirect) return `${mDirect[1]}-${mDirect[2]}`;
+
+  const monthMap = { jan: 1, feb: 2, mar: 3 };
+  const mDateStr = s.match(/\b(Jan|Feb|Mar)\s+0?([1-4])\b/i);
+  if (mDateStr) {
+    return `${monthMap[mDateStr[1].toLowerCase()]}-${Number(mDateStr[2])}`;
+  }
+  const mIso = s.match(/^\d{4}-0?([1-3])-0?([1-4])\b/);
+  if (mIso) {
+    return `${Number(mIso[1])}-${Number(mIso[2])}`;
+  }
+  if (SCHOOL_CLASSES.some(c => c.classId === s)) return s;
+  return '1-1';
+}
+
 function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin = false }) {
   const today = getLocalDateStr();
   const cleanEmail = email.toLowerCase().trim();
@@ -234,7 +257,7 @@ function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin 
     email: cleanEmail,
     name: (name || '김문영').trim(),
     nickname: (nickname || name || '개나리퀸').trim(),
-    classId: classId || '2-2',
+    classId: normalizeClassId(classId || '1-1'),
     studentNo: Number(studentNo) || 1,
     isAdmin: isAdmin || isTeacherEmail(cleanEmail),
     xp: 0,
@@ -371,11 +394,21 @@ function loadPersistentState() {
     state.questions = [...DEFAULT_QUESTIONS, ...customQs];
 
     state.allUsers = JSON.parse(localStorage.getItem(STORAGE_KEYS.ALL_USERS) || '{}');
+    Object.values(state.allUsers).forEach(u => {
+      if (u && u.classId && u.email !== '__admin_config__') {
+        u.classId = normalizeClassId(u.classId);
+      }
+    });
     state.quizLogs = JSON.parse(localStorage.getItem(STORAGE_KEYS.QUIZ_LOGS) || '[]');
+    state.quizLogs.forEach(l => {
+      if (l && l.classId) l.classId = normalizeClassId(l.classId);
+    });
 
     const savedCurrent = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || 'null');
     if (savedCurrent && savedCurrent.email) {
+      savedCurrent.classId = normalizeClassId(savedCurrent.classId);
       state.currentUser = state.allUsers[savedCurrent.email] || savedCurrent;
+      state.currentUser.classId = normalizeClassId(state.currentUser.classId);
       state.allUsers[state.currentUser.email] = state.currentUser;
     }
   } catch (e) {
@@ -784,6 +817,7 @@ function refreshAllUI() {
 
   const streak = user.streakDays || 1;
   const maxStreak = user.maxStreakDays || streak;
+  user.classId = normalizeClassId(user.classId);
 
   // 상단 헤더 바
   document.getElementById('headerStreakPill').textContent = `🔥 연속 ${streak}일째`;
@@ -801,13 +835,15 @@ function refreshAllUI() {
   const titleObj = getLevelTitleObj(user.level);
   document.getElementById('profileAvatar').textContent = titleObj.badge;
   document.getElementById('profileNickname').textContent = user.nickname || user.name;
-  document.getElementById('profileClassTag').textContent = user.classId;
-  document.getElementById('profileRealNameSub').textContent = `실명(본인·교사만 열람): ${user.name} (${user.studentNo}번) | ${user.email}`;
+  document.getElementById('profileClassTag').textContent = user.isAdmin ? '👩‍🏫 교사' : `${user.classId} (${user.studentNo}번)`;
+  document.getElementById('profileRealNameSub').textContent = user.isAdmin
+    ? `교사 계정: ${user.name} | ${user.email}`
+    : `실명(본인·교사만 열람): ${user.name} | ${user.email}`;
   document.getElementById('profileTitleBadge').textContent = titleObj.title;
 
   // 연속 도전 일수 배너
   document.getElementById('profileStreakText').textContent = `연속 ${streak}일째 도전 중!`;
-  document.getElementById('profileMaxStreakText').textContent = `최고 ${maxStreak}일`;
+  document.getElementById('profileMaxStreakText').textContent = `🏆 최고 ${maxStreak}일`;
 
   // XP & 레벨 게이지
   const xpInCurrentLevel = user.xp % 100;
@@ -2334,15 +2370,15 @@ function renderAdminStudentSubPanel(students, periodLogs) {
 
     return `
       <tr>
-        <td><span class="profile-class-tag">${s.classId}</span></td>
-        <td>${s.studentNo}번</td>
-        <td><strong style="color:#7C3AED;">${s.nickname || s.name}</strong></td>
+        <td><span class="profile-class-tag">${normalizeClassId(s.classId)}</span></td>
+        <td style="white-space:nowrap;">${s.studentNo}번</td>
+        <td style="white-space:nowrap;"><strong style="color:#7C3AED;">${s.nickname || s.name}</strong></td>
         <td>
           <strong>${s.name}</strong><br/>
           <span style="font-size:0.71rem; color:#64748B;">${s.email}</span>
         </td>
-        <td><strong>Lv.${s.level}</strong></td>
-        <td>🔥 ${s.streakDays || 1}일 <span style="font-size:0.71rem; color:#64748B;">(최고 ${s.maxStreakDays || 1}일)</span></td>
+        <td style="white-space:nowrap;"><strong>Lv.${s.level}</strong></td>
+        <td style="white-space:nowrap;">🔥 ${s.streakDays || 1}일 <span style="font-size:0.71rem; color:#64748B;">(최고 ${s.maxStreakDays || 1}일)</span></td>
         <td><strong style="color:#D97706;">${pSolved}문항</strong></td>
         <td><strong>${s.totalSolved}문항</strong></td>
         <td>${getAccuracyBadgeHtml(acc)}</td>
@@ -2823,10 +2859,11 @@ async function syncWithGoogleSheets(showNotification = true) {
           if (u.email) {
             const key = u.email.toLowerCase().trim();
             if (key === '__admin_config__') return;
+            u.classId = normalizeClassId(u.classId);
             const prev = state.allUsers[key];
             const merged = prev && (prev.totalSolved || 0) > (u.totalSolved || 0)
-              ? { ...u, ...prev, email: key, profileConfirmed: true, isAdmin: isTeacherEmail(key) }
-              : { ...(prev || {}), ...u, email: key, profileConfirmed: true, isAdmin: isTeacherEmail(key) };
+              ? { ...u, ...prev, email: key, classId: normalizeClassId(prev.classId || u.classId), profileConfirmed: true, isAdmin: isTeacherEmail(key) }
+              : { ...(prev || {}), ...u, email: key, classId: normalizeClassId(u.classId), profileConfirmed: true, isAdmin: isTeacherEmail(key) };
             state.allUsers[key] = merged;
             if (state.currentUser && state.currentUser.email === key) {
               state.currentUser = merged;

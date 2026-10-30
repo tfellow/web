@@ -40,6 +40,7 @@ function setupSheets() {
       '수집마스코트JSON', '발급인증서JSON', '분야별통계JSON', '최근업데이트'
     ]);
     stuSheet.getRange(1, 1, 1, 17).setFontWeight('bold').setBackground('#EDE9FE');
+    stuSheet.getRange('D:D').setNumberFormat('@');
   }
 
   // 2. 문제은행 시트

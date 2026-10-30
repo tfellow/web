@@ -503,8 +503,14 @@ html, body {
   background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
   border: 1.5px solid #FDBA74;
   border-radius: 14px;
-  padding: 0.65rem 0.9rem;
+  padding: 0.7rem 0.9rem;
   margin-bottom: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.streak-banner-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -514,19 +520,32 @@ html, body {
 .streak-banner-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.86rem;
+  gap: 0.4rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: #9A3412;
+  white-space: nowrap;
 }
 
 .streak-banner-right {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.76rem;
+  font-weight: 800;
   color: #C2410C;
-  background: rgba(255, 255, 255, 0.75);
-  padding: 0.2rem 0.55rem;
+  background: #FFFFFF;
+  border: 1px solid #FED7AA;
+  padding: 0.2rem 0.65rem;
   border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(194, 65, 12, 0.08);
+}
+
+.streak-banner-sub {
+  font-size: 0.73rem;
+  color: #C2410C;
+  font-weight: 600;
+  padding-left: 1.55rem;
+  word-break: keep-all;
 }
 
 /* 경험치(XP) 바 */

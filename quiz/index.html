@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>QUIZ QUEENS (퀴즈 퀸즈) | 서울문영여자중학교 상식 여왕 도전기</title>
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <link rel="stylesheet" href="styles.css?v=15" />
   <!-- Google Identity Services (실제 구글 로그인) & Supabase 연동 스크립트 -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -175,15 +175,15 @@
         <aside class="glass-card">
           <div class="profile-header">
             <div class="profile-avatar" id="profileAvatar">🌼</div>
-            <div class="profile-info" style="flex:1;">
-              <div style="display:flex; align-items:center; justify-content:space-between; gap:0.35rem;">
-                <h2>
-                  <span id="profileNickname">개나리퀸</span>
+            <div class="profile-info" style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:0.4rem;">
+                <h2 style="min-width:0;">
+                  <span id="profileNickname" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">개나리퀸</span>
                   <span class="profile-class-tag" id="profileClassTag">2-2</span>
                 </h2>
-                <button type="button" class="btn-chip" style="padding:0.2rem 0.5rem; font-size:0.7rem;" onclick="openProfileEditModal()">✏️ 수정</button>
+                <button type="button" class="btn-chip" style="padding:0.24rem 0.58rem; font-size:0.72rem; white-space:nowrap; flex-shrink:0;" onclick="openProfileEditModal()">✏️ 수정</button>
               </div>
-              <div style="font-size:0.73rem; color:#64748B; font-weight:600; margin-top:0.1rem;" id="profileRealNameSub">
+              <div style="font-size:0.73rem; color:#64748B; font-weight:600; margin-top:0.15rem; word-break:keep-all;" id="profileRealNameSub">
                 실명(본인·교사만 열람): -
               </div>
               <div class="profile-title-badge" id="profileTitleBadge">🌱 호기심 가득 새싹 퀸</div>
@@ -192,14 +192,14 @@
 
           <!-- 연속 도전 일수 배너 (Streak Days) -->
           <div class="streak-banner-box">
-            <div class="streak-banner-left">
-              <span style="font-size:1.3rem;">🔥</span>
-              <div>
-                <div id="profileStreakText">연속 1일째 도전 중!</div>
-                <div style="font-size:0.71rem; color:#C2410C; font-weight:600;">매일 1문제 이상 풀면 연속 도전 기록이 이어집니다</div>
+            <div class="streak-banner-top">
+              <div class="streak-banner-left">
+                <span style="font-size:1.15rem; line-height:1;">🔥</span>
+                <span id="profileStreakText">연속 1일째 도전 중!</span>
               </div>
+              <div class="streak-banner-right" id="profileMaxStreakText">🏆 최고 1일</div>
             </div>
-            <div class="streak-banner-right" id="profileMaxStreakText">최고 1일</div>
+            <div class="streak-banner-sub">매일 1문제 이상 풀면 연속 도전 기록이 이어집니다</div>
           </div>
 
           <!-- 레벨 & XP 게이지 -->
@@ -968,7 +968,7 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- 스크립트 로드 -->
-  <script src="questions.js?v=14"></script>
-  <script src="app.js?v=14"></script>
+  <script src="questions.js?v=15"></script>
+  <script src="app.js?v=15"></script>
 </body>
 </html>
