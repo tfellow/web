@@ -18,13 +18,14 @@ try {
 } catch (e) {}
 
 const STORAGE_KEYS = {
-  CURRENT_USER: 'qq_current_user_v11',
-  ALL_USERS: 'qq_all_users_v11',
-  QUIZ_LOGS: 'qq_quiz_logs_v11',
-  CUSTOM_QUESTIONS: 'qq_custom_questions_v11',
-  GAS_URL: 'qq_gas_webapp_url_v11',
-  SHOW_DEMO: 'qq_show_demo_v11',
-  SOUND_ON: 'qq_sound_on_v11'
+  CURRENT_USER: 'qq_current_user_v14',
+  ALL_USERS: 'qq_all_users_v14',
+  QUIZ_LOGS: 'qq_quiz_logs_v14',
+  CUSTOM_QUESTIONS: 'qq_custom_questions_v14',
+  GAS_URL: 'qq_gas_webapp_url_v14',
+  SHOW_DEMO: 'qq_show_demo_v14',
+  SOUND_ON: 'qq_sound_on_v14',
+  EXTRA_ADMINS: 'qq_extra_admins_v14'
 };
 
 // 룰렛 7개 슬라이스 구성 (6대 분야 + 왕관 찬스)
@@ -47,8 +48,9 @@ let state = {
   allUsers: {},
   quizLogs: [], // { date: 'YYYY-MM-DD', email, classId, category, isCorrect }
   questions: [],
+  extraAdminEmails: [],
   gasUrl: DEFAULT_GAS_URL,
-  showDemoData: true,
+  showDemoData: false,
   soundEnabled: true,
   adminPeriod: 'all', // today, thisWeek, thisMonth, last7, last30, customDay, all
   adminSubTab: 'class',
@@ -212,15 +214,29 @@ function createEmptyCategoryStats() {
   return catStats;
 }
 
+function getAdminEmailsList() {
+  const merged = new Set([
+    ...ADMIN_EMAILS.map(e => e.toLowerCase().trim()),
+    ...(state.extraAdminEmails || []).map(e => e.toLowerCase().trim())
+  ]);
+  return Array.from(merged);
+}
+
+function isTeacherEmail(email) {
+  if (!email) return false;
+  return getAdminEmailsList().includes(String(email).toLowerCase().trim());
+}
+
 function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin = false }) {
   const today = getLocalDateStr();
+  const cleanEmail = email.toLowerCase().trim();
   return {
-    email: email.toLowerCase().trim(),
+    email: cleanEmail,
     name: (name || '김문영').trim(),
     nickname: (nickname || name || '개나리퀸').trim(),
     classId: classId || '2-2',
     studentNo: Number(studentNo) || 1,
-    isAdmin: isAdmin || ADMIN_EMAILS.includes(email.toLowerCase().trim()),
+    isAdmin: isAdmin || isTeacherEmail(cleanEmail),
     xp: 0,
     level: 1,
     totalSolved: 0,
@@ -334,9 +350,11 @@ function loadPersistentState() {
     if (soundBtn) soundBtn.textContent = state.soundEnabled ? '🔊' : '🔇';
 
     const savedShowDemo = localStorage.getItem(STORAGE_KEYS.SHOW_DEMO);
-    if (savedShowDemo !== null) state.showDemoData = JSON.parse(savedShowDemo);
+    state.showDemoData = savedShowDemo !== null ? JSON.parse(savedShowDemo) : false;
     const demoCheck = document.getElementById('toggleDemoDataCheckbox');
     if (demoCheck) demoCheck.checked = state.showDemoData;
+
+    state.extraAdminEmails = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTRA_ADMINS) || '[]');
 
     const savedGasUrl = localStorage.getItem(STORAGE_KEYS.GAS_URL) || DEFAULT_GAS_URL;
     if (savedGasUrl) {
@@ -476,7 +494,7 @@ async function handleGoogleCredentialResponse(response) {
     }
   }
 
-  const isTeacherAdmin = ADMIN_EMAILS.includes(email) || sbIsAdmin;
+  const isTeacherAdmin = isTeacherEmail(email) || sbIsAdmin;
   const isSchoolStudent = email.endsWith(ALLOWED_SCHOOL_DOMAIN) || (sbProfile && sbProfile.role === 'school');
 
   if (!isTeacherAdmin && !isSchoolStudent) {
@@ -615,7 +633,7 @@ function handleProfileSaveSubmit(event) {
   const nickname = document.getElementById('loginNickname').value.trim();
   const name = document.getElementById('loginName').value.trim();
 
-  const isTeacherAdmin = ADMIN_EMAILS.includes(emailRaw) || (state.currentUser && state.currentUser.isAdmin);
+  const isTeacherAdmin = isTeacherEmail(emailRaw) || (state.currentUser && state.currentUser.isAdmin);
 
   loginWithProfile({
     email: emailRaw,
@@ -684,7 +702,7 @@ function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin, 
     existing.name = name || existing.name;
     existing.classId = classId || existing.classId;
     existing.studentNo = studentNo || existing.studentNo;
-    existing.isAdmin = isAdmin || ADMIN_EMAILS.includes(email);
+    existing.isAdmin = isAdmin || isTeacherEmail(email);
     existing.profileConfirmed = profileConfirmed;
     state.currentUser = existing;
   } else {
@@ -697,7 +715,7 @@ function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin, 
   closeLoginModal();
   refreshAllUI();
 
-  if (state.gasUrl && state.currentUser) {
+  if (state.gasUrl && state.currentUser && !state.currentUser.isAdmin) {
     postToGoogleSheets({ action: 'syncUser', user: state.currentUser });
   }
 
@@ -1134,14 +1152,16 @@ function submitAnswer(selectedNum) {
 
   user.level = Math.floor(user.xp / 100) + 1;
 
-  // 일별/기간별 통계용 로그 저장
-  state.quizLogs.push({
-    date: getLocalDateStr(),
-    email: user.email,
-    classId: user.classId,
-    category: q.categoryObj.id,
-    isCorrect
-  });
+  // 일별/기간별 통계용 로그 저장 (교사 테스트 풀이는 학생 통계에서 제외)
+  if (!user.isAdmin) {
+    state.quizLogs.push({
+      date: getLocalDateStr(),
+      email: user.email,
+      classId: user.classId,
+      category: q.categoryObj.id,
+      isCorrect
+    });
+  }
 
   // 마일스톤 레벨 인증서 자동 해금 확인
   let newlyUnlockedCertLevel = null;
@@ -1155,7 +1175,7 @@ function submitAnswer(selectedNum) {
   saveUserState();
   refreshAllUI();
 
-  if (state.gasUrl) {
+  if (state.gasUrl && !user.isAdmin) {
     postToGoogleSheets({
       action: 'saveQuizLog',
       user,
@@ -1628,7 +1648,7 @@ function getCombinedStudentsList() {
     Object.assign(combinedMap, getDemoDataset().usersMap);
   }
   Object.values(state.allUsers).forEach(u => {
-    if (u && u.email && !u.isAdmin) {
+    if (u && u.email && !u.isAdmin && u.email !== '__admin_config__' && !isTeacherEmail(u.email)) {
       combinedMap[u.email] = u;
     }
   });
@@ -1640,7 +1660,8 @@ function getCombinedLogsList() {
   if (state.showDemoData) {
     logs = [...getDemoDataset().demoLogs];
   }
-  return [...logs, ...state.quizLogs];
+  const studentLogs = state.quizLogs.filter(l => l && l.email && !isTeacherEmail(l.email));
+  return [...logs, ...studentLogs];
 }
 
 function getAccuracyBadgeHtml(accNum) {
@@ -1930,6 +1951,7 @@ function renderAdminTab() {
   renderAdminCategorySubPanel(periodLogs);
   renderAdminDailySubPanel();
   renderAdminStudentSubPanel(students, periodLogs);
+  renderRegisteredTeachersList();
 }
 
 // [서브패널 1] 반별 현황 (1-1 ~ 3-4)
@@ -2628,17 +2650,155 @@ async function postToGoogleSheets(payload) {
   }
 }
 
+function normalizeCategoryId(raw) {
+  const s = String(raw || '').toLowerCase().trim();
+  if (s.includes('school') || s.includes('학교') || s.includes('문영')) return 'school';
+  if (s.includes('curriculum') || s.includes('교과') || s.includes('융합')) return 'curriculum';
+  if (s.includes('economy') || s.includes('시사') || s.includes('경제')) return 'economy';
+  if (s.includes('world') || s.includes('세계') || s.includes('지리')) return 'world';
+  if (s.includes('science') || s.includes('과학') || s.includes('미래') || s.includes('기술')) return 'science';
+  if (s.includes('culture') || s.includes('예술') || s.includes('문화') || s.includes('대중')) return 'culture';
+  return 'school';
+}
+
+function renderRegisteredTeachersList() {
+  const wrap = document.getElementById('registeredTeachersList');
+  if (!wrap) return;
+  const baseSet = new Set(ADMIN_EMAILS.map(e => e.toLowerCase().trim()));
+  const allAdmins = getAdminEmailsList();
+
+  wrap.innerHTML = allAdmins.map(email => {
+    const isBase = baseSet.has(email);
+    return `
+      <span style="display:inline-flex; align-items:center; gap:0.35rem; background:${isBase ? '#EDE9FE' : '#F1F5F9'}; color:${isBase ? '#5B21B6' : '#334155'}; border:1px solid ${isBase ? '#C4B5FD' : '#CBD5E1'}; padding:0.3rem 0.65rem; border-radius:999px; font-size:0.78rem; font-weight:800;">
+        👩‍🏫 ${email} ${isBase ? '<span style="font-size:0.68rem; color:#7C3AED;">(기본)</span>' : `<button type="button" onclick="removeTeacherEmail('${email}')" style="border:none; background:transparent; color:#EF4444; font-weight:900; cursor:pointer; padding:0 0.15rem;" title="교사 권한 해제">✕</button>`}
+      </span>
+    `;
+  }).join('');
+}
+
+async function syncAdminEmailsToSheet() {
+  localStorage.setItem(STORAGE_KEYS.EXTRA_ADMINS, JSON.stringify(state.extraAdminEmails));
+  if (state.gasUrl) {
+    await postToGoogleSheets({
+      action: 'syncUser',
+      user: {
+        email: '__admin_config__',
+        name: '교사계정목록',
+        nickname: '교사계정목록',
+        classId: '시스템',
+        studentNo: 0,
+        level: 1,
+        xp: 0,
+        streakDays: 1,
+        maxStreakDays: 1,
+        totalSolved: 0,
+        totalCorrect: 0,
+        maxCombo: 0,
+        mascots: state.extraAdminEmails,
+        certificates: [],
+        categoryStats: {}
+      }
+    });
+  }
+}
+
+async function handleAddTeacherEmail(event) {
+  event.preventDefault();
+  const input = document.getElementById('newTeacherEmailInput');
+  if (!input) return;
+  const email = input.value.trim().toLowerCase();
+  if (!email || !email.includes('@')) return;
+
+  if (!isTeacherEmail(email)) {
+    state.extraAdminEmails.push(email);
+    await syncAdminEmailsToSheet();
+  }
+  if (state.allUsers[email]) {
+    state.allUsers[email].isAdmin = true;
+    saveUserState();
+  }
+  input.value = '';
+  renderRegisteredTeachersList();
+  showToast(`👩‍🏫 [${email}] 계정이 교사(관리자)로 등록 및 구글 시트에 동기화되었습니다!`);
+}
+
+async function removeTeacherEmail(email) {
+  state.extraAdminEmails = (state.extraAdminEmails || []).filter(e => e.toLowerCase().trim() !== email.toLowerCase().trim());
+  await syncAdminEmailsToSheet();
+  renderRegisteredTeachersList();
+  showToast(`교사 계정 [${email}]이 목록에서 제외되었습니다.`);
+}
+
+function resetAllStatsData() {
+  if (!confirm('로컬에 남아있는 테스트 통계 기록과 예시 데이터 표시를 모두 초기화하시겠습니까?\n(현재 로그인된 내 계정의 풀이 기록도 0으로 초기화됩니다.)')) {
+    return;
+  }
+  state.showDemoData = false;
+  localStorage.setItem(STORAGE_KEYS.SHOW_DEMO, 'false');
+  const demoCheck = document.getElementById('toggleDemoDataCheckbox');
+  if (demoCheck) demoCheck.checked = false;
+
+  state.quizLogs = [];
+  state.allUsers = {};
+  if (state.currentUser) {
+    state.currentUser = createUserProfile({
+      email: state.currentUser.email,
+      name: state.currentUser.name,
+      nickname: state.currentUser.nickname,
+      classId: state.currentUser.classId,
+      studentNo: state.currentUser.studentNo,
+      isAdmin: state.currentUser.isAdmin
+    });
+    state.currentUser.profileConfirmed = true;
+    state.allUsers[state.currentUser.email] = state.currentUser;
+  }
+  saveUserState();
+  refreshAllUI();
+  showToast('🗑️ 통계 데이터가 깨끗하게 초기화되었습니다!');
+}
+
+async function uploadDefaultQuestionsToSheet() {
+  if (!state.gasUrl) {
+    alert('구글 시트 URL이 설정되어 있지 않습니다.');
+    return;
+  }
+  if (!confirm(`기본 탑재된 ${DEFAULT_QUESTIONS.length}문항을 구글 시트의 [문제은행] 탭으로 내보내시겠습니까?\n(시트에서 직접 문제를 확인하고 수정할 수 있습니다. 약 10~15초가 소요됩니다.)`)) {
+    return;
+  }
+  showToast(`📤 기본 ${DEFAULT_QUESTIONS.length}문항을 구글 시트 [문제은행] 탭으로 전송 중입니다...`);
+
+  let existingSheetIds = new Set();
+  try {
+    const res = await fetch(`${state.gasUrl}?action=getInitialData`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.questions && Array.isArray(data.questions)) {
+        data.questions.forEach(q => existingSheetIds.add(String(q.id)));
+      }
+    }
+  } catch (e) {}
+
+  let sentCount = 0;
+  for (const q of DEFAULT_QUESTIONS) {
+    if (existingSheetIds.has(String(q.id))) continue;
+    await postToGoogleSheets({ action: 'addQuestion', question: q });
+    sentCount++;
+  }
+  showToast(`✅ 총 ${sentCount}개의 신규 기본 문항을 구글 시트 [문제은행] 탭에 등록했습니다!`);
+}
+
 async function syncWithGoogleSheets(showNotification = true) {
   if (!state.gasUrl) {
     if (showNotification) {
-      alert('먼저 [⚙️ 구글 시트 & 문제 추가] 탭에서 Google Apps Script 배포 URL을 입력해 주세요!');
+      alert('먼저 [⚙️ 교사·문제·데이터 관리] 탭에서 Google Apps Script 배포 URL을 입력해 주세요!');
     }
     return;
   }
 
   if (showNotification) showToast('🔄 구글 시트와 데이터 동기화를 진행합니다...');
 
-  if (state.currentUser) {
+  if (state.currentUser && !state.currentUser.isAdmin) {
     await postToGoogleSheets({ action: 'syncUser', user: state.currentUser });
   }
 
@@ -2647,13 +2807,26 @@ async function syncWithGoogleSheets(showNotification = true) {
     if (res.ok) {
       const data = await res.json();
       if (data.users && Array.isArray(data.users)) {
+        // 1) 먼저 __admin_config__ 행에서 추가 등록된 교사 이메일 목록 복원
+        const adminRow = data.users.find(u => u && String(u.email).toLowerCase().trim() === '__admin_config__');
+        if (adminRow && Array.isArray(adminRow.mascots)) {
+          const mergedAdmins = new Set([
+            ...(state.extraAdminEmails || []).map(e => e.toLowerCase().trim()),
+            ...adminRow.mascots.map(e => String(e).toLowerCase().trim()).filter(Boolean)
+          ]);
+          state.extraAdminEmails = Array.from(mergedAdmins);
+          localStorage.setItem(STORAGE_KEYS.EXTRA_ADMINS, JSON.stringify(state.extraAdminEmails));
+        }
+
+        // 2) 학생 데이터 병합 (교사 및 시스템 설정 행 제외)
         data.users.forEach(u => {
           if (u.email) {
             const key = u.email.toLowerCase().trim();
+            if (key === '__admin_config__') return;
             const prev = state.allUsers[key];
             const merged = prev && (prev.totalSolved || 0) > (u.totalSolved || 0)
-              ? { ...u, ...prev, email: key, profileConfirmed: true, isAdmin: ADMIN_EMAILS.includes(key) }
-              : { ...(prev || {}), ...u, email: key, profileConfirmed: true, isAdmin: ADMIN_EMAILS.includes(key) };
+              ? { ...u, ...prev, email: key, profileConfirmed: true, isAdmin: isTeacherEmail(key) }
+              : { ...(prev || {}), ...u, email: key, profileConfirmed: true, isAdmin: isTeacherEmail(key) };
             state.allUsers[key] = merged;
             if (state.currentUser && state.currentUser.email === key) {
               state.currentUser = merged;
@@ -2663,9 +2836,17 @@ async function syncWithGoogleSheets(showNotification = true) {
         saveUserState();
       }
       if (data.questions && Array.isArray(data.questions) && data.questions.length > 0) {
-        const existingIds = new Set(state.questions.map(q => q.id));
-        data.questions.forEach(q => {
-          if (!existingIds.has(q.id)) state.questions.push(q);
+        data.questions.forEach(rawQ => {
+          const q = {
+            ...rawQ,
+            category: normalizeCategoryId(rawQ.category)
+          };
+          const idx = state.questions.findIndex(item => String(item.id) === String(q.id));
+          if (idx !== -1) {
+            state.questions[idx] = q;
+          } else {
+            state.questions.push(q);
+          }
         });
       }
       refreshAllUI();

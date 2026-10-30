@@ -155,9 +155,9 @@
 
     <!-- 2. 교사용 통계 및 CSV 다운로드 가이드 -->
     <section class="manual-section">
-      <h2>👩‍🏫 2. 교사용 통합 통계 센터 & CSV(엑셀) 다운로드 안내</h2>
+      <h2>👩‍🏫 2. 교사용 통합 통계 센터 · 교사 등록 · 문제 관리 안내</h2>
       <p style="font-size:0.9rem; color:#334155; font-weight:600; margin-bottom:1rem;">
-        교사 관리자 계정(<code>tfellow@gmail.com</code>, <code>tfellow@smy.ms.kr</code>)으로 로그인하면 상단에 <strong>[👩‍🏫 선생님 관리·통계]</strong> 탭이 나타나며, 모든 화면에서 학생의 <strong>닉네임과 실명</strong>을 함께 확인할 수 있습니다.
+        등록된 교사 구글 계정으로 로그인하면 상단에 <strong>[👩‍🏫 선생님 관리·통계]</strong> 탭이 나타나며, 모든 화면에서 학생의 <strong>닉네임과 실명</strong>을 함께 확인할 수 있습니다.
       </p>
 
       <div class="manual-grid-2">
@@ -178,40 +178,26 @@
             <li><span class="badge-tag">문제은행 CSV</span> 전체 퀴즈 문항 백업 및 시트 업로드용 파일</li>
           </ul>
         </div>
+        <div class="step-box">
+          <h3>👩‍🏫 다른 교사(관리자) 계정 추가 등록</h3>
+          <ul>
+            <li><strong>[👩‍🏫 선생님 관리·통계 &gt; ⚙️ 교사·문제·데이터 관리]</strong> 탭의 <strong>[교사(관리자) 계정 추가 · 관리]</strong> 카드에서 동료 선생님의 구글 이메일(<code>@smy.ms.kr</code> 또는 <code>@gmail.com</code>)을 입력하고 <strong>[➕ 교사 등록]</strong>을 누르면 즉시 교사 권한이 부여됩니다.</li>
+          </ul>
+        </div>
+        <div class="step-box">
+          <h3>➕ 새 문제 입력 및 🗑️ 통계 초기화</h3>
+          <ul>
+            <li><strong>웹앱에서 바로 출제:</strong> <strong>[⚙️ 교사·문제·데이터 관리]</strong> 탭 우측의 <strong>[새로운 퀴즈 문항 즉시 추가]</strong> 폼에서 입력하면 웹앱과 구글 시트 <code>[문제은행]</code> 탭에 동시에 저장됩니다.</li>
+            <li><strong>구글 시트에서 대량 입력:</strong> 연동된 구글 스프레드시트 하단의 <strong><code>[문제은행]</code></strong> 탭에 엑셀처럼 행을 추가하거나 수정하면 모든 학생 화면에 자동 반영됩니다.</li>
+            <li><strong>통계 초기화:</strong> 상단 또는 설정 탭의 <strong>[🗑️ 통계 초기화]</strong> 버튼으로 테스트 기록을 언제든 초기화할 수 있습니다.</li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <!-- 3. 구글 시트 연동 가이드 -->
+    <!-- 3. 기기별 최적화 안내 -->
     <section class="manual-section">
-      <h2>🔗 3. 구글 시트(Google Sheets) 연동 및 이메일 자동 발송 설정 (3분 완성)</h2>
-      <div class="step-box" style="margin-bottom:0.85rem;">
-        <h3>1단계: 구글 스프레드시트 생성 및 Apps Script 붙여넣기</h3>
-        <p>
-          1. 구글 드라이브에서 새 스프레드시트를 만들고 이름을 <strong><code>서울문영여자중학교_퀴즈퀸즈_DB</code></strong>로 지정합니다.<br />
-          2. 상단 메뉴 <strong>[확장 프로그램] → [Apps Script]</strong>를 클릭합니다.<br />
-          3. 기존 코드를 지우고 <code>quiz_queens/google_apps_script.gs</code> 파일의 내용을 붙여넣고 저장(Ctrl+S)합니다.
-        </p>
-      </div>
-      <div class="step-box" style="margin-bottom:0.85rem;">
-        <h3>2단계: 시트 자동 세팅 (setupSheets 실행)</h3>
-        <p>
-          1. 상단 함수 드롭다운에서 <strong><code>setupSheets</code></strong>를 선택하고 <strong>[▷ 실행]</strong>을 한 번 클릭합니다.<br />
-          2. 스프레드시트에 <strong>[학생통계], [문제은행], [풀이로그], [인증서발급내역]</strong> 4개 탭이 자동으로 생성됩니다.
-        </p>
-      </div>
-      <div class="step-box">
-        <h3>3단계: 웹 앱 배포 및 URL 연결</h3>
-        <p>
-          1. 우측 상단 <strong>[배포] → [새 배포] → 유형: [웹 앱]</strong>을 선택합니다.<br />
-          2. 다음 사용자 인증 정보로 실행: <strong>[나]</strong> / 액세스 권한이 있는 사용자: <strong>[모든 사용자]</strong>로 설정 후 배포합니다.<br />
-          3. 생성된 웹 앱 URL(<code>https://script.google.com/macros/s/.../exec</code>)을 복사하여 퀴즈 퀸즈의 <strong>[👩‍🏫 선생님 관리·통계 &gt; ⚙️ 구글 시트 &amp; 문제 추가]</strong> 탭에 입력하고 저장하면 완료됩니다!
-        </p>
-      </div>
-    </section>
-
-    <!-- 4. 기기별 최적화 안내 -->
-    <section class="manual-section">
-      <h2>📱 4. 스마트폰 · 태블릿 · PC 멀티 디바이스 최적화</h2>
+      <h2>📱 3. 스마트폰 · 태블릿 · PC 멀티 디바이스 최적화</h2>
       <p style="font-size:0.9rem; color:#475569; line-height:1.6;">
         • <strong>스마트폰(모바일):</strong> 한 손 터치에 최적화된 룰렛 휠과 상단 탭, 가로 스크롤 데이터 표를 지원합니다.<br />
         • <strong>태블릿(iPad / 갤럭시탭):</strong> 교실 수업이나 스마트 기기 활용 수업에서 화면 잘림 없이 쾌적하게 작동합니다.<br />
