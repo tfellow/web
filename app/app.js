@@ -1,11 +1,11 @@
-(function () {
+﻿(function () {
   "use strict";
 
   var SUPABASE_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "48"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "49"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -585,7 +585,9 @@
           '<div class="class-words">' + Number(cls.words || 0).toLocaleString() + " <small>/ " + Number(cls.goal || 0).toLocaleString() + " 단어</small></div>" +
           '<div class="progress navy" style="margin-top:8px"><div id="clsbar"></div></div>' +
           '<div class="class-nums"><span>참여 ' + (cls.active || 0) + "/" + (cls.members || 0) + "명</span><span>메달 " + (cls.medals || 0) + "개</span></div></div>"
-        : '<div class="card"><h2>🧭 오늘의 추천</h2><p class="muted">' + (rec.length ? "아래 \"다음에 읽을 책\"에서 하나 골라 시작해 보세요." : "모든 책에 도전했어요. 새 책을 기다려 주세요!") + "</p></div>") +
+        : '<div class="card"><h2>🧭 오늘의 추천</h2>' + (rec.length
+          ? '<p class="muted" style="margin-top:-6px">오늘 이 책으로 시작해 보세요. 더 보고 싶다면 아래 “다음에 읽을 책”을 확인하세요.</p><div class="shelf">' + card(rec[0]) + "</div>"
+          : '<p class="muted">모든 책에 도전했어요. 새 책을 기다려 주세요!</p>') + "</div>") +
       "</div>" +
 
       '<div class="card"><h2>🏅 독서 칭호<span class="sub">메달 받은 책 권수로 올라가요</span></h2>' +
