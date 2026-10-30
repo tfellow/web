@@ -5,6 +5,17 @@
 
 const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
 const ALLOWED_SCHOOL_DOMAIN = '@smy.ms.kr';
+const GOOGLE_CLIENT_ID = '359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com';
+const SUPABASE_URL = 'https://jkxdhyvnrvsiokbbbjtu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF';
+
+let sbClient = null;
+try {
+  if (window.supabase && window.supabase.createClient) {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+} catch (e) {}
+
 const STORAGE_KEYS = {
   CURRENT_USER: 'qq_current_user_v11',
   ALL_USERS: 'qq_all_users_v11',
@@ -158,6 +169,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const customDateInput = document.getElementById('adminCustomDateInput');
   if (customDateInput) customDateInput.value = getLocalDateStr();
+
+  initGoogleSignInButton();
 
   if (state.currentUser) {
     closeLoginModal();
@@ -359,19 +372,229 @@ function saveUserState() {
 }
 
 // ============================================================================
-// 4. 로그인 & 권한 검증 (@smy.ms.kr + 닉네임/실명 분리)
+// 4. 실제 Google 계정 로그인 (Google Identity Services + 학교 Supabase 명단 연동)
 // ============================================================================
+function parseJwtPayload(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+function parseSchoolEmailPattern(email) {
+  // 예: 202620315@smy.ms.kr 또는 20315@smy.ms.kr 등에서 학년·반·번호 자동 추출 시도
+  const local = (email || '').split('@')[0];
+  // 패턴 A: 연도4자리 + 학년(1~3) + 반(01~04 또는 1~4) + 번호(01~40)
+  const m1 = local.match(/^(?:20\d{2})?([1-3])0?([1-4])(\d{2})$/);
+  if (m1) {
+    return {
+      classId: `${m1[1]}-${Number(m1[2])}`,
+      studentNo: Number(m1[3]) || 1
+    };
+  }
+  return null;
+}
+
+function initGoogleSignInButton() {
+  if (location.protocol === 'file:') {
+    const notice = document.getElementById('localFileNoticeBox');
+    if (notice) notice.style.display = 'block';
+  }
+
+  function tryRender() {
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredentialResponse
+      });
+      const wrap = document.getElementById('googleSignInBtnWrap');
+      if (wrap) {
+        wrap.innerHTML = '';
+        google.accounts.id.renderButton(wrap, {
+          theme: 'filled_blue',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'pill',
+          locale: 'ko',
+          width: 280
+        });
+      }
+    } else {
+      setTimeout(tryRender, 250);
+    }
+  }
+  tryRender();
+}
+
+async function handleGoogleCredentialResponse(response) {
+  const errEl = document.getElementById('googleLoginErrorMsg');
+  if (errEl) errEl.textContent = '';
+
+  const payload = parseJwtPayload(response.credential);
+  if (!payload || !payload.email) {
+    if (errEl) errEl.textContent = 'Google 인증 정보를 읽지 못했습니다. 다시 시도해 주세요.';
+    return;
+  }
+
+  const email = payload.email.toLowerCase().trim();
+  const googleName = (payload.name || payload.given_name || '').trim();
+
+  // Supabase 연동 확인 (기존 문영 독서 여권에 등록된 교사 권한 및 학생 학년·반·번호·실명·닉네임 자동 조회)
+  let sbProfile = null;
+  let sbIsAdmin = false;
+  if (sbClient && sbClient.auth) {
+    try {
+      const authRes = await sbClient.auth.signInWithIdToken({
+        provider: 'google',
+        token: response.credential
+      });
+      if (!authRes.error && authRes.data && authRes.data.user) {
+        const uid = authRes.data.user.id;
+        const [profRes, adminRes] = await Promise.all([
+          sbClient.from('profiles').select('*').eq('id', uid).maybeSingle(),
+          sbClient.rpc('is_admin')
+        ]);
+        if (profRes && profRes.data) sbProfile = profRes.data;
+        if (adminRes && adminRes.data) sbIsAdmin = !!adminRes.data;
+      }
+    } catch (e) {
+      console.warn('Supabase 프로필 조회 생략:', e);
+    }
+  }
+
+  const isTeacherAdmin = ADMIN_EMAILS.includes(email) || sbIsAdmin;
+  const isSchoolStudent = email.endsWith(ALLOWED_SCHOOL_DOMAIN) || (sbProfile && sbProfile.role === 'school');
+
+  if (!isTeacherAdmin && !isSchoolStudent) {
+    if (errEl) {
+      errEl.innerHTML =
+        `⚠️ <strong>${email}</strong> 계정은 학교 계정이 아닙니다.<br/>` +
+        `학생은 <strong>@smy.ms.kr</strong> 학교 구글 계정으로 로그인해 주세요!`;
+    }
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.disableAutoSelect();
+    }
+    return;
+  }
+
+  // 이미 퀴즈 퀸즈에 저장된 프로필이 있는 경우 즉시 로그인
+  const existingLocal = state.allUsers[email];
+  if (existingLocal && existingLocal.profileConfirmed) {
+    existingLocal.isAdmin = isTeacherAdmin;
+    loginWithProfile(existingLocal, true);
+    return;
+  }
+
+  // 교사 계정인 경우 추가 입력 없이 즉시 교사 모드로 로그인
+  if (isTeacherAdmin) {
+    loginWithProfile({
+      email,
+      nickname: (sbProfile && sbProfile.nickname) || googleName || '문영선생님',
+      name: (sbProfile && sbProfile.name) || googleName || '문영 선생님',
+      classId: '2-2',
+      studentNo: 1,
+      isAdmin: true,
+      profileConfirmed: true
+    }, true);
+    return;
+  }
+
+  // 학교 Supabase 명단(profiles)에 학년·반·번호·실명이 이미 등록된 학생이면 자동 세팅 후 닉네임/학급 확인 창 표시
+  const parsedEmail = parseSchoolEmailPattern(email);
+  const autoClassId =
+    (sbProfile && sbProfile.grade && sbProfile.class_no ? `${sbProfile.grade}-${sbProfile.class_no}` : null) ||
+    (existingLocal && existingLocal.classId) ||
+    (parsedEmail && parsedEmail.classId) ||
+    '1-1';
+  const autoStudentNo =
+    (sbProfile && sbProfile.student_no) ||
+    (existingLocal && existingLocal.studentNo) ||
+    (parsedEmail && parsedEmail.studentNo) ||
+    1;
+  const autoRealName =
+    (sbProfile && sbProfile.name) ||
+    (existingLocal && existingLocal.name) ||
+    googleName ||
+    '';
+  const autoNickname =
+    (existingLocal && existingLocal.nickname) ||
+    (sbProfile && sbProfile.nickname) ||
+    '';
+
+  // 만약 Supabase 명단에 학년/반/번호/실명/닉네임이 모두 있으면 바로 로그인!
+  if (sbProfile && sbProfile.grade && sbProfile.class_no && sbProfile.name && sbProfile.nickname) {
+    loginWithProfile({
+      email,
+      nickname: sbProfile.nickname,
+      name: sbProfile.name,
+      classId: `${sbProfile.grade}-${sbProfile.class_no}`,
+      studentNo: sbProfile.student_no || 1,
+      isAdmin: false,
+      profileConfirmed: true
+    }, true);
+    return;
+  }
+
+  // 최초 로그인 학생: 학급·번호·닉네임·실명 1회 확인 화면 노출
+  showProfileSetupStep({
+    email,
+    classId: autoClassId,
+    studentNo: autoStudentNo,
+    nickname: autoNickname,
+    name: autoRealName,
+    canCancel: false
+  });
+}
+
+function showProfileSetupStep({ email, classId, studentNo, nickname, name, canCancel }) {
+  const overlay = document.getElementById('loginOverlay');
+  if (overlay) overlay.classList.remove('hidden');
+
+  document.getElementById('googleSignInStep').style.display = 'none';
+  document.getElementById('profileSetupStep').style.display = 'block';
+
+  document.getElementById('verifiedGoogleEmail').textContent = email;
+  document.getElementById('loginEmail').value = email;
+  document.getElementById('loginClass').value = SCHOOL_CLASSES.some(c => c.classId === classId) ? classId : '1-1';
+  document.getElementById('loginNumber').value = studentNo || 1;
+  document.getElementById('loginNickname').value = nickname || '';
+  document.getElementById('loginName').value = name || '';
+
+  const cancelBtn = document.getElementById('cancelProfileEditBtn');
+  if (cancelBtn) cancelBtn.style.display = canCancel ? 'inline-flex' : 'none';
+}
+
 function openLoginModal() {
   const overlay = document.getElementById('loginOverlay');
   if (!overlay) return;
-  if (state.currentUser) {
-    document.getElementById('loginEmail').value = state.currentUser.email || '';
-    document.getElementById('loginClass').value = state.currentUser.classId || '2-2';
-    document.getElementById('loginNumber').value = state.currentUser.studentNo || 7;
-    document.getElementById('loginNickname').value = state.currentUser.nickname || '';
-    document.getElementById('loginName').value = state.currentUser.name || '';
-  }
+  document.getElementById('googleSignInStep').style.display = 'block';
+  document.getElementById('profileSetupStep').style.display = 'none';
   overlay.classList.remove('hidden');
+  initGoogleSignInButton();
+}
+
+function openProfileEditModal() {
+  if (!state.currentUser) {
+    openLoginModal();
+    return;
+  }
+  showProfileSetupStep({
+    email: state.currentUser.email,
+    classId: state.currentUser.classId,
+    studentNo: state.currentUser.studentNo,
+    nickname: state.currentUser.nickname,
+    name: state.currentUser.name,
+    canCancel: true
+  });
 }
 
 function closeLoginModal() {
@@ -379,7 +602,7 @@ function closeLoginModal() {
   if (overlay) overlay.classList.add('hidden');
 }
 
-function handleLoginSubmit(event) {
+function handleProfileSaveSubmit(event) {
   event.preventDefault();
   const emailRaw = document.getElementById('loginEmail').value.trim().toLowerCase();
   const classId = document.getElementById('loginClass').value;
@@ -387,26 +610,32 @@ function handleLoginSubmit(event) {
   const nickname = document.getElementById('loginNickname').value.trim();
   const name = document.getElementById('loginName').value.trim();
 
-  const isTeacherAdmin = ADMIN_EMAILS.includes(emailRaw);
-  const isSchoolStudent = emailRaw.endsWith(ALLOWED_SCHOOL_DOMAIN);
-
-  if (!isTeacherAdmin && !isSchoolStudent) {
-    alert(
-      '⚠️ 서울문영여자중학교 학교 계정(@smy.ms.kr)으로만 로그인할 수 있습니다!\n\n' +
-      '• 학생 예시: student01@smy.ms.kr\n' +
-      '• 선생님 관리자 계정: tfellow@gmail.com 또는 tfellow@smy.ms.kr'
-    );
-    return;
-  }
+  const isTeacherAdmin = ADMIN_EMAILS.includes(emailRaw) || (state.currentUser && state.currentUser.isAdmin);
 
   loginWithProfile({
     email: emailRaw,
     nickname: nickname || name || '개나리퀸',
-    name: name || (isTeacherAdmin ? '문영 선생님' : '김문영'),
-    classId: classId || '2-2',
+    name: name || '김문영',
+    classId: classId || '1-1',
     studentNo: Number(studentNo) || 1,
-    isAdmin: isTeacherAdmin
-  });
+    isAdmin: isTeacherAdmin,
+    profileConfirmed: true
+  }, true);
+}
+
+async function signOutGoogle() {
+  try {
+    if (sbClient && sbClient.auth) {
+      await sbClient.auth.signOut();
+    }
+  } catch (e) {}
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.disableAutoSelect();
+  }
+  state.currentUser = null;
+  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+  openLoginModal();
+  showToast('🚪 로그아웃되었습니다. Google 계정으로 다시 로그인해 주세요.');
 }
 
 function quickLogin(mode) {
@@ -417,8 +646,9 @@ function quickLogin(mode) {
       name: '김문영',
       classId: '2-2',
       studentNo: 7,
-      isAdmin: false
-    });
+      isAdmin: false,
+      profileConfirmed: true
+    }, true);
   } else if (mode === 'teacher_smy') {
     loginWithProfile({
       email: 'tfellow@smy.ms.kr',
@@ -426,8 +656,9 @@ function quickLogin(mode) {
       name: '문영 선생님',
       classId: '2-2',
       studentNo: 1,
-      isAdmin: true
-    });
+      isAdmin: true,
+      profileConfirmed: true
+    }, true);
   } else if (mode === 'teacher_gmail') {
     loginWithProfile({
       email: 'tfellow@gmail.com',
@@ -435,12 +666,13 @@ function quickLogin(mode) {
       name: '문영 선생님',
       classId: '2-2',
       studentNo: 1,
-      isAdmin: true
-    });
+      isAdmin: true,
+      profileConfirmed: true
+    }, true);
   }
 }
 
-function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin }) {
+function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin, profileConfirmed = true }) {
   const existing = state.allUsers[email];
   if (existing) {
     existing.nickname = nickname || existing.nickname || name;
@@ -448,9 +680,12 @@ function loginWithProfile({ email, nickname, name, classId, studentNo, isAdmin }
     existing.classId = classId || existing.classId;
     existing.studentNo = studentNo || existing.studentNo;
     existing.isAdmin = isAdmin || ADMIN_EMAILS.includes(email);
+    existing.profileConfirmed = profileConfirmed;
     state.currentUser = existing;
   } else {
-    state.currentUser = createUserProfile({ email, nickname, name, classId, studentNo, isAdmin });
+    const created = createUserProfile({ email, nickname, name, classId, studentNo, isAdmin });
+    created.profileConfirmed = profileConfirmed;
+    state.currentUser = created;
   }
 
   saveUserState();

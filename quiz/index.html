@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>QUIZ QUEENS (퀴즈 퀸즈) | 서울문영여자중학교 상식 여왕 도전기</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=12" />
+  <!-- Google Identity Services (실제 구글 로그인) & Supabase 연동 스크립트 -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -17,7 +20,7 @@
       <div class="brand-titles">
         <div class="brand-main">
           QUIZ QUEENS
-          <span style="font-size:0.7rem; padding:0.12rem 0.48rem; border-radius:999px; background:#EDE9FE; color:#5B21B6; -webkit-text-fill-color:#5B21B6; font-weight:800;">v1.1</span>
+          <span style="font-size:0.7rem; padding:0.12rem 0.48rem; border-radius:999px; background:#EDE9FE; color:#5B21B6; -webkit-text-fill-color:#5B21B6; font-weight:800;">v1.2</span>
         </div>
         <div class="brand-sub">서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)</div>
       </div>
@@ -42,112 +45,119 @@
       <div class="streak-header-pill" id="headerStreakPill" title="연속 도전 일수">
         🔥 연속 1일째
       </div>
-      <div class="user-pill" id="headerUserPill">
+      <div class="user-pill" id="headerUserPill" onclick="openProfileEditModal()" style="cursor:pointer;" title="내 학급·닉네임 수정 또는 로그아웃">
         <span class="user-level-badge" id="headerLevelBadge">Lv.1</span>
-        <span id="headerUserName">로그인 필요</span>
+        <span id="headerUserName">Google 로그인 필요</span>
       </div>
       <a href="manual.html" target="_blank" class="icon-btn" title="사용 설명서 열기">📖</a>
       <button class="icon-btn" id="soundToggleBtn" onclick="toggleSound()" title="효과음 켜기/끄기">🔊</button>
-      <button class="icon-btn" onclick="openLoginModal()" title="닉네임/계정 변경">🔑</button>
+      <button class="icon-btn" onclick="openProfileEditModal()" title="내 정보 수정 / 구글 로그아웃">⚙️</button>
     </div>
   </header>
 
   <!-- ========================================================================
-       2. 학교 계정 로그인 모달 (닉네임 공개 / 실명은 교사만 열람)
+       2. 실제 Google 계정 로그인 & 최초 프로필(닉네임·학급) 설정 모달
        ======================================================================== -->
   <div id="loginOverlay" class="login-overlay">
     <div class="login-card">
-      <div class="login-logo-badge">👑</div>
+      <img src="emblem.png" alt="서울문영여자중학교 교표" style="width:76px; height:auto; margin:0 auto 0.5rem; display:block; filter:drop-shadow(0 6px 12px rgba(0,0,0,0.15));" onerror="this.style.display='none'" />
       <h1 class="login-title">QUIZ QUEENS</h1>
       <p class="login-subtitle">서울문영여자중학교 상식 여왕 도전기 (Moonyoung Quiz Queens)</p>
 
-      <div class="school-domain-notice">
-        🏫 <strong>서울문영여자중학교 전용 안내</strong><br />
-        • 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해 주세요.<br />
-        • <strong>프라이버시 보호:</strong> 다른 학생들에게는 <strong>닉네임만</strong> 보이며, 실명은 선생님에게만 표시됩니다.<br />
-        • 매일 꾸준히 문제를 풀면 <strong>🔥 연속 도전 일수</strong>가 올라가고 레벨별 인증서가 이메일로 발송됩니다!
-      </div>
-
-      <form id="loginForm" onsubmit="handleLoginSubmit(event)">
-        <div class="login-form-group">
-          <label for="loginEmail">학교 구글 이메일 (@smy.ms.kr)</label>
-          <input
-            type="email"
-            id="loginEmail"
-            class="login-input"
-            placeholder="예: student01@smy.ms.kr"
-            required
-          />
+      <!-- [단계 1] Google 공식 로그인 버튼 화면 -->
+      <div id="googleSignInStep">
+        <div class="school-domain-notice">
+          🏫 <strong>서울문영여자중학교 공식 Google 로그인</strong><br />
+          • <strong>학생:</strong> 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해 주세요.<br />
+          • <strong>선생님:</strong> 교사 구글 계정(<code>tfellow@gmail.com</code>, <code>tfellow@smy.ms.kr</code> 등 등록 교사)으로 로그인하시면 교사용 관리·통계 화면이 자동으로 열립니다.<br />
+          • <strong>프라이버시 보호:</strong> 다른 학생들에게는 <strong>닉네임만</strong> 공개되며, 실명은 선생님에게만 표시됩니다.
         </div>
 
-        <div class="login-row-2">
-          <div class="login-form-group">
-            <label for="loginClass">학급 (1-1 ~ 3-4)</label>
-            <select id="loginClass" class="login-select" required>
-              <!-- JS에서 1-1 ~ 3-4 자동 생성 -->
-            </select>
-          </div>
-          <div class="login-form-group">
-            <label for="loginNumber">출석번호</label>
-            <input
-              type="number"
-              id="loginNumber"
-              class="login-input"
-              min="1"
-              max="40"
-              value="7"
-              required
-            />
+        <!-- Google Identity Services 공식 버튼이 렌더링되는 영역 -->
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; margin:1.35rem 0; min-height:54px;">
+          <div id="googleSignInBtnWrap"></div>
+          <div id="googleLoginErrorMsg" style="color:#DC2626; font-size:0.82rem; font-weight:700; margin-top:0.65rem;"></div>
+        </div>
+
+        <!-- 로컬 파일(file://)로 열었을 때만 표시되는 안내 -->
+        <div id="localFileNoticeBox" style="display:none; background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:12px; padding:0.75rem; margin-top:0.75rem; font-size:0.78rem; color:#475569;">
+          💡 현재 컴퓨터 내부 파일(<code>file://</code>)로 열려 있습니다. 실제 Google 로그인은 정식 웹 주소(<a href="https://tfellow.github.io/web/quiz/" style="color:var(--primary); font-weight:800;">https://tfellow.github.io/web/quiz/</a>)에서 작동합니다.<br />
+          <div style="margin-top:0.5rem; display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap;">
+            <button type="button" class="btn-chip" onclick="quickLogin('student')">로컬 미리보기(학생)</button>
+            <button type="button" class="btn-chip" onclick="quickLogin('teacher_gmail')">로컬 미리보기(교사)</button>
           </div>
         </div>
 
-        <div class="login-row-2">
-          <div class="login-form-group">
-            <label for="loginNickname">닉네임 (친구들에게 공개됨 ✨)</label>
-            <input
-              type="text"
-              id="loginNickname"
-              class="login-input"
-              placeholder="예: 개나리공주"
-              maxlength="14"
-              required
-            />
-          </div>
-          <div class="login-form-group">
-            <label for="loginName">실명 (선생님 확인·인증서용 🔒)</label>
-            <input
-              type="text"
-              id="loginName"
-              class="login-input"
-              placeholder="예: 김문영"
-              maxlength="10"
-              required
-            />
-          </div>
-        </div>
-
-        <button type="submit" class="btn-primary-large">
-          🚀 퀴즈 퀸즈 무한도전 시작하기!
-        </button>
-      </form>
-
-      <div class="quick-teacher-box">
-        <span style="font-size:0.75rem; color:#64748B; font-weight:700;">⚡ 원클릭 빠른 체험 & 선생님 관리자 로그인</span>
-        <div class="quick-teacher-btns">
-          <button type="button" class="btn-chip" onclick="quickLogin('student')">
-            👧 학생 체험 (2-2 개나리퀸)
-          </button>
-          <button type="button" class="btn-chip" onclick="quickLogin('teacher_smy')">
-            👩‍🏫 선생님 (tfellow@smy.ms.kr)
-          </button>
-          <button type="button" class="btn-chip" onclick="quickLogin('teacher_gmail')">
-            🛠️ 선생님 (tfellow@gmail.com)
-          </button>
-          <a href="manual.html" target="_blank" class="btn-chip">
-            📖 사용 설명서 보기
-          </a>
+        <div style="margin-top:1rem; padding-top:0.85rem; border-top:1px solid #F1F5F9; display:flex; justify-content:center; gap:0.6rem;">
+          <a href="manual.html" target="_blank" class="btn-chip">📖 사용 설명서 보기</a>
         </div>
       </div>
+
+      <!-- [단계 2] Google 인증 완료 후 학급·번호·닉네임·실명 확인/수정 화면 -->
+      <div id="profileSetupStep" style="display:none;">
+        <div style="background:#ECFDF5; border:1px solid #A7F3D0; color:#065F46; padding:0.6rem 0.9rem; border-radius:12px; font-size:0.8rem; font-weight:700; margin-bottom:0.9rem; text-align:left;">
+          ✅ <strong>Google 계정 인증 완료:</strong> <span id="verifiedGoogleEmail">student@smy.ms.kr</span>
+        </div>
+
+        <form id="loginForm" onsubmit="handleProfileSaveSubmit(event)">
+          <input type="hidden" id="loginEmail" />
+
+          <div class="login-row-2">
+            <div class="login-form-group">
+              <label for="loginClass">학급 (1-1 ~ 3-4)</label>
+              <select id="loginClass" class="login-select" required></select>
+            </div>
+            <div class="login-form-group">
+              <label for="loginNumber">출석번호</label>
+              <input
+                type="number"
+                id="loginNumber"
+                class="login-input"
+                min="1"
+                max="40"
+                value="1"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="login-row-2">
+            <div class="login-form-group">
+              <label for="loginNickname">닉네임 (친구들에게 공개됨 ✨)</label>
+              <input
+                type="text"
+                id="loginNickname"
+                class="login-input"
+                placeholder="2~12글자 닉네임"
+                minlength="2"
+                maxlength="12"
+                required
+              />
+            </div>
+            <div class="login-form-group">
+              <label for="loginName">실명 (선생님 확인·인증서용 🔒)</label>
+              <input
+                type="text"
+                id="loginName"
+                class="login-input"
+                placeholder="실명 입력"
+                maxlength="10"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary-large">
+            🚀 저장하고 퀴즈 퀸즈 시작하기!
+          </button>
+        </form>
+
+        <div style="margin-top:0.85rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <button type="button" class="btn-chip" onclick="signOutGoogle()">🚪 다른 Google 계정으로 로그아웃</button>
+          <button type="button" id="cancelProfileEditBtn" class="btn-chip" onclick="closeLoginModal()" style="display:none;">닫기</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -166,13 +176,16 @@
         <aside class="glass-card">
           <div class="profile-header">
             <div class="profile-avatar" id="profileAvatar">🌼</div>
-            <div class="profile-info">
-              <h2>
-                <span id="profileNickname">개나리퀸</span>
-                <span class="profile-class-tag" id="profileClassTag">2-2</span>
-              </h2>
-              <div style="font-size:0.74rem; color:#64748B; font-weight:600; margin-top:0.1rem;" id="profileRealNameSub">
-                실명(본인·교사만 표시): 김문영 | student@smy.ms.kr
+            <div class="profile-info" style="flex:1;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:0.35rem;">
+                <h2>
+                  <span id="profileNickname">개나리퀸</span>
+                  <span class="profile-class-tag" id="profileClassTag">2-2</span>
+                </h2>
+                <button type="button" class="btn-chip" style="padding:0.2rem 0.5rem; font-size:0.7rem;" onclick="openProfileEditModal()">✏️ 수정</button>
+              </div>
+              <div style="font-size:0.73rem; color:#64748B; font-weight:600; margin-top:0.1rem;" id="profileRealNameSub">
+                실명(본인·교사만 열람): -
               </div>
               <div class="profile-title-badge" id="profileTitleBadge">🌱 호기심 가득 새싹 퀸</div>
             </div>
@@ -247,9 +260,7 @@
             <span>✨ 문영 6대 퀸 마스코트 도감</span>
             <span id="mascotCountBadge" style="font-size:0.76rem; color:var(--primary); font-weight:800;">0 / 6 수집</span>
           </div>
-          <div class="mascot-mini-grid" id="mascotMiniGrid">
-            <!-- JS에서 6개 분야 마스코트 렌더링 -->
-          </div>
+          <div class="mascot-mini-grid" id="mascotMiniGrid"></div>
         </aside>
 
         <!-- 우측: 트리비아 크랙 스타일 룰렛 아레나 -->
@@ -266,7 +277,6 @@
             우리 학교 상식부터 교과 융합, 시사·경제, 세계·지리, 과학·미래, 예술·문화까지!
           </p>
 
-          <!-- 룰렛 휠 -->
           <div class="wheel-wrapper">
             <svg class="wheel-pointer" viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M25 58L4 14C1.5 8.5 5.5 2 11.5 2H38.5C44.5 2 48.5 8.5 46 14L25 58Z" fill="#F59E0B" stroke="#FFFFFF" stroke-width="4"/>
@@ -285,12 +295,9 @@
             중앙의 SPIN 버튼을 누르거나 아래 분야를 직접 선택해 보세요!
           </div>
 
-          <!-- 분야별 집중 연습 버튼 -->
           <div class="direct-category-bar">
             <p>💡 특정 분야만 집중해서 풀고 싶다면? 아래 분야 칩을 클릭하세요 (바로 출제)</p>
-            <div class="category-chips" id="directCategoryChips">
-              <!-- JS 렌더링 -->
-            </div>
+            <div class="category-chips" id="directCategoryChips"></div>
           </div>
         </div>
 
@@ -337,24 +344,19 @@
       </div>
 
       <div class="charts-two-col">
-        <!-- 좌측: 6대 분야 밸런스 레이더 차트 -->
         <div class="glass-card" style="text-align:center;">
           <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:0.35rem;">📐 나의 6대 분야 상식 밸런스 (정육각형 프리즘)</h3>
           <p style="font-size:0.78rem; color:var(--text-sub); margin-bottom:0.85rem;">고른 분야의 문제를 풀고 정답률을 높여 문영의 정육각형 프리즘을 완성해 보세요!</p>
           <canvas id="radarCanvas" width="380" height="320" style="max-width:100%; height:auto;"></canvas>
         </div>
 
-        <!-- 우측: 분야별 상세 풀이 수 & 정확도 막대 그래프 -->
         <div class="glass-card">
           <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:0.35rem;">📊 분야별 풀이 문항 수 & 정확도 상세</h3>
           <p style="font-size:0.78rem; color:var(--text-sub); margin-bottom:1rem;">어느 분야에서 가장 강하고, 어느 분야를 더 보충하면 좋을지 확인하세요.</p>
-          <div id="categoryProgressList">
-            <!-- JS에서 6개 분야별 막대 그래프 렌더링 -->
-          </div>
+          <div id="categoryProgressList"></div>
         </div>
       </div>
 
-      <!-- 레벨별 디지털 인증서 보관함 -->
       <div class="glass-card">
         <div class="filter-bar">
           <div>
@@ -368,9 +370,7 @@
           </button>
         </div>
 
-        <div id="certificateVaultGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:0.9rem; margin-top:0.85rem;">
-          <!-- JS에서 마일스톤 레벨별 인증서 카드 렌더링 -->
-        </div>
+        <div id="certificateVaultGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:0.9rem; margin-top:0.85rem;"></div>
       </div>
     </section>
 
@@ -378,11 +378,8 @@
          [탭 3] 🏆 학급별·전체 랭킹 (1-1 ~ 3-4 11개 학급 대항전 & 닉네임 랭킹)
          ====================================================================== -->
     <section id="tab-ranking" class="tab-panel">
-      <div class="stats-top-cards" id="schoolSummaryCards">
-        <!-- JS에서 전교 총 풀이 수, 전교 평균 정답률, 최다 참여 학급, 최고 정확도 학급 렌더링 -->
-      </div>
+      <div class="stats-top-cards" id="schoolSummaryCards"></div>
 
-      <!-- 11개 학급(1-1 ~ 3-4) 학급별 다각도 통계 비교표 -->
       <div class="glass-card" style="margin-bottom:1.25rem;">
         <div class="filter-bar">
           <div>
@@ -423,14 +420,11 @@
                 <th>우리 반 최강 분야</th>
               </tr>
             </thead>
-            <tbody id="classRankingTableBody">
-              <!-- JS 렌더링 -->
-            </tbody>
+            <tbody id="classRankingTableBody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 전교 개인별 명예의 전당 (학생에게는 닉네임만 표시, 교사에게는 닉네임+실명 표시) -->
       <div class="glass-card">
         <div class="filter-bar">
           <div>
@@ -442,7 +436,6 @@
           <div class="filter-group">
             <select id="studentRankClassFilter" class="login-select" style="width:auto; padding:0.42rem 0.8rem; font-size:0.82rem;" onchange="renderRankingTab()">
               <option value="all">전체 학급 (1-1 ~ 3-4)</option>
-              <!-- JS에서 1-1 ~ 3-4 옵션 추가 -->
             </select>
             <select id="studentRankSortBy" class="login-select" style="width:auto; padding:0.42rem 0.8rem; font-size:0.82rem;" onchange="renderRankingTab()">
               <option value="xp">정렬: 레벨 & 경험치(XP) 순</option>
@@ -469,19 +462,16 @@
                 <th>최고 콤보</th>
               </tr>
             </thead>
-            <tbody id="studentRankingTableBody">
-              <!-- JS 렌더링 -->
-            </tbody>
+            <tbody id="studentRankingTableBody"></tbody>
           </table>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================
-         [탭 4] 👩‍🏫 선생님 관리·통계 대시보드 (기간별 통계 / 반별 / 주간 / 일별 / 분야별 / 학생별 / CSV)
+         [탭 4] 👩‍🏫 선생님 관리·통계 대시보드
          ====================================================================== -->
     <section id="tab-admin" class="tab-panel">
-      <!-- 상단 관리자 헤더 + 기간 필터 + CSV 원클릭 다운로드 허브 -->
       <div class="glass-card" style="margin-bottom:1.25rem; background:linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 100%); border:1.5px solid #FCD34D;">
         <div class="filter-bar" style="margin-bottom:0.65rem;">
           <div>
@@ -490,7 +480,7 @@
             </span>
             <h2 style="font-size:1.22rem; font-weight:900;">👩‍🏫 서울문영여자중학교 교사용 통합 통계 & 리포트 센터</h2>
             <p style="font-size:0.8rem; color:#475569; font-weight:600; margin-top:0.15rem;">
-              교사 계정(<code>tfellow@gmail.com</code>, <code>tfellow@smy.ms.kr</code>)에서는 모든 학생의 <strong>닉네임과 실명</strong>을 함께 열람하며, 기간별(오늘·주간·월간·일별·전체) 통계와 리포트를 CSV(엑셀)로 내려받을 수 있습니다.
+              교사 계정에서는 모든 학생의 <strong>닉네임과 실명</strong>을 함께 열람하며, 기간별(오늘·주간·월간·일별·전체) 통계와 리포트를 CSV(엑셀)로 내려받을 수 있습니다.
             </p>
           </div>
           <div class="filter-group">
@@ -507,7 +497,6 @@
           </div>
         </div>
 
-        <!-- 기간별 통계 필터 바 (오늘, 이번 주, 이번 달, 최근 7일, 최근 30일, 일별 지정, 전체) -->
         <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:0.75rem 0.9rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.6rem;">
           <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
             <span style="font-size:0.8rem; font-weight:800; color:#1E1B4B; margin-right:0.25rem;">📅 조회 기간:</span>
@@ -527,7 +516,6 @@
           </div>
         </div>
 
-        <!-- CSV 원클릭 다운로드 허브 -->
         <div class="csv-download-hub">
           <span style="font-size:0.78rem; font-weight:800; color:#92400E; display:flex; align-items:center;">📥 항목별 CSV(엑셀) 다운로드:</span>
           <button type="button" class="btn-chip" onclick="exportClassStatusCSV()">🏫 반별 현황 CSV</button>
@@ -539,12 +527,8 @@
         </div>
       </div>
 
-      <!-- 선택 기간 핵심 KPI 요약 4칸 -->
-      <div class="stats-top-cards" id="adminKpiCards">
-        <!-- JS에서 기간별 응시 학생 수, 푼 퀴즈 수, 평균 정답률, 평균 연속 도전일 렌더링 -->
-      </div>
+      <div class="stats-top-cards" id="adminKpiCards"></div>
 
-      <!-- 교사용 세부 탭 네비게이션 -->
       <div class="admin-subnav">
         <button type="button" class="admin-subnav-btn active" data-subtab="class" onclick="switchAdminSubTab('class')">
           🏫 반별 현황 (1-1~3-4)
@@ -603,7 +587,7 @@
         </div>
       </div>
 
-      <!-- [서브패널 2] 📅 주간 리포트 (Weekly Report) -->
+      <!-- [서브패널 2] 📅 주간 리포트 -->
       <div id="admin-sub-weekly" class="admin-subpanel">
         <div class="glass-card">
           <div class="filter-bar">
@@ -670,7 +654,7 @@
         </div>
       </div>
 
-      <!-- [서브패널 4] 📈 일별 추이 (Daily Trend) -->
+      <!-- [서브패널 4] 📈 일별 추이 -->
       <div id="admin-sub-daily" class="admin-subpanel">
         <div class="glass-card">
           <div class="filter-bar">
@@ -706,7 +690,7 @@
         </div>
       </div>
 
-      <!-- [서브패널 5] 👩‍🎓 학생별 통계 (닉네임 + 실명) -->
+      <!-- [서브패널 5] 👩‍🎓 학생별 통계 -->
       <div id="admin-sub-student" class="admin-subpanel">
         <div class="glass-card">
           <div class="filter-bar">
@@ -859,7 +843,7 @@
   </main>
 
   <!-- ========================================================================
-       4. 퀴즈 문제 풀이 모달 (Quiz Question Modal)
+       4. 퀴즈 문제 풀이 모달
        ======================================================================== -->
   <div id="quizModal" class="modal-backdrop hidden">
     <div class="quiz-modal-card">
@@ -953,7 +937,7 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- 스크립트 로드 -->
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <script src="questions.js?v=12"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
