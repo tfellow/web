@@ -1,11 +1,11 @@
-﻿(function () {
+(function () {
   "use strict";
 
   var SUPABASE_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "51"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "52"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -1317,7 +1317,9 @@
     var lvByEmail = {};
     ((res[7] && !res[7].error && res[7].data) || []).forEach(function (p) { if (p.reading_level) lvByEmail[String(p.email || "").toLowerCase()] = p.reading_level; });
     for (var k = 0; k < 3; k++) if (res[k].error) throw res[k].error;
-    var ov = res[0].data || [], sc = res[1].data || [], hs = res[2].data || [];
+    // 학년 → 반 → 번호(숫자) 순서로 정렬해요 (문자로 정렬하면 18번이 2번보다 앞에 와요)
+    function cmpNo(a, b) { return (a.grade || 99) - (b.grade || 99) || (a.class_no || 99) - (b.class_no || 99) || (a.student_no || 999) - (b.student_no || 999); }
+    var ov = (res[0].data || []).slice().sort(cmpNo), sc = (res[1].data || []).slice().sort(cmpNo), hs = res[2].data || [];
     var qstats = (res[4] && !res[4].error && res[4].data) || [];
     var ex = (res[5] && !res[5].error && res[5].data) || {};
     var board = (res[6] && !res[6].error && res[6].data) || [];
@@ -1326,7 +1328,7 @@
     var books = window.BOOKS || [];
     var settings = ex.settings || {};
     var goalWords = parseInt(settings.class_goal_words, 10) || 10000;
-    var roster = ex.roster || [];
+    var roster = (ex.roster || []).slice().sort(cmpNo);
     var weekStart = ex.week_start || "";
     function low(s) { return String(s || "").toLowerCase(); }
     function clsKey(r) { return r.grade ? r.grade + "-" + r.class_no : "미지정"; }
@@ -1521,7 +1523,7 @@
         }
         var perRows = Object.keys(per).sort().reverse();
         var stuRows = activeKeys.filter(function (k) { var m = byEmail[k]; return !q || low([m.name, m.nickname, m.email].join(" ")).indexOf(q) >= 0; })
-          .sort(function (a, b) { return stu[b].tries - stu[a].tries; });
+          .sort(function (a, b) { return stu[b].tries - stu[a].tries || cmpNo(byEmail[a], byEmail[b]); });
         var bookRows = Object.keys(bk).filter(function (id) { var b = findBook(id) || {}; return !q || low([b.title, b.titleKo].join(" ")).indexOf(q) >= 0; })
           .sort(function (a, b) { return bk[b].tries - bk[a].tries; });
         var detail = rows.filter(matchRow).sort(function (a, b) { return a.attempt_at < b.attempt_at ? 1 : -1; });
