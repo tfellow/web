@@ -26,7 +26,7 @@ const CATEGORY_TABS = [
   { tabName: '4.세계지리', catId: 'world' },
   { tabName: '5.과학미래', catId: 'science' },
   { tabName: '6.예술문화', catId: 'culture' },
-  { tabName: '7.글로벌영어', catId: 'english' },
+  { tabName: '7.영어', catId: 'english' },
   { tabName: '8.문학고전', catId: 'literature' }
 ];
 
