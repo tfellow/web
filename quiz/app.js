@@ -1010,58 +1010,67 @@ function drawRouletteWheel() {
 
   const items = getRouletteItems();
   const numSlices = items.length;
-  const sliceAngle = (2 * Math.PI) / numSlices;
+  const arc = (2 * Math.PI) / numSlices;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Outer gold rim
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius + 10, 0, 2 * Math.PI);
-  ctx.fillStyle = '#D97706';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius + 6, 0, 2 * Math.PI);
-  ctx.fillStyle = '#FEF3C7';
-  ctx.fill();
-  ctx.restore();
-
-  // Slices
-  for (let i = 0; i < numSlices; i++) {
-    const item = items[i];
-    const startAngle = state.rouletteAngle + i * sliceAngle;
-    const endAngle = startAngle + sliceAngle;
+  // 1) 9개 슬라이스 부채꼴 그리기
+  items.forEach((slice, idx) => {
+    // 0번 슬라이스의 중심이 12시 정각(-PI/2)에 위치하도록 설정
+    const startAngle = idx * arc - Math.PI / 2 - arc / 2;
+    const endAngle = startAngle + arc;
 
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = item.color;
+    ctx.fillStyle = slice.color;
     ctx.fill();
-    ctx.strokeStyle = '#FFFFFF';
+
     ctx.lineWidth = 3;
+    ctx.strokeStyle = '#FFFFFF';
     ctx.stroke();
 
-    // Text & icon
-    const midAngle = startAngle + sliceAngle / 2;
+    // 2) 아이콘 및 텍스트 렌더링
     ctx.translate(cx, cy);
-    ctx.rotate(midAngle);
+    ctx.rotate(startAngle + arc / 2);
     ctx.textAlign = 'right';
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '900 13px "Pretendard", sans-serif';
-    ctx.shadowColor = 'rgba(0,0,0,0.45)';
-    ctx.shadowBlur = 4;
-    ctx.fillText(`${item.icon} ${item.shortName}`, radius - 20, 5);
-    ctx.restore();
-  }
 
-  // Center button ring
+    // 9분할에 맞춘 폰트 및 위치 정렬
+    ctx.font = 'bold 24px "Pretendard", sans-serif';
+    ctx.fillText(slice.icon, radius - 18, 9);
+
+    ctx.font = '800 14px "Pretendard", sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(slice.shortName, radius - 50, 5);
+
+    ctx.restore();
+  });
+
+  // 3) 외곽 흰색/골드 이중 링 테두리
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius + 3, 0, 2 * Math.PI);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#F59E0B';
+  ctx.stroke();
+  ctx.restore();
+
+  // 4) 중앙 흰색 원 (SPIN 버튼 배경 받침)
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, 54, 0, 2 * Math.PI);
   ctx.fillStyle = '#FFFFFF';
-  ctx.shadowColor = 'rgba(0,0,0,0.2)';
+  ctx.shadowColor = 'rgba(0,0,0,0.15)';
   ctx.shadowBlur = 10;
   ctx.fill();
   ctx.restore();
