@@ -1,3 +1,30 @@
+
+function getForsythiaSvgHtml(size = 38) {
+  return `
+    <svg viewBox="0 0 100 100" width="${size}" height="${size}" style="vertical-align:middle; display:inline-block; filter:drop-shadow(0 2px 4px rgba(217,119,6,0.3));">
+      <defs>
+        <radialGradient id="fCenter_${size}" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FEF08A"/>
+          <stop offset="60%" stop-color="#F59E0B"/>
+          <stop offset="100%" stop-color="#D97706"/>
+        </radialGradient>
+        <linearGradient id="petalTop_${size}" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%" stop-color="#FDE047"/>
+          <stop offset="100%" stop-color="#F59E0B"/>
+        </linearGradient>
+      </defs>
+      <!-- 4장의 개나리 꽃잎 (4수성 통꽃) -->
+      <path d="M50 44 C44 20, 32 8, 50 3 C68 8, 56 20, 50 44 Z" fill="url(#petalTop_${size})" stroke="#D97706" stroke-width="2.5"/>
+      <path d="M50 56 C44 80, 32 92, 50 97 C68 92, 56 80, 50 56 Z" fill="url(#petalTop_${size})" stroke="#D97706" stroke-width="2.5"/>
+      <path d="M44 50 C20 44, 8 32, 3 50 C8 68, 20 56, 44 50 Z" fill="url(#petalTop_${size})" stroke="#D97706" stroke-width="2.5"/>
+      <path d="M56 50 C80 44, 92 32, 97 50 C92 68, 80 56, 56 50 Z" fill="url(#petalTop_${size})" stroke="#D97706" stroke-width="2.5"/>
+      <!-- 중앙 통꽃 관 및 수술 -->
+      <circle cx="50" cy="50" r="11" fill="url(#fCenter_${size})" stroke="#B45309" stroke-width="2"/>
+      <circle cx="47" cy="48" r="2.2" fill="#B45309"/>
+      <circle cx="53" cy="52" r="2.2" fill="#B45309"/>
+    </svg>
+  `;
+}
 // ============================================================================
 // QUIZ QUEENS (퀴즈 퀸즈) - 서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)
 // Main Application Logic (app.js v1.1.0)
@@ -25,7 +52,8 @@ const STORAGE_KEYS = {
   GAS_URL: 'qq_gas_webapp_url_v14',
   SHOW_DEMO: 'qq_show_demo_v14',
   SOUND_ON: 'qq_sound_on_v14',
-  EXTRA_ADMINS: 'qq_extra_admins_v14'
+  EXTRA_ADMINS: 'qq_extra_admins_v14',
+  STUDENT_ROSTER: 'qq_student_roster_v15'
 };
 
 // 룰렛 7개 슬라이스 구성 (6대 분야 + 왕관 찬스)
@@ -49,6 +77,7 @@ let state = {
   quizLogs: [], // { date: 'YYYY-MM-DD', email, classId, category, isCorrect }
   questions: [],
   extraAdminEmails: [],
+  rosterMap: {}, // { 'email or studentId': '학생실명' }
   gasUrl: DEFAULT_GAS_URL,
   showDemoData: false,
   soundEnabled: true,
@@ -234,32 +263,48 @@ function isTeacherEmail(email) {
 function normalizeClassId(raw) {
   if (!raw) return '1-1';
   const s = String(raw).trim();
+  if (SCHOOL_CLASSES.some(c => c.classId === s)) return s;
+
   const mDirect = s.match(/^([1-3])-([1-4])$/);
-  if (mDirect) return `${mDirect[1]}-${mDirect[2]}`;
+  if (mDirect) {
+    let g = Number(mDirect[1]);
+    let c = Number(mDirect[2]);
+    if (g === 1 && c > 3) c = 3; // 1학년은 3반까지만 존재
+    const candidate = `${g}-${c}`;
+    if (SCHOOL_CLASSES.some(sc => sc.classId === candidate)) return candidate;
+  }
 
   const monthMap = { jan: 1, feb: 2, mar: 3 };
   const mDateStr = s.match(/\b(Jan|Feb|Mar)\s+0?([1-4])\b/i);
   if (mDateStr) {
-    return `${monthMap[mDateStr[1].toLowerCase()]}-${Number(mDateStr[2])}`;
+    let g = monthMap[mDateStr[1].toLowerCase()];
+    let c = Number(mDateStr[2]);
+    if (g === 1 && c > 3) c = 3;
+    const candidate = `${g}-${c}`;
+    if (SCHOOL_CLASSES.some(sc => sc.classId === candidate)) return candidate;
   }
   const mIso = s.match(/^\d{4}-0?([1-3])-0?([1-4])\b/);
   if (mIso) {
-    return `${Number(mIso[1])}-${Number(mIso[2])}`;
+    let g = Number(mIso[1]);
+    let c = Number(mIso[2]);
+    if (g === 1 && c > 3) c = 3;
+    const candidate = `${g}-${c}`;
+    if (SCHOOL_CLASSES.some(sc => sc.classId === candidate)) return candidate;
   }
-  if (SCHOOL_CLASSES.some(c => c.classId === s)) return s;
   return '1-1';
 }
 
 function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin = false }) {
   const today = getLocalDateStr();
   const cleanEmail = email.toLowerCase().trim();
+  const teacher = isAdmin || isTeacherEmail(cleanEmail);
   return {
     email: cleanEmail,
-    name: (name || '김문영').trim(),
-    nickname: (nickname || name || '개나리퀸').trim(),
-    classId: normalizeClassId(classId || '1-1'),
-    studentNo: Number(studentNo) || 1,
-    isAdmin: isAdmin || isTeacherEmail(cleanEmail),
+    name: (name || (teacher ? '문영 선생님' : '김문영')).trim(),
+    nickname: (nickname || name || (teacher ? '문영선생님' : '개나리퀸')).trim(),
+    classId: teacher ? '' : normalizeClassId(classId || '1-1'),
+    studentNo: teacher ? null : (Number(studentNo) || 1),
+    isAdmin: teacher,
     xp: 0,
     level: 1,
     totalSolved: 0,
@@ -275,10 +320,10 @@ function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin 
     certificates: [],
     categoryStats: createEmptyCategoryStats(),
     solvedQuestionIds: [],
+    allClearRewarded: false,
     updatedAt: new Date().toISOString()
   };
 }
-
 let cachedDemoData = null;
 function getDemoDataset() {
   if (cachedDemoData) return cachedDemoData;
@@ -425,6 +470,7 @@ function saveUserState() {
   }
   localStorage.setItem(STORAGE_KEYS.ALL_USERS, JSON.stringify(state.allUsers));
   localStorage.setItem(STORAGE_KEYS.QUIZ_LOGS, JSON.stringify(state.quizLogs));
+  localStorage.setItem(STORAGE_KEYS.STUDENT_ROSTER, JSON.stringify(state.rosterMap || {}));
 }
 
 // ============================================================================
@@ -447,19 +493,57 @@ function parseJwtPayload(token) {
 }
 
 function parseSchoolEmailPattern(email) {
-  // 예: 202620315@smy.ms.kr 또는 20315@smy.ms.kr 등에서 학년·반·번호 자동 추출 시도
-  const local = (email || '').split('@')[0];
-  // 패턴 A: 연도4자리 + 학년(1~3) + 반(01~04 또는 1~4) + 번호(01~40)
-  const m1 = local.match(/^(?:20\d{2})?([1-3])0?([1-4])(\d{2})$/);
+  if (!email) return null;
+  const clean = String(email).toLowerCase().trim();
+  const local = clean.split('@')[0];
+
+  // 패턴 1 [선생님 지정 공식 규칙]: 연도 4자리(예: 2026) + 학년 1자리(1~3) + 반 2자리(01~04) + 출석번호 2자리(01~40)
+  // 1학년은 1~3반, 2~3학년은 1~4반
+  const m1 = local.match(/^(\d{4})([1-3])(0[1-4])(0[1-9]|[1-3][0-9]|40)$/);
   if (m1) {
+    const grade = Number(m1[2]);
+    let classNo = Number(m1[3]);
+    const studentNo = Number(m1[4]);
+    if (grade === 1 && classNo > 3) classNo = 3; // 1학년은 3반까지만 존재
     return {
-      classId: `${m1[1]}-${Number(m1[2])}`,
-      studentNo: Number(m1[3]) || 1
+      grade,
+      classNo,
+      classId: `${grade}-${classNo}`,
+      studentNo
     };
   }
+
+  // 패턴 2 [연도 생략 5자리]: 학년(1~3) + 반 2자리(01~04) + 번호 2자리(01~40)
+  const m2 = local.match(/^([1-3])(0[1-4])(0[1-9]|[1-3][0-9]|40)$/);
+  if (m2) {
+    const grade = Number(m2[1]);
+    let classNo = Number(m2[2]);
+    const studentNo = Number(m2[3]);
+    if (grade === 1 && classNo > 3) classNo = 3;
+    return {
+      grade,
+      classNo,
+      classId: `${grade}-${classNo}`,
+      studentNo
+    };
+  }
+
+  // 패턴 3 [대시형]: 1-1-07 또는 2-3-15
+  const m3 = local.match(/^([1-3])-([1-4])-0?([1-9]|[1-3][0-9]|40)$/);
+  if (m3) {
+    const grade = Number(m3[1]);
+    let classNo = Number(m3[2]);
+    if (grade === 1 && classNo > 3) classNo = 3;
+    return {
+      grade,
+      classNo,
+      classId: `${grade}-${classNo}`,
+      studentNo: Number(m3[3])
+    };
+  }
+
   return null;
 }
-
 function initGoogleSignInButton() {
   if (location.protocol === 'file:') {
     const notice = document.getElementById('localFileNoticeBox');
@@ -504,37 +588,17 @@ async function handleGoogleCredentialResponse(response) {
   const email = payload.email.toLowerCase().trim();
   const googleName = (payload.name || payload.given_name || '').trim();
 
-  // Supabase 연동 확인 (기존 문영 독서 여권에 등록된 교사 권한 및 학생 학년·반·번호·실명·닉네임 자동 조회)
-  let sbProfile = null;
-  let sbIsAdmin = false;
-  if (sbClient && sbClient.auth) {
-    try {
-      const authRes = await sbClient.auth.signInWithIdToken({
-        provider: 'google',
-        token: response.credential
-      });
-      if (!authRes.error && authRes.data && authRes.data.user) {
-        const uid = authRes.data.user.id;
-        const [profRes, adminRes] = await Promise.all([
-          sbClient.from('profiles').select('*').eq('id', uid).maybeSingle(),
-          sbClient.rpc('is_admin')
-        ]);
-        if (profRes && profRes.data) sbProfile = profRes.data;
-        if (adminRes && adminRes.data) sbIsAdmin = !!adminRes.data;
-      }
-    } catch (e) {
-      console.warn('Supabase 프로필 조회 생략:', e);
-    }
-  }
-
-  const isTeacherAdmin = isTeacherEmail(email) || sbIsAdmin;
-  const isSchoolStudent = email.endsWith(ALLOWED_SCHOOL_DOMAIN) || (sbProfile && sbProfile.role === 'school');
+  // 교사 계정 확인
+  const isTeacherAdmin = isTeacherEmail(email);
+  // 학생 계정 확인: 교사가 아니면 오직 학교 공식 계정(@smy.ms.kr)만 허용!
+  const isSchoolStudent = email.endsWith(ALLOWED_SCHOOL_DOMAIN);
 
   if (!isTeacherAdmin && !isSchoolStudent) {
     if (errEl) {
       errEl.innerHTML =
-        `⚠️ <strong>${email}</strong> 계정은 학교 계정이 아닙니다.<br/>` +
-        `학생은 <strong>@smy.ms.kr</strong> 학교 구글 계정으로 로그인해 주세요!`;
+        `⛔ <strong>로그인 실패:</strong> 학교 공식 계정이 아닙니다.<br/>` +
+        `서울문영여자중학교 학생은 반드시 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해야 합니다.<br/>` +
+        `<span style="font-size:0.75rem; color:#64748B;">(현재 로그인 시도 계정: ${email})</span>`;
     }
     if (window.google && google.accounts && google.accounts.id) {
       google.accounts.id.disableAutoSelect();
@@ -542,75 +606,52 @@ async function handleGoogleCredentialResponse(response) {
     return;
   }
 
-  // 이미 퀴즈 퀸즈에 저장된 프로필이 있는 경우 즉시 로그인
-  const existingLocal = state.allUsers[email];
-  if (existingLocal && existingLocal.profileConfirmed) {
-    existingLocal.isAdmin = isTeacherAdmin;
-    loginWithProfile(existingLocal, true);
-    return;
-  }
-
-  // 교사 계정인 경우 추가 입력 없이 즉시 교사 모드로 로그인
+  // 교사 계정인 경우 학년·반 소속 없이 즉시 교사 모드로 로그인
   if (isTeacherAdmin) {
     loginWithProfile({
       email,
-      nickname: (sbProfile && sbProfile.nickname) || googleName || '문영선생님',
-      name: (sbProfile && sbProfile.name) || googleName || '문영 선생님',
-      classId: '2-2',
-      studentNo: 1,
+      nickname: googleName || '문영선생님',
+      name: googleName || '문영 선생님',
+      classId: '',
+      studentNo: null,
       isAdmin: true,
       profileConfirmed: true
     }, true);
     return;
   }
 
-  // 학교 Supabase 명단(profiles)에 학년·반·번호·실명이 이미 등록된 학생이면 자동 세팅 후 닉네임/학급 확인 창 표시
-  const parsedEmail = parseSchoolEmailPattern(email);
-  const autoClassId =
-    (sbProfile && sbProfile.grade && sbProfile.class_no ? `${sbProfile.grade}-${sbProfile.class_no}` : null) ||
-    (existingLocal && existingLocal.classId) ||
-    (parsedEmail && parsedEmail.classId) ||
-    '1-1';
-  const autoStudentNo =
-    (sbProfile && sbProfile.student_no) ||
-    (existingLocal && existingLocal.studentNo) ||
-    (parsedEmail && parsedEmail.studentNo) ||
-    1;
-  const autoRealName =
-    (sbProfile && sbProfile.name) ||
-    (existingLocal && existingLocal.name) ||
-    googleName ||
-    '';
-  const autoNickname =
-    (existingLocal && existingLocal.nickname) ||
-    (sbProfile && sbProfile.nickname) ||
-    '';
+  // 학생 계정: 1) 사전 등록된 명단 실명 확인 -> 2) 구글 계정 프로필 실명(googleName) 확인
+  const localId = email.split('@')[0];
+  const mappedRealName = (state.rosterMap && (state.rosterMap[email] || state.rosterMap[localId])) || '';
+  const finalRealName = mappedRealName || googleName || '문영인';
 
-  // 만약 Supabase 명단에 학년/반/번호/실명/닉네임이 모두 있으면 바로 로그인!
-  if (sbProfile && sbProfile.grade && sbProfile.class_no && sbProfile.name && sbProfile.nickname) {
-    loginWithProfile({
-      email,
-      nickname: sbProfile.nickname,
-      name: sbProfile.name,
-      classId: `${sbProfile.grade}-${sbProfile.class_no}`,
-      studentNo: sbProfile.student_no || 1,
-      isAdmin: false,
-      profileConfirmed: true
-    }, true);
+  // 이메일 주소(202610101@smy.ms.kr)에서 학년·반·번호 자동 파싱
+  const parsed = parseSchoolEmailPattern(email);
+  const autoClassId = (parsed && parsed.classId) || '1-1';
+  const autoStudentNo = (parsed && parsed.studentNo) || 1;
+
+  // 이미 저장된 학생 프로필이 있는 경우
+  const existingLocal = state.allUsers[email];
+  if (existingLocal && existingLocal.profileConfirmed) {
+    existingLocal.name = finalRealName || existingLocal.name;
+    existingLocal.classId = autoClassId || existingLocal.classId;
+    existingLocal.studentNo = autoStudentNo || existingLocal.studentNo;
+    loginWithProfile(existingLocal, true);
     return;
   }
 
-  // 최초 로그인 학생: 학급·번호·닉네임·실명 1회 확인 화면 노출
-  showProfileSetupStep({
+  // 최초 로그인 학생: 학급과 번호, 실명이 자동으로 결정되므로 추천 닉네임과 함께 자동 시작 또는 확인창
+  const defaultNickname = `퀸_${autoClassId}_${autoStudentNo}번`;
+  loginWithProfile({
     email,
+    nickname: defaultNickname,
+    name: finalRealName,
     classId: autoClassId,
     studentNo: autoStudentNo,
-    nickname: autoNickname,
-    name: autoRealName,
-    canCancel: false
-  });
+    isAdmin: false,
+    profileConfirmed: true
+  }, true);
 }
-
 function showProfileSetupStep({ email, classId, studentNo, nickname, name, canCancel }) {
   const overlay = document.getElementById('loginOverlay');
   if (overlay) overlay.classList.remove('hidden');
@@ -620,15 +661,24 @@ function showProfileSetupStep({ email, classId, studentNo, nickname, name, canCa
 
   document.getElementById('verifiedGoogleEmail').textContent = email;
   document.getElementById('loginEmail').value = email;
-  document.getElementById('loginClass').value = SCHOOL_CLASSES.some(c => c.classId === classId) ? classId : '1-1';
-  document.getElementById('loginNumber').value = studentNo || 1;
-  document.getElementById('loginNickname').value = nickname || '';
-  document.getElementById('loginName').value = name || '';
+
+  const isTeacher = isTeacherEmail(email) || (state.currentUser && state.currentUser.isAdmin);
+  const classRow = document.getElementById('loginClassStudentNoRow');
+  if (classRow) {
+    classRow.style.display = isTeacher ? 'none' : 'grid';
+  }
+
+  if (!isTeacher) {
+    document.getElementById('loginClass').value = SCHOOL_CLASSES.some(c => c.classId === classId) ? classId : '1-1';
+    document.getElementById('loginNumber').value = studentNo || 1;
+  }
+
+  document.getElementById('loginNickname').value = nickname || (isTeacher ? '문영선생님' : '');
+  document.getElementById('loginName').value = name || (isTeacher ? '문영 선생님' : '');
 
   const cancelBtn = document.getElementById('cancelProfileEditBtn');
   if (cancelBtn) cancelBtn.style.display = canCancel ? 'inline-flex' : 'none';
 }
-
 function openLoginModal() {
   const overlay = document.getElementById('loginOverlay');
   if (!overlay) return;
@@ -710,8 +760,8 @@ function quickLogin(mode) {
       email: 'tfellow@smy.ms.kr',
       nickname: '문영선생님',
       name: '문영 선생님',
-      classId: '2-2',
-      studentNo: 1,
+      classId: '',
+      studentNo: null,
       isAdmin: true,
       profileConfirmed: true
     }, true);
@@ -720,8 +770,8 @@ function quickLogin(mode) {
       email: 'tfellow@gmail.com',
       nickname: '관리자선생님',
       name: '문영 선생님',
-      classId: '2-2',
-      studentNo: 1,
+      classId: '',
+      studentNo: null,
       isAdmin: true,
       profileConfirmed: true
     }, true);
@@ -817,13 +867,18 @@ function refreshAllUI() {
 
   const streak = user.streakDays || 1;
   const maxStreak = user.maxStreakDays || streak;
-  user.classId = normalizeClassId(user.classId);
+  if (!user.isAdmin) {
+    user.classId = normalizeClassId(user.classId);
+  } else {
+    user.classId = '';
+    user.studentNo = null;
+  }
 
   // 상단 헤더 바
   document.getElementById('headerStreakPill').textContent = `🔥 연속 ${streak}일째`;
-  document.getElementById('headerLevelBadge').textContent = `Lv.${user.level}`;
+  document.getElementById('headerLevelBadge').textContent = `Lv.${user.level || 1}`;
   document.getElementById('headerUserName').textContent =
-    user.isAdmin ? `👩‍🏫 ${user.name}` : `${user.classId} ${user.nickname}`;
+    user.isAdmin ? `👩‍🏫 ${user.name}` : `${user.classId ? user.classId + ' ' : ''}${user.nickname}`;
 
   // 선생님 전용 탭 표시 여부
   const adminBtn = document.getElementById('adminTabBtn');
@@ -832,26 +887,41 @@ function refreshAllUI() {
   }
 
   // 좌측 프로필 카드 업데이트
-  const titleObj = getLevelTitleObj(user.level);
-  document.getElementById('profileAvatar').textContent = titleObj.badge;
+  const titleObj = getLevelTitleObj(user.level || 1);
+  const avatarEl = document.getElementById('profileAvatar');
+  if (avatarEl) {
+    avatarEl.innerHTML = getForsythiaSvgHtml(36);
+  }
   document.getElementById('profileNickname').textContent = user.nickname || user.name;
-  document.getElementById('profileClassTag').textContent = user.isAdmin ? '👩‍🏫 교사' : `${user.classId} (${user.studentNo}번)`;
-  document.getElementById('profileRealNameSub').textContent = user.isAdmin
-    ? `교사 계정: ${user.name} | ${user.email}`
-    : `실명(본인·교사만 열람): ${user.name} | ${user.email}`;
+  document.getElementById('profileClassTag').textContent = user.isAdmin
+    ? '👩‍🏫 교사'
+    : `${user.classId || '1-1'}${user.studentNo ? ' (' + user.studentNo + '번)' : ''}`;
+
+  const realSubEl = document.getElementById('profileRealNameSub');
+  if (realSubEl) {
+    if (user.isAdmin) {
+      realSubEl.style.display = 'block';
+      realSubEl.textContent = `교사 관리 계정: ${user.name} (${user.email})`;
+    } else {
+      realSubEl.style.display = 'none';
+      realSubEl.textContent = '';
+    }
+  }
   document.getElementById('profileTitleBadge').textContent = titleObj.title;
 
   // 연속 도전 일수 배너
   document.getElementById('profileStreakText').textContent = `연속 ${streak}일째 도전 중!`;
   document.getElementById('profileMaxStreakText').textContent = `🏆 최고 ${maxStreak}일`;
 
-  // XP & 레벨 게이지
-  const xpInCurrentLevel = user.xp % 100;
-  document.getElementById('xpLevelText').textContent = `Lv.${user.level} (${xpInCurrentLevel} / 100 XP)`;
+  // XP & 레벨 게이지 (NaN 완벽 방어)
+  const userXp = Number(user.xp) || 0;
+  const userLevel = Number(user.level) || 1;
+  const xpInCurrentLevel = userXp % 100;
+  document.getElementById('xpLevelText').textContent = `Lv.${userLevel} (${xpInCurrentLevel} / 100 XP)`;
   document.getElementById('xpPercentText').textContent = `${xpInCurrentLevel}%`;
   document.getElementById('xpBarFill').style.width = `${xpInCurrentLevel}%`;
 
-  const nextMilestone = CERTIFICATE_MILESTONE_LEVELS.find(m => m > user.level);
+  const nextMilestone = CERTIFICATE_MILESTONE_LEVELS.find(m => m > userLevel);
   const nextCertEl = document.getElementById('nextCertTargetText');
   if (nextMilestone) {
     const nextTitle = getLevelTitleObj(nextMilestone);
@@ -860,47 +930,76 @@ function refreshAllUI() {
     nextCertEl.textContent = `🌟 최고 레벨 인증서(Lv.30) 달성 완료!`;
   }
 
-  // 미니 스탯 4칸
-  const acc = user.totalSolved > 0 ? ((user.totalCorrect / user.totalSolved) * 100).toFixed(1) : '0.0';
-  document.getElementById('miniTotalSolved').textContent = `${user.totalSolved}문항`;
+  // 미니 스탯 4칸 (NaN 방어)
+  const tSolved = Number(user.totalSolved) || 0;
+  const tCorrect = Number(user.totalCorrect) || 0;
+  const combo = Number(user.combo) || 0;
+  const maxCombo = Number(user.maxCombo) || 0;
+  const certCount = Array.isArray(user.certificates) ? user.certificates.length : 0;
+  const acc = tSolved > 0 ? ((tCorrect / tSolved) * 100).toFixed(1) : '0.0';
+
+  document.getElementById('miniTotalSolved').textContent = `${tSolved}문항`;
   document.getElementById('miniAccuracy').textContent = `${acc}%`;
-  document.getElementById('miniCombo').textContent = `${user.combo} / ${user.maxCombo}🔥`;
-  document.getElementById('miniCertCount').textContent = `${streak}일 / ${user.certificates.length}장`;
+  document.getElementById('miniCombo').textContent = `${combo} / ${maxCombo}🔥`;
+  document.getElementById('miniCertCount').textContent = `${streak}일 / ${certCount}장`;
 
   // 왕관 게이지 (0~3)
-  document.getElementById('crownGaugeText').textContent = `(${user.crownGauge} / 3)`;
+  const cGauge = Number(user.crownGauge) || 0;
+  document.getElementById('crownGaugeText').textContent = `(${cGauge} / 3)`;
   for (let i = 1; i <= 3; i++) {
     const slot = document.getElementById(`crownSlot${i}`);
-    if (slot) slot.classList.toggle('filled', i <= user.crownGauge);
+    if (slot) slot.classList.toggle('filled', i <= cGauge);
   }
 
-  // 6대 분야 마스코트 미니 그리드
-  document.getElementById('mascotCountBadge').textContent = `${user.mascots.length} / 6 수집`;
+  // 문영 8대 퀸 마스코트 미니 그리드 (각 영역 5문항 정답 시 해금 & 개나리 SVG)
+  const mascotsList = Array.isArray(user.mascots) ? user.mascots : [];
+  document.getElementById('mascotCountBadge').textContent = `${mascotsList.length} / ${CATEGORIES.length} 수집`;
   const mascotGrid = document.getElementById('mascotMiniGrid');
   if (mascotGrid) {
     mascotGrid.innerHTML = CATEGORIES.map(cat => {
-      const collected = user.mascots.includes(cat.id);
+      const collected = mascotsList.includes(cat.id);
+      const st = (user.categoryStats && user.categoryStats[cat.id]) || { solved: 0, correct: 0 };
+      const corr = st.correct || 0;
+      const iconHtml = cat.id === 'school' ? getForsythiaSvgHtml(28) : cat.mascotEmoji;
       return `
-        <div class="mascot-card ${collected ? 'collected' : ''}" title="${cat.mascotDesc}">
-          <span class="mascot-emoji">${cat.mascotEmoji}</span>
+        <div class="mascot-card ${collected ? 'collected' : ''}" title="${cat.mascotDesc} (정답 5개 시 해금)">
+          <span class="mascot-emoji">${iconHtml}</span>
           <span class="mascot-name">${cat.mascotName}</span>
-          <span class="mascot-cat">${cat.shortName} ${collected ? '✅' : '🔒'}</span>
+          <span class="mascot-cat" style="font-size:0.71rem;">${cat.shortName} ${collected ? '✅ 달성' : `(${corr}/5🔒)`}</span>
         </div>
       `;
     }).join('');
   }
 
-  const comboBonus = Math.min(user.combo * 3, 30);
+  // 상단 콤보 배너 (+NaN XP 방어)
+  const comboBonus = Math.min(combo * 3, 30);
   document.getElementById('arenaComboPill').textContent =
-    `🔥 현재 ${user.combo}연속 정답 중! (콤보 보너스 +${comboBonus} XP)`;
+    `🔥 현재 ${combo}연속 정답 중! (콤보 보너스 +${comboBonus} XP)`;
 
   const qCountEl = document.getElementById('adminTotalQCount');
   if (qCountEl) qCountEl.textContent = state.questions.length;
 }
 
-// ============================================================================
-// 6. 트리비아 크랙 스타일 7분할 룰렛 휠 그리기 및 회전
-// ============================================================================
+function getRouletteItems() {
+  const items = CATEGORIES.map(c => ({
+    id: c.id,
+    name: c.name,
+    shortName: c.shortName,
+    icon: c.icon,
+    color: c.color,
+    isCrown: false
+  }));
+  items.push({
+    id: 'crown',
+    name: '왕관 찬스',
+    shortName: '왕관찬스',
+    icon: '👑',
+    color: '#F59E0B',
+    isCrown: true
+  });
+  return items;
+}
+
 function drawRouletteWheel() {
   const canvas = document.getElementById('rouletteCanvas');
   if (!canvas) return;
@@ -908,71 +1007,99 @@ function drawRouletteWheel() {
   const cx = canvas.width / 2;
   const cy = canvas.height / 2;
   const radius = cx - 14;
-  const sliceCount = ROULETTE_SLICES.length;
-  const arc = (2 * Math.PI) / sliceCount;
+
+  const items = getRouletteItems();
+  const numSlices = items.length;
+  const sliceAngle = (2 * Math.PI) / numSlices;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ROULETTE_SLICES.forEach((slice, idx) => {
-    const startAngle = idx * arc - Math.PI / 2 - arc / 2;
-    const endAngle = startAngle + arc;
+  // Outer gold rim
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius + 10, 0, 2 * Math.PI);
+  ctx.fillStyle = '#D97706';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius + 6, 0, 2 * Math.PI);
+  ctx.fillStyle = '#FEF3C7';
+  ctx.fill();
+  ctx.restore();
 
+  // Slices
+  for (let i = 0; i < numSlices; i++) {
+    const item = items[i];
+    const startAngle = state.rouletteAngle + i * sliceAngle;
+    const endAngle = startAngle + sliceAngle;
+
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = slice.color;
+    ctx.fillStyle = item.color;
     ctx.fill();
-
-    ctx.lineWidth = 4;
     ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 3;
     ctx.stroke();
 
-    ctx.save();
+    // Text & icon
+    const midAngle = startAngle + sliceAngle / 2;
     ctx.translate(cx, cy);
-    ctx.rotate(startAngle + arc / 2);
+    ctx.rotate(midAngle);
     ctx.textAlign = 'right';
     ctx.fillStyle = '#FFFFFF';
-
-    ctx.font = 'bold 34px "Pretendard", sans-serif';
-    ctx.fillText(slice.icon, radius - 26, 12);
-
-    ctx.font = '800 18px "Pretendard", sans-serif';
-    ctx.fillText(slice.shortName, radius - 72, 7);
+    ctx.font = '900 13px "Pretendard", sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,0.45)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(`${item.icon} ${item.shortName}`, radius - 20, 5);
     ctx.restore();
-  });
+  }
 
+  // Center button ring
+  ctx.save();
   ctx.beginPath();
-  ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-  ctx.lineWidth = 8;
-  ctx.strokeStyle = '#FFFFFF';
-  ctx.stroke();
+  ctx.arc(cx, cy, 54, 0, 2 * Math.PI);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.shadowColor = 'rgba(0,0,0,0.2)';
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.restore();
 }
-
-function renderDirectCategoryChips() {
-  const wrap = document.getElementById('directCategoryChips');
-  if (!wrap) return;
-  wrap.innerHTML = CATEGORIES.map(cat => `
-    <button type="button" class="cat-chip-btn" onclick="startQuizByCategory('${cat.id}')">
-      <span>${cat.icon}</span>
-      <span>${cat.name}</span>
-    </button>
-  `).join('');
-}
-
 function spinRoulette() {
   if (state.isSpinning) return;
   state.isSpinning = true;
+  state.isRouletteMode = true; // 룰렛 도전 모드 활성화
 
   const spinBtn = document.getElementById('spinBtn');
   if (spinBtn) spinBtn.disabled = true;
 
   playSoundEffect('spin');
 
-  const sliceCount = ROULETTE_SLICES.length;
+  const items = getRouletteItems();
+  const sliceCount = items.length;
   const sliceDeg = 360 / sliceCount;
-  const chosenIndex = Math.floor(Math.random() * sliceCount);
-  const chosenSlice = ROULETTE_SLICES[chosenIndex];
+
+  // 스마트 룰렛 가중치: 아직 마스코트를 획득하지 못한 미수집 분야에 3배 가중치 부여
+  const user = state.currentUser;
+  const ownedMascots = (user && Array.isArray(user.mascots)) ? user.mascots : [];
+
+  const weights = items.map(it => {
+    if (it.isCrown) return 1.5;
+    return ownedMascots.includes(it.id) ? 1.0 : 3.0; // 미수집 영역 가중치
+  });
+
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  let rnd = Math.random() * totalWeight;
+  let chosenIndex = 0;
+  for (let i = 0; i < weights.length; i++) {
+    if (rnd < weights[i]) {
+      chosenIndex = i;
+      break;
+    }
+    rnd -= weights[i];
+  }
+  const chosenSlice = items[chosenIndex];
 
   const extraSpins = (5 + Math.floor(Math.random() * 3)) * 360;
   const targetModAngle = (360 - chosenIndex * sliceDeg) % 360;
@@ -993,22 +1120,44 @@ function spinRoulette() {
     state.isSpinning = false;
     if (spinBtn) spinBtn.disabled = false;
 
-    if (chosenSlice.id === 'crown') {
+    if (chosenSlice.isCrown) {
       statusText.innerHTML = `👑 <strong>[왕관 찬스]</strong> 당첨! 원하는 분야의 마스코트를 획득하세요!`;
       openCrownSelectionModal();
     } else {
-      statusText.innerHTML = `${chosenSlice.icon} <strong>[${chosenSlice.name}]</strong> 분야 당첨! 문제를 출제합니다.`;
-      setTimeout(() => startQuizByCategory(chosenSlice.id), 450);
+      statusText.innerHTML = `${chosenSlice.icon} <strong>[${chosenSlice.name}]</strong> 분야 당첨! 룰렛 무한도전 출제 (🎯 정답 시 +15 XP 혜택)`;
+      setTimeout(() => startQuizByCategory(chosenSlice.id, true), 450);
     }
   }, 3850);
 }
 
-// ============================================================================
-// 7. 퀴즈 출제, 타이머, 찬스 아이템(3종) 및 채점 + 일별 로그 기록
-// ============================================================================
+// 하단 분야 칩 클릭 시: 특정 분야 집중 연습 모드
+function startDirectCategoryQuiz(catId) {
+  const catObj = CATEGORIES.find(c => c.id === catId);
+  if (!catObj) return;
+  const statusText = document.getElementById('rouletteStatusText');
+  if (statusText) {
+    statusText.innerHTML = `${catObj.icon} <strong>[${catObj.name}]</strong> 집중 연습 모드 (💡 5문제 정답 시 마스코트 해금)`;
+  }
+  startQuizByCategory(catId, false);
+}
+
+function renderDirectCategoryChips() {
+  const container = document.getElementById('directCategoryChips');
+  if (!container) return;
+  container.innerHTML = CATEGORIES.map(cat => `
+    <button type="button" class="btn-chip category-chip-btn" style="border-left: 3px solid ${cat.color}; font-weight:800;" onclick="startDirectCategoryQuiz('${cat.id}')">
+      ${cat.icon} ${cat.shortName}
+    </button>
+  `).join('');
+}
+
 function pickQuestionForCategory(categoryId) {
-  const pool = state.questions.filter(q => q.category === categoryId);
-  if (pool.length === 0) return state.questions[0];
+  // 보류된 문제 제외
+  const pool = state.questions.filter(q => q.category === categoryId && q.status !== '보류');
+  if (pool.length === 0) {
+    const anyPool = state.questions.filter(q => q.status !== '보류');
+    return anyPool[0] || state.questions[0];
+  }
 
   const solvedIds = state.currentUser ? state.currentUser.solvedQuestionIds : [];
   const unsolved = pool.filter(q => !solvedIds.includes(q.id));
@@ -1017,7 +1166,8 @@ function pickQuestionForCategory(categoryId) {
   return targetPool[Math.floor(Math.random() * targetPool.length)];
 }
 
-function startQuizByCategory(categoryId) {
+function startQuizByCategory(categoryId, isRoulette = false) {
+  state.isRouletteMode = isRoulette;
   const catObj = CATEGORIES.find(c => c.id === categoryId) || CATEGORIES[0];
   const questionObj = pickQuestionForCategory(catObj.id);
 
@@ -1030,14 +1180,17 @@ function startQuizByCategory(categoryId) {
     answered: false,
     used5050: false,
     usedTime: false,
-    usedSkip: false
+    usedSkip: false,
+    feedbackGiven: false
   };
 
   const header = document.getElementById('quizModalHeader');
   header.style.background = catObj.color;
   document.getElementById('quizCatIcon').textContent = catObj.icon;
-  document.getElementById('quizCatName').textContent = catObj.name;
-  document.getElementById('quizDiffBadge').textContent = `난이도: ${questionObj.difficulty || '보통'}`;
+  document.getElementById('quizCatName').textContent = `${catObj.name} ${isRoulette ? '🎯 (룰렛 도전)' : '💡 (집중 연습)'}`;
+
+  const diffBadge = document.getElementById('quizDiffBadge');
+  if (diffBadge) diffBadge.style.display = 'none';
 
   document.getElementById('quizQuestionText').textContent = `Q. ${questionObj.question}`;
   const optionsList = document.getElementById('quizOptionsList');
@@ -1052,6 +1205,15 @@ function startQuizByCategory(categoryId) {
   document.getElementById('lifelineTime').disabled = false;
   document.getElementById('lifelineSkip').disabled = false;
   document.getElementById('quizExplanationBox').classList.add('hidden');
+
+  // 상호 평가 영역 초기화
+  const fbBtns = document.getElementById('quizFeedbackBtns');
+  if (fbBtns) {
+    fbBtns.style.display = 'flex';
+    fbBtns.querySelectorAll('button').forEach(b => b.disabled = false);
+  }
+  const fbDone = document.getElementById('quizFeedbackDoneMsg');
+  if (fbDone) fbDone.style.display = 'none';
 
   document.getElementById('quizModal').classList.remove('hidden');
   startQuizTimer();
@@ -1121,7 +1283,7 @@ function useLifelineSkip() {
   if (q.answered || q.usedSkip) return;
   clearInterval(q.timerId);
   showToast('🔄 같은 분야의 다른 문제로 교체합니다!');
-  startQuizByCategory(q.categoryObj.id);
+  startQuizByCategory(q.categoryObj.id, state.isRouletteMode);
   state.currentQuiz.usedSkip = true;
   document.getElementById('lifelineSkip').disabled = true;
 }
@@ -1151,49 +1313,76 @@ function submitAnswer(selectedNum) {
   document.getElementById('lifelineSkip').disabled = true;
 
   const user = state.currentUser;
-  const prevLevel = user.level;
+  const prevLevel = user.level || 1;
 
   // 연속 도전 일수 갱신
   updateStreakOnQuizSolve(user);
 
-  user.totalSolved += 1;
+  user.totalSolved = (user.totalSolved || 0) + 1;
   if (!user.categoryStats[q.categoryObj.id]) {
     user.categoryStats[q.categoryObj.id] = { solved: 0, correct: 0 };
   }
-  user.categoryStats[q.categoryObj.id].solved += 1;
+  user.categoryStats[q.categoryObj.id].solved = (user.categoryStats[q.categoryObj.id].solved || 0) + 1;
 
   let earnedXp = 0;
   if (isCorrect) {
     playSoundEffect('correct');
-    user.totalCorrect += 1;
-    user.categoryStats[q.categoryObj.id].correct += 1;
-    user.combo += 1;
-    if (user.combo > user.maxCombo) user.maxCombo = user.combo;
+    user.totalCorrect = (user.totalCorrect || 0) + 1;
+    user.categoryStats[q.categoryObj.id].correct = (user.categoryStats[q.categoryObj.id].correct || 0) + 1;
 
-    const comboBonus = Math.min((user.combo - 1) * 3, 30);
-    earnedXp = 25 + comboBonus;
-    user.xp += earnedXp;
+    // 룰렛 도전 vs 특정분야 선택 차별화
+    if (state.isRouletteMode) {
+      user.combo = (user.combo || 0) + 1;
+      if (user.combo > (user.maxCombo || 0)) user.maxCombo = user.combo;
+      const comboBonus = Math.min((user.combo - 1) * 3, 30);
+      earnedXp = 15 + comboBonus; // 룰렛 보너스 1.5배 + 콤보
+      user.crownGauge = Math.min(3, (user.crownGauge || 0) + 1);
+    } else {
+      earnedXp = 10; // 특정분야 기본 연습 점수
+    }
+
+    user.xp = (user.xp || 0) + earnedXp;
 
     if (!user.solvedQuestionIds.includes(q.questionObj.id)) {
       user.solvedQuestionIds.push(q.questionObj.id);
     }
 
-    user.crownGauge = Math.min(3, user.crownGauge + 1);
+    // 마스코트 획득 조건: 해당 영역 누적 5문항 정답 달성 시 도감 자동 해금!
+    const catCorrectCount = user.categoryStats[q.categoryObj.id].correct;
+    if (catCorrectCount >= 5 && !user.mascots.includes(q.categoryObj.id)) {
+      user.mascots.push(q.categoryObj.id);
+      user.xp += 30;
+      setTimeout(() => {
+        showToast(`🎉 축하합니다! [${q.categoryObj.shortName}] 5문항 정답 달성으로 [${q.categoryObj.mascotName}] 마스코트를 도감에 수집했습니다! (+30 XP)`);
+      }, 500);
+    }
+
+    // 도감 8대 퀸 올클리어 최종 보상
+    if (user.mascots.length >= CATEGORIES.length && !user.allClearRewarded) {
+      user.allClearRewarded = true;
+      user.xp += 500;
+      setTimeout(() => {
+        alert(`👑 축하합니다! 문영 8대 퀸 마스코트 도감을 모두 완성하여 '👑 문영 그랜드 올마스터 퀸' 특별 황금 칭호와 올클리어 보너스 +500 XP를 획득했습니다!`);
+      }, 900);
+    }
+
   } else {
     playSoundEffect('wrong');
-    user.combo = 0;
+    if (state.isRouletteMode) {
+      user.combo = 0;
+    }
     earnedXp = 5;
-    user.xp += earnedXp;
+    user.xp = (user.xp || 0) + earnedXp;
   }
 
   user.level = Math.floor(user.xp / 100) + 1;
 
-  // 일별/기간별 통계용 로그 저장 (교사 테스트 풀이는 학생 통계에서 제외)
+  // 일별/기간별 통계용 로그 저장 (교사는 통계 집계 제외)
   if (!user.isAdmin) {
     state.quizLogs.push({
       date: getLocalDateStr(),
       email: user.email,
-      classId: user.classId,
+      classId: user.classId || '',
       category: q.categoryObj.id,
       isCorrect
     });
@@ -1227,16 +1416,18 @@ function submitAnswer(selectedNum) {
 
   if (isCorrect) {
     expTitle.style.color = '#059669';
-    expTitle.textContent = `🎉 정답입니다! (+${earnedXp} XP 획득 | 🔥 ${user.combo}연속 정답!)`;
+    expTitle.textContent = state.isRouletteMode
+      ? `🎉 정답입니다! (+${earnedXp} XP 획득 | 🔥 ${user.combo}연속 정답!)`
+      : `🎉 정답입니다! (+${earnedXp} XP 획득 | 💡 집중 연습)`;
   } else if (selectedNum === -1) {
     expTitle.style.color = '#DC2626';
-    expTitle.textContent = `⏰ 시간이 초과되었습니다! (도전 격려 +${earnedXp} XP | 정답: ${correctNum}번)`;
+    expTitle.textContent = `⏰ 시간이 초과되었습니다! (도전 격려 +${earnedXp} XP)`;
   } else {
     expTitle.style.color = '#DC2626';
-    expTitle.textContent = `💡 아쉽네요! 정답은 ${correctNum}번입니다. (도전 격려 +${earnedXp} XP)`;
+    expTitle.textContent = `💡 아쉽네요! 오답입니다. (도전 격려 +${earnedXp} XP)`;
   }
 
-  expText.textContent = `해설: ${q.questionObj.explanation}`;
+  expText.innerHTML = `<strong>정답:</strong> ${correctNum}번 [${q.questionObj.options[correctNum - 1]}]`;
   expBox.classList.remove('hidden');
 
   if (user.level > prevLevel) {
@@ -1251,18 +1442,60 @@ function submitAnswer(selectedNum) {
   }
 }
 
+// 상호 평가 (좋아요 / 보통 / 아쉬워요)
+function submitQuestionFeedback(type) {
+  const q = state.currentQuiz;
+  if (!q || !q.questionObj || q.feedbackGiven) return;
+  q.feedbackGiven = true;
+
+  const qObj = q.questionObj;
+  const user = state.currentUser;
+
+  if (type === 'like') {
+    qObj.likes = (qObj.likes || 0) + 1;
+    const bonusXp = 5; // 문제에 좋아요 선택 시 보너스 +5 XP 부여!
+    if (user) {
+      user.xp = (user.xp || 0) + bonusXp;
+      user.level = Math.floor(user.xp / 100) + 1;
+      saveUserState();
+      refreshAllUI();
+    }
+    showToast(`👍 좋은 문제를 추천해 주셔서 보너스 +${bonusXp} XP를 획득했습니다!`);
+  } else if (type === 'normal') {
+    showToast('😐 소중한 의견이 기록되었습니다.');
+  } else if (type === 'dislike') {
+    qObj.dislikes = (qObj.dislikes || 0) + 1;
+    if (qObj.dislikes >= 3) {
+      qObj.status = '보류';
+    }
+    showToast('👎 아쉬운 점이 기록되었습니다. 평가가 누적되면 출제가 자동 보류됩니다.');
+  }
+
+  const fbBtns = document.getElementById('quizFeedbackBtns');
+  if (fbBtns) fbBtns.style.display = 'none';
+  const fbDone = document.getElementById('quizFeedbackDoneMsg');
+  if (fbDone) fbDone.style.display = 'block';
+
+  if (state.gasUrl) {
+    postToGoogleSheets({
+      action: 'voteQuestion',
+      questionId: qObj.id,
+      vote: type
+    });
+  }
+}
 function closeQuizModal() {
   clearInterval(state.currentQuiz.timerId);
   document.getElementById('quizModal').classList.add('hidden');
 
-  if (state.currentUser && state.currentUser.crownGauge >= 3) {
+  if (state.currentUser && (state.currentUser.crownGauge || 0) >= 3) {
     setTimeout(() => openCrownSelectionModal(), 250);
   }
 }
 
 function closeQuizAndSpinAgain() {
   closeQuizModal();
-  if (state.currentUser && state.currentUser.crownGauge >= 3) {
+  if (state.currentUser && (state.currentUser.crownGauge || 0) >= 3) {
     return;
   }
   setTimeout(() => spinRoulette(), 250);
@@ -1278,14 +1511,15 @@ function openCrownSelectionModal() {
   const grid = document.getElementById('crownSelectGrid');
   grid.innerHTML = CATEGORIES.map(cat => {
     const owned = user.mascots.includes(cat.id);
+    const iconHtml = cat.id === 'school' ? getForsythiaSvgHtml(32) : `<span style="font-size:2.1rem;">${cat.mascotEmoji}</span>`;
     return `
       <button type="button" class="crown-choice-btn" onclick="claimCrownMascot('${cat.id}')">
-        <span style="font-size:2.1rem;">${cat.mascotEmoji}</span>
+        ${iconHtml}
         <div>
           <div style="font-size:0.9rem; font-weight:900; color:#1E1B4B;">
             ${cat.mascotName} ${owned ? '<span style="font-size:0.7rem; color:#10B981;">(보유중)</span>' : '<span style="font-size:0.7rem; color:#DB2777;">(NEW!)</span>'}
           </div>
-          <div style="font-size:0.74rem; color:#64748B; font-weight:600;">${cat.icon} ${cat.name}</div>
+          <div style="font-size:0.74rem; color:#64748B; font-weight:600;">${cat.icon} ${cat.shortName}</div>
         </div>
       </button>
     `;
@@ -1299,7 +1533,7 @@ function claimCrownMascot(categoryId) {
   const cat = CATEGORIES.find(c => c.id === categoryId) || CATEGORIES[0];
 
   user.crownGauge = 0;
-  user.xp += 30;
+  user.xp = (user.xp || 0) + 30;
   user.level = Math.floor(user.xp / 100) + 1;
 
   if (!user.mascots.includes(categoryId)) {
@@ -1309,11 +1543,20 @@ function claimCrownMascot(categoryId) {
     showToast(`👑 [${cat.mascotName}] 마스코트 응원 보너스로 +30 XP를 획득했습니다!`);
   }
 
-  playSoundEffect('levelup');
+  // 8대 퀸 올클리어 체크
+  if (user.mascots.length >= CATEGORIES.length && !user.allClearRewarded) {
+    user.allClearRewarded = true;
+    user.xp = (user.xp || 0) + 500;
+    setTimeout(() => {
+      alert(`👑 축하합니다! 문영 8대 퀸 마스코트 도감을 모두 완성하여 '👑 문영 그랜드 올마스터 퀸' 칭호와 +500 XP를 획득했습니다!`);
+    }, 600);
+  }
+
+  document.getElementById('crownModal').classList.add('hidden');
   saveUserState();
   refreshAllUI();
-  document.getElementById('crownModal').classList.add('hidden');
 }
+
 
 // ============================================================================
 // 9. 레벨별 디지털 인증서 (서울문영여자중학교 공식 명칭 적용)
@@ -1987,7 +2230,9 @@ function renderAdminTab() {
   renderAdminCategorySubPanel(periodLogs);
   renderAdminDailySubPanel();
   renderAdminStudentSubPanel(students, periodLogs);
+  renderAdminStudentQuestionsSubPanel();
   renderRegisteredTeachersList();
+  renderRegisteredRosterCount();
 }
 
 // [서브패널 1] 반별 현황 (1-1 ~ 3-4)
@@ -2859,6 +3104,12 @@ async function syncWithGoogleSheets(showNotification = true) {
           if (u.email) {
             const key = u.email.toLowerCase().trim();
             if (key === '__admin_config__') return;
+            // 시트에 실명이 등록되어 있으면 rosterMap에 자동 반영
+            if (u.name && !state.rosterMap[key]) {
+              if (!state.rosterMap) state.rosterMap = {};
+              state.rosterMap[key] = u.name;
+              state.rosterMap[key.split('@')[0]] = u.name;
+            }
             u.classId = normalizeClassId(u.classId);
             const prev = state.allUsers[key];
             const merged = prev && (prev.totalSolved || 0) > (u.totalSolved || 0)
@@ -2908,4 +3159,211 @@ function showToast(message) {
     el.style.transition = 'opacity 0.3s';
     setTimeout(() => el.remove(), 300);
   }, 3200);
+}
+
+
+// ============================================================================
+// 13. ✏️ 학생 퀴즈 직접 출제 & 교사용 학생 출제 검토실
+// ============================================================================
+function openStudentSubmitModal() {
+  if (!state.currentUser) {
+    showToast('⚠️ 먼저 Google 계정으로 로그인해 주세요!');
+    openLoginModal();
+    return;
+  }
+
+  const select = document.getElementById('submitQCat');
+  if (select) {
+    select.innerHTML = CATEGORIES.map(c => `
+      <option value="${c.id}">${c.icon} ${c.name} (${c.shortName})</option>
+    `).join('');
+  }
+
+  const modal = document.getElementById('studentSubmitModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeStudentSubmitModal() {
+  const modal = document.getElementById('studentSubmitModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function handleStudentQuestionSubmit(event) {
+  event.preventDefault();
+  const user = state.currentUser;
+  if (!user) return;
+
+  const catId = document.getElementById('submitQCat').value;
+  const questionText = document.getElementById('submitQText').value.trim();
+  const opt1 = document.getElementById('submitOpt1').value.trim();
+  const opt2 = document.getElementById('submitOpt2').value.trim();
+  const opt3 = document.getElementById('submitOpt3').value.trim();
+  const opt4 = document.getElementById('submitOpt4').value.trim();
+  const ansRadio = document.querySelector('input[name="submitQAnswer"]:checked');
+  const answerNum = ansRadio ? Number(ansRadio.value) : 1;
+
+  if (!questionText || !opt1 || !opt2 || !opt3 || !opt4) {
+    alert('질문과 4개의 보기를 모두 입력해 주세요!');
+    return;
+  }
+
+  const newQ = {
+    id: `stu_${Date.now()}`,
+    category: catId,
+    question: questionText,
+    options: [opt1, opt2, opt3, opt4],
+    answer: answerNum,
+    author: `${user.nickname || user.name} (${user.classId || '교사'})`,
+    likes: 0,
+    dislikes: 0,
+    status: '정상',
+    createdAt: new Date().toISOString()
+  };
+
+  state.questions.push(newQ);
+
+  // 출제 학생에게 +20 XP 보너스 부여
+  user.xp = (user.xp || 0) + 20;
+  user.level = Math.floor(user.xp / 100) + 1;
+  saveUserState();
+  refreshAllUI();
+
+  // 구글 시트로 전송
+  if (state.gasUrl) {
+    postToGoogleSheets({
+      action: 'submitStudentQuestion',
+      question: newQ
+    });
+  }
+
+  closeStudentSubmitModal();
+  document.getElementById('studentSubmitForm').reset();
+  showToast('🎉 내가 낸 퀴즈가 전교생 룰렛에 성공적으로 등록되었습니다! (+20 XP 지급)');
+}
+
+function renderAdminStudentQuestionsSubPanel() {
+  const tbody = document.getElementById('adminStudentQTableBody');
+  if (!tbody) return;
+
+  const filter = document.getElementById('adminStudentQFilter')?.value || 'all';
+  // 학생 출제 문제 필터링 (id가 stu_ 로 시작하거나 author가 선생님이 아닌 것)
+  let studentQuestions = state.questions.filter(q => q.id.startsWith('stu_') || (q.author && q.author !== '선생님'));
+
+  if (filter === 'active') {
+    studentQuestions = studentQuestions.filter(q => q.status !== '보류');
+  } else if (filter === 'paused') {
+    studentQuestions = studentQuestions.filter(q => q.status === '보류');
+  }
+
+  if (studentQuestions.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center; padding:1.5rem; color:#64748B;">
+          등록된 학생 출제 문제가 아직 없습니다. 메인 화면의 [✏️ 나도 퀴즈 출제하기!]를 통해 학생들이 문제를 등록할 수 있습니다.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = studentQuestions.map(q => {
+    const cat = CATEGORIES.find(c => c.id === q.category) || CATEGORIES[0];
+    const isPaused = q.status === '보류';
+    const likes = q.likes || 0;
+    const dislikes = q.dislikes || 0;
+
+    return `
+      <tr style="${isPaused ? 'background:#FEF2F2;' : ''}">
+        <td><span class="badge-tag" style="background:${cat.color}20; color:${cat.color};">${cat.icon} ${cat.shortName}</span></td>
+        <td><strong>${q.author || '학생'}</strong></td>
+        <td><div style="font-weight:700; word-break:break-all;">Q. ${q.question}</div></td>
+        <td style="font-size:0.78rem;">
+          ① ${q.options[0]}<br/>
+          ② ${q.options[1]}<br/>
+          ③ ${q.options[2]}<br/>
+          ④ ${q.options[3]}<br/>
+          <strong style="color:#059669;">[정답: ${q.answer}번]</strong>
+        </td>
+        <td>
+          <span style="color:#059669; font-weight:800;">👍 ${likes}</span> /
+          <span style="color:#DC2626; font-weight:800;">👎 ${dislikes}</span>
+        </td>
+        <td>
+          <span class="accuracy-pill ${isPaused ? 'acc-low' : 'acc-high'}">
+            ${isPaused ? '⏸️ 보류됨' : '✅ 정상 출제'}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex; gap:0.3rem;">
+            <button type="button" class="btn-chip" onclick="toggleStudentQuestionStatus('${q.id}')" title="출제 상태 토글">
+              ${isPaused ? '▶️ 출제 승인' : '⏸️ 출제 보류'}
+            </button>
+            <button type="button" class="btn-chip" style="color:#DC2626;" onclick="deleteStudentQuestion('${q.id}')" title="문제 완전 삭제">
+              🗑️ 삭제
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function toggleStudentQuestionStatus(qId) {
+  const q = state.questions.find(item => item.id === qId);
+  if (!q) return;
+  q.status = q.status === '보류' ? '정상' : '보류';
+  renderAdminStudentQuestionsSubPanel();
+  showToast(`✅ [${q.question.slice(0, 15)}...] 문제가 ${q.status === '보류' ? '출제 보류' : '정상 출제'} 상태로 변경되었습니다.`);
+}
+
+function deleteStudentQuestion(qId) {
+  if (!confirm('이 학생 출제 문제를 완전히 삭제하시겠습니까?')) return;
+  state.questions = state.questions.filter(q => q.id !== qId);
+  renderAdminStudentQuestionsSubPanel();
+  showToast('🗑️ 문제가 삭제되었습니다.');
+}
+
+
+// ============================================================================
+// 14. 👩‍🏫 교사용 학생 명단(아이디·실명) 사전 등록 & 관리
+// ============================================================================
+function saveStudentRosterFromText() {
+  const textarea = document.getElementById('adminStudentRosterInput');
+  if (!textarea) return;
+  const rawText = textarea.value.trim();
+  if (!rawText) {
+    alert('학생 명단을 입력해 주세요!\n(예: 202610101, 김문영 또는 202610101@smy.ms.kr, 김문영)');
+    return;
+  }
+
+  const lines = rawText.split('\n');
+  let addedCount = 0;
+  if (!state.rosterMap) state.rosterMap = {};
+
+  lines.forEach(line => {
+    const parts = line.split(/[,\t\s]+/).map(s => s.trim()).filter(Boolean);
+    if (parts.length >= 2) {
+      let idPart = parts[0].toLowerCase();
+      const namePart = parts[1];
+      if (idPart && namePart) {
+        state.rosterMap[idPart] = namePart;
+        if (!idPart.includes('@')) {
+          state.rosterMap[`${idPart}@smy.ms.kr`] = namePart;
+        }
+        addedCount++;
+      }
+    }
+  });
+
+  localStorage.setItem(STORAGE_KEYS.STUDENT_ROSTER, JSON.stringify(state.rosterMap));
+  renderRegisteredRosterCount();
+  showToast(`✅ 총 ${addedCount}명의 학생 아이디·실명 명단이 등록되었습니다!`);
+}
+
+function renderRegisteredRosterCount() {
+  const countEl = document.getElementById('adminRosterCountBadge');
+  if (countEl) {
+    const keys = Object.keys(state.rosterMap || {}).filter(k => k.includes('@'));
+    countEl.textContent = `등록된 학생: ${keys.length}명`;
+  }
 }
