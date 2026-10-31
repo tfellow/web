@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>QUIZ QUEENS (퀴즈 퀸즈) | 서울문영여자중학교 상식 여왕 도전기</title>
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=17" />
   <!-- Google Identity Services (실제 구글 로그인) & Supabase 연동 스크립트 -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -252,9 +252,9 @@
             </p>
           </div>
 
-          <!-- 6대 분야 마스코트 컬렉션 -->
-          <div class="mascot-section-title">
-            <span>✨ 문영 8대 퀸 마스코트 도감</span>
+          <!-- 문영 8대 퀸 무한 성급 & 티어 도감 -->
+          <div class="mascot-section-title" style="cursor:pointer;" onclick="openMascotBookModal()" title="클릭하여 8대 퀸 마스터리 상세 도감 보기">
+            <span>✨ 문영 8대 퀸 도감</span>
             <span id="mascotCountBadge" style="font-size:0.76rem; color:var(--primary); font-weight:800;">0 / 8 수집</span>
           </div>
           <div class="mascot-mini-grid" id="mascotMiniGrid"></div>
@@ -1103,11 +1103,38 @@
     </div>
   </div>
 
+  <!-- ========================================================================
+       [신규] 문영 8대 퀸 마스터리 도감 & 무한 회차 모달
+       ======================================================================== -->
+  <div id="mascotBookModal" class="modal-backdrop hidden">
+    <div class="quiz-modal-card" style="max-width:800px; width:94%; max-height:88vh; display:flex; flex-direction:column; padding:1.5rem; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.75rem;">
+        <div>
+          <h2 style="font-size:1.35rem; font-weight:900; color:#1E1B4B; margin:0; display:flex; align-items:center; gap:0.4rem;">
+            📖 문영 8대 퀸 마스터리 도감
+          </h2>
+          <div id="mascotBookGrandTitle" style="font-size:0.95rem; font-weight:800; color:#B45309; margin-top:0.25rem;"></div>
+          <div id="mascotBookGrandSub" style="font-size:0.78rem; color:#64748B; font-weight:600; margin-top:0.15rem;"></div>
+        </div>
+        <button type="button" class="btn-chip" onclick="closeMascotBookModal()" style="padding:0.4rem 0.8rem; font-size:0.85rem; border-radius:8px;">✕ 닫기</button>
+      </div>
+
+      <div style="background:#FEF3C7; border:1px solid #FCD34D; border-radius:10px; padding:0.6rem 0.9rem; margin-bottom:1rem; font-size:0.76rem; color:#92400E; font-weight:600; line-height:1.45;">
+        💡 <strong>무한 성급 & 무한 회차 시스템:</strong><br />
+        • 각 영역 정답 5문항마다 <strong>별(★) 1개 레벨업!</strong><br />
+        • 5성(★★★★★) 달성 시 <strong>상위 티어로 영구 승급!</strong> (🥉브론즈 ➡️ 🥈실버 ➡️ 🥇골드 ➡️ 💠플래티넘 ➡️ 💎다이아 ➡️ 👑마스터 ➡️ 🌟그랜드마스터 ➡️ 🌌신화 N회차 무한 확장)<br />
+        • 8대 퀸 전체를 동일 티어로 올클리어할 때마다 <strong>대형 보너스 XP(+500*N)와 특별 인증서</strong>가 수여됩니다!
+      </div>
+
+      <div id="mascotBookGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:0.85rem; overflow-y:auto; padding-right:4px;"></div>
+    </div>
+  </div>
+
   <!-- 토스트 메시지 영역 -->
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- 스크립트 로드 -->
-  <script src="questions.js?v=16"></script>
-  <script src="app.js?v=16"></script>
+  <script src="questions.js?v=17"></script>
+  <script src="app.js?v=17"></script>
 </body>
 </html>

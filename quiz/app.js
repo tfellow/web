@@ -861,6 +861,204 @@ function formatStudentDisplayName(studentObj, forceTeacherView = false) {
   return nick;
 }
 
+// ============================================================================
+// [신규] 문영 8대 퀸 무한 성급(★) & 무한 티어(회차) 승급 프레스티지 시스템
+// ============================================================================
+const MASCOT_TIER_CONFIG = [
+  { tier: 1, name: '브론즈 퀸', badge: '🥉', color: '#CD7F32', borderColor: '#EA580C', bgColor: '#FFF7ED', glow: 'rgba(234, 88, 12, 0.35)' },
+  { tier: 2, name: '실버 퀸', badge: '🥈', color: '#64748B', borderColor: '#94A3B8', bgColor: '#F8FAFC', glow: 'rgba(148, 163, 184, 0.4)' },
+  { tier: 3, name: '골드 퀸', badge: '🥇', color: '#D97706', borderColor: '#F59E0B', bgColor: '#FEF3C7', glow: 'rgba(245, 158, 11, 0.45)' },
+  { tier: 4, name: '플래티넘 퀸', badge: '💠', color: '#0891B2', borderColor: '#06B6D4', bgColor: '#ECFEFF', glow: 'rgba(6, 182, 212, 0.45)' },
+  { tier: 5, name: '다이아몬드 퀸', badge: '💎', color: '#2563EB', borderColor: '#3B82F6', bgColor: '#EFF6FF', glow: 'rgba(59, 130, 246, 0.5)' },
+  { tier: 6, name: '마스터 퀸', badge: '👑', color: '#7C3AED', borderColor: '#8B5CF6', bgColor: '#F5F3FF', glow: 'rgba(139, 92, 246, 0.55)' },
+  { tier: 7, name: '그랜드마스터 퀸', badge: '🌟', color: '#DB2777', borderColor: '#EC4899', bgColor: '#FDF2F8', glow: 'rgba(236, 72, 153, 0.55)' },
+  { tier: 8, name: '레전드 퀸', badge: '🔮', color: '#DC2626', borderColor: '#EF4444', bgColor: '#FEF2F2', glow: 'rgba(239, 68, 68, 0.6)' }
+];
+
+function getMascotProgress(correctCount) {
+  const corr = Math.max(0, Number(correctCount) || 0);
+  if (corr < 5) {
+    return {
+      unlocked: false,
+      tier: 0,
+      tierName: '입문 탐험가',
+      badge: '🌱',
+      stars: 0,
+      totalStars: 0,
+      starsText: '☆☆☆☆☆',
+      currentInStar: corr,
+      nextStarGoal: 5,
+      percent: Math.round((corr / 5) * 100),
+      label: `(${corr}/5문항 🔒)`,
+      borderColor: '#E2E8F0',
+      bgColor: '#F8FAFC',
+      color: '#94A3B8',
+      glow: 'none'
+    };
+  }
+
+  // 5문항당 별 1개
+  const totalStars = Math.floor(corr / 5);
+  // 5성마다 티어 1단계 상승 (1~5성 = 1회차, 6~10성 = 2회차, ...)
+  const tier = Math.floor((totalStars - 1) / 5) + 1;
+  const starInTier = ((totalStars - 1) % 5) + 1; // 1~5성
+  const progressInStar = corr % 5; // 다음 별까지 남은 정답 수
+
+  let tierConfig;
+  if (tier <= MASCOT_TIER_CONFIG.length) {
+    tierConfig = MASCOT_TIER_CONFIG[tier - 1];
+  } else {
+    // 8회차 초과 무한 확장: 신화 N회차
+    tierConfig = {
+      tier: tier,
+      name: `신화 ${tier}회차 퀸`,
+      badge: '🌌',
+      color: '#9333EA',
+      borderColor: '#A855F7',
+      bgColor: '#FAF5FF',
+      glow: 'rgba(168, 85, 247, 0.6)'
+    };
+  }
+
+  const starsText = '★'.repeat(starInTier) + '☆'.repeat(5 - starInTier);
+
+  return {
+    unlocked: true,
+    tier: tier,
+    tierName: tierConfig.name,
+    badge: tierConfig.badge,
+    color: tierConfig.color,
+    borderColor: tierConfig.borderColor,
+    bgColor: tierConfig.bgColor,
+    glow: tierConfig.glow,
+    stars: starInTier,
+    totalStars: totalStars,
+    starsText: starsText,
+    currentInStar: progressInStar,
+    nextStarGoal: 5,
+    percent: Math.round((progressInStar / 5) * 100),
+    label: `${tierConfig.badge} ${tierConfig.name} ${starsText} (${progressInStar}/5)`
+  };
+}
+
+function getGrandMascotTier(user) {
+  if (!user) {
+    return { tier: 0, name: '입문 퀸즈', badge: '🌱', completedMascots: 0, totalStars: 0, allUnlocked: false };
+  }
+  let minTier = 999999;
+  let totalStars = 0;
+  let completedCount = 0;
+
+  CATEGORIES.forEach(cat => {
+    const corr = (user.categoryStats && user.categoryStats[cat.id] && user.categoryStats[cat.id].correct) || 0;
+    const prog = getMascotProgress(corr);
+    if (prog.unlocked) completedCount++;
+    totalStars += (prog.totalStars || 0);
+    if (prog.tier < minTier) minTier = prog.tier;
+  });
+
+  if (completedCount < CATEGORIES.length || minTier === 0) {
+    return {
+      tier: 0,
+      name: '도감 수집 중',
+      badge: '🌱',
+      completedMascots: completedCount,
+      totalStars: totalStars,
+      allUnlocked: false
+    };
+  }
+
+  let tierName = '로열 퀸';
+  let badge = '👑';
+  if (minTier === 1) { tierName = '브론즈 로열 퀸'; badge = '🥉'; }
+  else if (minTier === 2) { tierName = '실버 로열 퀸'; badge = '🥈'; }
+  else if (minTier === 3) { tierName = '골드 로열 퀸'; badge = '🥇'; }
+  else if (minTier === 4) { tierName = '플래티넘 로열 퀸'; badge = '💠'; }
+  else if (minTier === 5) { tierName = '다이아몬드 로열 퀸'; badge = '💎'; }
+  else if (minTier === 6) { tierName = '마스터 로열 퀸'; badge = '👑'; }
+  else if (minTier === 7) { tierName = '그랜드마스터 로열 퀸'; badge = '🌟'; }
+  else { tierName = `신화 ${minTier}회차 로열 퀸`; badge = '🌌'; }
+
+  return {
+    tier: minTier,
+    name: tierName,
+    badge: badge,
+    completedMascots: completedCount,
+    totalStars: totalStars,
+    allUnlocked: true
+  };
+}
+
+function openMascotBookModal() {
+  const user = state.currentUser;
+  if (!user) {
+    alert('로그인 후 마스코트 도감을 확인하실 수 있습니다.');
+    return;
+  }
+  const modal = document.getElementById('mascotBookModal');
+  if (!modal) return;
+
+  const grand = getGrandMascotTier(user);
+  document.getElementById('mascotBookGrandTitle').innerHTML = `
+    ${grand.badge} <strong>${grand.name}</strong> ${grand.tier > 0 ? `(${grand.tier}회차 올클리어 달성!)` : ''}
+  `;
+  document.getElementById('mascotBookGrandSub').innerHTML = `
+    수집 완료 마스코트: <strong>${grand.completedMascots} / ${CATEGORIES.length}</strong>개 · 
+    누적 획득 별: <strong style="color:#F59E0B;">★ ${grand.totalStars}개</strong>
+  `;
+
+  const container = document.getElementById('mascotBookGrid');
+  if (container) {
+    container.innerHTML = CATEGORIES.map(cat => {
+      const corr = (user.categoryStats && user.categoryStats[cat.id] && user.categoryStats[cat.id].correct) || 0;
+      const prog = getMascotProgress(corr);
+      const iconHtml = cat.id === 'school' ? getForsythiaSvgHtml(40) : `<span style="font-size:2.4rem;">${cat.mascotEmoji}</span>`;
+
+      return `
+        <div class="mascot-book-card" style="border: 2px solid ${prog.borderColor}; background: ${prog.bgColor}; box-shadow: 0 4px 12px ${prog.glow}; border-radius: 14px; padding: 1rem; position: relative; display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:12px; background:${prog.borderColor}; color:#FFFFFF;">
+              ${prog.badge} ${prog.tierName}
+            </span>
+            <span style="font-size:0.85rem; font-weight:900; color:#F59E0B; letter-spacing:1px;">
+              ${prog.starsText}
+            </span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:0.75rem; margin:0.3rem 0;">
+            <div style="width:54px; height:54px; display:flex; align-items:center; justify-content:center; background:#FFFFFF; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+              ${iconHtml}
+            </div>
+            <div>
+              <div style="font-size:1rem; font-weight:900; color:#1E1B4B;">${cat.mascotName}</div>
+              <div style="font-size:0.75rem; color:#64748B; font-weight:700;">${cat.icon} ${cat.name}</div>
+            </div>
+          </div>
+
+          <p style="font-size:0.76rem; color:#475569; margin:0; line-height:1.4;">${cat.mascotDesc}</p>
+
+          <div style="margin-top:auto; padding-top:0.5rem; border-top:1px dashed ${prog.borderColor};">
+            <div style="display:flex; justify-content:space-between; font-size:0.72rem; font-weight:700; color:#334155; margin-bottom:3px;">
+              <span>다음 별(★)까지:</span>
+              <span><strong>${prog.currentInStar} / 5문항</strong> (누적 ${corr}정답)</span>
+            </div>
+            <div style="width:100%; height:7px; background:#E2E8F0; border-radius:4px; overflow:hidden;">
+              <div style="width:${prog.percent}%; height:100%; background:${prog.borderColor}; transition:width 0.3s;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.classList.remove('hidden');
+}
+
+function closeMascotBookModal() {
+  const modal = document.getElementById('mascotBookModal');
+  if (modal) modal.classList.add('hidden');
+}
+
 function refreshAllUI() {
   const user = state.currentUser;
   if (!user) return;
@@ -951,21 +1149,29 @@ function refreshAllUI() {
     if (slot) slot.classList.toggle('filled', i <= cGauge);
   }
 
-  // 문영 8대 퀸 마스코트 미니 그리드 (각 영역 5문항 정답 시 해금 & 개나리 SVG)
-  const mascotsList = Array.isArray(user.mascots) ? user.mascots : [];
-  document.getElementById('mascotCountBadge').textContent = `${mascotsList.length} / ${CATEGORIES.length} 수집`;
+  // 문영 8대 퀸 무한 성급 & 티어 미니 그리드
+  const grandTier = getGrandMascotTier(user);
+  const mascotCountBadge = document.getElementById('mascotCountBadge');
+  if (mascotCountBadge) {
+    mascotCountBadge.innerHTML = `<span style="cursor:pointer;" onclick="openMascotBookModal()">${grandTier.badge} ${grandTier.name} (★${grandTier.totalStars}개) 🔍</span>`;
+  }
   const mascotGrid = document.getElementById('mascotMiniGrid');
   if (mascotGrid) {
     mascotGrid.innerHTML = CATEGORIES.map(cat => {
-      const collected = mascotsList.includes(cat.id);
       const st = (user.categoryStats && user.categoryStats[cat.id]) || { solved: 0, correct: 0 };
       const corr = st.correct || 0;
+      const prog = getMascotProgress(corr);
       const iconHtml = cat.id === 'school' ? getForsythiaSvgHtml(28) : cat.mascotEmoji;
       return `
-        <div class="mascot-card ${collected ? 'collected' : ''}" title="${cat.mascotDesc} (정답 5개 시 해금)">
+        <div class="mascot-card ${prog.unlocked ? 'collected' : ''}" 
+             style="border: 2px solid ${prog.borderColor}; background: ${prog.bgColor}; cursor: pointer; transition: transform 0.2s;"
+             title="${cat.mascotName}: ${prog.label} - 클릭 시 상세 도감 열기"
+             onclick="openMascotBookModal()">
           <span class="mascot-emoji">${iconHtml}</span>
-          <span class="mascot-name">${cat.mascotName}</span>
-          <span class="mascot-cat" style="font-size:0.71rem;">${cat.shortName} ${collected ? '✅ 달성' : `(${corr}/5🔒)`}</span>
+          <span class="mascot-name" style="color:#1E1B4B; font-weight:800;">${cat.mascotName}</span>
+          <span class="mascot-cat" style="font-size:0.71rem; font-weight:800; color:${prog.color};">
+            ${prog.unlocked ? `${prog.badge} ★${prog.stars} (${prog.currentInStar}/5)` : `(${corr}/5🔒)`}
+          </span>
         </div>
       `;
     }).join('');
@@ -1356,22 +1562,45 @@ function submitAnswer(selectedNum) {
       user.solvedQuestionIds.push(q.questionObj.id);
     }
 
-    // 마스코트 획득 조건: 해당 영역 누적 5문항 정답 달성 시 도감 자동 해금!
-    const catCorrectCount = user.categoryStats[q.categoryObj.id].correct;
-    if (catCorrectCount >= 5 && !user.mascots.includes(q.categoryObj.id)) {
-      user.mascots.push(q.categoryObj.id);
-      user.xp += 30;
+    // [무한 성급 & 무한 티어 승급 체크]
+    const catId = q.categoryObj.id;
+    const currentCorrect = user.categoryStats[catId].correct;
+    const oldCorrect = currentCorrect - 1;
+    const oldProg = getMascotProgress(oldCorrect);
+    const newProg = getMascotProgress(currentCorrect);
+
+    // 1) 최초 1성 해금
+    if (!oldProg.unlocked && newProg.unlocked) {
+      if (!user.mascots.includes(catId)) user.mascots.push(catId);
+      user.xp += 50;
       setTimeout(() => {
-        showToast(`🎉 축하합니다! [${q.categoryObj.shortName}] 5문항 정답 달성으로 [${q.categoryObj.mascotName}] 마스코트를 도감에 수집했습니다! (+30 XP)`);
+        showToast(`🎉 [${q.categoryObj.mascotName}] 최초 1성 해금! (${newProg.badge} ${newProg.tierName} 입성 +50 XP)`);
       }, 500);
+    } 
+    // 2) 별(★) 또는 티어 승급
+    else if (newProg.totalStars > oldProg.totalStars) {
+      if (newProg.tier > oldProg.tier) {
+        user.xp += 150;
+        setTimeout(() => {
+          showToast(`👑 [${q.categoryObj.mascotName}] 대승급! ${newProg.badge} [${newProg.tierName}] 승급 달성! (+150 XP)`);
+        }, 500);
+      } else {
+        user.xp += 30;
+        setTimeout(() => {
+          showToast(`✨ [${q.categoryObj.mascotName}] ${newProg.stars}성(★) 레벨업! (+30 XP)`);
+        }, 500);
+      }
     }
 
-    // 도감 8대 퀸 올클리어 최종 보상
-    if (user.mascots.length >= CATEGORIES.length && !user.allClearRewarded) {
-      user.allClearRewarded = true;
-      user.xp += 500;
+    // 3) 8대 퀸 종합 회차 올클리어 체크 (무한 회차 지원!)
+    user.clearedPrestigeTiers = Array.isArray(user.clearedPrestigeTiers) ? user.clearedPrestigeTiers : [];
+    const grandTier = getGrandMascotTier(user);
+    if (grandTier.allUnlocked && grandTier.tier >= 1 && !user.clearedPrestigeTiers.includes(grandTier.tier)) {
+      user.clearedPrestigeTiers.push(grandTier.tier);
+      const bonusXp = 500 * grandTier.tier;
+      user.xp += bonusXp;
       setTimeout(() => {
-        alert(`👑 축하합니다! 문영 8대 퀸 마스코트 도감을 모두 완성하여 '👑 문영 그랜드 올마스터 퀸' 특별 황금 칭호와 올클리어 보너스 +500 XP를 획득했습니다!`);
+        alert(`👑 대기록 달성!\n문영 8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
       }, 900);
     }
 
@@ -1543,21 +1772,46 @@ function claimCrownMascot(categoryId) {
 
   user.crownGauge = 0;
   user.xp = (user.xp || 0) + 30;
-  user.level = Math.floor(user.xp / 100) + 1;
+
+  if (!user.categoryStats[categoryId]) {
+    user.categoryStats[categoryId] = { solved: 0, correct: 0 };
+  }
+
+  const oldCorr = user.categoryStats[categoryId].correct || 0;
+  // 왕관 찬스: 정답 5개 치를 즉시 선물하여 1성 해금 또는 즉시 1개 별 레벨업!
+  user.categoryStats[categoryId].correct = oldCorr + 5;
+  user.categoryStats[categoryId].solved = (user.categoryStats[categoryId].solved || 0) + 5;
+  const newCorr = user.categoryStats[categoryId].correct;
 
   if (!user.mascots.includes(categoryId)) {
     user.mascots.push(categoryId);
-    showToast(`👑 축하합니다! [${cat.mascotName}] 마스코트를 도감에 수집했습니다! (+30 XP)`);
-  } else {
-    showToast(`👑 [${cat.mascotName}] 마스코트 응원 보너스로 +30 XP를 획득했습니다!`);
   }
 
-  // 8대 퀸 올클리어 체크
-  if (user.mascots.length >= CATEGORIES.length && !user.allClearRewarded) {
-    user.allClearRewarded = true;
-    user.xp = (user.xp || 0) + 500;
+  const oldProg = getMascotProgress(oldCorr);
+  const newProg = getMascotProgress(newCorr);
+
+  if (!oldProg.unlocked && newProg.unlocked) {
+    showToast(`👑 왕관 찬스 축복! [${cat.mascotName}] 1성 즉시 해금! (+50 XP)`);
+    user.xp += 50;
+  } else if (newProg.tier > oldProg.tier) {
+    showToast(`👑 왕관 찬스 축복! [${cat.mascotName}] ${newProg.badge} ${newProg.tierName}으로 승급! (+100 XP)`);
+    user.xp += 100;
+  } else {
+    showToast(`👑 왕관 찬스 축복! [${cat.mascotName}] 별(★) 즉시 레벨업! (+50 XP)`);
+    user.xp += 50;
+  }
+
+  user.level = Math.floor(user.xp / 100) + 1;
+
+  // 8대 퀸 종합 회차 체크
+  user.clearedPrestigeTiers = Array.isArray(user.clearedPrestigeTiers) ? user.clearedPrestigeTiers : [];
+  const grandTier = getGrandMascotTier(user);
+  if (grandTier.allUnlocked && grandTier.tier >= 1 && !user.clearedPrestigeTiers.includes(grandTier.tier)) {
+    user.clearedPrestigeTiers.push(grandTier.tier);
+    const bonusXp = 500 * grandTier.tier;
+    user.xp += bonusXp;
     setTimeout(() => {
-      alert(`👑 축하합니다! 문영 8대 퀸 마스코트 도감을 모두 완성하여 '👑 문영 그랜드 올마스터 퀸' 칭호와 +500 XP를 획득했습니다!`);
+      alert(`👑 대기록 달성!\n문영 8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
     }, 600);
   }
 
