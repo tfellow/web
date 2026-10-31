@@ -73,8 +73,8 @@ const CATEGORIES = [
   },
   {
     id: 'english',
-    name: '글로벌 영어',
-    shortName: '글로벌영어',
+    name: '영어',
+    shortName: '영어',
     icon: '🔤',
     color: '#0284C7',
     lightColor: '#F0F9FF',
