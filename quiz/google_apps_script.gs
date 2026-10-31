@@ -1,27 +1,46 @@
 /**
  * ============================================================================
  * QUIZ QUEENS (퀴즈 퀸즈) - 서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)
- * Google Sheets + Gmail 인증서 자동 발송 백엔드 스크립트 (google_apps_script.gs v1.1)
+ * Google Sheets 백엔드 스크립트 (google_apps_script.gs v2.0 - 8대 영역 & 학생출제 지원)
  * ============================================================================
  *
- * [설치 및 배포 방법 (3분 완성)]
- * 1. 구글 드라이브에서 새 [Google 스프레드시트]를 만듭니다 (권장 계정: tfellow@smy.ms.kr 또는 tfellow@gmail.com).
- * 2. 상단 메뉴 [확장 프로그램] -> [Apps Script]를 클릭합니다.
- * 3. 기존 코드를 지우고 이 파일의 내용을 모두 복사해 붙여넣은 뒤 저장(Ctrl+S)합니다.
- * 4. 상단 함수 선택 드롭다운에서 `setupSheets`를 선택하고 [실행]을 한 번 눌러 4개의 시트 탭을 자동 생성합니다.
- * 5. 우측 상단 [배포] -> [새 배포] -> 유형: [웹 앱] 선택:
- *    - 다음 사용자 인증 정보로 실행: [나 (본인 계정)]
- *    - 액세스 권한이 있는 사용자: [모든 사용자]
- * 6. 배포 후 나오는 [웹 앱 URL (https://script.google.com/macros/s/.../exec)]을 복사하여
- *    퀴즈 퀸즈 웹앱의 [👩‍🏫 선생님 관리·통계 > ⚙️ 구글 시트 & 문제 추가] 탭에 붙여넣고 저장하면 즉시 연동됩니다!
+ * [특징 및 기능]
+ * 1. 선생님 작업용 [영역별 개별 탭 8개] 지원 (난이도, 해설 없이 질문·보기1~4·정답만 간결 입력!)
+ * 2. 상단 메뉴 [👑 퀴즈 퀸즈 > 🔄 영역별 탭 ➡️ 문제은행 자동 통합] 클릭 시 1초 만에 최종 취합!
+ * 3. 웹앱은 오직 [문제은행] 1개 탭만 읽으므로 로딩 속도 0.2초 초고속 유지!
+ * 4. 학생이 직접 낸 퀴즈 및 상호 평가(좋아요/나빠요) 실시간 동기화 지원!
  */
 
 const SHEET_NAMES = {
   STUDENTS: '학생통계',
-  QUESTIONS: '문제은행',
+  MASTER_QUESTIONS: '문제은행',
+  STUDENT_SUBMISSIONS: '학생출제_검토',
   LOGS: '풀이로그',
   CERTS: '인증서발급내역'
 };
+
+const CATEGORY_TABS = [
+  { tabName: '1.학교상식', catId: 'school' },
+  { tabName: '2.교과융합', catId: 'curriculum' },
+  { tabName: '3.시사경제', catId: 'economy' },
+  { tabName: '4.세계지리', catId: 'world' },
+  { tabName: '5.과학미래', catId: 'science' },
+  { tabName: '6.예술문화', catId: 'culture' },
+  { tabName: '7.글로벌영어', catId: 'english' },
+  { tabName: '8.문학고전', catId: 'literature' }
+];
+
+/**
+ * 스프레드시트 열릴 때 상단 커스텀 메뉴 자동 생성
+ */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('👑 퀴즈 퀸즈')
+    .addItem('🔄 영역별 탭 내용 ➡️ [문제은행] 탭으로 자동 통합', 'syncCategoryTabsToQuestionBank')
+    .addSeparator()
+    .addItem('⚙️ 전체 시트 탭 초기 설정 (최초 1회)', 'setupSheets')
+    .addToUi();
+}
 
 /**
  * 최초 1회 실행하여 필요한 시트 탭과 헤더를 자동으로 생성합니다.
@@ -29,7 +48,7 @@ const SHEET_NAMES = {
 function setupSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // 1. 학생통계 시트 (닉네임, 실명, 연속도전일수 모두 저장)
+  // 1. 학생통계 시트
   let stuSheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
   if (!stuSheet) {
     stuSheet = ss.insertSheet(SHEET_NAMES.STUDENTS);
@@ -43,18 +62,41 @@ function setupSheets() {
     stuSheet.getRange('D:D').setNumberFormat('@');
   }
 
-  // 2. 문제은행 시트
-  let qSheet = ss.getSheetByName(SHEET_NAMES.QUESTIONS);
-  if (!qSheet) {
-    qSheet = ss.insertSheet(SHEET_NAMES.QUESTIONS);
-    qSheet.appendRow([
-      '문항ID', '분야(school/curriculum/economy/world/science/culture)', '난이도',
-      '질문', '보기1', '보기2', '보기3', '보기4', '정답번호(1~4)', '해설'
+  // 2. 최종 취합 [문제은행] 탭
+  let masterSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
+  if (!masterSheet) {
+    masterSheet = ss.insertSheet(SHEET_NAMES.MASTER_QUESTIONS);
+    masterSheet.appendRow([
+      '문항ID', '분야', '질문', '보기1', '보기2', '보기3', '보기4', '정답번호(1~4)',
+      '출제자', '좋아요(👍)', '나빠요(👎)', '상태(정상/보류)'
     ]);
-    qSheet.getRange(1, 1, 1, 10).setFontWeight('bold').setBackground('#FEF3C7');
+    masterSheet.getRange(1, 1, 1, 12).setFontWeight('bold').setBackground('#FEF3C7');
   }
 
-  // 3. 풀이로그 시트 (기간별/일별 통계 분석용)
+  // 3. 학생 출제 검토 탭
+  let subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
+  if (!subSheet) {
+    subSheet = ss.insertSheet(SHEET_NAMES.STUDENT_SUBMISSIONS);
+    subSheet.appendRow([
+      '등록일시', '문항ID', '분야', '질문', '보기1', '보기2', '보기3', '보기4', '정답번호',
+      '출제학생(이메일·실명)', '좋아요(👍)', '나빠요(👎)', '상태(정상/보류)'
+    ]);
+    subSheet.getRange(1, 1, 1, 13).setFontWeight('bold').setBackground('#FCE7F3');
+  }
+
+  // 4. 선생님용 8대 영역별 개별 탭 생성 (난이도·해설 없이 간결한 7개 열!)
+  CATEGORY_TABS.forEach(cat => {
+    let catSheet = ss.getSheetByName(cat.tabName);
+    if (!catSheet) {
+      catSheet = ss.insertSheet(cat.tabName);
+      catSheet.appendRow([
+        '문항ID', '질문', '보기1', '보기2', '보기3', '보기4', '정답번호(1~4)'
+      ]);
+      catSheet.getRange(1, 1, 1, 7).setFontWeight('bold').setBackground('#E0F2FE');
+    }
+  });
+
+  // 5. 풀이로그 시트
   let logSheet = ss.getSheetByName(SHEET_NAMES.LOGS);
   if (!logSheet) {
     logSheet = ss.insertSheet(SHEET_NAMES.LOGS);
@@ -65,7 +107,7 @@ function setupSheets() {
     logSheet.getRange(1, 1, 1, 12).setFontWeight('bold').setBackground('#DCFCE7');
   }
 
-  // 4. 인증서발급내역 시트
+  // 6. 인증서발급내역 시트
   let certSheet = ss.getSheetByName(SHEET_NAMES.CERTS);
   if (!certSheet) {
     certSheet = ss.insertSheet(SHEET_NAMES.CERTS);
@@ -73,17 +115,129 @@ function setupSheets() {
       '발송일시', '수신이메일', '학급', '닉네임', '실명',
       '달성레벨', '인증서명', '부여칭호', '총푼문제', '정확도(%)'
     ]);
-    certSheet.getRange(1, 1, 1, 10).setFontWeight('bold').setBackground('#FCE7F3');
+    certSheet.getRange(1, 1, 1, 10).setFontWeight('bold').setBackground('#F3E8FF');
   }
 }
 
 /**
- * GET 요청 처리: 학생 통계 목록 및 시트에 추가된 문제은행 반환
+ * [핵심 기능] 선생님이 작업하신 8개 개별 탭의 문제들을 [문제은행] 탭으로 자동 통합합니다.
+ */
+function syncCategoryTabsToQuestionBank() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let masterSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
+  if (!masterSheet) {
+    setupSheets();
+    masterSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
+  }
+
+  // 기존 문제은행에서 학생이 출제한 문제나 평가 수치(좋아요/나빠요/상태) 맵 보존
+  const existingRows = masterSheet.getDataRange().getValues();
+  const metaMap = {};
+  for (let i = 1; i < existingRows.length; i++) {
+    const r = existingRows[i];
+    const qId = String(r[0]);
+    if (qId) {
+      metaMap[qId] = {
+        author: r[8] || '선생님',
+        likes: Number(r[9]) || 0,
+        dislikes: Number(r[10]) || 0,
+        status: r[11] || '정상'
+      };
+    }
+  }
+
+  const allCompiledRows = [];
+
+  // 1) 8개 개별 탭에서 문제 읽어오기
+  CATEGORY_TABS.forEach(cat => {
+    const sheet = ss.getSheetByName(cat.tabName);
+    if (!sheet) return;
+    const values = sheet.getDataRange().getValues();
+    for (let i = 1; i < values.length; i++) {
+      const row = values[i];
+      const qId = String(row[0] || '').trim();
+      const question = String(row[1] || '').trim();
+      if (!question) continue;
+
+      const realId = qId || `${cat.catId}_${i}`;
+      const meta = metaMap[realId] || { author: '선생님', likes: 0, dislikes: 0, status: '정상' };
+
+      allCompiledRows.push([
+        realId,
+        cat.catId,
+        question,
+        String(row[2] || ''),
+        String(row[3] || ''),
+        String(row[4] || ''),
+        String(row[5] || ''),
+        Number(row[6]) || 1,
+        meta.author,
+        meta.likes,
+        meta.dislikes,
+        meta.status
+      ]);
+    }
+  });
+
+  // 2) 학생 출제 검토 시트에서 '정상' 상태인 승인된 문제도 함께 통합
+  const subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
+  if (subSheet) {
+    const subValues = subSheet.getDataRange().getValues();
+    for (let i = 1; i < subValues.length; i++) {
+      const row = subValues[i];
+      const qId = String(row[1] || '').trim();
+      const catId = String(row[2] || 'school').trim();
+      const question = String(row[3] || '').trim();
+      const status = String(row[12] || '정상').trim();
+      if (!question || status === '보류') continue;
+
+      const meta = metaMap[qId] || {
+        author: String(row[9] || '학생'),
+        likes: Number(row[10]) || 0,
+        dislikes: Number(row[11]) || 0,
+        status: status
+      };
+
+      allCompiledRows.push([
+        qId,
+        catId,
+        question,
+        String(row[4] || ''),
+        String(row[5] || ''),
+        String(row[6] || ''),
+        String(row[7] || ''),
+        Number(row[8]) || 1,
+        meta.author,
+        meta.likes,
+        meta.dislikes,
+        meta.status
+      ]);
+    }
+  }
+
+  // 3) [문제은행] 탭 내용 전면 갱신
+  if (masterSheet.getLastRow() > 1) {
+    masterSheet.getRange(2, 1, masterSheet.getLastRow() - 1, 12).clearContent();
+  }
+  if (allCompiledRows.length > 0) {
+    masterSheet.getRange(2, 1, allCompiledRows.length, 12).setValues(allCompiledRows);
+  }
+
+  SpreadsheetApp.getActiveSpreadsheet().toast(
+    `✅ 총 ${allCompiledRows.length}개의 문제를 [문제은행] 탭으로 자동 통합했습니다!`,
+    '통합 완료',
+    5
+  );
+}
+
+/**
+ * GET 요청 처리: 학생 통계 목록 및 통합된 [문제은행] 반환 (초고속 단일 조회)
  */
 function doGet(e) {
   setupSheets();
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
+  // 학생 통계 조회
   const stuSheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
   const stuValues = stuSheet.getDataRange().getValues();
   const users = [];
@@ -106,25 +260,30 @@ function doGet(e) {
       mascots: safeJsonParse(r[13], []),
       certificates: safeJsonParse(r[14], []),
       categoryStats: safeJsonParse(r[15], {}),
-      solvedQuestionIds: [],
       updatedAt: String(r[16] || '')
     });
   }
 
-  const qSheet = ss.getSheetByName(SHEET_NAMES.QUESTIONS);
+  // [문제은행] 단일 조회
+  const qSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
   const qValues = qSheet.getDataRange().getValues();
   const questions = [];
   for (let i = 1; i < qValues.length; i++) {
     const r = qValues[i];
-    if (!r[0] || !r[3]) continue;
+    if (!r[0] || !r[2]) continue;
+    const status = String(r[11] || '정상');
+    if (status === '보류') continue; // 보류된 문제는 출제 목록에서 제외
+
     questions.push({
       id: String(r[0]),
       category: String(r[1] || 'school'),
-      difficulty: String(r[2] || '보통'),
-      question: String(r[3]),
-      options: [String(r[4]), String(r[5]), String(r[6]), String(r[7])],
-      answer: Number(r[8]) || 1,
-      explanation: String(r[9] || '')
+      question: String(r[2]),
+      options: [String(r[3]), String(r[4]), String(r[5]), String(r[6])],
+      answer: Number(r[7]) || 1,
+      author: String(r[8] || '선생님'),
+      likes: Number(r[9]) || 0,
+      dislikes: Number(r[10]) || 0,
+      status: status
     });
   }
 
@@ -134,7 +293,7 @@ function doGet(e) {
 }
 
 /**
- * POST 요청 처리: 학생 기록 저장, 문제 추가, 레벨 달성 인증서 이메일 발송
+ * POST 요청 처리: 학생 기록 저장, 학생 출제 문제 등록, 상호 평가(좋아요/나빠요)
  */
 function doPost(e) {
   setupSheets();
@@ -148,13 +307,12 @@ function doPost(e) {
     if (action === 'saveQuizLog' && data.user) {
       const logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.LOGS);
       const now = new Date();
-      const dateStr = Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd');
       logSheet.appendRow([
-        now,
-        dateStr,
+        now.toISOString(),
+        now.toISOString().slice(0, 10),
         data.user.email,
-        data.user.classId,
-        data.user.nickname || data.user.name,
+        data.user.classId || '교사',
+        data.user.nickname,
         data.user.name,
         data.category || '',
         data.questionId || '',
@@ -164,122 +322,127 @@ function doPost(e) {
         data.user.streakDays || 1
       ]);
     }
-  } else if (action === 'addQuestion' && data.question) {
-    const q = data.question;
-    const qSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.QUESTIONS);
-    qSheet.appendRow([
-      q.id, q.category, q.difficulty, q.question,
-      q.options[0], q.options[1], q.options[2], q.options[3],
-      q.answer, q.explanation
-    ]);
-  } else if (action === 'sendCertificateEmail') {
-    sendLevelCertificateEmail(data);
+    return makeJsonResponse({ status: 'ok' });
   }
 
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  // 학생 직접 문제 출제
+  if (action === 'submitStudentQuestion' && data.question) {
+    const q = data.question;
+    const subSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
+    const masterSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
+    const now = new Date();
+    const qId = q.id || `stu_${Date.now()}`;
+
+    // 1) 학생출제_검토 시트에 기록
+    subSheet.appendRow([
+      now.toISOString(),
+      qId,
+      q.category,
+      q.question,
+      q.options[0],
+      q.options[1],
+      q.options[2],
+      q.options[3],
+      q.answer,
+      q.author || '학생',
+      0, 0, '정상'
+    ]);
+
+    // 2) 문제은행 탭에도 즉시 반영
+    masterSheet.appendRow([
+      qId,
+      q.category,
+      q.question,
+      q.options[0],
+      q.options[1],
+      q.options[2],
+      q.options[3],
+      q.answer,
+      q.author || '학생',
+      0, 0, '정상'
+    ]);
+
+    return makeJsonResponse({ status: 'ok', id: qId });
+  }
+
+  // 상호 평가 (좋아요 / 나빠요 투표 및 자동 보류)
+  if (action === 'voteQuestion' && data.questionId) {
+    const masterSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
+    const rows = masterSheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) === String(data.questionId)) {
+        let likes = Number(rows[i][9]) || 0;
+        let dislikes = Number(rows[i][10]) || 0;
+        if (data.vote === 'like') likes++;
+        if (data.vote === 'dislike') dislikes++;
+
+        // 나빠요 3회 이상 시 자동 보류
+        let status = rows[i][11] || '정상';
+        if (dislikes >= 3) {
+          status = '보류';
+        }
+
+        masterSheet.getRange(i + 1, 10, 1, 3).setValues([[likes, dislikes, status]]);
+        break;
+      }
+    }
+    return makeJsonResponse({ status: 'ok' });
+  }
+
+  return makeJsonResponse({ status: 'ignored' });
 }
 
-/**
- * 학생 통계 시트에 학생 데이터를 업데이트하거나 새로 추가합니다.
- */
 function upsertStudentRow(user) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.STUDENTS);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
   const values = sheet.getDataRange().getValues();
-  const acc = user.totalSolved > 0 ? ((user.totalCorrect / user.totalSolved) * 100).toFixed(1) : '0.0';
+  const email = String(user.email).toLowerCase().trim();
+
+  let targetRow = -1;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][0]).toLowerCase().trim() === email) {
+      targetRow = i + 1;
+      break;
+    }
+  }
 
   const rowData = [
-    user.email,
-    user.nickname || user.name,
-    user.name,
-    user.classId,
-    user.studentNo,
-    user.level,
-    user.xp,
+    email,
+    user.nickname || '',
+    user.name || '',
+    user.classId || '',
+    user.studentNo || '',
+    user.level || 1,
+    user.xp || 0,
     user.streakDays || 1,
     user.maxStreakDays || 1,
-    user.totalSolved,
-    user.totalCorrect,
-    acc,
-    user.maxCombo,
+    user.totalSolved || 0,
+    user.totalCorrect || 0,
+    user.totalSolved > 0 ? Math.round((user.totalCorrect / user.totalSolved) * 100) : 0,
+    user.maxCombo || 0,
     JSON.stringify(user.mascots || []),
     JSON.stringify(user.certificates || []),
     JSON.stringify(user.categoryStats || {}),
     new Date().toISOString()
   ];
 
-  for (let i = 1; i < values.length; i++) {
-    if (String(values[i][0]).toLowerCase() === String(user.email).toLowerCase()) {
-      sheet.getRange(i + 1, 1, 1, rowData.length).setValues([rowData]);
-      return;
-    }
+  if (targetRow !== -1) {
+    sheet.getRange(targetRow, 1, 1, 17).setValues([rowData]);
+  } else {
+    sheet.appendRow(rowData);
   }
-  sheet.appendRow(rowData);
-}
-
-/**
- * 학생의 학교 이메일(@smy.ms.kr)로 고화질 레벨 인증서(PNG 첨부 + HTML 본문)를 자동 발송합니다.
- */
-function sendLevelCertificateEmail(data) {
-  const certSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAMES.CERTS);
-  certSheet.appendRow([
-    new Date(),
-    data.email,
-    data.classLabel,
-    data.nickname || data.name,
-    data.name,
-    data.level,
-    data.certName,
-    data.title,
-    data.totalSolved,
-    data.accuracy
-  ]);
-
-  const subject = `👑 [서울문영여자중학교 QUIZ QUEENS] 축하합니다! ${data.name}(${data.nickname || data.name}) 학생의 Lv.${data.level} 인증서가 도착했습니다!`;
-  const htmlBody = `
-    <div style="font-family:'Malgun Gothic',sans-serif; max-width:600px; margin:0 auto; padding:24px; border:2px solid #7C3AED; border-radius:16px; background:#FFFDF9;">
-      <h2 style="color:#6D28D9; text-align:center;">👑 서울문영여자중학교 QUIZ QUEENS (퀴즈 퀸즈)</h2>
-      <p style="font-size:16px; color:#1E293B; line-height:1.6;">
-        안녕하세요, <strong>${data.classLabel} ${data.name} (닉네임: ${data.nickname || data.name})</strong> 학생!<br/>
-        서울문영여자중학교 (Seoul Moonyoung Girls' Middle School) 상식 여왕 무한도전 <strong>『QUIZ QUEENS』</strong>에서 끊임없는 탐구심으로
-        <strong>Lv.${data.level} (${data.certName})</strong> 달성을 진심으로 축하합니다! 🎉
-      </p>
-      <div style="background:#F5F3FF; padding:16px; border-radius:12px; margin:16px 0;">
-        <p style="margin:4px 0;">🏅 <strong>달성 레벨 및 인증서:</strong> Lv.${data.level} — ${data.certName}</p>
-        <p style="margin:4px 0;">✨ <strong>부여된 호칭:</strong> ${data.title}</p>
-        <p style="margin:4px 0;">📊 <strong>누적 성취 기록:</strong> 총 ${data.totalSolved}문항 도전 (정확도 ${data.accuracy}%)</p>
-      </div>
-      <p style="font-size:14px; color:#64748B;">
-        ※ 첨부된 고화질 공식 인증서 이미지(PNG)를 다운로드하여 간직하세요!<br/>
-        — 서울문영여자중학교 『신바람 문영』 퀴즈 퀸즈 운영위원회 —
-      </p>
-    </div>
-  `;
-
-  const mailOptions = {
-    to: data.email,
-    subject: subject,
-    htmlBody: htmlBody
-  };
-
-  if (data.imageBase64 && data.imageBase64.indexOf('base64,') !== -1) {
-    const base64Data = data.imageBase64.split('base64,')[1];
-    const blob = Utilities.newBlob(
-      Utilities.base64Decode(base64Data),
-      'image/png',
-      `서울문영여자중학교_퀴즈퀸즈_인증서_${data.name}_Lv${data.level}.png`
-    );
-    mailOptions.attachments = [blob];
-  }
-
-  MailApp.sendEmail(mailOptions);
 }
 
 function safeJsonParse(str, fallback) {
   try {
-    return str ? JSON.parse(str) : fallback;
+    return JSON.parse(str);
   } catch (e) {
     return fallback;
   }
+}
+
+function makeJsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }

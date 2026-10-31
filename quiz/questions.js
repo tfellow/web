@@ -14,15 +14,15 @@ const CATEGORIES = [
     lightColor: '#FFF0F3',
     mascotName: '개나리 퀸 나리',
     mascotEmoji: '🌼',
-    mascotDesc: '서울문영여자중학교의 역사와 전통을 사랑하는 신바람 마스코트'
+    mascotDesc: '서울문영여자중학교의 역사와 전통을 사랑하는 개나리 마스코트'
   },
   {
     id: 'curriculum',
     name: '교과 융합',
     shortName: '교과융합',
     icon: '📘',
-    color: '#4F7DF3',
-    lightColor: '#EEF3FF',
+    color: '#3B82F6',
+    lightColor: '#EFF6FF',
     mascotName: '지혜 퀸 아테나',
     mascotEmoji: '🦉',
     mascotDesc: '국·영·수·사·과 교과 핵심 지식을 꿰뚫는 백과사전 마스코트'
@@ -40,7 +40,7 @@ const CATEGORIES = [
   },
   {
     id: 'world',
-    name: '세계 문화·지리',
+    name: '세계·지리',
     shortName: '세계·지리',
     icon: '🌍',
     color: '#10B981',
@@ -51,7 +51,7 @@ const CATEGORIES = [
   },
   {
     id: 'science',
-    name: '과학·미래기술',
+    name: '과학·미래',
     shortName: '과학·미래',
     icon: '🚀',
     color: '#8B5CF6',
@@ -62,14 +62,36 @@ const CATEGORIES = [
   },
   {
     id: 'culture',
-    name: '예술·대중문화',
+    name: '예술·문화',
     shortName: '예술·문화',
     icon: '🎨',
     color: '#EC4899',
     lightColor: '#FDF2F8',
     mascotName: '아트 퀸 뮤즈',
     mascotEmoji: '🎭',
-    mascotDesc: '음악, 미술, 문학, 스포츠와 K-컬처를 즐기는 예술가'
+    mascotDesc: '음악, 미술, 공연, 스포츠와 K-컬처를 즐기는 예술가'
+  },
+  {
+    id: 'english',
+    name: '글로벌 영어',
+    shortName: '글로벌영어',
+    icon: '🔤',
+    color: '#0284C7',
+    lightColor: '#F0F9FF',
+    mascotName: '잉글리시 퀸 로렐',
+    mascotEmoji: '👑',
+    mascotDesc: '세계인과 유창하게 소통하며 문화의 다리를 놓는 글로벌 리더'
+  },
+  {
+    id: 'literature',
+    name: '문학·고전',
+    shortName: '문학·고전',
+    icon: '📖',
+    color: '#7C3AED',
+    lightColor: '#FAF5FF',
+    mascotName: '책향기 퀸 다솔',
+    mascotEmoji: '🪶',
+    mascotDesc: '시와 소설, 동서양 고전문학의 깊은 감동을 전하는 문학 감성가'
   }
 ];
 
@@ -1208,5 +1230,237 @@ const DEFAULT_QUESTIONS = [
     options: ['저작권(Copyright)', '초상권', '투표권', '청구권'],
     answer: 1,
     explanation: '창작자의 노력이 담긴 저작물에 대한 권리를 "저작권(Copyright)"이라고 하며, 출처 표시와 허락 등 정보통신윤리를 지켜야 합니다.'
+  },
+
+  // ==========================================================================
+  // 7. 🔤 글로벌 영어 (실생활 관용표현·어휘·문화 16문항 - 정답 1,2,3,4번 균등 배분)
+  // ==========================================================================
+  {
+    id: 'eng_01',
+    category: 'english',
+    question: "'Break a leg!'라는 영어 관용 표현이 공연이나 시험 전에 건네는 말일 때 알맞은 뜻은?",
+    options: ['행운을 빌어', '조심해서 걸어', '다리를 쉬게 해', '끝까지 포기 마'],
+    answer: 1
+  },
+  {
+    id: 'eng_02',
+    category: 'english',
+    question: "'Once in a blue moon'이라는 표현이 뜻하는 빈도로 가장 알맞은 것은?",
+    options: ['매달 규칙적으로', '아주 드물게 일어나는', '달빛이 유난히 밝은', '밤늦게까지 지속되는'],
+    answer: 2
+  },
+  {
+    id: 'eng_03',
+    category: 'english',
+    question: "식당에서 식사를 마친 후 'Can I have the check, please?'라고 요청할 때 'check'의 의미는?",
+    options: ['주문 메뉴 재확인', '빈자리 추가 예약', '계산서', '남은 음식 포장'],
+    answer: 3
+  },
+  {
+    id: 'eng_04',
+    category: 'english',
+    question: "영미권 표현 'Piece of cake'과 가장 유사한 우리말 속담이나 관용구는?",
+    options: ['백지장도 맞들면 낫다', '시작이 반이다', '티끌 모아 태산', '누워서 떡 먹기'],
+    answer: 4
+  },
+  {
+    id: 'eng_05',
+    category: 'english',
+    question: "지구 환경 보호를 위한 대표적인 3R 실천 운동에 포함되지 않는 단어는?",
+    options: ['Remove', 'Reduce', 'Reuse', 'Recycle'],
+    answer: 1
+  },
+  {
+    id: 'eng_06',
+    category: 'english',
+    question: "'I am feeling under the weather today.'라고 말했을 때 화자의 상태는?",
+    options: ['날씨가 좋아 상쾌함', '몸이 찌뿌둥하고 아픔', '비를 맞아 옷이 젖음', '바람 때문에 긴장됨'],
+    answer: 2
+  },
+  {
+    id: 'eng_07',
+    category: 'english',
+    question: "책이나 영화의 줄거리나 핵심 결말을 미리 누설하여 감상의 재미를 떨어뜨리는 행위는?",
+    options: ['Trailer', 'Sequel', 'Spoiler', 'Prequel'],
+    answer: 3
+  },
+  {
+    id: 'eng_08',
+    category: 'english',
+    question: "상대방의 의견에 대해 '동의하지 않는다'는 의사를 공손하게 밝히는 표현은?",
+    options: ['I am not ready', 'You got me wrong', 'It doesn\'t matter', 'I don\'t think so'],
+    answer: 4
+  },
+  {
+    id: 'eng_09',
+    category: 'english',
+    question: "공항 탑승 수속 중 허용된 수하물 무게를 초과했을 때 부과되는 요금 명칭은?",
+    options: ['Excess baggage', 'Fast luggage', 'Heavy carton', 'Secret parcel'],
+    answer: 1
+  },
+  {
+    id: 'eng_10',
+    category: 'english',
+    question: "'We need to catch up with the latest trends.'에서 'catch up with'의 올바른 뜻은?",
+    options: ['멀리 도망치다', '따라잡다', '손을 맞잡다', '친구에게 소개하다'],
+    answer: 2
+  },
+  {
+    id: 'eng_11',
+    category: 'english',
+    question: "'Every cloud has a silver lining'이라는 속담이 전하는 긍정적인 메시지는?",
+    options: ['먹구름 뒤엔 비가 온다', '은색 장식은 변하지 않는다', '어려움 속에도 희망이 있다', '일기예보를 미리 확인해야 한다'],
+    answer: 3
+  },
+  {
+    id: 'eng_12',
+    category: 'english',
+    question: "스마트폰이나 프로그램의 오류를 고치고 최신 상태로 갱신하는 작업을 뜻하는 단어는?",
+    options: ['Download', 'Restart', 'Backup', 'Update'],
+    answer: 4
+  },
+  {
+    id: 'eng_13',
+    category: 'english',
+    question: "'I am looking forward to seeing you.' 문장에서 'look forward to'의 정확한 뜻은?",
+    options: ['간절히 고대하다', '뒤를 돌아보다', '앞으로 걸어가다', '앞장서서 이끌다'],
+    answer: 1
+  },
+  {
+    id: 'eng_14',
+    category: 'english',
+    question: "강연회나 공식 인터뷰가 끝난 뒤 이어지는 'Q&A' 세션의 올바른 영문 풀이는?",
+    options: ['Quality and Access', 'Question and Answer', 'Quick and Accurate', 'Quiet and Active'],
+    answer: 2
+  },
+  {
+    id: 'eng_15',
+    category: 'english',
+    question: "'Better late than never'라는 격언이 강조하는 행동 양식으로 알맞은 것은?",
+    options: ['부지런해야 성공한다', '속도보다 방향이 중요하다', '늦더라도 하는 것이 낫다', '약속 시간을 철저히 지키자'],
+    answer: 3
+  },
+  {
+    id: 'eng_16',
+    category: 'english',
+    question: "도움을 받은 상대방이 'Thank you so much!'라고 감사할 때 건네는 친절한 답변은?",
+    options: ['Never remind me', 'It is your problem', 'You must pay back', 'My pleasure'],
+    answer: 4
+  },
+
+  // ==========================================================================
+  // 8. 📖 한국·세계 문학 (중학 교과 핵심 시·소설·세계명작 16문항 - 정답 1,2,3,4번 균등 배분)
+  // ==========================================================================
+  {
+    id: 'lit_01',
+    category: 'literature',
+    question: "김소월의 시 「진달래꽃」에서 이별의 슬픔을 겉으로 드러내지 않고 삭이는 우리 민족의 전통적 정서는?",
+    options: ['한(恨)', '풍자', '분노', '체념'],
+    answer: 1
+  },
+  {
+    id: 'lit_02',
+    category: 'literature',
+    question: "황순원의 단편 소설 「소나기」에서 갑작스러운 소나기를 피해 소년과 소녀가 함께 머물렀던 공간은?",
+    options: ['낡은 물레방앗간', '수수밭 원두막', '깊은 산속 동굴', '마을 어귀 당산나무'],
+    answer: 2
+  },
+  {
+    id: 'lit_03',
+    category: 'literature',
+    question: "이효석의 단편 소설 「메밀꽃 필 무렵」에서 허 생원과 동이가 달빛 아래 걸어가던 주 무대 장터는?",
+    options: ['강원도 횡성장', '강원도 정선장', '강원도 봉평장', '강원도 춘천장'],
+    answer: 3
+  },
+  {
+    id: 'lit_04',
+    category: 'literature',
+    question: "윤동주 시인의 대표작 「서시」에서 '하늘을 우러러 한 점 부끄럼이 없기를' 바라는 마음을 비유한 섬세한 자연물은?",
+    options: ['밤하늘의 별', '차오르는 달', '불어오는 바람', '일렁이는 잎새'],
+    answer: 4
+  },
+  {
+    id: 'lit_05',
+    category: 'literature',
+    question: "생텍쥐페리의 소설 「어린 왕자」에서 사막 여우가 어린 왕자에게 알려 준 관계 맺기의 소중한 비밀은?",
+    options: ['서로를 길들이는 것', '기다림 없이 떠나는 것', '비밀을 마음속에 묻는 것', '장미를 통제하는 것'],
+    answer: 1
+  },
+  {
+    id: 'lit_06',
+    category: 'literature',
+    question: "현진건의 단편 소설 「운수 좋은 날」의 비극적 결말을 극대화하기 위해 제목과 상황에 쓰인 문학적 표현 기법은?",
+    options: ['과장법', '반어법', '의인법', '도치법'],
+    answer: 2
+  },
+  {
+    id: 'lit_07',
+    category: 'literature',
+    question: "셰익스피어의 4대 비극(햄릿, 오셀로, 리어 왕, 맥베스)에 포함되지 않는 작품은?",
+    options: ['햄릿', '오셀로', '로미오와 줄리엣', '리어 왕'],
+    answer: 3
+  },
+  {
+    id: 'lit_08',
+    category: 'literature',
+    question: "주요섭의 단편 소설 「사랑손님과 어머니」에서 여섯 살 '옥희'의 순수한 시선으로 이야기를 전달하는 서술 시점은?",
+    options: ['1인칭 주인공 시점', '3인칭 전지적 작가 시점', '3인칭 관찰자 시점', '1인칭 관찰자 시점'],
+    answer: 4
+  },
+  {
+    id: 'lit_09',
+    category: 'literature',
+    question: "허균이 지은 우리나라 최초의 한글 소설로, 적서 차별 철폐와 탐관오리 응징을 다룬 고전 문학 작품은?",
+    options: ['홍길동전', '구운몽', '춘향전', '심청전'],
+    answer: 1
+  },
+  {
+    id: 'lit_10',
+    category: 'literature',
+    question: "헤르만 헤세의 소설 「데미안」에서 주인공 싱클레어가 알을 깨고 나와 날아가는 신화적 신의 이름은?",
+    options: ['프로메테우스', '아브락사스', '디오니소스', '오디세우스'],
+    answer: 2
+  },
+  {
+    id: 'lit_11',
+    category: 'literature',
+    question: "조지 오웰의 풍자 소설 「동물농장」에서 동물들의 혁명 이상을 변질시키고 독재자로 군림하는 동물은?",
+    options: ['충직한 말 복서', '늙은 당나귀 벤저민', '지배층이 된 돼지 나폴레옹', '경비견 무리'],
+    answer: 3
+  },
+  {
+    id: 'lit_12',
+    category: 'literature',
+    question: "이상화 시인의 저항시 「빼앗긴 들에도 봄은 오는가」에서 '빼앗긴 들'이 비유하고 있는 역사적 현실은?",
+    options: ['병자호란의 참상', '갑오개혁의 혼란', '한국 전쟁의 비극', '일제 강점기 국권 피탈'],
+    answer: 4
+  },
+  {
+    id: 'lit_13',
+    category: 'literature',
+    question: "소설의 3요소(주제, 구성, 문체)와 구별되는 소설 '구성의 3요소'에 해당하는 것은?",
+    options: ['인물, 사건, 배경', '운율, 심상, 어조', '기승전결, 갈등, 복선', '서론, 본론, 결론'],
+    answer: 1
+  },
+  {
+    id: 'lit_14',
+    category: 'literature',
+    question: "어니스트 헤밍웨이의 소설 「노인과 바다」에서 노인 산티아고가 84일간의 침묵 끝에 먼바다에서 낚아 올린 거대한 물고기는?",
+    options: ['백상아리', '청새치', '대왕고래', '참다랑어'],
+    answer: 2
+  },
+  {
+    id: 'lit_15',
+    category: 'literature',
+    question: "박완서의 소설 「자전거 도둑」에서 주인공 수남이가 도덕적 부끄러움을 느끼고 고향으로 돌아가게 만든 상징물은?",
+    options: ['잃어버린 시계', '낡은 가죽 지갑', '신사의 자전거', '가게의 금고'],
+    answer: 3
+  },
+  {
+    id: 'lit_16',
+    category: 'literature',
+    question: "찰스 디킨스의 소설 「크리스마스 캐럴」에서 구두쇠 스크루지가 과거·현재·미래의 유령을 만난 뒤 깨달은 삶의 진정한 가치는?",
+    options: ['치밀한 자산 관리', '명예로운 신분 상승', '규칙적인 절약 습관', '이웃에 대한 나눔과 사랑'],
+    answer: 4
   }
 ];

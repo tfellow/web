@@ -20,7 +20,7 @@
       <div class="brand-titles">
         <div class="brand-main">
           QUIZ QUEENS
-          <span style="font-size:0.7rem; padding:0.12rem 0.48rem; border-radius:999px; background:#EDE9FE; color:#5B21B6; -webkit-text-fill-color:#5B21B6; font-weight:800;">v1.4</span>
+          <span style="font-size:0.7rem; padding:0.12rem 0.48rem; border-radius:999px; background:#EDE9FE; color:#5B21B6; -webkit-text-fill-color:#5B21B6; font-weight:800;">v1.5</span>
         </div>
         <div class="brand-sub">서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)</div>
       </div>
@@ -101,7 +101,7 @@
         <form id="loginForm" onsubmit="handleProfileSaveSubmit(event)">
           <input type="hidden" id="loginEmail" />
 
-          <div class="login-row-2">
+          <div class="login-row-2" id="loginClassStudentNoRow">
             <div class="login-form-group">
               <label for="loginClass">학급 (1-1 ~ 3-4)</label>
               <select id="loginClass" class="login-select" required></select>
@@ -183,9 +183,7 @@
                 </h2>
                 <button type="button" class="btn-chip" style="padding:0.24rem 0.58rem; font-size:0.72rem; white-space:nowrap; flex-shrink:0;" onclick="openProfileEditModal()">✏️ 수정</button>
               </div>
-              <div style="font-size:0.73rem; color:#64748B; font-weight:600; margin-top:0.15rem; word-break:keep-all;" id="profileRealNameSub">
-                실명(본인·교사만 열람): -
-              </div>
+              <div style="font-size:0.73rem; color:#64748B; font-weight:600; margin-top:0.15rem; word-break:keep-all; display:none;" id="profileRealNameSub"></div>
               <div class="profile-title-badge" id="profileTitleBadge">🌱 호기심 가득 새싹 퀸</div>
             </div>
           </div>
@@ -256,8 +254,8 @@
 
           <!-- 6대 분야 마스코트 컬렉션 -->
           <div class="mascot-section-title">
-            <span>✨ 문영 6대 퀸 마스코트 도감</span>
-            <span id="mascotCountBadge" style="font-size:0.76rem; color:var(--primary); font-weight:800;">0 / 6 수집</span>
+            <span>✨ 문영 8대 퀸 마스코트 도감</span>
+            <span id="mascotCountBadge" style="font-size:0.76rem; color:var(--primary); font-weight:800;">0 / 8 수집</span>
           </div>
           <div class="mascot-mini-grid" id="mascotMiniGrid"></div>
         </aside>
@@ -295,7 +293,12 @@
           </div>
 
           <div class="direct-category-bar">
-            <p>💡 특정 분야만 집중해서 풀고 싶다면? 아래 분야 칩을 클릭하세요 (바로 출제)</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.4rem;">
+              <p style="margin:0;">💡 <strong>특정 분야 집중 연습:</strong> 아래 분야 칩을 클릭하세요 (마스코트 5문제 수집용)</p>
+              <button type="button" class="btn-gold" onclick="openStudentSubmitModal()" style="padding:0.35rem 0.85rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.3rem;">
+                ✏️ 나도 퀴즈 출제하기! (+20 XP)
+              </button>
+            </div>
             <div class="category-chips" id="directCategoryChips"></div>
           </div>
         </div>
@@ -547,6 +550,9 @@
         <button type="button" class="admin-subnav-btn" data-subtab="student" onclick="switchAdminSubTab('student')">
           👩‍🎓 학생별 통계 (닉네임·실명)
         </button>
+        <button type="button" class="admin-subnav-btn" data-subtab="student-questions" onclick="switchAdminSubTab('student-questions')">
+          📝 학생 출제 검토실
+        </button>
         <button type="button" class="admin-subnav-btn" data-subtab="settings" onclick="switchAdminSubTab('settings')">
           ⚙️ 교사·문제·데이터 관리
         </button>
@@ -754,7 +760,44 @@
       </div>
 
       <!-- [서브패널 6] ⚙️ 교사 계정 · 문제 출제 · 구글 시트 관리 -->
-      <div id="admin-sub-settings" class="admin-subpanel">
+      
+      <!-- [서브패널 6] 📝 학생 출제 문제 검토실 -->
+      <div id="admin-sub-student-questions" class="admin-subpanel">
+        <div class="glass-card">
+          <div class="filter-bar">
+            <div>
+              <h3 style="font-size:1.08rem; font-weight:800;">📝 학생 출제 상식 퀴즈 검토실 & 상호 평가 모니터링</h3>
+              <p style="font-size:0.78rem; color:var(--text-sub); font-weight:600;">
+                학생들이 직접 출제한 퀴즈와 동료 학생들의 상호 평가(👍 좋아요 / 👎 아쉬워요)를 확인하고 [승인/보류/삭제]를 관리합니다.
+              </p>
+            </div>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <select id="adminStudentQFilter" class="login-select" style="width:auto; padding:0.32rem 0.6rem; font-size:0.78rem;" onchange="renderAdminStudentQuestionsSubPanel()">
+                <option value="all">전체 상태 보기</option>
+                <option value="active">정상 출제 중</option>
+                <option value="paused">출제 보류됨</option>
+              </select>
+            </div>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>분야</th>
+                  <th>출제자</th>
+                  <th style="min-width:180px;">질문 내용</th>
+                  <th>보기 (정답)</th>
+                  <th>상호 평가 (👍/👎)</th>
+                  <th>상태</th>
+                  <th>관리 동작</th>
+                </tr>
+              </thead>
+              <tbody id="adminStudentQTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+<div id="admin-sub-settings" class="admin-subpanel">
         <div class="charts-two-col">
           <div style="display:flex; flex-direction:column; gap:1rem;">
             <!-- 교사(관리자) 계정 추가·관리 카드 -->
@@ -775,6 +818,28 @@
                 <button type="submit" class="btn-gold">➕ 교사 등록</button>
               </form>
               <div id="registeredTeachersList" style="display:flex; gap:0.45rem; flex-wrap:wrap;"></div>
+
+            <!-- 학생 명단(아이디·실명) 사전 등록 카드 -->
+            <div class="glass-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.4rem;">
+                <h3 style="font-size:1.05rem; font-weight:800; margin:0;">👩‍🎓 학생 명단(아이디·실명) 사전 등록 & 관리</h3>
+                <span class="badge-tag" id="adminRosterCountBadge" style="background:#EDE9FE; color:#5B21B6;">등록된 학생: 0명</span>
+              </div>
+              <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:0.65rem; line-height:1.5;">
+                학생 아이디(또는 이메일)와 실명을 쉼표 또는 공백으로 구분해 줄바꿈하여 입력하세요.<br/>
+                <span style="color:#64748B;">(엑셀에서 2개 열 [학번, 이름]을 복사해서 그대로 붙여넣어도 자동 인식됩니다.)</span>
+              </p>
+              <textarea
+                id="adminStudentRosterInput"
+                class="login-input"
+                rows="4"
+                style="resize:vertical; font-family:monospace; font-size:0.8rem; margin-bottom:0.65rem;"
+                placeholder="예시:&#10;202610101, 김문영&#10;202610102, 이수빈&#10;202610201@smy.ms.kr, 박하은"
+              ></textarea>
+              <div style="display:flex; justify-content:flex-end;">
+                <button type="button" class="btn-primary" onclick="saveStudentRosterFromText()">💾 학생 명단 저장하기</button>
+              </div>
+            </div>
             </div>
 
             <!-- 구글 시트 연동 & 데이터/문제은행 관리 카드 -->
@@ -910,8 +975,22 @@
         </div>
 
         <div id="quizExplanationBox" class="quiz-Explanation-box hidden">
-          <div class="exp-result-title" id="expResultTitle">🎉 정답입니다! (+25 XP)</div>
-          <div class="exp-text" id="expText">해설 텍스트가 여기에 표시됩니다.</div>
+          <div class="exp-result-title" id="expResultTitle">🎉 정답입니다! (+15 XP)</div>
+          <div class="exp-text" id="expText" style="margin-bottom:0.65rem;">정답 확인 텍스트가 여기에 표시됩니다.</div>
+
+          <!-- 상호 평가 섹션 (좋아요 / 보통 / 아쉬워요) -->
+          <div class="quiz-feedback-box" id="quizFeedbackBox" style="margin:0.75rem 0; padding:0.65rem 0.85rem; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+            <span style="font-size:0.78rem; font-weight:800; color:#475569;">💡 이 퀴즈 어떠셨나요?</span>
+            <div style="display:flex; gap:0.35rem;" id="quizFeedbackBtns">
+              <button type="button" class="btn-chip" onclick="submitQuestionFeedback('like')" style="font-size:0.74rem; padding:0.22rem 0.6rem;">👍 좋아요</button>
+              <button type="button" class="btn-chip" onclick="submitQuestionFeedback('normal')" style="font-size:0.74rem; padding:0.22rem 0.6rem;">😐 보통</button>
+              <button type="button" class="btn-chip" onclick="submitQuestionFeedback('dislike')" style="font-size:0.74rem; padding:0.22rem 0.6rem;">👎 아쉬워요</button>
+            </div>
+            <div id="quizFeedbackDoneMsg" style="font-size:0.76rem; color:#10B981; font-weight:800; display:none;">
+              ✅ 소중한 평가가 반영되었습니다!
+            </div>
+          </div>
+
           <div style="display:flex; gap:0.6rem; justify-content:flex-end; flex-wrap:wrap;">
             <button type="button" class="btn-secondary" onclick="closeQuizModal()">잠시 닫기</button>
             <button type="button" class="btn-gold" onclick="closeQuizAndSpinAgain()">🎯 다음 룰렛 바로 돌리기!</button>
@@ -924,7 +1003,67 @@
   <!-- ========================================================================
        5. 왕관(Crown) 마스코트 획득 선택 모달
        ======================================================================== -->
-  <div id="crownModal" class="modal-backdrop hidden">
+  
+  <!-- ========================================================================
+       5-1. ✏️ 학생 퀴즈 출제 모달
+       ======================================================================== -->
+  <div id="studentSubmitModal" class="modal-backdrop hidden">
+    <div class="quiz-modal-card" style="max-width:580px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem; border-bottom:1.5px solid #F1F5F9; padding-bottom:0.6rem;">
+        <h2 style="font-size:1.24rem; font-weight:900; color:#5B21B6; display:flex; align-items:center; gap:0.4rem; margin:0;">
+          ✏️ 나도 퀴즈 출제하기!
+        </h2>
+        <button type="button" class="icon-btn" onclick="closeStudentSubmitModal()" title="닫기">✖️</button>
+      </div>
+      <p style="font-size:0.82rem; color:#64748B; font-weight:600; margin-bottom:1rem;">
+        내가 만든 멋진 퀴즈를 전교생 룰렛에 등록해 보세요! 등록 즉시 <strong style="color:#7C3AED;">+20 XP</strong> 보너스가 지급됩니다.
+      </p>
+
+      <form id="studentSubmitForm" onsubmit="handleStudentQuestionSubmit(event)">
+        <div class="login-form-group" style="margin-bottom:0.75rem;">
+          <label for="submitQCat" style="font-size:0.82rem; font-weight:800; margin-bottom:0.25rem; display:block;">📚 문제 분야 선택</label>
+          <select id="submitQCat" class="login-select" required></select>
+        </div>
+
+        <div class="login-form-group" style="margin-bottom:0.75rem;">
+          <label for="submitQText" style="font-size:0.82rem; font-weight:800; margin-bottom:0.25rem; display:block;">❓ 질문 내용</label>
+          <textarea id="submitQText" class="login-input" rows="2" placeholder="정확하고 명확한 질문을 입력하세요." required style="resize:vertical;"></textarea>
+        </div>
+
+        <div style="font-size:0.82rem; font-weight:800; margin-bottom:0.4rem; color:#1E1B4B;">
+          🎯 보기 4개 입력 및 정답 라디오 선택
+        </div>
+        <div style="display:grid; grid-template-columns:1fr; gap:0.45rem; margin-bottom:1rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="radio" name="submitQAnswer" id="ansOpt1" value="1" required checked />
+            <label for="ansOpt1" style="font-size:0.8rem; font-weight:800; min-width:32px;">①번:</label>
+            <input type="text" id="submitOpt1" class="login-input" placeholder="1번 보기 내용" required />
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="radio" name="submitQAnswer" id="ansOpt2" value="2" required />
+            <label for="ansOpt2" style="font-size:0.8rem; font-weight:800; min-width:32px;">②번:</label>
+            <input type="text" id="submitOpt2" class="login-input" placeholder="2번 보기 내용" required />
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="radio" name="submitQAnswer" id="ansOpt3" value="3" required />
+            <label for="ansOpt3" style="font-size:0.8rem; font-weight:800; min-width:32px;">③번:</label>
+            <input type="text" id="submitOpt3" class="login-input" placeholder="3번 보기 내용" required />
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="radio" name="submitQAnswer" id="ansOpt4" value="4" required />
+            <label for="ansOpt4" style="font-size:0.8rem; font-weight:800; min-width:32px;">④번:</label>
+            <input type="text" id="submitOpt4" class="login-input" placeholder="4번 보기 내용" required />
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.6rem;">
+          <button type="button" class="btn-chip" onclick="closeStudentSubmitModal()">취소</button>
+          <button type="submit" class="btn-gold" style="padding:0.6rem 1.25rem;">🚀 퀴즈 등록하고 +20 XP 받기!</button>
+        </div>
+      </form>
+    </div>
+  </div>
+<div id="crownModal" class="modal-backdrop hidden">
     <div class="quiz-modal-card" style="max-width:540px; padding:1.5rem; text-align:center;">
       <div style="font-size:2.8rem; margin-bottom:0.25rem;">👑</div>
       <h2 style="font-size:1.35rem; font-weight:900; color:#92400E;">왕관 찬스 발동! 마스코트를 선택하세요!</h2>
