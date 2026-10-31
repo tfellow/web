@@ -84,8 +84,8 @@ const CATEGORIES = [
   },
   {
     id: 'literature',
-    name: '문학·고전',
-    shortName: '문학·고전',
+    name: '문학',
+    shortName: '문학',
     icon: '📖',
     color: '#7C3AED',
     lightColor: '#FAF5FF',
