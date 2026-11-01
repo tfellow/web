@@ -1,12 +1,16 @@
 import { APP } from '../config.js';
 import { esc, toast, el } from '../lib/util.js';
 import { logo } from '../main.js';
+import { allBooks } from '../data/books.js';
 
 const gradeOpts = (v) => APP.grades.map(g => `<option value="${g}" ${g == v ? 'selected' : ''}>${g}학년</option>`).join('');
 const classOpts = (v) => Array.from({ length: APP.classesPerGrade }, (_, i) => i + 1).map(c => `<option value="${c}" ${c == v ? 'selected' : ''}>${c}반</option>`).join('');
 
 export function renderLogin(root, store) {
   const demo = store.mode === 'demo';
+  // 로그인 화면 단어: 열 때마다 단어장에서 무작위로 하나
+  const pool = allBooks().flatMap(b => b.words);
+  const hw = pool.length ? pool[Math.floor(Math.random() * pool.length)] : { word: 'aquarium', pos: 'n.', ko: '수족관' };
   root.innerHTML = `
   <div class="login">
     <section class="login-hero">
@@ -14,7 +18,7 @@ export function renderLogin(root, store) {
       <h1>${esc(APP.appName)}</h1>
       <p class="tag">매일 조금씩, 단어가 자라는 숲<br><small>${esc(APP.schoolName)} 영어 어휘 학습</small></p>
       <div class="hero-card" aria-hidden="true">
-        <span class="pos">n.</span><b class="hw">aquarium</b><span class="ko">수족관</span>
+        ${hw.pos ? `<span class="pos">${esc(hw.pos)}</span>` : ''}<b class="hw">${esc(hw.word)}</b><span class="ko">${esc(hw.ko)}</span>
       </div>
     </section>
     <section class="login-box">

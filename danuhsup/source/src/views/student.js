@@ -162,6 +162,9 @@ export async function lesson(main, { bookId, n } = {}, go) {
   const myTests = (await S.store.myResults(S.user.uid)).filter(r => r.bookId === bookId && r.lesson == l.n);
   const best = myTests.length ? Math.max(...myTests.map(r => r.pct)) : null;
   let filter = 'all';
+  // 뜻 가리기: 기본은 가림, 빈칸을 누르면 그 단어만 보임. 선택은 기기에 기억
+  let hideKo = true; try { hideKo = localStorage.getItem('dn_hideKo') !== '0'; } catch { }
+  const shown = new Set();
   main.innerHTML = `
     <button class="back" id="back">‹ 단원 목록</button>
     <section class="lesson-head">
@@ -174,6 +177,7 @@ export async function lesson(main, { bookId, n } = {}, go) {
       <button class="mode test" data-m="test"><b>📝 단원 테스트</b><small>20문제 · 결과가 선생님께 전달돼요</small></button>
     </section>
     <div class="sec-h"><h3 class="h3">단어 목록</h3>
+      <button class="chip-btn ko-toggle" id="koT"></button>
       <div class="chips sm">${[['all', '전체'], ['new', '안 본 단어'], ['weak', '약한 단어'], ['mast', '암기 완료'], ['fav', '⭐']].map(([k, t]) => `<button class="chip-btn ${k === 'all' ? 'on' : ''}" data-f="${k}">${t}</button>`).join('')}</div></div>
     <ul class="wlist" id="wl"></ul>`;
   say(main);
@@ -184,13 +188,17 @@ export async function lesson(main, { bookId, n } = {}, go) {
     main.querySelector('#wl').innerHTML = ws.map(w => { const st = map[w.id]; return `
       <li class="wrow" data-id="${w.id}">
         <span class="dots" title="${BOX_LABEL[st?.b || 0]}">${[1, 2, 3, 4, 5].map(i => `<i class="${(st?.b || 0) >= i ? 'on' : ''}"></i>`).join('')}</span>
-        <b class="hw">${esc(w.word)}</b><span class="pos">${esc(w.pos)}</span><span class="ko">${esc(w.ko)}</span>
+        <b class="hw">${esc(w.word)}</b><span class="pos">${esc(w.pos)}</span><span class="ko">${hideKo && !shown.has(w.id) ? `<button class="ko-blank" data-reveal="${w.id}" aria-label="뜻 보기"></button>` : esc(w.ko)}</span>
         ${spk(w.word)}<button class="icon-btn fav ${st?.f ? 'on' : ''}" data-fav="${w.id}" aria-label="즐겨찾기">${st?.f ? '★' : '☆'}</button>
       </li>`; }).join('') || '<li class="empty">해당하는 단어가 없어요.</li>';
+    const t = main.querySelector('#koT'); t.textContent = hideKo ? '👀 뜻 모두 보기' : '🙈 뜻 가리기'; t.classList.toggle('on', !hideKo);
   };
   draw();
+  main.querySelector('#koT').onclick = () => { hideKo = !hideKo; shown.clear(); try { localStorage.setItem('dn_hideKo', hideKo ? '1' : '0'); } catch { } draw(); };
   main.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filter = b.dataset.f; main.querySelectorAll('[data-f]').forEach(x => x.classList.toggle('on', x === b)); draw(); });
   main.querySelector('#wl').addEventListener('click', e => {
+    const r = e.target.closest('[data-reveal]');
+    if (r) { shown.add(r.dataset.reveal); r.parentElement.textContent = s.words.find(x => x.id === r.dataset.reveal).ko; return; }
     const f = e.target.closest('[data-fav]');
     if (f) { const w = s.words.find(x => x.id === f.dataset.fav); const on = toggleFav(w); f.textContent = on ? '★' : '☆'; f.classList.toggle('on', on); return; }
     const row = e.target.closest('.wrow'); if (!row || e.target.closest('[data-say]')) return;
