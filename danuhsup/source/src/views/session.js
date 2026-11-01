@@ -153,7 +153,7 @@ function run(stage, opts) {
     }
   }
   // 숫자키 1~4 선택 지원 (태블릿 키보드)
-  const onKey = e => { if (/^[1-4]$/.test(e.key) && !e.target.closest('input')) qBox.querySelector(`.opt[data-i="${+e.key - 1}"]`)?.click(); if (e.key === 'Enter' && !fb.hidden) fb.querySelector('button')?.click(); };
+  const onKey = e => { if (/^[1-4]$/.test(e.key) && !e.target.closest('input')) qBox.querySelector(`.opt[data-i="${+e.key - 1}"]`)?.click(); if (e.key === 'Enter' && !fb.hidden) fb.querySelector('.fb-next')?.click(); };
   addEventListener('keydown', onKey);
 
   function grade(q, ok, given) {
@@ -171,9 +171,9 @@ function run(stage, opts) {
     fb.hidden = false;
     fb.className = `fb ${ok ? 'good' : 'bad'}`;
     fb.innerHTML = ok
-      ? `<div class="fb-in"><div><b>${combo >= 3 ? `🔥 ${combo} 콤보!` : pick(['정답!', '좋아요!', '훌륭해요!', '완벽해요!'])}</b> <span class="muted">+${xp} XP</span><div class="fb-word">${esc(w.word)} · ${esc(w.ko)}</div></div><button class="btn primary">계속</button></div>`
-      : `<div class="fb-in"><div><b>정답은 <u>${esc(w.word)}</u></b>${posTag(w)}<div class="fb-word">${esc(w.ko)}</div>${w.ex ? `<div class="fb-ex">${esc(w.ex)} ${spk(w.ex, 'sm')}</div>` : ''}</div><button class="btn primary">계속</button></div>`;
-    fb.querySelector('button').onclick = () => { next(); };
+      ? `<div class="fb-in"><div><b>${combo >= 3 ? `🔥 ${combo} 콤보!` : pick(['정답!', '좋아요!', '훌륭해요!', '완벽해요!'])}</b> <span class="muted">+${xp} XP</span><div class="fb-word">${esc(w.word)} · ${esc(w.ko)}</div></div><button class="btn primary fb-next">계속</button></div>`
+      : `<div class="fb-in"><div><b>정답은 <u>${esc(w.word)}</u></b>${posTag(w)}<div class="fb-word">${esc(w.ko)}</div>${w.ex ? `<div class="fb-ex">${esc(w.ex)} ${spk(w.ex, 'sm')}</div>` : ''}</div><button class="btn primary fb-next">계속</button></div>`;
+    fb.querySelector('.fb-next').onclick = () => { next(); };
     if (prefs.autoSpeak && !ok) speak(w.word);
     if (ok) { clearTimeout(fb._t); fb._t = setTimeout(() => { if (!fb.hidden && fb.classList.contains('good')) next(); }, 1100); }
   }
