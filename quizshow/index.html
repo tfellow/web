@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#4F46E5">
+  <link rel="manifest" href='data:application/manifest+json,{"name":"문영 예술제 퀴즈쇼","short_name":"예술제퀴즈쇼","display":"fullscreen","orientation":"landscape","background_color":"#F1F5F9","theme_color":"#4F46E5"}'>
+  <title>문영 예술제 퀴즈쇼 - 추천 작품 & 교과서 소설 퀴즈</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #3730A3;
+      --primary-light: #EEF2FF;
+      --secondary: #EC4899;
+      --accent: #F59E0B;
+      --success: #10B981;
+      --success-dark: #059669;
+      --success-light: #ECFDF5;
+      --danger: #EF4444;
+      --danger-light: #FEF2F2;
+      --bg: #F1F5F9;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border: #CBD5E1;
+      --shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 12px -4px rgba(15, 23, 42, 0.05);
+      --radius: clamp(16px, 1.4vw, 28px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overscroll-behavior: none;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* When in Quiz or Result mode, lock body to 100dvh with no scroll */
+    body.arena-mode {
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* Header - Optimized for 2560x1600 (16:10) & Smart View Electronic Whiteboard */
+    header {
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--border);
+      padding: clamp(10px, 1.1vh, 22px) clamp(20px, 2.2vw, 48px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1vw, 20px);
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: clamp(46px, 3.6vw, 68px);
+      height: clamp(46px, 3.6vw, 68px);
+      background: linear-gradient(135deg, #4F46E5, #EC4899);
+      border-radius: clamp(12px, 1vw, 18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: clamp(24px, 2vw, 36px);
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: clamp(1.3rem, 1.8vw, 2.2rem);
+      font-weight: 900;
+      color: #0F172A;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: clamp(0.85rem, 1vw, 1.25rem);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 0.8vw, 16px);
+    }
+
+    .header-btn {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 2px solid #C7D2FE;
+      padding: clamp(10px, 1vh, 18px) clamp(16px, 1.4vw, 28px);
+      border-radius: clamp(12px, 0.9vw, 18px);
+      font-size: clamp(0.95rem, 1.15vw, 1.45rem);
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.12s, background 0.15s;
+      min-height: clamp(46px, 4.8vh, 68px);
+    }
+
+    .header-btn:active {
+      transform: scale(0.95);
+      background: #E0E7FF;
+    }
+
+    .fullscreen-btn {
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: #FFFFFF;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .fullscreen-btn:active {
+      background: #4338CA;
+    }
+
+    .fullscreen-btn.is-fullscreen {
+      background: #EEF2FF;
+      color: var(--primary);
+      border-color: #C7D2FE;
+      box-shadow: none;
+    }
+
+    .reset-btn {
+      background: #F8FAFC;
+      color: #475569;
+      border-color: #CBD5E1;
+    }
+
+    /* Main Container */
+    .container {
+      width: 100%;
+      max-width: 2480px;
+      margin: 0 auto;
+      padding: clamp(16px, 1.8vh, 32px) clamp(20px, 2.2vw, 48px);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Home View */
+    #homeView {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Stats Overview Banner */
+    .mission-status-bar {
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: white;
+      border-radius: var(--radius);
+      padding: clamp(14px, 1.5vh, 26px) clamp(20px, 2vw, 36px);
+      margin-bottom: clamp(14px, 1.5vh, 24px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .mission-text {
+      font-size: clamp(1.05rem, 1.35vw, 1.7rem);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mission-badge {
+      background: rgba(255, 255, 255, 0.25);
+      padding: clamp(6px, 0.7vh, 12px) clamp(16px, 1.4vw, 26px);
+      border-radius: 999px;
+      font-size: clamp(0.95rem, 1.2vw, 1.5rem);
+      font-weight: 900;
+    }
+
+    /* Search & Filter Bar */
+    .filter-panel {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: clamp(16px, 1.6vh, 28px) clamp(20px, 2vw, 36px);
+      box-shadow: var(--shadow);
+      margin-bottom: clamp(16px, 1.8vh, 28px);
+      border: 2px solid var(--border);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: clamp(12px, 1.4vh, 22px);
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: clamp(14px, 1.4vh, 22px) clamp(56px, 4.5vw, 80px) clamp(14px, 1.4vh, 22px) clamp(48px, 3.8vw, 68px);
+      border-radius: clamp(12px, 1vw, 18px);
+      border: 2px solid var(--border);
+      font-size: clamp(1.05rem, 1.25vw, 1.6rem);
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #F8FAFC;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      background: #FFFFFF;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: clamp(16px, 1.3vw, 24px);
+      font-size: clamp(20px, 1.5vw, 28px);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: clamp(12px, 1vw, 20px);
+      background: #E2E8F0;
+      color: #475569;
+      border: none;
+      width: clamp(34px, 2.5vw, 48px);
+      height: clamp(34px, 2.5vw, 48px);
+      border-radius: 50%;
+      font-size: clamp(16px, 1.2vw, 22px);
+      font-weight: 900;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-clear-btn:active {
+      background: #CBD5E1;
+      transform: scale(0.92);
+    }
+
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(8px, 0.8vw, 14px);
+    }
+
+    .cat-tab {
+      background: #F1F5F9;
+      color: #475569;
+      border: 2px solid transparent;
+      padding: clamp(10px, 1.1vh, 18px) clamp(18px, 1.5vw, 30px);
+      border-radius: 999px;
+      font-size: clamp(0.95rem, 1.15vw, 1.45rem);
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .cat-tab:active {
+      transform: scale(0.95);
+    }
+
+    .cat-tab.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+
+    .cat-tab.highlight {
+      background: #FEF3C7;
+      color: #92400E;
+      border-color: #FDE68A;
+    }
+
+    .cat-tab.highlight.active {
+      background: #D97706;
+      color: white;
+      border-color: #D97706;
+    }
+
+    /* Works Grid - 4 columns on 16:10 Widescreen */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 22vw, 480px), 1fr));
+      gap: clamp(16px, 1.5vw, 28px);
+      padding-bottom: 32px;
+    }
+
+    .work-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: clamp(20px, 1.8vw, 34px);
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s, border-color 0.15s;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .work-card:active {
+      transform: scale(0.98);
+      border-color: var(--primary);
+    }
+
+    .work-card.completed {
+      background: #F0FDF4;
+      border-color: #86EFAC;
+      cursor: default;
+    }
+
+    .work-card.completed:active {
+      transform: none;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(10px, 1vh, 16px);
+      gap: 8px;
+    }
+
+    .cat-badge {
+      font-size: clamp(0.8rem, 0.95vw, 1.2rem);
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #EEF2FF;
+      color: var(--primary);
+    }
+
+    .cat-badge.textbook {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    .in-progress-badge {
+      font-size: clamp(0.8rem, 0.95vw, 1.2rem);
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .completed-badge {
+      font-size: clamp(0.8rem, 0.95vw, 1.2rem);
+      font-weight: 900;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #DEF7EC;
+      color: #03543F;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #A7F3D0;
+    }
+
+    .work-title {
+      font-size: clamp(1.3rem, 1.55vw, 2rem);
+      font-weight: 900;
+      color: #0F172A;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .work-author {
+      font-size: clamp(0.9rem, 1.05vw, 1.35rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .work-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .kw-tag {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      font-size: clamp(0.8rem, 0.9vw, 1.15rem);
+      font-weight: 600;
+      color: #475569;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .work-card.completed .kw-tag {
+      background: #E8F5E9;
+      border-color: #C8E6C9;
+    }
+
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: white;
+      border: none;
+      padding: clamp(14px, 1.4vh, 22px);
+      border-radius: clamp(12px, 1vw, 18px);
+      font-size: clamp(1.05rem, 1.2vw, 1.55rem);
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .start-btn.btn-completed {
+      background: linear-gradient(135deg, #059669, #10B981);
+      color: #FFFFFF;
+      cursor: not-allowed;
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    .start-btn.btn-retry {
+      background: linear-gradient(135deg, #D97706, #F59E0B);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+    }
+
+    /* ========================================================
+       QUIZ ARENA SCREEN - 100% Zero-Scroll Fullscreen Widescreen
+       ======================================================== */
+    .quiz-view {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      justify-content: space-between;
+    }
+
+    .quiz-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(10px, 1.2vh, 20px);
+      flex-shrink: 0;
+    }
+
+    .quiz-status-group {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.2vw, 24px);
+    }
+
+    .quiz-progress-text {
+      font-size: clamp(1.1rem, 1.4vw, 1.85rem);
+      font-weight: 900;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 2px solid #C7D2FE;
+      padding: clamp(8px, 1vh, 16px) clamp(18px, 1.6vw, 32px);
+      border-radius: 999px;
+    }
+
+    .quiz-score-pill {
+      font-size: clamp(1.1rem, 1.4vw, 1.85rem);
+      font-weight: 900;
+      color: #065F46;
+      background: #D1FAE5;
+      border: 2px solid #6EE7B7;
+      padding: clamp(8px, 1vh, 16px) clamp(18px, 1.6vw, 32px);
+      border-radius: 999px;
+    }
+
+    .quiz-timer-pill {
+      font-size: clamp(1.25rem, 1.6vw, 2.2rem);
+      font-weight: 900;
+      padding: clamp(8px, 1vh, 16px) clamp(20px, 1.8vw, 36px);
+      border-radius: 999px;
+      background: #FEF3C7;
+      border: 2px solid #FDE68A;
+      color: #92400E;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .quiz-timer-pill.urgent {
+      background: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #B91C1C;
+      animation: pulse 0.45s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.07); }
+    }
+
+    .timer-progress-wrap {
+      height: clamp(10px, 1.2vh, 18px);
+      background: #CBD5E1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: clamp(12px, 1.6vh, 24px);
+      flex-shrink: 0;
+    }
+
+    .timer-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #F59E0B, #EF4444);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    .quiz-card {
+      background: #FFFFFF;
+      border-radius: clamp(20px, 1.8vw, 36px);
+      padding: clamp(20px, 2.8vh, 48px) clamp(24px, 3vw, 56px);
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
+      border: 3px solid var(--border);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .question-header-box {
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: clamp(16px, 1.4vw, 28px);
+      padding: clamp(18px, 2.4vh, 40px) clamp(22px, 2.4vw, 48px);
+      margin-bottom: clamp(16px, 2.2vh, 36px);
+      flex-shrink: 0;
+    }
+
+    .q-work-info {
+      display: inline-block;
+      font-size: clamp(0.95rem, 1.25vw, 1.65rem);
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      margin-bottom: clamp(10px, 1.2vh, 18px);
+    }
+
+    .question-title {
+      font-size: clamp(1.45rem, 2.2vw, 3rem);
+      font-weight: 900;
+      color: #0F172A;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+
+    /* 2x2 Grid for Options on Landscape Whiteboard */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(14px, 1.6vw, 28px);
+      flex: 1;
+      min-height: 0;
+      margin-bottom: clamp(16px, 2vh, 32px);
+    }
+
+    .option-btn {
+      background: #FFFFFF;
+      border: 3px solid #CBD5E1;
+      border-radius: clamp(16px, 1.4vw, 28px);
+      padding: clamp(16px, 2vh, 36px) clamp(20px, 2vw, 40px);
+      font-size: clamp(1.25rem, 1.8vw, 2.45rem);
+      font-weight: 800;
+      color: #1E293B;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 1.4vw, 28px);
+      transition: transform 0.12s, background 0.15s, border-color 0.15s;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+      word-break: keep-all;
+      line-height: 1.35;
+    }
+
+    .option-btn:active {
+      transform: scale(0.98);
+      background: #F1F5F9;
+    }
+
+    .opt-num {
+      width: clamp(44px, 3.6vw, 72px);
+      height: clamp(44px, 3.6vw, 72px);
+      border-radius: clamp(12px, 1vw, 20px);
+      background: #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.2rem, 1.6vw, 2.2rem);
+      font-weight: 900;
+      color: #334155;
+      flex-shrink: 0;
+    }
+
+    .option-btn.selected-correct {
+      background: #ECFDF5;
+      border-color: #10B981;
+      border-width: 4px;
+      color: #065F46;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+    }
+
+    .option-btn.selected-correct .opt-num {
+      background: #10B981;
+      color: white;
+    }
+
+    .option-btn.selected-wrong {
+      background: #FEF2F2;
+      border-color: #EF4444;
+      border-width: 4px;
+      color: #991B1B;
+      animation: shake 0.4s;
+    }
+
+    .option-btn.selected-wrong .opt-num {
+      background: #EF4444;
+      color: white;
+    }
+
+    .option-btn.reveal-correct {
+      background: #ECFDF5;
+      border-color: #10B981;
+      border-width: 4px;
+      color: #065F46;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+    }
+
+    .option-btn.reveal-correct .opt-num {
+      background: #10B981;
+      color: white;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    /* Bottom Action Area (Fixed height so layout never shifts when button appears) */
+    .quiz-bottom-bar {
+      height: clamp(68px, 8.5vh, 110px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(16px, 2vw, 32px);
+      flex-shrink: 0;
+    }
+
+    .feedback-banner {
+      flex: 1;
+      height: 100%;
+      border-radius: clamp(14px, 1.2vw, 22px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.2rem, 1.6vw, 2.2rem);
+      font-weight: 900;
+      padding: 0 24px;
+      background: #F8FAFC;
+      border: 2px dashed #CBD5E1;
+      color: #64748B;
+    }
+
+    .feedback-banner.correct {
+      background: #ECFDF5;
+      border: 3px solid #10B981;
+      color: #065F46;
+    }
+
+    .feedback-banner.wrong {
+      background: #FEF2F2;
+      border: 3px solid #EF4444;
+      color: #991B1B;
+    }
+
+    .next-btn {
+      height: 100%;
+      min-width: clamp(240px, 26vw, 480px);
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: white;
+      border: none;
+      padding: 0 clamp(28px, 2.5vw, 48px);
+      border-radius: clamp(14px, 1.2vw, 22px);
+      font-size: clamp(1.25rem, 1.7vw, 2.3rem);
+      font-weight: 900;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35);
+      transition: transform 0.12s;
+    }
+
+    .next-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* ========================================================
+       RESULT VIEW - Fullscreen Centered Widescreen
+       ======================================================== */
+    .result-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+      max-width: clamp(680px, 60vw, 1200px);
+      margin: auto;
+      text-align: center;
+      background: white;
+      padding: clamp(32px, 4.5vh, 64px) clamp(32px, 4vw, 72px);
+      border-radius: clamp(24px, 2vw, 40px);
+      box-shadow: var(--shadow);
+      border: 3px solid var(--border);
+    }
+
+    .result-icon {
+      font-size: clamp(64px, 7vh, 110px);
+      margin-bottom: clamp(8px, 1.2vh, 18px);
+      line-height: 1;
+    }
+
+    .result-title {
+      font-size: clamp(2rem, 2.8vw, 3.6rem);
+      font-weight: 900;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+
+    .result-work {
+      font-size: clamp(1.2rem, 1.6vw, 2.1rem);
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: clamp(20px, 2.5vh, 36px);
+    }
+
+    .score-circle {
+      width: clamp(150px, 18vh, 240px);
+      height: clamp(150px, 18vh, 240px);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4F46E5, #EC4899);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto clamp(20px, 2.5vh, 36px);
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.35);
+    }
+
+    .score-circle.perfect {
+      background: linear-gradient(135deg, #059669, #10B981);
+      box-shadow: 0 14px 32px rgba(16, 185, 129, 0.4);
+    }
+
+    .score-num {
+      font-size: clamp(3.4rem, 5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .score-total {
+      font-size: clamp(1.05rem, 1.3vw, 1.7rem);
+      opacity: 0.95;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .result-msg {
+      font-size: clamp(1.25rem, 1.65vw, 2.2rem);
+      color: #334155;
+      font-weight: 800;
+      margin-bottom: clamp(24px, 3.2vh, 48px);
+      word-break: keep-all;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: clamp(14px, 1.5vw, 28px);
+      width: 100%;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: clamp(16px, 2vh, 28px);
+      background: #F1F5F9;
+      color: #334155;
+      border: 3px solid #CBD5E1;
+      border-radius: clamp(14px, 1.2vw, 22px);
+      font-size: clamp(1.15rem, 1.5vw, 2rem);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: clamp(16px, 2vh, 28px);
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: white;
+      border: none;
+      border-radius: clamp(14px, 1.2vw, 22px);
+      font-size: clamp(1.15rem, 1.5vw, 2rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    /* Modals */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: clamp(24px, 2vw, 36px);
+      max-width: clamp(520px, 46vw, 820px);
+      width: 100%;
+      padding: clamp(28px, 3.5vh, 48px) clamp(28px, 3vw, 52px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: clamp(1.6rem, 2.1vw, 2.7rem);
+      font-weight: 900;
+      color: #0F172A;
+      margin-bottom: 10px;
+    }
+
+    .modal-desc {
+      font-size: clamp(1.05rem, 1.3vw, 1.65rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: clamp(20px, 2.5vh, 32px);
+    }
+
+    .timer-options-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(10px, 1vw, 18px);
+      margin-bottom: clamp(20px, 2.5vh, 32px);
+    }
+
+    .time-opt-btn {
+      background: #F8FAFC;
+      border: 3px solid #E2E8F0;
+      border-radius: clamp(14px, 1.1vw, 20px);
+      padding: clamp(14px, 1.8vh, 24px) clamp(16px, 1.5vw, 26px);
+      font-size: clamp(1.05rem, 1.3vw, 1.7rem);
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+
+    .time-opt-btn.full-span {
+      grid-column: 1 / -1;
+    }
+
+    .time-opt-btn.active {
+      background: #EEF2FF;
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.18);
+    }
+
+    .time-badge {
+      font-size: clamp(0.85rem, 1vw, 1.25rem);
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #E2E8F0;
+      color: #475569;
+    }
+
+    .time-opt-btn.active .time-badge {
+      background: var(--primary);
+      color: white;
+    }
+
+    .modal-confirm-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      color: white;
+      border: none;
+      padding: clamp(16px, 2vh, 26px);
+      border-radius: clamp(14px, 1.2vw, 22px);
+      font-size: clamp(1.2rem, 1.55vw, 2rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+    }
+
+    .modal-confirm-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* Portrait or smaller screens fallback */
+    @media (max-width: 900px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .timer-options-list {
+        grid-template-columns: 1fr;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand" onclick="goHome()">
+      <div class="brand-icon">📚</div>
+      <div>
+        <div class="brand-title">문영 예술제 퀴즈쇼</div>
+        <div class="brand-subtitle">작품 & 교과서 소설로 배우는 즐거운 중학 퀴즈</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn fullscreen-btn" id="fullscreenBtn" onclick="toggleFullScreen()" title="주소창 없는 전체화면 전환">
+        <span id="fullscreenIcon">⛶</span>
+        <span id="fullscreenLabel">전체화면</span>
+      </button>
+      <button class="header-btn" onclick="openTimerModal()">
+        <span>⏱️</span>
+        <span id="currentTimerLabel">20초</span>
+      </button>
+      <button class="header-btn" id="soundBtn" onclick="toggleSound()">
+        <span id="soundIcon">🔊</span>
+      </button>
+      <button class="header-btn reset-btn" onclick="openResetModal()" title="퀴즈 완료 기록 초기화">
+        <span>🔄 초기화</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    
+    <!-- View 1: Main Works Explorer -->
+    <div id="homeView">
+      <!-- Mission Progress Banner -->
+      <div class="mission-status-bar">
+        <div class="mission-text">
+          <span>🎯 미션 완료 현황:</span>
+          <span id="completedCountText">0 / 0개 작품 달성</span>
+        </div>
+        <div class="mission-badge" id="missionPercentBadge">진행률 0%</div>
+      </div>
+
+      <div class="filter-panel">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="작품명, 작가, 키워드를 검색해보세요 (예: 어린 왕자, 아몬드, 홍길동전, 겨울왕국)" oninput="filterWorks()">
+          <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="검색어 지우기">✕</button>
+        </div>
+        <div class="category-tabs" id="catTabs">
+          <button class="cat-tab active" onclick="setCategory('전체', this)">전체 (<span id="totalCount">0</span>)</button>
+          <button class="cat-tab highlight" onclick="setCategory('교과서 수록 소설', this)">📖 교과서 수록 소설 (28)</button>
+          <button class="cat-tab" onclick="setCategory('동화', this)">동화 (15)</button>
+          <button class="cat-tab" onclick="setCategory('한국 문학', this)">한국 문학 (15)</button>
+          <button class="cat-tab" onclick="setCategory('청소년 문학', this)">청소년 문학 (20)</button>
+          <button class="cat-tab" onclick="setCategory('세계 명작', this)">세계 명작 (15)</button>
+          <button class="cat-tab" onclick="setCategory('웹툰', this)">웹툰 (15)</button>
+          <button class="cat-tab" onclick="setCategory('영화&애니', this)">영화&애니 (20)</button>
+        </div>
+      </div>
+
+      <div class="works-grid" id="worksGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- View 2: Quiz Play Arena (100% Fullscreen Fit) -->
+    <div id="quizView" class="quiz-view">
+      <div class="quiz-top-bar">
+        <button class="header-btn" onclick="goHome()">◀ 작품 목록으로</button>
+        <div class="quiz-status-group">
+          <div class="quiz-progress-text" id="quizProgressText">문제 1 / 5</div>
+          <div class="quiz-score-pill" id="quizScorePill">현재 0점</div>
+        </div>
+        <div class="quiz-timer-pill" id="quizTimerPill">
+          <span>⏱️</span>
+          <span id="quizTimerNum">20</span>초
+        </div>
+      </div>
+
+      <div class="timer-progress-wrap" id="timerProgressWrap">
+        <div class="timer-progress-bar" id="timerBar"></div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="question-header-box">
+          <div class="q-work-info" id="qWorkInfo">[카테고리] 작품명 (작가)</div>
+          <div class="question-title" id="questionTitle">질문이 여기에 표시됩니다.</div>
+        </div>
+
+        <div class="options-grid" id="optionsGrid">
+          <!-- 4 Options rendered in 2x2 grid by JS -->
+        </div>
+
+        <div class="quiz-bottom-bar">
+          <div class="feedback-banner" id="feedbackBanner">화면을 터치하여 정답을 선택해 주세요!</div>
+          <button class="next-btn" id="nextBtn" onclick="nextQuestion()">다음 문제로 ▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 3: Result Summary -->
+    <div id="resultView" class="result-view">
+      <div class="result-icon" id="resultIcon">🏆</div>
+      <div class="result-title" id="resultTitle">퀴즈 완료!</div>
+      <div class="result-work" id="resultWork">작품명</div>
+
+      <div class="score-circle" id="scoreCircle">
+        <div class="score-num" id="scoreNum">5</div>
+        <div class="score-total">/ 5 문제</div>
+      </div>
+
+      <div class="result-msg" id="resultMsg">만점입니다! 대단한 실력자네요!</div>
+
+      <div class="result-actions">
+        <button class="btn-secondary" id="retryBtn" onclick="restartCurrentQuiz()">다시 풀기 🔄</button>
+        <button class="btn-primary" onclick="goHome()">작품 목록으로 📚</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Time Limit & Fullscreen Startup Modal -->
+  <div class="modal-overlay" id="timerModal">
+    <div class="modal-box">
+      <div class="modal-title">⏱️ 1문제당 제한 시간 선택</div>
+      <div class="modal-desc">시작하기 버튼을 누르면 전자칠판용 전체화면으로 자동 전환됩니다.</div>
+
+      <div class="timer-options-list">
+        <div class="time-opt-btn" onclick="selectTimeLimit(10)">
+          <span>⚡ 10초 스피드</span>
+          <span class="time-badge">속도전</span>
+        </div>
+        <div class="time-opt-btn" onclick="selectTimeLimit(15)">
+          <span>⏱️ 15초 박진감</span>
+          <span class="time-badge">빠른 진행</span>
+        </div>
+        <div class="time-opt-btn active" onclick="selectTimeLimit(20)">
+          <span>👍 20초 표준</span>
+          <span class="time-badge">추천 기본</span>
+        </div>
+        <div class="time-opt-btn" onclick="selectTimeLimit(30)">
+          <span>☕ 30초 여유</span>
+          <span class="time-badge">차분하게</span>
+        </div>
+        <div class="time-opt-btn full-span" onclick="selectTimeLimit(0)">
+          <span>🧘 제한 시간 없음 (무제한 모드)</span>
+          <span class="time-badge">시간 무제한</span>
+        </div>
+      </div>
+
+      <button class="modal-confirm-btn" onclick="startQuizShowApp()">⛶ 전체화면으로 시작하기</button>
+    </div>
+  </div>
+
+  <!-- Custom Reset Confirmation Modal (Keeps Fullscreen Active) -->
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal-box">
+      <div class="modal-title">🔄 기록 초기화</div>
+      <div class="modal-desc">모든 작품의 퀴즈 완료 기록과 점수를 초기화하시겠습니까?</div>
+      <div class="result-actions">
+        <button class="btn-secondary" onclick="closeResetModal()">취소</button>
+        <button class="btn-primary" style="background: var(--danger);" onclick="confirmResetAllProgress()">초기화 실행</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       1. DATASET (128 WORKS, 640 QUESTIONS)
+       ======================================================== */
+    const WORKS_DATA = [{"id": 1, "category": "동화", "title": "흥부와 놀부", "author": "작자 미상", "keywords": "제비 다리, 박씨, 화초장", "questions": [{"q": "흥부가 가난하지만 착하게 살던 중, 다리가 부러진 어떤 동물을 정성껏 치료해 주었나요?", "options": ["참새", "제비", "까치", "비둘기"], "answer": 1}, {"q": "치료를 받고 강남에 갔던 제비가 이듬해 봄 흥부에게 은혜를 갚기 위해 물어다 준 것은?", "options": ["황금쌀", "박씨앗", "금반지", "비단옷"], "answer": 1}, {"q": "흥부가 가을에 열린 큰 박을 타자 박 속에서 쏟아져 나온 것이 아닌 것은?", "options": ["비단과 쌀가마", "목수와 기와집", "도깨비와 오물", "온갖 금은보화"], "answer": 2}, {"q": "동생 흥부가 부자가 된 것을 시기하여 억지로 제비 다리를 부러뜨린 인물은?", "options": ["방자", "놀부", "놀부 처", "변학도"], "answer": 1}, {"q": "놀부가 흥부 집에서 보물을 잔뜩 얻어가면서 이름을 까먹지 않으려고 계속 외치며 돌아간 가구는?", "options": ["책궤", "문갑", "화초장", "자개장"], "answer": 2}]}, {"id": 2, "category": "동화", "title": "별주부전", "author": "작자 미상", "keywords": "용왕, 자라, 간을 두고 옴", "questions": [{"q": "바닷속 용궁의 용왕님이 깊은 병에 걸렸을 때 의원이 처방한 특효약은?", "options": ["천년 거북 등딱지", "한라산 사슴 녹용", "육지 토끼의 간", "깊은 산속 산삼"], "answer": 2}, {"q": "용왕의 병을 고치기 위해 토끼의 간을 구하러 육지로 올라간 충성스러운 신하는?", "options": ["잉어", "문어", "상어", "자라"], "answer": 3}, {"q": "자라는 육지에서 토끼를 만나 용궁으로 유인하기 위해 무엇을 준다고 거짓말했나요?", "options": ["드넓은 당근 밭과 황금", "하늘을 나는 마법 날개", "맹수를 이길 초인적 힘", "높은 벼슬과 부귀영화"], "answer": 3}, {"q": "용궁에 잡혀가 배를 갈릴 위기에 처하자, 토끼가 위기를 벗어나기 위해 한 기막힌 거짓말은?", "options": ["자신의 간에는 맹독이 들어있다", "간을 육지 바위틈에 두고 왔다", "간이 원래 태어날 때부터 없다", "어제 간을 깊은 바다에 빠뜨렸다"], "answer": 1}, {"q": "육지에 무사히 도착한 토끼가 자라를 비웃으며 한 교훈적인 행동으로 옳은 것은?", "options": ["주변 짐승들과 함께 자라를 잡아먹었다", "산신령에게 자라를 엄벌해 달라고 빌었다", "용왕에게 직접 항의하는 편지를 보냈다", "자신의 똥을 만병통치약이라 속여 주었다"], "answer": 3}]}, {"id": 3, "category": "동화", "title": "심청전", "author": "작자 미상", "keywords": "공양미 삼백 석, 인당수, 심봉사", "questions": [{"q": "심청이의 아버지 심학규(심봉사)의 눈을 뜨게 하기 위해 몽은사 화주승에게 바치기로 약속한 곡식의 양은?", "options": ["쌀 백 가마", "보리 오백 섬", "공양미 삼백 석", "공양미 천 석"], "answer": 2}, {"q": "심청이는 공양미 삼백 석을 마련하기 위해 남경 장사 선인들에게 무엇의 제물로 팔려갔나요?", "options": ["인당수 뱃길 안전을 위한 바다 제물", "용왕을 지극히 모실 용궁의 시녀 제물", "가뭄을 끝내고 비를 부를 기우제 제물", "산신의 노여움을 풀기 위한 처녀 제물"], "answer": 0}, {"q": "심청이가 거친 파도가 치는 바다에 몸을 던진 장소의 이름은?", "options": ["벽란도", "노량", "명량", "인당수"], "answer": 3}, {"q": "인당수에 빠진 심청이는 용궁에서 환대를 받은 후 어떤 꽃을 타고 인간 세상으로 환생했나요?", "options": ["연꽃", "목련", "국화", "장미"], "answer": 0}, {"q": "심청이가 왕비가 된 후, 맹인 아버지를 찾기 위해 대궐에서 며칠간 연 잔치는?", "options": ["효도 잔치", "풍년 잔치", "팔순 잔치", "맹인 잔치"], "answer": 3}]}, {"id": 4, "category": "동화", "title": "춘향전", "author": "작자 미상", "keywords": "이몽룡, 암행어사 출두, 변학도", "questions": [{"q": "이몽룡과 성춘향이 남원 광한루에서 처음 만났던 전통 명절 날은 언제인가요?", "options": ["칠석", "단오", "설날", "추석"], "answer": 1}, {"q": "춘향의 어머니이자 몽룡과 춘향의 혼약을 인정해 준 인물은?", "options": ["향단", "방자", "뺑덕", "월매"], "answer": 3}, {"q": "새로 부임하여 춘향에게 수청을 들라고 강요하며 옥에 가둔 탐관오리 사또는 누구인가요?", "options": ["조대감", "김판서", "변학도", "허봉희"], "answer": 2}, {"q": "과거에 장원 급제한 이몽룡이 남원에 내려올 때 비밀리에 부여받은 관직은?", "options": ["암행어사", "포도대장", "전라관찰사", "영의정"], "answer": 0}, {"q": "변학도의 생일잔치 때 역졸들이 들이닥치며 외친 유명한 대사는?", "options": ["임금님의 어명이다!", "암행어사 출두야!", "포도대장 출동이다!", "탐관오리 체포하라!"], "answer": 1}]}, {"id": 5, "category": "동화", "title": "해와 달이 된 오누이", "author": "작자 미상", "keywords": "호랑이, 썩은 동아줄, 떡 하나 주면 안 잡아먹지", "questions": [{"q": "고개를 넘어 집으로 돌아오던 어머니를 위협하며 호랑이가 반복해서 요구한 유명한 대사는?", "options": ["옷 한 벌 벗어주면 살려주지", "고기 한 점 주면 친구하지", "떡 하나 주면 안 잡아먹지", "돈 한 푼 주면 보내주지"], "answer": 2}, {"q": "엄마 목소리를 흉내 내며 문을 열어달라는 호랑이에게 오누이가 손을 보여달라고 했을 때 호랑이가 한 행동은?", "options": ["흰 밀가루를 앞발에 묻혀 속였다", "고운 흙을 앞발에 묻혀 위장했다", "넓은 나뭇잎으로 앞발을 감쌌다", "하얀 장갑을 앞발에 끼워 숨겼다"], "answer": 0}, {"q": "호랑이를 피해 나무 위로 도망친 오누이가 호랑이에게 나무에 오르는 법이라며 거짓으로 알려준 방법은?", "options": ["도끼로 찍으며 올라오라", "돌을 던지며 올라오라", "참기름을 바르고 올라오라", "사다리를 타고 올라오라"], "answer": 2}, {"q": "하늘에 간절히 기도한 오누이와 호랑이에게 하늘에서 각각 내려온 줄은?", "options": ["오누이는 튼튼한 밧줄, 호랑이는 징그러운 뱀", "오누이는 끊어진 실줄, 호랑이는 단단한 금줄", "오누이는 고운 비단줄, 호랑이는 굵은 쇠사슬", "오누이는 새 동아줄, 호랑이는 썩은 동아줄"], "answer": 3}, {"q": "하늘로 올라간 오누이 중, 밤을 무서워하는 여동생을 위해 오빠와 여동생이 각각 변한 천체는?", "options": ["오빠는 해, 여동생은 별", "오빠는 별, 여동생은 달", "오빠는 달, 여동생은 해", "오빠는 해, 여동생은 달"], "answer": 2}]}, {"id": 6, "category": "동화", "title": "콩쥐팥쥐", "author": "작자 미상", "keywords": "두꺼비, 직녀, 꽃신, 잔치", "questions": [{"q": "새어머니가 콩쥐에게 구멍 난 밑 빠진 독에 물을 채우라고 했을 때 도와준 고마운 동물은?", "options": ["청개구리", "거북이", "물총새", "두꺼비"], "answer": 3}, {"q": "새어머니가 콩쥐에게 자갈밭을 갈라고 준 농기구는 무엇이었나요?", "options": ["무쇠 호미", "돌 괭이", "나무 호미", "쇠 괭이"], "answer": 2}, {"q": "새어머니와 팥쥐가 잔치에 가면서 콩쥐에게 남긴 벼 세 섬을 순식간에 찧어준 동물들은?", "options": ["참새 떼", "까치 떼", "비둘기 떼", "개미 떼"], "answer": 0}, {"q": "선녀가 콩쥐에게 선물한 아름다운 옷과 신발 중, 잔치에 급히 가다가 개울물에 빠뜨린 물건은?", "options": ["비취 가락지", "비단 머리띠", "옥 노리개", "꽃신 한 짝"], "answer": 3}, {"q": "콩쥐가 잃어버린 꽃신의 주인을 찾아 마을 처녀들에게 신겨보며 콩쥐를 배필로 맞이한 사람은?", "options": ["고을 감사", "암행어사", "포도대장", "한양 판서"], "answer": 0}]}, {"id": 7, "category": "동화", "title": "혹부리 영감", "author": "작자 미상", "keywords": "도깨비 방망이, 노래 주머니", "questions": [{"q": "착한 혹부리 영감이 산속 빈집에서 비를 피하다가 도깨비들을 만났을 때 공포를 이기기 위해 한 행동은?", "options": ["신나게 노래를 불렀다", "춤을 추며 칼을 휘둘렀다", "맛있는 떡을 나누어 주었다", "숨을 죽이고 죽은 척했다"], "answer": 0}, {"q": "도깨비들이 어디서 그런 고운 노랫소리가 나오냐고 묻자, 영감이 재치 있게 둘러댄 말은?", "options": ["턱 밑에 달린 혹에서 나온다", "뱃속의 마법 구슬에서 나온다", "목구멍 속 은방울에서 나온다", "머리에 난 흰 털에서 나온다"], "answer": 0}, {"q": "도깨비들이 영감의 혹을 떼어가면서 대가로 주고 간 신비한 보물은?", "options": ["소원을 들어주는 요술 거울", "몸을 감춰 주는 투명 망토", "하늘을 자유롭게 나는 신발", "도깨비 방망이와 금은보화"], "answer": 3}, {"q": "소문을 듣고 찾아온 욕심쟁이 혹부리 영감이 도깨비들에게 혹을 노래 주머니라고 팔려 하자 일어난 결과는?", "options": ["혹을 하나 더 붙여 두 개가 되었다", "거짓말이 들통나 먼 곳으로 쫓겨났다", "가진 재물과 방망이를 모두 뺏겼다", "도깨비들에게 잡혀 하인이 되었다"], "answer": 0}, {"q": "이 이야기에서 배울 수 있는 중심 교훈으로 가장 알맞은 것은?", "options": ["욕심을 부리지 말고 정직하게 살아야 한다", "남을 감동시키는 노래 연습을 해야 한다", "어두운 밤에는 깊은 산속에 가면 안 된다", "무서운 도깨비와는 절대 친구가 될 수 없다"], "answer": 0}]}, {"id": 8, "category": "동화", "title": "백설공주", "author": "그림 형제", "keywords": "독사과, 일곱 난쟁이, 마법 거울", "questions": [{"q": "새왕비가 매일 \"세상에서 누가 가장 예쁘니?\"라고 물어보았던 신비한 물건은?", "options": ["지혜로운 요술빗", "신비한 수정구", "말하는 앵무새", "마법의 거울"], "answer": 3}, {"q": "사냥꾼을 피해 깊은 숲속으로 도망친 백설공주가 머물게 된 오두막의 주인들은?", "options": ["세 마리 곰", "숲속의 사슴들", "요정 할머니", "일곱 난쟁이"], "answer": 3}, {"q": "변장한 왕비가 백설공주를 해치기 위해 마지막으로 건넨 위험한 음식은?", "options": ["독버섯 수프", "빨간 독사과", "수면제 든 빵", "마법의 체리"], "answer": 1}, {"q": "독사과를 먹고 깊은 잠에 빠진 백설공주는 어디에 눕혀졌나요?", "options": ["연못 위의 큰 연꽃", "투명한 유리관", "깊고 어두운 동굴", "화려한 황금 침대"], "answer": 1}, {"q": "유리관에 누워있던 백설공주가 깨어나게 된 결정적인 계기는?", "options": ["난쟁이들이 숲에서 찾은 신비한 해독제를 먹였다", "관을 옮기다 목에 걸린 독사과 조각이 빠져나왔다", "왕비의 마법 거울이 깨지면서 저주가 저절로 풀렸다", "숲속의 파랑새들이 공주의 몸에서 독을 빨아들였다"], "answer": 1}]}, {"id": 9, "category": "동화", "title": "신데렐라", "author": "샤를 페로", "keywords": "유리구두, 12시 종소리, 호박마차", "questions": [{"q": "요정 대모가 신데렐라를 무도회장에 데려다주기 위해 텃밭의 야채로 변신시킨 마차는?", "options": ["당근마차", "호박마차", "양배추마차", "수박마차"], "answer": 1}, {"q": "요정 대모가 마법을 걸어주며 반드시 지켜야 한다고 신신당부한 제한 시간은?", "options": ["새벽 2시", "밤 10시", "동틀 무렵", "밤 12시"], "answer": 3}, {"q": "신데렐라가 궁전 계단을 황급히 내려오다 흘리고 만 것은?", "options": ["순백의 진주목걸이", "유리구두 한 짝", "화려한 보석왕관", "반짝이는 은장갑"], "answer": 1}, {"q": "'신데렐라'라는 이름의 어원이자, 벽난로 청소를 하다가 묻은 것은?", "options": ["타고 남은 재", "흩날린 밀가루", "굳어버린 진흙", "시커먼 그을음"], "answer": 0}, {"q": "왕자가 신데렐라를 찾아내기 위해 전국을 돌며 실시한 방법은?", "options": ["궁전 왈츠를 추어보게 했다", "초상화를 그리며 찾아다녔다", "노랫소리를 들려달라고 했다", "유리구두를 발에 신겨보았다"], "answer": 3}]}, {"id": 10, "category": "동화", "title": "어린 왕자", "author": "앙투안 드 생텍쥐페리", "keywords": "사막여우, 보아뱀, 바오밥나무, 장미", "questions": [{"q": "비행기 조종사인 화자가 사막에 불시착했을 때 어린 왕자가 처음으로 그려달라고 부탁한 동물은?", "options": ["사막 여우", "어린 양", "산비둘기", "사막 낙타"], "answer": 1}, {"q": "어린 왕자의 고향 별(소행성 B612)을 통째로 파괴할 수 있어 싹이 트면 매일 뽑아야 하는 식물은?", "options": ["가시선인장", "바오밥나무", "거대주목나무", "장미꽃덤불"], "answer": 1}, {"q": "어린 왕자에게 \"가장 중요한 것은 눈에 보이지 않아, 마음으로 보아야 해\"라는 비밀을 알려준 친구는?", "options": ["사막여우", "붉은 장미", "사막의 뱀", "지리학자"], "answer": 0}, {"q": "조종사가 어릴 적 코끼리를 삼킨 보아뱀을 그렸을 때, 어른들이 무엇으로 착각했나요?", "options": ["낡은 가죽가방", "접어 둔 우산", "험한 산등성이", "챙 달린 모자"], "answer": 3}, {"q": "어린 왕자가 지구의 수많은 장미꽃 밭을 보고도 자기 별의 장미가 유일하다고 깨달은 까닭은?", "options": ["밤하늘 별처럼 찬란한 황금빛 꽃잎을 가져서", "정성을 쏟아 돌보며 시간을 함께 바쳤기 때문에", "다른 꽃과 달리 스스로 말을 걸어줄 수 있어서", "세상에서 가장 짙고 향기로운 꽃내음이 나서"], "answer": 1}]}, {"id": 11, "category": "동화", "title": "피노키오", "author": "카를로 콜로디", "keywords": "제페토 할아버지, 거짓말, 늘어나는 코", "questions": [{"q": "말하는 통나무를 정성스레 깎아 꼭두각시 목각 인형 피노키오를 만든 할아버지는?", "options": ["제페토 할아버지", "조반니 할아버지", "안토니오 아저씨", "마르코 목수영감"], "answer": 0}, {"q": "피노키오가 양심을 속이고 거짓말을 할 때마다 몸에 일어나는 신체적 변화는?", "options": ["얼굴 피부가 단단히 굳어진다", "몸의 키가 절반으로 줄어든다", "코가 나뭇가지처럼 길어진다", "귀가 당나귀 귀처럼 커진다"], "answer": 2}, {"q": "피노키오 곁에서 올바른 길로 인도하려다 피노키오에게 구박을 받던 양심의 상징 곤충은?", "options": ["귀뚜라미", "풀베짱이", "쇠똥구리", "무당벌레"], "answer": 0}, {"q": "공부하기 싫어하고 놀기만 좋아하는 아이들이 유혹에 빠져 놀러 갔다가 당나귀로 변한 곳은?", "options": ["과자꽃 동산", "장난감 나라", "게으름 천국", "환상의 미로"], "answer": 1}, {"q": "피노키오가 바다에 빠진 제페토 할아버지를 구출해낸 곳은 어떤 동물의 뱃속인가요?", "options": ["바다 거북이", "사나운 상어", "거대한 고래", "대왕 오징어"], "answer": 2}]}, {"id": 12, "category": "동화", "title": "인어공주", "author": "한스 크리스티안 안데르센", "keywords": "목소리와 바꾼 다리, 거품, 왕자", "questions": [{"q": "인어공주가 난파선에서 익사할 뻔한 왕자를 구한 뒤, 인간이 되기 위해 찾아간 인물은?", "options": ["문어 대왕", "바다 마녀", "바다 용왕", "북극 요정"], "answer": 1}, {"q": "바다 마녀가 인간의 두 다리를 만들어주는 대가로 인어공주에게서 빼앗아 간 것은?", "options": ["아름다운 노랫소리", "비단 같은 머리카락", "신비로운 진주보석", "헤엄치는 지느러미"], "answer": 0}, {"q": "마녀의 물약을 먹고 인간의 다리를 얻은 인어공주가 걸을 때마다 겪어야 했던 고통은?", "options": ["얼음물에 얼어붙는 듯한 고통", "불길 속에 타들어가는 고통", "바위에 짓눌려 으깨지는 고통", "칼날 위를 걷는 듯한 고통"], "answer": 3}, {"q": "왕자가 다른 나라 공주와 결혼하자, 언니들이 머리카락을 마녀에게 바치고 구해온 칼로 인어공주가 해야 했던 일은?", "options": ["왕자의 심장을 찔러 피를 발에 묻히기", "자신의 열 손가락 끝을 베어 피 흘리기", "공주의 침실에 숨어들어 드레스 찢기", "마녀가 건네준 마법의 거울 깨뜨리기"], "answer": 0}, {"q": "차마 사랑하는 왕자를 찌르지 못하고 칼을 바다에 던진 인어공주는 최후에 무엇으로 변했나요?", "options": ["바다의 물거품", "푸른 돌고래", "붉은 산호초", "밤하늘의 별"], "answer": 0}]}, {"id": 13, "category": "동화", "title": "빨간 모자", "author": "샤를 페로 / 그림 형제", "keywords": "늑대, 할머니, 빨간 망토", "questions": [{"q": "빨간 모자가 아프신 할머니를 위해 바구니에 담아 숲길을 걸어간 음식은?", "options": ["죽과 초콜릿", "빵과 포도주", "치즈와 주스", "과일과 사탕"], "answer": 1}, {"q": "숲속에서 빨간 모자를 만난 늑대가 시간을 벌기 위해 빨간 모자에게 권유한 행동은?", "options": ["커다란 나무 밑에서 낮잠 자기", "숲속 나비들과 숨바꼭질하기", "예쁜 꽃을 꺾어 꽃다발 만들기", "시원한 시냇물에 발 담그기"], "answer": 2}, {"q": "할머니로 변장한 늑대에게 빨간 모자가 \"할머니 귀는 왜 이렇게 커요?\"라고 묻자 늑대가 한 대답은?", "options": ["나이를 많이 먹어 저절로 자란 거란다", "찬 바람을 많이 맞아서 부은 거란다", "네 목소리를 더 잘 들으려고 그러지", "숲속의 모든 소리를 모으려고 그러지"], "answer": 2}, {"q": "할머니와 빨간 모자를 삼키고 낮잠을 자던 늑대의 배를 가르고 두 사람을 구출한 은인은?", "options": ["밭에서 일하던 이웃 농부", "숲길을 지나가던 사냥꾼", "마을을 순찰하던 순경 아저씨", "도끼를 메고 가던 나무꾼"], "answer": 1}, {"q": "두 사람을 구한 뒤 잠든 늑대의 뱃속에 가득 채워 넣은 것은?", "options": ["뾰족한 가시나무", "축축한 흙모래", "단단한 쇠구슬", "무거운 돌멩이"], "answer": 3}]}, {"id": 14, "category": "동화", "title": "오즈의 마법사", "author": "L. 프랭크 바움", "keywords": "도로시, 허수아비, 양철 나무꾼, 사자", "questions": [{"q": "주인공 도로시와 반려견 토토를 캔자스 농장에서 신비한 오즈의 나라로 날려 보낸 자연현상은?", "options": ["휘몰아치는 눈보라", "거대한 회오리바람", "땅이 갈라지는 지진", "마을을 덮친 큰 홍수"], "answer": 1}, {"q": "에메랄드 시의 마법사를 만나기 위해 도로시와 친구들이 따라 걸어간 길의 색깔은?", "options": ["노란 벽돌길", "푸른 자갈길", "빨간 융단길", "은빛 모래길"], "answer": 0}, {"q": "도로시와 함께 여행한 세 친구(허수아비, 양철 나무꾼, 사자)가 각각 얻고 싶어 했던 것은?", "options": ["지혜, 따뜻한 심장, 용기", "부귀, 튼튼한 육체, 날개", "젊음, 불로장생, 깊은 우정", "마법, 아름다운 옷, 명예"], "answer": 0}, {"q": "서쪽의 사악한 마녀를 물리칠 수 있었던 마녀의 치명적인 약점 물질은?", "options": ["차가운 물", "하얀 소금", "뜨거운 불", "밝은 햇빛"], "answer": 0}, {"q": "도로시가 집(캔자스)으로 돌아가기 위해 세 번 부딪쳐야 했던 신발은?", "options": ["빛나는 황금장화", "투명한 유리구두", "반짝이는 은구두", "부드러운 비단신"], "answer": 2}]}, {"id": 15, "category": "동화", "title": "피터 팬", "author": "J.M. 배리", "keywords": "네버랜드, 웬디, 팅커벨, 후크 선장", "questions": [{"q": "피터 팬이 아이들과 함께 살아가며, 어른이 되지 않고 영원히 아이로 남는 환상의 섬은?", "options": ["판타지아", "원더랜드", "드림랜드", "네버랜드"], "answer": 3}, {"q": "피터 팬 곁에서 빛을 내며 날아다니고, 요정 가루를 뿌려 하늘을 날게 해주는 작은 요정은?", "options": ["팅커벨", "로제타", "비비안", "클라라"], "answer": 0}, {"q": "피터 팬의 숙적이자 해적선의 두목으로, 한쪽 손에 날카로운 쇠갈고리를 달고 있는 인물은?", "options": ["실버 선장", "키드 선장", "모건 선장", "후크 선장"], "answer": 3}, {"q": "후크 선장이 공포에 떨며 가장 무서워하는 동물은 누구인가요?", "options": ["날카로운 톱상어", "맹독을 품은 문어", "거대한 바다 뱀", "시계를 삼킨 악어"], "answer": 3}, {"q": "런던의 집에서 피터 팬을 따라 네버랜드로 날아가 아이들의 엄마 역할을 해준 소녀는?", "options": ["도로시", "웬디", "제인", "앨리스"], "answer": 1}]}, {"id": 16, "category": "한국 문학", "title": "소나기", "author": "황순원", "keywords": "보라색 조약돌, 수수단, 풋풋한 첫사랑", "questions": [{"q": "개울가에서 소녀가 소년의 관심을 끌기 위해 던진 물건은?", "options": ["갈색 도토리", "붉은 단풍잎", "분홍 진달래", "하얀 조약돌"], "answer": 3}, {"q": "갑자기 쏟아진 거센 소나기를 피하기 위해 소년과 소녀가 함께 비를 피한 곳은?", "options": ["바위 동굴", "수수단 속", "나무 그늘", "원두막 밑"], "answer": 1}, {"q": "소녀가 가장 좋아한다고 말하며, 소년에게 '쓸쓸한 느낌'을 준 꽃의 색깔은?", "options": ["분홍색", "노란색", "보라색", "파란색"], "answer": 2}, {"q": "소나기를 맞은 후 병이 악화되어 세상을 떠난 소녀가 마지막으로 남긴 유언은?", "options": ["소년과 함께 거닐던 개울가 곁에 묻어 달라", "개울가에서 주운 조약돌을 함께 묻어 달라", "소년에게 아끼던 손수건을 꼭 전해 달라", "자신이 입던 옷을 그대로 입혀 묻어 달라"], "answer": 3}, {"q": "소년이 소녀를 위해 산에서 꺾어다 준 야생 열매는 무엇인가요?", "options": ["머루와 다래", "알밤과 호두", "도토리 열매", "붉은 산딸기"], "answer": 0}]}, {"id": 17, "category": "한국 문학", "title": "봄·봄", "author": "김유정", "keywords": "점순이, 키 재기, 데릴사위, 장인님", "questions": [{"q": "주인공 '나'가 3년 7개월 동안 돈 한 푼 안 받고 머슴살이를 한 까닭은?", "options": ["점순이와 성례시켜 준다는 약속 때문에", "홀로서기에 필요한 농사일을 배우기 위해", "장인에게 빌린 빚을 모두 갚기 위해", "만주로 떠날 독립 자금을 마련하기 위해"], "answer": 0}, {"q": "봉필 영감이 '나'와 점순이를 성례시켜 주지 않으려고 핑계로 내세운 조건은?", "options": ["점순이의 나이가 아직 열여덟이 못 되었다", "사윗감 농사 시험을 아직 통과하지 못했다", "혼수에 보탤 소가 한 마리 부족한 상태다", "점순이의 키가 아직 미처 자라지 않았다"], "answer": 3}, {"q": "점순이가 밥을 먹는 '나'에게 와서 \"구장님한테 가서 일 안 한다고 대들라\"며 충동질하며 건넨 핀잔은?", "options": ["돈도 못 버는 게 무슨 사위야!", "키 안 큰다고 속상해하지 마!", "밤낮 일만 할 테여? 바보같이!", "난 영원히 시집 안 갈 거야!"], "answer": 2}, {"q": "'나'와 장인님이 논둑에서 육탄전을 벌일 때 서로 붙잡고 놓지 않았던 부위는?", "options": ["턱수염과 바짓가랑이", "앞머리채와 멱살덜미", "얼굴 콧등과 귓바퀴", "양쪽 팔뚝과 다릿발"], "answer": 0}, {"q": "몸싸움 도중 점순이가 나타나 내 편을 들어줄 줄 알았는데, 오히려 어떤 뜻밖의 행동을 했나요?", "options": ["지게 막대기를 집어 들고 장인님에게 마구 휘둘렀다", "울음을 터뜨리며 마을 구장님 댁으로 급히 달려갔다", "우리 아버지 죽인다고 소리치며 내 귀를 잡아당겼다", "두 사람의 우스꽝스러운 싸움을 크게 웃으며 구경했다"], "answer": 2}]}, {"id": 18, "category": "한국 문학", "title": "동백꽃", "author": "김유정", "keywords": "점순이, 감자, 씨암탉, 노란 동백꽃", "questions": [{"q": "점순이가 울타리를 엮는 '나'에게 남몰래 다가와 바구니에서 불쑥 내민 음식은?", "options": ["김이 모락모락 나는 흰 쌀떡", "막 삶아 낸 찰옥수수 두 자루", "노릇하게 구운 군고구마 세 개", "따뜻하게 쪄 온 감자 세 개"], "answer": 3}, {"q": "내가 감자를 거절하자 앙심을 품은 점순이가 나의 관심을 끌고 괴롭히기 위해 한 행동은?", "options": ["산에서 내려오는 나를 향해 짓궂게 마구 돌팔매질하기", "내가 나무하러 갈 때 쓰는 멀쩡한 지게를 부러뜨리기", "우리 집 씨암탉을 자기네 사나운 수탉과 싸움 붙이기", "우리 집 텃밭에 심어 놓은 어린 고추 모종을 뽑아버리기"], "answer": 2}, {"q": "'나'가 싸움에서 지는 자기 집 수탉에게 힘을 내라고 몰래 먹인 음식은?", "options": ["고추장", "인삼즙", "생마늘", "막걸리"], "answer": 0}, {"q": "점순이의 괴롭힘에 참다못한 '나'가 홧김에 때려죽인 동물은?", "options": ["점순네 강아지", "점순네 수탉", "점순네 아기염소", "우리 집 싸움닭"], "answer": 1}, {"q": "소설의 마지막에서 '나'와 점순이가 함께 파묻히며 은은한 알싸한 향기를 풍긴 꽃은?", "options": ["노란 동백꽃", "하얀 메밀꽃", "분홍 진달래", "붉은 동백꽃"], "answer": 0}]}, {"id": 19, "category": "한국 문학", "title": "운수 좋은 날", "author": "현진건", "keywords": "인력거꾼 김첨지, 설렁탕", "questions": [{"q": "주인공 김첨지의 직업은 무엇이었나요?", "options": ["거리의 인력거꾼", "마을 우편배달부", "노면전차 운전수", "장터의 짐바리꾼"], "answer": 0}, {"q": "아침에 아내가 몹시 앓으며 김첨지에게 간절하게 부탁했던 말은?", "options": ["몸이 너무 아프니 병원의 용한 의사를 불러 달라", "오늘은 제발 일하러 나가지 말고 곁에 있어 달라", "마지막으로 얼굴을 보게 친정어머니를 불러 달라", "목을 축일 시원한 물과 달콤한 사탕을 사다 달라"], "answer": 1}, {"q": "김첨지가 비가 오는 날 오랜만에 많은 손님을 태우며 큰돈을 벌었을 때 느낀 감정의 본질은?", "options": ["궂은 날씨 속에서도 손님을 모신다는 직업적 자부심", "열심히 일해 언젠가 큰 부자가 될 수 있다는 야망", "이제는 아내의 병을 고칠 수 있다는 안도감과 기쁨", "이상하리만치 일이 잘 풀려 문득 엄습해오는 불길함"], "answer": 3}, {"q": "병든 아내가 며칠 전부터 그렇게 먹고 싶다고 애타게 노래를 불렀던 음식은?", "options": ["갈비탕", "삼계탕", "호박죽", "설렁탕"], "answer": 3}, {"q": "집에 돌아와 싸늘하게 식은 아내의 시체를 보며 김첨지가 오열하며 내뱉은 절규는?", "options": ["설렁탕을 사 왔는데 왜 먹지를 못하니, 오늘은 운수가 좋더니만!", "어쩌자고 나를 두고 홀로 먼저 떠났느냐, 나 혼자 어떻게 살라고!", "내가 다 잘못했으니 제발 눈 좀 떠 보아라, 이렇게 빌고 있잖니!", "내일은 돈을 훨씬 더 많이 벌어올 수 있는데 왜 기다리지 못했니!"], "answer": 0}]}, {"id": 20, "category": "한국 문학", "title": "사랑손님과 어머니", "author": "주요섭", "keywords": "옥희, 삶은 달걀, 풍금", "questions": [{"q": "이 소설의 순진무구하고 사랑스러운 여섯 살짜리 어린 화자는 누구인가요?", "options": ["옥희", "영희", "순이", "점순"], "answer": 0}, {"q": "사랑방에 하숙을 들어온 손님(선생님)이 옥희의 말을 듣고 가장 좋아한다고 오해받은 반찬은?", "options": ["소고기 장조림", "노릇한 조기구이", "삶은 달걀", "바삭한 김치전"], "answer": 2}, {"q": "옥희가 유치원에서 돌아와 어머니를 기쁘게 해주려고 아저씨가 주었다고 거짓말하며 건넨 것은?", "options": ["손수건", "알사탕", "책갈피", "붉은 꽃"], "answer": 3}, {"q": "어머니가 깊은 밤 마음의 번민과 외로움을 달래기 위해 연주하곤 했던 악기는?", "options": ["피아노", "가야금", "풍금", "바이올린"], "answer": 2}, {"q": "두 사람이 서로 깊이 연모하면서도 끝내 이어지지 못하고 아저씨가 떠난 사회적 배경은?", "options": ["과부의 재가를 금기시하던 당시 사회의 유교적 도덕관념", "고향 마을에 아저씨를 기다리는 다른 아내가 이미 있어서", "양반 가문과 평민 집안 사이를 가로막는 엄격한 신분 차이", "마을 전체를 혼란과 비극으로 몰고 간 갑작스러운 전쟁 발발"], "answer": 0}]}, {"id": 21, "category": "한국 문학", "title": "자전거 도둑", "author": "박완서", "keywords": "수남이, 바람 부는 날, 도덕적 갈등", "questions": [{"q": "청계천 세운상가 전기용품 도매상에서 꼬마 점원으로 일하는 주인공 소년의 이름은?", "options": ["완득이", "덕재형", "동호인", "수남이"], "answer": 3}, {"q": "바람이 몹시 불던 날 수남이의 자전거가 넘어져 흠집을 낸 고급 외제차의 주인인 신사가 요구한 것은?", "options": ["경찰서로 즉시 가자며 멱살을 잡고 위협함", "상점 주인을 당장 불러오라고 크게 호통침", "수리비를 당장 물어내라며 자전거를 압류함", "자전거를 발로 걷어차서 완전히 망가뜨림"], "answer": 2}, {"q": "차 주인이 한눈을 파는 사이, 구경꾼들이 수남이에게 소리치며 부추긴 행동은?", "options": ["\"경찰관을 불러 해결해라!\"", "\"자전거 들고 그냥 뛰어라!\"", "\"가게 주인을 얼른 모셔와!\"", "\"무릎 꿇고 빌며 사정해라!\""], "answer": 1}, {"q": "가게로 돌아온 수남이가 자초지종을 이야기하자, 주인 영감님이 보인 반응은?", "options": ["남의 물건을 훔쳐 왔다며 크게 호통치고 혼냈다", "차 주인에게 당장 가서 수리비를 물어주자고 했다", "수남이의 행동이 도둑질이라며 경찰서에 고발했다", "돈 안 뺏기고 자전거를 잘 가져왔다며 칭찬했다"], "answer": 3}, {"q": "자신 안의 도둑놈 심보를 칭찬하는 주인에게 소름이 돋은 수남이가 내린 마지막 결심은?", "options": ["자신의 잘못을 반성하기 위해 직접 경찰서로 찾아감", "자전거를 처분하여 생긴 돈을 차 주인에게 보내줌", "아버지가 계신 시골 고향으로 돌아가기로 마음먹음", "월급을 더 많이 주는 세운상가의 다른 가게로 옮겨감"], "answer": 2}]}, {"id": 22, "category": "한국 문학", "title": "수난이대", "author": "하근찬", "keywords": "박만도, 부자(父子), 외나무다리", "questions": [{"q": "아버지 박만도가 일제강점기 태평양 전쟁 징용에 끌려가 잃게 된 신체 부위는?", "options": ["한쪽 팔", "한쪽 다리", "한쪽 눈", "한쪽 귀"], "answer": 0}, {"q": "6·25 전쟁에 참전했다가 돌아온 아들 진수가 겪게 된 신체적 비극은?", "options": ["말을 하지 못하게 벙어리가 됨", "한쪽 팔을 잃어 소매를 묶음", "두 눈의 시력을 잃고 실명함", "한쪽 다리를 잃어 목발을 짚음"], "answer": 3}, {"q": "만도가 귀향하는 아들을 마중 나가며 장거리에서 기쁜 마음으로 사 둔 음식은?", "options": ["조기 한 두름", "막걸리 한 되", "고등어 한 손", "소고기 한 근"], "answer": 2}, {"q": "집으로 돌아오는 길, 물이 흐르는 좁고 험한 외나무다리를 건너기 위해 두 부자가 취한 행동은?", "options": ["외나무다리를 건너기 위해 마을 사람의 도움을 구했다", "팔을 잃은 아버지가 다리를 다친 아들을 업고 건넜다", "다친 아들이 온전치 못한 아버지를 부축하며 건넜다", "위험한 외나무다리를 피해 멀리 있는 큰길로 돌아갔다"], "answer": 1}, {"q": "외나무다리를 함께 건너는 부자의 모습을 통해 작가가 전달하고자 한 주제는?", "options": ["가족 간의 사랑과 협력을 통한 민족 수난의 극복 의지", "전쟁 직후 피폐해진 우리 농촌 공동체의 비참한 현실", "참혹한 전쟁이 남긴 지울 수 없는 절망감과 허무함", "어려운 상황 속에서도 지켜야 할 부모에 대한 효심"], "answer": 0}]}, {"id": 23, "category": "한국 문학", "title": "기억 속의 들꽃", "author": "윤흥길", "keywords": "명선이, 금반지, 피난 시절, 끊어진 다리", "questions": [{"q": "피난길에 가족을 모두 잃고 주인공 '나'의 시골 마을로 흘러들어온 피난민 소녀는?", "options": ["점순이", "명선이", "미자네", "옥희네"], "answer": 1}, {"q": "명선이가 '나'의 집에서 쫓겨나지 않고 어른들의 극진한 대접을 받게 된 비밀은?", "options": ["피난 오기 전 서울의 이름난 부잣집 딸로 밝혀져서", "집안일을 성실히 돕고 바느질 솜씨가 매우 뛰어나서", "어른들의 기분을 맞추며 아름다운 노래를 잘 불러서", "품에 숨겨두었던 진짜 금반지를 어른들에게 보여주어서"], "answer": 3}, {"q": "명선이가 나머지 금반지들을 아무도 모르게 숨겨두었던 위험한 장소는?", "options": ["폭격으로 끊어진 철교의 교각 위", "마을 어귀 당산나무의 까치집 속", "동네 뒷산에 있는 커다란 바위 밑", "마을 우물 안쪽의 깊숙한 돌 틈 사이"], "answer": 0}, {"q": "명선이가 끊어진 철교 위에서 비극적으로 추락사하게 된 결정적인 이유는?", "options": ["노후화된 철교의 녹슨 철골 구조물이 무너져 내려서", "금반지를 빼앗으려던 주인공 소년이 뒤에서 밀어서", "갑자기 날아든 전투기의 굉음과 바람에 크게 놀라서", "가파른 철골을 딛고 내려오다 발을 잘못 헛디뎌서"], "answer": 2}, {"q": "명선이가 추락할 때 허공에 날리며 강물로 흩어진 상징적인 것은?", "options": ["가슴에 품었던 작은 낡은 일기장", "머리에 묶었던 붉은색 머리띠", "어머니가 주신 하얀색 손수건", "금반지 주머니와 들꽃의 꽃잎"], "answer": 3}]}, {"id": 24, "category": "한국 문학", "title": "꺼삐딴 리", "author": "전광용", "keywords": "이인국 박사, 기회주의자, 회중시계", "questions": [{"q": "외과의사 이인국 박사가 격변기(일제강점기, 소련군 점령기, 미군정)를 거치며 살아남은 삶의 방식은?", "options": ["가난하고 병든 민초들을 위해 무료로 진료하는 삶", "정치적 혼란을 뒤로한 채 의학 연구에만 몰두한 삶", "독립운동 단체를 남몰래 물심양면으로 지원하는 삶", "시대와 권력의 변화에 재빨리 빌붙는 기회주의적 삶"], "answer": 3}, {"q": "제목 '꺼삐딴(Капитан)'은 러시아어로 어떤 뜻에서 유래한 말인가요?", "options": ["위대한 영웅", "충직한 부하", "지혜로운 의사", "우두머리인 캡틴"], "answer": 3}, {"q": "소련군 치하 감옥에서 죽을 위기에 처했던 이인국이 스텐코프 군의관의 환심을 사게 된 계기는?", "options": ["소련군 장교들 앞에서 러시아 군가를 유창하게 불러서", "가보로 내려오던 값비싼 다이아몬드를 뇌물로 바쳐서", "형무소에 갇혀 있던 주요 독립운동가 명단을 밀고해서", "스텐코프 뺨에 난 악성 혹을 성공적으로 수술해 주어서"], "answer": 3}, {"q": "미국 대사관의 브라운 씨를 만나 미국행 비자를 얻어내기 위해 이인국이 선물한 가보급 골동품은?", "options": ["훈민정음 해례본 원본 책", "고려청자 상감모란문 화병", "조선백자 달항아리 도자기", "신사임당 초충도 병풍 그림"], "answer": 1}, {"q": "이인국이 제국대학 졸업 때 일본인에게 상으로 받아 항상 품속에 간직하던 애지중지 물건은?", "options": ["18금 회중시계", "황금테 안경", "은장 만년필", "고급 청진기"], "answer": 0}]}, {"id": 25, "category": "한국 문학", "title": "우리들의 일그러진 영웅", "author": "이문열", "keywords": "엄석대, 한병태, 5학년 담임선생님", "questions": [{"q": "시골 국민학교 5학년 2반에서 절대적인 권력을 휘두르며 급우들을 지배하던 급장은?", "options": ["한병태", "김영팔", "박원하", "엄석대"], "answer": 3}, {"q": "서울 명문 학교에서 전학 와 엄석대의 불합리한 권력에 유일하게 저항하던 주인공은?", "options": ["한병태", "김첨지", "황순원", "이인국"], "answer": 0}, {"q": "한병태가 결국 저항을 포기하고 엄석대의 왕국에 굴복하게 된 결정적인 사건은?", "options": ["석대 패거리에게 심한 폭행을 당해 겁을 먹은 후", "서울로 다시 전학 가려던 계획이 완전히 무산된 후", "부모님이 석대 아버지의 위세에 눌려 굴복한 후", "석대가 베푸는 특별한 배려와 안락함을 맛본 후"], "answer": 3}, {"q": "6학년이 되어 부임하여 엄석대의 성적 조작 비리를 밝혀내고 체벌한 새 담임선생님은?", "options": ["학교를 총괄하는 교장", "학생주임을 맡은 교감", "이전의 5학년 담임교사", "새로 부임한 김 선생님"], "answer": 3}, {"q": "엄석대의 몰락 후 교실에서 급우들이 보인 행동의 본질은 무엇이었나요?", "options": ["자신들의 잘못을 인정하고 깊이 반성함", "선생님의 처벌에 맞서 집단으로 반발함", "석대의 편에 서서 끝까지 보호하려 애씀", "앞다투어 석대의 잘못을 고발하며 비난함"], "answer": 3}]}, {"id": 26, "category": "한국 문학", "title": "벙어리 삼룡이", "author": "나도향", "keywords": "불길, 충직한 하인, 애절한 희생", "questions": [{"q": "주인공 삼룡이의 외모와 신체적 특징에 대한 설명으로 옳은 것은?", "options": ["한쪽 다리를 절며 궂은일을 도맡아 하는 일꾼", "귀가 들리지 않아 손짓과 눈짓으로 소통하는 하인", "말을 못 하고 흉측하게 생겼으나 충직한 일꾼", "앞을 보지 못하지만 기억력이 매우 뛰어난 하인"], "answer": 2}, {"q": "주인 오생원의 망나니 아들 광조는 새색시(새아씨)를 어떻게 대했나요?", "options": ["가문의 명예를 위해 지극정성으로 아껴주었다", "친정의 재물을 탐내며 지속적으로 협박했다", "귀한 양반집 규수라며 집안일을 면제해 주었다", "까닭 없이 심하게 구박하고 폭력을 일삼았다"], "answer": 3}, {"q": "삼룡이가 마음속으로 깊이 연모하고 숭배했던 대상은 누구인가요?", "options": ["불행한 처지의 가련한 새아씨", "자주 찾아가던 장터 주막 주모", "자신을 아껴주던 주인집 마님", "이웃 마을에 사는 젊은 하녀"], "answer": 0}, {"q": "오생원의 집에 대화재가 일어났을 때 삼룡이가 불길 속에 뛰어들어 가장 먼저 구출한 사람은?", "options": ["집안의 최고 어른인 주인 오생원", "마음속 깊이 연모하던 가련한 새아씨", "평소 인자하게 대해주던 주인집 마님", "자신을 몹시 괴롭히던 도련님 광조"], "answer": 0}, {"q": "불타는 지붕 위에서 새아씨를 가슴에 안고 타죽어가던 삼룡이의 마지막 표정은?", "options": ["주인 일가를 향해 뿜어내는 원망의 눈빛", "세상에서 가장 평화롭고 행복에 찬 미소", "화염의 고통을 이기지 못한 처절한 비명", "억울한 운명을 저주하는 분노에 찬 표정"], "answer": 1}]}, {"id": 27, "category": "한국 문학", "title": "학", "author": "황순원", "keywords": "학 사냥, 삼팔선, 단짝 친구 덕재와 성삼", "questions": [{"q": "삼팔선 접경 마을에서 치안대원이 된 성삼이가 포승줄에 묶여 호송하게 된 죄수는?", "options": ["체포되어 압송되던 인민군", "이웃에 살던 농민동맹 간부", "마을의 대소사를 맡던 이장", "어릴 적 단짝 동무였던 덕재"], "answer": 3}, {"q": "성삼이가 덕재를 호송하면서 어린 시절을 회상하게 만든 들판의 풍경은?", "options": ["하얀 눈이 수북이 덮인 보리밭", "어릴 적 학을 잡고 놀던 들판", "무더위에 멱을 감던 맑은 개울", "참외를 서리하며 숨던 원두막"], "answer": 1}, {"q": "가난한 농사꾼이었던 덕재가 피난을 가지 않고 마을에 남아 농민동맹 일을 한 진짜 까닭은?", "options": ["지주들의 재산을 몰수하여 가난을 벗고자", "공산주의 혁명 사상에 깊이 감화되었기 때문에", "새로운 정권에서 권력을 잡고 출세하기 위해", "늙으신 아버지를 모시고 농사를 지키기 위해"], "answer": 3}, {"q": "고갯마루에 이르러 성삼이가 덕재의 포승줄을 풀어주며 한 제안은?", "options": ["\"사내답게 일대일로 결투나 한번 벌이자!\"", "\"모른 척할 테니 남쪽 치안대에 자수해라!\"", "\"얘, 우리 여기서 학 사냥이나 한번 하자!\"", "\"노잣돈을 줄 테니 어서 남쪽으로 월남해라!\""], "answer": 2}, {"q": "성삼이의 깊은 뜻을 알아챈 덕재가 풀밭을 달려갈 때, 하늘 높이 날아오른 새는?", "options": ["기러기", "학", "까치", "독수리"], "answer": 1}]}, {"id": 28, "category": "한국 문학", "title": "원미동 사람들", "author": "양귀자", "keywords": "일용할 양식, 소시민의 삶, 동네 풍경", "questions": [{"q": "이 연작 소설의 주요 무대가 되는 경기도 부천의 동네 이름은?", "options": ["원미동", "중동", "상동", "역곡동"], "answer": 0}, {"q": "단편 〈일용할 양식〉에서 동네 쌀과 연탄을 팔던 김포슈퍼 옆에 새로 문을 열어 치열한 가격 할인 경쟁을 벌인 가게는?", "options": ["원미마트", "싱싱청과", "형제슈퍼", "서울상회"], "answer": 2}, {"q": "두 슈퍼가 계란과 과자 값을 깎으며 싸우던 중, 두 가게를 모두 위협하며 골목에 새로 들어선 거대 복합 매장은?", "options": ["희망슈퍼", "태양마트", "대림마트", "싱싱슈퍼"], "answer": 3}, {"q": "단편 〈비 오는 날이면 가리봉동에 가야 한다〉에서 주인공 집의 지하실 방수 공사를 맡은 정직한 도배·보수 기술자는?", "options": ["김 반장", "강만성", "임 씨", "박 씨"], "answer": 2}, {"q": "임 씨가 비가 와서 일을 쉬는 날마다 옛 공장 사장에게 떼인 품값을 받기 위해 찾아간 곳은?", "options": ["구로공단", "신림동", "가리봉동", "영등포"], "answer": 2}]}, {"id": 29, "category": "한국 문학", "title": "화수분", "author": "전영택", "keywords": "가난, 눈 덮인 고개, 부모의 사랑", "questions": [{"q": "주인공의 이름 '화수분'은 원래 재물이 자꾸 생겨서 끝없이 나오는 보물단지를 뜻하는데, 주인공의 실제 삶은 어떠했나요?", "options": ["이름처럼 막대한 부를 누리던 삶", "출세하여 높은 벼슬길에 오른 삶", "가난과 굶주림에 시달린 비참한 삶", "남부러울 것 없는 평범한 중산층 삶"], "answer": 2}, {"q": "화수분은 아내와 어린 딸을 고향에 남겨두고 돈을 벌기 위해 어디로 행랑살이를 떠났나요?", "options": ["만주", "평양", "부산", "서울"], "answer": 3}, {"q": "시골의 아내가 남편의 소식이 끊기자 어린 딸을 업고 남편을 찾아 고개를 넘어가던 계절과 날씨는?", "options": ["뙤약볕이 내리쬐는 무더운 여름", "눈보라 몰아치는 혹독한 겨울", "찬바람에 낙엽 지는 쌀쌀한 가을", "세찬 비바람 부는 궂은 장마철"], "answer": 1}, {"q": "이튿날 아침 고갯길을 지나던 나무꾼이 눈 구덩이 속에서 발견한 충격적이고 감동적인 장면은?", "options": ["추위를 이기지 못하고 세 식구 모두 얼어 죽어 있는 모습", "부부는 얼어 죽었으나 품속의 어린 아기는 살아남은 모습", "부부는 기운을 차렸으나 품속의 아기만 숨을 거둔 모습", "눈 속에서 맹수를 만나 세 식구 모두 변을 당해 있는 모습"], "answer": 1}, {"q": "살아남은 어린 핏덩이 아기를 거두어 등에 업고 눈길을 걸어 내려간 사람은?", "options": ["동네 마을 구장", "지나가던 나무꾼", "순찰 돌던 순사", "왕진 가던 의원"], "answer": 1}]}, {"id": 30, "category": "한국 문학", "title": "메밀꽃 필 무렵", "author": "이효석", "keywords": "허생원, 동이, 메밀꽃 달밤, 왼손잡이", "questions": [{"q": "봉평 장에서 대화 장으로 장터를 떠돌며 살아가는 장돌뱅이 주인공의 이름은?", "options": ["동이", "윤봉길", "허생원", "조선달"], "answer": 2}, {"q": "허생원이 젊은 시절 봉평 물레방앗간에서 만난 일생일대의 운명적인 여인은 누구였나요?", "options": ["동네 처녀 점순", "화개장터 옥화", "성서방네 처녀", "봉평 주막 주모"], "answer": 2}, {"q": "밤길을 걷는 세 장돌뱅이(허생원, 조선달, 동이)의 주변을 환상적으로 수놓은 풍경은?", "options": ["봄바람에 붉은 꽃잎이 흩날리는 수려한 진달래 능선", "가을 달밤에 은빛 물결을 이루며 춤추는 억새풀 언덕", "햇살을 받아 황금빛 물결로 일렁이는 노란 유채꽃밭", "달빛을 받아 소금을 뿌린 듯 하얗게 빛나는 메밀꽃밭"], "answer": 3}, {"q": "개울물을 건너다 발을 헛디뎌 물에 빠진 허생원을 번쩍 업어서 건네준 건장한 청년은?", "options": ["충주집의 작부", "나루터 뱃사공", "장돌뱅이 동이", "동행인 조선달"], "answer": 2}, {"q": "허생원이 동이가 자신의 친아들일지도 모른다고 직감하게 만든 결정적인 혈육의 신체적 징표는?", "options": ["한쪽 발가락이 여섯 개로 태어난 육손이라는 점", "오른쪽 귀 뒤편에 커다란 사마귀가 있다는 점", "채찍을 쥐고 있는 손이 같은 왼손잡이라는 점", "뺨 한가운데에 깊게 파인 흉터 자국이 있다는 점"], "answer": 2}]}, {"id": 31, "category": "청소년 문학", "title": "아몬드", "author": "손원평", "keywords": "윤재, 감정표현불능증, 곤이, 편도체", "questions": [{"q": "주인공 '선윤재'가 선천적으로 감정을 인식하거나 표현하는 데 어려움을 겪는 상태인 알렉시티미아(감정표현불능증)를 앓게 된 뇌의 원인 부위는?", "options": ["편도체", "전두엽", "소뇌", "해마"], "answer": 0}, {"q": "윤재의 어머니와 할머니가 윤재의 뇌 발달을 돕기 위해 매일 아침 식탁에 올린 음식은?", "options": ["호두", "잣", "아몬드", "땅콩"], "answer": 2}, {"q": "크리스마스이브 윤재의 생일날, 비극적인 묻지마 칼부림 사건으로 목숨을 잃은 가족은?", "options": ["어머니", "누나", "할머니", "이모"], "answer": 2}, {"q": "상처를 품고 삐뚤어져 윤재를 괴롭히지만, 결국 윤재와 깊은 우정을 나누게 되는 반항아 소년은?", "options": ["도라", "심 박사", "곤이", "진호"], "answer": 2}, {"q": "육상부에서 뛰며 윤재에게 처음으로 가슴 두근거림과 풋풋한 사랑의 감정을 일깨워준 소녀는?", "options": ["박수남", "김유진", "정은주", "이도라"], "answer": 3}]}, {"id": 32, "category": "청소년 문학", "title": "완득이", "author": "김려령", "keywords": "똥주 선생님, 킥복싱, 옥탑방", "questions": [{"q": "완득이가 입만 열면 막말을 하지만 뒤에서는 자신을 묵묵히 챙겨주는 담임 이동주 선생님을 부르는 별명은?", "options": ["똥주", "호랑이", "미친개", "독사"], "answer": 0}, {"q": "완득이가 교회의 하느님께 밤마다 무릎 꿇고 간절하게 드린 유쾌하고 황당한 기도는?", "options": ["\"제발 똥주 좀 죽여주세요!\"", "\"키 180cm 넘게 해주세요!\"", "\"학교 안 가게 해주세요!\"", "\"복권 1등 당첨되게 해주세요!\""], "answer": 0}, {"q": "완득이가 자신의 넘치는 에너지와 분노를 긍정적으로 분출하며 꿈을 찾게 된 운동은?", "options": ["유도", "태권도", "레슬링", "킥복싱"], "answer": 3}, {"q": "선생님을 통해 처음으로 존재를 알게 된 완득이의 친어머니의 출신 국가는?", "options": ["필리핀", "몽골", "태국", "베트남"], "answer": 0}, {"q": "꼽추인 아버지와 삼촌, 어머니가 함께 옥탑방에서 정착하며 새로 열게 된 희망의 공간은?", "options": ["다문화 공부방 및 댄스교습소", "의류를 깨끗하게 빠는 동네 세탁소", "신선한 과일을 파는 청과물 상회", "동네 주민들을 위한 치킨 전문점"], "answer": 0}]}, {"id": 33, "category": "청소년 문학", "title": "위저드 베이커리", "author": "구병모", "keywords": "마법의 빵, 타임 린더, 소년의 피신처", "questions": [{"q": "의붓어머니와 여동생의 거짓 누명을 피해 소년이 한밤중에 급히 숨어든 신비한 빵집은?", "options": ["달콤한 디저트점", "미스터리 과자점", "위저드 베이커리", "시간의 베이커리"], "answer": 2}, {"q": "위저드 베이커리의 점장인 마법사가 만드는 빵들의 특별한 성질은?", "options": ["욕망과 저주를 실현해 주는 마법 빵", "영원히 늙지 않게 해주는 불로 빵", "과거 기억을 깨끗이 지워 주는 망각 빵", "하늘을 자유롭게 날게 돕는 비행 빵"], "answer": 0}, {"q": "시간을 뒤로 되돌려 과거의 한 순간으로 돌아가게 해주는 마법의 비스킷 이름은?", "options": ["어제의 쿠키", "크로노스 빵", "메모리 파이", "타임 린더"], "answer": 3}, {"q": "점장 곁에서 낮에는 파랑새의 모습으로 지내는 신비한 소녀의 정체는?", "options": ["여동생", "길고양이", "숲요정", "파랑새"], "answer": 3}, {"q": "소년이 타임 린더를 사용하거나 사용하지 않는 두 갈래 결말을 통해 작가가 전하는 메시지는?", "options": ["자신의 선택과 책임을 스스로 감당하며 살아가는 삶", "상처를 주는 가족과의 인연은 완전히 단절해야 한다는 태도", "과거로 돌아가 실수를 바로잡는 것만이 최선이라는 생각", "현실의 고통을 잊기 위해 신비한 마법에 의존하려는 태도"], "answer": 0}]}, {"id": 34, "category": "청소년 문학", "title": "시간을 파는 상점", "author": "김선영", "keywords": "크로노스, 온조, 바람결, 시간 거래 의뢰", "questions": [{"q": "소방관이었던 아버지를 여읜 후 '시간을 파는 상점' 인터넷 카페를 개설한 주인공 여고생은?", "options": ["이유진", "강다현", "이도라", "백온조"], "answer": 3}, {"q": "온조가 상점의 닉네임으로 사용한 그리스 신화 속 '흘러가는 물리적 시간'의 신은?", "options": ["크로노스", "디오니소스", "카이로스", "헤르메스"], "answer": 0}, {"q": "상점의 첫 번째 의뢰로 들어온 '진지한 아이'의 특별한 부탁 내용은?", "options": ["혼자 계신 할머니께 생신 선물을 전해 달라는 부탁", "훔친 물건을 원래 자리에 몰래 돌려놓아 달라는 부탁", "서먹해진 친구에게 대신 찾아가 사과해 달라는 부탁", "시험을 대신 치러 성적을 올려 달라는 부정한 부탁"], "answer": 1}, {"q": "온조에게 큰 힘이 되어주며 '바람결'이라는 닉네임으로 상점에 의뢰를 보낸 소년은?", "options": ["남궁호", "이강우", "김태성", "정이현"], "answer": 1}, {"q": "이 작품에서 아버지가 온조에게 남겨준 시간의 교훈으로 가장 알맞은 것은?", "options": ["현재의 순간을 소중히 여기며 최선을 다해 살아가는 태도", "시간은 곧 돈이니 한순간도 낭비하지 말고 아끼라는 가르침", "지나간 과거는 돌이킬 수 없으니 깨끗이 잊어야 한다는 조언", "다가올 성공적인 미래를 위해 현재의 즐거움을 참는 자세"], "answer": 0}]}, {"id": 35, "category": "청소년 문학", "title": "페인트", "author": "이희영", "keywords": "국가 양육 센터(NC), 부모 면접, 제누 301", "questions": [{"q": "미래 사회에서 부모가 아이를 낳지 않자 국가가 아이들을 도맡아 키우는 기관의 명칭은?", "options": ["드림 차일드 관", "스마트 에듀 랩", "퓨처 키즈 센터", "국가 양육 센터"], "answer": 3}, {"q": "아이들이 성인이 되기 전, 자신을 입양하러 온 예비 부모들을 직접 면접하고 평가하는 은어는?", "options": ["페인트", "필터링", "스크린", "테스팅"], "answer": 0}, {"q": "주인공 소년의 등록 이름인 '제누 301'에서 '제누'는 몇 월생을 뜻하나요?", "options": ["7월", "1월", "6월", "9월"], "answer": 1}, {"q": "완벽하고 모범적인 부모인 척 꾸미지 않고, 부족한 점을 솔직하게 털어놓으며 제누에게 다가온 부모 후보 부부는?", "options": ["박 병원장 부부", "하나와 류 부부", "김 교수님 부부", "최 변호사 부부"], "answer": 1}, {"q": "제누 301이 수많은 고민 끝에 마지막으로 내린 주체적인 결정은?", "options": ["정부 지원을 받아 외국으로 새로운 유학을 떠남", "입양되지 않고 성인이 되어 당당히 독립하기로 함", "류 부부의 진심을 받아들여 입양을 즉시 승낙함", "시설에 영원히 남아 NC 센터 관리자가 되기로 함"], "answer": 1}]}, {"id": 36, "category": "청소년 문학", "title": "구드모닝, 첼로", "author": "최진영 외", "keywords": "첼로, 가족 갈등, 청소년 성장, 화해", "questions": [{"q": "청소년 단편선 〈구드모닝, 첼로〉에서 주인공이 마음의 상처와 갈등을 치유하는 매개체가 되는 현악기는?", "options": ["첼로", "비올라", "기타", "하프"], "answer": 0}, {"q": "주인공이 첼로 연주를 통해 극복하고자 하는 마음속 그늘은?", "options": ["가장 친한 친구와의 반복되는 다툼", "자신의 외모에 대한 콤플렉스와 불안", "가족 간의 대화 단절과 깊은 소외감", "시험 성적에 대한 극심한 스트레스"], "answer": 2}, {"q": "작품에서 첼로 현을 켤 때 주인공이 느끼는 감정의 변화는?", "options": ["끝없는 지루함과 견디기 힘든 일상의 피로", "억눌렸던 상처의 치유와 깊은 내면의 평온", "주변을 향한 걷잡을 수 없는 분노와 공격성", "미래에 대한 깊은 좌절과 자포자기의 심정"], "answer": 1}, {"q": "이 청소년 소설집이 청소년 독자들에게 전하는 핵심 메시지는?", "options": ["자신만의 방식으로 내면의 상처를 극복하고 성장하는 힘", "값비싼 명품 악기를 소유하여 남들에게 인정받으려는 태도", "자신의 뜻을 접고 부모님의 모든 말씀에 무조건 복종하기", "최고의 연주자가 되어 유명한 음악 콩쿠르에서 우승하기"], "answer": 0}, {"q": "제목 '구드모닝(Good Morning)'이 상징하는 희망적인 의미는?", "options": ["글로벌 사회에 적응하기 위해 필요한 외국어 회화 능력", "매일 아침 학교 교문을 들어서며 주고받는 친근한 인사", "가족과 함께 식탁에 둘러앉아 나누는 따뜻한 식사", "어둠의 시간을 지나 맞이하는 새로운 시작과 화해"], "answer": 3}]}, {"id": 37, "category": "청소년 문학", "title": "불편한 편의점", "author": "김호연", "keywords": "올웨이즈 편의점, 야간 알바 독고, 참참참, 따뜻한 위로", "questions": [{"q": "청파동 골목 구석진 '올웨이즈 편의점'에서 지갑을 찾아준 인연으로 야간 알바를 시작한 노숙인 출신 주인공은?", "options": ["임동식", "독고", "황제하", "김첨지"], "answer": 1}, {"q": "고단한 하루를 마친 회사원 손님에게 독고가 따뜻한 위로와 함께 권한 가성비 세트 메뉴의 별칭은?", "options": ["삼각김밥 세트", "도시락 라면 세트", "맥주 4캔 세트", "참참참 세트"], "answer": 3}, {"q": "전직 성형외과 의사였던 독고가 알코올성 치매로 노숙인이 되었던 비극적 과거의 원인은?", "options": ["무리한 주식 투자로 인한 파산과 빚", "가족과의 심각한 갈등 및 병원 부도", "친한 지인의 사기 범죄와 사업 실패", "의료 사고와 그로 인한 가족의 해체"], "answer": 3}, {"q": "편의점 주인 염 여사가 편의점의 물건이 자주 품절되어 '불편한 편의점'이라 불림에도 가게를 지킨 까닭은?", "options": ["가난한 알바생들의 생계를 지켜주는 일터가 되기를 바라며", "골목 상권에서 많은 이윤을 남겨 큰돈을 벌어들이기 위해", "주변 지역의 재개발에 따른 부동산 시세 차익을 노리며", "방황하는 아들에게 가업으로 안정되게 물려주기를 바라며"], "answer": 0}, {"q": "이 소설에서 편의점이라는 평범한 공간이 지닌 참된 의미는 무엇인가요?", "options": ["갈 곳 없는 거리의 노숙인들을 임시로 수용하는 무료 보호소", "지친 동네 주민들이 모여 밤새 술을 마시는 골목의 아지트", "서로의 온기와 위로를 나누며 다시 일어서는 따뜻한 쉼터", "밤낮없이 물건을 사고팔며 이윤을 창출하는 단순한 상업 공간"], "answer": 2}]}, {"id": 38, "category": "청소년 문학", "title": "달러구트 꿈 백화점", "author": "이미예", "keywords": "페니, 꿈 제작자, 트램펄린 꿈, 설렘", "questions": [{"q": "잠든 손님들에게 온갖 신비한 꿈을 판매하는 꿈 백화점의 신입 직원 주인공은?", "options": ["온조", "다현", "제누", "페니"], "answer": 3}, {"q": "달러구트 꿈 백화점에서 손님들이 꿈값을 치르는 특별한 화폐는 무엇인가요?", "options": ["꿈을 꾼 뒤 느끼는 설렘과 자신감 같은 감정", "과거의 가장 찬란하고 소중했던 추억의 기억들", "은행에서 환전할 수 있는 현실 세계의 황금 지폐", "손님이 현실에서 지니고 있는 남은 수명과 시간"], "answer": 0}, {"q": "트럼프 카드 옷을 입고 동물들의 꿈이나 하늘을 나는 꿈을 전문으로 만드는 전설의 꿈 제작자는?", "options": ["아가페 유라", "야스누즈 오르카", "와하쿰 마닌", "킥 슬럼버"], "answer": 3}, {"q": "시험을 망치거나 실패하는 악몽(트라우마 꿈)을 파는 이유에 대해 달러구트가 설명한 교훈은?", "options": ["손님들에게 두려움을 심어 백화점에 더욱 의존하게 만들려고", "제작 과정이 단순해 원가가 적게 들고 많은 이윤을 남기려고", "과거의 상처를 극복하고 현실의 시련에 맞설 담대함을 주려고", "오랫동안 팔리지 않고 창고에 쌓여 있던 재고를 처분하려고"], "answer": 2}, {"q": "작품 전체를 관통하는 '잠과 꿈'에 대한 따뜻한 시선으로 가장 알맞은 것은?", "options": ["지친 마음을 위로하고 내일을 살아갈 힘을 주는 따뜻한 쉼", "잠든 사이 뇌의 무의식이 만들어내는 불완전한 신경 착각", "생산적인 활동을 가로막고 귀중한 시간을 버리게 하는 낭비", "고달픈 현실에서 벗어나 헛된 망상에 빠지게 하는 도피처"], "answer": 0}]}, {"id": 39, "category": "청소년 문학", "title": "모모", "author": "미하엘 엔데", "keywords": "회색 신사, 시간 도둑, 카시오페이아, 경청", "questions": [{"q": "원형 경기장 폐허에 살며, 사람들의 말을 진심으로 귀 기울여 들어주는 능력을 가진 꼬마 소녀는?", "options": ["도로시", "웬디", "모모", "하이디"], "answer": 2}, {"q": "사람들에게 시간을 아끼라고 유혹하며 시가(담배)를 피우고 시간을 빼앗아가는 악당들은?", "options": ["회색 신사들", "어둠의 마법사", "시간의 해적단", "그림자 요괴"], "answer": 0}, {"q": "시간의 꽃이 피어나는 근원지로 모모를 안내해 주는 등껍질에 글자가 나타나는 거북이의 이름은?", "options": ["카시오페이아", "안드로메다", "헤라클레스", "아르테미스"], "answer": 0}, {"q": "호라 선생이 모모에게 건네주어 회색 신사들을 멈추고 쫓아낼 수 있게 해준 신비한 무기는?", "options": ["시간의 꽃", "마법 모래시계", "은빛의 보검", "황금 지팡이"], "answer": 0}, {"q": "작품 〈모모〉가 현대인들에게 던지는 뼈아픈 경고는 무엇인가요?", "options": ["자연의 순리에 따라 모든 경쟁을 멈추고 쉬어가야 한다는 경고", "시간 낭비를 줄이고 하루 일과를 빈틈없이 관리하라는 조언", "풍요로운 미래를 위해 젊을 때부터 열심히 저축하라는 교훈", "속도와 효율에 쫓겨 사랑과 여유를 잃어가는 삶에 대한 비판"], "answer": 3}]}, {"id": 40, "category": "청소년 문학", "title": "나니아 연대기", "author": "C.S. 루이스", "keywords": "마법의 옷장, 사자 아슬란, 하얀 마녀, 영원한 겨울", "questions": [{"q": "네 남매(피터, 수전, 에드먼드, 루시)가 신비한 마법의 세계 나니아로 들어가게 된 통로는?", "options": ["비밀이 숨겨진 지하철 승강장", "깊은 숲속에 버려진 낡은 우물", "먼지 쌓인 다락방의 전신 거울", "시골 대저택의 오래된 옷장"], "answer": 3}, {"q": "나니아를 100년 동안 영원한 겨울로 얼어붙게 만들고 크리스마스조차 오지 못하게 한 사악한 지배자는?", "options": ["바다 마녀", "어둠의 군주", "눈의 여왕", "하얀 마녀"], "answer": 3}, {"q": "에드먼드가 하얀 마녀의 유혹에 넘어가 남매들을 배신하게 만든 달콤한 마법 간식은?", "options": ["초콜릿 케이크", "딸기 아이스크림", "터키시 딜라이트", "달콤한 사탕 지팡이"], "answer": 2}, {"q": "배신자 에드먼드의 죗값을 대신 치르기 위해 돌탁자에서 스스로 희생당했다가 부활한 나니아의 참된 왕은?", "options": ["바람을 다스리는 독수리", "숲을 지키는 사슴 왕", "지혜로운 켄타우로스", "위대한 사자 아슬란"], "answer": 3}, {"q": "하얀 마녀를 물리친 네 남매가 케어 패러벨 성에서 즉위하며 받은 영광스러운 칭호는?", "options": ["성스러운 대륙의 수호자", "황금 성의 영주와 대공작", "마법 세계의 수호 기사", "나니아의 왕과 여왕"], "answer": 3}]}, {"id": 41, "category": "청소년 문학", "title": "해리 포터 시리즈", "author": "J.K. 롤링", "keywords": "호그와트, 9와 4분의 3 승강장, 골든 스니치, 볼드모트", "questions": [{"q": "호그와트 마법급행열차를 타기 위해 런던 킹스크로스 역에서 통과해야 하는 신비한 승강장은?", "options": ["7과 2분의 1 승강장", "9와 4분의 3 승강장", "8과 4분의 1 승강장", "6과 4분의 3 승강장"], "answer": 1}, {"q": "퀴디치 경기에서 수색꾼이 잡으면 150점을 얻고 경기를 종료시키는 날개 달린 작은 공은?", "options": ["강철 블러저", "붉은 퀘이플", "마법 스피릿", "골든 스니치"], "answer": 3}, {"q": "이름을 불러서는 안 되는 자이자 호그와트와 마법 세계를 위협하는 어둠의 군주는?", "options": ["스네이프", "그린델왈드", "볼드모트", "루시우스"], "answer": 2}, {"q": "신입생들의 머리에 씌워 성향에 따라 기숙사(그리핀도르, 슬리데린 등)를 배정해 주는 마법 도구는?", "options": ["신비한 예언 거울", "마법의 분류 모자", "지혜의 수정 구슬", "진실의 마법 두건"], "answer": 1}, {"q": "해리 포터의 이마에 새겨져 있으며 볼드모트와의 연결고리가 되는 흉터의 모양은?", "options": ["초승달 모양", "번개 모양", "십자가 모양", "별자리 모양"], "answer": 1}]}, {"id": 42, "category": "청소년 문학", "title": "헝거게임", "author": "수잔 콜린스", "keywords": "캣니스 에버딘, 판엠, 모킹제이, 서바이벌", "questions": [{"q": "독재 국가 판엠에서 12개 구역의 청소년들을 강제로 모아 최후의 1인이 남을 때까지 벌이는 살인 서바이벌은?", "options": ["데스 레이스", "헝거 게임", "스퀴드 게임", "메이즈 러너"], "answer": 1}, {"q": "12구역의 추첨식에서 어린 여동생 프림을 대신해 자원 출전한 활의 명수 주인공 소녀는?", "options": ["테레사 아그네스", "캣니스 에버딘", "트리스 프라이어", "클라리 프레이"], "answer": 1}, {"q": "캣니스가 지니고 출전하여 이후 캐피톨에 맞서는 독재 저항군의 상징이 된 새의 이름은?", "options": ["독수리", "불사조", "모킹제이", "파랑새"], "answer": 2}, {"q": "12구역의 빵집 아들이자 캣니스를 짝사랑하며 함께 헝거게임에 출전한 파트너는?", "options": ["피타 멜라크", "헤이미치", "피닉 오데어", "게일 호손"], "answer": 0}, {"q": "캣니스와 피타가 게임의 규칙을 깨부수고 둘 다 살아남기 위해 동시에 입에 넣으려 했던 독 열매는?", "options": ["푸른 야생독사과", "붉은 주목열매", "나이트록 베리", "맹독성 검은베리"], "answer": 2}]}, {"id": 43, "category": "청소년 문학", "title": "메이즈 러너", "author": "제임스 대시너", "keywords": "토머스, 글레이드, 움직이는 미로, 괴물 그리버", "questions": [{"q": "기억을 모두 지운 채 기억의 상자를 타고 소년들이 갇혀 있는 '글레이드'로 올라온 주인공은?", "options": ["갤리", "민호", "토머스", "뉴트"], "answer": 2}, {"q": "소년들이 갇혀 있는 광장 글레이드를 둘러싸고 있으며 밤마다 구조가 바뀌는 거대한 건축물은?", "options": ["거대한 미로", "강철의 감옥", "고대 피라미드", "지하의 동굴"], "answer": 0}, {"q": "낮 동안 미로 속으로 달려 들어가 지도를 만들고 탈출구를 탐색하는 소년들의 특별한 직책은?", "options": ["슬라이서", "트래커", "빌더", "러너"], "answer": 3}, {"q": "밤이 되면 미로 속에서 튀어나와 소년들을 사냥하고 찌르는 기계 생명체 괴물은?", "options": ["오크", "그리버", "디멘터", "좀비"], "answer": 1}, {"q": "이 모든 가혹한 미로 실험을 배후에서 조종하고 아이들을 감시하는 거대 조직의 명칭은?", "options": ["엄브렐러", "스카이넷", "위키드", "모나크"], "answer": 2}]}, {"id": 44, "category": "청소년 문학", "title": "원더", "author": "R.J. 팔라시오", "keywords": "어기 풀먼, 헬멧, 안면기형, 친절과 용기", "questions": [{"q": "선천적 안면기형 증후군으로 27번의 수술을 받고 처음으로 일반 학교에 입학한 열 살 소년은?", "options": ["줄리안", "어기 풀먼", "빅터", "잭 윌"], "answer": 1}, {"q": "어기가 사람들의 따가운 시선을 피하고 숨기 위해 평소 머리에 푹 눌러쓰고 다녔던 물건은?", "options": ["우주비행사 헬멧", "오토바이 헬멧", "커다란 야구모자", "할로윈 호박가면"], "answer": 0}, {"q": "학교에서 어기에게 처음으로 편견 없이 다가와 점심 식탁에 함께 앉아준 고마운 소녀는?", "options": ["비아", "서머", "미란다", "샬롯"], "answer": 1}, {"q": "어기의 5학년 담임 브라운 선생님이 매달 학생들에게 칠판에 적어준 인생의 격언(잠언)의 핵심은?", "options": ["세상의 시선에 지지 않는 가장 강한 실력자가 되어라", "타인과의 치열한 경쟁에서 반드시 승리하는 사람이 되라", "옳음과 친절함 중 하나를 골라야 한다면 친절을 택하라", "자신의 주장과 옳음을 세상 끝까지 당당히 증명해내라"], "answer": 2}, {"q": "졸업식 날, 어기가 전교생의 기립박수를 받으며 수상한 영예로운 메달은?", "options": ["헨리 워드 비처 메달", "전교 최우수 학업 대상", "수학 올림피아드 금메달", "모범 봉사 공로 메달"], "answer": 0}]}, {"id": 45, "category": "청소년 문학", "title": "바보 빅터", "author": "호아킴 데 포사다", "keywords": "빅터, 로라, IQ 173, 자기 믿음", "questions": [{"q": "학교의 잘못된 IQ 검사 기록 때문에 17년 동안 자신이 지능지수 73의 바보인 줄 알고 살았던 천재는?", "options": ["토머스", "빅터", "한스", "로버트"], "answer": 1}, {"q": "어릴 적 못생겼다는 놀림을 받아 자신을 '못난이 트레이시'라 부르며 자존감을 잃었던 여주인공은?", "options": ["로라", "델라", "서머", "페니"], "answer": 0}, {"q": "빅터에게 \"남들의 평가에 너를 맞추지 말고 너 자신을 믿으라\"며 자전거 수리와 기계 재능을 북돋아 준 스승은?", "options": ["스텐코프 선생님", "브라운 선생님", "레이첼 선생님", "테일러 선생님"], "answer": 2}, {"q": "빅터가 거대 기업 애프리의 회장이 된 테일러의 난해한 암호 광고를 풀어내며 마침내 알게 된 진실은?", "options": ["자신의 기억이 전부 조작되었다는 사실", "자신의 진짜 IQ가 173이었다는 사실", "자신이 회사의 숨겨진 후계자라는 사실", "자신이 어릴 적 입양된 아이라는 사실"], "answer": 1}, {"q": "이 책이 독자들에게 전하는 가장 감동적인 핵심 교훈은 무엇인가요?", "options": ["실패를 두려워하며 위험한 도전을 항상 피하라", "남의 시선에 갇히지 말고 자신의 잠재력을 믿어라", "자신의 부족한 능력을 일찍 인정하고 안주하라", "타인의 냉정한 평가에 맞춰 끊임없이 자신을 바꿔라"], "answer": 1}]}, {"id": 46, "category": "청소년 문학", "title": "체리새우: 비밀글입니다", "author": "황영미", "keywords": "노다현, 은따 공포, 비공개 블로그, 나답게 살기", "questions": [{"q": "중학교 2학년 노다현이 친구들의 눈치를 보지 않고 솔직한 속마음과 음악 이야기를 털어놓는 비밀 공간은?", "options": ["혼자만 보는 메모장 어플", "비공개 블로그 체리새우", "비공개 개인 소셜 계정", "비밀로 쓰는 개인 일기장"], "answer": 1}, {"q": "다현이가 중학교 교실에서 가장 두려워하며 친구들의 비위를 맞추게 만든 심리적 공포는?", "options": ["선생님께 규칙 위반으로 벌점을 받게 될 공포", "친구들과의 경쟁에서 밀려 성적이 떨어질 공포", "친구 무리에서 은밀하게 따돌림당할 공포", "부모님 기대에 미치지 못해 크게 혼날 공포"], "answer": 2}, {"q": "무리 친구들이 재수 없다며 따돌리던 은유와 모둠 과제를 함께 하며 다현이가 깨달은 점은?", "options": ["친구들의 도움 없이 모든 모둠 과제를 혼자 해결해야 한다는 점", "남들의 편견과 달리 은유는 솔직하고 당당한 좋은 친구라는 점", "소문대로 은유는 남을 배려하지 않고 이기적인 아이라는 점", "선생님이 특정 모둠에게만 불리하게 점수를 준다는 점"], "answer": 1}, {"q": "비공개였던 '체리새우' 블로그 글들이 친구들에게 공개되자 다현이가 취한 당당한 태도는?", "options": ["블로그를 전부 삭제하고 친구들에게 눈물로 사과함", "잘못을 전적으로 부인하며 다른 친구를 탓함", "숨지 않고 솔직한 내 모습을 당당하게 인정함", "친구들의 따돌림을 견디지 못하고 전학을 결정함"], "answer": 2}, {"q": "다현이가 애지중지 키우며 껍질을 벗고(탈피) 성장하는 모습을 지켜본 작은 생물은?", "options": ["체리새우", "장수풍뎅이", "명주달팽이", "줄무늬구피"], "answer": 0}]}, {"id": 47, "category": "청소년 문학", "title": "유진과 유진", "author": "이금이", "keywords": "큰 유진, 작은 유진, 상처와 치유, 유치원 사건", "questions": [{"q": "중학교 같은 반에서 우연히 다시 만난 두 소녀 '큰 유진'과 '작은 유진'이 공유하고 있는 어릴 적 상처는?", "options": ["부모님의 갑작스러운 이혼으로 버림받았던 기억", "유치원 시절 원장에게 겪었던 성폭력 피해의 기억", "화재 사고로 큰 화상을 입고 오랜 시간 고통받은 기억", "어린 시절 끔찍한 교통사고로 가족을 잃었던 기억"], "answer": 1}, {"q": "사건 이후 '큰 유진'의 부모님이 딸을 치유하기 위해 취했던 바람직한 대처 방식은?", "options": ["아이의 잘못이 아님을 확인시키고 사랑과 대화로 상처를 보듬어줌", "사건을 절대 발설하지 못하게 비밀로 덮고 아이를 엄하게 다그침", "상처를 잊게 하려고 서둘러 외국으로 가족 모두가 이민을 떠남", "주변 사람들의 시선이 두려워 아이를 시골 친척 집으로 홀로 보냄"], "answer": 0}, {"q": "반면 '작은 유진'의 부모님이 사건을 처리한 방식의 문제점은 무엇이었나요?", "options": ["사건을 즉시 경찰에 신고하여 가해자를 엄벌에 처하려 한 점", "가문의 수치라며 사건을 은폐하고 아이에게 기억을 지우라고 강요함", "가해자의 진심 어린 사과를 받아들이고 합의를 통해 용서해 준 점", "아이의 상처를 치유하기 위해 온 가족이 함께 심리 상담을 받은 점"], "answer": 1}, {"q": "작은 유진이가 마음을 열고 어두운 트라우마의 감옥에서 벗어날 수 있게 손을 잡아준 친구는?", "options": ["이소민", "송은유", "노다현", "큰 유진"], "answer": 3}, {"q": "이 소설이 피해자 청소년들과 우리 사회에 전하는 가장 절실한 외침은?", "options": ["스스로 조심하지 않으면 언제든 위험한 범죄의 피해자가 될 수 있다는 경고", "절대 너의 잘못이 아니며 너는 여전히 소중하고 사랑받을 존재라는 위로", "과거의 나쁜 기억은 남들에게 절대 알리지 말고 무조건 숨겨야 한다는 주장", "개인의 억울한 상처보다 집안의 명예와 어른들의 체면이 우선이라는 훈계"], "answer": 1}]}, {"id": 48, "category": "청소년 문학", "title": "소년이 온다", "author": "한강", "keywords": "동호, 5·18 광주민주화운동, 상무관, 숭고한 기억", "questions": [{"q": "노벨문학상 수상 작가 한강의 소설 〈소년이 온다〉의 중심 공간이자 역사적 배경이 되는 사건은?", "options": ["1919년 3·1 만세독립운동", "1980년 5·18 광주민주화운동", "1960년 4·19 민주주의혁명", "1987년 6월 민주항쟁사건"], "answer": 1}, {"q": "도청 상무관에서 차가운 주검으로 누워있는 희생자들의 시신을 수습하고 촛불을 켜주던 중학생 소년은?", "options": ["진수", "동호", "수남", "영택"], "answer": 1}, {"q": "어린 동호가 시신들을 태극기로 덮어주면서 가졌던 순수하고 아픈 의문은?", "options": ["왜 어른들은 총을 들고 싸우면서 어린 학생들을 집으로 돌려보내지 않을까?", "국가는 왜 도청 앞의 차가운 시신들을 병원으로 데려가지 않고 방치할까?", "국가가 국민을 죽였는데 왜 시신 위에 태극기를 덮고 애국가를 부를까?", "어째서 아무런 죄도 없는 시민들이 매일같이 도청으로 모여들고 있을까?"], "answer": 2}, {"q": "계엄군의 최후 진압 작전이 임박했을 때, 동호가 집으로 돌아가지 않고 끝까지 도청에 남은 이유는?", "options": ["어린 나이라서 총칼을 든 군인들의 진압이 전혀 무섭지 않아서", "억울하게 죽은 친구와 시민들의 넋을 홀로 버려둘 수 없어서", "집으로 돌아가는 길이 완전히 막혀 도망갈 곳이 없어서", "계엄군과 끝까지 맞서 싸워 큰 훈장과 명예를 얻고 싶어서"], "answer": 1}, {"q": "작품 전체를 관통하는 '혼(넋)'들의 목소리를 통해 작가가 말하고자 하는 주제는?", "options": ["비극적인 사건을 극복하고 경제 성장을 이룩해야 한다는 시대적 과제", "국가 권력에 저항하는 무력 충돌의 전술과 군사적 작전의 중요성", "잔혹한 폭력 앞에서도 꺾이지 않는 인간의 존엄성과 연대의 숭고함", "역사의 비극적인 상처는 미래를 위해 깨끗이 잊어야 한다는 메시지"], "answer": 2}]}, {"id": 49, "category": "청소년 문학", "title": "나의 라임오렌지나무", "author": "J.M. 바스콘셀로스", "keywords": "제제, 뽀르뚜까 아저씨, 밍기뉴, 사랑과 이별", "questions": [{"q": "가난한 브라질 빈민가에서 온갖 말썽을 부리지만 마음속에 천사의 순수함을 품은 다섯 살 소년은?", "options": ["올리버", "빅터", "어기", "제제"], "answer": 3}, {"q": "새로 이사 간 집 뒷마당에서 제제와 마음속으로 비밀 대화를 나누며 유일한 친구가 되어준 나무는?", "options": ["거대 바오밥나무", "라임오렌지나무", "붉은 동백나무", "싱그런 사과나무"], "answer": 1}, {"q": "처음에는 제제의 엉덩이를 때렸지만, 나중에는 제제에게 진정한 사랑과 다정함을 베풀어준 포르투갈인 아저씨는?", "options": ["제페토", "뽀르뚜까", "산티아고", "베어먼"], "answer": 1}, {"q": "제제에게 감당할 수 없는 슬픔을 안겨주며 소년의 어린 시절을 끝나게 만든 비극적 사건은?", "options": ["제제가 심한 매질로 큰 부상을 입은 일", "친구인 밍기뉴가 병들어 베어져 버린 일", "뽀르뚜까 아저씨가 기차 사고로 숨진 일", "가난을 견디지 못하고 가족이 흩어진 일"], "answer": 2}, {"q": "어른이 된 제제가 마지막에 뽀르뚜까 아저씨를 회상하며 고백한 '사랑'의 의미는?", "options": ["사람보다는 식물과 마음으로 교감하는 것이 더 낫다", "자신을 학대한 가족들에게 언젠가 복수해야만 한다", "가난을 이겨내고 성공하려면 오직 돈을 벌어야 한다", "사랑을 받지 못하는 유년 시절은 가련하고 슬프다"], "answer": 3}]}, {"id": 50, "category": "청소년 문학", "title": "파리대왕", "author": "윌리엄 골딩", "keywords": "무인도 조난, 소라 껍데기, 랠프와 잭, 피기, 야만성", "questions": [{"q": "비행기 추락으로 무인도에 표류한 소년들이 회의를 소집하고 발언권을 얻을 때 사용한 문명의 상징은?", "options": ["펄럭이는 대장 깃발", "하얀 소라 껍데기", "불타는 나무 횃불", "빛나는 황금 손칼"], "answer": 1}, {"q": "규칙과 봉화(구조 신호)를 중시하며 질서를 세우려 한 민주적 리더는?", "options": ["랠프", "잭", "사이먼", "로저"], "answer": 0}, {"q": "사냥에 집착하며 얼굴에 물감을 칠하고 야만적인 사냥꾼 무리를 이끈 독재자 소년은?", "options": ["피터", "피기", "로저", "잭"], "answer": 3}, {"q": "지혜롭고 합리적인 안경 쓴 뚱보 소년 피기가 불을 피우기 위해 빼앗긴 소중한 도구는?", "options": ["성냥", "안경", "라이터", "돋보기"], "answer": 1}, {"q": "파리 떼가 들끓는 돼지 머리 '파리대왕(Lord of the Flies)'이 상징하는 인간의 본성은?", "options": ["인간 내면에 숨겨진 원초적 악과 야만성", "질서와 법을 끝까지 지키려는 성숙한 이성", "미지의 괴물에 맞서 싸우려는 불굴의 용기", "자연과 더불어 살아가려는 숭고한 배려심"], "answer": 0}]}, {"id": 51, "category": "세계 명작", "title": "로미오와 줄리엣", "author": "윌리엄 셰익스피어", "keywords": "몬태규와 캐뷸릿 가문, 베로나, 독약, 비극적 사랑", "questions": [{"q": "이탈리아 베로나에서 대대로 원수지간으로 피 흘리며 싸우던 두 귀족 가문은?", "options": ["몬태규 가문과 캐뷸릿 가문", "합스부르크 가문과 부르봉 가문", "요크 가문과 랭커스터 가문", "메디치 가문과 보르자 가문"], "answer": 0}, {"q": "로미오와 줄리엣이 처음 만나 한눈에 반한 장소는?", "options": ["한밤중 비밀스러운 장미 정원", "마을 중앙 광장의 분수대 광장", "베로나 대성당의 지하 예배당", "캐뷸릿 가문의 가면무도회장"], "answer": 3}, {"q": "줄리엣이 밤에 창가 발코니에 서서 밤하늘을 보며 읊조린 유명한 대사는?", "options": ["\"내일은 또다시 찬란한 내일의 태양이 뜬다!\"", "\"이 또한 눈 깜짝할 사이에 다 지나가리라!\"", "\"사느냐 죽느냐, 오직 그것만이 문제로다!\"", "\"오 로미오, 왜 당신의 이름은 로미오인가요?\""], "answer": 3}, {"q": "원치 않는 패리스 백작과의 결혼을 피하기 위해 줄리엣이 로렌스 신부에게 받아 마신 것은?", "options": ["잠시 가사 상태에 빠지게 하는 비약", "마시면 서서히 목숨을 앗아가는 독약", "서로를 첫눈에 반하게 만드는 마법의 약", "며칠 동안 깊은 잠에 빠져드는 수면제"], "answer": 0}, {"q": "신부의 편지가 전염병으로 제때 전달되지 못하자, 줄리엣이 진짜 죽은 줄 알고 로미오가 취한 극단적 행동은?", "options": ["모든 잘못을 탓하며 로렌스 신부에게 거세게 항의함", "슬픔을 견디지 못하고 베로나를 영원히 떠나버림", "줄리엣 곁에서 독약을 마시고 스스로 목숨을 끊음", "분노에 눈이 멀어 캐뷸릿 가문에 총공격을 감행함"], "answer": 2}]}, {"id": 52, "category": "세계 명작", "title": "햄릿", "author": "윌리엄 셰익스피어", "keywords": "덴마크 왕자, 유령, 사느냐 죽느냐, 클로디어스", "questions": [{"q": "셰익스피어 4대 비극 중 하나인 〈햄릿〉에서 주인공 햄릿의 신분은 어느 나라의 왕자인가요?", "options": ["스웨덴", "덴마크", "노르웨이", "잉글랜드"], "answer": 1}, {"q": "엘시노어 성벽에 나타난 선왕(아버지)의 유령이 햄릿에게 폭로한 충격적인 진실은?", "options": ["동생 클로디어스가 귀에 독을 부어 선왕을 살해함", "왕권을 탐낸 반란군 무리에게 기습으로 암살당함", "깊은 절망에 빠진 선왕이 스스로 극단적 선택을 함", "숲속 마녀가 내린 사악한 저주에 걸려 숨을 거둠"], "answer": 0}, {"q": "햄릿이 삶과 죽음, 행동과 주저 사이에서 고뇌하며 독백한 인류 문학사 최고의 명대사는?", "options": ["\"약한 자여, 그대의 이름은 여자니라\"", "\"인생이란 한바탕 덧없는 연극이로다\"", "\"사느냐 죽느냐, 그것이 문제로다\"", "\"브루투스, 너마저도 나를 배신하는가\""], "answer": 2}, {"q": "햄릿이 숙부의 범행을 확증하기 위해 유랑 극단을 시켜 궁중에서 공연하게 한 연극의 장치는?", "options": ["환상적인 눈속임을 펼친 마술 쇼", "합창단이 노래하는 궁중 음악회", "귀족들의 위선을 비꼰 풍자 희극", "선왕의 독살 장면을 재현한 연극"], "answer": 3}, {"q": "햄릿의 비극적 갈등에 휩쓸려 아버지를 잃고 실성하여 개울물에 빠져 익사한 비련의 여인은?", "options": ["거트루드", "오필리아", "데스데모나", "코델리아"], "answer": 1}]}, {"id": 53, "category": "세계 명작", "title": "프랑켄슈타인", "author": "메리 셸리", "keywords": "빅터 박사, 시체 조립 괴물, 번개와 생명, 창조주의 책임", "questions": [{"q": "시체 조각들을 모아 생명의 불꽃(전기)을 불어넣어 인공 생명체를 창조해 낸 젊은 과학자의 이름은?", "options": ["빅터 프랑켄슈타인", "요한 파우스트", "탐정 셜록 홈즈", "의사 헨리 지킬"], "answer": 0}, {"q": "빅터 프랑켄슈타인이 완성된 피조물(괴물)이 눈을 떴을 때 취한 첫 번째 행동은?", "options": ["흉측한 몰골에 큰 공포를 느끼고 도망쳤다", "완성된 생명체를 기쁘게 안아주며 환영했다", "위험을 방지하기 위해 실험실에 가두었다", "새로운 인류라 부르며 이름을 지어주었다"], "answer": 0}, {"q": "괴물이 오두막 틈으로 가난한 드 라세 가문을 관찰하며 스스로 독학하여 깨우친 능력은?", "options": ["총을 다루는 사격술", "신비한 마법과 주문", "인간의 언어와 감정", "정교한 요리와 기술"], "answer": 2}, {"q": "괴물이 빅터를 찾아와 사람들의 학대에서 벗어나기 위해 애원하며 요구한 단 하나의 조건은?", "options": ["고통에서 벗어날 수 있게 자신을 죽여 달라", "함께 살아갈 여성 괴물을 하나 만들어 달라", "남은 생을 편히 보낼 막대한 재물을 달라", "사람들처럼 살아가게 인간 얼굴로 바꿔 달라"], "answer": 1}, {"q": "이 SF 고전 문학이 인류에게 던지는 가장 무거운 윤리적 질문은 무엇인가요?", "options": ["생명 창조에 따르는 과학자의 윤리적 책임을 감당할 수 있는가", "인류 문명이 미지의 혹독한 북극 탐험을 과연 성공할 수 있는가", "의학 발전을 위해 인간의 시신을 안전하게 장기 보관할 수 있는가", "자연의 번개 에너지를 인류의 유용한 전력으로 전환할 수 있는가"], "answer": 0}]}, {"id": 54, "category": "세계 명작", "title": "지킬 앤 하이드", "author": "로버트 루이스 스티븐슨", "keywords": "인간의 이중성, 선과 악, 마법의 약물, 파멸", "questions": [{"q": "존경받는 런던의 부유하고 고결한 의사이자 박사의 이름은?", "options": ["에드워드 하이드", "가브리엘 어터슨", "헤이스티 라니언", "헨리 지킬 박사"], "answer": 3}, {"q": "지킬 박사가 인간의 내면에 공존하는 선과 악의 본성을 분리하기 위해 제조하여 마신 것은?", "options": ["마법의 버섯 수프", "신비한 화학 약물", "정신 개조 주사액", "환각성 수면 가스"], "answer": 1}, {"q": "약을 마시고 나타난 순수한 악의 화신이자 사악하고 난폭한 인물의 이름은?", "options": ["에드워드 하이드", "빅터 프랑켄슈타인", "살인마 잭 더 리퍼", "제임스 모리아티"], "answer": 0}, {"q": "지킬 박사가 점차 약을 먹지 않아도 스스로 하이드로 변하게 되자 겪은 공포는?", "options": ["자신이 저지른 범죄로 인해 경찰에 체포되는 공포", "사회적 명성과 막대한 재산을 모두 탕진하는 공포", "육체와 신체적 건강이 급격히 쇠약해져 가는 공포", "악한 자아가 선한 자아를 완전히 잠식하는 공포"], "answer": 3}, {"q": "지킬 박사가 남긴 마지막 고백서에서 밝힌 인간 본성에 대한 통찰은?", "options": ["\"인간의 내면적 한계와 비극은 오직 만능 과학으로 치료된다\"", "\"인간은 선과 악이라는 모순된 두 본성을 함께 지니고 있다\"", "\"인간의 모든 도덕적 가치와 존엄성은 오직 돈이 지배한다\"", "\"인간의 사악한 본성은 스스로의 노력으로 쉽게 없앨 수 있다\""], "answer": 1}]}, {"id": 55, "category": "세계 명작", "title": "셜록 홈즈 시리즈", "author": "아서 코난 도일", "keywords": "베이커가 221B, 왓슨 박사, 파이프 담배, 추리소설의 대명사", "questions": [{"q": "세계에서 가장 유명한 자문 탐정 셜록 홈즈의 런던 하숙집 주소는?", "options": ["다우닝가 10번지", "샹젤리제가 5번지", "월스트리트 1번지", "베이커가 221B"], "answer": 3}, {"q": "셜록 홈즈의 가장 절친한 단짝 친구이자 군의관 출신 기록자는?", "options": ["제임스 모리아티 교수", "마이크로프트 홈즈", "레스트레이드 경감", "존 H. 왓슨 박사"], "answer": 3}, {"q": "셜록 홈즈가 사건을 해결할 때 사용하는 핵심적인 사고방식은?", "options": ["초자연적 능력과 투시형 독심술", "신비주의에 기댄 점성술과 타로", "사소한 관찰과 치밀한 연역적 추리", "단순한 직감과 막연한 어림짐작"], "answer": 2}, {"q": "셜록 홈즈의 숙적이자 범죄계의 나폴레옹이라 불리는 천재 악당 교수는?", "options": ["의사 헨리 지킬 박사", "괴도 신사 아르센 루팡", "희대의 악인 잭 더 리퍼", "제임스 모리아티 교수"], "answer": 3}, {"q": "홈즈가 항상 '그 여인(The Woman)'이라 부르며 지성과 기지에 경의를 표한 유일한 여성은?", "options": ["메리 모스턴", "바이올렛 헌터", "허드슨 부인", "아이린 애들러"], "answer": 3}]}, {"id": 56, "category": "세계 명작", "title": "걸리버 여행기", "author": "조너선 스위프트", "keywords": "소인국 릴리펏, 거인국 브롭딩낵, 말들의 나라 후이늠", "questions": [{"q": "선박 의사 레뮤얼 걸리버가 난파되어 첫 번째로 도착한 6인치(약 15cm) 크기의 작은 사람들이 사는 나라는?", "options": ["고결한 말의 나라 후이늠", "하늘을 나는 섬 라퓨타", "거인들의 나라 브롭딩낵", "소인들의 나라 릴리펏"], "answer": 3}, {"q": "소인국 릴리펏과 이웃 나라 블레푸스쿠가 수많은 전쟁을 벌이며 싸운 황당한 명분은?", "options": ["고기를 구울 때 소금을 먼저 뿌릴지 나중에 뿌릴 것인가", "달걀을 먹을 때 뾰족한 쪽과 둥근 쪽 중 어디를 깨는가", "인사를 나눌 때 오른손을 올릴지 왼손을 가슴에 댈 것인가", "비가 내릴 때 우산을 바깥으로 펼칠지 안으로 접을 것인가"], "answer": 1}, {"q": "걸리버가 두 번째로 도착하여 자신이 애완동물처럼 상자에 갇혀 구경거리가 되었던 거인들의 나라는?", "options": ["거인들의 나라 브롭딩낵", "고결한 말의 나라 후이늠", "하늘에 뜬 섬 라퓨타", "소인들의 나라 릴리펏"], "answer": 0}, {"q": "네 번째 여행지에서 이성을 지닌 고결한 말(馬)들이 지배하고, 추악하고 탐욕스러운 인간의 형상을 한 짐승을 부리는 나라는?", "options": ["후이늠의 나라", "브롭딩낵의 나라", "릴리펏의 나라", "라퓨타의 나라"], "answer": 0}, {"q": "〈걸리버 여행기〉가 단순한 아동용 모험 동화가 아니라 위대한 고전인 까닭은?", "options": ["거친 파도를 헤치며 살아남는 선원들의 실전 항해술을 담은 지침서라서", "인간의 탐욕과 부패한 사회 현실을 날카롭게 고발한 풍자 소설이라서", "미지의 신대륙 지형과 바다 항로를 정밀하게 기록한 지리 안내서라서", "신비로운 외계 생명체와의 조우를 과학적으로 예측해 낸 SF 소설이라서"], "answer": 1}]}, {"id": 57, "category": "세계 명작", "title": "노인과 바다", "author": "어니스트 헤밍웨이", "keywords": "산티아고 노인, 거대한 청새치, 상어 떼, 불굴의 의지", "questions": [{"q": "쿠바의 늙은 어부 산티아고 노인이 고기를 한 마리도 잡지 못하고 바다로 나간 날수는?", "options": ["40일 동안", "10일 동안", "84일 동안", "100일 동안"], "answer": 2}, {"q": "노인이 멕시코만 먼바다에서 낚싯줄에 걸려 이틀 밤낮을 사투를 벌인 거대한 물고기는?", "options": ["사나운 백상아리", "날렵한 참다랑어", "거대한 대왕고래", "거대한 청새치"], "answer": 3}, {"q": "사투 끝에 청새치를 잡았으나 집으로 돌아오는 길에 물고기를 뜯어먹기 위해 몰려든 바다의 포식자들은?", "options": ["사나운 바다표범", "거대한 바다뱀", "몰려든 상어 떼", "굶주린 범고래"], "answer": 2}, {"q": "노인이 상어 떼와의 싸움 속에서 스스로에게 다짐하며 외친 불멸의 명대사는?", "options": ["자연의 거대한 힘 앞에 인간은 굴복해야 한다", "욕심을 버려야만 진정한 승리를 얻는다", "바다는 인간의 모든 희망을 삼켜 버린다", "인간은 파멸할지언정 결코 패배할 수 없다"], "answer": 3}, {"q": "빈손으로 항구에 돌아와 오두막에서 잠든 산티아고 노인이 꿈속에서 본 상징적인 동물은?", "options": ["바닷속의 거대한 고래들", "아프리카의 어린 사자들", "모래사장의 바다거북들", "하늘을 나는 바다독수리"], "answer": 1}]}, {"id": 58, "category": "세계 명작", "title": "로빈슨 크루소", "author": "대니얼 디포", "keywords": "무인도 표류, 식인종, 원주민 프라이데이, 28년의 생존", "questions": [{"q": "폭풍우로 난파된 후 남미 무인도에 홀로 표류하여 28년 동안 생존한 모험가는?", "options": ["신드바드 선장", "산티아고 노인", "레뮤엘 걸리버", "로빈슨 크루소"], "answer": 3}, {"q": "크루소가 섬에서 날짜를 잊지 않고 시간을 기록하기 위해 만든 원시적인 도구는?", "options": ["나뭇가지에 매일 매듭을 묶어두기", "동굴 벽에 숯으로 날마다 줄 긋기", "나무 기둥에 매일 칼로 눈금 새기기", "해변 모래사장에 돌을 매일 쌓기"], "answer": 2}, {"q": "크루소가 식인종들에게 잡혀 먹힐 뻔한 것을 총으로 구해준 뒤 충성스러운 친구가 된 원주민은?", "options": ["새터데이", "프라이데이", "먼데이", "선데이"], "answer": 1}, {"q": "크루소가 무인도에서 식량과 의복을 해결하기 위해 길들여 키운 가축은?", "options": ["야생 멧돼지", "산토끼들", "야생 들개", "야생 염소"], "answer": 3}, {"q": "〈로빈슨 크루소〉가 보여주는 근대 인간상의 가장 뛰어난 특징은?", "options": ["주어진 가혹한 운명에 묵묵히 순응하는 태도", "노동과 합리적 이성으로 환경을 개척하는 태도", "원시 자연과 부족의 풍습에 완전히 동화되는 태도", "신비로운 주술과 마법의 힘에 의존하는 태도"], "answer": 1}]}, {"id": 59, "category": "세계 명작", "title": "톰 소여의 모험", "author": "마크 트웨인", "keywords": "미시시피강, 울타리 페인트칠, 허클베리 핀, 동굴 모험", "questions": [{"q": "미시시피 강변의 세인트피터즈버그 마을에서 폴리 이모의 속을 썩이던 장난꾸러기 소년은?", "options": ["톰 소여", "피터 팬", "허클베리 핀", "올리버 트위스트"], "answer": 0}, {"q": "벌로 길고 높은 판자 울타리에 페인트칠을 하게 된 톰이 친구들에게 꾀를 부린 방법은?", "options": ["이모에게 이미 페인트칠을 다 끝냈다고 속임", "동생에게 용돈을 주며 대신 칠해 달라고 부탁함", "울타리 칠하기를 피해 몰래 강가로 낚시를 떠남", "신나는 놀이인 척 연기해 대가를 받고 칠하게 함"], "answer": 3}, {"q": "자유롭게 거리를 떠돌며 학교에 얽매이지 않아 톰의 부러움을 한 몸에 받던 방랑자 친구는?", "options": ["허클베리 핀", "베키 대처", "조 하퍼", "벤 로저스"], "answer": 0}, {"q": "톰과 헉이 한밤중에 묘지에서 고양이 사체를 들고 놀다가 목격한 충격적인 사건은?", "options": ["인준 조가 의사를 해치는 살인 사건", "도굴꾼들이 무덤을 파헤치는 강도 사건", "숨겨진 황금 상자를 발견하는 보물찾기", "한밤중에 나타난 무서운 귀신의 출몰"], "answer": 0}, {"q": "톰이 첫사랑 베키 대처와 함께 소풍을 갔다가 길을 잃고 며칠 동안 갇혔던 장소는?", "options": ["고장 난 증기선의 기관실", "으스스한 폐가의 다락방", "강 한가운데의 무인도 섬", "미로 같은 맥두걸 동굴"], "answer": 3}]}, {"id": 60, "category": "세계 명작", "title": "크리스마스 캐럴", "author": "찰스 디킨스", "keywords": "에비니저 스크루지, 세 유령, 과거·현재·미래, 나눔과 온정", "questions": [{"q": "\"메리 크리스마스라고? 흥, 사기야(Humbug)!\"라며 돈만 알고 인정머리 없는 구두쇠 노인은?", "options": ["심술궂은 봉필 영감", "에비니저 스크루지", "인색한 자린고비 노인", "베니스의 샤일록"], "answer": 1}, {"q": "크리스마스이브 밤, 7년 전에 죽은 옛 동업자 말리의 유령이 온몸에 감고 나타난 것은?", "options": ["온몸을 꽁꽁 묶은 거칠고 질긴 밧줄들", "화려하게 반짝이는 금목걸이와 비단옷", "탐욕과 죄로 엮인 무거운 쇠사슬과 돈상자", "가시가 돋친 차갑고 거대한 쇠창살들"], "answer": 2}, {"q": "스크루지 앞에 차례로 나타나 인생을 송두리째 뒤흔들어놓은 세 유령의 정체는?", "options": ["인간의 영혼을 시험하는 천사와 사신", "과거에 세상을 떠난 부모와 형제의 유령", "과거, 현재, 미래의 크리스마스 유령", "봄, 여름, 가을을 다스리는 계절의 유령"], "answer": 2}, {"q": "스크루지가 미래의 유령을 통해 본 자신의 비참한 최후의 모습은?", "options": ["사회적 공헌을 인정받아 훈장을 수여받는 노년", "가족들이 지켜보는 가운데 편안히 맞이한 임종", "시트마저 도둑맞고 아무도 슬퍼하지 않는 시체", "수많은 이웃들의 애도 속에 치러지는 장례식"], "answer": 2}, {"q": "크리스마스 아침에 잠에서 깨어 완전히 새사람으로 거듭난 스크루지가 한 선행은?", "options": ["평생 모아 온 금화를 광장에 나가 뿌려줌", "직원 집에 칠면조를 보내고 월급을 올려줌", "자신의 모든 빚을 탕감하고 외국으로 떠남", "운영하던 사무실 문을 닫고 전 재산을 기부함"], "answer": 1}]}, {"id": 61, "category": "세계 명작", "title": "동물농장", "author": "조지 오웰", "keywords": "매너 농장, 돼지 나폴레옹, 스노볼, 모든 동물은 평등하다", "questions": [{"q": "게으르고 가혹한 존스 농장주를 몰아내고 동물들이 스스로 주인이 되어 세운 농장의 이름은?", "options": ["평화목장", "유토피아", "동물농장", "자유농장"], "answer": 2}, {"q": "풍차 건설 등 개혁을 주도했으나, 정적 나폴레옹의 사나운 군견들에게 쫓겨난 똑똑한 돼지는?", "options": ["스퀼러", "클로버", "스노볼", "벤저민"], "answer": 2}, {"q": "사나운 맹견들을 경호원으로 거느리며 독재 권력을 휘두르고 인간 행세를 시작한 돼지 독재자는?", "options": ["벤저민", "프레더릭", "필킹턴", "나폴레옹"], "answer": 3}, {"q": "\"내가 더 열심히 일하겠다\"며 충성스럽게 일하다 부상을 입자 나폴레옹에 의해 폐마 도살장에 팔려간 충직한 말은?", "options": ["벤저민", "몰리", "클로버", "복서"], "answer": 3}, {"q": "벽에 적혀 있던 7계명이 왜곡되어 결국 마지막에 남은 기만적인 단 하나의 계명은?", "options": ["\"네 다리는 언제나 선하고, 두 다리는 언제나 악하다\"", "\"어떤 동물도 침대에서 자거나, 술을 마셔선 안 된다\"", "\"모든 동물은 평등하나, 어떤 동물은 더 평등하다\"", "\"인간은 모두 우리의 적이며, 동물은 모두 형제이다\""], "answer": 2}]}, {"id": 62, "category": "세계 명작", "title": "제인 에어", "author": "샬럿 브론테", "keywords": "손필드 저택, 로체스터, 다락방의 미치광이 여인, 당당한 여성", "questions": [{"q": "고아로 자라 외숙모와 기숙학교의 가혹한 학대를 견디고 당당한 여성으로 성장한 여주인공은?", "options": ["에스메랄다", "제인 에어", "캐서린 언쇼", "엘리자베스"], "answer": 1}, {"q": "제인이 가정교사로 들어간 손필드 저택의 주인으로 거칠지만 제인을 깊이 사랑한 귀족은?", "options": ["세인트 존 리버스", "존 리드 도련님", "로버트 블록클허스트", "에드워드 로체스터"], "answer": 3}, {"q": "결혼식 날 밝혀진 손필드 저택 3층 다락방에 숨겨져 있던 충격적인 비밀은?", "options": ["선대 귀족들이 비밀리에 모아둔 막대한 보물이 숨겨져 있었다", "정신병을 앓는 로체스터의 아내가 몰래 감금되어 있었다", "밤마다 기괴한 소리를 내며 울부짖는 유령이 출몰하고 있었다", "가문의 저주를 받아 흉측하게 변한 괴물이 숨겨져 있었다"], "answer": 1}, {"q": "저택에 불을 지르고 뛰어내린 버사로 인해 눈이 멀고 한쪽 팔을 잃은 로체스터를 제인이 다시 찾아갔을 때의 결말은?", "options": ["처참하게 몰락한 로체스터를 매몰차게 거절하고 손필드를 떠남", "장애를 입은 로체스터를 감싸 안으며 동등한 인격체로 결혼함", "인도 선교사로 떠나는 세인트 존과 결합하여 머나먼 길을 떠남", "속세의 모든 고통과 번뇌를 끊어내고 평생 엄격한 수녀원에 들어감"], "answer": 1}, {"q": "제인 에어가 로체스터의 신분적 유혹 앞에서 외친 여성주의 문학사의 기념비적인 대사는?", "options": ["\"내가 가난하고 보잘것없다고 영혼과 심장도 없는 줄 아시나요?\"", "\"남성의 명령에 순종하는 것만이 여성이 걸어가야 할 운명입니다\"", "\"신이 정해주신 비천한 운명을 거스르지 않고 묵묵히 따르겠습니다\"", "\"막대한 신분과 재력 앞에서는 어떠한 양심과 자존심도 무의미합니다\""], "answer": 0}]}, {"id": 63, "category": "세계 명작", "title": "레 미제라블", "author": "빅토르 위고", "keywords": "장발장, 빵 한 조각, 은촛대, 자베르 경감, 팡틴과 코제트", "questions": [{"q": "굶주린 조카들을 위해 빵 한 조각을 훔쳤다가 탈옥 시도로 19년 동안 감옥살이를 한 인물은?", "options": ["장발장", "마리우스", "자베르", "가브로슈"], "answer": 0}, {"q": "장발장이 은식기를 훔쳐 달아났음에도 경찰에게 \"은촛대도 주었는데 왜 안 가져갔느냐\"며 용서해 준 성자는?", "options": ["로렌스 신부", "마페이 주교", "클로드 신부", "미리엘 주교"], "answer": 3}, {"q": "마들렌 시장으로 신분을 숨기고 자선을 베풀던 장발장을 평생 끈질기게 추적한 냉혹한 원칙주의 경감은?", "options": ["메그레 경감", "자베르 경감", "콜롬보 형사", "레스트레이드"], "answer": 1}, {"q": "장발장이 병들어 죽어가는 여인 팡틴의 부탁을 받고 사악한 테나르디에 부부에게서 구출해 친딸처럼 키운 소녀는?", "options": ["에포닌", "델라", "마틸드", "코제트"], "answer": 3}, {"q": "프랑스 6월 혁명 바리케이드에서 장발장에게 목숨을 건진 자베르 경감이 센강에 투신자살한 까닭은?", "options": ["테나르디에 일당의 간계에 빠져 전 재산을 모조리 빼앗기고 빈털터리가 되어서", "혁명 진압 작전에 실패하여 정부와 상부로부터 가혹한 파면과 처벌을 받게 되어서", "장발장의 용서 앞에서 자신이 맹신해 온 냉혹한 법과 정의의 신념이 무너져서", "장발장을 끝내 체포하지 못한 죄책감과 동료 경찰들의 비난을 견디지 못해서"], "answer": 2}]}, {"id": 64, "category": "세계 명작", "title": "별", "author": "알퐁스 도데", "keywords": "프로방스 뤼브롱 산, 양치기 소년, 스테파네트 아가씨, 밤하늘", "questions": [{"q": "프랑스 프로방스 뤼브롱 산꼭대기에서 홀로 양 떼를 치며 살아가던 순박한 주인공의 직업은?", "options": ["산림 감시원", "포도밭 농부", "수도원 수사", "양치기 소년"], "answer": 3}, {"q": "소년이 남몰래 흠모하던 저택 주인의 딸이자 어느 날 식량을 싣고 직접 산으로 올라온 아름다운 아가씨는?", "options": ["에스메랄다", "오필리아", "스테파네트", "데스데모나"], "answer": 2}, {"q": "아가씨가 산을 내려가지 못하고 양치기의 오두막에서 하룻밤을 지새우게 된 이유는?", "options": ["어두운 안개 속에서 하산하는 방향을 잃고 산을 헤매게 되어서", "산 아래 마을로 통하는 유일한 다리가 거센 폭풍우에 무너져서", "가파른 산길을 내려가다가 발목을 심하게 삐어 걸을 수 없어서", "갑자기 소나기가 내려 강물이 불어나는 바람에 건널 수 없어서"], "answer": 3}, {"q": "모닥불 가에서 추위에 떨던 아가씨가 양치기의 어깨에 머리를 기대고 잠들었을 때 빛나던 배경은?", "options": ["온 세상을 하얗게 뒤덮으며 휘몰아치는 눈보라", "먹구름을 가르며 천지를 뒤흔드는 무서운 번개", "밤하늘을 은하수처럼 수놓은 맑고 영롱한 별빛", "서쪽 지평선을 붉게 물들이며 타오르는 저녁노을"], "answer": 2}, {"q": "소년이 잠든 아가씨를 보며 느낀 가장 순결하고 시적인 감정의 독백은?", "options": ["\"세상의 모든 보석과 재물을 바쳐 귀족 아가씨의 사랑과 환심을 얻고 싶다\"", "\"가장 가냘프고 빛나는 별 하나가 길을 잃고 내 어깨에 내려앉아 잠들어 있다\"", "\"차가운 밤바람을 피해 어서 빨리 따뜻하고 안락한 도시의 품으로 떠나고 싶다\"", "\"화려한 저택의 주인이 되어 아름다운 아가씨와 영원히 함께 살아가고 싶다\""], "answer": 1}]}, {"id": 65, "category": "세계 명작", "title": "파우스트", "author": "요한 볼프강 폰 괴테", "keywords": "파우스트 박사, 메피스토펠레스, 영혼을 건 계약, 구원", "questions": [{"q": "평생 모든 학문을 섭렵했으나 인생의 참된 의미를 찾지 못해 절망에 빠진 늙은 노학자는?", "options": ["헨리 지킬 박사", "하인리히 파우스트", "빅터 프랑켄슈타인", "늙은 화가 베어먼"], "answer": 1}, {"q": "파우스트에게 접근하여 젊음과 쾌락을 주는 대가로 영혼을 요구한 악마의 이름은?", "options": ["메피스토펠레스", "파괴마왕 벨제붑", "타락천사 루시퍼", "어둠의 군주 사탄"], "answer": 0}, {"q": "파우스트가 악마와 맺은 치명적인 계약 조건 중, 영혼을 빼앗기게 되는 결정적인 순간의 대사는?", "options": ["\"복종하라, 내 소원은 끝이 없단다!\"", "\"물러가라, 이제 나는 패배하였노라!\"", "\"사라져라, 나는 모든 것을 얻었다!\"", "\"멈추어라, 너는 정말 아름답구나!\""], "answer": 3}, {"q": "젊어진 파우스트의 유혹에 넘어가 파멸하지만, 끝내 참회하여 하느님의 구원을 받는 순결한 여인은?", "options": ["오필리아", "그레트헨", "헬레네", "줄리엣"], "answer": 1}, {"q": "생애 마지막에 간척 사업을 통해 만인을 위한 자유로운 낙원을 건설하며 숨을 거둔 파우스트가 구원받은 신의 섭리는?", "options": ["\"평생 동안 높은 학문과 지식만을 탐구한 자만 간다\"", "\"세상의 모든 부귀영화를 누린 자만 구원받을 수 있다\"", "\"악마와의 헛된 내기에서 완벽하게 승리한 자만 산다\"", "\"언제나 갈망하며 애쓰는 자는 구원받을 수 있다\""], "answer": 3}]}, {"id": 66, "category": "웹툰", "title": "마음의 소리", "author": "조석", "keywords": "각진 얼굴, 노란 옷, 조준, 애봉이, 최장수 일상 개그", "questions": [{"q": "네이버 웹툰 최장수 연재 기록을 세운 레전드 개그 만화 〈마음의 소리〉의 주인공이자 작가의 이름은?", "options": ["조석", "이말년", "기안84", "조준"], "answer": 0}, {"q": "주인공 조석의 형이자, 파란색 모자를 뒤로 눌러쓰고 기행을 일삼는 캐릭터의 이름은?", "options": ["센세이션", "김정남", "조철왕", "조준"], "answer": 3}, {"q": "조석의 여자친구이자 훗날 아내가 된, 강렬한 일자 단발머리와 눈빛을 가진 캐릭터의 별명은?", "options": ["임주경", "왕자림", "봉봉이", "애봉이"], "answer": 3}, {"q": "조석의 반려견이자 요크셔테리어와 불독을 모티브로 한 귀여운 강아지 캐릭터들의 이름은?", "options": ["맥스와 찰리", "센세이션과 행봉이", "흰둥이와 짱구", "토토와 누렁이"], "answer": 1}, {"q": "〈마음의 소리〉가 10년 넘게 국민적인 사랑을 받으며 한국 웹툰 역사에 남긴 업적은?", "options": ["세계 최초로 웹툰을 기반으로 한 극장용 애니메이션 제작", "청소년의 아련한 첫사랑과 깊은 감성을 그린 순정 만화", "역사적 실화를 바탕으로 제작된 고증 다큐멘터리 만화", "성실한 장기 연재를 통한 일상 개그 웹툰의 대중화"], "answer": 3}]}, {"id": 67, "category": "웹툰", "title": "연애혁명", "author": "232", "keywords": "공주영, 왕자림, 이삼정보고, 달콤살벌 고교 로맨스", "questions": [{"q": "이삼정보고등학교를 배경으로 왕자림에게 첫눈에 반해 직진 사랑을 펼친 애교 넘치는 주인공 남학생은?", "options": ["안경민", "김병훈", "공주영", "이경우"], "answer": 2}, {"q": "도도하고 시크한 고양이상 미녀이자 상처를 품고 마음의 문을 닫았던 여주인공은?", "options": ["양민지", "왕자림", "오아람", "임주경"], "answer": 1}, {"q": "공주영의 십년지기 절친이자 한쪽 눈을 앞머리로 가리고 복잡한 서사를 지닌 인기 캐릭터는?", "options": ["정상훈", "이경우", "김병훈", "최정우"], "answer": 1}, {"q": "공주영이 왕자림에게 고백할 때 사용하며 독자들에게 폭발적인 화제를 모은 노래와 이벤트는?", "options": ["수련회 장기자랑 무대에서 펼친 통기타 세레나데 고백", "놀이공원 중앙 광장에서 하늘 가득 띄워 올린 풍선 고백", "영화관을 통째로 대관하여 상영한 깜짝 영상 편지 이벤트", "학교 축제 무대에서 전교생에게 바친 장미 백 송이 전달"], "answer": 0}, {"q": "웹툰 〈연애혁명〉이 10대 청소년들에게 선풍적인 공감과 지지를 얻은 비결은?", "options": ["10대들의 말투와 또래 문화를 사실감 넘치게 생생히 묘사함", "외국인 주인공들이 펼치는 이국적인 배경의 서사를 그림", "기성세대의 복잡한 정치적 암투와 치열한 갈등을 다룸", "화려한 판타지 마법과 다른 차원을 넘나드는 모험을 다룸"], "answer": 0}]}, {"id": 68, "category": "웹툰", "title": "신의 탑", "author": "SIU", "keywords": "스물다섯번째 밤, 라헬, 탑을 오르는 자, 선별인원", "questions": [{"q": "자신의 전부였던 소녀 라헬을 찾기 위해 스스로 거대한 탑의 문을 열고 들어간 주인공 소년은?", "options": ["하 유리 자하드", "라크 레크레이셔", "쿤 아게로 아그니스", "스물다섯번째 밤"], "answer": 3}, {"q": "밤을 어둠 속에서 거두어주었으나, 별을 보겠다는 야망을 위해 밤을 배신하고 밀어뜨린 인물은?", "options": ["유리", "화련", "라헬", "엔도르시"], "answer": 2}, {"q": "뛰어난 두뇌와 계략으로 밤의 가장 든든한 지략가 친구가 되어준 쿤 가문의 도련님은?", "options": ["퐁세칼 라우뢰", "하 유리 자하드", "쿤 아게로 아그니스", "라크 레크레이셔"], "answer": 2}, {"q": "악어를 닮은 외모에 악어 가죽을 입고 있으며 밤을 '검은 거북이'라 부르는 의리파 전사는?", "options": ["스물다섯번째 밤", "라크 레크레이셔", "하 유리 자하드", "쿤 아게로 아그니스"], "answer": 1}, {"q": "탑의 최정상에 군림하고 있는 절대적인 군주이자 지배자의 이름은?", "options": ["우렉 마지노", "쿤 에드안", "아리에 혼", "자하드"], "answer": 3}]}, {"id": 69, "category": "웹툰", "title": "전지적 독자 시점", "author": "싱숑 / 슬리피-C", "keywords": "김독자, 유중혁, 멸살법, 배후성, 성좌", "questions": [{"q": "10년 동안 아무도 읽지 않던 3149편의 웹소설 〈멸살법〉을 유일하게 끝까지 완독한 주인공은?", "options": ["유중혁", "이현성", "한수영", "김독자"], "answer": 3}, {"q": "소설 〈멸살법〉의 본래 주인공이자, 죽으면 과거로 회귀하는 강력한 능력을 가진 패왕은?", "options": ["김독자", "유중혁", "공필두", "정희원"], "answer": 1}, {"q": "김독자 컴퍼니의 일원이자, 〈멸살법〉을 표절했다는 의혹을 받았던 천재 작가 소녀는?", "options": ["유상아", "신유승", "이지혜", "한수영"], "answer": 3}, {"q": "도깨비들이 주최하는 생방송 스트리밍에서 인간들의 사투를 지켜보고 코인을 후원하는 초월적 존재들은?", "options": ["악마", "천사", "신선", "성좌"], "answer": 3}, {"q": "김독자가 성좌들 앞에서 스스로 선언한 자신의 고유한 성좌 수식언(이명)은?", "options": ["심연의 흑염룡", "긴고아의 죄수", "은밀한 모략가", "구원의 마왕"], "answer": 3}]}, {"id": 70, "category": "웹툰", "title": "화산귀환", "author": "비가 / LICO", "keywords": "청명, 매화검존, 화산파 재건, 당보, 무협 웹툰 1위", "questions": [{"q": "천마의 목을 베고 장렬히 전사한 후 100년 뒤 어린아이의 몸으로 환생한 매화검존의 이름은?", "options": ["조걸", "유이설", "백천", "청명"], "answer": 3}, {"q": "청명이 환생했을 때 자신이 목숨 바쳐 지켰던 문파 '화산파'가 처해 있던 충격적인 상태는?", "options": ["빚더미에 앉아 삼류 문파로 몰락한 상태", "천하를 호령하는 제일 문파가 된 상태", "황실을 호위하는 근위대로 거듭난 상태", "마교의 침략을 받아 본거지가 된 상태"], "answer": 0}, {"q": "화산파 검술의 상징이자 검끝에서 붉은 꽃잎처럼 피어나는 화려한 검기는?", "options": ["동백꽃", "연꽃", "매화", "난초"], "answer": 2}, {"q": "화산파의 대제자이자 미남 검사로, 처음에는 청명과 부딪혔으나 든든한 버팀목이 된 인물은?", "options": ["윤종", "백천", "당소소", "조걸"], "answer": 1}, {"q": "청명이 전생에 의형제를 맺었던 암기의 명문 사천당가의 전설적인 의형제는?", "options": ["진금룡", "법정", "당보", "장일소"], "answer": 2}]}, {"id": 71, "category": "웹툰", "title": "여신강림", "author": "야옹이", "keywords": "임주경, 메이크업의 신, 이수호, 한서준, K-웹툰", "questions": [{"q": "외모 콤플렉스로 괴로워하다가 피나는 노력으로 메이크업 신기술을 연마해 여신으로 거듭난 주인공은?", "options": ["임주경", "오나리", "한송이", "강수진"], "answer": 0}, {"q": "주경의 민낯(생얼)을 가장 먼저 알아보고도 변함없이 주경을 좋아해 준 차가운 츤데레 남주는?", "options": ["강건우", "한서준", "유정", "이수호"], "answer": 3}, {"q": "날카로운 눈매와 모델 같은 비율을 가졌으나 츤데레 의리남으로 아이돌 가수가 된 남주는?", "options": ["공주영", "백인호", "한서준", "박형석"], "answer": 2}, {"q": "주경과 수호가 남몰래 공유하던 독특한 취미와 아지트 장소는?", "options": ["동네 노래방에서 최신 노래 부르기", "학교 앞 피시방에서 밤새 게임하기", "동네 만화방에서 공포 만화책 읽기", "도심 놀이공원에서 놀이기구 타기"], "answer": 2}, {"q": "웹툰 〈여신강림〉이 드라마화되고 전 세계적인 인기를 얻은 핵심 메시지는?", "options": ["있는 그대로의 나 자신을 긍정하고 사랑하는 내면의 당당함", "의학의 힘을 빌려 완벽한 미모를 얻는 것이 최선이라는 생각", "외모만 뛰어나면 사회에서 모든 것이 용서된다는 맹신", "내면의 아름다움보다 학벌과 재력이 훨씬 중요하다는 교훈"], "answer": 0}]}, {"id": 72, "category": "웹툰", "title": "외모지상주의", "author": "박태준", "keywords": "박형석, 두 개의 몸, 일진과 크루 액션, 변신", "questions": [{"q": "학교폭력에 시달리던 뚱뚱하고 소심한 소년 박형석이 어느 날 자고 일어났을 때 얻게 된 기적은?", "options": ["완벽한 외모와 뛰어난 신체 능력을 갖춘 새로운 몸", "과거와 미래를 자유롭게 오갈 수 있는 타임머신", "인생을 한순간에 바꿀 수 있는 거액의 당첨 복권", "상대방의 마음과 과거를 꿰뚫어 볼 수 있는 초능력"], "answer": 0}, {"q": "재원고등학교 패션과로 전학 온 새로운 박형석과 처음부터 주먹을 맞대며 라이벌이 된 복싱 천재는?", "options": ["바스코", "홍재열", "김기명", "이진성"], "answer": 3}, {"q": "순수한 마음과 엄청난 괴력을 지녔으며, 약자를 괴롭히는 나쁜 놈들을 응징하는 '번너클'의 리더는?", "options": ["바스코", "종건", "준구", "장현"], "answer": 0}, {"q": "말을 하지 않고 침묵하지만 부유한 재력과 뛰어난 무술로 형석을 물심양면 도와주는 든든한 친구는?", "options": ["이도규", "홍재열", "진호빈", "박범재"], "answer": 1}, {"q": "〈외모지상주의〉 초반부가 한국 사회에 던진 가장 날카로운 사회적 비판은?", "options": ["골목 상권을 장악하려는 거대 조폭 조직들 간의 암투", "실전 싸움에서 드러나는 다양한 격투 무술들의 우수성", "외모만으로 사람의 가치를 차별하고 대우하는 사회적 위선", "청소년들 사이에서 빠르게 번져가는 화려한 패션 유행"], "answer": 2}]}, {"id": 73, "category": "웹툰", "title": "치즈인더트랩", "author": "순끼", "keywords": "홍설, 유정 선배, 백인호, 경영학과, 심리 스릴러 로맨스", "questions": [{"q": "치열하게 장학금을 타며 대학 생활을 버텨나가는 예민하고 통찰력 있는 주인공 여대생은?", "options": ["홍설", "오나리", "임주경", "왕자림"], "answer": 0}, {"q": "완벽한 집안과 외모, 성적으로 모두에게 친절하지만 뒤에서는 사람들을 조종하는 미스터리한 선배는?", "options": ["권은택", "백인호", "오영곤", "유정"], "answer": 3}, {"q": "과거 천재 피아니스트였으나 손을 다친 후 방황하다 홍설의 곁에서 든든한 친구가 되어준 남자는?", "options": ["백인호", "김상철", "백인하", "권은택"], "answer": 0}, {"q": "대학 조별 과제에서 무임승차(프리라이더)를 일삼으며 홍설의 속을 뒤집어놓은 밉상 복학생 선배는?", "options": ["하재우", "손민수", "오영곤", "김상철"], "answer": 3}, {"q": "제목 〈치즈인더트랩(Cheese in the Trap)〉에 담긴 비유적 의미로 가장 알맞은 것은?", "options": ["외국 유학 생활에서 겪는 낯선 문화 체험", "달콤한 유혹 뒤에 숨겨진 위험한 인간관계", "치즈 가게를 운영하며 벌어지는 일상 이야기", "쥐를 잡기 위해 덫을 설치하는 사냥 모험"], "answer": 1}]}, {"id": 74, "category": "웹툰", "title": "유미의 세포들", "author": "이동건", "keywords": "김유미, 세포마을, 출출세포, 사랑세포, 프라임 세포", "questions": [{"q": "평범한 30대 직장인 김유미의 머릿속에서 유미의 감정과 행동을 조종하는 존재들은?", "options": ["생각을 조작하는 외계인", "어깨 위의 천사와 악마", "머릿속 의인화된 세포들", "감정을 조종하는 요정들"], "answer": 2}, {"q": "유미가 배가 고플 때마다 거대한 떡꼬치를 머리에 꽂고 나타나 마을을 뒤흔드는 거인 세포는?", "options": ["응큼세포", "출출세포", "이성세포", "패션세포"], "answer": 1}, {"q": "한 사람의 인격과 행동을 근본적으로 지배하는 가장 강력한 핵심 세포를 부르는 명칭은?", "options": ["마스터 세포", "리더형 세포", "프라임 세포", "에이스 세포"], "answer": 2}, {"q": "유미가 직장을 그만두고 자신의 진정한 꿈을 찾아 새롭게 변신하여 성공하게 된 직업은?", "options": ["패션 디자이너", "웹소설 작가", "요리 연구가", "카페 사장님"], "answer": 1}, {"q": "세포 마을의 게시판에 적혀 있던 이 작품 최고의 명대사이자 인생의 진리는?", "options": ["\"돈을 많이 벌고 성공해야 진정 행복해진다\"", "\"이 이야기의 주인공은 오직 너 한 사람뿐이야\"", "\"맛있는 음식을 실컷 먹는 것이 최고의 행복\"", "\"모든 인생에서 가장 소중한 가치는 사랑이야\""], "answer": 1}]}, {"id": 75, "category": "웹툰", "title": "호랑이형님", "author": "이상규", "keywords": "산군, 흰눈썹, 아랑사, 무케, 동양 판타지", "questions": [{"q": "조선의 험준한 산하를 배경으로 영응왕의 아이들을 지키기 위해 목숨 바쳐 싸우는 전설의 호랑이는?", "options": ["빠르", "추이", "무케", "산군"], "answer": 3}, {"q": "호랑이들의 영원한 숙적이자, 호랑이를 때려잡는 거대한 맹수 종족의 우두머리는?", "options": ["빠르", "황요", "추이", "이령"], "answer": 2}, {"q": "귀여운 외모로 엄청난 인기를 얻었으며, 덩치는 커도 아직 아기 같은 매력을 가진 호랑이 캐릭터는?", "options": ["빠르", "황요", "녹치", "무케"], "answer": 3}, {"q": "산군이 자신의 모든 것을 바쳐 끝까지 지켜내야 했던 영응왕의 신비한 어린 후계자는?", "options": ["아랑사", "가우복", "아비사", "차돌이"], "answer": 0}, {"q": "웹툰 〈호랑이형님〉이 한국 웹툰계에서 찬사를 받는 가장 독보적인 장점은?", "options": ["중세 유럽의 성과 기사도를 다룬 정통 기사물", "전통 설화를 바탕으로 한 웅장한 한국형 판타지", "우주 함선과 외계 종족이 등장하는 SF 모험물", "현대 고등학교를 배경으로 한 청춘 학원 로맨스"], "answer": 1}]}, {"id": 76, "category": "웹툰", "title": "나 혼자만 레벨업", "author": "추공 / 장성락", "keywords": "성진우, E급 헌터, 그림자 군주, \"일어나라(Arise)\"", "questions": [{"q": "인류 최약병기라 불리던 최하위 E급 헌터에서 세계 최강의 헌터로 각성한 주인공은?", "options": ["차해인", "백윤호", "최종인", "성진우"], "answer": 3}, {"q": "성진우가 쓰러뜨린 적의 영혼을 자신의 언데드 군단으로 부활시킬 때 외치는 상징적인 한마디는?", "options": ["\"일어나라\"", "\"공격하라\"", "\"부활하라\"", "\"깨어나라\""], "answer": 0}, {"q": "성진우가 물려받은 어둠과 죽음을 지배하는 태초의 절대적인 존재의 정체는?", "options": ["혹한의 군주", "그림자 군주", "파괴의 군주", "백염의 군주"], "answer": 1}, {"q": "성진우의 곁을 그림자처럼 지키며 기사단장 역할을 하는 붉은 투구의 충성스러운 그림자 병사는?", "options": ["아이언", "탱크", "이그리트", "카이셀"], "answer": 2}, {"q": "제주도 레이드에서 개미 마수들을 몰살시키고 군단으로 흡수한 개미 왕 그림자 병사의 이름은?", "options": ["투스", "카이셀", "지마", "베르"], "answer": 3}]}, {"id": 77, "category": "웹툰", "title": "프리드로우", "author": "전선욱", "keywords": "한태성, 구하린, 남천고 만화부, 청춘과 도전", "questions": [{"q": "중학교 시절 악명 높은 일진 짱이었으나, 남천고에 진학해 평범한 학생으로 살고 싶어 한 주인공은?", "options": ["구하린", "신솔민", "이민지", "한태성"], "answer": 3}, {"q": "남천고 만화부의 당돌하고 거침없는 부장이자 오토바이를 타는 부잣집 소녀는?", "options": ["임주경", "이민지", "구하린", "이지혜"], "answer": 2}, {"q": "한태성이 일진 무리의 싸움 유혹을 뿌리치고 친구들과 함께 도전한 꿈의 무대는?", "options": ["전국 청소년 아마추어 복싱 챔피언전", "대형 연예 기획사 글로벌 아이돌 선발전", "전국 규모의 웹툰 공모전 및 작가 데뷔", "명문대 진학을 위한 대학수학능력시험"], "answer": 2}, {"q": "태성의 첫사랑이자 조용하고 모범적인 만화부 동급생 소녀는?", "options": ["강수진", "이민지", "오나리", "양민지"], "answer": 1}, {"q": "작품의 제목 '프리드로우(Free Draw)'에 담긴 이중적인 의미로 가장 알맞은 것은?", "options": ["틀에 얽매이지 않고 자신의 삶과 그림을 펼친다는 의미", "누구나 결제 없이 무료로 만화를 관람할 수 있게 한다는 의미", "자신이 완성한 작품을 주변 사람들에게 공짜로 나눠준다는 의미", "상대방을 단번에 제압할 수 있는 비장의 일진 싸움 기술 이름"], "answer": 0}]}, {"id": 78, "category": "웹툰", "title": "소녀의 세계", "author": "모랑지", "keywords": "오나리, 백조들 사이의 오리, 진정한 우정, 자존감", "questions": [{"q": "고등학교 입학 후 눈부신 세 명의 백조 친구들 틈에서 평범한 오리라며 주눅 들었던 주인공은?", "options": ["임선지", "오나리", "서미래", "임유나"], "answer": 1}, {"q": "나리의 소꿉친구이자 완벽한 외모와 집안을 가졌으나 나리에게만 집착하는 츤데레 백조는?", "options": ["임선지", "서미래", "임유나", "진소랑"], "answer": 2}, {"q": "순수하고 천사 같지만 순진해서 친구들에게 사기를 당하거나 오해를 자주 받는 빵순이 백조는?", "options": ["임선지", "서미래", "왕자림", "양민지"], "answer": 0}, {"q": "중학교 때 유명 아역배우이자 혼혈 미소녀로 쿨한 걸크러시 매력을 가진 백조는?", "options": ["임유나", "남유진", "이도라", "서미래"], "answer": 3}, {"q": "웹툰 〈소녀의 세계〉가 수많은 청소년 독자들에게 깊은 울림을 준 진정한 주제는?", "options": ["타인과 비교하지 않고 서로의 상처를 보듬으며 성장하는 참된 우정", "학창 시절 철저한 자기관리와 식단 조절을 통해 성공하는 다이어트", "외모가 뛰어난 친구들과 원만하게 어울리며 호감을 얻어내는 방법", "부유한 집안 환경을 갖추어 주변 친구들의 선망을 받는 성공 비결"], "answer": 0}]}, {"id": 79, "category": "웹툰", "title": "정년이", "author": "서이레 / 나몬", "keywords": "윤정년, 매란국극단, 여성국극, 목포 소녀, 소리꾼", "questions": [{"q": "1950년대 한국전쟁 직후 목포에서 상경하여 여성국극 최고의 남역(남자 주연) 배우를 꿈꾸는 소녀는?", "options": ["윤정년", "허영서", "문옥경", "권부용"], "answer": 0}, {"q": "여성들만으로 구성되어 남역과 여역을 모두 소화하며 1950년대를 풍미한 전설의 종합 예술 극단은?", "options": ["남사당패거리", "국립무용단", "시립연극단", "여성국극단"], "answer": 3}, {"q": "정년이의 숙명의 라이벌이자, 명문 예술가 집안 출신의 완벽한 엘리트 연습생은?", "options": ["서혜랑", "문옥경", "허영서", "백도앵"], "answer": 2}, {"q": "정년이의 가장 열렬한 1호 팬이자, 극단 대본을 쓰며 예술적 영혼을 나눈 친구는?", "options": ["서혜랑", "권부용", "백도앵", "박초록"], "answer": 1}, {"q": "웹툰 〈정년이〉가 최근 드라마화되며 현대 대중들에게 다시금 찬사를 받은 까닭은?", "options": ["근현대사의 실제 기록을 파격적으로 왜곡하여 자극적인 갈등 서사를 구성해서", "서양의 전통 뮤지컬 요소를 적극적으로 도입하여 낯선 외래문화를 널리 소개해서", "잊힌 여성 국극의 찬란한 역사와 주체적인 여성들의 꿈과 연대를 생생히 조명해서", "현대 케이팝 아이돌의 화려한 안무와 최신 유행 댄스 동작을 무대 위에서 펼쳐서"], "answer": 2}]}, {"id": 80, "category": "웹툰", "title": "삼국지톡", "author": "무적핑크 / 이리", "keywords": "스마트폰 메신저, 조조, 유비, 삼국지 영웅들의 톡", "questions": [{"q": "나관중의 《삼국지연의》 속 영웅들이 현대의 스마트폰과 메신저(카카오톡)를 쓴다는 기발한 설정의 웹툰은?", "options": ["삼국지톡", "화산귀환", "조선왕조실톡", "이말년삼국지"], "answer": 0}, {"q": "도원결의를 맺고 후한 말 난세를 구하기 위해 일어선 촉한의 삼형제 리더는?", "options": ["조조", "유비", "원소", "손권"], "answer": 1}, {"q": "난세의 간웅이라 불리며 뛰어난 두뇌와 빠른 판단력으로 위나라의 기틀을 세운 패왕은?", "options": ["여포", "원술", "동탁", "조조"], "answer": 3}, {"q": "적벽대전에서 조조의 대함대를 불태우기 위해 동남풍을 부르고 신출귀몰한 계책을 쓴 천재 군사는?", "options": ["주유", "방통", "사마의", "제갈량"], "answer": 3}, {"q": "웹툰 〈삼국지톡〉이 학생들에게 고전 삼국지를 쉽게 이해할 수 있도록 도운 가장 큰 장점은?", "options": ["고전 서사를 현대적인 모바일 메신저 대화와 감각적인 연출로 유쾌하게 풀어내어서", "등장인물 간의 주요 대화 내용을 외국어 회화 표현으로 대체해 어학 학습을 도와서", "실제 역사적 사건과 인물 관계를 완벽한 허구의 판타지 세계관으로 완전히 바꾸어서", "원작의 방대한 에피소드를 대폭 생략하고 줄거리 분량을 가볍게 단축해 제공해서"], "answer": 0}]}, {"id": 81, "category": "영화&애니", "title": "겨울왕국", "author": "크리스 벅, 제니퍼 리", "keywords": "엘사, 안나, 올라프, Let It Go, 진정한 사랑의 행동", "questions": [{"q": "아렌델 왕국의 여왕이자 손에 닿는 모든 것을 얼려버리는 마법의 힘을 가진 주인공은?", "options": ["안나", "모아나", "엘사", "라푼젤"], "answer": 2}, {"q": "얼어붙은 엘사의 마음을 녹이고 왕국을 구하기 위해 험난한 북쪽 산으로 언니를 찾아 나선 동생은?", "options": ["안나", "라푼젤", "오로라", "메리다"], "answer": 0}, {"q": "자매가 어릴 적 만든 눈사람이자, 여름과 따뜻한 포옹을 좋아하는 귀여운 눈사람 캐릭터는?", "options": ["스벤", "트롤", "올라프", "한스"], "answer": 2}, {"q": "엘사의 마법에 심장이 얼어붙어 얼음 동상이 되어가던 안나를 구한 '진정한 사랑의 행동'은?", "options": ["한스 왕자의 거짓된 입맞춤", "크리스토프의 열정적인 고백", "언니 엘사를 지키기 위한 안나의 숭고한 희생", "올라프가 피워 올린 따뜻한 모닥불"], "answer": 2}, {"q": "엘사가 얼어붙은 아렌델 왕국의 눈과 얼음을 모두 녹일 수 있었던 결정적인 마법의 열쇠는?", "options": ["세상과 담을 쌓고 영원히 차가운 얼음 궁전에 고립되기", "모든 마법을 포기하고 평범한 인간으로 살아가는 삶", "세상의 편견에 맞서 진정한 나 자신을 당당히 사랑하기", "타인의 시선을 신경 쓰며 자신의 능력을 꽁꽁 숨기기"], "answer": 2}]}, {"id": 82, "category": "영화&애니", "title": "인사이드 아웃", "author": "피트 닥터", "keywords": "기쁨, 슬픔, 버럭, 까칠, 소심, 빙봉", "questions": [{"q": "11살 소녀 라일리의 머릿속 감정 본부에서 리더 역할을 하며 늘 긍정 에너지를 전파하려 한 감정은?", "options": ["버럭이", "기쁨이", "소심이", "슬픔이"], "answer": 1}, {"q": "처음에는 문제를 일으키는 귀찮은 존재로 여겨졌으나, 타인의 아픔을 공감하고 치유하는 핵심 감정임이 밝혀진 것은?", "options": ["까칠이", "소심이", "슬픔이", "버럭이"], "answer": 2}, {"q": "라일리의 어린 시절 상상 속 친구로, 몸은 솜사탕이고 코끼리 코와 고양이 꼬리를 가진 감동의 캐릭터는?", "options": ["트리피", "빙봉", "레인보우 유니콘", "삐에로 풍선"], "answer": 1}, {"q": "라일리가 미네소타에서 샌프란시스코로 이사 온 후 가족과 갈등하며 가출을 결심하게 된 근본 원인은?", "options": ["집안 형편이 어려워져 하키 장비를 살 돈이 부족해져서", "이사 후 학업을 따라가지 못해 학교 성적이 곤두박질쳐서", "새로 전학 간 학교에서 친구들에게 심한 괴롭힘을 당해서", "슬픔을 억누르고 참다가 감정 섬들이 무너져 내려서"], "answer": 3}, {"q": "영화가 주는 교훈으로 알맞은 것은?", "options": ["분노와 두려움을 완전히 마음속에서 없애야 한다는 것", "기쁨만이 인생의 유일하고 절대적인 가치라는 것", "슬픔을 인정하고 보듬을 때 진정한 치유와 성장이 온다는 것", "모든 감정을 억누르고 냉철한 이성만을 유지해야 한다는 것"], "answer": 2}]}, {"id": 83, "category": "영화&애니", "title": "주토피아", "author": "바이런 하워드 외", "keywords": "주디 홉스, 닉 와일드, 나무늘보 플래시, 편견 극복", "questions": [{"q": "\"누구나 무엇이든 될 수 있다\"는 주토피아 최초의 토끼 경찰관 주인공의 이름은?", "options": ["닉 와일드", "보고 서장", "던 벨웨더", "주디 홉스"], "answer": 3}, {"q": "어릴 적 편견에 상처받아 사기꾼으로 살아왔으나 주디를 만나 정의로운 파트너가 된 여우는?", "options": ["닉 와일드", "미스터 빅", "보고 서장", "클로하우저"], "answer": 0}, {"q": "차량 등록국(DMV)에서 일하며 엄청나게 느린 동작과 말투로 폭소를 자아낸 동물 캐릭터는?", "options": ["치타 클로하우저", "나무늘보 플래시", "물소 보고 서장", "사자 라이온하트"], "answer": 1}, {"q": "주토피아의 포식자 동물들을 미치게 만들어 야수성(맹수화)을 발현시킨 신비한 식물은?", "options": ["마법의 당근", "붉은 사과나무", "밤의 울음꾼", "푸른 독버섯"], "answer": 2}, {"q": "포식자들을 향한 시민들의 공포와 편견을 조장하여 시장 자리를 차지하려 한 배후의 진범은?", "options": ["벨웨더 부시장", "라이언하트 시장", "미스터 빅", "가젤"], "answer": 0}]}, {"id": 84, "category": "영화&애니", "title": "코코", "author": "리 언크리치", "keywords": "미겔, 망자의 날, 기타, Remember Me, 진정한 죽음", "questions": [{"q": "음악이 금지된 집안에서 태어났으나 뮤지션을 꿈꾸다 '망자의 날' 사후세계로 넘어간 멕시코 소년은?", "options": ["헥터", "훌리오", "단테", "미겔"], "answer": 3}, {"q": "멕시코 전통 축제 '망자의 날'에 이승과 저승을 연결해 주는 화려한 꽃잎 다리는 어떤 꽃인가요?", "options": ["주황색 메리골드 꽃", "새하얀 순백의 백합", "샛노란 들국화 송이", "붉은빛 야생 장미꽃"], "answer": 0}, {"q": "미겔의 진짜 고조할아버지이자 명곡 〈Remember Me〉를 딸 코코를 위해 작곡한 비운의 천재 음악가는?", "options": ["헥터", "훌리오", "에르네스토", "단테"], "answer": 0}, {"q": "영화 〈코코〉에서 말하는 '인간의 진정한 마지막 죽음'이란 언제 일어나는 것인가요?", "options": ["이승을 영영 떠나 망자들의 세상인 저승에 도착했을 때", "장례식을 모두 마치고 차가운 무덤 속에 깊이 묻혔을 때", "노환이나 질병으로 육체의 심장 박동이 완전히 멈췄을 때", "살아있는 사람들의 기억 속에서 완전히 잊혀졌을 때"], "answer": 3}, {"q": "기억을 잃어가던 늙은 증조할머니 코코가 미겔의 기타 연주와 노래를 듣고 눈물을 흘리며 기억을 되찾은 노래는?", "options": ["〈Un Poco Loco〉", "〈A Whole New World〉", "〈Let It Go〉", "〈Remember Me〉"], "answer": 3}]}, {"id": 85, "category": "영화&애니", "title": "엘리멘탈", "author": "피터 손", "keywords": "앰버(불), 웨이드(물), 엘리멘트 시티, 다름과 사랑", "questions": [{"q": "불, 물, 흙, 공기 4원소가 함께 살아가는 환상적인 대도시의 이름은?", "options": ["메트로폴리스", "아렌델", "엘리멘트 시티", "주토피아"], "answer": 2}, {"q": "아버지가 일군 식료품점 파이어플레이스를 물려받아야 한다는 압박에 화를 잘 내는 불 종족 소녀는?", "options": ["클로드", "신더", "게일", "앰버 루멘"], "answer": 3}, {"q": "눈물이 많고 감수성이 풍부하며, 앰버의 마음을 열어준 시청 시청 조사관 물 종족 청년은?", "options": ["페른", "웨이드 리플", "클로드", "버니"], "answer": 1}, {"q": "물과 불은 절대 섞일 수 없고 닿으면 꺼지거나 증발한다는 금기를 깨고 두 사람이 처음 손을 잡았을 때 일어난 기적은?", "options": ["앰버의 불꽃이 완전히 꺼지며 연기로 사라짐", "거대한 폭발이 일어나며 사방으로 튕겨 나감", "웨이드가 얼어붙어 차가운 고체가 되어버림", "빛을 내며 증발하지 않고 서로를 따뜻하게 감싸 안음"], "answer": 3}, {"q": "한국계 피터 손 감독이 이민자 부모님의 희생과 사랑을 담아 완성한 이 영화의 핵심 주제는?", "options": ["다름을 포용하는 사랑과 주체적인 꿈을 찾아가는 여정", "주기율표 원소 기호의 과학적 원리와 상호작용 암기", "화재 예방 수칙과 소방 시설의 중요성에 대한 교육", "원소들이 공존하는 첨단 친환경 도시 건설 기술 연구"], "answer": 0}]}, {"id": 86, "category": "영화&애니", "title": "어벤져스: 엔드게임", "author": "안소니 루소, 조 루소", "keywords": "아이언맨, 타노스, 핑거스냅, 인피니티 스톤, \"3000만큼 사랑해\"", "questions": [{"q": "우주 생명체의 절반을 지워버린 타노스의 핑거스냅을 되돌리기 위해 어벤져스가 감행한 작전은?", "options": ["새로운 행성에 인류의 우주 정거장 건설", "강력한 우주 함선과 무기를 제작하여 반격", "타노스를 암살하기 위한 비밀 결사대 파견", "양자 영역을 통한 과거 시간 여행 작전"], "answer": 3}, {"q": "보르미르 행성에서 소울 스톤을 얻기 위해 서로를 대신해 절벽 아래로 뛰어내려 희생한 히어로는?", "options": ["호크아이", "스칼렛 위치", "캡틴 마블", "블랙 위도우"], "answer": 3}, {"q": "나노 건틀릿을 끼고 스냅을 쳐서 사라졌던 인류 절반을 되살려낸 엄청난 방사능을 견딘 영웅은?", "options": ["헐크", "워머신", "아이언맨", "토르"], "answer": 0}, {"q": "모든 희망이 사라질 뻔한 순간 닥터 스트레인지의 마법 포털들이 열리며 캡틴 아메리카가 외친 전율의 구호는?", "options": ["와칸다를 위하여 전진하라!", "어벤져스... 어셈블!", "적들을 향해 전군 돌격하라!", "지구를 끝까지 지켜라!"], "answer": 1}, {"q": "타노스의 건틀릿에서 스톤을 빼앗아 스스로 스냅을 치며 우주를 구하고 장렬히 산화한 영웅의 명대사는?", "options": ["나는 아이언맨이다", "하루 종일도 할 수 있어", "나는 그루트다", "와칸다 포에버"], "answer": 0}]}, {"id": 87, "category": "영화&애니", "title": "스파이더맨: 노 웨이 홈", "author": "존 왓츠", "keywords": "피터 파커, 닥터 스트레인지, 멀티버스, 삼스파, 큰 힘에는 큰 책임이 따른다", "questions": [{"q": "미스테리오의 폭로로 정체가 온 세상에 까발려지자 피터 파커가 기억을 지우기 위해 찾아간 마법사는?", "options": ["스칼렛 위치", "로키", "웡", "닥터 스트레인지"], "answer": 3}, {"q": "시공간이 뒤틀린 차원의 문을 통해 역대 다른 스파이더맨 영화 시리즈에서 소환된 빌런이 아닌 자는?", "options": ["일렉트로", "그린 고블린", "타노스", "닥터 옥토퍼스"], "answer": 2}, {"q": "영화 팬들을 전율케 한 '피터 2'(토비 맥과이어)와 '피터 3'(앤드류 가필드)의 등장을 부르는 팬들의 애칭은?", "options": ["멀티 파커", "어메이징 팀", "스파이더 삼총사", "삼스파"], "answer": 3}, {"q": "메이 숙모가 그린 고블린의 공격으로 숨을 거두며 피터에게 남긴 스파이더맨 시리즈 최고의 가언은?", "options": ["\"큰 힘에는 큰 책임이 따른다\"", "\"절대 포기하지 마라\"", "\"악당을 용서하지 마라\"", "\"너 자신만을 위해 살아라\""], "answer": 0}, {"q": "무너지는 멀티버스를 닫고 세상을 구하기 위해 피터 파커가 치러야 했던 가장 가슴 아픈 대가는?", "options": ["거미 능력을 모두 잃고 평범한 인간으로 돌아감", "두 눈의 시력을 완전히 잃고 암흑 속에 갇힘", "다른 차원의 시공간으로 영원히 추방당함", "세상 모든 사람의 기억 속에서 피터 파커가 완전히 지워짐"], "answer": 3}]}, {"id": 88, "category": "영화&애니", "title": "알라딘", "author": "가이 리치", "keywords": "알라딘, 자스민, 요술램프 지니, A Whole New World", "questions": [{"q": "아그라바 왕국의 시장 골목을 누비며 좀도둑질을 하지만 마음씨 착한 진흙 속의 보석 같은 청년은?", "options": ["알라딘", "알리바바", "신드바드", "자파"], "answer": 0}, {"q": "램프를 문지르면 푸른 연기와 함께 튀어나와 춤과 노래로 소원을 들어주는 마법의 정령은?", "options": ["지니", "자파", "올라프", "이아고"], "answer": 0}, {"q": "알라딘과 자스민 공주가 마법의 양탄자를 타고 밤하늘을 날며 부른 세기의 명곡은?", "options": ["〈Speechless〉", "〈Friend Like Me〉", "〈A Whole New World〉", "〈Prince Ali〉"], "answer": 2}, {"q": "자스민 공주가 술탄의 자리를 빼앗으려는 사악한 마법사 자파에 맞서 침묵을 거부하며 부른 솔로곡은?", "options": ["〈Let It Go〉", "〈How Far I'll Go〉", "〈Remember Me〉", "〈Speechless〉"], "answer": 3}, {"q": "왕자가 되어 공주와 결혼할 수 있는 마지막 세 번째 소원을 앞두고 알라딘이 지니에게 선물한 것은?", "options": ["램프의 속박에서 벗어나 평범한 인간이 되는 자유", "아그라바 왕국의 모든 보물과 금은보화 절반", "사막 한가운데 솟아오른 거대한 황금 궁전", "어떤 마법에도 상처 입지 않는 영원한 불로불사"], "answer": 0}]}, {"id": 89, "category": "영화&애니", "title": "해리 포터와 마법사의 돌", "author": "크리스 콜럼버스", "keywords": "호그와트 마법학교, 해그리드, 마법사의 돌, 볼드모트의 부활 저지", "questions": [{"q": "열한 번째 생일날 벽장 밑에서 구박받던 해리 포터를 찾아와 호그와트 입학통지서를 전해준 거인은?", "options": ["루비우스 해그리드", "세베루스 스네이프", "드레이코 말포이", "알버스 덤블도어"], "answer": 0}, {"q": "지팡이가 마법사를 선택하는 다이애건 앨리의 유서 깊은 마법 지팡이 가게 주인은?", "options": ["개릭 올리밴더", "마담 말킨", "톰 리들", "플로리안 포테스큐"], "answer": 0}, {"q": "불로불사의 영생을 누릴 수 있고 쇠를 황금으로 바꾸는 니콜라스 플라멜의 전설적인 물건은?", "options": ["골든 스니치", "마법사의 돌", "부활의 돌", "소망의 거울"], "answer": 1}, {"q": "마법사의 돌을 지키기 위한 지하 관문 중, 론 위즐리가 스스로를 희생하며 팀을 승리로 이끈 게임은?", "options": ["날아다니는 열쇠 잡기", "마법 폭발 카드 놀이", "거대한 마법사 체스", "박진감 넘치는 퀴디치"], "answer": 2}, {"q": "가장 보고 싶은 간절한 소망을 비추어주는 '소망의 거울(Erised)'에서 해리가 마법사의 돌을 얻을 수 있었던 이유는?", "options": ["마법사의 돌을 지키겠다는 결연한 맹세를 해서", "돌을 탐내지 않고 오직 찾기만을 순수하게 바라서", "거울 속의 자신에게 강력한 소환 마법을 걸어서", "거울을 깨뜨려 그 안에 숨겨진 돌을 꺼내어서"], "answer": 1}]}, {"id": 90, "category": "영화&애니", "title": "토이 스토리", "author": "존 라세터", "keywords": "우디, 버즈 라이트이어, 앤디의 방, \"무한한 공간 저 너머로\"", "questions": [{"q": "픽사 최초의 풀 3D 장편 애니메이션 〈토이 스토리〉에서 앤디가 가장 아끼던 카우보이 인형은?", "options": ["우디", "슬링키", "렉스", "버즈"], "answer": 0}, {"q": "앤디의 생일 선물로 나타나 우디의 1등 자리를 위협한 최첨단 우주 전사 장난감은?", "options": ["미스터 포테이토", "사악한 저그 황제", "저금통 돼지 햄", "버즈 라이트이어"], "answer": 3}, {"q": "버즈 라이트이어가 날개를 펼치며 당당하게 외치는 전 세계적인 유행어는?", "options": ["\"우디와 친구들을 구하라!\"", "\"무한한 공간 저 너머로!\"", "\"은하계로 발사 준비 완료!\"", "\"평화로운 지구를 지켜라!\""], "answer": 1}, {"q": "장난감들을 분해하고 폭파하며 잔인하게 괴롭히는 무시무시한 옆집 악동 소년의 이름은?", "options": ["시드 필립스", "알 맥위긴", "앤디 데이비스", "랏소 베어"], "answer": 0}, {"q": "장난감들의 세계에서 절대 어겨서는 안 되는 가장 중요한 철칙은?", "options": ["다른 장난감과 싸우거나 비밀을 누설하지 마라", "어두운 밤이 되어도 침대 밑으로 숨지 마라", "주인의 허락 없이 방문 밖으로 절대 나가지 마라", "사람 앞에서는 절대 살아 움직이거나 말하지 마라"], "answer": 3}]}, {"id": 91, "category": "영화&애니", "title": "센과 치히로의 행방불명", "author": "미야자키 하야오", "keywords": "치히로(센), 가오나시, 하쿠, 유바바의 온천장", "questions": [{"q": "부모님이 신들의 음식을 함부로 먹고 돼지로 변하자 온천장에서 일하게 된 열 살 소녀는?", "options": ["린", "치히로", "포뇨", "사츠키"], "answer": 1}, {"q": "치히로를 위기 때마다 도와주며 진짜 이름을 잊지 않도록 주먹밥을 건네준 용의 화신 소년은?", "options": ["린", "카마", "보", "하쿠"], "answer": 3}, {"q": "말을 하지 못하고 '아, 아...' 소리를 내며 금을 쏟아내지만 치히로의 순수함을 갈망한 검은 괴물은?", "options": ["먼지귀신", "오물신", "유바바", "가오나시"], "answer": 3}, {"q": "온천장의 지배자 마녀 유바바가 인간들을 영원히 종속시키기 위해 빼앗아가는 것은?", "options": ["기억", "가족", "목소리", "진짜 이름"], "answer": 3}, {"q": "치히로가 유바바의 마지막 수수께끼(수많은 돼지 중 부모님을 찾아내라는 시험)를 통과한 정답은?", "options": ["\"이 우리 안에 갇혀 있는 모든 돼지가 부모님이에요!\"", "\"맨 앞줄에 서 있는 첫 번째와 두 번째 돼지예요!\"", "\"여기 있는 돼지 중에 우리 부모님은 한 분도 없어요!\"", "\"제일 크고 뚱뚱한 돼지 두 마리가 우리 부모님이에요!\""], "answer": 2}]}, {"id": 92, "category": "영화&애니", "title": "하울의 움직이는 성", "author": "미야자키 하야오", "keywords": "소피, 불꽃 악마 캘시퍼, 꽃미남 마법사 하울, 인생의 회전목마", "questions": [{"q": "모자 가게에서 일하다 황야의 마녀의 저주를 받아 90세 꼬부랑 할머니로 변해버린 소녀는?", "options": ["산", "키키", "소피", "치히로"], "answer": 2}, {"q": "거대한 고철 성을 움직이는 동력이자 하울과 심장을 공유하고 있는 귀여운 불꽃 악마는?", "options": ["토토로", "지지", "가오나시", "캘시퍼"], "answer": 3}, {"q": "아름다운 외모를 가졌으나 머리 색이 주황색으로 잘못 염색되자 절망하여 녹아내리던 미소년 마법사는?", "options": ["하쿠", "아시타카", "하울", "파즈"], "answer": 2}, {"q": "소피가 들판에서 구해준 뒤 묵묵히 곁을 지키며 도와준 순무 머리의 허수아비의 진짜 정체는?", "options": ["비밀리에 정체를 숨기고 있던 하울의 친형", "소피를 감시하기 위해 변장한 황야의 마녀", "저주에 걸려 마법에 빠졌던 이웃 나라 왕자", "전쟁을 피해 몰래 도망쳐 나온 제국의 국왕"], "answer": 2}, {"q": "영화 전체를 관통하는 히사이시 조의 왈츠풍 대표 OST 명곡의 제목은?", "options": ["어느 여름날", "바다가 보이는 마을", "인생의 회전목마", "언제나 몇 번이라도"], "answer": 2}]}, {"id": 93, "category": "영화&애니", "title": "너의 이름은", "author": "신카이 마코토", "keywords": "타키, 미츠하, 티아마트 혜성, 무스비(매듭), 몸이 뒤바뀜", "questions": [{"q": "도쿄의 남고생 타키와 시골 마을 이토모리의 여고생 미츠하 사이에 일어난 신비한 현상은?", "options": ["마음과 생각을 나누는 텔레파시", "꿈을 통해 미래를 미리 보는 능력", "몸과 영혼이 서로 뒤바뀌는 현상", "주변의 모든 시간이 멈추는 현상"], "answer": 2}, {"q": "미츠하의 할머니가 가르쳐준 실을 엮고 시간을 잇는 우주의 섭리를 뜻하는 전통 개념은?", "options": ["윤회관", "카르마", "무스비", "인과율"], "answer": 2}, {"q": "타키가 미츠하를 만나러 시골로 갔을 때 알게 된 3년 전의 충격적인 진실은?", "options": ["대규모 수해가 발생하여 마을 주민들이 뿔뿔이 흩어졌다", "거대한 산사태가 발생해 마을 전체가 매몰되어 버렸다", "혜성 파편이 떨어져 마을과 주민들이 참사를 당했다", "갑작스러운 지진 해일로 마을이 완전히 파괴되어 버렸다"], "answer": 2}, {"q": "황혼기(카타와레도키, 낮도 밤도 아닌 시간)에 산 정상 분화구에서 두 사람이 기적처럼 마주쳤을 때 한 행동은?", "options": ["잊지 않기 위해 기념사진을 함께 찍었다", "서로의 손바닥에 이름을 적어주려 했다", "소중히 간직하던 물건을 서로 교환했다", "마음을 확인하며 서로를 따뜻하게 안았다"], "answer": 1}, {"q": "미츠하의 손바닥에 타키가 이름 대신 적어놓았던 눈물겨운 글자는 무엇이었나요?", "options": ["\"기다려\"", "\"사랑해\"", "\"기억해\"", "\"좋아해\""], "answer": 3}]}, {"id": 94, "category": "영화&애니", "title": "스즈메의 문단속", "author": "신카이 마코토", "keywords": "이와토 스즈메, 다이진, 다리 세 개 달린 의자, 재난의 문", "questions": [{"q": "폐허에 방치된 재난의 문을 닫고 열쇠를 잠그는 여행을 떠나는 주인공 여고생은?", "options": ["이와토 스즈메", "미야미즈 미츠하", "츠키시마 시즈쿠", "오기노 치히로"], "answer": 0}, {"q": "재난을 몰고 오는 거대한 지렁이 요괴(미미즈)를 막기 위해 전국을 떠도는 '닫힘사' 청년은?", "options": ["타치바나 타키", "아시타카 히코", "모리시마 호다카", "무나카타 소타"], "answer": 3}, {"q": "스즈메가 뽑아버린 요석이자, 흰 고양이의 모습으로 스즈메를 이끌며 장난을 치던 신령은?", "options": ["다이진", "사다이진", "가오나시", "토토로"], "answer": 0}, {"q": "재난의 문이 열릴 때마다 지하에서 뿜어져 나와 땅에 닿으면 거대한 지진을 일으키는 붉은 기운은?", "options": ["미미즈", "싱크홀", "마그마", "쓰나미"], "answer": 0}, {"q": "스즈메가 어릴 적 겪었던 어머니를 잃은 트라우마의 배경이 되는 실제 일본의 대참사는?", "options": ["1923년 관동 대지진", "1995년 한신 대지진", "2016년 구마모토 지진", "2011년 동일본 대지진"], "answer": 3}]}, {"id": 95, "category": "영화&애니", "title": "괴물", "author": "봉준호", "keywords": "한강 둔치, 송강호(박강두), 괴생명체, 가족의 사투", "questions": [{"q": "미군 부대에서 한강으로 무단 방류한 어떤 유독 물질 때문에 흉측한 돌연변이 괴물이 탄생했나요?", "options": ["다이옥신 용액", "고농도 염화수소", "포름알데히드", "방사성 폐기물"], "answer": 2}, {"q": "한강 매점에서 낮잠을 자다 딸 현서가 괴물에게 납치되자 구출하기 위해 목숨을 건 아버지는?", "options": ["박남일", "박희봉", "박강두", "박남주"], "answer": 2}, {"q": "전국체전 양궁 동메달리스트로 마지막 순간 불화살을 괴물의 눈에 명중시킨 고모는?", "options": ["박미자", "박남주", "박옥희", "박현서"], "answer": 1}, {"q": "미국과 정부가 괴물 바이러스가 퍼졌다며 한강 일대에 살포한 가상의 노란색 방역 살충제는?", "options": ["살충제 디디티", "에이전트 옐로우", "에이전트 오렌지", "최루성 독가스"], "answer": 1}, {"q": "국가의 무능과 언론의 왜곡 속에서 납치된 아이를 구하기 위해 처절하게 사투를 벌인 주체는 누구였나요?", "options": ["국가 안보를 책임지는 최정예 군 특수부대원들", "진상을 규명하기 위해 파견된 국회 특별조사단", "최첨단 무기로 무장한 미군 소속 대테러 부대", "서로를 지키기 위해 헌신한 평범한 소시민 가족"], "answer": 3}]}, {"id": 96, "category": "영화&애니", "title": "극한직업", "author": "이병헌", "keywords": "수원왕갈비통닭, 마형사, 잠복근무 위장 창업, 1600만 관객", "questions": [{"q": "실적 부진으로 해체 위기에 몰린 마포경찰서 마약반 5인방이 마약 밀매 조직을 감시하기 위해 인수한 가게는?", "options": ["아지트 앞 치킨집", "골목 모퉁이 분식집", "상가 1층 피자집", "길 건너편 중국집"], "answer": 0}, {"q": "수원 갈비집 아들 마형사의 환상적인 손맛으로 탄생하여 전국적인 대박을 터뜨린 메뉴는?", "options": ["수원왕갈비통닭", "매콤양념치킨", "허니버터치킨", "마늘간장치킨"], "answer": 0}, {"q": "고반장(류승룡)이 치킨집 주문 전화를 받을 때마다 외친 전설의 명대사는?", "options": ["\"한 번 맛보면 잊을 수 없다. 치킨의 새로운 혁명, 수원왕갈비통닭입니다.\"", "\"낮에는 범인 잡고 밤에는 닭을 튀긴다. 정성을 다하는 왕갈비통닭입니다.\"", "\"지금까지 이런 맛은 없었다. 갈비인가 통닭인가, 수원왕갈비통닭입니다.\"", "\"바삭함과 달콤함의 환상 궁합. 세상에서 가장 맛있는 치킨 전문점입니다.\""], "answer": 2}, {"q": "알고 보니 마약반 형사 5인방의 숨겨진 진짜 무시무시한 정체는 무엇이었나요?", "options": ["국가대표 및 특수부대 출신의 최정예 무술 유단자들", "특수 범죄 현장에서 오랜 경력을 쌓은 전직 프로 킬러들", "무술 실력은 전혀 없지만 두뇌 회전이 빠른 천재 사기꾼들", "조폭 조직의 비밀을 캐내기 위해 잠입했던 전직 깡패들"], "answer": 0}, {"q": "1626만 관객을 동원하며 한국 영화 역대 흥행 2위에 오른 이 영화의 가장 큰 매력은?", "options": ["시대적 아픔을 깊이 있게 조명한 진지하고 묵직한 역사적 서사", "최첨단 컴퓨터 그래픽으로 완성한 거대하고 화려한 공상 과학", "쉴 새 없이 터지는 유쾌한 상황극과 찰떡같은 대사의 말맛", "손에 땀을 쥐게 만드는 잔혹한 누아르와 긴장감 넘치는 추격전"], "answer": 2}]}, {"id": 97, "category": "영화&애니", "title": "엑시트", "author": "이상근", "keywords": "용남(조정석), 의주(임윤아), 유독가스, 따따따 따- 따- 따 따따따, 클라이밍", "questions": [{"q": "도심 전체를 뒤덮은 치명적인 백색 유독가스 테러 속에서 탈출하기 위해 사투를 벌이는 두 주인공의 공통된 특기는?", "options": ["수영 선수 출신", "대학 산악동아리 출신", "특공대 출신", "마라톤 선수 출신"], "answer": 1}, {"q": "유독가스가 지표면에서부터 점점 높이 차오르자 생존자들이 무조건 올라가야 했던 장소는?", "options": ["지하 깊숙이 위치한 지하철 역사 승강장", "고층 빌딩의 바람이 부는 가장 높은 옥상", "두꺼운 방화벽이 설치된 지하 대피소", "탁 트인 한강 다리 난간 위 안전 구역"], "answer": 1}, {"q": "구조 헬리콥터에 자신들의 위치를 알리고 모스부호 SOS 신호를 보내기 위해 노래방 마이크와 핸드폰 플래시로 외친 리듬은?", "options": ["여기 아직 사람이 남아 있어요", "살려주세요 살려주세요 제발", "아리랑 아리랑 아라리요", "따따따 따- 따- 따 따따따"], "answer": 3}, {"q": "구조 헬기가 왔으나 무게 초과로 인해 용남과 의주가 양보하고 취한 눈물겨운 선택은?", "options": ["위험을 무릅쓰고 헬기 난간에 억지로 매달림", "자신들을 먼저 구해달라고 조종사에게 거세게 항의함", "가스 구름을 피해 건물 아래로 뛰어내림", "학생들을 먼저 태워 올려보내고 둘만 옥상에 남음"], "answer": 3}, {"q": "연회장 테이블보, 쓰레기봉투, 분필가루, 운동화끈 등 생활용품을 활용해 보여준 탈출 액션의 특징은?", "options": ["높은 건물을 단숨에 뛰어넘는 초능력 비행 액션", "방탄 기능과 추진력을 갖춘 특수 슈퍼 히어로 수트 착용", "위기 순간마다 기적을 부르는 최첨단 마법 도구의 사용", "재난 상황에서 실질적으로 활용 가능한 현실적 생존 기술"], "answer": 3}]}, {"id": 98, "category": "영화&애니", "title": "파묘", "author": "장재현", "keywords": "최민식, 김고은, 이화림, 험한 것, 쇠말뚝과 민족의 정기", "questions": [{"q": "풍수사 상덕(최민식), 장의사 영근, 무당 화림(김고은)과 봉길이 거액의 의뢰를 받고 파헤친 무덤의 위치는?", "options": ["제주도 한라산 중턱의 양지바른 유서 깊은 명당터", "서울 시내 한복판에 조성된 평범한 가족 공원묘지", "동해 바다 멀리 홀로 솟아 있는 외딴 독도 절벽", "강원도 고성의 험준한 산꼭대기 악지에 위치한 묘자리"], "answer": 3}, {"q": "무당 화림이 파묘를 시작하기 전 인부들을 보호하고 액운을 막기 위해 칼을 쥐고 펼친 신들린 굿판은?", "options": ["풍어제", "씻김굿", "진오귀굿", "대살굿"], "answer": 3}, {"q": "관을 파낸 후 그 아래 깊은 땅속에 겹쳐서 묻혀 있던 거대한 두 번째 관의 기괴한 매장 형태는?", "options": ["차가운 지하 암반수 속에 잠겨 있는 검은 석관", "수직으로 꼿꼿이 세워져 묻힌 거대한 쇠사슬 감긴 관", "가로로 편안하게 눕혀진 번쩍이는 황금관", "공중에 굵은 동아줄로 매달린 투명한 유리관"], "answer": 1}, {"q": "관 속에서 튀어나와 맹렬한 도깨비불을 뿜으며 사람들을 학살한 '험한 것'의 진짜 정체는?", "options": ["쇠붙이가 척추에 박힌 채 매장된 일본 장수의 정령", "백 년 묵은 구렁이가 원한을 품고 변한 뱀 요괴", "호랑이의 형상을 하고 사람을 홀리는 산신령 귀신", "자손들에게 저주를 내리는 친일파 조상의 원혼"], "answer": 0}, {"q": "풍수사 상덕이 오행(수화목금토)의 상생상극 원리를 이용해 쇠와 불의 성질을 가진 괴물을 꺾은 방법은?", "options": ["기름을 붓고 도깨비불보다 뜨거운 화염을 지핌", "성수를 뿌리며 구마 의식의 기도문을 외움", "은탄환을 장전한 산탄총을 급소에 명중시킴", "피 묻은 젖은 참나무 몽둥이로 쇠를 내리쳐 쪼갬"], "answer": 3}]}, {"id": 99, "category": "영화&애니", "title": "부산행", "author": "연상호", "keywords": "KTX 열차, 좀비 바이러스, 마동석(윤상화), 공유(서석우), 부성애", "questions": [{"q": "서울에서 부산으로 향하는 KTX 고속열차 안에서 급속도로 번진 미증유의 대재난은?", "options": ["테러범이 열차 환기구에 살포한 치명적인 신경 독가스", "선로 결함으로 인한 고속열차 연쇄 탈선과 충돌 사고", "열차 지붕을 뚫고 습격한 외계 생명체의 무차별 침공", "물리면 순식간에 감염되어 폭주하는 변종 좀비 바이러스"], "answer": 3}, {"q": "임신한 아내 성경을 지키기 위해 맨주먹으로 좀비 떼를 때려잡으며 관객들을 사로잡은 마동석의 배역 이름은?", "options": ["서석우", "민영석", "윤상화", "최영웅"], "answer": 2}, {"q": "달리는 KTX 열차 안에서 좀비들이 어둠 속(터널을 지날 때)에서 보인 치명적인 약점은?", "options": ["강한 플래시 불빛을 보면 피부가 타버리는 약점", "기온이 급격히 떨어지면 몸이 굳어 움직이지 못함", "어두워지면 사람을 보지 못하고 소리에만 반응하는 특성", "물이 몸에 닿으면 감전된 듯 극심한 공포를 느낌"], "answer": 2}, {"q": "자신의 생존만을 위해 다른 승객들을 방패막이로 내던지며 좀비보다 더 잔인한 이기심을 보여준 악역은?", "options": ["야구부 학생", "기관사", "용석", "노숙자"], "answer": 2}, {"q": "펀드매니저 석우(공유)가 감염된 후 마지막 남은 인간의 이성으로 딸 수안을 지키기 위해 한 행동은?", "options": ["이성을 잃고 조종실의 기관사를 맹렬히 공격함", "감염을 늦추기 위해 홀로 열차 뒤편으로 백신을 찾으러 감", "딸을 안전한 기관실에 넣고 스스로 달리는 열차에서 투신함", "열차 칸을 가로막고 남은 좀비들과 맨몸으로 싸움"], "answer": 2}]}, {"id": 100, "category": "영화&애니", "title": "나 홀로 집에", "author": "크리스 콜럼버스", "keywords": "케빈 맥콜리스터, 크리스마스, 어리바리 도둑 2인조, 기발한 부비트랩", "questions": [{"q": "크리스마스 파리 여행을 떠나는 대가족에게 다락방에 갇혀 홀로 남겨진 8살 악동 주인공은?", "options": ["케빈 맥콜리스터", "버즈", "해리", "풀러"], "answer": 0}, {"q": "크리스마스 빈집털이를 노리고 케빈의 집에 침입하려 한 어리바리한 도둑 2인조의 이름은?", "options": ["배트맨과 로빈", "해리와 마브", "후크와 스미", "톰과 제리"], "answer": 1}, {"q": "케빈이 도둑들을 물리치기 위해 온 집안에 설치한 기발한 방어 도구가 아닌 것은?", "options": ["계단에 늘어뜨린 무거운 페인트통과 다리미", "살상용 레이저 총과 강력한 화약 폭탄", "빨갛게 달궈진 문고리와 바닥의 유리 장식품", "마루 바닥에 칠해놓은 끈적한 타르와 닭 깃털"], "answer": 1}, {"q": "동네 사람들에게 살인마라는 무서운 헛소문이 돌았으나, 케빈에게 가족의 소중함을 일깨워준 이웃 노인은?", "options": ["바다를 누비는 산티아고 노인", "눈을 치우는 이웃 말리 할아버지", "목수 일을 하는 제페토 할아버지", "마을 의사인 베어먼 영감님"], "answer": 1}, {"q": "영화의 가장 상징적인 시그니처 포즈이자 포스터에 나온 케빈의 코믹한 장면은?", "options": ["독한 스킨을 바르고 양볼을 감싸며 비명 지르는 포즈", "부모님 침대 위에서 신나게 뜀박질하는 포즈", "치즈 피자를 크게 베어 물며 만족해하는 포즈", "비비탄 총을 겨누며 눈을 찡긋하는 포즈"], "answer": 0}]}, {"id": 101, "category": "교과서 수록 소설", "title": "만복이네 떡집", "author": "김리리", "keywords": "욕쟁이 만복이, 신비한 떡집, 착한 말, 배려", "questions": [{"q": "주인공 만복이가 친구들에게 욕을 하고 심술을 부리게 된 속마음은 무엇이었나요?", "options": ["반 친구들과 어울리는 것이 너무 싫고 귀찮아서", "마음과 달리 자기도 모르게 거친 말이 튀어나와서", "선생님께 강한 아이라는 칭찬과 인정을 받으려고", "집에서 부모님이 남에게 지지 말라고 엄하게 시켜서"], "answer": 1}, {"q": "만복이가 신비한 떡집에서 먹은 떡 중, '칭찬만 술술 나오게 만든' 떡은?", "options": ["찹쌀떡 ", "꿀떡", "바람떡", "무지개떡"], "answer": 1}, {"q": "먹으면 다른 사람의 웃는 얼굴과 거짓말을 구분할 수 있게 해준 알록달록한 떡은?", "options": ["시루떡", "무지개떡", "백설기", "송편"], "answer": 1}, {"q": "신비한 떡집에서 떡값을 치르는 방법으로 옳은 것은?", "options": ["착한 일이나 친구의 웃음소리 등 따뜻한 마음", "부모님이 찍어준 비밀 인감도장과 서명", "옛날부터 전해 내려오는 귀한 황금 동전", "은행에서 인출해 온 현금 백만 원 지폐"], "answer": 0}, {"q": "이 동화를 통해 배울 수 있는 중심 교훈은 무엇인가요?", "options": ["건강을 위해 아침마다 신선한 떡을 챙겨 먹어야 한다", "욕을 잘하고 거칠어야 친구들 사이에서 인기가 많아진다", "골목길 구석에 숨겨진 신비한 비밀 가게를 찾아다녀야 한다", "따뜻한 말 한마디가 친구의 마음을 열고 자신을 변화시킨다"], "answer": 3}]}, {"id": 102, "category": "교과서 수록 소설", "title": "잘못 뽑은 반장", "author": "이은재", "keywords": "이로운, 문제아 반장, 서당개, 책임감", "questions": [{"q": "선생님과 친구들에게 장난꾸러기 문제아로 찍혔던 주인공 소년의 이름은?", "options": ["백온조", "이로운", "김영택", "안건우"], "answer": 1}, {"q": "로운이가 4학년 5반의 반장 선거에 장난삼아 나갔다가 당선된 결정적인 이유는?", "options": ["선생님이 직접 임명해서", "맛있는 간식을 돌려서", "친구들이 장난삼아 표를 몰아주어서", "공부를 전교 1등으로 잘해서"], "answer": 2}, {"q": "반장이 된 후 로운이를 끊임없이 무시하고 반장 자리를 노리던 모범생 부반장은?", "options": ["김동호", "정수남", "황제하", "박만도"], "answer": 2}, {"q": "로운이가 반장으로서 진정한 책임감을 느끼고 아이들을 위해 헌신하게 된 계기는?", "options": ["선생님이 학급을 위해 애썼다며 특별한 선물을 주어서", "오해와 따돌림을 겪으며 친구들의 깊은 상처를 공감하게 됨", "부반장 제하와 방과 후 공터에서 주먹다짐을 벌인 후", "반장 노릇을 제대로 못 한다고 어머니께 크게 혼나서"], "answer": 1}, {"q": "이 작품이 보여주는 진정한 반장의 자격이란 무엇인가요?", "options": ["아이들을 한눈에 제압할 수 있는 강한 힘과 엄격한 카리스마", "선생님의 모든 지시와 학교 방침에 무조건 복종하는 성실함", "전교 1등의 뛰어난 시험 성적과 남부럽지 않은 부유한 가정환경", "성적보다 친구들의 마음을 깊이 헤아리고 솔선수범하는 책임감"], "answer": 3}]}, {"id": 103, "category": "교과서 수록 소설", "title": "가방 들어주는 아이", "author": "고정욱", "keywords": "석우, 영택이, 장애인 친구, 1년 동안의 우정", "questions": [{"q": "선생님의 부탁으로 1년 동안 다리가 불편한 친구 영택이의 무거운 가방을 들어주게 된 주인공은?", "options": ["로운이", "만복이", "기수", "석우"], "answer": 3}, {"q": "영택이가 앓고 있는 신체적 장애는 무엇인가요?", "options": ["말을 유창하게 하지 못하는 언어장애", "목발을 짚어야 걷는 소아마비 지체장애", "소리를 전혀 들을 수 없는 청각장애", "앞을 제대로 보기 힘든 시각장애"], "answer": 1}, {"q": "석우가 비가 오는 날 영택이의 가방을 들어주며 가장 힘들었던 점은?", "options": ["빗물에 흙탕물이 튀어 새 옷이 젖는 것이 싫어서", "자기 우산에 영택이의 무거운 가방까지 들어야 해서", "안개가 자욱하여 집으로 가는 길을 잃어버려서", "영택이가 퉁명스럽게 굴고 고마워하지 않아서"], "answer": 1}, {"q": "종업식 날, 교장선생님이 석우에게 수여한 뜻깊은 상장은 무엇이었나요?", "options": ["선행상", "모범 어린이 표창장", "체육상", "개근상"], "answer": 1}, {"q": "영택이와 어머니가 1년 동안 가방을 들어준 석우에게 눈물로 건넨 감사의 선물은?", "options": ["최신형 태블릿과 스마트폰", "정성껏 포장한 새 양말과 감사 편지", "번쩍이는 금도금 황금 만년필", "마을 어귀에서 타는 고급 자전거"], "answer": 1}]}, {"id": 104, "category": "교과서 수록 소설", "title": "책 먹는 여우", "author": "프란치스카 비어만", "keywords": "여우 아저씨, 소금과 후추, 도서관, 베스트셀러 작가", "questions": [{"q": "여우 아저씨가 책을 읽은 뒤 맛있는 식사로 먹을 때 꼭 뿌려 먹는 조미료 두 가지는?", "options": ["소금과 후추", "참기름과 고추장", "마요네즈와 머스터드", "설탕과 케첩"], "answer": 0}, {"q": "집에 있는 책과 가산을 탕진한 여우 아저씨가 공짜로 책을 먹기 위해 몰래 숨어든 곳은?", "options": ["서점", "시립 도서관", "인쇄소", "학교 교무실"], "answer": 1}, {"q": "배가 너무 고파 결국 서점을 털려다 체포되어 감옥에 갇힌 여우 아저씨가 간수에게 요구한 것은?", "options": ["맛있는 닭고기", "따뜻한 담요", "종이와 연필", "소금과 후추"], "answer": 2}, {"q": "여우 아저씨가 감옥에서 쓴 첫 소설이 출간되자 일어난 놀라운 일은?", "options": ["전 세계적인 초대형 베스트셀러가 됨", "초등학교 국어 교과서에만 짧게 실림", "표절 혐의로 출판 계약이 즉시 취소됨", "내용이 너무 어려워 아무도 사지 않음"], "answer": 0}, {"q": "이 유쾌한 동화에서 '책을 먹는다'는 행위가 상징하는 참된 의미는?", "options": ["배가 고파서 책의 종이를 씹어 삼키는 것", "남들에게 지식을 과시하려는 허세 어린 태도", "장난삼아 책장을 찢고 훼손하는 행동", "책의 지식과 감동을 온전히 소화 흡수하는 독서"], "answer": 3}]}, {"id": 105, "category": "교과서 수록 소설", "title": "훈민정음 구출 작전", "author": "김기정", "keywords": "간송 전형필, 훈민정음 해례본, 문화재 수호", "questions": [{"q": "일제강점기 우리 민족의 혼이 담긴 국보 〈훈민정음 해례본〉을 거금을 주고 지켜낸 실존 인물은?", "options": ["주시경", "도산 안창호", "백범 김구", "간송 전형필"], "answer": 3}, {"q": "훈민정음 해례본이 세상에 발견되기 전까지 안동의 어느 가문에서 대대로 비밀리에 보관해 왔나요?", "options": ["안동 권씨 종택", "파평 윤씨 종택", "전주 이씨 종택", "안동 광산 김씨 종택"], "answer": 3}, {"q": "훈민정음 해례본이 우리 역사에서 유네스코 세계기록유산으로 등재될 만큼 결정적으로 중요한 까닭은?", "options": ["조선 왕실 역대 임금들의 상세한 가계도가 담겨 있어서", "순금 활자로 화려하게 인쇄된 유일한 왕실 서적이라서", "세종대왕의 친필 서명과 어인이 또렷하게 찍혀 있어서", "한글의 창제 원리와 문자 사용법이 밝혀진 유일한 책이라서"], "answer": 3}, {"q": "6·25 한국전쟁 피난길에서도 간송 전형필이 훈민정음 해례본을 지키기 위해 취한 행동은?", "options": ["안전을 위해 서울의 미국 대사관에 맡겨둠", "단단한 쇠로 만들어진 은행 비밀 금고에 보관함", "베개 속에 넣고 잠잘 때도 항상 머리에 베고 잠", "시골 기와집 마당 땅속 깊은 항아리에 묻어둠"], "answer": 2}, {"q": "이 소설을 통해 학생들이 배워야 할 가장 중요한 태도는 무엇인가요?", "options": ["오래된 옛날 고서들을 정리하고 버리는 실용적 태도", "세계화 시대에 발맞춘 외국어 몰입 교육의 필요성", "민족의 문화유산을 지켜낸 숭고한 헌신과 자긍심", "인사동 골동품 시장에서 고미술품을 비싸게 파는 법"], "answer": 2}]}, {"id": 106, "category": "교과서 수록 소설", "title": "사금파리 한 조각", "author": "린다 수 박", "keywords": "목이, 민 도공, 고려청자, 사금파리, 뉴베리상", "questions": [{"q": "다리 밑에서 두루미 아저씨와 함께 살며 고려청자 도공을 꿈꾸는 고아 소년의 이름은?", "options": ["진수", "바우", "수남이", "목이"], "answer": 3}, {"q": "목이가 마을 최고의 도예 장인인 민 도공 밑에서 일하게 된 계기는 무엇인가요?", "options": ["도예가가 되라는 돌아가신 부모님의 간절한 유언 때문에", "가마터의 도자기를 훔치려다 장인에게 현장에서 붙잡혀서", "민 도공의 청자 작품을 구경하다 깨뜨린 빚을 갚으려고", "가난을 딱하게 여긴 마을 원님의 적극적인 주선으로"], "answer": 2}, {"q": "민 도공의 뛰어난 상감청자를 왕실 감찰관에게 보여주기 위해 목이가 향한 목적지는?", "options": ["서경", "한양", "강화도", "송도"], "answer": 3}, {"q": "송도로 가던 중 강도들에게 도자기를 모두 절벽 아래로 빼앗겨 깨졌을 때, 목이가 주워 든 것은?", "options": ["비취색 상감 문양이 영롱하게 살아있는 사금파리 조각", "빗물에 젖어 굳어버린 푸석한 백토 흙덩어리", "강도들이 무기로 쓰려다 버리고 간 날카로운 깨진 돌", "절벽 풀숲에 온전하게 떨어진 도자기 뚜껑"], "answer": 0}, {"q": "왕실 감찰관이 사금파리 한 조각을 보고 내린 놀라운 결정은?", "options": ["얼마간의 동전을 쥐여주고 사금파리를 압류함", "비취색 청자의 뛰어난 예술성을 인정하여 일감을 하사함", "도자기를 간수하지 못한 책임을 물어 관아에 가둠", "깨진 조각을 가져온 거짓말쟁이라며 문전박대함"], "answer": 1}]}, {"id": 107, "category": "교과서 수록 소설", "title": "푸른 사자 와니니", "author": "이현", "keywords": "암사자 와니니, 마디바 무리, 아프리카 초원, 연대와 성장", "questions": [{"q": "어린 암사자 와니니가 살던 거대한 아프리카 초원 사자 무리의 우두머리 할머니 사자는?", "options": ["아산테", "무투", "잠보", "마디바"], "answer": 3}, {"q": "와니니가 무리에서 쫓겨나 떠돌이 신세가 된 억울한 누명은 무엇이었나요?", "options": ["적의 침입을 미리 알리지 못해 동생을 위험에 빠뜨렸다는 오해", "영역을 침범한 이웃 사자 무리와 함부로 싸워서", "우두머리 몰래 사냥한 사슴 고기를 혼자 먹어서", "사냥 훈련 시간에 게으름을 피우며 잠만 자서"], "answer": 0}, {"q": "추방된 와니니가 초원을 떠돌며 만나 서로를 의지하게 된 약하고 상처 입은 친구들은?", "options": ["사자 무리의 눈치를 보며 도망치는 얼룩말과 어린 영양", "초원을 누비는 재빠른 치타와 약삭빠른 하이에나", "물웅덩이를 지키는 거대한 코끼리와 키 큰 기린", "무리에서 홀로 떨어져 나온 외톨이 아산테와 어린 잠보"], "answer": 3}, {"q": "작고 연약했던 와니니가 험난한 야생에서 발휘한 자신만의 특별한 장점은?", "options": ["성체 코끼리도 단숨에 쓰러뜨릴 수 있는 거대한 체격", "바람 냄새로 멀리서 다가오는 위험을 직감하는 뛰어난 감각", "하이에나 무리와 자유롭게 대화할 수 있는 영특한 능력", "원숭이처럼 높은 아카시아 나무를 잽싸게 타는 민첩성"], "answer": 1}, {"q": "이 작품에서 '푸른 사자'가 상징하는 진정한 의미로 가장 알맞은 것은?", "options": ["두려움에 맞서 자신만의 당당한 삶을 개척하는 젊은 용기", "새의 날개를 달고 푸른 창공을 자유롭게 비행하는 수호신", "태어날 때부터 푸른빛 털을 지닌 전설 속 신비로운 사자", "초원의 평화를 위협하는 잔혹하고 무자비한 사냥꾼의 본능"], "answer": 0}]}, {"id": 108, "category": "교과서 수록 소설", "title": "마당을 나온 암탉", "author": "황선미", "keywords": "잎싹, 초록머리, 나그네, 족제비, 모성애", "questions": [{"q": "양계장의 좁은 철창 케이지에서 알만 낳다가 마당 밖으로 탈출한 암탉의 이름은?", "options": ["꼬꼬", "나리", "초록이", "잎싹"], "answer": 3}, {"q": "잎싹이 족제비의 습격을 피해 갈대숲에서 지극정성으로 품어 부화시킨 새끼의 정체는?", "options": ["참새", "닭", "거위", "청둥오리"], "answer": 3}, {"q": "초록머리가 자라면서 암탉인 엄마 잎싹과 자신의 외모와 능력이 달라 겪은 정체성의 고민은?", "options": ["숲속 동물들이 깃털 색깔이 다르다고 놀려서", "자신은 물갈퀴가 있어 수영할 수 있는데 엄마는 못 해서", "새벽을 알리는 우렁찬 닭 울음소리를 내지 못해서", "양계장 동물들이 엄마를 사나운 암탉이라며 피해서"], "answer": 1}, {"q": "초록머리가 마침내 다른 청둥오리 무리의 파수꾼이 되어 하늘 높이 날아갈 때 잎싹의 심정은?", "options": ["곁을 떠나지 말라고 울부짖으며 초록머리의 날개를 붙잡음", "자신을 홀로 남겨두고 떠났다며 깊은 배신감과 분노에 휩싸임", "자식을 온전히 세상으로 떠나보내는 가슴 벅찬 감동과 슬픔", "더 이상 돌보지 않아도 된다며 시원섭섭한 무덤덤함을 느낌"], "answer": 2}, {"q": "마지막 순간에 잎싹이 굶주린 족제비에게 자신의 몸을 기꺼이 내어준 숭고한 이유는?", "options": ["사냥꾼이 놓아둔 날카로운 덫에 발이 걸려서", "외로움과 노쇠함에 지쳐 스스로 삶을 포기해서", "족제비의 어린 새끼들이 굶어 죽지 않기를 바라는 자비", "추위 속에서 족제비와 싸우다 체력이 바닥나서"], "answer": 2}]}, {"id": 109, "category": "교과서 수록 소설", "title": "아홉 살 인생", "author": "위기철", "keywords": "백여민, 산동네, 신기종, 피아노 소녀 우림이", "questions": [{"q": "가난한 산동네로 이사 와 아홉 살의 나이에 세상의 희로애락을 배워나가는 주인공 소년은?", "options": ["한병태", "백여민", "선윤재", "박만도"], "answer": 1}, {"q": "여민이의 단짝 친구이자 기상천외한 거짓말과 허풍으로 아이들을 사로잡는 골목대장은?", "options": ["신기종", "석우", "기수", "로운이"], "answer": 0}, {"q": "서울 부잣집에서 산동네로 전학 와 하얀 피아노를 치며 여민이의 마음을 흔든 새침데기 소녀는?", "options": ["옥희", "장우림", "점순이", "이도라"], "answer": 1}, {"q": "여민이가 한쪽 눈을 실명한 어머니를 위해 간절하게 선물하고 싶어 했던 물건은?", "options": ["비단 목도리", "은반지", "예쁜 손수건", "검은 색안경"], "answer": 3}, {"q": "소설의 마지막에서 여민이가 아홉 살의 나이를 되돌아보며 내린 성숙한 결론은?", "options": ["산동네 골목길의 모든 싸움에서 이기는 대장이 됨", "학교 시험에서 백 점을 맞아 칭찬받는 삶", "지나친 욕심을 버리고 슬픔과 기쁨을 껴안는 법을 배움", "빨리 어른이 되어 큰 부와 권력을 쥐는 것"], "answer": 2}]}, {"id": 110, "category": "교과서 수록 소설", "title": "나쁜 어린이 표", "author": "황선미", "keywords": "건우, 노란색 스티커, 안경호 선생님, 마음의 상처", "questions": [{"q": "3학년이 된 건우가 첫날부터 의도치 않은 사소한 행동으로 받게 된 노란 스티커의 이름은?", "options": ["반성문", "지각 표", "나쁜 어린이 표", "벌점 스티커"], "answer": 2}, {"q": "건우가 처음으로 나쁜 어린이 표를 받게 된 억울한 이유는 무엇이었나요?", "options": ["발표하려다 의자가 뒤로 넘어져 시끄러운 소리를 내서", "수학 쪽지시험을 보다가 짝꿍의 시험지를 훔쳐봐서", "복도에서 친구와 멱살을 잡고 주먹다짐을 벌여서", "방학 동안 밀린 일기장 숙제를 제출하지 않아서"], "answer": 0}, {"q": "나쁜 어린이 표가 자꾸 쌓이자 건우가 억울한 마음에 혼자서 비밀 수첩에 적기 시작한 표는?", "options": ["복수 노트", "착한 어린이 표", "비밀 일기", "나쁜 선생님 표"], "answer": 3}, {"q": "건우가 비 오는 날 선생님이 흘린 가방에서 '나쁜 어린이 표' 스티커 뭉치를 발견하고 한 행동은?", "options": ["자기 옷에 모두 붙임", "화장실 변기에 넣고 물을 내려버림", "선생님 책상에 돌려놓음", "친구들에게 나누어 줌"], "answer": 1}, {"q": "선생님이 건우의 '나쁜 선생님 표' 수첩을 발견한 뒤, 두 사람이 나눈 진정한 화해의 방식은?", "options": ["부모님을 학교로 불러 아이의 잘못된 버릇을 꾸짖음", "선생님을 비방했다는 이유로 더 무거운 벌점을 내림", "선생님이 자신의 서툰 교육을 반성하고 진심으로 안아줌", "교칙 위반으로 건우를 일주일간 출석 정지 처분함"], "answer": 2}]}, {"id": 111, "category": "교과서 수록 소설", "title": "샬롯의 거미줄", "author": "E.B. 화이트", "keywords": "돼지 윌버, 거미 샬롯, SOME PIG, 헌신적인 우정", "questions": [{"q": "봄에 태어난 무녀리(가장 작고 약한) 새끼 돼지 윌버를 살려달라며 정성껏 키운 소녀는?", "options": ["펀 아라블", "신데렐라", "도로시", "웬디"], "answer": 0}, {"q": "주커만 농장 헛간에서 윌버가 크리스마스 햄이 될 운명에 처하자, 그를 구하기로 결심한 회색 거미 친구는?", "options": ["샬롯", "루시", "아라크네", "벨"], "answer": 0}, {"q": "샬롯이 사람들을 놀라게 하고 윌버를 특별한 돼지로 만들기 위해 거미줄에 처음 새겨 넣은 영단어는?", "options": ["TERRIFIC", "RADIANT", "HUMBLE", "SOME PIG"], "answer": 3}, {"q": "농장 헛간의 쓰레기 더미를 뒤지며 샬롯에게 신문 조각의 글자들을 물어다 준 이기적이지만 도움을 준 쥐는?", "options": ["미키", "제리", "라따뚜이", "템플턴"], "answer": 3}, {"q": "품평회에서 특별상을 받아 목숨을 건진 윌버 곁에서 수명이 다해 숨을 거둔 샬롯을 위해 윌버가 한 일은?", "options": ["거미줄에 걸린 알주머니를 풀숲에 조용히 묻어주었다", "샬롯의 알주머니를 농장으로 데려와 새끼들을 돌보았다", "슬픔을 견디지 못하고 홀로 깊은 야생 숲으로 떠났다", "품평회장 구석에 샬롯의 작은 무덤을 만들고 돌아왔다"], "answer": 1}]}, {"id": 112, "category": "교과서 수록 소설", "title": "지각대장 존", "author": "존 버닝햄", "keywords": "존 패트릭 노먼 맥헤너시, 악어, 사자, 파도, 교사의 불신", "questions": [{"q": "학교에 갈 때마다 기상천외한 모험을 겪는 주인공 소년의 풀네임은?", "options": ["존 패트릭 노먼 맥헤너시", "피터 팬 웬디 달링", "한스 기벤라트 헤르만", "빅터 프랑켄슈타인"], "answer": 0}, {"q": "존이 학교에 늦었을 때 하수구에서 나와 장갑을 뺏어갔다고 말한 동물은?", "options": ["코끼리", "악어", "상어", "하마"], "answer": 1}, {"q": "존이 덤불에서 사자가 튀어나와 바지를 찢었다고 하자, 선생님이 내린 가혹한 벌은?", "options": ["수업이 끝난 후 운동장을 100바퀴 도는 체벌", "사자가 나온다는 거짓말을 않겠다는 반성문 400번 쓰기", "교탁 앞으로 불려 나가 나무 회초리로 손바닥 맞기", "한 달 동안 방과 후에 남아 칠판과 교실 바닥 청소하기"], "answer": 1}, {"q": "어느 날 존이 제시간에 학교에 도착했을 때, 교실 천장에 매달려 있던 선생님의 처지는?", "options": ["교실에 난입한 사자에게 쫓겨 책상 위를 뛰어다녔다", "교탁 의자에 기대어 평화롭게 낮잠을 자고 있었다", "물가에서 기어 나온 악어 뱃속에 들어가 허우적댔다", "커다란 털북숭이 고릴라에게 붙잡혀 천장에 매달려 있었다"], "answer": 3}, {"q": "고릴라에게 붙잡혀 살려달라는 선생님에게 존이 남긴 통쾌하고 냉정한 한마디는?", "options": ["이 동네에는 그런 커다란 고릴라 따위는 살지 않아요!", "선생님은 아이들에게 거짓말만 늘어놓는 분이에요!", "혼자 힘으로 빠져나오세요, 저는 도와드릴 수 없어요!", "교장 선생님과 경찰관을 모시러 교무실로 달려갈게요!"], "answer": 0}]}, {"id": 113, "category": "교과서 수록 소설", "title": "꼴찌라도 괜찮아", "author": "유효진", "keywords": "기수, 장애 친구 재웅이, 마라톤 달리기, 동행과 완주", "questions": [{"q": "기찬이가 걱정하는 것은?", "options": ["전국 어린이 미술대회", "동네 노래자랑 대회", "초등학교 가을 운동회", "학급 대청소 봉사활동"], "answer": 2}, {"q": "1등을 차지하여 메달을 목에 걸고 싶어 피나는 연습을 했던 주인공 소년은?", "options": ["만복", "석우", "기찬", "로운"], "answer": 2}, {"q": "결승선을 앞두고 홀로 저 멀리 뒤처져 넘어지며 울고 있는 재웅이를 본 기수가 내린 결단은?", "options": ["친구들에게 뒤돌아보지 말고 먼저 가라고 손짓함", "담임 선생님을 향해 큰 소리로 구급함을 외침", "친구를 모른 척하고 전속력으로 1등 결승선을 통과함", "달리기를 멈추고 되돌아가 재웅이를 부축해 일으킴"], "answer": 3}, {"q": "기수와 친구들이 넘어진 재웅이와 함께 손을 잡고 결승선을 통과할 때 일어난 감동적인 장면은?", "options": ["관중들이 경기가 늦어졌다며 아무도 박수를 치지 않음", "다른 반 아이들이 승부에 집착하여 거세게 야유를 보냄", "경기 진행 요원이 규칙 위반이라며 전원 실격 처리를 내림", "모두 손잡고 결승선을 통과해 공동 꼴찌이자 전원 1등이 됨"], "answer": 3}, {"q": "이 작품의 제목 〈꼴찌라도 괜찮아〉가 전하는 참된 가치는 무엇인가요?", "options": ["불필요한 경쟁을 없애기 위해 학교 운동회를 폐지함", "부상을 방지하기 위해 평소에 달리기를 천천히 하기", "남을 이기는 1등보다 손잡고 완주하는 연대의 가치", "성적 스트레스에서 벗어나 공부를 적당히 하는 태도"], "answer": 2}]}, {"id": 114, "category": "교과서 수록 소설", "title": "동서남북", "author": "이청준", "keywords": "판소리, 득음의 경지, 소리꾼의 삶, 방황과 길", "questions": [{"q": "이청준 소설 〈동서남북〉에서 주인공들이 평생을 바쳐 도달하고자 갈망한 예술의 경지는?", "options": ["탈춤", "시조 낭송", "가야금 산조", "판소리"], "answer": 3}, {"q": "주인공이 삶의 고단함과 예술적 방황 속에서 '동서남북' 사방을 떠돌며 찾고자 한 것은?", "options": ["가문을 배신하고 야반도주한 옛 스승을 향한 복수", "자신의 소리와 영혼이 깃들 궁극의 안식처이자 예술", "산속에 은밀히 숨겨진 거액의 금괴와 보물", "과거 시험에 급제하여 누릴 수 있는 높은 관직"], "answer": 1}, {"q": "소리꾼의 가슴속에 맺혀 소리의 깊이를 더해주는 한국 전통의 핵심 정서는?", "options": ["한", "환락", "분노", "질투"], "answer": 0}, {"q": "작품에서 주인공에게 예술적 지침과 시련을 동시에 안겨주는 인물 관계는?", "options": ["엄격한 소리 스승과 예술을 연마하는 제자의 관계", "탐관오리 사또와 명령에 복종하는 포졸의 관계", "소작료를 독촉하는 악덕 지주와 소작농의 관계", "병을 고치려는 의사와 목숨을 맡긴 환자의 관계"], "answer": 0}, {"q": "〈서편제〉와 맥을 같이하는 이청준 남도 소리 문학의 세계관으로 가장 알맞은 것은?", "options": ["서양 고전 음악의 우수성을 맹목적으로 찬양하는 태도", "대중의 인기를 얻어 음반을 많이 파는 상업적 성공", "인간의 고통과 한을 숭고한 예술적 경지로 승화하는 삶", "낡은 민족 전통문화를 시대에 맞게 무조건 폐지함"], "answer": 2}]}, {"id": 115, "category": "교과서 수록 소설", "title": "눈길", "author": "이청준", "keywords": "어머니, 하얀 눈길, 눈물 발자국, 모성애", "questions": [{"q": "오랜만에 시골 고향의 노모를 찾아왔지만 냉정하게 서둘러 서울로 떠나려 하는 아들의 직업은?", "options": ["학교 교사", "사업가", "의사", "공무원"], "answer": 0}, {"q": "형의 사업 실패로 집안이 풍비박산 났을 때, 노모가 아들을 위해 남겨두었던 것은?", "options": ["외갓집에서 물려받은 문전옥답 땅문서 한 장", "어려울 때 요긴하게 쓰라며 건넨 숨겨둔 금반지", "남의 손에 넘어간 옛집에서 지어준 따뜻한 밥 한 끼", "장롱 속에 곱게 모셔둔 귀한 비단 옷 한 벌"], "answer": 2}, {"q": "어두운 새벽 눈 덮인 산길을 걸어 아들을 버스 정류장까지 배웅한 뒤, 어머니가 혼자 돌아오며 한 행동은?", "options": ["이웃집 마루에 들러 동네 사람들과 수다를 떨었음", "골목길 아이들과 장난삼아 눈싸움을 하며 돌아옴", "아침 일찍 마을 공동 텃밭으로 밭일을 하러 나감", "아들의 발자국을 되짚어 밟으며 하염없이 눈물 흘림"], "answer": 3}, {"q": "아내가 어머니에게 그날의 눈길 이야기를 들려달라고 청할 때, 아들이 취한 태도는?", "options": ["이불속에 얼굴을 파묻고 감당할 수 없는 사랑에 오열함", "피곤하다는 핑계를 대며 모른 척 코를 골며 잠을 청함", "쓸데없는 옛이야기를 꺼내지 말라며 말을 가로막음", "어머니에게 크게 화를 내며 새벽 찬바람 속에 집을 나섬"], "answer": 0}, {"q": "새벽 눈길 위에 남겨진 '발자국'이 상징하는 문학적 의미는 무엇인가요?", "options": ["자식을 향한 어머니의 끝없는 희생과 애달픈 사랑의 자취", "사기당해 빼앗긴 가문의 재산을 되찾지 못한 패배감", "밤새 쫓기던 도망자가 남기고 간 위태로운 도주의 흔적", "추운 겨울날 산골 마을에 내린 자연 현상으로서의 눈길"], "answer": 0}]}, {"id": 116, "category": "교과서 수록 소설", "title": "종탑 아래에서", "author": "윤흥길", "keywords": "6·25 전쟁, 딸랑발이 명은이, 백치 또또, 종소리", "questions": [{"q": "전쟁 통에 부모를 잃고 다리에 방울을 단 채 마을을 배회하는 백치 소녀의 이름은?", "options": ["순이", "명선이", "옥희", "또또"], "answer": 3}, {"q": "서울에서 피난 와 다리를 저는 소아마비 장애를 가진 고집 센 소년은?", "options": ["기수", "진수", "명은이", "건우"], "answer": 2}, {"q": "명은이가 교회 종탑에 올라가 밧줄을 당겨 맑은 종소리를 울리려 했던 간절한 소망은?", "options": ["마을 주민들에게 새벽기도 시간을 정확히 알리려고", "친구들과 종탑 꼭대기에서 장난을 치며 놀려고", "마을 어귀로 침략해 오는 적군을 물리치기 위해", "돌아가신 어머니가 계신 하늘나라에 종소리가 닿기를 바라서"], "answer": 3}, {"q": "교회 종지기 아저씨의 눈을 피해 종탑 줄을 함께 당겨준 고마운 친구는?", "options": ["주인공 소년", "마을 이장", "또또", "순경"], "answer": 2}, {"q": "전쟁의 비극과 상처 속에서도 울려 퍼진 맑은 종소리가 상징하는 주제는?", "options": ["치열한 무력 대립 끝에 쟁취한 일방적인 전쟁의 승리", "전쟁 상처 속 영혼들의 교감과 순수한 인간애의 구원", "엄격한 교회 규율과 종교적 권위에 대한 맹목적 복종", "국경 지역 주민들에게 알리는 위급한 공습 군사 경보"], "answer": 1}]}, {"id": 117, "category": "교과서 수록 소설", "title": "그 여자네 집", "author": "박완서", "keywords": "만득이와 순애, 일제강점기 정신대, 징용, 분단 비극", "questions": [{"q": "일제강점기 시골 마을에서 온 동네 사람들이 선남선녀로 부러워하며 혼인을 기대했던 연인은?", "options": ["흥부와 놀부", "학규와 심청", "만득이와 순애", "몽룡과 춘향"], "answer": 2}, {"q": "만득이가 일제에 의해 강제로 끌려간 험악한 전장은 무엇이었나요?", "options": ["강제 연행된 징용지", "만주의 독립군 기지", "경성의 군수품 공장", "하와이 사탕수수밭"], "answer": 0}, {"q": "순애가 만득이를 기다리지 못하고 다른 남자에게 황급히 시집을 가야만 했던 비극적인 사연은?", "options": ["만득이의 오랜 변심에 크게 실망해서", "가문의 강요로 부모가 억지로 협박해서", "일제의 정신대 처녀 공출을 피하기 위해", "권세를 지닌 부유한 양반이 청혼해서"], "answer": 2}, {"q": "전쟁이 끝나고 기적처럼 살아 돌아온 만득이가 마주한 가혹한 운명은?", "options": ["조국 독립을 위해 싸운 공로로 명예로운 훈장을 받는 영광", "정혼자 순애가 반갑게 뛰어나와 눈물로 마중해 주는 기쁨", "고향에 남은 가족들이 큰 부자가 되어 번창해 있는 모습", "사랑하던 순애가 이미 다른 이의 아내가 되어 버린 현실"], "answer": 3}, {"q": "작품에서 김용택 시인의 시 〈그 여자네 집〉을 액자로 사용하여 작가가 고발하고자 한 역사의 상처는?", "options": ["급격한 근대화와 도시화 과정에서 생겨난 도시와 농촌 간의 갈등", "식민 지배와 분단이 평범한 청춘들의 사랑과 삶을 파괴한 비극", "유교적 관습과 부모의 지나친 간섭으로 파탄에 이른 남녀의 혼인", "일제강점기 가난한 농촌 공동체가 겪어야 했던 경제적인 몰락"], "answer": 1}]}, {"id": 118, "category": "교과서 수록 소설", "title": "옥상 위의 민들레꽃", "author": "박완서", "keywords": "고급 아파트, 옥상 투신자살, 민들레꽃, 생명의 소중함", "questions": [{"q": "주인공 가족이 사는 고급 고층 아파트에서 연이어 발생한 끔찍한 사건은?", "options": ["금품을 노린 부유층 연쇄 절도 사건", "단지 전체를 위협한 대형 화재 사고", "고층에서 발생한 승강기 추락 사고", "노인들의 비극적인 옥상 투신 사건"], "answer": 3}, {"q": "아파트 주민들이 자살 사건이 벌어지자 아파트값(집값)이 떨어질까 봐 취한 이기적인 조치는?", "options": ["옥상 문을 쇠사슬로 굳게 잠그고 철조망을 쳤다", "관할 경찰서에 자진 신고하고 순찰을 요청했다", "억울하게 희생된 넋을 위로하는 위령제를 지냈다", "소외된 독거노인들을 찾아가 돌봄 봉사를 시작했다"], "answer": 0}, {"q": "주인공 어린 소년이 자신도 과거 옥상에서 뛰어내리려 했을 때 죽음을 멈추게 만든 것은?", "options": ["시멘트 틈에 홀로 피어난 노란 민들레꽃", "푸른 하늘을 가르며 날아가는 비행기", "귓가에 울려 퍼진 엄마의 다정한 목소리", "뒤에서 소년을 부르던 단짝 친구의 손짓"], "answer": 0}, {"q": "소년이 반상회에 가서 어른들에게 자살을 막을 수 있는 해결책이라며 용기 내어 말한 것은?", "options": ["입구마다 보안 경비원을 스물네 시간 배치하자", "주민 안전을 위해 아파트를 전면 재건축하자", "단지 내에 고화질 방범 감시 카메라를 늘리자", "옥상에 쇠창살 대신 어여쁜 민들레꽃을 심자"], "answer": 3}, {"q": "소년의 순수한 외침을 들은 아파트 어른들이 보인 씁쓸한 반응은 무엇이었나요?", "options": ["아이의 순수한 뜻을 헤아리지 못하고 헛소리 취급하며 무시했다", "자신들의 이기적인 모습을 깊이 뉘우치며 눈물을 흘려 반성했다", "생명의 소중함을 일깨워 준 대가로 소년에게 큰 상장을 주었다", "아이의 따뜻한 마음에 감동하여 옥상에 곧바로 민들레를 심었다"], "answer": 0}]}, {"id": 119, "category": "교과서 수록 소설", "title": "모두 아름다운 아이들", "author": "최시한", "keywords": "입시 경쟁, 청소년의 고뇌, 참된 교육, 방황과 성장", "questions": [{"q": "최시한의 성장 소설 〈모두 아름다운 아이들〉이 정면으로 다루고 있는 청소년들의 현실적 고통은?", "options": ["숨 막히는 입시 교육과 치열한 성적 경쟁의 압박", "가난과 궁핍으로 인한 끼니 걱정과 굶주림의 고통", "전쟁과 무력 분쟁으로 인한 생명의 위협과 공포", "급격한 기술 혁신으로 인한 미래 실업의 불안감"], "answer": 0}, {"q": "주인공 학생들이 교실과 가정에서 겪는 가장 큰 내면적 갈등은?", "options": ["타인의 시선에 얽매여 스스로를 비하하는 외모에 대한 콤플렉스", "자신이 원하는 참된 꿈과 사회가 요구하는 성적 사이의 갈등", "또래 집단에서 밀려나지 않기 위해 벌이는 서열 다툼과 갈등", "가상 세계에 지나치게 빠져 일상을 망쳐가는 스마트폰 과몰입"], "answer": 1}, {"q": "아이들의 아픔을 진심으로 이해하고 곁에서 귀를 기울여주는 인물은 누구인가요?", "options": ["아이들의 눈높이에서 고민을 함께 나누는 참된 교사", "청소년 비행을 단속하고 교내 폭력을 지도하는 동네 경찰", "학교의 명예와 규율만을 엄격하게 앞세우는 근엄한 교장", "명문대 진학만을 강조하며 스파르타식으로 가르치는 학원장"], "answer": 0}, {"q": "소설 속 아이들이 서로에게 힘이 되어주며 상처를 치유해 나가는 원동력은?", "options": ["약점을 잡아 상대를 굴복시키려는 은밀한 비밀 폭로", "남들보다 앞서기 위해 밤낮없이 벌이는 성적 경쟁", "엄격한 규율과 억압에서 벗어나려는 무작정 학교 탈출", "서로의 아픔을 보듬는 진솔한 대화와 따뜻한 연대"], "answer": 3}, {"q": "제목 〈모두 아름다운 아이들〉에 담긴 작가의 궁극적인 메시지는?", "options": ["어른들의 말씀에 무조건 복종하고 순종하는 아이만이 참으로 예쁘다", "남들보다 빼어난 외모와 신체 조건을 갖춘 아이가 가장 돋보인다", "성적과 상관없이 모든 아이는 그 자체로 소중하고 빛나는 존재이다", "오직 전교 일등을 차지하는 우등생만이 사회의 주역으로 인정받는다"], "answer": 2}]}, {"id": 120, "category": "교과서 수록 소설", "title": "홍길동전", "author": "허균", "keywords": "서얼 차별, 호부호형, 활빈당, 율도국", "questions": [{"q": "홍길동이 뛰어난 총명함과 무예를 갖추었음에도 벼슬길에 오를 수 없었던 신분적 한계는?", "options": ["명망 높은 권문세가 출신이 아니라서", "첩의 아들인 서얼이라서", "평범한 농민 집안의 양민 출신이라서", "관직에 나아가기엔 나이가 너무 어려서"], "answer": 1}, {"q": "길동이 밤하늘을 보며 눈물을 흘리며 한탄한 유명한 대사는?", "options": ["\"불의가 가득한 세상의 모든 탐관오리를 남김없이 다 벌하겠노라!\"", "\"아버지를 아버지라 부르지 못하고 형을 형이라 부르지 못하니...\"", "\"썩어 빠진 과거 시험 따위는 내 손으로 영원히 보지 않겠노라!\"", "\"어찌하여 나는 임금의 아들로 태어나 세상을 호령하지 못하는가!\""], "answer": 1}, {"q": "집을 나온 길동이 도적 떼의 우두머리가 된 후 부패한 탐관오리를 응징하기 위해 지은 의적단의 이름은?", "options": ["녹림당", "일지매파", "백정당", "활빈당"], "answer": 3}, {"q": "조선 조정이 도술을 부리는 길동을 잡지 못하자, 그의 한을 달래주기 위해 제수한 관직은?", "options": ["암행어사", "포도대장", "영의정", "병조판서"], "answer": 3}, {"q": "조선을 떠난 길동이 바다 건너 세운 백성들이 평등하고 평화롭게 살아가는 이상 국가는?", "options": ["율도국", "이어도", "탐라국", "달구벌"], "answer": 0}]}, {"id": 121, "category": "교과서 수록 소설", "title": "양반전 / 허생전 / 호질", "author": "박지원", "keywords": "연암 박지원, 실학 풍자, 허생의 매점매석, 범의 질책", "questions": [{"q": "〈양반전〉에서 평생 글만 읽다 빚더미에 오른 정선 양반의 신분을 돈으로 사려다 도망친 사람은?", "options": ["마을 이장", "부자 상민", "고을 사또", "포도대장"], "answer": 1}, {"q": "〈허생전〉에서 10년 글공부를 작정했던 허생이 아내의 바가지에 글공부를 접고 한양 부자 변 씨에게 빌린 돈은?", "options": ["십 냥", "만 냥", "백 냥", "천 냥"], "answer": 1}, {"q": "허생이 안성 시장에서 과일과 말총(망건 재료)을 독점 매입하여 조선의 취약한 경제 구조를 풍자한 상업 행위는?", "options": ["매점매석", "밀수무역", "물물교환", "할인판매"], "answer": 0}, {"q": "〈호질〉에서 겉으로는 고결한 학자인 척하면서 과부 동리자의 방에 몰래 들어갔다 호랑이에게 호된 꾸짖음을 당한 위선자는?", "options": ["남궁 선생", "정선 양반", "북곽 선생", "변 씨 거상"], "answer": 2}, {"q": "연암 박지원이 이 소설들을 통해 통렬하게 비판하고자 한 당시 조선 사회의 모순은?", "options": ["위선과 허례허식에 빠져 무능하고 부패한 양반 지배층", "왕권을 강화하려는 시도로 백성의 삶을 억압하던 왕실층", "백성의 고혈을 빨아 사리사욕만 채우는 탐욕스런 상인층", "근대적 기술을 외면하고 나태함에 빠진 무기력한 농민층"], "answer": 0}]}, {"id": 122, "category": "교과서 수록 소설", "title": "구운몽", "author": "김만중", "keywords": "성진, 팔선녀, 양소유, 남가일몽, 인생무상", "questions": [{"q": "김만중이 유배지에서 어머니 윤씨 부인의 외로움을 달래드리기 위해 지은 몽자류 소설의 효시는?", "options": ["운영전", "구운몽", "심청전", "옥루몽"], "answer": 1}, {"q": "연화봉 육관대사의 제자였던 불제자 성진이 속세의 부귀영화를 부러워하다가 함께 벌을 받은 대상은?", "options": ["저승사자", "팔선녀", "옥황상제", "용왕의 딸"], "answer": 1}, {"q": "성진이 인간 세상에 환생하여 과거에 급제하고 두 아내와 여섯 첩을 거느리며 승승장구한 인물의 이름은?", "options": ["이몽룡", "양소유", "홍길동", "허생원"], "answer": 1}, {"q": "늙은 양소유가 높은 누각에서 퉁소를 불며 덧없음을 느낄 때, 주장자를 내리쳐 꿈에서 깨어나게 한 스님은?", "options": ["육관대사", "사명대사", "의상대사", "원효대사"], "answer": 0}, {"q": "성진이 꿈에서 깨어나 자신의 본래 모습을 확인하고 도달한 불교적 깨달음의 주제는?", "options": ["권선징악", "인생무상", "고진감래", "자포자기"], "answer": 1}]}, {"id": 123, "category": "교과서 수록 소설", "title": "최척전", "author": "조위한", "keywords": "정유재란, 최척과 옥영, 안남(베트남), 극적 재회", "questions": [{"q": "최척과 옥영 부부가 전쟁의 소용돌이에 휘말려 이별을 겪게 된 역사적 배경은?", "options": ["임진왜란", "신미양요", "정유재란", "병자호란"], "answer": 2}, {"q": "남편과 헤어져 일본으로 끌려간 아내 옥영이 남장을 하고 상선을 타고 도착한 이국의 항구는?", "options": ["류큐", "안남", "마닐라", "대만"], "answer": 1}, {"q": "안남의 항구에서 달밤에 옥영이 배 안에서 연주하여 남편 최척이 알아듣게 된 악기 소리는?", "options": ["거문고 소리", "해금 소리", "가야금 소리", "퉁소 소리"], "answer": 3}, {"q": "조선, 일본, 중국(명나라), 베트남을 넘나들며 이산가족이 다시 뭉치게 된 원동력은?", "options": ["조선 왕실과 명나라 조정의 막대한 재정적 지원", "점쟁이의 신통한 예언과 하늘이 내린 신비한 도술", "이국 땅에서 만난 외국 군대의 전폭적인 무력 보호", "죽음을 뛰어넘는 부부간의 신의와 강인한 생명력"], "answer": 3}, {"q": "조선 후기 군담소설 중 〈최척전〉이 지닌 독보적인 문학사적 가치는?", "options": ["도술적 허구를 배제하고 전란 속 민중의 고난을 사실적으로 형상화함", "동아시아 각국의 언어와 풍습을 체계적으로 정리한 실용적 지침서임", "주인공이 신선이 되어 승천하는 비현실적인 도교적 환상을 표현함", "초인적인 영웅이 홀로 적군 수만 명을 물리치는 통쾌함을 강조함"], "answer": 0}]}, {"id": 124, "category": "교과서 수록 소설", "title": "마지막 잎새", "author": "오 헨리", "keywords": "존시, 폐렴, 베어먼 영감, 벽에 그린 걸작", "questions": [{"q": "뉴욕 그리니치 빌리지의 가난한 화가 마을에서 폐렴에 걸려 삶의 의지를 잃어버린 젊은 여류 화가는?", "options": ["수", "존시", "제인", "델라"], "answer": 1}, {"q": "존시를 극진히 간호하며 희망을 잃지 않도록 지켜준 다정한 동료 화가 친구는?", "options": ["샬롯", "수", "제인", "델라"], "answer": 1}, {"q": "아래층에 살며 40년 동안 걸작을 그리겠다고 큰소리치던 괴팍하지만 따뜻한 노화가는?", "options": ["산티아고 노인", "스크루지 영감", "베어먼 영감", "제페토 영감"], "answer": 2}, {"q": "폭풍우가 몰아친 다음 날 아침에도 담벼락에 기적처럼 떨어지지 않고 매달려 있던 잎새의 비밀은?", "options": ["줄기가 벽돌 틈에 단단히 박혀 결코 떨어지지 않는 생화였다", "베어먼 영감이 비바람 속에서 벽에 정성껏 그린 그림이었다", "이웃 주민들이 환자를 위로하려고 풀로 붙여둔 가짜 잎이었다", "강풍에도 떨어지지 않게 튼튼히 만든 플라스틱 모형이었다"], "answer": 1}, {"q": "자신의 목숨과 폐렴을 바꾸어 소녀에게 살겠다는 희망을 선물하고 숨을 거둔 베어먼 영감의 잎새를 부르는 말은?", "options": ["한 생명을 살려낸 노화가의 불멸의 걸작", "완성작을 그리기 전에 미리 연습한 습작", "미술 전람회에 출품하기 위해 그린 유화", "환자의 기분을 맞춰주려 대충 그린 낙서"], "answer": 0}]}, {"id": 125, "category": "교과서 수록 소설", "title": "크리스마스 선물", "author": "오 헨리", "keywords": "짐과 델라, 머리카락, 금시계, 진정한 사랑", "questions": [{"q": "가난하지만 서로를 깊이 사랑하는 젊은 부부 짐과 델라가 가진 세상에 단 두 개뿐인 가보급 보물은?", "options": ["짐의 황금 회중시계와 델라의 아름다운 갈색 머리카락", "벽장 깊숙이 감춰둔 푸른 고려청자와 은은한 옥비녀", "외갓집에서 물려받은 값비싼 외제 마차와 고급 피아노", "대대로 전해 내려온 은촛대와 찬란한 다이아몬드 반지"], "answer": 0}, {"q": "크리스마스 전날 델라가 남편 짐의 금시계에 어울리는 백금 시곗줄을 사기 위해 희생한 것은?", "options": ["겨울 추위를 막아주는 낡은 외투를 맡기고 돈을 빌렸다", "이웃에 사는 부유한 지인에게 높은 이자로 빚을 졌다", "자신의 탐스러운 긴 갈색 머리카락을 미용실에 팔았다", "어머니가 물려주신 소중한 결혼반지를 전당포에 팔았다"], "answer": 2}, {"q": "집에 돌아온 남편 짐이 짧아진 델라의 머리를 보고 망연자실했던 까닭은?", "options": ["상의도 없이 머리를 짧게 잘랐다며 크게 화를 내려고", "아내에게 줄 크리스마스 선물을 사 오지 못해서", "시계를 팔아 마련한 머리빗 세트를 쓸 수 없게 되어서", "짧아진 머리 모양이 델라에게 전혀 어울리지 않아서"], "answer": 2}, {"q": "두 사람의 선물이 당장은 쓸모없게 되었지만, 이 선물이 세상에서 가장 지혜로운 선물인 이유는?", "options": ["시중에서 구하기 힘든 최고급 명품 보석 제품이라서", "당시 뉴욕 상류층 젊은 연인들 사이에 대유행해서", "가장 아끼는 것을 희생하여 상대를 위하는 참된 사랑이라서", "세월이 흐른 뒤 골동품 가게에 되팔면 큰돈이 되므로"], "answer": 2}, {"q": "오 헨리가 이 소설의 결말에서 두 부부를 비유한 성경 속 지혜로운 인물들은?", "options": ["대홍수 속에서 방주를 지어 생명을 구한 노아", "골리앗을 물리치고 나라를 세운 성경 속 다윗 왕", "지혜로운 판결로 백성을 다스린 고대 솔로몬 왕", "아기 예수께 귀한 예물을 바친 지혜로운 동방박사"], "answer": 3}]}, {"id": 126, "category": "교과서 수록 소설", "title": "목걸이", "author": "기 드 모파상", "keywords": "마틸드 루아젤, 가짜 다이아몬드, 10년의 고통, 허영심", "questions": [{"q": "하급 관리의 아내로 가난하지만 늘 상류층의 화려한 사치와 귀족적인 삶을 동경하던 여주인공은?", "options": ["존시", "마틸드 루아젤", "점순이", "순애"], "answer": 1}, {"q": "장관 주최 무도회에 참석하기 위해 부유한 친구 포레스티에 부인에게 빌린 보석은?", "options": ["무도회장을 화려하게 밝힐 다이아몬드 목걸이", "희귀한 천연 진주를 엮어 만든 고급 팔찌", "푸른빛이 감도는 영롱한 사파이어 티아라", "붉은빛이 강렬하게 타오르는 루비 귀걸이"], "answer": 0}, {"q": "무도회가 끝나고 집에 돌아왔을 때 마틸드가 비명을 지르며 경악한 까닭은?", "options": ["빌려 입고 간 비단 드레스의 옷자락이 길게 찢어져서", "목에 걸려 있던 다이아몬드 목걸이가 감쪽같이 사라져서", "남편이 무도회장 복도에서 전 재산이 든 지갑을 잃어버려서", "집으로 타고 오던 낡은 합승 마차가 길에서 전복되어서"], "answer": 1}, {"q": "잃어버린 목걸이와 똑같은 진품 다이아몬드 목걸이를 사서 돌려주기 위해 부부가 치러야 했던 대가는?", "options": ["막대한 빚을 얻고 10년 동안 온갖 궂은일을 하며 갚아나감", "사법 당국의 추적을 피해 한밤중에 외국으로 야반도주함", "빚을 갚지 못해 채무자 감옥에 갇혀 오랜 옥살이를 치름", "친구를 찾아가 사실대로 고백하고 평생 하녀가 되기로 함"], "answer": 0}, {"q": "10년 후 초라한 노파가 된 마틸드가 공원에서 우연히 만난 포레스티에 부인에게 들은 충격적인 진실은?", "options": ["그 목걸이는 돌려받자마자 도둑에게 도난당했다고 말함", "10년 전 빌려준 보석의 존재 자체를 완전히 잊어버렸다고 함", "기껏해야 500프랑밖에 안 하는 가짜 모조품이었다고 밝힘", "애초에 나한테 목걸이를 돌려준 적이 없다고 잡아뗌"], "answer": 2}]}, {"id": 127, "category": "교과서 수록 소설", "title": "변신", "author": "프란츠 카프카", "keywords": "그레고르 잠자, 거대한 벌레, 가족의 소외, 실존적 고독", "questions": [{"q": "어느 날 아침 불안한 꿈에서 깨어났을 때 자신이 흉측한 한 마리의 거대한 벌레로 변해버린 주인공은?", "options": ["빅터 프랑켄슈타인", "한스 기벤라트", "그레고르 잠자", "지킬 박사"], "answer": 2}, {"q": "벌레로 변하기 전 그레고르가 가족(부모님과 여동생 그레테)을 위해 헌신하며 일했던 직업은?", "options": ["가족의 빚을 갚기 위해 기차를 타고 다니는 출장 외판원", "마을 공립학교에서 아이들에게 라틴어를 가르치는 교사", "도심 상업은행 창구에서 자금을 관리하는 은행 지점장", "정밀한 태엽 시계를 제작하고 고치는 시계 수리공"], "answer": 0}, {"q": "처음에는 오빠를 불쌍히 여겨 음식 찌꺼기를 챙겨주었으나, 점차 지쳐서 \"저 괴물을 내쫓아야 해\"라고 외치게 된 인물은?", "options": ["어머니", "여동생 그레테", "지배인", "하녀"], "answer": 1}, {"q": "분노한 아버지가 그레고르를 향해 집어던져 등껍질에 박힌 채 썩어 들어가 치명상을 입힌 과일은?", "options": ["복숭아", "오렌지", "사과", "배"], "answer": 2}, {"q": "카프카가 인간이 벌레로 변하고 가족에게 버림받는 과정을 통해 고발한 현대 사회의 비정함은?", "options": ["과도한 업무에 시달리는 영업사원의 감정 노동 스트레스", "도시 위생 관리와 해충 방역 대책의 사회적 시급성", "부모가 장남보다 막내딸을 더 편애하는 편파적인 양육 방식", "돈벌이 능력을 잃으면 가족에게도 버림받는 물질만능주의"], "answer": 3}]}, {"id": 128, "category": "교과서 수록 소설", "title": "수레바퀴 아래서", "author": "헤르만 헤세", "keywords": "한스 기벤라트, 신학교, 주입식 교육, 짓눌린 영혼", "questions": [{"q": "작은 마을의 총망받는 영재였으나 어른들의 지나친 기대와 압박 속에 파멸해 가는 소년은?", "options": ["그레고르 잠자", "홀든 콜필드", "한스 기벤라트", "피터 팬"], "answer": 2}, {"q": "한스가 마을 최초로 우수한 성적으로 합격하여 입학한 엄격하고 보수적인 기숙 학교는?", "options": ["이튼 칼리지", "옥스퍼드 대학", "호그와트 마법학교", "마울브론 신학교"], "answer": 3}, {"q": "규율에 얽매이지 않고 자유로운 시와 영혼을 추구하며 한스에게 진정한 우정을 일깨워준 친구는?", "options": ["요제프 크네히트", "에밀 싱클레어", "루치우스", "헤르만 하일너"], "answer": 3}, {"q": "신학교 교장이 한스에게 \"지치지 않도록 조심하게, 그렇지 않으면 0000 아래 깔리게 되니까\"라고 경고한 대상은?", "options": ["벽돌담", "쇠사슬", "수레바퀴", "기찻길"], "answer": 2}, {"q": "신학교에서 쫓겨나 기계공 견습생으로 일하던 한스가 결국 차가운 강물에 빠져 비극적인 최후를 맞이한 의미는?", "options": ["숲과 낚시를 너무 사랑하여 현실 사회에 적응하지 못함", "획일적 주입식 교육과 어른들의 야망이 짓밟은 소년의 비극", "어두운 밤길을 걷다 발을 헛디뎌 일어난 단순한 실족사", "체력에 맞지 않는 험난한 기계 공학 기술 습득의 어려움"], "answer": 1}]}];
+
+    /* ========================================================
+       2. STATE & FULLSCREEN / WAKE LOCK (GALAXY TAB + WHITEBOARD)
+       ======================================================== */
+    let currentCategory = '전체';
+    let currentSearch = '';
+    let selectedTimeLimit = 20; // 0 = unlimited
+    let soundEnabled = true;
+
+    let activeWork = null;
+    let currentQIdx = 0;
+    let score = 0;
+    let timerInterval = null;
+    let timeLeft = 20;
+    let answered = false;
+    let wakeLockSentinel = null;
+
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLockSentinel = await navigator.wakeLock.request('screen');
+        } catch (err) {
+          // Ignore wakeLock errors
+        }
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    });
+
+    function isFullScreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement);
+    }
+
+    function enterFullScreen() {
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) {
+          el.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        }
+      } catch (e) {}
+      requestWakeLock();
+    }
+
+    function exitFullScreen() {
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      } catch (e) {}
+    }
+
+    function toggleFullScreen() {
+      if (isFullScreen()) {
+        exitFullScreen();
+      } else {
+        enterFullScreen();
+      }
+    }
+
+    function updateFullScreenButton() {
+      const btn = document.getElementById('fullscreenBtn');
+      const label = document.getElementById('fullscreenLabel');
+      if (isFullScreen()) {
+        btn.classList.add('is-fullscreen');
+        label.innerText = '창모드';
+      } else {
+        btn.classList.remove('is-fullscreen');
+        label.innerText = '전체화면';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', updateFullScreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
+
+    // Load cleared status from localStorage
+    function getClearedScore(workId) {
+      const v = localStorage.getItem('quiz_cleared_' + workId);
+      return v !== null ? parseInt(v, 10) : null;
+    }
+
+    function saveClearedScore(workId, s) {
+      const prev = getClearedScore(workId);
+      if (prev === null || s > prev) {
+        localStorage.setItem('quiz_cleared_' + workId, s);
+      }
+    }
+
+    function openResetModal() {
+      document.getElementById('resetModal').classList.add('open');
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.remove('open');
+    }
+
+    function confirmResetAllProgress() {
+      WORKS_DATA.forEach(w => localStorage.removeItem('quiz_cleared_' + w.id));
+      closeResetModal();
+      renderWorks();
+    }
+
+    /* ========================================================
+       3. OFFLINE WEB AUDIO API SYNTHESIZER
+       ======================================================== */
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const ctx = audioCtx;
+        const now = ctx.currentTime;
+
+        if (type === 'correct') {
+          const freqs = [523.25, 659.25, 783.99, 1046.50];
+          freqs.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.28, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.35);
+          });
+        } else if (type === 'wrong') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.linearRampToValueAtTime(110, now + 0.3);
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'tick') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'fanfare') {
+          const notes = [
+            { f: 523.25, d: 0.12 },
+            { f: 523.25, d: 0.12 },
+            { f: 659.25, d: 0.12 },
+            { f: 783.99, d: 0.4 }
+          ];
+          let offset = 0;
+          notes.forEach(n => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(n.f, now + offset);
+            gain.gain.setValueAtTime(0.32, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + offset + n.d);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + offset);
+            osc.stop(now + offset + n.d);
+            offset += n.d * 0.9;
+          });
+        }
+      } catch (e) {
+        console.warn('Audio not supported:', e);
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundIcon').innerText = soundEnabled ? '🔊' : '🔇';
+    }
+
+    /* ========================================================
+       4. TIMER MODAL & SETTINGS
+       ======================================================== */
+    function openTimerModal() {
+      document.getElementById('timerModal').classList.add('open');
+    }
+
+    function closeTimerModal() {
+      document.getElementById('timerModal').classList.remove('open');
+      updateTimerBadge();
+    }
+
+    function startQuizShowApp() {
+      initAudio();
+      if (!isFullScreen()) {
+        enterFullScreen();
+      }
+      closeTimerModal();
+    }
+
+    function selectTimeLimit(seconds) {
+      selectedTimeLimit = seconds;
+      document.querySelectorAll('.time-opt-btn').forEach(btn => btn.classList.remove('active'));
+      const buttons = document.querySelectorAll('.time-opt-btn');
+      if (seconds === 10) buttons[0].classList.add('active');
+      else if (seconds === 15) buttons[1].classList.add('active');
+      else if (seconds === 20) buttons[2].classList.add('active');
+      else if (seconds === 30) buttons[3].classList.add('active');
+      else if (seconds === 0) buttons[4].classList.add('active');
+      updateTimerBadge();
+    }
+
+    function updateTimerBadge() {
+      const label = selectedTimeLimit === 0 ? '무제한' : selectedTimeLimit + '초';
+      document.getElementById('currentTimerLabel').innerText = label;
+    }
+
+    /* ========================================================
+       5. MAIN EXPLORER VIEW (WITH MISSION COMPLETED LOGIC)
+       ======================================================== */
+    function setCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      if (btn) {
+        btn.classList.add('active');
+      } else {
+        const found = Array.from(document.querySelectorAll('.cat-tab')).find(b => b.innerText.includes(cat));
+        if (found) found.classList.add('active');
+      }
+      renderWorks();
+    }
+
+    function filterWorks() {
+      const input = document.getElementById('searchInput');
+      currentSearch = input.value.trim().toLowerCase();
+      document.getElementById('searchClearBtn').style.display = currentSearch ? 'flex' : 'none';
+      renderWorks();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      currentSearch = '';
+      document.getElementById('searchClearBtn').style.display = 'none';
+      renderWorks();
+    }
+
+    function renderWorks() {
+      const grid = document.getElementById('worksGrid');
+      grid.innerHTML = '';
+
+      let completedTotal = 0;
+      WORKS_DATA.forEach(w => {
+        if (getClearedScore(w.id) === 5) completedTotal++;
+      });
+
+      document.getElementById('completedCountText').innerText = `${completedTotal} / ${WORKS_DATA.length}개 작품 달성`;
+      const pct = Math.round((completedTotal / WORKS_DATA.length) * 100);
+      document.getElementById('missionPercentBadge').innerText = `진행률 ${pct}%`;
+
+      const filtered = WORKS_DATA.filter(w => {
+        const matchCat = currentCategory === '전체' || w.category === currentCategory;
+        const matchSearch = !currentSearch ||
+          w.title.toLowerCase().includes(currentSearch) ||
+          w.author.toLowerCase().includes(currentSearch) ||
+          w.keywords.toLowerCase().includes(currentSearch);
+        return matchCat && matchSearch;
+      });
+
+      document.getElementById('totalCount').innerText = WORKS_DATA.length;
+
+      filtered.forEach(w => {
+        const clearedScore = getClearedScore(w.id);
+        const isCompleted = (clearedScore === 5);
+
+        const card = document.createElement('div');
+        card.className = 'work-card' + (isCompleted ? ' completed' : '');
+
+        if (!isCompleted) {
+          card.onclick = () => startQuiz(w);
+        }
+
+        const keywordsHtml = w.keywords.split(',')
+          .map(k => `<span class="kw-tag">#${k.trim()}</span>`)
+          .join('');
+
+        let badgeHtml = '';
+        let btnHtml = '';
+
+        if (isCompleted) {
+          badgeHtml = `<span class="completed-badge">✅ 미션 완료 (5/5)</span>`;
+          btnHtml = `<button class="start-btn btn-completed" disabled>미션 완료! 🎉</button>`;
+        } else if (clearedScore !== null) {
+          badgeHtml = `<span class="in-progress-badge">⭐ ${clearedScore}/5점</span>`;
+          btnHtml = `<button class="start-btn btn-retry">다시 도전 🔄</button>`;
+        } else {
+          badgeHtml = ``;
+          btnHtml = `<button class="start-btn">퀴즈 풀기 🎯</button>`;
+        }
+
+        const isTextbook = w.category === '교과서 수록 소설';
+
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <span class="cat-badge ${isTextbook ? 'textbook' : ''}">${w.category}</span>
+              ${badgeHtml}
+            </div>
+            <div class="work-title">${w.title}</div>
+            <div class="work-author">저자/감독: ${w.author}</div>
+            <div class="work-keywords">${keywordsHtml}</div>
+          </div>
+          ${btnHtml}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ========================================================
+       6. QUIZ ARENA LOGIC
+       ======================================================== */
+    function startQuiz(work) {
+      if (getClearedScore(work.id) === 5) {
+        return;
+      }
+      initAudio();
+      activeWork = work;
+      currentQIdx = 0;
+      score = 0;
+      document.body.classList.add('arena-mode');
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('resultView').style.display = 'none';
+      document.getElementById('quizView').style.display = 'flex';
+      window.scrollTo(0, 0);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      answered = false;
+      clearInterval(timerInterval);
+
+      const qData = activeWork.questions[currentQIdx];
+
+      document.getElementById('quizProgressText').innerText = `문제 ${currentQIdx + 1} / 5`;
+      document.getElementById('quizScorePill').innerText = `현재 ${score}점`;
+      document.getElementById('qWorkInfo').innerText = `[${activeWork.category}] ${activeWork.title} (${activeWork.author})`;
+      document.getElementById('questionTitle').innerText = qData.q;
+
+      // Reset bottom feedback & next button
+      const banner = document.getElementById('feedbackBanner');
+      banner.className = 'feedback-banner';
+      banner.innerText = '화면을 터치하여 정답을 선택해 주세요!';
+      document.getElementById('nextBtn').style.display = 'none';
+
+      // Options (2x2 Grid)
+      const optionsGrid = document.getElementById('optionsGrid');
+      optionsGrid.innerHTML = '';
+      const labels = ['①', '②', '③', '④'];
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<span class="opt-num">${labels[idx]}</span><span>${opt}</span>`;
+        btn.onclick = () => selectAnswer(idx);
+        optionsGrid.appendChild(btn);
+      });
+
+      setupTimer();
+    }
+
+    function setupTimer() {
+      const timerPill = document.getElementById('quizTimerPill');
+      const timerNum = document.getElementById('quizTimerNum');
+      const timerBar = document.getElementById('timerBar');
+      const timerWrap = document.getElementById('timerProgressWrap');
+
+      if (selectedTimeLimit === 0) {
+        timerPill.style.display = 'none';
+        timerWrap.style.display = 'none';
+        return;
+      }
+
+      timerPill.style.display = 'flex';
+      timerWrap.style.display = 'block';
+      timerPill.classList.remove('urgent');
+
+      timeLeft = selectedTimeLimit;
+      timerNum.innerText = timeLeft;
+      timerBar.style.width = '100%';
+
+      const totalTime = selectedTimeLimit;
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerNum.innerText = timeLeft;
+        const pct = Math.max(0, (timeLeft / totalTime) * 100);
+        timerBar.style.width = pct + '%';
+
+        if (timeLeft <= 4 && timeLeft > 0) {
+          timerPill.classList.add('urgent');
+          playSound('tick');
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          handleTimeOut();
+        }
+      }, 1000);
+    }
+
+    function selectAnswer(chosenIdx) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timerInterval);
+
+      const qData = activeWork.questions[currentQIdx];
+      const buttons = document.querySelectorAll('.option-btn');
+      const banner = document.getElementById('feedbackBanner');
+
+      if (chosenIdx === qData.answer) {
+        score++;
+        buttons[chosenIdx].classList.add('selected-correct');
+        document.getElementById('quizScorePill').innerText = `현재 ${score}점`;
+        banner.className = 'feedback-banner correct';
+        banner.innerText = '⭕ 정답입니다! 훌륭해요!';
+        playSound('correct');
+      } else {
+        buttons[chosenIdx].classList.add('selected-wrong');
+        buttons[qData.answer].classList.add('reveal-correct');
+        banner.className = 'feedback-banner wrong';
+        banner.innerText = `❌ 아쉽네요! 정답은 ${qData.answer + 1}번입니다.`;
+        playSound('wrong');
+      }
+
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.style.display = 'flex';
+      nextBtn.innerText = currentQIdx === 4 ? '결과 확인하기 🏆' : '다음 문제로 ▶';
+    }
+
+    function handleTimeOut() {
+      if (answered) return;
+      answered = true;
+      playSound('wrong');
+
+      const qData = activeWork.questions[currentQIdx];
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons[qData.answer].classList.add('reveal-correct');
+
+      const banner = document.getElementById('feedbackBanner');
+      banner.className = 'feedback-banner wrong';
+      banner.innerText = `⏰ 시간 초과! 정답은 ${qData.answer + 1}번입니다.`;
+
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.style.display = 'flex';
+      nextBtn.innerText = currentQIdx === 4 ? '결과 확인하기 🏆' : '다음 문제로 ▶';
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < 5) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    /* ========================================================
+       7. RESULT VIEW & CONFETTI
+       ======================================================== */
+    function showResult() {
+      document.body.classList.add('arena-mode');
+      document.getElementById('quizView').style.display = 'none';
+      document.getElementById('resultView').style.display = 'flex';
+
+      document.getElementById('resultWork').innerText = `[${activeWork.category}] ${activeWork.title}`;
+      document.getElementById('scoreNum').innerText = score;
+
+      saveClearedScore(activeWork.id, score);
+
+      const scoreCircle = document.getElementById('scoreCircle');
+      const retryBtn = document.getElementById('retryBtn');
+
+      if (score === 5) {
+        scoreCircle.classList.add('perfect');
+        document.getElementById('resultTitle').innerText = '🎉 미션 완벽 완료!';
+        document.getElementById('resultMsg').innerText = '5문제 모두 정답! 미션을 성공적으로 완수했습니다!';
+        document.getElementById('resultIcon').innerText = '🏆';
+        retryBtn.style.display = 'none';
+        playSound('fanfare');
+        triggerConfetti();
+      } else {
+        scoreCircle.classList.remove('perfect');
+        retryBtn.style.display = 'inline-block';
+        document.getElementById('resultTitle').innerText = '퀴즈 종료';
+        const msgs = [
+          "아쉬워요! 다시 한번 5점 만점에 도전해보세요! 🌱",
+          "첫 도전 성공! 조금만 더 신중하게 풀면 만점이 눈앞이에요! 💪",
+          "절반 가까이 맞혔어요! 남은 문제도 정복해볼까요? 👏",
+          "참 잘했어요! 조금만 더 힘을 내면 5점 만점 가능! ✨",
+          "아깝다 4점! 딱 한 문제만 더 맞히면 미션 완료예요! 🌟"
+        ];
+        const icons = ["🌱", "💪", "👏", "✨", "🌟"];
+        document.getElementById('resultMsg').innerText = msgs[score];
+        document.getElementById('resultIcon').innerText = icons[score];
+      }
+    }
+
+    function restartCurrentQuiz() {
+      startQuiz(activeWork);
+    }
+
+    function goHome() {
+      clearInterval(timerInterval);
+      document.body.classList.remove('arena-mode');
+      document.getElementById('quizView').style.display = 'none';
+      document.getElementById('resultView').style.display = 'none';
+      document.getElementById('homeView').style.display = 'flex';
+      renderWorks();
+      window.scrollTo(0, 0);
+    }
+
+    /* ========================================================
+       8. PURE OFFLINE CANVAS CONFETTI
+       ======================================================== */
+    function triggerConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#4F46E5', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'];
+
+      for (let i = 0; i < 150; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          r: Math.random() * 8 + 5,
+          dx: (Math.random() - 0.5) * 24,
+          dy: (Math.random() - 0.8) * 26,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.random() * 10,
+          tiltAngle: 0,
+          tiltAngleInc: Math.random() * 0.08 + 0.04
+        });
+      }
+
+      let frame = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.x += p.dx;
+          p.y += p.dy;
+          p.dy += 0.35;
+          p.tiltAngle += p.tiltAngleInc;
+          p.tilt = Math.sin(p.tiltAngle) * 12;
+
+          ctx.beginPath();
+          ctx.lineWidth = p.r;
+          ctx.strokeStyle = p.color;
+          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+          ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+          ctx.stroke();
+        });
+
+        frame++;
+        if (frame < 140) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confettiCanvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderWorks();
+      updateTimerBadge();
+      openTimerModal();
+    });
+  </script>
+</body>
+</html>
