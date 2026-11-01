@@ -62,7 +62,7 @@ function draw() {
     $$("#aBody .aslot-row").forEach(el => { el.onclick = () => toggle(+el.dataset.row); });
   } else {
     const bmap = new Map(test.blanks.map((b, k) => [b, k]));
-    $("#aBody").innerHTML = `<div class="ans-passage" id="aPassage">${tokens.map((t, i) => {
+    $("#aBody").innerHTML = `<div class="ans-passage ans-text" id="aPassage">${tokens.map((t, i) => {
       if (!bmap.has(i)) return esc(t);
       const k = bmap.get(i);
       const alt = (test.accepted?.[i] || []).join(", ");
