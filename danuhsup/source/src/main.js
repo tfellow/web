@@ -98,3 +98,8 @@ function start() {
 export async function logout() { await flush(); await S.store.signOut(); }
 
 boot();
+
+// 오프라인 지원: 한 번 열어 두면 인터넷이 끊겨도 앱이 열리고 학습할 수 있어요 (https 에서만)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.warn('sw', e)));
+}

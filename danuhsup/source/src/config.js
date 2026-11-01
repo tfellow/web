@@ -27,5 +27,6 @@ export const APP = {
   enableGemini: false,
 };
 
+// 바꾸면 index.html 의 modulepreload 주소 3곳도 같은 버전으로 바꿔 주세요.
 export const FIREBASE_VERSION = '10.12.2';
 export const isFirebaseConfigured = () => !!firebaseConfig.apiKey;
