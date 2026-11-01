@@ -1,6 +1,6 @@
 import { APP } from '../config.js';
 import { esc, toast, el } from '../lib/util.js';
-import { logo } from '../main.js';
+import { mascot } from '../lib/mascot.js';
 import { allBooks } from '../data/books.js';
 
 const gradeOpts = (v) => APP.grades.map(g => `<option value="${g}" ${g == v ? 'selected' : ''}>${g}학년</option>`).join('');
@@ -14,7 +14,7 @@ export function renderLogin(root, store) {
   root.innerHTML = `
   <div class="login">
     <section class="login-hero">
-      <span class="logo big">${logo}</span>
+      ${mascot('cheer', 128, 'bob')}
       <h1>${esc(APP.appName)}</h1>
       <p class="tag">매일 조금씩, 단어가 자라는 숲<br><small>${esc(APP.schoolName)} 영어 어휘 학습</small></p>
       <div class="hero-card" aria-hidden="true">
