@@ -1,2 +1,2 @@
-{ "name": "단어숲 - 영어 어휘 학습", "short_name": "단어숲", "start_url": "./", "display": "standalone", "background_color": "#F3F5EF", "theme_color": "#1F5E3B", "lang": "ko",
+{ "name": "단어숲 - 영어 어휘 학습", "short_name": "단어숲", "start_url": "./", "display": "standalone", "background_color": "#F5F9EF", "theme_color": "#3DBE6B", "lang": "ko",
   "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }] }

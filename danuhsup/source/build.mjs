@@ -8,6 +8,10 @@ const css = (await esbuild.build({ entryPoints: ['src/styles.css'], bundle: true
 fs.writeFileSync('dist/app.js', js); fs.writeFileSync('dist/app.css', css);
 fs.copyFileSync('index.html', 'dist/index.html');
 for (const f of fs.readdirSync('public')) fs.copyFileSync('public/' + f, 'dist/' + f);
+// 서비스 워커: 앱 파일 내용이 바뀔 때마다 버전이 바뀌어 학생 기기에 새 버전이 깔림
+const { createHash } = await import('crypto');
+const ver = createHash('sha1').update(js).update(css).update(fs.readFileSync('index.html')).digest('hex').slice(0, 10);
+fs.writeFileSync('dist/sw.js', fs.readFileSync('sw.js', 'utf8').replace('__VERSION__', ver));
 const fonts = fs.readFileSync('index.html', 'utf8').match(/<link rel="stylesheet" href="https:\/\/fonts[^>]+>/)[0];
 fs.writeFileSync('demo/vocab-demo.html', `<title>단어숲</title>
 <meta name="claude:viewport-fit-sides" content="cover">

@@ -5,6 +5,7 @@ import { levelOf, todayOf, liveStreak, BADGES, isMastered, isSeen, isDue, BOX_LA
 import { esc, speak, dayKey, dayNum, dayNumToKey, pct, prefs, savePrefs, modal, toast, sample, shuffle, fmtDate, ls } from '../lib/util.js';
 import { startSession, startCards, startMatch, wordCardHTML, QTYPES } from './session.js';
 import { logout, refreshTop } from '../main.js';
+import { mascotSays } from '../lib/mascot.js';
 import { APP } from '../config.js';
 
 // 처음엔 내 학년 단어장, 학생이 다른 학년·종류 단어장을 고르면 그 선택을 기억
@@ -48,7 +49,7 @@ export async function home(main, _, go) {
 
   main.innerHTML = `
   <section class="hello">
-    <div><p class="muted">${u.grade}학년 ${u.classNo}반 · Lv.${lv.lv} ${esc(lv.title)}</p><h1>${hi}, ${esc(u.name)}님</h1></div>
+    ${mascotSays(`<p>${u.grade}학년 ${u.classNo}반 · Lv.${lv.lv} ${esc(lv.title)}</p><h1>${hi}, ${esc(u.name)}님!</h1>`, 'happy', 84)}
   </section>
   <section class="hero-row">
     <div class="panel streak-panel ${streak ? 'lit' : ''}">

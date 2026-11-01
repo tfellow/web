@@ -3,6 +3,7 @@ import { S, flush, stats } from './lib/state.js';
 import { setCustomBooks } from './data/books.js';
 import { $, el, esc, toast } from './lib/util.js';
 import { liveStreak, freshStats } from './lib/game.js';
+import { mascot } from './lib/mascot.js';
 import { renderLogin, renderProfileSetup } from './views/login.js';
 import * as student from './views/student.js';
 import * as teacher from './views/teacher.js';
@@ -63,14 +64,14 @@ export function refreshTop() {
   const box = $('#topStats'); if (!box || !S.user) return;
   if (S.user.role === 'teacher') { box.innerHTML = `<span class="who">${esc(S.user.name || S.user.email || '')}</span>`; return; }
   const st = stats();
-  box.innerHTML = `<span class="chip streak ${liveStreak(st) ? 'lit' : ''}" title="연속 학습일">🔥 <b>${liveStreak(st)}</b></span><span class="chip" title="경험치">⭐ <b>${(st.xp || 0).toLocaleString()}</b></span>`;
+  box.innerHTML = `<span class="chip streak ${liveStreak(st) ? 'lit' : ''}" title="연속 학습일">🔥 <b>${liveStreak(st)}</b></span><span class="chip xp" title="경험치">⭐ <b>${(st.xp || 0).toLocaleString()}</b></span>`;
 }
 
-export const logo = `<svg viewBox="0 0 32 32"><path d="M16 3 6 17h5l-6 8h9v4h4v-4h9l-6-8h5z" fill="currentColor"/></svg>`;
+export const logo = mascot('happy', 38);
 
 // ---------- 시작 ----------
 async function boot() {
-  root.innerHTML = `<div class="boot"><span class="logo big">${logo}</span><p>불러오는 중…</p></div>`;
+  root.innerHTML = `<div class="boot">${mascot('happy', 110, 'bob')}<p>숲길을 여는 중…</p></div>`;
   let store;
   if (isFirebaseConfigured()) {
     try { store = (await import('./store/firebase.js')).firebaseStore; await store.init(); }
@@ -97,3 +98,8 @@ function start() {
 export async function logout() { await flush(); await S.store.signOut(); }
 
 boot();
+
+// 오프라인 지원: 한 번 열어 두면 인터넷이 끊겨도 앱이 열리고 학습할 수 있어요 (https 에서만)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.warn('sw', e)));
+}
