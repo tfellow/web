@@ -62,6 +62,7 @@ code { background: var(--surface-2); padding: 1px 5px; border-radius: 5px; font-
 .chip-btn { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-weight: 600; font-size: .9rem; white-space: nowrap; min-height: 36px; }
 .chip-btn.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 8px; scrollbar-width: none; }
+.chips.wrap { flex-wrap: wrap; overflow: visible; }
 .chips.sm .chip-btn { padding: 4px 10px; font-size: .82rem; min-height: 32px; }
 .pill { font-size: .7rem; padding: 2px 8px; border-radius: 999px; background: var(--forest-soft); color: var(--forest); font-weight: 700; }
 .pill.demo { background: var(--hl-soft); color: var(--hl-ink); }
