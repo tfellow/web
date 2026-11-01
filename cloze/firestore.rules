@@ -1,0 +1,57 @@
+rules_version = '2';
+// Firebase 콘솔 > Firestore Database > 규칙 탭에 이 내용을 통째로 붙여 넣고 [게시]를 누르세요.
+// 아래 교사 이메일 2개를 실제 주소(소문자)로 바꾸세요. js/config.js 와 같아야 합니다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+    function isTeacher() {
+      return signedIn() && myEmail() in ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+    }
+    function isSchool() {
+      return signedIn() && (myEmail().matches('.*@smy[.]ms[.]kr') || isTeacher());
+    }
+
+    // 내 정보 (학번·실명·닉네임): 본인과 교사만 읽기
+    match /users/{uid} {
+      allow read: if isSchool() && (request.auth.uid == uid || isTeacher());
+      allow create, update: if isSchool() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email;
+      allow delete: if false;
+    }
+
+    // 테스트: 로그인한 학교 계정은 읽기, 만든 교사만 수정
+    match /tests/{testId} {
+      allow read: if isSchool();
+      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // 제출 기록 (실명 포함): 본인과 그 테스트를 만든 교사만 읽기
+    match /submissions/{subId} {
+      allow read: if isSchool() && (resource.data.uid == request.auth.uid || resource.data.ownerUid == request.auth.uid);
+      allow create: if isSchool()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.resource.data.ownerUid;
+      allow update: if false;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // 학생용 순위표 (닉네임·점수만, 실명 없음)
+    match /board/{subId} {
+      allow read: if isSchool();
+      allow create: if isSchool() && request.resource.data.uid == request.auth.uid
+        && !('realName' in request.resource.data) && !('email' in request.resource.data);
+      allow update: if false;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+  }
+}
