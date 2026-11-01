@@ -141,6 +141,7 @@ function renderGrid() {
       ? `<button class="btn small" data-a="restore">복원</button><button class="btn small danger" data-a="purge">영구 삭제</button>`
       : `<a class="btn small" href="editor.html?id=${t.id}">편집</a>
          <a class="btn small" href="results.html?id=${t.id}">결과</a>
+         <a class="btn small" href="answers.html?id=${t.id}" target="_blank">정답보기</a>
          <a class="btn small" href="live.html?id=${t.id}" target="_blank">실시간 순위</a>
          <button class="btn small" data-a="link">링크</button>
          <details class="more"><summary class="btn small">⋯</summary><div class="menu">

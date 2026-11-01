@@ -11,6 +11,7 @@ cloze/
 ├─ play.html       학생 응시
 ├─ results.html    결과 통계 (교사)
 ├─ live.html       수업용 실시간 순위 화면 (교사, 프로젝터용)
+├─ answers.html    정답보기 (교사, 전자칠판용: 전체·개별·→/스페이스바로 차례대로 정답 공개)
 ├─ firestore.rules 데이터베이스 보안 규칙 (Firebase 콘솔에 붙여 넣기)
 ├─ css/style.css
 └─ js/ config.js · common.js · core.js · index.js · editor.js · play.js · results.js · live.js
