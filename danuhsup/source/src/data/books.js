@@ -18,10 +18,36 @@ export const BUILTIN_BOOKS = [
 ];
 
 const registry = new Map(BUILTIN_BOOKS.map(b => [b.id, b]));
-export function setCustomBooks(list) {
-  for (const b of list) registry.set(b.id, normalizeBook(b, b.rows));
+// 교사가 정한 단어장 이름·순서. vocab_books/_settings 문서 하나에 저장 (단어장 문서와 같은 권한 규칙)
+export const SETTINGS_ID = '_settings';
+let settings = { id: SETTINGS_ID, order: [], names: {} };
+const original = new Map(); // 이름을 바꾸기 전 원래 이름
+function applyNames() {
+  for (const b of registry.values()) {
+    if (!original.has(b.id)) original.set(b.id, { title: b.title, short: b.short });
+    Object.assign(b, original.get(b.id), settings.names?.[b.id] || {});
+  }
 }
-export const allBooks = () => [...registry.values()];
+export function setCustomBooks(list) {
+  for (const b of list) {
+    if (b.id === SETTINGS_ID) { settings = { order: [], names: {}, ...b }; continue; }
+    original.delete(b.id);
+    registry.set(b.id, normalizeBook(b, b.rows));
+  }
+  applyNames();
+}
+export const bookSettings = () => JSON.parse(JSON.stringify(settings));
+export function setBookSettings(next) { settings = { ...next, id: SETTINGS_ID }; applyNames(); }
+export const originalName = id => original.get(id) || {};
+export const hasCustomOrder = () => (settings.order || []).length > 0;
+export const allBooks = () => {
+  const order = settings.order || [];
+  return [...registry.values()].map((b, i) => [b, i]).sort(([a, i], [b, j]) => {
+    const x = order.indexOf(a.id), y = order.indexOf(b.id);
+    return (x < 0 ? 1e6 + i : x) - (y < 0 ? 1e6 + j : y);
+  }).map(([b]) => b);
+};
+export function removeBook(id) { registry.delete(id); original.delete(id); }
 export const getBook = id => registry.get(id);
 export function getWord(id) { const b = registry.get(id.split(':')[0]); return b && b.words.find(w => w.id === id); }
 export function booksForGrade(g) { const l = allBooks().filter(b => !g || b.grade == g); return l.length ? l : allBooks(); }
