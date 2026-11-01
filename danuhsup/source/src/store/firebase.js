@@ -25,7 +25,7 @@ export const firebaseStore = {
     A = a; F = f;
     const fa = app.initializeApp(firebaseConfig);
     auth = A.getAuth(fa);
-    fs = F.initializeFirestore(fa, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) });
+    fs = F.initializeFirestore(fa, { ignoreUndefinedProperties: true, localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) });
     this.app = fa;
     await new Promise(res => {
       A.onAuthStateChanged(auth, async user => {
