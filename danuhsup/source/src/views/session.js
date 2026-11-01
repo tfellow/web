@@ -58,6 +58,7 @@ function run(stage, opts) {
       <div class="sess-top">
         <button class="icon-btn" id="quit" aria-label="그만하기">✕</button>
         <div class="bar"><i id="prog"></i></div>
+        <span class="count" id="qcount" aria-label="푼 문제 수"></span>
         <span class="combo" id="combo"></span>
         ${isTest ? '<span class="timer" id="timer">0:00</span>' : `<span class="xpchip" id="xpc">+0</span>`}
       </div>
@@ -79,7 +80,9 @@ function run(stage, opts) {
 
   function exit() { clearInterval(tInt); flush(); const [r, p] = opts.back || ['learn']; go(r, p); }
   function progress() {
-    stage.querySelector('#prog').style.width = `${(done / (total + requeued.size)) * 100}%`;
+    const all = total + requeued.size;
+    stage.querySelector('#prog').style.width = `${(done / all) * 100}%`;
+    stage.querySelector('#qcount').textContent = `${done} / ${all}`;
     stage.querySelector('#combo').innerHTML = combo >= 3 && !isTest ? `🔥 ${combo} 콤보` : '';
     const x = stage.querySelector('#xpc'); if (x) x.textContent = `+${xpGain} XP`;
   }
