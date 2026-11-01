@@ -79,10 +79,17 @@ async function boot() {
   }
   if (!store) { store = (await import('./store/local.js')).localStore; await store.init(); }
   S.store = store;
-  try { setCustomBooks(await store.listBooks()); } catch (e) { console.warn('books', e); }
-  store.onAuth(user => {
+  // 교사가 올린 단어장은 로그인한 사람만 읽을 수 있으므로, 로그인할 때마다 불러옴
+  // (예전에는 앱을 열 때 한 번만 불러와서, 로그아웃 후 다시 로그인하면 올린 단어장이 안 보였음)
+  const loadBooks = async () => {
+    try { setCustomBooks(await store.listBooks()); }
+    catch (e) { console.warn('books', e); toast('선생님이 올린 단어장을 불러오지 못했어요. 새로고침해 주세요.', 'bad'); }
+  };
+  store.onAuth(async user => {
     S.user = user; S.progress = {};
     if (!user) { root.dataset.kind = ''; return renderLogin(root, store); }
+    await loadBooks();
+    if (S.user !== user) return;
     user.stats = user.stats || freshStats();
     if (user.needsProfile || (user.role === 'student' && !user.grade)) return renderProfileSetup(root, store, user, () => start());
     start();

@@ -1,6 +1,6 @@
 // 교사 화면: 대시보드(반별), 학생별, 단어 분석, 테스트, 단어장 관리
 import { S } from '../lib/state.js';
-import { allBooks, getBook, getWord, normalizeBook, rowsFromSheet, setCustomBooks } from '../data/books.js';
+import { allBooks, getBook, getWord, normalizeBook, rowsFromSheet, setCustomBooks, bookSettings, setBookSettings, originalName, removeBook } from '../data/books.js';
 import { levelOf, liveStreak, isMastered, isSeen, BADGES, BOX_LABEL } from '../lib/game.js';
 import { esc, dayNum, dayNumToKey, keyToDayNum, pct, avg, sum, modal, toast, fmtDate, daysAgoText, downloadCSV, ls, speak } from '../lib/util.js';
 import { heatmap } from './student.js';
@@ -277,10 +277,17 @@ export async function tests(main, params, go) {
 
 // ================= 단어장 관리 =================
 export async function books(main, params, go) {
-  const custom = await S.store.listBooks();
+  const list = allBooks();
+  const card = (b, i) => `<div class="panel book" data-id="${b.id}">
+      <div class="book-order"><button class="icon-btn sm" data-up="${b.id}" aria-label="위로" ${i === 0 ? 'disabled' : ''}>▲</button><button class="icon-btn sm" data-down="${b.id}" aria-label="아래로" ${i === list.length - 1 ? 'disabled' : ''}>▼</button></div>
+      <div class="book-info"><p class="eyebrow">${i + 1}번째 · ${b.grade}학년 · ${esc(b.publisher || '')}</p><div class="row-inline wrap"><b>${esc(b.title)}</b><span class="pill" title="학생 화면 버튼 이름">${esc(b.short || '')}</span></div><p class="muted small">${b.words.length}단어 · ${b.lessons.length}단원 ${b.builtin ? '· 기본 내장' : ''}</p>
+        <form class="rename form" data-rename="${b.id}" hidden><div class="row2"><label>단어장 이름<input name="title" required value="${esc(b.title)}"></label><label>짧은 이름 (학생 버튼)<input name="short" maxlength="12" value="${esc(b.short || '')}"></label></div><div class="row-inline"><button class="btn sm primary">이름 저장</button><button type="button" class="btn sm ghost" data-cancel>취소</button>${bookSettings().names?.[b.id] ? `<button type="button" class="btn sm ghost" data-reset="${b.id}">원래 이름으로</button>` : ''}</div></form>
+      </div>
+      <div class="book-act"><button class="btn sm" data-edit="${b.id}">이름 바꾸기</button>${b.builtin ? '' : `<button class="btn sm danger ghost" data-del="${b.id}">삭제</button>`}</div></div>`;
   main.innerHTML = `
     <div class="sec-h"><h1>단어장 관리</h1></div>
-    <section class="book-list">${allBooks().map(b => `<div class="panel book"><div><p class="eyebrow">${b.grade}학년 · ${esc(b.publisher || '')}</p><b>${esc(b.title)}</b><p class="muted small">${b.words.length}단어 · ${b.lessons.length}단원 ${b.builtin ? '· 기본 내장' : ''}</p></div>${b.builtin ? '' : `<button class="btn sm danger ghost" data-del="${b.id}">삭제</button>`}</div>`).join('')}</section>
+    <p class="muted">▲▼ 로 순서를 바꾸면 학생 학습 화면의 단어장 버튼도 같은 순서로 나와요. 학생에게 처음 선택되는 단어장은 지금처럼 자기 학년 단어장이에요.</p>
+    <section class="book-list">${list.map(card).join('')}</section>
     <section class="panel">
       <h2>새 단어장 추가</h2>
       <p class="muted">지금 쓰고 계신 엑셀과 같은 형식(첫 줄 머리글: <code>grade, lesson, no., words, 한글 뜻, 영영풀이, 예문, 예문 해석</code>)이면 그대로 올릴 수 있어요. 품사(n., v., adj.)는 뜻 앞에 붙여 쓰면 자동으로 나눠요.</p>
@@ -297,8 +304,34 @@ export async function books(main, params, go) {
   main.querySelector('#logout').onclick = logout;
   main.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
     if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = '정말 삭제'; return; }
-    await S.store.deleteBook(b.dataset.del); toast('단어장을 삭제했어요. 새로고침하면 목록에서 사라져요.'); b.closest('.book').remove();
+    await S.store.deleteBook(b.dataset.del); removeBook(b.dataset.del); toast('단어장을 삭제했어요.'); go('t_books');
   });
+  // 이름·순서 저장: vocab_books/_settings 한 문서
+  const saveSettings = async (next, msg) => {
+    const prev = bookSettings();
+    setBookSettings(next);
+    try { await S.store.saveBook({ ...next, id: '_settings', updatedAt: Date.now() }); clearCache(); toast(msg, 'good'); }
+    catch (err) { setBookSettings(prev); toast('저장 실패: ' + err.message, 'bad'); }
+    go('t_books');
+  };
+  const move = (id, d) => {
+    const ids = list.map(b => b.id), i = ids.indexOf(id), j = i + d;
+    if (j < 0 || j >= ids.length) return;
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+    saveSettings({ ...bookSettings(), order: ids }, '순서를 바꿨어요.');
+  };
+  main.querySelectorAll('[data-up]').forEach(b => b.onclick = () => move(b.dataset.up, -1));
+  main.querySelectorAll('[data-down]').forEach(b => b.onclick = () => move(b.dataset.down, 1));
+  main.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => { const f = main.querySelector(`[data-rename="${b.dataset.edit}"]`); f.hidden = !f.hidden; if (!f.hidden) f.elements.title.focus(); });
+  main.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { b.closest('form').hidden = true; });
+  main.querySelectorAll('[data-reset]').forEach(b => b.onclick = () => { const st = bookSettings(); delete st.names[b.dataset.reset]; saveSettings(st, '원래 이름으로 돌렸어요.'); });
+  main.querySelectorAll('[data-rename]').forEach(f => f.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = f.dataset.rename, o = originalName(id), title = f.elements.title.value.trim(), short = f.elements.short.value.trim() || title.slice(0, 10);
+    const st = bookSettings(); st.names = st.names || {};
+    if (title === o.title && short === o.short) delete st.names[id]; else st.names[id] = { title, short };
+    saveSettings(st, '단어장 이름을 바꿨어요.');
+  }));
   main.querySelector('#bf').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
     try {
