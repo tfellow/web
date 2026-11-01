@@ -19,7 +19,7 @@ export function record(word, correct, { kind } = {}) {
   const prev = map[word.id];
   const wasSeen = prev && prev.s > 0, wasM = isMastered(prev);
   const next = applyAnswer(prev, correct);
-  next.f = prev?.f;
+  if (prev?.f) next.f = prev.f; else delete next.f;
   map[word.id] = next;
   if (!wasSeen) st.learned = (st.learned || 0) + 1;
   const nowM = isMastered(next);
@@ -67,7 +67,10 @@ export async function flush() {
     const books = [...S.dirty]; S.dirty.clear();
     for (const b of books) await S.store.saveProgress(S.user.uid, b, S.progress[b]);
     if (S.userDirty) { S.userDirty = false; await S.store.saveUser(S.user); }
-  } catch (e) { console.error(e); toast('저장에 실패했어요. 인터넷 연결을 확인해 주세요.', 'bad'); }
+  } catch (e) {
+    console.error(e);
+    toast(e?.code === 'permission-denied' ? '저장 권한이 없어요. 학교 계정으로 로그인했는지 확인해 주세요.' : `저장에 실패했어요. 잠시 후 다시 시도해 주세요. (${e?.code || e?.message || '알 수 없는 오류'})`, 'bad');
+  }
 }
 addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S.user) flush(); });
 
