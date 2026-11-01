@@ -197,6 +197,24 @@ input:focus, select:focus { border-color: var(--sky); background: var(--surface)
 .or { display: flex; align-items: center; gap: 10px; color: var(--ink-3); font-size: .8rem; font-weight: 800; } .or::before, .or::after { content: ""; flex: 1; height: 2px; background: var(--line); border-radius: 2px; }
 .boot { min-height: 80vh; display: grid; place-content: center; justify-items: center; gap: 12px; color: var(--ink-2); font-weight: 800; }
 
+/* ---------- 선생님 캐릭터 ---------- */
+.tchar { display: block; flex: none; user-select: none; -webkit-user-drag: none; }
+.tchar.tbust { width: 112px; height: auto; align-self: flex-end; }
+.tchar.tface { width: 96px; height: auto; animation: pop .5s var(--spring) both; }
+.notice-card { display: flex; align-items: flex-end; gap: 4px; background: linear-gradient(135deg, var(--sky-soft), var(--surface) 75%); border: 2px solid color-mix(in srgb, var(--sky) 35%, var(--line)); border-radius: var(--r); padding: 12px 14px 0 6px; overflow: hidden; }
+.notice-card .bubble { flex: 1; min-width: 0; margin-bottom: 16px; }
+.notice-card .tchar { animation: wave-in .6s var(--spring) both; }
+@keyframes wave-in { from { transform: translateY(30px); opacity: 0; } }
+.ntext { font: 400 1.12rem/1.45 var(--f-fun); white-space: pre-wrap; }
+.notice-edit { display: flex; align-items: flex-end; gap: 10px; padding-bottom: 0; overflow: hidden; }
+.notice-edit .tchar { width: 96px; }
+.notice-edit form { flex: 1; min-width: 0; padding-bottom: 16px; }
+textarea { border: 2px solid var(--line); background: var(--surface-2); border-radius: 14px; padding: 10px 14px; width: 100%; font: inherit; font-weight: 700; resize: vertical; color: var(--ink); }
+textarea:focus { border-color: var(--sky); background: var(--surface); outline: none; }
+.t-react { display: flex; align-items: center; gap: 8px; max-width: 420px; }
+.t-react .bubble { margin-bottom: 0; text-align: left; flex: 1; }
+@media (max-width: 480px) { .notice-edit .tchar { display: none; } }
+
 /* ---------- 학생 홈 ---------- */
 .hello { display: flex; align-items: flex-end; gap: 6px; }
 .hello .masc-say { flex: 1; min-width: 0; }

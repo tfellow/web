@@ -1,6 +1,7 @@
 // 학생 화면: 홈, 학습, 단원, 랭킹, 내 기록
 import { S, stats, progressOf, dueWords, wrongWords, favWords, toggleFav, flush, scheduleSave } from '../lib/state.js';
-import { allBooks, getBook, booksForGrade, hasCustomOrder } from '../data/books.js';
+import { allBooks, getBook, booksForGrade, hasCustomOrder, bookSettings } from '../data/books.js';
+import { teacherImg } from '../lib/teacher.js';
 import { levelOf, todayOf, liveStreak, BADGES, isMastered, isSeen, isDue, BOX_LABEL } from '../lib/game.js';
 import { esc, speak, dayKey, dayNum, dayNumToKey, pct, prefs, savePrefs, modal, toast, sample, shuffle, fmtDate, ls } from '../lib/util.js';
 import { startSession, startCards, startMatch, wordCardHTML, QTYPES } from './session.js';
@@ -28,6 +29,14 @@ function getLastLesson(bookId) { try { return +localStorage.getItem(lastKey(book
 function setLastLesson(bookId, n) { try { localStorage.setItem(lastKey(bookId), n); } catch { } }
 
 // ================= 홈 =================
+// 선생님 한마디: 교사 대시보드에서 쓴 메시지 (전체 또는 학년 지정)
+function noticeCard(u) {
+  const n = bookSettings().notice;
+  if (!n?.text || (n.grade && +n.grade !== +u.grade)) return '';
+  const d = new Date(n.ts || Date.now());
+  return `<section class="notice-card">${teacherImg('wave')}<div class="bubble"><p class="eyebrow">${esc(n.from || '선생님')} 선생님 한마디 · ${d.getMonth() + 1}/${d.getDate()}</p><p class="ntext">${esc(n.text)}</p></div></section>`;
+}
+
 export async function home(main, _, go) {
   const st = stats(), u = S.user;
   const lv = levelOf(st.xp), today = todayOf(st), streak = liveStreak(st);
@@ -51,6 +60,7 @@ export async function home(main, _, go) {
   <section class="hello">
     ${mascotSays(`<p>${u.grade}학년 ${u.classNo}반 · Lv.${lv.lv} ${esc(lv.title)}</p><h1>${hi}, ${esc(u.name)}님!</h1>`, 'happy', 84)}
   </section>
+  ${noticeCard(u)}
   <section class="hero-row">
     <div class="panel streak-panel ${streak ? 'lit' : ''}">
       <div class="flame" aria-hidden="true">🔥</div>
