@@ -90,7 +90,9 @@ async function boot() {
 function start() {
   const want = (location.hash || '').slice(1).replace('-', '_');
   const isT = S.user.role === 'teacher';
-  go(ROUTES[want] && want.startsWith('t_') === isT ? want : (isT ? 't_dash' : 'home'));
+  // 단원 화면처럼 정보가 더 필요한 화면은 주소만으로 다시 열 수 없으므로 학습 목록으로 보냄
+  const ok = ROUTES[want] && want.startsWith('t_') === isT;
+  go(want === 'lesson' ? 'learn' : ok ? want : (isT ? 't_dash' : 'home'));
 }
 export async function logout() { await flush(); await S.store.signOut(); }
 

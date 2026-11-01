@@ -154,7 +154,8 @@ function pickForStudy(words) {
 }
 
 // ================= 단원 상세 =================
-export async function lesson(main, { bookId, n }, go) {
+export async function lesson(main, { bookId, n } = {}, go) {
+  if (!getBook(bookId)) return go('learn');
   const book = getBook(bookId), map = await progressOf(bookId);
   const l = book.lessons.find(x => x.n === n) || book.lessons[0];
   const s = lessonStats(book, map, l.n);
