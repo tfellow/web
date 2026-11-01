@@ -1,6 +1,7 @@
 // 교사 화면: 대시보드(반별), 학생별, 단어 분석, 테스트, 단어장 관리
 import { S } from '../lib/state.js';
 import { allBooks, getBook, getWord, normalizeBook, rowsFromSheet, setCustomBooks, bookSettings, setBookSettings, originalName, removeBook } from '../data/books.js';
+import { teacherImg } from '../lib/teacher.js';
 import { levelOf, liveStreak, isMastered, isSeen, BADGES, BOX_LABEL } from '../lib/game.js';
 import { esc, dayNum, dayNumToKey, keyToDayNum, pct, avg, sum, modal, toast, fmtDate, daysAgoText, downloadCSV, ls, speak } from '../lib/util.js';
 import { heatmap } from './student.js';
@@ -82,9 +83,32 @@ const sid = u => u && u.grade ? String(u.grade * 10000 + (u.classNo || 0) * 100 
 const statusOf = p => p == null ? '' : p >= 80 ? 'good' : p >= 60 ? 'warn' : 'crit';
 
 // ================= 대시보드 =================
+// 선생님 한마디 편집: vocab_books/_settings 의 notice 필드 (학생은 읽기만 가능)
+function noticeEditor(main, go) {
+  const n = bookSettings().notice || {};
+  main.insertAdjacentHTML('beforeend', `<section class="panel notice-edit">
+    ${teacherImg('wave')}
+    <form id="nform" class="form">
+      <div class="sec-h"><h2>선생님 한마디</h2><span class="muted small">${n.text ? '학생 홈 맨 위에 보이는 중' : '학생 홈 맨 위에 선생님 캐릭터와 함께 보여요'}</span></div>
+      <textarea id="ntext" maxlength="140" rows="2" placeholder="예: 이번 주 금요일에 L3 단원 테스트가 있어요. 오늘의 복습 꼭 하기!">${esc(n.text || '')}</textarea>
+      <div class="row-inline wrap"><select id="ngrade" style="width:auto"><option value="0">전체 학년</option>${APP.grades.map(g => `<option value="${g}" ${+n.grade === g ? 'selected' : ''}>${g}학년만</option>`).join('')}</select>
+      <button class="btn sm primary">올리기</button>${n.text ? '<button type="button" class="btn sm ghost" id="nclear">내리기</button>' : ''}</div>
+    </form></section>`);
+  const save = async notice => {
+    const prev = bookSettings(), next = { ...prev, notice };
+    setBookSettings(next);
+    try { await S.store.saveBook({ ...next, id: '_settings', updatedAt: Date.now() }); toast(notice ? '학생 홈에 올렸어요.' : '한마디를 내렸어요.', 'good'); }
+    catch (e) { setBookSettings(prev); toast('저장 실패: ' + e.message, 'bad'); }
+    go('t_dash');
+  };
+  main.querySelector('#nform').addEventListener('submit', e => { e.preventDefault(); const text = main.querySelector('#ntext').value.trim(); if (!text) return save(null); save({ text, grade: +main.querySelector('#ngrade').value, from: (S.user.name || '').replace(/\s*선생님$/, ''), ts: Date.now() }); });
+  main.querySelector('#nclear')?.addEventListener('click', () => save(null));
+}
+
 export async function dash(main, params, go) {
   main.innerHTML = '';
   filterBar(main, () => go('t_dash'));
+  noticeEditor(main, go);
   loading(main);
   const { students, progress, results, book } = await data();
   main.querySelector('#ld')?.remove();
