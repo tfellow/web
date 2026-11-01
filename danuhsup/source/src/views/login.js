@@ -75,6 +75,9 @@ export function renderLogin(root, store) {
 
 export function renderProfileSetup(root, store, user, done) {
   let sid = ''; try { sid = sessionStorage.getItem('vocab.sid') || ''; } catch { }
+  // 학교 계정 아이디(예: 202620118@smy.ms.kr = 2026학년도 2학년 1반 18번)에서 학년·반·번호를 자동으로 채움
+  const em = String(user.email || '').match(/^\d{4}(\d)(\d{2})(\d{2})@/);
+  if (!sid && em) sid = em[1] + em[2] + em[3];
   const g = sid ? sid[0] : 2, c = sid ? +sid.slice(1, 3) : 1, n = sid ? +sid.slice(3, 5) : '';
   root.innerHTML = `<div class="login"><section class="login-box" style="margin:auto">
     <form class="card form" id="pf">
