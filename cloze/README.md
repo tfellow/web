@@ -1,0 +1,60 @@
+# SMY Cloze — 설치 안내 (v2)
+
+빈칸 채우기(Cloze)와 문장 순서 맞추기 테스트를 만들고, 학생 기록을 모으는 웹앱입니다.
+주소: https://tfellow.github.io/web/cloze/
+
+## 폴더 구성
+```
+cloze/
+├─ index.html      첫 화면 (교사: 내 테스트 목록 / 학생: 코드 입력·내 기록)
+├─ editor.html     테스트 만들기·편집
+├─ play.html       학생 응시
+├─ results.html    결과 통계 (교사)
+├─ live.html       수업용 실시간 순위 화면 (교사, 프로젝터용)
+├─ firestore.rules 데이터베이스 보안 규칙 (Firebase 콘솔에 붙여 넣기)
+├─ css/style.css
+└─ js/ config.js · common.js · core.js · index.js · editor.js · play.js · results.js · live.js
+```
+
+## 1. Firebase 설정 (개인 계정으로 만든 프로젝트)
+1. https://console.firebase.google.com 에서 프로젝트를 엽니다.
+2. **프로젝트 설정(톱니바퀴) > 일반 > 내 앱 > 웹 앱(</>) 추가** → 나오는 `firebaseConfig` 값을 `js/config.js` 맨 위에 붙여 넣습니다.
+   (이전 버전 zip에서 이미 넣었다면 그 값을 새 `js/config.js`로 옮기면 됩니다.)
+3. **Authentication > 시작하기 > 로그인 방법 > Google 사용 설정**
+4. **Authentication > 설정 > 승인된 도메인**에 `tfellow.github.io` 추가
+5. **Firestore Database > 데이터베이스 만들기** → 위치 `asia-northeast3 (서울)` → **프로덕션 모드**
+
+## 2. 교사 계정 등록 (두 곳에 똑같이)
+- `js/config.js` 의 `TEACHER_EMAILS` 에서 `TEACHER_EMAIL_1`, `TEACHER_EMAIL_2` 를 실제 주소로 바꿉니다.
+- `firestore.rules` 의 `'teacher_email_1', 'teacher_email_2'` 를 실제 주소로 바꿉니다. **반드시 소문자**로 적습니다.
+- 교사를 더 추가할 때도 두 곳 모두 고칩니다.
+- 교사 주소는 학교 계정이 아니어도(예: gmail) 로그인됩니다. 그 외에는 `@smy.ms.kr` 계정만 들어올 수 있고, 모두 학생으로 처리됩니다.
+
+## 3. 보안 규칙 게시
+Firestore Database > **규칙** 탭 → `firestore.rules` 내용을 통째로 붙여 넣고 **게시**.
+(별도의 색인(index) 만들기는 필요 없습니다.)
+
+## 4. GitHub에 올리기
+`web` 저장소에서 **Add file > Upload files** → `cloze` 폴더를 통째로 끌어다 놓고 Commit.
+기존 파일은 건드리지 않습니다. 이전 버전 `cloze` 폴더가 있다면 안의 파일을 이 버전으로 교체하세요.
+1~2분 뒤 https://tfellow.github.io/web/cloze/ 에서 확인합니다.
+
+## 5. 사용 순서
+1. 교사: 첫 화면 → `+ 빈칸 채우기 만들기` 또는 `+ 문장 순서 만들기`
+2. 본문 붙여 넣기 → 자동 빈칸 또는 단어 클릭 → 설정 → 저장 → **6자리 코드** 생성
+3. 학생: 첫 화면에서 코드 입력(또는 링크·QR) → 처음 한 번 학번·실명·닉네임 입력 → 응시
+4. 교사: `결과`에서 통계·CSV, `실시간 순위`를 프로젝터로 띄우기
+
+## 이름 표시 원칙
+| 화면 | 보이는 이름 |
+|---|---|
+| 학생 순위표 (응시 후) | 닉네임만 |
+| 실시간 순위 화면 | 기본 닉네임 (교사가 실명으로 바꿀 수 있음) |
+| 결과 통계·CSV (교사) | 실명 / 닉네임 / 둘 다 선택 |
+
+실명·이메일은 `submissions`(본인·교사만 읽기)에만 저장되고, 학생이 읽을 수 있는 `board`에는 닉네임과 점수만 저장됩니다.
+
+## 알아 둘 한계
+- 채점은 학생 브라우저에서 합니다. 컴퓨터를 잘 아는 학생이 개발자 도구로 정답을 보거나 점수를 조작할 수 있습니다. 막으려면 서버 채점(Cloud Functions, 유료 Blaze 요금제)이 필요합니다. 수행평가처럼 중요한 평가라면 알려 주세요.
+- 화면 이탈 횟수는 "다른 탭·앱으로 이동"만 셉니다. 같은 화면 안의 다른 창은 잡지 못합니다.
+- 본문 듣기는 브라우저 내장 음성을 쓰므로 기기마다 목소리가 다릅니다.
