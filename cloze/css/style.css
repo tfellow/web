@@ -126,6 +126,8 @@ hr{border:0;border-top:1px solid var(--border);margin:10px 0}
 .lscore{font-weight:800;text-align:right}.lscore small{font-size:16px;color:var(--muted)}.ltime{text-align:right;font-size:20px;color:var(--muted)}
 .lrow.flash{animation:flash 1.6s ease-out}
 @keyframes flash{0%{background:#bfdbfe}100%{background:#fff}}
+/* 본문 줄바꿈 유지 (붙여 넣은 문단 그대로) */
+.passage,.token-view,.ans-text{white-space:pre-wrap}
 /* 정답보기 */
 .ans-wrap{max-width:1200px;margin:0 auto;padding:12px 14px 60px}
 .ans-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;position:sticky;top:52px;z-index:10;margin-bottom:8px}
