@@ -96,7 +96,7 @@ export async function learn(main, _, go) {
     <div class="chips" role="tablist">${books.map(b => `<button class="chip-btn ${b.id === bookId ? 'on' : ''}" data-book="${b.id}">${esc(b.short || b.title)}</button>`).join('')}</div>
     <section class="panel book-sum">
       <div><p class="eyebrow">${esc(book.publisher || '')} · ${book.grade}학년</p><h2>${esc(book.title)}</h2><p class="muted">${book.words.length}단어 · ${book.lessons.length}단원</p></div>
-      <div class="ring" style="--p:${pct(all.mast, all.total)}"><div><b>${pct(all.mast, all.total)}%</b><small>암기</small></div></div>
+      <div class="ring" style="--p:${pct(all.mast, all.total)}"><div><b>${pct(all.mast, all.total)}%</b><small>암기</small></div><a class="ring-help" href="guide/student.html#mastery" target="_blank" rel="noopener">암기 기준?</a></div>
     </section>
     <section class="decks">
       <button class="deck" data-deck="due"><b>🔁 오늘의 복습</b><span>${due.length}단어</span></button>
@@ -285,7 +285,7 @@ export async function me(main, _, go) {
       <label class="set"><span>발음 종류</span><select id="acc"><option value="en-US" ${prefs.accent === 'en-US' ? 'selected' : ''}>미국식</option><option value="en-GB" ${prefs.accent === 'en-GB' ? 'selected' : ''}>영국식</option></select></label>
       <label class="set"><span>발음 속도</span><select id="rate">${[[0.7, '느리게'], [0.9, '보통'], [1.1, '빠르게']].map(([v, t]) => `<option value="${v}" ${prefs.rate == v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
       <button class="btn" id="test-say">🔊 발음 들어 보기</button>
-      <button class="btn danger ghost" id="logout">로그아웃</button>
+      <a class="btn ghost" href="guide/student.html" target="_blank" rel="noopener">📘 학생 설명서</a><button class="btn danger ghost" id="logout">로그아웃</button>
     </section>`;
   main.querySelector('#goal').onchange = e => { st.goal = +e.target.value; S.userDirty = true; scheduleSave(200); toast('하루 목표를 바꿨어요.'); };
   main.querySelector('#snd').onchange = e => { prefs.sound = e.target.checked; savePrefs(); };
