@@ -2,6 +2,7 @@
 import { fullscreen, go, refreshTop } from '../main.js';
 import { S, record, bonus, newBadges, flush, progressOf, stats } from '../lib/state.js';
 import { makeQ, typeForBox, clozeOf, checkSpell, QTYPES } from '../lib/quiz.js';
+import { mascot } from '../lib/mascot.js';
 import { esc, speak, sfx, vibrate, shuffle, confetti, prefs, toast, pct, el } from '../lib/util.js';
 import { XP, BADGES } from '../lib/game.js';
 
@@ -174,8 +175,8 @@ function run(stage, opts) {
     fb.hidden = false;
     fb.className = `fb ${ok ? 'good' : 'bad'}`;
     fb.innerHTML = ok
-      ? `<div class="fb-in"><div><b>${combo >= 3 ? `🔥 ${combo} 콤보!` : pick(['정답!', '좋아요!', '훌륭해요!', '완벽해요!'])}</b> <span class="muted">+${xp} XP</span><div class="fb-word">${esc(w.word)} · ${esc(w.ko)}</div></div><button class="btn primary fb-next">계속</button></div>`
-      : `<div class="fb-in"><div><b>정답은 <u>${esc(w.word)}</u></b>${posTag(w)}<div class="fb-word">${esc(w.ko)}</div>${w.ex ? `<div class="fb-ex">${esc(w.ex)} ${spk(w.ex, 'sm')}</div>` : ''}</div><button class="btn primary fb-next">계속</button></div>`;
+      ? `<div class="fb-in">${mascot('cheer', 76, 'jump')}<div><b>${combo >= 3 ? `🔥 ${combo} 콤보!` : pick(['정답!', '좋아요!', '훌륭해요!', '완벽해요!'])}</b> <span class="muted">+${xp} XP</span><div class="fb-word">${esc(w.word)} · ${esc(w.ko)}</div></div><button class="btn primary fb-next">계속</button></div>`
+      : `<div class="fb-in">${mascot('sad', 76, 'bob')}<div><b>정답은 <u>${esc(w.word)}</u></b>${posTag(w)}<div class="fb-word">${esc(w.ko)}</div>${w.ex ? `<div class="fb-ex">${esc(w.ex)} ${spk(w.ex, 'sm')}</div>` : ''}</div><button class="btn primary fb-next">계속</button></div>`;
     fb.querySelector('.fb-next').onclick = () => { next(); };
     if (prefs.autoSpeak && !ok) speak(w.word);
     if (ok) { clearTimeout(fb._t); fb._t = setTimeout(() => { if (!fb.hidden && fb.classList.contains('good')) next(); }, 1100); }
@@ -208,6 +209,7 @@ function run(stage, opts) {
     const msg = p === 100 ? '완벽해요! 🎉' : p >= 80 ? '아주 잘했어요!' : p >= 60 ? '좋아요, 조금만 더!' : '틀린 단어를 다시 연습해 봐요';
     stage.innerHTML = `
       <div class="result">
+        ${mascot(p >= 80 ? 'cheer' : p >= 50 ? 'happy' : 'sad', 110, 'bob')}
         <div class="ring big" style="--p:${p}"><div><b>${isTest ? `${rightN}/${answered}` : `${p}%`}</b><small>${isTest ? `${p}점` : '정답률'}</small></div></div>
         <h2>${msg}</h2>
         <div class="res-stats">

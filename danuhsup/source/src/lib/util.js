@@ -113,7 +113,7 @@ export function confetti(n = 120) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const c = el('<canvas class="confetti"></canvas>'); document.body.appendChild(c);
   const ctx = c.getContext('2d'); const W = c.width = innerWidth, H = c.height = innerHeight;
-  const cols = ['#FFD23F', '#3B5BDB', '#2BB673', '#FF6B6B', '#7950F2', '#15AABF'];
+  const cols = ['#FFC93C', '#3FA9F5', '#3DBE6B', '#FF5C7A', '#9B6BF2', '#7DDF86'];
   const ps = Array.from({ length: n }, () => ({ x: W / 2 + (Math.random() - .5) * W * .3, y: H * .35, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: Math.random() * 6 + 4, c: pick(cols), a: Math.random() * 6, va: (Math.random() - .5) * .4 }));
   let f = 0;
   (function tick() {
