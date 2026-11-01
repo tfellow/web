@@ -361,7 +361,7 @@ function printWorksheet() {
     total = T.blanks.length;
     const bmap = new Map(T.blanks.map((b, k) => [b, k]));
     const bank = shuffle([...T.blanks.map(b => tokens[b]), ...(T.distractors || [])]);
-    const textHtml = tokens.map((t, i) => (bmap.has(i) ? `<span class="pb">(${bmap.get(i) + 1}) ____________</span>` : (/\n/.test(t) ? "<br>" : esc(t)))).join("");
+    const textHtml = tokens.map((t, i) => (bmap.has(i) ? `<span class="pb">(${bmap.get(i) + 1}) ____________</span>` : (/\n/.test(t) ? "<br>".repeat(t.split("\n").length - 1) : esc(t)))).join("");
     const key = T.blanks.map(b => `<li>${esc(tokens[b])}${(T.accepted[b] || []).length ? ` <small>(${esc(T.accepted[b].join(", "))})</small>` : ""}</li>`).join("");
     body = `${T.settings.answerMode !== "type" ? `<div class="bank">${bank.map(esc).join(" &nbsp;/&nbsp; ")}</div>` : ""}<div class="txt">${textHtml}</div><div class="page"><h2>정답 — ${esc(T.title)}</h2><ol>${key}</ol></div>`;
   } else {
