@@ -1,0 +1,92 @@
+rules_version = '2';
+// ★ 이 Firebase 프로젝트(cloze-a8e6c)는 SMY Cloze 와 단어숲이 함께 씁니다.
+// Firebase 콘솔 > Firestore Database > 규칙 탭에 이 파일 내용을 "통째로" 붙여 넣고 [게시]를 누르세요.
+// (cloze/firestore.rules 와 danuhsup/firestore.rules 는 같은 내용입니다. 교사를 바꿀 때는 두 파일과 각 앱의 config 를 함께 고치세요.)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+    function isTeacher() {
+      return signedIn() && myEmail() in ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+    }
+    function isSchool() {
+      return signedIn() && (myEmail().matches('.*@smy[.]ms[.]kr') || isTeacher());
+    }
+
+    // 내 정보 (학번·실명·닉네임): 본인과 교사만 읽기
+    match /users/{uid} {
+      allow read: if isSchool() && (request.auth.uid == uid || isTeacher());
+      allow create, update: if isSchool() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email;
+      allow delete: if false;
+    }
+
+    // 테스트: 로그인한 학교 계정은 읽기, 만든 교사만 수정
+    match /tests/{testId} {
+      allow read: if isSchool();
+      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // 제출 기록 (실명 포함): 본인과 그 테스트를 만든 교사만 읽기
+    match /submissions/{subId} {
+      allow read: if isSchool() && (resource.data.uid == request.auth.uid || resource.data.ownerUid == request.auth.uid);
+      allow create: if isSchool()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.resource.data.ownerUid;
+      allow update: if false;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // 학생용 순위표 (닉네임·점수만, 실명 없음)
+    match /board/{subId} {
+      allow read: if isSchool();
+      allow create: if isSchool() && request.resource.data.uid == request.auth.uid
+        && !('realName' in request.resource.data) && !('email' in request.resource.data);
+      allow update: if false;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ===================== 단어숲 (danuhsup) =====================
+    function vocabTeacher() {
+      return isTeacher() && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    function isMe(uid) { return isSchool() && request.auth.uid == uid; }
+
+    // 학생 정보 + 학습 통계: 본인과 교사만 읽기, 본인만 쓰기
+    match /vocab_users/{uid} {
+      allow read: if isMe(uid) || vocabTeacher();
+      allow create, update: if isMe(uid) && (request.resource.data.role == 'student' || vocabTeacher());
+      allow delete: if vocabTeacher();
+      match /progress/{bookId} {
+        allow read: if isMe(uid) || vocabTeacher();
+        allow write: if isMe(uid);
+      }
+    }
+    // 랭킹용 요약 (이름·XP·연속일만): 학교 계정이면 읽기, 본인만 쓰기
+    match /vocab_board/{uid} {
+      allow read: if isSchool();
+      allow write: if isMe(uid);
+      allow delete: if vocabTeacher();
+    }
+    // 단원 테스트 결과: 본인 것만 작성, 본인과 교사만 읽기
+    match /vocab_results/{id} {
+      allow read: if isSchool() && (resource.data.uid == request.auth.uid || vocabTeacher());
+      allow create: if isSchool() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if vocabTeacher();
+    }
+    // 단어장: 학교 계정이면 읽기, 교사만 추가·삭제
+    match /vocab_books/{id} {
+      allow read: if isSchool();
+      allow write: if vocabTeacher();
+    }
+  }
+}
