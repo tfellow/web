@@ -1,0 +1,17 @@
+{
+  "name": "danuh-forest",
+  "version": "1.0.0",
+  "description": "단어숲 - 학교 영어 어휘 학습 웹앱",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "cd dist && python3 -m http.server 8080",
+    "deploy": "node build.mjs && npx firebase-tools deploy"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "0.23.1"
+  },
+  "type": "module",
+  "private": true
+}
