@@ -119,7 +119,7 @@ export async function dash(main, params, go) {
   const hard = hardWords(students, progress, book).slice(0, 8);
 
   main.insertAdjacentHTML('beforeend', `
-    <div class="sec-h"><h1>${scopeName()} 대시보드</h1><button class="btn sm" id="csv">CSV 내보내기</button></div>
+    <div class="sec-h"><h1>${scopeName()} 대시보드</h1><span class="row-inline"><a class="btn sm ghost" href="guide/teacher.html" target="_blank" rel="noopener">📘 교사 설명서</a><button class="btn sm" id="csv">CSV 내보내기</button></span></div>
     <section class="tiles six">
       <div class="tile"><b>${n}</b><span>학생 수</span></div>
       <div class="tile"><b>${activeToday}</b><span>오늘 학습</span><small>${pct(activeToday, n)}%</small></div>
