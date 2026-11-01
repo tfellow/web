@@ -3,6 +3,7 @@ import { fullscreen, go, refreshTop } from '../main.js';
 import { S, record, bonus, newBadges, flush, progressOf, stats } from '../lib/state.js';
 import { makeQ, typeForBox, clozeOf, checkSpell, QTYPES } from '../lib/quiz.js';
 import { mascot } from '../lib/mascot.js';
+import { teacherImg, teacherReaction } from '../lib/teacher.js';
 import { esc, speak, sfx, vibrate, shuffle, confetti, prefs, toast, pct, el } from '../lib/util.js';
 import { XP, BADGES } from '../lib/game.js';
 
@@ -209,7 +210,7 @@ function run(stage, opts) {
     const msg = p === 100 ? '완벽해요! 🎉' : p >= 80 ? '아주 잘했어요!' : p >= 60 ? '좋아요, 조금만 더!' : '틀린 단어를 다시 연습해 봐요';
     stage.innerHTML = `
       <div class="result">
-        ${mascot(p >= 80 ? 'cheer' : p >= 50 ? 'happy' : 'sad', 110, 'bob')}
+        ${isTest ? (([face, line]) => `<div class="t-react">${teacherImg(face)}<div class="bubble"><p class="eyebrow">선생님</p>${line}</div></div>`)(teacherReaction(p)) : mascot(p >= 80 ? 'cheer' : p >= 50 ? 'happy' : 'sad', 110, 'bob')}
         <div class="ring big" style="--p:${p}"><div><b>${isTest ? `${rightN}/${answered}` : `${p}%`}</b><small>${isTest ? `${p}점` : '정답률'}</small></div></div>
         <h2>${msg}</h2>
         <div class="res-stats">
