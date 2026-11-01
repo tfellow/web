@@ -1,6 +1,6 @@
 // 학생 화면: 홈, 학습, 단원, 랭킹, 내 기록
 import { S, stats, progressOf, dueWords, wrongWords, favWords, toggleFav, flush, scheduleSave } from '../lib/state.js';
-import { allBooks, getBook, booksForGrade } from '../data/books.js';
+import { allBooks, getBook, booksForGrade, hasCustomOrder } from '../data/books.js';
 import { levelOf, todayOf, liveStreak, BADGES, isMastered, isSeen, isDue, BOX_LABEL } from '../lib/game.js';
 import { esc, speak, dayKey, dayNum, dayNumToKey, pct, prefs, savePrefs, modal, toast, sample, shuffle, fmtDate, ls } from '../lib/util.js';
 import { startSession, startCards, startMatch, wordCardHTML, QTYPES } from './session.js';
@@ -10,8 +10,8 @@ import { APP } from '../config.js';
 
 // 처음엔 내 학년 단어장, 학생이 다른 학년·종류 단어장을 고르면 그 선택을 기억
 const curBookId = () => { const saved = ls.get('vocab.book', null); return (saved && getBook(saved)) ? saved : booksForGrade(S.user.grade)[0].id; };
-// 단어장 목록: 내 학년 먼저, 그다음 학년 순
-const sortedBooks = () => { const g = +S.user.grade; return allBooks().map((b, i) => [b, i]).sort(([a, i], [b, j]) => ((+a.grade === g ? 0 : 1) - (+b.grade === g ? 0 : 1)) || ((+a.grade || 9) - (+b.grade || 9)) || i - j).map(([b]) => b); };
+// 단어장 목록: 선생님이 순서를 정했으면 그 순서, 아니면 내 학년 먼저, 그다음 학년 순
+const sortedBooks = () => { if (hasCustomOrder()) return allBooks(); const g = +S.user.grade; return allBooks().map((b, i) => [b, i]).sort(([a, i], [b, j]) => ((+a.grade === g ? 0 : 1) - (+b.grade === g ? 0 : 1)) || ((+a.grade || 9) - (+b.grade || 9)) || i - j).map(([b]) => b); };
 const say = root => root.addEventListener('click', e => { const s = e.target.closest('[data-say]'); if (s) { e.stopPropagation(); speak(s.dataset.say); } });
 const spk = t => `<button class="icon-btn speak sm" data-say="${esc(t)}" aria-label="발음 듣기"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>`;
 
