@@ -215,6 +215,9 @@ input:focus, select:focus { border-color: var(--forest-2); outline: none; }
 .sec-h .ko-toggle { margin-left: auto; }
 .dots { display: flex; gap: 2px; flex: none; } .dots i { width: 5px; height: 14px; border-radius: 2px; background: var(--surface-2); } .dots i.on { background: var(--forest-2); }
 
+.guide-links { text-align: center; font-size: .9rem; margin: 12px 0 0; } .guide-links a { color: var(--forest-2); font-weight: 600; }
+.ring { position: relative; } .ring-help { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); white-space: nowrap; font-size: .75rem; color: var(--forest-2); font-weight: 600; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
 /* 랭킹 */
 .me-rank { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; } .me-rank b { font-size: 1.6rem; }
 .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-items: end; margin: 8px 0; }

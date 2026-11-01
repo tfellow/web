@@ -51,8 +51,9 @@ export function renderLogin(root, store) {
             <label>비밀번호 <small class="muted">(6자 이상)</small><input id="pw" type="password" minlength="6" required autocomplete="current-password"></label>
             <div class="row2"><button class="btn primary" data-mode="login">로그인</button><button class="btn" data-mode="register">처음 사용 (가입)</button></div>
           </form>
-` : `<p class="muted small">학교 또는 개인 구글 계정으로 로그인하세요. 처음 한 번만 학년·반·번호를 입력하면 돼요.</p>`}
+` : `<p class="muted small">학교 구글 계정(@${esc(APP.allowedGoogleDomain || '')})으로 로그인하세요. 처음 한 번만 학년·반·번호를 확인하면 돼요.</p>`}
         </div>`}
+      <p class="guide-links"><a href="guide/student.html" target="_blank" rel="noopener">📘 학생 설명서</a> · <a href="guide/teacher.html" target="_blank" rel="noopener">교사 설명서</a></p>
     </section>
   </div>`;
 
