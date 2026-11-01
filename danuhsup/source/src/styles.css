@@ -210,6 +210,9 @@ input:focus, select:focus { border-color: var(--forest-2); outline: none; }
 .wrow { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
 .wrow:last-child { border-bottom: 0; }
 .wrow .hw { font-size: 1.1rem; } .wrow .ko { flex: 1; color: var(--ink-2); font-size: .9rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ko-blank { display: block; width: min(100%, 9em); height: 26px; border: 1.5px dashed var(--line); border-radius: 8px; background: var(--surface-2); cursor: pointer; padding: 0; }
+.ko-blank:hover, .ko-blank:focus-visible { border-color: var(--forest-2); }
+.sec-h .ko-toggle { margin-left: auto; }
 .dots { display: flex; gap: 2px; flex: none; } .dots i { width: 5px; height: 14px; border-radius: 2px; background: var(--surface-2); } .dots i.on { background: var(--forest-2); }
 
 /* 랭킹 */
