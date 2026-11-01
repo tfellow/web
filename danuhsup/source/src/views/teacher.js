@@ -14,7 +14,7 @@ async function data() {
   if (!getBook(F.bookId)) F.bookId = allBooks()[0].id;
   const key = JSON.stringify([F.grade, F.classNo, F.bookId]);
   if (!cache.has(key)) cache.set(key, (async () => {
-    const students = (await S.store.listStudents({ grade: F.grade, classNo: F.classNo })).sort((a, b) => a.classNo - b.classNo || a.number - b.number);
+    const students = (await S.store.listStudents({ grade: F.grade, classNo: F.classNo })).sort((a, b) => +sid(a) - +sid(b));
     const progress = await S.store.listProgress(students.map(s => s.uid), F.bookId);
     const results = (await S.store.listResults({ grade: F.grade, classNo: F.classNo })).filter(r => r.bookId === F.bookId);
     return { students, progress, results, book: getBook(F.bookId) };
@@ -77,6 +77,8 @@ function bars(items, { max, unit = '', h = 200, fmt = v => v } = {}) {
   });
   return `<div class="chart-wrap">${s}</svg></div>`;
 }
+// 5자리 학번 (예: 2학년 1반 18번 → 20118)
+const sid = u => u && u.grade ? String(u.grade * 10000 + (u.classNo || 0) * 100 + (u.number || 0)) : '-';
 const statusOf = p => p == null ? '' : p >= 80 ? 'good' : p >= 60 ? 'warn' : 'crit';
 
 // ================= 대시보드 =================
@@ -136,10 +138,10 @@ export async function dash(main, params, go) {
       <tbody>${classRows.map(r => `<tr><td><button class="link" data-class="${r.c}">${r.c}반</button></td><td>${r.n}</td><td><span class="meter"><i style="width:${r.act}%"></i></span>${r.act}%</td><td>${r.xp.toLocaleString()}</td><td>${r.learned}</td><td>${r.mastered}</td><td class="${statusOf(r.acc)}">${r.acc == null ? '-' : Math.round(r.acc) + '%'}</td><td class="${statusOf(r.test)}">${r.test ?? '-'}</td><td>${r.streak}</td></tr>`).join('')}</tbody></table></div></section>` : ''}
     <section class="grid3">
       <div class="panel"><div class="sec-h"><b>관심이 필요한 학생</b><span class="muted small">3일 이상 미접속</span></div>
-        ${attention.length ? `<ul class="plist">${attention.slice(0, 10).map(m => `<li data-uid="${m.u.uid}"><b>${esc(m.u.name)}</b><small class="muted">${m.u.classNo}-${m.u.number}</small><span class="tag crit">${m.inactive >= 999 ? '미접속' : m.inactive + '일째'}</span></li>`).join('')}</ul>${attention.length > 10 ? `<p class="muted small">외 ${attention.length - 10}명</p>` : ''}` : '<p class="muted">모두 꾸준히 학습하고 있어요 👏</p>'}
-        ${lowAcc.length ? `<div class="sec-h" style="margin-top:12px"><b>정답률이 낮은 학생</b></div><ul class="plist">${lowAcc.slice(0, 5).map(m => `<li data-uid="${m.u.uid}"><b>${esc(m.u.name)}</b><small class="muted">${m.u.classNo}-${m.u.number}</small><span class="tag warn">${m.acc}%</span></li>`).join('')}</ul>` : ''}</div>
+        ${attention.length ? `<ul class="plist">${attention.slice(0, 10).map(m => `<li data-uid="${m.u.uid}"><b>${esc(m.u.name)}</b><small class="muted">${sid(m.u)}</small><span class="tag crit">${m.inactive >= 999 ? '미접속' : m.inactive + '일째'}</span></li>`).join('')}</ul>${attention.length > 10 ? `<p class="muted small">외 ${attention.length - 10}명</p>` : ''}` : '<p class="muted">모두 꾸준히 학습하고 있어요 👏</p>'}
+        ${lowAcc.length ? `<div class="sec-h" style="margin-top:12px"><b>정답률이 낮은 학생</b></div><ul class="plist">${lowAcc.slice(0, 5).map(m => `<li data-uid="${m.u.uid}"><b>${esc(m.u.name)}</b><small class="muted">${sid(m.u)}</small><span class="tag warn">${m.acc}%</span></li>`).join('')}</ul>` : ''}</div>
       <div class="panel"><div class="sec-h"><b>칭찬할 학생</b><span class="muted small">${F.range}일 XP</span></div>
-        <ul class="plist">${stars.map((m, i) => `<li data-uid="${m.u.uid}"><span class="rn">${i + 1}</span><b>${esc(m.u.name)}</b><small class="muted">${m.u.classNo}-${m.u.number}</small><span class="tag good">${m.xp.toLocaleString()} XP</span></li>`).join('')}</ul></div>
+        <ul class="plist">${stars.map((m, i) => `<li data-uid="${m.u.uid}"><span class="rn">${i + 1}</span><b>${esc(m.u.name)}</b><small class="muted">${sid(m.u)}</small><span class="tag good">${m.xp.toLocaleString()} XP</span></li>`).join('')}</ul></div>
       <div class="panel"><div class="sec-h"><b>어려워하는 단어</b><button class="link" id="moreW">전체 보기</button></div>
         <ul class="plist">${hard.map(h => `<li><b>${esc(h.w.word)}</b><small class="muted">L${h.w.lesson} ${esc(h.w.ko)}</small><span class="tag crit">오답 ${h.rate}%</span></li>`).join('') || '<li class="muted">아직 데이터가 부족해요.</li>'}</ul></div>
     </section>`);
@@ -151,8 +153,8 @@ export async function dash(main, params, go) {
 
 function exportCSV(M) {
   downloadCSV(`단어학습_${scopeName()}_${dayNumToKey(dayNum())}.csv`, [
-    ['학년', '반', '번호', '이름', `${F.range}일 학습일`, `${F.range}일 XP`, `${F.range}일 문제 수`, '정답률(%)', '학습 시간(분)', '학습 단어', '암기 단어', '현재 연속일', '최고 연속일', '레벨', '누적 XP', '테스트 횟수', '테스트 평균', '마지막 학습일'],
-    ...M.map(m => [m.u.grade, m.u.classNo, m.u.number, m.u.name, m.activeDays, m.xp, m.answers, m.acc ?? '', m.minutes, m.learned, m.mastered, m.streak, m.best, m.level, m.totalXp, m.tests, m.testAvg ?? '', m.lastDay || '']),
+    ['학번', '학년', '반', '번호', '이름', `${F.range}일 학습일`, `${F.range}일 XP`, `${F.range}일 문제 수`, '정답률(%)', '학습 시간(분)', '학습 단어', '암기 단어', '현재 연속일', '최고 연속일', '레벨', '누적 XP', '테스트 횟수', '테스트 평균', '마지막 학습일'],
+    ...M.map(m => [sid(m.u), m.u.grade, m.u.classNo, m.u.number, m.u.name, m.activeDays, m.xp, m.answers, m.acc ?? '', m.minutes, m.learned, m.mastered, m.streak, m.best, m.level, m.totalXp, m.tests, m.testAvg ?? '', m.lastDay || '']),
   ]);
   toast('CSV 파일을 내려받았어요. 구글 시트에서 [파일 → 가져오기]로 열 수 있어요.');
 }
@@ -177,17 +179,17 @@ export async function students(main, params, go) {
   main.querySelector('#ld')?.remove();
   const M = students.map(u => metrics(u, progress[u.uid], results, book, F.range));
   let sortK = 'num', dir = 1, q = '';
-  const cols = [['num', '반-번호'], ['name', '이름'], ['activeDays', '학습일'], ['xp', 'XP'], ['acc', '정답률'], ['learned', '학습 단어'], ['mastered', '암기'], ['streak', '연속'], ['testAvg', '테스트'], ['inactive', '마지막 학습']];
+  const cols = [['num', '학번'], ['name', '이름'], ['activeDays', '학습일'], ['xp', 'XP'], ['acc', '정답률'], ['learned', '학습 단어'], ['mastered', '암기'], ['streak', '연속'], ['testAvg', '테스트'], ['inactive', '마지막 학습']];
   main.insertAdjacentHTML('beforeend', `
     <div class="sec-h"><h1>학생별 기록 <small class="muted">${scopeName()} · ${M.length}명</small></h1>
       <div class="row-inline"><input id="q" class="search" placeholder="이름 검색" aria-label="이름 검색"><button class="btn sm" id="csv">CSV</button></div></div>
     <p class="muted small">기간: 최근 ${F.range}일 · 이름을 누르면 자세한 기록을 볼 수 있어요. 열 제목을 누르면 정렬돼요.</p>
     <div class="tbl-wrap"><table class="tbl sortable"><thead><tr>${cols.map(([k, t]) => `<th data-k="${k}">${t}</th>`).join('')}</tr></thead><tbody id="tb"></tbody></table></div>`);
-  const val = (m, k) => k === 'num' ? m.u.classNo * 100 + m.u.number : k === 'name' ? m.u.name : m[k] ?? -1;
+  const val = (m, k) => k === 'num' ? +sid(m.u) : k === 'name' ? m.u.name : m[k] ?? -1;
   const draw = () => {
     const list = M.filter(m => !q || m.u.name.includes(q)).sort((a, b) => { const x = val(a, sortK), y = val(b, sortK); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * dir; });
     main.querySelector('#tb').innerHTML = list.map(m => `<tr data-uid="${m.u.uid}">
-      <td>${m.u.classNo}-${m.u.number}</td><td><button class="link">${esc(m.u.name)}</button></td><td>${m.activeDays}일</td><td>${m.xp.toLocaleString()}</td>
+      <td>${sid(m.u)}</td><td><button class="link">${esc(m.u.name)}</button></td><td>${m.activeDays}일</td><td>${m.xp.toLocaleString()}</td>
       <td class="${statusOf(m.acc)}">${m.acc == null ? '-' : m.acc + '%'}</td>
       <td><span class="meter"><i style="width:${pct(m.learned, m.total)}%"></i></span>${m.learned}</td><td>${m.mastered}</td><td>${m.streak ? '🔥' + m.streak : '0'}</td>
       <td class="${statusOf(m.testAvg)}">${m.testAvg ?? '-'}</td><td class="${m.inactive >= 3 ? 'crit' : ''}">${m.inactive >= 999 ? '없음' : daysAgoText(Date.now() - m.inactive * 86400000)}</td></tr>`).join('');
@@ -266,11 +268,11 @@ export async function tests(main, params, go) {
     <div class="sec-h"><h1>테스트 결과 <small class="muted">${scopeName()}</small></h1><button class="btn sm" id="csv">CSV</button></div>
     <section class="tiles">${L.map(l => { const t = results.filter(r => r.lesson == l.n); const takers = new Set(t.map(r => r.uid)).size; return `<div class="tile"><b class="${statusOf(t.length ? avg(t, r => r.pct) : null)}">${t.length ? Math.round(avg(t, r => r.pct)) : '-'}</b><span>L${l.n} 평균</span><small>${takers}/${students.length}명 응시</small></div>`; }).join('')}</section>
     <div class="panel"><div class="sec-h"><b>학생 × 단원 최고 점수</b><span class="muted small"><i class="sw good"></i>80 이상 <i class="sw warn"></i>60~79 <i class="sw crit"></i>60 미만</span></div>
-    <div class="tbl-wrap"><table class="tbl matrix"><thead><tr><th>반-번호</th><th>이름</th>${L.map(l => `<th>L${l.n}</th>`).join('')}<th>평균</th></tr></thead>
-    <tbody>${students.map(u => { const cs = L.map(l => cell(u.uid, l.n)); const v = cs.filter(Boolean); return `<tr><td>${u.classNo}-${u.number}</td><td>${esc(u.name)}</td>${cs.map(c => `<td class="hm ${c ? statusOf(c.best) : ''}" title="${c ? `${c.cnt}회 응시` : '미응시'}">${c ? c.best : '·'}</td>`).join('')}<td><b>${v.length ? Math.round(avg(v, c => c.best)) : '-'}</b></td></tr>`; }).join('')}</tbody></table></div></div>
+    <div class="tbl-wrap"><table class="tbl matrix"><thead><tr><th>학번</th><th>이름</th>${L.map(l => `<th>L${l.n}</th>`).join('')}<th>평균</th></tr></thead>
+    <tbody>${students.map(u => { const cs = L.map(l => cell(u.uid, l.n)); const v = cs.filter(Boolean); return `<tr><td>${sid(u)}</td><td>${esc(u.name)}</td>${cs.map(c => `<td class="hm ${c ? statusOf(c.best) : ''}" title="${c ? `${c.cnt}회 응시` : '미응시'}">${c ? c.best : '·'}</td>`).join('')}<td><b>${v.length ? Math.round(avg(v, c => c.best)) : '-'}</b></td></tr>`; }).join('')}</tbody></table></div></div>
     <div class="panel"><div class="sec-h"><b>최근 응시</b></div>
-    <div class="tbl-wrap"><table class="tbl compact"><thead><tr><th>일시</th><th>학생</th><th>단원</th><th>점수</th><th>틀린 단어</th></tr></thead><tbody>${recent.map(r => `<tr><td>${fmtDate(r.ts)}</td><td>${r.classNo}-${r.number} ${esc(r.name)}</td><td>${r.lesson === 'mix' ? '종합' : 'L' + r.lesson}</td><td class="${statusOf(r.pct)}">${r.pct}점</td><td class="small">${(r.wrong || []).slice(0, 8).map(id => esc(getWord(id)?.word || '')).join(', ')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">아직 응시 기록이 없어요.</td></tr>'}</tbody></table></div></div>`);
-  main.querySelector('#csv').onclick = () => downloadCSV(`테스트결과_${scopeName()}.csv`, [['일시', '학년', '반', '번호', '이름', '단원', '점수', '맞은 수', '문항 수', '소요(초)', '틀린 단어'], ...results.sort((a, b) => a.ts - b.ts).map(r => [new Date(r.ts).toLocaleString('ko-KR'), r.grade, r.classNo, r.number, r.name, r.lesson, r.pct, r.score, r.total, r.sec, (r.wrong || []).map(id => getWord(id)?.word || '').join(' / ')])]);
+    <div class="tbl-wrap"><table class="tbl compact"><thead><tr><th>일시</th><th>학생</th><th>단원</th><th>점수</th><th>틀린 단어</th></tr></thead><tbody>${recent.map(r => `<tr><td>${fmtDate(r.ts)}</td><td>${sid(r)} ${esc(r.name)}</td><td>${r.lesson === 'mix' ? '종합' : 'L' + r.lesson}</td><td class="${statusOf(r.pct)}">${r.pct}점</td><td class="small">${(r.wrong || []).slice(0, 8).map(id => esc(getWord(id)?.word || '')).join(', ')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">아직 응시 기록이 없어요.</td></tr>'}</tbody></table></div></div>`);
+  main.querySelector('#csv').onclick = () => downloadCSV(`테스트결과_${scopeName()}.csv`, [['일시', '학번', '학년', '반', '번호', '이름', '단원', '점수', '맞은 수', '문항 수', '소요(초)', '틀린 단어'], ...results.sort((a, b) => a.ts - b.ts).map(r => [new Date(r.ts).toLocaleString('ko-KR'), sid(r), r.grade, r.classNo, r.number, r.name, r.lesson, r.pct, r.score, r.total, r.sec, (r.wrong || []).map(id => getWord(id)?.word || '').join(' / ')])]);
 }
 
 // ================= 단어장 관리 =================
