@@ -244,8 +244,13 @@ input:focus, select:focus { border-color: var(--forest-2); outline: none; }
 .set { flex-direction: row !important; justify-content: space-between; align-items: center; } .set select { width: auto; } .set input[type=checkbox] { width: 22px; min-height: 22px; accent-color: var(--forest-2); }
 
 /* ---------- 학습 진행 화면 ---------- */
-.stage { min-height: 100vh; display: flex; justify-content: center; }
-.sess { width: 100%; max-width: 680px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 12px; min-height: 100vh; }
+.stage { min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; overflow-x: hidden; overflow-x: clip; }
+.sess { width: 100%; max-width: 680px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 12px; min-height: 100vh; min-height: 100dvh; overflow-x: hidden; overflow-x: clip; }
+/* 카드 화면: 화면 높이에 딱 맞춰 몰라요/알아요 버튼이 항상 보이게 */
+.sess.cards { height: 100vh; height: 100dvh; min-height: 0; }
+.sess.cards .flip-wrap { min-height: 200px; }
+.sess.cards .flip { min-height: 0; height: 100%; }
+.sess.cards .card-btns { flex: none; }
 .sess-top { display: flex; align-items: center; gap: 12px; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); padding: 6px 0; z-index: 5; }
 .sess-top .bar { height: 14px; } .sess-top .bar i { background: var(--forest-2); }
 .combo { font-weight: 700; color: var(--warn); font-size: .85rem; white-space: nowrap; }

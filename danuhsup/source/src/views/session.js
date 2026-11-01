@@ -286,7 +286,7 @@ export function startCards({ title, words, back }) {
       stage.querySelector('.flip-wrap').innerHTML = `<div class="result in-cards"><div class="ring big" style="--p:${pct(known, order.length)}"><div><b>${known}/${order.length}</b><small>알아요</small></div></div>
         ${badges.length ? `<div class="new-badges">${badges.map(b => `<div class="nb"><span>${b.icon}</span><b>${b.name}</b><small>새 배지!</small></div>`).join('')}</div>` : ''}
         <div class="res-actions">${unknown.length ? `<button class="btn primary big" id="ag">모르는 ${unknown.length}단어 다시 보기</button><button class="btn big" id="qz">모르는 단어로 퀴즈</button>` : ''}<button class="btn big ghost" id="dn">끝내기</button></div></div>`;
-      stage.querySelector('.card-btns').remove(); stage.querySelector('.card-tools').remove();
+      stage.querySelector('.card-btns').remove(); stage.querySelector('.card-tools').remove(); stage.querySelector('.sess').classList.remove('cards');
       stage.querySelector('#ag')?.addEventListener('click', () => startCards({ title, words: unknown, back }));
       stage.querySelector('#qz')?.addEventListener('click', () => startSession({ title: '모르는 단어 퀴즈', words: unknown, pool: words.length >= 4 ? words : unknown, mode: 'smart', back }));
       stage.querySelector('#dn').onclick = exit;
