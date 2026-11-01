@@ -6,7 +6,23 @@
 //   vocab_results/{autoId}               단원 테스트 결과 (교사 통계용)
 //   vocab_books/{bookId}                 교사가 업로드한 단어장
 import { firebaseConfig, APP, FIREBASE_VERSION } from '../config.js';
-import { weekKey } from '../lib/util.js';
+import { weekKey, toast } from '../lib/util.js';
+
+// Firestore 는 인터넷이 끊기면 쓰기를 기기에 보관했다가 다시 연결될 때 보냅니다.
+// 그런데 서버 응답을 끝까지 기다리면 오프라인에서 화면이 멈추므로, 잠시 기다린 뒤에는
+// "기기에 보관됨"으로 보고 넘어갑니다. 나중에 실패하면 그때 알려 줍니다.
+function settle(p, ms = 4000) {
+  return new Promise((res, rej) => {
+    let done = false;
+    const t = setTimeout(() => { done = true; res('queued'); }, ms);
+    p.then(v => { if (!done) { done = true; clearTimeout(t); res(v); } },
+      e => {
+        if (!done) { done = true; clearTimeout(t); rej(e); return; }
+        console.error(e);
+        toast(e?.code === 'permission-denied' ? '저장 권한이 없어요. 학교 계정으로 로그인했는지 확인해 주세요.' : `기록을 서버에 보내지 못했어요. (${e?.code || e?.message || '알 수 없는 오류'})`, 'bad');
+      });
+  });
+}
 
 const V = FIREBASE_VERSION;
 let A, F, auth, fs, me = null, authCb = () => { };
@@ -69,11 +85,11 @@ export const firebaseStore = {
     const batch = F.writeBatch(fs);
     batch.set(F.doc(fs, 'vocab_users', u.uid), clean);
     if (u.role === 'student') batch.set(F.doc(fs, 'vocab_board', u.uid), boardDoc(u));
-    await batch.commit();
+    await settle(batch.commit());
   },
   async loadProgress(uid, bookId) { const s = await F.getDoc(F.doc(fs, 'vocab_users', uid, 'progress', bookId)); return s.exists() ? (s.data().words || {}) : {}; },
-  async saveProgress(uid, bookId, map) { await F.setDoc(F.doc(fs, 'vocab_users', uid, 'progress', bookId), { words: map, updatedAt: Date.now() }); },
-  async addResult(r) { await F.addDoc(F.collection(fs, 'vocab_results'), r); },
+  async saveProgress(uid, bookId, map) { await settle(F.setDoc(F.doc(fs, 'vocab_users', uid, 'progress', bookId), { words: map, updatedAt: Date.now() })); },
+  async addResult(r) { await settle(F.addDoc(F.collection(fs, 'vocab_results'), r)); },
   async myResults(uid) {
     const q = F.query(F.collection(fs, 'vocab_results'), F.where('uid', '==', uid));
     return (await F.getDocs(q)).docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.ts - a.ts);

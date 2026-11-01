@@ -14,7 +14,10 @@
 - **처음 한 번 할 일**: Firebase 콘솔 → Firestore Database → 규칙 탭에 `firestore.rules` 내용을 통째로 붙여 넣고 [게시]. (Cloze 규칙이 포함된 합본이라 Cloze 도 그대로 작동합니다.)
 
 ### 고치는 방법
-`source/` 폴더가 원본 코드입니다. 고친 뒤 `cd source && npm install && node build.mjs` 를 실행하면 `source/dist/` 가 만들어지고, 그 안의 파일을 `danuhsup/` 로 복사하면 됩니다.
+`source/` 폴더가 원본 코드입니다. 고친 뒤 `cd source && npm install && node build.mjs` 를 실행하면 `source/dist/` 가 만들어지고, 그 안의 파일(`sw.js` 포함)을 `danuhsup/` 로 복사하면 됩니다.
+
+### 오프라인 학습
+`sw.js`(서비스 워커)가 앱 파일과 Firebase 프로그램을 기기에 저장해 두어, 한 번 접속한 기기는 인터넷이 끊겨도 앱이 열리고 학습할 수 있습니다. 학습 기록은 기기에 보관됐다가 인터넷이 다시 연결되면 자동으로 서버에 올라갑니다. 새 버전을 올리면 학생 기기는 다음에 앱을 열 때 자동으로 새 버전을 받습니다.
 
 ## 기능 한눈에 보기
 
@@ -74,4 +77,6 @@ src/store/firebase.js  운영 모드 저장소 (Auth + Firestore)
 src/views/             화면 (로그인, 학생, 학습 진행, 교사)
 firestore.rules        보안 규칙
 build.mjs              빌드 → dist/ (배포용), demo/ (단일 파일 체험판)
+sw.js                  오프라인 지원 서비스 워커 (빌드 때 버전 이름이 붙음)
+src/lib/mascot.js      마스코트 새싹이 그림 (기분: happy, cheer, sad, sleep)
 ```

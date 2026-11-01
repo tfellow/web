@@ -59,19 +59,29 @@ export function newBadges() {
   return got;
 }
 
-let timer;
+let timer, saving = Promise.resolve();
 export function scheduleSave(ms = 1500) { clearTimeout(timer); timer = setTimeout(flush, ms); }
-export async function flush() {
+// 저장은 한 번에 하나씩 차례로. 실패하면 다시 저장할 목록에 되돌려 놓고 잠시 뒤 다시 시도합니다.
+export function flush() {
   clearTimeout(timer);
+  return (saving = saving.then(saveNow, saveNow));
+}
+async function saveNow() {
+  if (!S.user || !S.store) return;
+  const books = [...S.dirty], userDirty = S.userDirty;
+  S.dirty.clear(); S.userDirty = false;
   try {
-    const books = [...S.dirty]; S.dirty.clear();
     for (const b of books) await S.store.saveProgress(S.user.uid, b, S.progress[b]);
-    if (S.userDirty) { S.userDirty = false; await S.store.saveUser(S.user); }
+    if (userDirty) await S.store.saveUser(S.user);
   } catch (e) {
     console.error(e);
-    toast(e?.code === 'permission-denied' ? '저장 권한이 없어요. 학교 계정으로 로그인했는지 확인해 주세요.' : `저장에 실패했어요. 잠시 후 다시 시도해 주세요. (${e?.code || e?.message || '알 수 없는 오류'})`, 'bad');
+    books.forEach(b => S.dirty.add(b)); if (userDirty) S.userDirty = true;
+    if (e?.code !== 'permission-denied') scheduleSave(15000);
+    toast(e?.code === 'permission-denied' ? '저장 권한이 없어요. 학교 계정으로 로그인했는지 확인해 주세요.' : `저장에 실패했어요. 잠시 후 자동으로 다시 시도할게요. (${e?.code || e?.message || '알 수 없는 오류'})`, 'bad');
   }
 }
+addEventListener('online', () => { if (S.user && (S.dirty.size || S.userDirty)) flush(); });
+addEventListener('pagehide', () => { if (S.user) flush(); });
 addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S.user) flush(); });
 
 // 오늘 복습할 단어 (모든 단어장)
