@@ -5,7 +5,7 @@ import { levelOf, todayOf, liveStreak, BADGES, isMastered, isSeen, isDue, BOX_LA
 import { esc, speak, dayKey, dayNum, dayNumToKey, pct, prefs, savePrefs, modal, toast, sample, shuffle, fmtDate, ls } from '../lib/util.js';
 import { startSession, startCards, startMatch, wordCardHTML, QTYPES } from './session.js';
 import { logout, refreshTop } from '../main.js';
-import { mascotSays } from '../lib/mascot.js';
+import { mascot, mascotSays } from '../lib/mascot.js';
 import { APP } from '../config.js';
 
 // 처음엔 내 학년 단어장, 학생이 다른 학년·종류 단어장을 고르면 그 선택을 기억
@@ -89,6 +89,39 @@ export async function home(main, _, go) {
   main.querySelector('#allB')?.addEventListener('click', () => go('me'));
 }
 
+// 단원 숲길: 단원이 숲길 위 징검다리처럼 지그재그로 이어짐. 잠그지 않고 모든 단원을 누를 수 있음
+const SWAY = [0, 54, 84, 54, 0, -54, -84, -54];
+const tree = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-3" y="10" width="6" height="12" rx="2" fill="#B07A4F"/><path d="M0-22 18 4H8l12 12H-20L-8 4h-10z" fill="${c}"/></g>`;
+const bush = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-8" cy="4" r="9" fill="${c}"/><circle cx="6" cy="0" r="12" fill="${c}"/><circle cx="18" cy="6" r="8" fill="${c}"/></g>`;
+function forestPath(book, map) {
+  const L = book.lessons, H = 168, W = 340, cx = W / 2;
+  const stats = L.map(l => lessonStats(book, map, l.n));
+  let cur = L.findIndex(l => l.n === getLastLesson(book.id));
+  if (cur < 0) cur = stats.findIndex(s => s.seen < s.total);
+  if (cur < 0) cur = L.length - 1;
+  const pts = L.map((_, i) => [cx + SWAY[i % SWAY.length], 60 + i * H]);
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += ` C${x0} ${y0 + H / 2} ${x1} ${y1 - H / 2} ${x1} ${y1}`; }
+  const deco = pts.map(([x, y], i) => { const side = x >= cx ? -1 : 1, tx = cx + side * (110 + (i % 3) * 14); return (i % 2 ? bush(tx, y + 30, .9, 'var(--heat1)') : tree(tx, y + 10, 1.3, i % 4 ? 'var(--heat2)' : 'var(--heat3)')); }).join('');
+  const nodes = L.map((l, i) => {
+    const s = stats[i], [x, y] = pts[i];
+    const state = s.stars >= 3 ? 'gold' : i === cur ? 'cur' : s.seen > 0 ? 'go' : 'new';
+    const off = x - cx;
+    return `<div class="pnode ${state}" style="top:${y}px;left:calc(50% + ${off}px)">
+      ${i === cur ? `<span class="pstart">여기부터!</span><span class="pmasc ${off > 0 ? 'l' : 'r'}">${mascot('happy', 58, 'bob')}</span>` : ''}
+      <span class="pwrap"><span class="pring" style="--p:${pct(s.seen, s.total)}"></span><button class="pbtn" data-n="${l.n}" aria-label="${esc(l.title)}, ${s.seen}/${s.total} 학습, ${s.mast} 암기">
+        <span class="pin">${s.stars >= 3 ? '👑' : l.n}</span>
+      </button></span>
+      <div class="plabel"><b>${esc(l.title)}</b>${stars(s.stars)}<small>${s.seen}/${s.total} 학습 · ${s.mast} 암기${s.due ? ` · <em>복습 ${s.due}</em>` : ''}</small></div>
+    </div>`;
+  }).join('');
+  const h = 60 + (L.length - 1) * H + 110;
+  return `<section class="forest" style="height:${h}px">
+    <svg class="forest-bg" viewBox="0 0 ${W} ${h}" width="${W}" height="${h}" aria-hidden="true">${deco}<path d="${d}" class="trail"/><path d="${d}" class="trail-dots"/></svg>
+    ${nodes}
+  </section>`;
+}
+
 // ================= 학습(단어장/단원 목록) =================
 export async function learn(main, _, go) {
   const books = sortedBooks();
@@ -98,7 +131,7 @@ export async function learn(main, _, go) {
   main.innerHTML = `
     <div class="sec-h"><h1>학습</h1></div>
     <div class="chips wrap" role="tablist">${books.map(b => `<button class="chip-btn ${b.id === bookId ? 'on' : ''}" data-book="${b.id}">${esc(b.short || b.title)}${+b.grade !== +S.user.grade && b.grade ? ` <small>${b.grade}학년</small>` : ''}</button>`).join('')}</div>
-    <section class="panel book-sum">
+    <section class="panel book-sum banner">
       <div><p class="eyebrow">${esc(book.publisher || '')} · ${book.grade}학년</p><h2>${esc(book.title)}</h2><p class="muted">${book.words.length}단어 · ${book.lessons.length}단원</p></div>
       <div class="ring" style="--p:${pct(all.mast, all.total)}"><div><b>${pct(all.mast, all.total)}%</b><small>암기</small></div><a class="ring-help" href="guide/student.html#mastery" target="_blank" rel="noopener">암기 기준?</a></div>
     </section>
@@ -108,14 +141,8 @@ export async function learn(main, _, go) {
       <button class="deck" data-deck="fav"><b>⭐ 즐겨찾기</b><span>${favs.length}단어</span></button>
       <button class="deck" data-deck="rand"><b>🎲 랜덤 20</b><span>전체 단원</span></button>
     </section>
-    <h3 class="h3">단원</h3>
-    <section class="lessons">${book.lessons.map(l => { const s = lessonStats(book, map, l.n); return `
-      <button class="lesson" data-n="${l.n}">
-        <div class="ln">L${l.n}</div>
-        <div class="lmeta"><b>${esc(l.title)}</b><span class="muted small">${s.seen}/${s.total} 학습 · ${s.mast} 암기${s.due ? ` · <em>복습 ${s.due}</em>` : ''}</span>
-        <div class="bar thin"><i class="seen" style="width:${pct(s.seen, s.total)}%"></i><i style="width:${pct(s.mast, s.total)}%"></i></div></div>
-        ${stars(s.stars)}
-      </button>`; }).join('')}</section>`;
+    <h3 class="h3">단원 숲길</h3>
+    ${forestPath(book, map)}`;
   main.querySelectorAll('[data-book]').forEach(b => b.onclick = () => { ls.set('vocab.book', b.dataset.book); go('learn'); });
   main.querySelectorAll('[data-n]').forEach(b => b.onclick = () => go('lesson', { bookId, n: +b.dataset.n }));
   main.querySelectorAll('[data-deck]').forEach(b => b.onclick = () => {
