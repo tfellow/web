@@ -19,13 +19,21 @@ function lessonStats(book, map, n) {
 }
 const stars = n => `<span class="stars" aria-label="별 ${n}개">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}">★</i>`).join('')}</span>`;
 
+const lastKey = bookId => `dn_last_${S.user?.uid || ''}_${bookId}`;
+function getLastLesson(bookId) { try { return +localStorage.getItem(lastKey(bookId)) || null; } catch { return null; } }
+function setLastLesson(bookId, n) { try { localStorage.setItem(lastKey(bookId), n); } catch { } }
+
 // ================= 홈 =================
 export async function home(main, _, go) {
   const st = stats(), u = S.user;
   const lv = levelOf(st.xp), today = todayOf(st), streak = liveStreak(st);
   const bookId = curBookId(), book = getBook(bookId), map = await progressOf(bookId);
   const due = await dueWords();
-  const nextLesson = book.lessons.find(l => lessonStats(book, map, l.n).seen < l.count) || book.lessons[0];
+  // 이어서 학습: 마지막으로 연 단원이 끝나지 않았으면 그 단원, 끝났으면 그 뒤의 안 끝난 단원
+  const notDone = l => lessonStats(book, map, l.n).seen < l.count;
+  const lastN = getLastLesson(bookId), li = book.lessons.findIndex(l => l.n === lastN);
+  const nextLesson = (li >= 0 && (notDone(book.lessons[li]) ? book.lessons[li] : book.lessons.slice(li + 1).find(notDone)))
+    || book.lessons.find(notDone) || book.lessons[li] || book.lessons[0];
   const week = Array.from({ length: 7 }, (_, i) => { const d = dayNum() - ((new Date().getDay() + 6) % 7) + i; return { k: dayNumToKey(d), d, on: (st.days[dayNumToKey(d)]?.xp || 0) > 0, today: d === dayNum() }; });
   const last7 = Object.entries(st.days).filter(([k]) => k >= dayNumToKey(dayNum() - 6));
   const acc = pct(last7.reduce((s, [, d]) => s + d.c, 0), last7.reduce((s, [, d]) => s + d.n, 0));
@@ -158,6 +166,7 @@ export async function lesson(main, { bookId, n } = {}, go) {
   if (!getBook(bookId)) return go('learn');
   const book = getBook(bookId), map = await progressOf(bookId);
   const l = book.lessons.find(x => x.n === n) || book.lessons[0];
+  setLastLesson(bookId, l.n);
   const s = lessonStats(book, map, l.n);
   const myTests = (await S.store.myResults(S.user.uid)).filter(r => r.bookId === bookId && r.lesson == l.n);
   const best = myTests.length ? Math.max(...myTests.map(r => r.pct)) : null;
