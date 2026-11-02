@@ -1,6 +1,6 @@
 // ===== 설정 파일 =====
 // Firebase 콘솔(https://console.firebase.google.com) → 프로젝트 설정 → 내 앱(웹)의 값을 붙여 넣으세요.
-// (SMY Cloze 와 같은 Firebase 프로젝트를 함께 씁니다.) apiKey가 비어 있으면 앱은 "체험 모드"(이 기기 브라우저에만 저장)로 동작합니다.
+// (MY Cloze 와 같은 Firebase 프로젝트를 함께 씁니다.) apiKey가 비어 있으면 앱은 "체험 모드"(이 기기 브라우저에만 저장)로 동작합니다.
 export const firebaseConfig = {
   apiKey: 'AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE',
   authDomain: 'cloze-a8e6c.firebaseapp.com',

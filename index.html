@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1e3768">
-<title>SMY English · 문영 영어 앱</title>
+<title>MY English · 문영 영어 앱</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="서울문영여자중학교 영어 수업 앱 모음: 독서 여권, 퀴즈 퀸즈, SMY Cloze, 단어숲, 퀴즈쇼">
+<meta name="description" content="서울문영여자중학교 영어 수업 앱 모음: 독서 여권, 퀴즈 퀸즈, MY Cloze, 단어숲, 퀴즈쇼">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -163,7 +163,7 @@
     <div class="topbar">
       <a class="brand" href="./">
         <img src="app/emblem.png" width="240" height="213" alt="서울문영여자중학교 교표">
-        <div><b>SMY English</b><span>서울문영여자중학교 영어과</span></div>
+        <div><b>MY English</b><span>서울문영여자중학교 영어과</span></div>
       </a>
       <button class="admin-btn" id="adminBtn" type="button" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
@@ -177,7 +177,7 @@
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
         <p class="lede">세계문학 읽기부터 빈칸 테스트, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="app/">독서 여권</a><a href="quiz/">퀴즈 퀸즈</a><a href="cloze/">SMY Cloze</a><a href="danuhsup/">단어숲</a><a href="quizshow/">퀴즈쇼</a>
+          <a href="app/">독서 여권</a><a href="quiz/">퀴즈 퀸즈</a><a href="cloze/">MY Cloze</a><a href="danuhsup/">단어숲</a><a href="quizshow/">퀴즈쇼</a>
         </nav>
       </div>
 
@@ -196,7 +196,7 @@
         <ul class="links" aria-label="앱별 로그인 상태">
           <li>MY Reading Passport <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>Quiz Queens <span class="pill off" data-auth="qq">앱에서 로그인</span></li>
-          <li>SMY Cloze <span class="pill off" data-auth="fb">로그인 필요</span></li>
+          <li>MY Cloze <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>단어숲 <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
         </ul>
@@ -204,7 +204,7 @@
       </section>
     </div>
 
-    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;SMY&lt;ENGLISH&lt;&lt;READ&lt;QUIZ&lt;CLOZE&lt;VOCAB&lt;SHOW&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;ENGLISH&lt;&lt;READ&lt;QUIZ&lt;CLOZE&lt;VOCAB&lt;SHOW&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
   </div>
 </header>
 
@@ -253,7 +253,7 @@
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h5M13 7h7M4 12h3M11 12h9M4 17h9M17 17h3"/><rect x="9" y="5" width="4" height="4" rx="1" stroke-dasharray="2 1.5"/></svg></div>
         <div class="tags"><span class="tag">빈칸 · 순서</span><span class="tag">로그인</span></div>
       </div>
-      <h3>SMY Cloze<small>빈칸 채우기 · 문장 순서</small></h3>
+      <h3>MY Cloze<small>빈칸 채우기 · 문장 순서</small></h3>
       <p>선생님이 낸 테스트 코드를 입력하고 빈칸 채우기와 문장 순서 맞추기를 풀어요. 수업 중 실시간 순위도 볼 수 있어요.</p>
       <div class="acts">
         <a class="go" href="cloze/">테스트 풀기 →</a>
@@ -322,7 +322,7 @@
   let sb = null;
   try { if (window.supabase) sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_KEY); } catch (e) {}
 
-  /* ---- Firebase: SMY Cloze · 단어숲 (같은 프로젝트) ---- */
+  /* ---- Firebase: MY Cloze · 단어숲 (같은 프로젝트) ---- */
   let fb = null;
   try {
     const [{ initializeApp }, A, { firebaseConfig }] = await Promise.all([
@@ -382,7 +382,7 @@
     try { qq = !!localStorage.getItem("qq_current_user_v14"); } catch (err) {}
     setPills("qq", qq, "앱에서 로그인");
     if (e && !state.fbEmail && state.fbError) {
-      $("#deskNote").textContent = "SMY Cloze·단어숲은 아직 통합 설정 전이라 각 앱에서 한 번 더 로그인해야 해요.";
+      $("#deskNote").textContent = "MY Cloze·단어숲은 아직 통합 설정 전이라 각 앱에서 한 번 더 로그인해야 해요.";
     } else {
       $("#deskNote").textContent = "공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.";
     }
@@ -407,13 +407,13 @@
     ["앱 관리", [
       ["app/#/teacher", "MY Reading Passport · 교사 화면", "학생 기록, 퀴즈 통계, 교사 추가, 반 목표"],
       ["quiz/", "Quiz Queens · 관리자 모드", "앱 오른쪽 위 관리자 버튼으로 문제·기록 관리"],
-      ["cloze/", "SMY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
+      ["cloze/", "MY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
       ["danuhsup/#t-dash", "단어숲 · 교사 대시보드", "참여율, 단원별 암기율, 테스트 결과, 단어장 업로드"]
     ]],
     ["설명서 · 서버", [
       ["danuhsup/guide/teacher.html", "단어숲 교사 설명서", "처음 설정과 운영 방법"],
       ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서 여권 · 퀴즈 퀸즈 데이터"],
-      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "SMY Cloze · 단어숲 데이터"]
+      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "MY Cloze · 단어숲 데이터"]
     ]]
   ];
   function openAdmin() {
