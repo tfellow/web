@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#4F46E5">
+<title>문영 예술제 퀴즈쇼 (모바일)</title>
+<!--
+  모바일 버전 안내
+  이 파일에는 문제가 들어 있지 않습니다. 같은 폴더의 index.html(PC·전자칠판 버전)을 그대로 불러온 뒤
+  아래 MOBILE_CSS로 휴대폰 화면에 맞게 모양만 바꿔서 보여 줍니다.
+  그래서 index.html의 문제를 고치면 모바일 버전에도 자동으로 반영됩니다. (인터넷 주소로 열어야 동작합니다.)
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  .boot { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center; color: #334155; }
+  .boot .icon { width: 64px; height: 64px; border-radius: 18px; background: linear-gradient(135deg, #4F46E5, #EC4899); display: grid; place-items: center; font-size: 32px; }
+  .boot b { font-size: 1.15rem; }
+  .boot p { margin: 0; color: #64748B; font-size: .95rem; line-height: 1.5; }
+  .boot a { color: #4F46E5; font-weight: 800; }
+</style>
+</head>
+<body>
+<div class="boot" id="boot">
+  <div class="icon">📚</div>
+  <b>퀴즈쇼를 불러오는 중이에요…</b>
+  <p id="bootMsg">잠시만 기다려 주세요.</p>
+</div>
+
+<script id="mobileCss" type="text/plain">
+/* ================= 모바일(휴대폰 세로) 최적화 ================= */
+:root { --radius: 16px; }
+html, body { font-size: 16px; }
+body { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Header: 한 줄, 아이콘 버튼 */
+header { padding: max(10px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) 10px max(14px, env(safe-area-inset-left, 0px)); gap: 8px; }
+.brand { gap: 10px; min-width: 0; flex: 1; }
+.brand > div:last-child { min-width: 0; }
+.brand-icon { width: 40px; height: 40px; font-size: 22px; border-radius: 12px; }
+.brand-title { font-size: 1.05rem; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand-subtitle { display: none; }
+.header-actions { gap: 6px; flex-shrink: 0; }
+.header-btn { min-height: 44px; min-width: 44px; padding: 0 10px; font-size: .95rem; border-radius: 12px; justify-content: center; gap: 4px; }
+#fullscreenBtn, .reset-btn { display: none; }
+.m-more-btn { font-size: 1.2rem; }
+
+/* 본문 */
+.container { max-width: 640px; padding: 12px max(14px, env(safe-area-inset-right, 0px)) 16px max(14px, env(safe-area-inset-left, 0px)); }
+
+.mission-status-bar { padding: 14px 16px; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+.mission-text { font-size: .98rem; flex-wrap: wrap; gap: 4px 8px; }
+.mission-badge { font-size: .9rem; padding: 6px 12px; }
+
+.filter-panel { padding: 0; margin: 0 -14px 12px; border: none; border-radius: 0; box-shadow: none; background: transparent; position: sticky; top: 64px; z-index: 40; }
+.search-input-wrap { margin: 0 14px 10px; }
+.search-input { font-size: 16px; padding: 13px 52px 13px 44px; border-radius: 14px; background: #fff; }
+.search-icon { left: 14px; font-size: 18px; }
+.search-clear-btn { right: 8px; width: 36px; height: 36px; font-size: 15px; }
+.category-tabs { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding: 2px 14px 10px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; background: linear-gradient(var(--bg) 70%, rgba(241,245,249,0)); }
+.category-tabs::-webkit-scrollbar { display: none; }
+.cat-tab { font-size: .92rem; padding: 0 16px; min-height: 42px; flex-shrink: 0; scroll-snap-align: start; background: #fff; border-color: #E2E8F0; }
+.cat-tab.highlight { background: #FEF3C7; }
+
+.works-grid { grid-template-columns: 1fr; gap: 12px; padding-bottom: 20px; }
+.work-card { padding: 16px; border-width: 2px; }
+.card-top { margin-bottom: 8px; }
+.cat-badge, .in-progress-badge, .completed-badge { font-size: .8rem; padding: 4px 10px; }
+.work-title { font-size: 1.2rem; margin-bottom: 2px; }
+.work-author { font-size: .9rem; margin-bottom: 10px; }
+.work-keywords { margin-bottom: 14px; }
+.kw-tag { font-size: .8rem; padding: 3px 8px; }
+.start-btn { font-size: 1.02rem; min-height: 50px; padding: 12px; }
+
+.m-pc-link { display: block; text-align: center; color: #64748B; font-size: .9rem; font-weight: 700; padding: 6px 0 18px; text-decoration: none; }
+.m-pc-link b { color: #4F46E5; }
+
+/* ================= 퀴즈 화면 ================= */
+body.arena-mode { height: auto; min-height: 100dvh; overflow: auto; }
+body.arena-mode header { display: none; }
+body.arena-mode .container { padding-top: max(10px, env(safe-area-inset-top, 0px)); }
+.quiz-view { min-height: calc(100dvh - 26px); }
+.quiz-top-bar { gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.quiz-top-bar > .header-btn { font-size: .9rem; padding: 0 12px; }
+.quiz-status-group { gap: 6px; order: 3; width: 100%; }
+.quiz-progress-text, .quiz-score-pill { font-size: .92rem; padding: 6px 12px; border-width: 2px; flex: 1; text-align: center; }
+.quiz-timer-pill { font-size: 1.15rem; padding: 6px 14px; min-height: 44px; }
+.timer-progress-wrap { height: 8px; margin-bottom: 10px; }
+
+.quiz-card { padding: 14px; border-width: 2px; border-radius: 20px; flex: 1 0 auto; justify-content: flex-start; }
+.question-header-box { padding: 14px; margin-bottom: 12px; border-radius: 14px; }
+.q-work-info { font-size: .82rem; padding: 4px 12px; margin-bottom: 8px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.question-title { font-size: 1.18rem; line-height: 1.45; }
+
+.options-grid { grid-template-columns: 1fr; gap: 10px; flex: 0 0 auto; margin-bottom: 12px; }
+.option-btn { font-size: 1.05rem; padding: 12px 14px; min-height: 60px; gap: 12px; border-width: 2px; border-radius: 14px; }
+.option-btn.selected-correct, .option-btn.selected-wrong, .option-btn.reveal-correct { border-width: 3px; }
+.opt-num { width: 38px; height: 38px; font-size: 1.1rem; border-radius: 10px; }
+
+.quiz-bottom-bar { height: auto; flex-direction: column; align-items: stretch; gap: 10px; margin-top: auto; position: sticky; bottom: 0; background: #fff; padding: 8px 0 max(4px, env(safe-area-inset-bottom, 0px)); }
+.feedback-banner { min-height: 52px; font-size: 1rem; padding: 10px 14px; text-align: center; border-radius: 14px; }
+.next-btn { height: 56px; min-width: 0; width: 100%; font-size: 1.15rem; border-radius: 14px; padding: 0 16px; }
+
+/* ================= 결과 화면 ================= */
+.result-view { max-width: 640px; padding: 28px 18px; border-width: 2px; border-radius: 24px; margin: 8px auto; }
+.result-icon { font-size: 60px; }
+.result-title { font-size: 1.7rem; }
+.result-work { font-size: 1.05rem; margin-bottom: 18px; }
+.score-circle { width: 140px; height: 140px; margin-bottom: 18px; }
+.score-num { font-size: 3.2rem; }
+.score-total { font-size: 1rem; }
+.result-msg { font-size: 1.08rem; margin-bottom: 22px; }
+.result-actions { flex-direction: column-reverse; gap: 10px; }
+.btn-primary, .btn-secondary { font-size: 1.08rem; min-height: 54px; padding: 12px; border-radius: 14px; }
+
+/* ================= 팝업 ================= */
+.modal-overlay { padding: 16px; align-items: flex-end; }
+.modal-box { max-width: 520px; padding: 22px 18px max(18px, env(safe-area-inset-bottom, 0px)); border-radius: 24px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+.modal-title { font-size: 1.3rem; }
+.modal-desc { font-size: .95rem; margin-bottom: 16px; }
+.timer-options-list { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.time-opt-btn { font-size: .98rem; padding: 12px; min-height: 56px; border-width: 2px; flex-direction: column; align-items: flex-start; gap: 6px; }
+.time-badge { font-size: .76rem; padding: 3px 8px; }
+.modal-confirm-btn { font-size: 1.1rem; min-height: 54px; padding: 12px; }
+.m-sheet-row { display: flex; gap: 8px; margin-top: 10px; }
+.m-sheet-row .btn-secondary { font-size: .95rem; min-height: 48px; padding: 8px; }
+</script>
+
+<script>
+(function () {
+  var SOURCE = 'index.html';
+
+  function fail(msg) {
+    document.getElementById('bootMsg').innerHTML = msg +
+      '<br><br><a href="index.html">PC 버전으로 열기</a>';
+  }
+
+  if (location.protocol === 'file:') {
+    fail('모바일 버전은 인터넷 주소<br>(tfellow.github.io/web/quizshow/mobile.html)로 열어 주세요.');
+    return;
+  }
+
+  fetch(SOURCE, { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+    .then(function (html) {
+      var css = document.getElementById('mobileCss').textContent;
+
+      // 휴대폰에 맞게 문구만 살짝 바꿔요 (찾지 못하면 그대로 둡니다).
+      var swaps = [
+        ['<title>', '<title>(모바일) '],
+        ['시작하기 버튼을 누르면 전자칠판용 전체화면으로 자동 전환됩니다.', '휴대폰 화면에 맞춘 모바일 버전이에요. 시간을 고르고 시작하세요.'],
+        ['⛶ 전체화면으로 시작하기', '▶ 시작하기'],
+        ['작품명, 작가, 키워드를 검색해보세요 (예: 어린 왕자, 아몬드, 홍길동전, 겨울왕국)', '작품명·작가·키워드 검색'],
+        ['화면을 터치하여 정답을 선택해 주세요!', '정답을 골라 주세요!'],
+        ['◀ 작품 목록으로', '◀ 목록']
+      ];
+      swaps.forEach(function (s) { html = html.split(s[0]).join(s[1]); });
+
+      var extra =
+        '<style id="mobile-overrides">' + css + '</style>';
+      var tail =
+        '<script>(' + mobileEnhance.toString() + ')();<\/script>';
+
+      html = html.replace('</head>', function () { return extra + '</head>'; });
+      html = html.replace(/<\/body>(?![\s\S]*<\/body>)/, function () { return tail + '</body>'; });
+
+      document.open();
+      document.write(html);
+      document.close();
+    })
+    .catch(function () {
+      fail('퀴즈쇼를 불러오지 못했어요. 인터넷 연결을 확인하고 새로고침해 주세요.');
+    });
+
+  // 불러온 페이지 안에서 실행되는 모바일 전용 보조 기능
+  function mobileEnhance() {
+    // 휴대폰에서는 시작할 때 전체화면으로 바꾸지 않아요 (주소창이 자동으로 숨겨져요).
+    if (typeof window.startQuizShowApp === 'function') {
+      window.startQuizShowApp = function () {
+        if (typeof initAudio === 'function') initAudio();
+        closeTimerModal();
+      };
+    }
+
+    // 헤더: 초기화를 ⋯ 메뉴(시간 선택 팝업 안)로 옮겨요.
+    var resetBtnHtml =
+      '<div class="m-sheet-row">' +
+      '<button class="btn-secondary" type="button" onclick="closeTimerModal();openResetModal()">🔄 기록 초기화</button>' +
+      '<a class="btn-secondary" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="index.html">🖥️ PC 버전</a>' +
+      '</div>';
+    var confirm = document.querySelector('#timerModal .modal-confirm-btn');
+    if (confirm) confirm.insertAdjacentHTML('afterend', resetBtnHtml);
+
+    // 목록 아래에 PC 버전 링크
+    var grid = document.getElementById('worksGrid');
+    if (grid) grid.insertAdjacentHTML('afterend',
+      '<a class="m-pc-link" href="index.html">전자칠판·PC 화면이 필요하면 <b>PC 버전 열기 →</b></a>');
+
+    // 고정되는 검색창 위치를 헤더 높이에 맞춰요.
+    function fitSticky() {
+      var h = document.querySelector('header');
+      var f = document.querySelector('.filter-panel');
+      if (h && f) f.style.top = h.offsetHeight + 'px';
+    }
+    window.addEventListener('resize', fitSticky);
+    fitSticky();
+
+    // 문제를 넘길 때 화면 맨 위로
+    if (typeof window.loadQuestion === 'function') {
+      var orig = window.loadQuestion;
+      window.loadQuestion = function () { orig.apply(this, arguments); window.scrollTo(0, 0); };
+    }
+
+    // 정답을 고르면 '다음 문제' 버튼이 보이게 스크롤
+    if (typeof window.selectAnswer === 'function') {
+      var origSel = window.selectAnswer;
+      window.selectAnswer = function () {
+        origSel.apply(this, arguments);
+        var bar = document.querySelector('.quiz-bottom-bar');
+        if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: 'end', behavior: 'smooth' });
+      };
+    }
+  }
+})();
+</script>
+</body>
+</html>

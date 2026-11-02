@@ -114,6 +114,14 @@
   .go:hover { filter: brightness(1.08); }
   .sub-link { display: inline-flex; align-items: center; font-size: .86rem; font-weight: 600; color: var(--muted); text-decoration: none; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); }
   .sub-link:hover { color: var(--c); border-color: var(--c); }
+  /* 퀴즈쇼: 휴대폰에서는 모바일 버전 버튼을 앞에, 강조해서 보여 줘요 */
+  @media (max-width: 700px) and (pointer: coarse) {
+    .show-acts { flex-direction: row-reverse; justify-content: flex-end; }
+    .show-acts [data-ver="mobile"] { background: var(--c); color: #fff; border-color: var(--c); }
+    .show-acts [data-ver="pc"] { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 600; }
+    :root[data-theme="dark"] .show-acts [data-ver="mobile"] { color: #0f1628; }
+  }
+  @media (max-width: 700px) and (pointer: coarse) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .show-acts [data-ver="mobile"] { color: #0f1628; } }
   .url { font-family: var(--mono); font-size: .72rem; color: var(--muted); opacity: .8; }
 
   footer { border-top: 1px solid var(--line); margin-top: 26px; }
@@ -276,12 +284,13 @@
     <article class="app" data-app="show">
       <div class="app-top">
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg></div>
-        <div class="tags"><span class="tag">전자칠판</span><span class="tag">로그인 없음</span></div>
+        <div class="tags"><span class="tag">전자칠판</span><span class="tag">휴대폰</span><span class="tag">로그인 없음</span></div>
       </div>
       <h3>퀴즈쇼<small>문영 예술제 퀴즈쇼</small></h3>
-      <p>퀴즈반이 예술제에서 진행하는 추천 작품·교과서 소설 퀴즈쇼예요. 전자칠판에서 전체화면으로 바로 시작해요.</p>
-      <div class="acts">
-        <a class="go" href="quizshow/">무대 열기 →</a>
+      <p>퀴즈반이 예술제에서 진행하는 추천 작품·교과서 소설 퀴즈쇼예요. 전자칠판에서는 PC 버전, 휴대폰에서는 모바일 버전으로 시작해요.</p>
+      <div class="acts show-acts">
+        <a class="go" href="quizshow/" data-ver="pc">🖥️ PC 버전 →</a>
+        <a class="sub-link" href="quizshow/mobile.html" data-ver="mobile">📱 모바일 버전</a>
       </div>
     </article>
   </div>
