@@ -20,4 +20,4 @@ export const TEACHER_EMAILS = [
   "tfellow@smy.ms.kr"
 ];
 
-export const APP_NAME = "SMY Cloze";
+export const APP_NAME = "MY Cloze";
