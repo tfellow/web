@@ -9,7 +9,7 @@
 
 - 주소: https://tfellow.github.io/web/danuhsup/
 - GitHub 저장소 `tfellow/web` 의 `danuhsup/` 폴더에 들어 있고, 다른 앱처럼 master 에 올라가면 바로 공개됩니다.
-- Firebase 는 **SMY Cloze 와 같은 프로젝트(cloze-a8e6c)** 를 함께 씁니다. 단어숲 데이터는 `vocab_` 로 시작하는 컬렉션에만 저장되어 Cloze 데이터와 섞이지 않습니다.
+- Firebase 는 **MY Cloze 와 같은 프로젝트(cloze-a8e6c)** 를 함께 씁니다. 단어숲 데이터는 `vocab_` 로 시작하는 컬렉션에만 저장되어 Cloze 데이터와 섞이지 않습니다.
 - 로그인: 학교 구글 계정(@smy.ms.kr). 교사: tfellow@gmail.com, tfellow@smy.ms.kr
 - **처음 한 번 할 일**: Firebase 콘솔 → Firestore Database → 규칙 탭에 `firestore.rules` 내용을 통째로 붙여 넣고 [게시]. (Cloze 규칙이 포함된 합본이라 Cloze 도 그대로 작동합니다.)
 

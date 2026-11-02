@@ -1,4 +1,4 @@
-# SMY Cloze — 설치 안내 (v2)
+# MY Cloze — 설치 안내 (v2)
 
 빈칸 채우기(Cloze)와 문장 순서 맞추기 테스트를 만들고, 학생 기록을 모으는 웹앱입니다.
 주소: https://tfellow.github.io/web/cloze/
