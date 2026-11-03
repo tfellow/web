@@ -3,7 +3,7 @@
    현재 버전: v1.4.0
    ========================================================================== */
 
-const APP_VERSION = 'v1.8.0';
+const APP_VERSION = 'v1.9.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // 최근 부여 실행 취소(Undo) 제어 변수
@@ -1012,6 +1012,7 @@ function updateFloatingSelectionBar() {
   const bar = document.getElementById('floating-selection-bar');
   const badge = document.getElementById('selected-students-badge');
   const namesEl = document.getElementById('selected-students-names');
+  const recentBtn = document.getElementById('btn-floating-recent-card');
   if (!bar) return;
 
   const cls = getCurrentClass();
@@ -1021,9 +1022,33 @@ function updateFloatingSelectionBar() {
     bar.classList.add('visible');
     badge.textContent = `${selectedList.length}명 선택됨`;
     namesEl.textContent = selectedList.map(s => s.name).join(', ');
+
+    if (recentBtn) {
+      const recentHistory = cls?.history?.[0];
+      const recentType = recentHistory ? recentHistory.type : 'eussuk';
+      const recentCard = getRecentCardForType(recentType);
+      recentBtn.title = `선택된 ${selectedList.length}명에게 최근 사용 카드 [${recentCard.title}] (${recentType === 'eussuk' ? '으쓱' : '머쓱'}) 즉시 부여`;
+    }
   } else {
     bar.classList.remove('visible');
   }
+}
+
+// 선택된 학생들에게 모달 없이 최근 사용 카드로 즉시 부여 (원클릭 퀵 액션)
+function giveRecentCardToSelectedStudents() {
+  if (selectedStudentIds.size === 0) {
+    alert('먼저 카드를 부여할 학생을 클릭해 선택해 주세요!');
+    return;
+  }
+  const cls = getCurrentClass();
+  const ids = Array.from(selectedStudentIds);
+  const recentHistory = cls?.history?.[0];
+  const recentType = recentHistory ? recentHistory.type : 'eussuk';
+
+  giveQuickRecentCards(ids, recentType);
+  selectedStudentIds.clear();
+  updateFloatingSelectionBar();
+  renderStudentsGrid();
 }
 
 function changeScoreDisplayMode(mode) {

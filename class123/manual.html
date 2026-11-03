@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v1.8.0)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v1.9.0)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v1.8.0 최신</span>
+          <span class="version-pill">v1.9.0 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v1.8.0</div>
+          <div class="num">v1.9.0</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -995,6 +995,21 @@
             <span class="impl-tag">🗑️ 리포트 상세 이력 개별 삭제 시 점수 차감 복구 연동</span>
           </div>
         </div>
+
+        <!-- 12차 프롬프트 -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[12차 프롬프트] 다중 선택 바 버튼명 단축(으쓱카드·머쓱카드) 및 최근카드 퀵 부여 신설</strong>
+            <span class="version-pill">v1.9.0 업데이트</span>
+          </div>
+          <div class="prompt-quote">"우리반에서 학생들을 여러 명 선택했을 때 으쓱카드 주기, 머쓱카드 주기가 있는데, 으쓱카드, 머쓱카드로 짧게 하고, 최근카드도 하나 만들어 줘"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">⭐ '으쓱카드 주기' → '으쓱카드' 단축</span>
+            <span class="impl-tag">🌧️ '머쓱카드 주기' → '머쓱카드' 단축</span>
+            <span class="impl-tag">⚡ [⚡ 최근카드] 원클릭 일괄 즉시 부여 버튼 신설</span>
+            <span class="impl-tag">↩️ 취소(Ctrl+Z) 롤백 연동</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1020,7 +1035,16 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v1.8.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v1.9.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • 우리반 다중 선택 바 버튼명 단축: <code>⭐ 으쓱카드</code>, <code>🌧️ 머쓱카드</code>로 간결화<br/>
+                  • 다중 선택 바에 <code>[⚡ 최근카드]</code> 원클릭 즉시 부여 버튼 신설 (모달 없이 최근 카드로 선택된 학생 전원 일괄 부여)
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v1.8.0</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>최근 카드 부여 취소(Undo) 시스템 완비</strong>: 상단 <code>[↩️ 취소]</code> 버튼, 하단 플로팅 취소 토스트, 단축키 <code>Ctrl + Z</code> 지원<br/>
