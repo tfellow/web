@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.8)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.9)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.0.8 최신</span>
+          <span class="version-pill">v2.0.9 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.0.8</div>
+          <div class="num">v2.0.9</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1096,7 +1096,7 @@
           </div>
         </div>
 
-        <!-- 19차 프롬프트 (v2.0.8) -->
+        <!-- 19차 프롬프트 (v2.0.9) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[19차 프롬프트] 학급 화면 툴바 & 왼쪽 메뉴 대폭 간소화, 쑥쑥점수 표시방법 배치 최적화</strong>
@@ -1172,7 +1172,16 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.8 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.9 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-04</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>밝은 테마 프리셋 버튼 글자 복원</strong>: CSS 가중치 충돌을 해결하여 밝은 테마에서도 active 버튼의 파란 배경과 흰 글자가 선명하게 노출<br/>
+                  • <strong>active 선택 로직 정밀화</strong>: 목표 시간 설정 버튼과 시간 추가 버튼의 active 상태 분리
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.8</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-04</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>자릿수 고정 슬롯 박스</strong>: 각 숫자가 고정된 슬롯 박스 안에 배치되어 숫자가 변해도 앞자리/전체 위치가 0.1px도 흔들리지 않음<br/>

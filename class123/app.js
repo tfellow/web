@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.8 (트루 전체화면 타이머 & 흔들림 없는 고정 슬롯 전광판 탑재)
+   현재 버전: v2.0.9 (밝은 테마 프리셋 버튼 가독성 버그 수정 및 active 스타일 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.8';
+const APP_VERSION = 'v2.0.9';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -48549,9 +48549,9 @@ function setTimerDuration(seconds) {
   smartTimer.durationSec = seconds;
   smartTimer.remainingSec = seconds;
 
-  // 프리셋 버튼 active
-  document.querySelectorAll('.btn-preset-chip').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('onclick')?.includes(`(${seconds})`));
+  // 목표 시간 프리셋 버튼만 정확히 active 토글 (+시간 추가 버튼 제외)
+  document.querySelectorAll('.btn-time-target').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick')?.includes(`setTimerDuration(${seconds})`));
   });
 
   const banner = document.getElementById('timer-finished-banner');

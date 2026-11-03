@@ -3175,7 +3175,7 @@ body:not(.theme-dark) .preset-sep {
 
 .btn-preset-chip {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
   padding: 6px 14px;
   border-radius: 10px;
   font-size: 0.9rem;
@@ -3192,17 +3192,20 @@ body:not(.theme-dark) .btn-preset-chip {
 }
 
 .btn-preset-chip:hover {
-  background: #3b82f6;
-  border-color: #3b82f6;
-  color: #ffffff;
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
   transform: translateY(-1px);
 }
 
-.btn-preset-chip.active {
-  background: #2563eb;
-  border-color: #2563eb;
+/* ★ 활성화(Active) 시 - 밝은 테마/어두운 테마 모두에서 선명한 파란 배경 + 흰 글자 확실히 보장! */
+.btn-preset-chip.active,
+body:not(.theme-dark) .btn-preset-chip.active,
+body.theme-dark .btn-preset-chip.active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
   color: #ffffff !important;
-  box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.45) !important;
 }
 
 .btn-preset-chip.add {
@@ -3211,7 +3214,15 @@ body:not(.theme-dark) .btn-preset-chip {
 }
 
 body:not(.theme-dark) .btn-preset-chip.add {
+  background: #f8fafc;
+  border-color: #cbd5e1;
   color: #2563eb;
+}
+
+body:not(.theme-dark) .btn-preset-chip.add:hover {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
 }
 
 /* 우측 액션: 전체화면 토글 / 축소 / 닫기 */
