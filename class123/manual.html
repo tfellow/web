@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.5)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.6)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.0.5 최신</span>
+          <span class="version-pill">v2.0.6 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.0.5</div>
+          <div class="num">v2.0.6</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1096,11 +1096,26 @@
           </div>
         </div>
 
+        <!-- 19차 프롬프트 (v2.0.6) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[19차 프롬프트] 학급 화면 툴바 & 왼쪽 메뉴 대폭 간소화, 쑥쑥점수 표시방법 배치 최적화</strong>
+            <span class="version-pill">v2.0.6 최신</span>
+          </div>
+          <div class="prompt-quote">"학급 이름 편집 버튼 삭제 / 쑥쑥점수 표시방법을 으쓱, 머쓱 버튼 바로 오른쪽으로 이동 / 점수 초기화, 명렬 붙여넣기/수정 버튼 삭제 / 왼쪽 메뉴에서 카드부여 버튼 삭제"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">✏️ 학급 이름 옆 [✏️ 이름편집] 버튼 삭제 (학급명 직접 클릭 및 상단 [🏫 학급관리]로 단일화)</span>
+            <span class="impl-tag">🌿 쑥쑥점수 표시방식 드롭다운을 [으쓱], [머쓱] 뱃지 바로 오른쪽으로 재배치하여 직관적 UI 완성</span>
+            <span class="impl-tag">🧹 우리반 학생 헤더 툴바에서 중복 기능인 [🔄 점수 초기화], [📋 명렬 붙여넣기/수정] 버튼 제거 ([☑️ 전체 선택/해제] 집중)</span>
+            <span class="impl-tag">🌱 왼쪽 주 도구바에서 [카드부여] 버튼 삭제하여 도구바를 직관적인 학급화면 & 편의도구 위주로 간소화</span>
+          </div>
+        </div>
+
         <!-- 18차 프롬프트 (v2.0.5) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[18차 프롬프트] 상단 로고 간소화 (Class123), 모바일 최적화 & 버전 뱃지 좌측 설명서 하단 이동, 학급 선택 인원수 괄호 제거</strong>
-            <span class="version-pill">v2.0.5 최신</span>
+            <span class="version-pill">v2.0.5</span>
           </div>
           <div class="prompt-quote">"상단에 있는 Class123Plus를 그냥 Class123으로 바꾸고 버전표시는 왼쪽 메뉴 설명서 아래로 옮기고, 상단 학급 선택에서 괄호에 학생 숫자가 있는데 괄호 부분을 완전히 없애 줘." / "모바일로 접속을 하면 화면이 많이 이상해. 모바일에도 최적화될 수 있게 해 줘"</div>
           <div class="impl-tags">
@@ -1157,7 +1172,18 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.5 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.6 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>학급 이름 편집 버튼 삭제</strong>: 학급명 클릭 및 상단 [🏫 학급관리]로 통합<br/>
+                  • <strong>쑥쑥점수 표시방법 위치 이동</strong>: [으쓱], [머쓱] 뱃지 바로 오른쪽으로 재배치하여 점수 설정 접근성 향상<br/>
+                  • <strong>점수 초기화, 명렬 붙여넣기/수정 버튼 삭제</strong>: 학생 화면 상단 헤더 툴바를 [☑️ 전체 선택/해제] 중심으로 깔끔하게 정돈<br/>
+                  • <strong>왼쪽 메뉴 카드부여 버튼 삭제</strong>: 왼쪽 툴바 구조를 단순화하여 학급화면과 편의도구 위주로 재편
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v2.0.5</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>상단 브랜드 로고 타이틀 변경</strong>: <code>Class123 Plus</code>에서 <code>Class123</code>으로 군더더기 없이 간소화<br/>

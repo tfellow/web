@@ -494,6 +494,26 @@ body.theme-dark .summary-pill.gold {
   color: var(--meossuk-red);
 }
 
+.score-display-select {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.score-display-select:hover,
+.score-display-select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
 .student-controls {
   display: flex;
   align-items: center;
