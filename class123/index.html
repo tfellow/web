@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.1.0" />
+  <link rel="stylesheet" href="styles.css?v=2.1.1" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -124,7 +124,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.1.0 (클릭 시 사용 설명서 열기)">v2.1.0</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.1.1 (클릭 시 사용 설명서 열기)">v2.1.1</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -171,17 +171,17 @@
         <!-- 하단 플로팅 다중 선택 액션 바 -->
         <div id="floating-selection-bar" class="floating-selection-bar">
           <span id="selected-students-badge" class="selection-count-badge">0명 선택됨</span>
-          <span id="selected-students-names" style="font-size:0.9rem; color:#cbd5e1; max-width:260px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
-          <button class="btn btn-eussuk" onclick="openGiveCardModal('eussuk')" title="선택된 학생들에게 으쓱카드 선택 부여">
+          <span id="selected-students-names" class="selected-students-names"></span>
+          <button class="btn btn-eussuk btn-selection-action" onclick="openGiveCardModal('eussuk')" title="선택된 학생들에게 으쓱카드 선택 부여">
             ⭐ 으쓱카드
           </button>
-          <button class="btn btn-meossuk" onclick="openGiveCardModal('meossuk')" title="선택된 학생들에게 머쓱카드 선택 부여">
+          <button class="btn btn-meossuk btn-selection-action" onclick="openGiveCardModal('meossuk')" title="선택된 학생들에게 머쓱카드 선택 부여">
             🌧️ 머쓱카드
           </button>
-          <button id="btn-floating-recent-card" class="btn btn-gold" onclick="giveRecentCardToSelectedStudents()" title="선택된 학생들에게 가장 최근에 사용한 카드 즉시 부여">
+          <button id="btn-floating-recent-card" class="btn btn-gold btn-selection-action" onclick="giveRecentCardToSelectedStudents()" title="선택된 학생들에게 가장 최근에 사용한 카드 즉시 부여">
             ⚡ 최근카드
           </button>
-          <button class="btn btn-secondary" style="background:rgba(255,255,255,0.12); color:#fff; border:none;" onclick="clearStudentSelection()">
+          <button class="btn btn-secondary btn-selection-action" style="background:rgba(255,255,255,0.12); color:#fff; border:none;" onclick="clearStudentSelection()">
             ✖ 선택 해제
           </button>
         </div>

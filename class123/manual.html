@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.1.0)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.1.1)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.1.0 최신</span>
+          <span class="version-pill">v2.1.1 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.1.0</div>
+          <div class="num">v2.1.1</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1096,7 +1096,36 @@
           </div>
         </div>
 
-        <!-- 19차 프롬프트 (v2.1.0) -->
+        <!-- 24차 프롬프트 (v2.1.1) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[24차 프롬프트] 다중 학생 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화</strong>
+            <span class="version-pill">v2.1.1 최신</span>
+          </div>
+          <div class="prompt-quote">"학생 카드를 여러 명 선택했을 때 안 예쁘게 보여. 모두 한 줄로 보이게 하면 좋겠어. 내 생각에는 둥근 창이 선택적으로 더 길어지면 될 거 같아. 네가 볼 때 더 좋은 방법이 있으면 그 방법대로 해도 돼. 4명 까지는 괜찮아 보여. 해결 해 줘"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🛡️ 선택 인원 뱃지 줄바꿈 100% 방지 (white-space: nowrap !important; line-height: 1.2; flex-shrink: 0)</span>
+            <span class="impl-tag">↔️ 선택 인원에 맞춰 자연스럽게 좌우로 길어지는 둥근 플로팅 바 (width: max-content; max-width: min(94vw, 1200px))</span>
+            <span class="impl-tag">📜 학생 이름 목록 반응형 클램프 확장 (clamp(140px, 32vw, 550px))으로 16명, 30명 선택 시에도 시원하게 표시</span>
+            <span class="impl-tag">✨ 뱃지, 이름, 으쓱/머쓱/최근/해제 버튼 모두 완벽한 단일 행(1줄) 슬림 캡슐 유지</span>
+          </div>
+        </div>
+
+        <!-- 23차 프롬프트 (v2.1.0) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[23차 프롬프트] 박스 밖 풀와이드 60fps 무빙 프로그레스 바 전격 탑재</strong>
+            <span class="version-pill">v2.1.0</span>
+          </div>
+          <div class="prompt-quote">"타이머 막대가 박스 안에 있으니까 뭔가 답답해 보여. 박스 밖에서 다르게 구현할 수 없을까? 그리고 줄어드는 막대가 자연스럽게 줄어드는 것이 아니고 뚝뚝 끊기는 느낌이 들어서 불편해."</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🌊 전광판 박스 밖 상단 전체 가로(100vw) 풀와이드 스트립 바로 재배치하여 답답함 완전 해소</span>
+            <span class="impl-tag">🎬 requestAnimationFrame 기반 60fps 무빙 게이지 엔진 도입 (1픽셀 단위 부드러운 감속)</span>
+            <span class="impl-tag">✨ 전광판 내부는 대형 디지털 전자시계 숫자만 배치하여 시인성 극대화</span>
+          </div>
+        </div>
+
+        <!-- 19차 프롬프트 (v2.0.6) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[19차 프롬프트] 학급 화면 툴바 & 왼쪽 메뉴 대폭 간소화, 쑥쑥점수 표시방법 배치 최적화</strong>
@@ -1172,7 +1201,17 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.1 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-04</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>다중 선택 플로팅 바 줄바꿈 방지</strong>: 인원수가 많아져도 선택 뱃지(16명 선택됨 등)가 2줄로 꺾이지 않도록 white-space: nowrap !important 보장<br/>
+                  • <strong>가변 너비 개편</strong>: 인원수와 학생 이름 목록에 따라 플로팅 창 전체가 좌우로 자연스럽고 시원하게 길어지도록 유연화<br/>
+                  • <strong>모든 요소 단일 행 정렬</strong>: 4명 선택 시의 슬림하고 깔끔한 디자인을 다수 선택 시에도 완벽히 유지
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.0</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-04</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>박스 밖 풀와이드 프로그레스 바</strong>: 전광판 내부의 답답함을 없애고 화면 상단 가로 전체를 채우는 세련된 스트립 바로 전환<br/>
