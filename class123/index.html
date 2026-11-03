@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.0.5" />
+  <link rel="stylesheet" href="styles.css?v=2.0.6" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -81,12 +81,6 @@
   <div class="app-layout">
     <!-- 좌측 클래스123 시그니처 도구바 -->
     <aside class="left-toolbar">
-      <button class="tool-btn primary-give" onclick="openGiveCardModalForSelectedOrAll()">
-        <div class="tool-icon">🌱</div>
-        <span class="tool-label">카드부여</span>
-      </button>
-
-      <div class="tool-divider"></div>
       <span class="tool-section-label">학급화면</span>
 
       <button class="tool-btn" id="left-btn-thermometer" onclick="switchView('thermometer')">
@@ -123,7 +117,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.5 (클릭 시 사용 설명서 열기)">v2.0.5</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.6 (클릭 시 사용 설명서 열기)">v2.0.6</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -136,7 +130,6 @@
         <div class="student-view-header">
           <div class="class-summary-badges">
             <h2 id="current-class-title" class="font-display" style="font-size: 1.55rem; margin-right: 2px; cursor:pointer;" onclick="openClassListModal()" title="클릭하여 학급 이름 및 학급 목록 편집">행복한 우리 반</h2>
-            <button class="btn-icon-pill" style="padding:4px 9px; font-size:0.78rem;" onclick="openClassListModal()" title="학급 목록 및 이름 편집">✏️ 이름편집</button>
             <div class="summary-pill gold" onclick="switchView('thermometer')" style="cursor:pointer;" title="학급 온도계 보기">
               <span>🥚 황금알</span>
               <span id="header-egg-count">0</span>개
@@ -149,25 +142,18 @@
               <span>🌧️ 머쓱</span>
               <span id="header-meossuk-count">0</span>
             </div>
-          </div>
-
-          <div class="student-controls">
-            <select id="score-display-mode" class="inline-input" style="width:auto; font-weight:700;" onchange="changeScoreDisplayMode(this.value)">
+            <select id="score-display-mode" class="inline-input score-display-select" style="width:auto; font-weight:700;" onchange="changeScoreDisplayMode(this.value)">
               <option value="ssukssuk">🌱 쑥쑥점수 (으쓱-머쓱)</option>
               <option value="both">⭐/🌧️ 으쓱·머쓱 각각 표시</option>
               <option value="eussuk">⭐ 으쓱점수만 표시</option>
               <option value="meossuk">🌧️ 머쓱점수만 표시</option>
               <option value="hidden">🙈 점수 숨기기</option>
             </select>
+          </div>
 
+          <div class="student-controls">
             <button class="btn btn-secondary" onclick="toggleSelectAllStudents()">
               <span id="select-all-icon">☑️</span> 전체 선택/해제
-            </button>
-            <button class="btn btn-secondary" onclick="openResetScoresModal()">
-              🔄 점수 초기화
-            </button>
-            <button class="btn btn-secondary" onclick="openClassSetupModal('edit')">
-              📋 명렬 붙여넣기/수정
             </button>
           </div>
         </div>
@@ -1060,6 +1046,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=2.0.5"></script>
+  <script src="app.js?v=2.0.6"></script>
 </body>
 </html>
