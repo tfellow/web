@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.1 (Firebase 실시간 클라우드 자동 동기화 & 자가 진단 도구)
+   현재 버전: v2.0.2 (클라우드 동기화 화면 렌더링 핫픽스)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.1';
+const APP_VERSION = 'v2.0.2';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -590,15 +590,9 @@ function updateModalCloudSyncTime() {
 }
 
 function refreshAppViews() {
-  renderClassSelector();
   updateTopControlsUI();
   updateUndoButtonUI();
-  const curView = state.currentView || 'students';
-  if (curView === 'students') renderStudents();
-  else if (curView === 'luckydraw') renderLuckyDraw();
-  else if (curView === 'progress') renderProgress();
-  else if (curView === 'report') renderReport();
-  else if (curView === 'thermometer') renderThermometer();
+  renderCurrentView();
 }
 
 function getVisibleClasses() {

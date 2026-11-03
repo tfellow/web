@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.1)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.2)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.0.1 최신</span>
+          <span class="version-pill">v2.0.2 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.0.1</div>
+          <div class="num">v2.0.2</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1057,7 +1057,7 @@
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[14차 프롬프트] 클라우드 연결 오류 긴급 패치 및 자가 진단 도구 신설</strong>
-            <span class="version-pill">v2.0.1 최신</span>
+            <span class="version-pill">v2.0.1 업데이트</span>
           </div>
           <div class="prompt-quote">"클라우드에 접속이 되지 않았다고 나오는데 어떻게 해?"</div>
           <div class="impl-tags">
@@ -1065,6 +1065,19 @@
             <span class="impl-tag">🔑 firebase-auth-compat SDK 모듈 보강</span>
             <span class="impl-tag">💻➡️☁️ [내 데이터 클라우드에 올리기] 원클릭 등록 버튼 신설</span>
             <span class="impl-tag">🔍 [연결 상태 진단] 팝업 자가 진단 도구 신설</span>
+          </div>
+        </div>
+
+        <!-- 15차 프롬프트 -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[15차 프롬프트] 클라우드 동기화 후 화면 갱신 함수 오타 수정</strong>
+            <span class="version-pill">v2.0.2 최신</span>
+          </div>
+          <div class="prompt-quote">"(스크린샷) 동기화 실패: renderStudents is not defined"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🛠️ renderCurrentView 뷰 렌더러 연결로 런타임 오류 완전 해결</span>
+            <span class="impl-tag">🔄 동기화 직후 화면 자동 갱신 안정화</span>
           </div>
         </div>
       </div>
@@ -1092,7 +1105,16 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.1 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.2 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>동기화 화면 갱신 오타 핫픽스</strong>: <code>refreshAppViews()</code> 내부에서 미정의 함수 <code>renderStudents</code> 대신 통합 뷰 렌더러 <code>renderCurrentView()</code>를 호출하도록 수정<br/>
+                  • 동기화 완료 후 학생 화면 및 점수가 런타임 오류 없이 즉각 갱신
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>app.js</code>, <code>index.html</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v2.0.1</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>클라우드 초기화 참조 함수 버그 수정</strong>: <code>getLoggedInUser</code> 참조 에러 수정으로 클라우드 연결 완벽 정상화<br/>
