@@ -18,7 +18,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.6.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.7.0</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -394,18 +394,21 @@
                   (뒤집힌 학생 카드의 버튼으로 즉시 으쓱/머쓱을 주거나, 뒤집힌 전원에게 한 번에 줄 수 있습니다)
                 </span>
               </div>
-              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                 <button class="btn btn-gold" onclick="shuffleFlipCards()">
-                  🔀 카드 다시 섞기 (모두 덮기)
+                  🔀 다시 섞기
                 </button>
                 <button class="btn btn-secondary" onclick="flipAllCards(true)">
                   👀 전체 뒤집기
                 </button>
-                <button class="btn btn-eussuk" onclick="giveCardToFlippedStudents('eussuk')">
-                  ⭐ 뒤집힌 학생 모두 으쓱 주기
+                <button class="btn btn-eussuk" onclick="giveCardToFlippedStudents('eussuk')" title="뒤집힌 학생 전원에게 최근 으쓱 즉시 부여">
+                  ⭐ 최근 으쓱
                 </button>
-                <button class="btn btn-meossuk" onclick="giveCardToFlippedStudents('meossuk')">
-                  🌧️ 뒤집힌 학생 모두 머쓱 주기
+                <button class="btn btn-meossuk" onclick="giveCardToFlippedStudents('meossuk')" title="뒤집힌 학생 전원에게 최근 머쓱 즉시 부여">
+                  🌧️ 최근 머쓱
+                </button>
+                <button class="btn btn-green" onclick="openGiveCardModalToFlipped()" title="뒤집힌 학생 전원에게 쑥쑥카드 목록에서 선택하여 부여">
+                  🌱 카드 선택
                 </button>
               </div>
             </div>

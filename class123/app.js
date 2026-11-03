@@ -3,7 +3,7 @@
    현재 버전: v1.4.0
    ========================================================================== */
 
-const APP_VERSION = 'v1.6.0';
+const APP_VERSION = 'v1.7.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // 관리자 인증 설정
@@ -1583,11 +1583,14 @@ function renderPickedWinners(winners) {
             현재 쑥쑥점수: <strong style="color:#4ade80;">${(w.visibleEussuk || 0) - (w.visibleMeossuk || 0)}점</strong>
           </div>
           <div class="winner-individual-actions">
-            <button class="btn btn-eussuk" style="padding:7px 12px; font-size:0.8rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'eussuk')">
+            <button class="btn btn-eussuk" style="padding:6px 10px; font-size:0.78rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'eussuk')" title="최근 으쓱 항목 즉시 부여">
               ⭐ 으쓱
             </button>
-            <button class="btn btn-meossuk" style="padding:7px 12px; font-size:0.8rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'meossuk')">
+            <button class="btn btn-meossuk" style="padding:6px 10px; font-size:0.78rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'meossuk')" title="최근 머쓱 항목 즉시 부여">
               🌧️ 머쓱
+            </button>
+            <button class="btn btn-secondary" style="padding:6px 10px; font-size:0.78rem; background:rgba(255,255,255,0.18); color:#ffffff; border:1px solid rgba(255,255,255,0.35);" onclick="openGiveCardModalForSingle('${w.id}')" title="쑥쑥카드 목록에서 직접 선택하여 부여">
+              🌱 카드선택
             </button>
           </div>
         </div>
@@ -1596,15 +1599,18 @@ function renderPickedWinners(winners) {
         .join('')}
     </div>
 
-    <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
-      <button class="btn btn-gold" style="font-size:1.05rem; padding:12px 24px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'eussuk')">
-        🌟 뽑힌 학생 전원(${winners.length}명) 최근 으쓱 주기
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; align-items:center;">
+      <button class="btn btn-gold" style="font-size:1rem; padding:11px 20px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'eussuk')" title="뽑힌 학생 전원에게 최근 으쓱 즉시 부여">
+        ⭐ 최근 으쓱
       </button>
-      <button class="btn btn-meossuk" style="font-size:1.05rem; padding:12px 24px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'meossuk')">
-        🌧️ 뽑힌 학생 전원(${winners.length}명) 최근 머쓱 주기
+      <button class="btn btn-meossuk" style="font-size:1rem; padding:11px 20px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'meossuk')" title="뽑힌 학생 전원에게 최근 머쓱 즉시 부여">
+        🌧️ 최근 머쓱
       </button>
-      <button class="btn btn-secondary" style="font-size:1.05rem; padding:12px 24px;" onclick="startRandomPick(${winners.length})">
-        🎲 ${winners.length}명 계속 뽑기
+      <button class="btn btn-green" style="font-size:1rem; padding:11px 20px;" onclick="openGiveCardModalWithTargets(lastPickedStudents.map(s => s.id), 'eussuk')" title="뽑힌 학생 전원에게 쑥쑥카드 목록에서 선택하여 부여">
+        🌱 카드 선택
+      </button>
+      <button class="btn btn-secondary" style="font-size:1rem; padding:11px 20px;" onclick="startRandomPick(${winners.length})" title="같은 인원수만큼 다시 뽑기">
+        🎲 다시 뽑기
       </button>
     </div>
   `;
@@ -1663,6 +1669,9 @@ function renderFlipCardsGrid() {
                 <button class="flip-reward-btn meossuk" onclick="giveQuickRecentCardToStudent('${stu.id}', 'meossuk')" title="최근 머쓱 항목으로 즉시 1장 부여">
                   🌧️ 머쓱
                 </button>
+                <button class="flip-reward-btn select" onclick="openGiveCardModalForSingle('${stu.id}')" title="쑥쑥카드 목록에서 직접 선택하여 부여">
+                  🌱 선택
+                </button>
               </div>
             </div>
           </div>
@@ -1694,6 +1703,16 @@ function giveCardToFlippedStudents(mode = 'eussuk') {
     return;
   }
   giveQuickRecentCards(flippedIds, mode);
+}
+
+// 뒤집힌 학생 전원에게 카드 선택 모달을 띄워 부여
+function openGiveCardModalToFlipped() {
+  const flippedIds = flipCardOrder.filter(slot => slot.flipped).map(slot => slot.studentId);
+  if (flippedIds.length === 0) {
+    alert('먼저 카드를 한 장 이상 클릭해 뒤집어 주세요!');
+    return;
+  }
+  openGiveCardModalWithTargets(flippedIds, 'eussuk');
 }
 
 // ==========================================================================
