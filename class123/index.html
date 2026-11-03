@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <!-- Google Identity Services (Google OAuth 로그인) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -21,7 +22,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v2.0.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v2.0.1</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -861,11 +862,17 @@
             마지막 동기화: <span id="modal-cloud-last-sync" style="font-weight:700; color:var(--text-primary);">-</span>
           </div>
           <div class="cloud-action-btn-group">
-            <button class="cloud-mini-btn" onclick="handleManualCloudSync()">
-              <span>🔄</span> 지금 즉시 동기화
+            <button class="cloud-mini-btn" onclick="handleManualCloudSync()" title="양방향 최신 상태 점검 및 동기화">
+              <span>🔄</span> 지금 동기화
             </button>
-            <button class="cloud-mini-btn" onclick="forcePullFromCloud()">
-              <span>☁️➡️💻</span> 클라우드 최신 불러오기
+            <button class="cloud-mini-btn" onclick="forcePushToCloud()" title="현재 컴퓨터에 있는 학생/카드/진도표 데이터를 클라우드에 강제 저장">
+              <span>💻➡️☁️</span> 내 데이터 클라우드에 올리기
+            </button>
+            <button class="cloud-mini-btn" onclick="forcePullFromCloud()" title="클라우드에 있는 최신 데이터를 현재 화면으로 강제 내려받기">
+              <span>☁️➡️💻</span> 클라우드에서 내려받기
+            </button>
+            <button class="cloud-mini-btn" onclick="diagnoseCloudConnection()" title="Firebase 연결 상태 및 네트워크 자가 진단">
+              <span>🔍</span> 연결 상태 진단
             </button>
           </div>
         </div>

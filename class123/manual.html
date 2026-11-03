@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.0)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.1)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.0.0 최신</span>
+          <span class="version-pill">v2.0.1 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -545,7 +545,7 @@
         type="text"
         id="manual-search"
         class="search-input"
-        placeholder="기능, 단축 팁, 프롬프트 키워드 검색 (예: 클라우드, 뽑기, 진도표, 초기화...)"
+        placeholder="기능, 단축 팁, 프롬프트 키워드 검색 (예: 클라우드, 진단, 뽑기, 진도표...)"
         oninput="filterManualContent(this.value)"
       />
     </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.0.0</div>
+          <div class="num">v2.0.1</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1040,7 +1040,7 @@
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[13차 프롬프트] Firebase Realtime Database 실시간 클라우드 자동 동기화 구축</strong>
-            <span class="version-pill">v2.0.0 최신</span>
+            <span class="version-pill">v2.0.0 업데이트</span>
           </div>
           <div class="prompt-quote">"컴퓨터나 브라우저가 달라지면 기존 카드 내용이 달라져? ... firebase에 연동해 줘 (기존 my-kahoot-smy 프로젝트 활용)"</div>
           <div class="impl-tags">
@@ -1050,6 +1050,21 @@
             <span class="impl-tag">⚡ 오프라인 우선(0초 로딩) & 타임스탬프 기반 스마트 동기화</span>
             <span class="impl-tag">🟢 상단 헤더 실시간 클라우드 상태 뱃지 & 수동 즉시 동기화 버튼</span>
             <span class="impl-tag">💾 백업 모달 내 클라우드 최신 강제 불러오기 기능 추가</span>
+          </div>
+        </div>
+
+        <!-- 14차 프롬프트 -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[14차 프롬프트] 클라우드 연결 오류 긴급 패치 및 자가 진단 도구 신설</strong>
+            <span class="version-pill">v2.0.1 최신</span>
+          </div>
+          <div class="prompt-quote">"클라우드에 접속이 되지 않았다고 나오는데 어떻게 해?"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🛠️ getStoredAuthUser 참조 함수 버그 수정 (ReferenceError 완벽 해결)</span>
+            <span class="impl-tag">🔑 firebase-auth-compat SDK 모듈 보강</span>
+            <span class="impl-tag">💻➡️☁️ [내 데이터 클라우드에 올리기] 원클릭 등록 버튼 신설</span>
+            <span class="impl-tag">🔍 [연결 상태 진단] 팝업 자가 진단 도구 신설</span>
           </div>
         </div>
       </div>
@@ -1077,7 +1092,27 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.1 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>클라우드 초기화 참조 함수 버그 수정</strong>: <code>getLoggedInUser</code> 참조 에러 수정으로 클라우드 연결 완벽 정상화<br/>
+                  • <strong><code>[💻 ➡️ ☁️ 내 데이터 클라우드에 올리기]</code></strong> 버튼 추가: 현재 컴퓨터의 학생/카드/진도표 데이터를 클라우드에 1초 만에 강제 업로드<br/>
+                  • <strong><code>[🔍 연결 상태 진단]</code></strong> 도구 추가: Firebase SDK 로드, 실시간 서버 Ping, 데이터 유무를 원클릭으로 점검하는 팝업 진단 지원<br/>
+                  • Firebase Auth SDK 모듈 보강으로 인증 호환성 증대
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v2.0.0</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>Firebase Realtime Database 클라우드 실시간 동기화 구축</strong> (연결 프로젝트: <code>my-kahoot-smy</code>)<br/>
+                  • <strong>다기기/다브라우저 실시간 자동 연동</strong>: 교실 PC, 집 노트북, 태블릿, 모바일 어디서든 동일한 학급 데이터 완벽 공유<br/>
+                  • <strong>관리자 통합 워크스페이스</strong>: <code>tfellow@gmail.com</code>과 <code>tfellow@smy.ms.kr</code> 계정의 데이터베이스 단일 통합 매핑<br/>
+                  • <strong>상단 실시간 클라우드 뱃지</strong>: 🟢 동기화됨, 🔄 저장 중, ⚠️ 오프라인 시각화 및 원클릭 동기화
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>Firebase Realtime Database 클라우드 실시간 동기화 구축</strong> (연결 프로젝트: <code>my-kahoot-smy</code>)<br/>
