@@ -1581,6 +1581,17 @@ body.theme-dark .student-card.selected .student-card-name {
   background: var(--meossuk-gradient);
 }
 
+.flip-reward-btn.select {
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+.flip-reward-btn.select:hover {
+  background: rgba(255, 255, 255, 0.38);
+  border-color: #ffffff;
+}
+
 /* ==========================================================================
    뷰 4: 학급별 진도표 (체크리스트 + 진도 기록장 통합형)
    ========================================================================== */
