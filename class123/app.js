@@ -3,8 +3,12 @@
    현재 버전: v1.4.0
    ========================================================================== */
 
-const APP_VERSION = 'v1.7.0';
+const APP_VERSION = 'v1.8.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
+
+// 최근 부여 실행 취소(Undo) 제어 변수
+let lastActionBatchId = null;
+let undoToastTimer = null;
 
 // 관리자 인증 설정
 const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
@@ -596,6 +600,7 @@ function initApp() {
   renderClassSelector();
   switchView(state.currentView || 'students');
   shuffleFlipCards(false);
+  updateUndoButtonUI();
 }
 
 function updateTopControlsUI() {
@@ -842,6 +847,7 @@ function giveQuickRecentCardToStudent(studentId, type = 'eussuk') {
   const card = getRecentCardForType(type);
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const batchId = `b_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
   if (type === 'eussuk') {
     stu.visibleEussuk = (stu.visibleEussuk || 0) + 1;
@@ -856,6 +862,7 @@ function giveQuickRecentCardToStudent(studentId, type = 'eussuk') {
 
   cls.history.unshift({
     id: `h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    batchId,
     studentId: stu.id,
     studentName: stu.name,
     studentNumber: stu.number,
@@ -870,8 +877,10 @@ function giveQuickRecentCardToStudent(studentId, type = 'eussuk') {
     timestamp
   });
 
+  lastActionBatchId = batchId;
   saveState();
   renderCurrentView();
+  updateUndoButtonUI();
 
   // 랜덤뽑기 결과 화면 중인 경우 당첨자 카드의 쑥쑥점수도 즉시 갱신
   if (state.currentView === 'luckydraw' && state.drawMode === 'random' && lastPickedStudents.length > 0) {
@@ -885,6 +894,8 @@ function giveQuickRecentCardToStudent(studentId, type = 'eussuk') {
     cardTitle: card.title,
     count: 1
   });
+
+  showUndoToast(`${stu.name} 학생에게 ${card.title} (${type === 'eussuk' ? '으쓱' : '머쓱'}) 부여됨`, card.icon);
 
   const newEggs = calculateTotalEggs(cls);
   if (prevEggs < cls.goalEggs && newEggs >= cls.goalEggs) {
@@ -908,6 +919,7 @@ function giveQuickRecentCards(studentIds, type = 'eussuk') {
   const card = getRecentCardForType(type);
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const batchId = `b_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
   targetStudents.forEach(stu => {
     if (type === 'eussuk') {
@@ -920,6 +932,7 @@ function giveQuickRecentCards(studentIds, type = 'eussuk') {
 
     cls.history.unshift({
       id: `h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}_${stu.id}`,
+      batchId,
       studentId: stu.id,
       studentName: stu.name,
       studentNumber: stu.number,
@@ -938,8 +951,10 @@ function giveQuickRecentCards(studentIds, type = 'eussuk') {
   if (!state.lastUsedCardIdByType) state.lastUsedCardIdByType = {};
   state.lastUsedCardIdByType[type] = card.id;
 
+  lastActionBatchId = batchId;
   saveState();
   renderCurrentView();
+  updateUndoButtonUI();
 
   if (state.currentView === 'luckydraw' && state.drawMode === 'random' && lastPickedStudents.length > 0) {
     renderPickedWinners(lastPickedStudents);
@@ -956,6 +971,8 @@ function giveQuickRecentCards(studentIds, type = 'eussuk') {
     cardTitle: card.title,
     count: 1
   });
+
+  showUndoToast(`${studentLabel}에게 ${card.title} (${type === 'eussuk' ? '으쓱' : '머쓱'}) 부여됨`, card.icon);
 
   const newEggs = calculateTotalEggs(cls);
   if (prevEggs < cls.goalEggs && newEggs >= cls.goalEggs) {
@@ -1135,6 +1152,7 @@ function submitGiveCards() {
   const important = document.getElementById('give-card-important').checked;
   const now = new Date();
   const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const batchId = `b_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
   const targetStudents = cls.students.filter(s => giveModalTargetIds.includes(s.id));
   if (targetStudents.length === 0) return;
@@ -1162,7 +1180,8 @@ function submitGiveCards() {
       }
 
       cls.history.unshift({
-        id: `h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        id: `h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}_${stu.id}`,
+        batchId,
         studentId: stu.id,
         studentName: stu.name,
         studentNumber: stu.number,
@@ -1179,10 +1198,12 @@ function submitGiveCards() {
     });
   });
 
+  lastActionBatchId = batchId;
   selectedStudentIds.clear();
   saveState();
   closeModal('modal-give-card');
   renderCurrentView();
+  updateUndoButtonUI();
 
   // 화려한 보상 축하 팝업 & 사운드 실행
   const studentLabel = targetStudents.length === 1
@@ -1197,6 +1218,8 @@ function submitGiveCards() {
     cardTitle: firstCardObj ? firstCardObj.title : '',
     count: cardPerStudent
   });
+
+  showUndoToast(`${studentLabel}에게 카드 ${cardPerStudent}장 부여됨`, firstCardObj ? firstCardObj.icon : '🌱');
 
   // 황금알 목표 달성 시 추가 축하 팡파레!
   const newEggs = calculateTotalEggs(cls);
@@ -2086,11 +2109,145 @@ function selectReportTarget(target) {
   renderReportView();
 }
 
+// ==========================================================================
+// 카드 부여 취소 (Undo) 및 이력 삭제/롤백 시스템
+// ==========================================================================
+function updateUndoButtonUI() {
+  const btn = document.getElementById('btn-undo-action');
+  if (!btn) return;
+  const cls = getCurrentClass();
+  const hasHistory = cls && cls.history && cls.history.length > 0;
+  if (hasHistory) {
+    btn.style.display = 'inline-flex';
+    const topItem = cls.history[0];
+    btn.title = `최근 부여 카드 취소: [${topItem.studentName}] ${topItem.category || ''} (단축키: Ctrl + Z)`;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+function showUndoToast(text, icon = '⭐') {
+  const toast = document.getElementById('undo-toast');
+  const iconEl = document.getElementById('undo-toast-icon');
+  const textEl = document.getElementById('undo-toast-text');
+  if (!toast) return;
+
+  if (iconEl) iconEl.textContent = icon;
+  if (textEl) textEl.textContent = text;
+
+  toast.classList.add('show');
+
+  if (undoToastTimer) clearTimeout(undoToastTimer);
+  undoToastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 6000);
+}
+
+function hideUndoToast() {
+  const toast = document.getElementById('undo-toast');
+  if (toast) toast.classList.remove('show');
+  if (undoToastTimer) clearTimeout(undoToastTimer);
+}
+
+// 1. 최근 부여 카드 1회 실행 취소 (Undo / Ctrl + Z) - 단일 및 전원 일괄 모두 완벽 롤백
+function undoLastRewardAction() {
+  const cls = getCurrentClass();
+  if (!cls || !cls.history || cls.history.length === 0) {
+    alert('취소할 카드 부여 이력이 없습니다.');
+    return;
+  }
+
+  // 대상 batchId 결정 (직전 액션의 batchId 또는 최상단 항목의 batchId/id)
+  let targetBatchId = lastActionBatchId;
+  if (!targetBatchId) {
+    targetBatchId = cls.history[0].batchId || cls.history[0].id;
+  }
+
+  // 동일한 부여 작업으로 묶인 모든 레코드 추출 (전원 일괄 부여 시 한 번에 롤백)
+  let itemsToUndo = cls.history.filter(h => h.batchId && h.batchId === targetBatchId);
+  if (itemsToUndo.length === 0) {
+    itemsToUndo = [cls.history[0]];
+  }
+
+  // 학생 점수 & 학급 전체 점수 & 황금알 온도계 롤백
+  itemsToUndo.forEach(item => {
+    const stu = cls.students.find(s => s.id === item.studentId);
+    const count = item.count || 1;
+    if (stu) {
+      if (item.type === 'eussuk') {
+        stu.visibleEussuk = Math.max(0, (stu.visibleEussuk || 0) - count);
+      } else {
+        stu.visibleMeossuk = Math.max(0, (stu.visibleMeossuk || 0) - count);
+      }
+    }
+
+    if (item.type === 'eussuk') {
+      cls.visibleClassEussuk = Math.max(0, (cls.visibleClassEussuk || 0) - count);
+    } else {
+      cls.visibleClassMeossuk = Math.max(0, (cls.visibleClassMeossuk || 0) - count);
+    }
+  });
+
+  // history 목록에서 롤백된 항목 제거
+  const undoIds = new Set(itemsToUndo.map(i => i.id));
+  cls.history = cls.history.filter(h => !undoIds.has(h.id));
+
+  // 다음 실행 취소를 위해 직전 batchId 갱신
+  lastActionBatchId = cls.history.length > 0 ? (cls.history[0].batchId || cls.history[0].id) : null;
+
+  saveState();
+  hideUndoToast();
+  playSound('tick');
+  renderCurrentView();
+
+  if (state.currentView === 'luckydraw' && state.drawMode === 'random' && lastPickedStudents.length > 0) {
+    renderPickedWinners(lastPickedStudents);
+  }
+
+  updateUndoButtonUI();
+
+  const undoneNames = itemsToUndo.length === 1
+    ? `${itemsToUndo[0].studentName}`
+    : `${itemsToUndo[0].studentName} 외 ${itemsToUndo.length - 1}명`;
+  const firstCard = itemsToUndo[0];
+  const typeLabel = firstCard.type === 'eussuk' ? '으쓱' : '머쓱';
+  alert(`↩️ [${undoneNames}] 학생의 "${firstCard.category || firstCard.cardTitle || '카드'}" (${typeLabel}) 부여가 성공적으로 취소되었습니다.`);
+}
+
+// 2. 리포트 상세 이력에서 특정 항목 1건 직접 취소/삭제 (점수 및 학급 온도계 동시 차감 복구)
 function deleteHistoryItem(historyId) {
   const cls = getCurrentClass();
+  const targetItem = cls.history.find(h => h.id === historyId);
+  if (!targetItem) return;
+
+  const typeLabel = targetItem.type === 'eussuk' ? '으쓱' : '머쓱';
+  if (!confirm(`[${targetItem.studentNumber}번 ${targetItem.studentName}] 학생의 "${targetItem.category || targetItem.cardTitle}" (${typeLabel} ${targetItem.count}장) 기록을 취소/삭제하시겠습니까?\n\n* 학생 점수 및 학급 온도계 점수도 즉시 차감 복구됩니다.`)) {
+    return;
+  }
+
+  // 점수 롤백
+  const stu = cls.students.find(s => s.id === targetItem.studentId);
+  const count = targetItem.count || 1;
+  if (stu) {
+    if (targetItem.type === 'eussuk') {
+      stu.visibleEussuk = Math.max(0, (stu.visibleEussuk || 0) - count);
+    } else {
+      stu.visibleMeossuk = Math.max(0, (stu.visibleMeossuk || 0) - count);
+    }
+  }
+
+  if (targetItem.type === 'eussuk') {
+    cls.visibleClassEussuk = Math.max(0, (cls.visibleClassEussuk || 0) - count);
+  } else {
+    cls.visibleClassMeossuk = Math.max(0, (cls.visibleClassMeossuk || 0) - count);
+  }
+
+  // 이력에서 삭제
   cls.history = cls.history.filter(h => h.id !== historyId);
   saveState();
-  renderReportView();
+  playSound('tick');
+  renderCurrentView();
+  updateUndoButtonUI();
 }
 
 function clearReportHistory(target = 'ALL') {
@@ -2811,6 +2968,18 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+// 전역 키보드 단축키 (Ctrl + Z 실행 취소)
+window.addEventListener('keydown', e => {
+  const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+  if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
+    return; // 입력 필드 안에서의 텍스트 편집 단축키는 방해하지 않음
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+    e.preventDefault();
+    undoLastRewardAction();
+  }
+});
 
 // 앱 시작
 document.addEventListener('DOMContentLoaded', initApp);

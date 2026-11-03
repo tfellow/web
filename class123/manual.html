@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v1.7.0)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v1.8.0)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v1.7.0 최신</span>
+          <span class="version-pill">v1.8.0 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v1.7.0</div>
+          <div class="num">v1.8.0</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -979,6 +979,22 @@
             <span class="impl-tag">✨ '⭐ 최근 으쓱' / '🌧️ 최근 머쓱'으로 버튼명 직관적 단축</span>
           </div>
         </div>
+
+        <!-- 11차 프롬프트 -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[11차 프롬프트] 카드 부여 실행 취소(Undo / Ctrl+Z) 및 리포트 개별 이력 삭제 연동 롤백</strong>
+            <span class="version-pill">v1.8.0 업데이트</span>
+          </div>
+          <div class="prompt-quote">"우리반, 뽑기, 뒤집기에서 실수로 카드를 주었을 때 최근 카드 취소 메뉴를 만들었으면 좋겠어. 그리고 리포트, 통계, 이력에서도 취소가 되어야 할 거 같아. 혹시 내가 생각하지 못한 것이 있으면 얘기해 줘"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">↩️ 상단 바 [↩️ 취소] 버튼 신설 & 단축키 Ctrl+Z 지원</span>
+            <span class="impl-tag">🔔 카드 부여 즉시 하단 플로팅 취소 토스트 팝업</span>
+            <span class="impl-tag">👥 전원 일괄 부여 건 원클릭 통째 롤백 (Batch Undo)</span>
+            <span class="impl-tag">🥚 학생 점수, 학급 온도계, 황금알 게이지 완벽 동시 복구</span>
+            <span class="impl-tag">🗑️ 리포트 상세 이력 개별 삭제 시 점수 차감 복구 연동</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1004,7 +1020,17 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v1.7.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v1.8.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>최근 카드 부여 취소(Undo) 시스템 완비</strong>: 상단 <code>[↩️ 취소]</code> 버튼, 하단 플로팅 취소 토스트, 단축키 <code>Ctrl + Z</code> 지원<br/>
+                  • 전원 일괄 부여(Batch) 실행 건 원클릭 통째 롤백 및 학생 개인 점수/학급 온도계/황금알 게이지 완벽 동시 복구<br/>
+                  • 리포트 상세 이력 타임라인 개별 삭제(<code>🗑️</code>) 시 해당 점수 즉시 차감 롤백 연동
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v1.7.0</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • 뽑기 및 뒤집기 화면에 <strong>쑥쑥카드 목록 직접 선택 부여</strong> 버튼 신설 (개별 카드 및 전원 일괄)<br/>

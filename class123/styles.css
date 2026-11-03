@@ -2376,3 +2376,100 @@ body.theme-dark .student-card.selected .student-card-name {
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
+
+/* ==========================================================================
+   플로팅 실행 취소 스낵바 (Undo Toast) & 이력 삭제 버튼 스타일
+   ========================================================================== */
+.undo-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 800;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #ffffff;
+  transform: translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.undo-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.undo-toast-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.undo-toast-icon {
+  font-size: 1.5rem;
+}
+
+.undo-toast-text-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.undo-toast-text {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.undo-toast-shortcut {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.btn-undo-toast {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 7px 14px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-undo-toast:hover {
+  filter: brightness(1.15);
+  transform: scale(1.05);
+}
+
+/* 리포트 타임라인 개별 삭제 버튼 */
+.history-item-del-btn {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+  opacity: 0.8;
+}
+
+.history-item-del-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  opacity: 1;
+  transform: scale(1.05);
+}

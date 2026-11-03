@@ -18,7 +18,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.7.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.8.0</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -47,6 +47,11 @@
 
     <!-- 우측 빠른 도구 -->
     <div class="top-actions">
+      <!-- 최근 부여 취소 (Undo) 버튼 -->
+      <button id="btn-undo-action" class="btn-icon-pill" style="font-weight:800; color:#ef4444; border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.06); display:none;" onclick="undoLastRewardAction()" title="방금 부여한 카드 취소 (단축키: Ctrl + Z)">
+        ↩️ 취소
+      </button>
+
       <!-- 관리자 로그인 뱃지 및 로그아웃 -->
       <div id="auth-user-badge" class="auth-user-badge" style="display:none;">
         <span class="auth-role-tag">🔒 관리자</span>
@@ -888,6 +893,20 @@
         <button class="btn btn-green" onclick="saveAndCloseClassListModal()">✔ 확인 및 닫기</button>
       </div>
     </div>
+  </div>
+
+  <!-- ======================================================================
+       플로팅 실행 취소 스낵바 (Undo Toast)
+       ====================================================================== -->
+  <div id="undo-toast" class="undo-toast">
+    <div class="undo-toast-body">
+      <span id="undo-toast-icon" class="undo-toast-icon">⭐</span>
+      <div class="undo-toast-text-box">
+        <span id="undo-toast-text" class="undo-toast-text">장여름 학생에게 카드가 부여되었습니다.</span>
+        <span class="undo-toast-shortcut">단축키: Ctrl + Z</span>
+      </div>
+    </div>
+    <button class="btn-undo-toast" onclick="undoLastRewardAction()">↩️ 취소하기</button>
   </div>
 
   <!-- ======================================================================
