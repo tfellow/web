@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.6 (학급 툴바 및 메뉴 간소화, 쑥쑥점수 표시 방식 위치 최적화)
+   현재 버전: v2.0.7 (심플 대형 전체화면 타이머 탑재, 다크테마 가독성 개선)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.6';
+const APP_VERSION = 'v2.0.7';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -48476,7 +48476,7 @@ function closeModal(id) {
 }
 
 // ==========================================================================
-// 신규 수업 도구: 깜깜이 아래 편리한 수업 집중 타이머 & 스톱워치 (v2.0.7)
+// 신규 수업 도구: 심플 대형 전체화면 수업 집중 타이머 & 스톱워치 (v2.0.7)
 // ==========================================================================
 const smartTimer = {
   mode: 'timer', // 'timer' | 'stopwatch'
@@ -48499,23 +48499,41 @@ function openTimerModal() {
   updateStopwatchUI();
 }
 
+function minimizeTimer() {
+  closeModal('modal-timer');
+}
+
 function switchTimerTab(mode) {
   smartTimer.mode = mode;
   const tabTimer = document.getElementById('tab-timer-mode');
   const tabStopwatch = document.getElementById('tab-stopwatch-mode');
-  const secTimer = document.getElementById('timer-view-section');
-  const secStopwatch = document.getElementById('stopwatch-view-section');
+  const digitsTimer = document.getElementById('timer-digits');
+  const digitsStopwatch = document.getElementById('stopwatch-digits');
+  const presetsBar = document.getElementById('timer-presets-toolbar');
+  const lapBtn = document.getElementById('btn-stopwatch-lap');
+  const progressWrap = document.querySelector('.timer-display-progress');
+  const banner = document.getElementById('timer-finished-banner');
+
+  if (banner) banner.style.display = 'none';
 
   if (mode === 'timer') {
     tabTimer?.classList.add('active');
     tabStopwatch?.classList.remove('active');
-    if (secTimer) secTimer.style.display = 'block';
-    if (secStopwatch) secStopwatch.style.display = 'none';
+    if (digitsTimer) digitsTimer.style.display = 'block';
+    if (digitsStopwatch) digitsStopwatch.style.display = 'none';
+    if (presetsBar) presetsBar.style.display = 'flex';
+    if (lapBtn) lapBtn.style.display = 'none';
+    if (progressWrap) progressWrap.style.display = 'block';
+    updateTimerUI();
   } else {
     tabStopwatch?.classList.add('active');
     tabTimer?.classList.remove('active');
-    if (secTimer) secTimer.style.display = 'none';
-    if (secStopwatch) secStopwatch.style.display = 'block';
+    if (digitsTimer) digitsTimer.style.display = 'none';
+    if (digitsStopwatch) digitsStopwatch.style.display = 'block';
+    if (presetsBar) presetsBar.style.display = 'none';
+    if (lapBtn) lapBtn.style.display = 'inline-flex';
+    if (progressWrap) progressWrap.style.display = 'none';
+    updateStopwatchUI();
   }
 }
 
@@ -48531,8 +48549,8 @@ function setTimerDuration(seconds) {
   smartTimer.durationSec = seconds;
   smartTimer.remainingSec = seconds;
 
-  // 버튼 active 표시
-  document.querySelectorAll('.btn-time-set').forEach(b => {
+  // 프리셋 버튼 active
+  document.querySelectorAll('.btn-preset-chip').forEach(b => {
     b.classList.toggle('active', b.getAttribute('onclick')?.includes(`(${seconds})`));
   });
 
@@ -48554,6 +48572,10 @@ function addTimerSeconds(extraSec) {
 }
 
 function toggleTimer() {
+  if (smartTimer.mode === 'stopwatch') {
+    toggleStopwatch();
+    return;
+  }
   if (smartTimer.isRunning) {
     pauseTimer();
   } else {
@@ -48593,6 +48615,10 @@ function pauseTimer() {
 }
 
 function resetTimer() {
+  if (smartTimer.mode === 'stopwatch') {
+    resetStopwatch();
+    return;
+  }
   pauseTimer();
   smartTimer.remainingSec = smartTimer.durationSec || 180;
   const banner = document.getElementById('timer-finished-banner');
@@ -48601,11 +48627,11 @@ function resetTimer() {
 }
 
 function onTimerFinished() {
-  // 타임오버 축하 배너 노출
+  // 타임오버 심플 알림 배너 노출 (캐릭터 제거)
   const banner = document.getElementById('timer-finished-banner');
-  if (banner) banner.style.display = 'flex';
+  if (banner) banner.style.display = 'block';
 
-  // 알림음 & 효과
+  // 팡파레 & 폭죽
   if (typeof playSound === 'function') {
     playSound('fanfare');
   }
@@ -48613,7 +48639,7 @@ function onTimerFinished() {
     launchConfetti('goal');
   }
 
-  // 맑은 4단 차임벨 연주 (Web Audio API)
+  // 맑은 4단 실로폰 차임벨 연주 (Web Audio API)
   try {
     const ctx = getAudioContext();
     if (ctx && state.soundEnabled) {
@@ -48649,7 +48675,6 @@ function updateTimerUI() {
 
   if (digitsEl) {
     digitsEl.textContent = formatted;
-    // 10초 이하 시 시각적 긴급 경고
     if (smartTimer.remainingSec <= 10 && smartTimer.remainingSec > 0 && smartTimer.isRunning) {
       digitsEl.classList.add('urgent');
     } else {
@@ -48668,21 +48693,21 @@ function updateTimerUI() {
     }
   }
 
-  if (toggleBtn && toggleIcon && toggleText) {
+  if (toggleBtn && toggleIcon && toggleText && smartTimer.mode === 'timer') {
     if (smartTimer.isRunning) {
-      toggleBtn.classList.remove('btn-timer-start');
-      toggleBtn.classList.add('btn-timer-pause');
+      toggleBtn.classList.remove('btn-stopwatch-start');
+      toggleBtn.classList.add('btn-stopwatch-pause');
       toggleIcon.textContent = '⏸';
-      toggleText.textContent = '일시정지';
+      toggleText.textContent = 'Pause';
     } else {
-      toggleBtn.classList.remove('btn-timer-pause');
-      toggleBtn.classList.add('btn-timer-start');
+      toggleBtn.classList.remove('btn-stopwatch-pause');
+      toggleBtn.classList.add('btn-stopwatch-start');
       toggleIcon.textContent = '▶';
-      toggleText.textContent = smartTimer.remainingSec < smartTimer.durationSec ? '계속하기' : '시작하기';
+      toggleText.textContent = smartTimer.remainingSec < smartTimer.durationSec ? 'Resume' : 'Start';
     }
   }
 
-  // 좌측 툴바 미니 뱃지 실시간 연동
+  // 좌측 툴바 미니 뱃지 실시간 연동 (축소 시 아이콘 아래 표시)
   if (tbBadge) {
     if (smartTimer.isRunning || (smartTimer.remainingSec > 0 && smartTimer.remainingSec < smartTimer.durationSec)) {
       tbBadge.style.display = 'inline-block';
@@ -48719,7 +48744,7 @@ function startStopwatch() {
   smartTimer.stopwatchIntervalId = setInterval(() => {
     smartTimer.stopwatchElapsedMs = performance.now() - smartTimer.stopwatchStartTime;
     updateStopwatchUI();
-  }, 33); // 약 30fps
+  }, 33);
 
   updateStopwatchUI();
 }
@@ -48772,25 +48797,25 @@ function renderStopwatchLaps() {
 
 function updateStopwatchUI() {
   const digitsEl = document.getElementById('stopwatch-digits');
-  const toggleBtn = document.getElementById('btn-stopwatch-toggle');
-  const toggleIcon = document.getElementById('stopwatch-toggle-icon');
-  const toggleText = document.getElementById('stopwatch-toggle-text');
+  const toggleBtn = document.getElementById('btn-timer-toggle');
+  const toggleIcon = document.getElementById('timer-toggle-icon');
+  const toggleText = document.getElementById('timer-toggle-text');
 
   if (digitsEl) {
     digitsEl.textContent = formatStopwatchDigits(smartTimer.stopwatchElapsedMs);
   }
 
-  if (toggleBtn && toggleIcon && toggleText) {
+  if (toggleBtn && toggleIcon && toggleText && smartTimer.mode === 'stopwatch') {
     if (smartTimer.stopwatchRunning) {
-      toggleBtn.classList.remove('btn-timer-start');
-      toggleBtn.classList.add('btn-timer-pause');
+      toggleBtn.classList.remove('btn-stopwatch-start');
+      toggleBtn.classList.add('btn-stopwatch-pause');
       toggleIcon.textContent = '⏸';
-      toggleText.textContent = '일시정지';
+      toggleText.textContent = 'Pause';
     } else {
-      toggleBtn.classList.remove('btn-timer-pause');
-      toggleBtn.classList.add('btn-timer-start');
+      toggleBtn.classList.remove('btn-stopwatch-pause');
+      toggleBtn.classList.add('btn-stopwatch-start');
       toggleIcon.textContent = '▶';
-      toggleText.textContent = smartTimer.stopwatchElapsedMs > 0 ? '계속하기' : '시작하기';
+      toggleText.textContent = smartTimer.stopwatchElapsedMs > 0 ? 'Resume' : 'Start';
     }
   }
 }
