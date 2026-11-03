@@ -1,0 +1,12 @@
+# 운영체제 임시 파일
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 에디터 및 IDE 설정
+.vscode/
+.idea/
+
+# 로컬 임시 백업 및 로그
+*.tmp
+*.log
