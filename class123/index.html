@@ -66,7 +66,6 @@
 
       <!-- 관리자 로그인 뱃지 및 로그아웃 -->
       <div id="auth-user-badge" class="auth-user-badge" style="display:none;">
-        <img src="assets/face_smile_clean.png" alt="교사 프로필" class="auth-header-avatar" />
         <span class="auth-role-tag">🔒 관리자</span>
         <span id="auth-user-email" class="auth-user-email">tfellow@gmail.com</span>
         <button class="btn-auth-logout" onclick="handleLogout()" title="로그아웃">로그아웃</button>
@@ -939,121 +938,92 @@
   </div>
 
   <!-- ======================================================================
-       신규 모달: 깜깜이 아래 편리한 수업 집중 타이머 & 스톱워치 (v2.0.7)
+       신규: 심플 대형 전체화면 수업 타이머 & 스톱워치 (v2.0.7)
        ====================================================================== -->
-  <div id="modal-timer" class="modal-backdrop">
-    <div class="modal-dialog modal-timer-dialog" style="max-width: 520px;">
-      <div class="modal-header">
-        <div class="modal-title">
-          <span>⏱️</span>
-          <span>수업 집중 타이머 & 스톱워치</span>
-        </div>
-        <button class="btn-icon-pill" onclick="closeModal('modal-timer')">✕ 닫기</button>
-      </div>
-
-      <div class="modal-body timer-modal-body">
+  <div id="modal-timer" class="modal-backdrop timer-fullscreen-backdrop">
+    <div class="timer-fullscreen-container">
+      <!-- 상단 컨트롤 툴바 -->
+      <div class="timer-top-bar">
         <!-- 모드 탭 (타이머 vs 스톱워치) -->
-        <div class="timer-mode-tabs">
-          <button id="tab-timer-mode" class="timer-tab-btn active" onclick="switchTimerTab('timer')">
-            <span>⏳</span> 카운트다운 타이머
-          </button>
-          <button id="tab-stopwatch-mode" class="timer-tab-btn" onclick="switchTimerTab('stopwatch')">
-            <span>⏱️</span> 스톱워치
-          </button>
+        <div class="timer-mode-switcher">
+          <button id="tab-timer-mode" class="timer-mode-pill active" onclick="switchTimerTab('timer')">⏳ 타이머</button>
+          <button id="tab-stopwatch-mode" class="timer-mode-pill" onclick="switchTimerTab('stopwatch')">⏱️ 스톱워치</button>
         </div>
 
-        <!-- 1) 카운트다운 타이머 섹션 -->
-        <div id="timer-view-section" class="timer-view-section">
-          <div class="timer-display-card">
-            <!-- 진행률 게이지 바 -->
-            <div class="timer-progress-bar-wrap">
-              <div id="timer-progress-fill" class="timer-progress-fill" style="width: 100%;"></div>
-            </div>
-
-            <div id="timer-digits" class="timer-big-digits">03:00</div>
-
-            <!-- 타임오버 축하/알림 배너 (교사 캐릭터 연동) -->
-            <div id="timer-finished-banner" class="timer-finished-banner" style="display:none;">
-              <img src="assets/teacher_jump_clean.png" alt="시간 종료!" class="timer-finish-teacher-img" />
-              <div class="timer-finish-msg-box">
-                <div class="timer-finish-title">⏰ 시간 종료! 참 잘했어요!</div>
-                <div class="timer-finish-sub">모두 하던 활동을 멈추고 자리에 집중해 볼까요? 👏</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 퀵 프리셋: 빠른 시간 추가 -->
-          <div class="timer-preset-group">
-            <span class="preset-label">⚡ 빠른 시간 추가:</span>
-            <div class="preset-buttons">
-              <button class="btn-preset" onclick="addTimerSeconds(30)">+30초</button>
-              <button class="btn-preset" onclick="addTimerSeconds(60)">+1분</button>
-              <button class="btn-preset" onclick="addTimerSeconds(120)">+2분</button>
-              <button class="btn-preset" onclick="addTimerSeconds(180)">+3분</button>
-              <button class="btn-preset" onclick="addTimerSeconds(300)">+5분</button>
-              <button class="btn-preset" onclick="addTimerSeconds(600)">+10분</button>
-            </div>
-          </div>
-
-          <!-- 기본 시간 목표 설정 (원터치 세팅) -->
-          <div class="timer-quick-set-row">
-            <span class="preset-label">🎯 목표 시간 세팅:</span>
-            <div class="time-set-buttons">
-              <button class="btn-time-set" onclick="setTimerDuration(60)">1분</button>
-              <button class="btn-time-set active" id="btn-set-3m" onclick="setTimerDuration(180)">3분</button>
-              <button class="btn-time-set" onclick="setTimerDuration(300)">5분</button>
-              <button class="btn-time-set" onclick="setTimerDuration(600)">10분</button>
-              <button class="btn-time-set" onclick="setTimerDuration(900)">15분</button>
-            </div>
-          </div>
-
-          <!-- 제어 버튼 (시작/일시정지, 리셋) -->
-          <div class="timer-control-buttons">
-            <button id="btn-timer-toggle" class="btn-timer-action btn-timer-start" onclick="toggleTimer()">
-              <span id="timer-toggle-icon">▶</span>
-              <span id="timer-toggle-text">시작하기</span>
-            </button>
-            <button class="btn-timer-action btn-timer-reset" onclick="resetTimer()">
-              <span>🔄</span>
-              <span>초기화</span>
-            </button>
-          </div>
+        <!-- 퀵 프리셋 시간 선택 (타이머 전용) -->
+        <div id="timer-presets-toolbar" class="timer-presets-toolbar">
+          <span class="preset-title">시간설정:</span>
+          <button class="btn-preset-chip" onclick="setTimerDuration(60)">1분</button>
+          <button class="btn-preset-chip active" id="btn-set-3m" onclick="setTimerDuration(180)">3분</button>
+          <button class="btn-preset-chip" onclick="setTimerDuration(300)">5분</button>
+          <button class="btn-preset-chip" onclick="setTimerDuration(600)">10분</button>
+          <button class="btn-preset-chip" onclick="setTimerDuration(900)">15분</button>
+          <span class="preset-sep">|</span>
+          <button class="btn-preset-chip add" onclick="addTimerSeconds(30)">+30초</button>
+          <button class="btn-preset-chip add" onclick="addTimerSeconds(60)">+1분</button>
+          <button class="btn-preset-chip add" onclick="addTimerSeconds(180)">+3분</button>
+          <button class="btn-preset-chip add" onclick="addTimerSeconds(300)">+5분</button>
         </div>
 
-        <!-- 2) 스톱워치 섹션 -->
-        <div id="stopwatch-view-section" class="stopwatch-view-section" style="display:none;">
-          <div class="timer-display-card">
-            <div id="stopwatch-digits" class="timer-big-digits">00:00.00</div>
-          </div>
-
-          <div class="timer-control-buttons">
-            <button id="btn-stopwatch-toggle" class="btn-timer-action btn-timer-start" onclick="toggleStopwatch()">
-              <span id="stopwatch-toggle-icon">▶</span>
-              <span id="stopwatch-toggle-text">시작하기</span>
-            </button>
-            <button class="btn-timer-action btn-timer-lap" onclick="recordStopwatchLap()">
-              <span>🚩</span>
-              <span>랩 기록</span>
-            </button>
-            <button class="btn-timer-action btn-timer-reset" onclick="resetStopwatch()">
-              <span>🔄</span>
-              <span>초기화</span>
-            </button>
-          </div>
-
-          <!-- 랩 기록 목록 -->
-          <div id="stopwatch-laps-box" class="stopwatch-laps-box" style="display:none;">
-            <div class="laps-title">🚩 구간 기록 (Laps)</div>
-            <div id="stopwatch-laps-list" class="laps-list"></div>
-          </div>
+        <!-- 우측 액션: 축소하여 수업화면 보기 (아이콘 아래 작은 타이머 유지) -->
+        <div class="timer-window-actions">
+          <button class="btn-timer-minimize" onclick="minimizeTimer()" title="축소하여 수업 화면 보기 (좌측 툴바에서 계속 작동)">
+            <span>🗕 축소 (수업화면 보기)</span>
+          </button>
+          <button class="btn-timer-close" onclick="minimizeTimer()" title="닫기">✕</button>
         </div>
       </div>
 
-      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.83rem; color:var(--text-secondary);">
-          💡 창을 닫아도 좌측 도구바에서 실시간 타이머가 계속 작동합니다.
-        </span>
-        <button class="btn btn-secondary" onclick="closeModal('modal-timer')">닫기</button>
+      <!-- 메인 전광판 디스플레이 영역 (온라인 스톱워치 스타일) -->
+      <div class="timer-board-wrapper">
+        <div class="timer-digital-display-box" id="timer-display-box">
+          <!-- 상단 진행률 프로그레스 바 -->
+          <div class="timer-display-progress">
+            <div id="timer-progress-fill" class="timer-display-progress-fill" style="width: 100%;"></div>
+          </div>
+
+          <!-- 타이머 디스플레이 숫자 -->
+          <div id="timer-digits" class="online-stopwatch-digits">03:00</div>
+
+          <!-- 스톱워치 디스플레이 숫자 (스톱워치 모드일 때) -->
+          <div id="stopwatch-digits" class="online-stopwatch-digits" style="display:none;">00:00.00</div>
+
+          <!-- 타임오버 심플 알림 배너 (캐릭터 없음) -->
+          <div id="timer-finished-banner" class="timer-simple-finished-banner" style="display:none;">
+            <div class="finish-text-main">🔔 TIME OVER! 시간이 종료되었습니다!</div>
+            <div class="finish-text-sub">모두 하던 활동을 멈추고 자리에 집중해 주세요.</div>
+          </div>
+        </div>
+
+        <!-- 하단 심플 대형 조작 버튼 (Start / Clear) -->
+        <div class="timer-board-controls">
+          <button id="btn-timer-toggle" class="btn-stopwatch-action btn-stopwatch-start" onclick="toggleTimer()">
+            <span id="timer-toggle-icon">▶</span>
+            <span id="timer-toggle-text">Start</span>
+          </button>
+
+          <!-- 스톱워치 랩 버튼 (스톱워치 모드일 때) -->
+          <button id="btn-stopwatch-lap" class="btn-stopwatch-action btn-stopwatch-lap" style="display:none;" onclick="recordStopwatchLap()">
+            <span>🚩</span>
+            <span>Lap</span>
+          </button>
+
+          <button class="btn-stopwatch-action btn-stopwatch-clear" onclick="resetTimer()">
+            <span>🔄</span>
+            <span>Clear</span>
+          </button>
+        </div>
+
+        <!-- 스톱워치 랩 기록 영역 -->
+        <div id="stopwatch-laps-box" class="stopwatch-fullscreen-laps" style="display:none;">
+          <div class="laps-title">🚩 구간 기록 (Laps)</div>
+          <div id="stopwatch-laps-list" class="laps-list-row"></div>
+        </div>
+      </div>
+
+      <!-- 하단 안내 문구 -->
+      <div class="timer-bottom-hint">
+        💡 <strong>[🗕 축소]</strong>를 누르면 타이머가 백그라운드에서 계속 동작하며 좌측 툴바 아이콘 아래 <strong>작은 타이머</strong>로 표시됩니다.
       </div>
     </div>
   </div>
@@ -1098,17 +1068,6 @@
        ====================================================================== -->
   <div id="auth-gate-overlay" class="auth-gate-overlay">
     <div class="auth-gate-card">
-      <!-- 시안 1: 문영여중 교사 캐릭터 웰컴 환영 배너 -->
-      <div class="auth-teacher-welcome-banner">
-        <div class="auth-teacher-avatar-frame">
-          <img src="assets/teacher_wave_clean.png" alt="선생님 캐릭터" class="auth-teacher-welcome-img" />
-        </div>
-        <div class="auth-teacher-welcome-speech">
-          <div class="teacher-speech-title">선생님, 어서오세요! 👋</div>
-          <div class="teacher-speech-desc">오늘도 학생들과 활기찬 하루 보내세요!</div>
-        </div>
-      </div>
-
       <div class="auth-gate-header">
         <div class="auth-logo-badge">🌱</div>
         <h2 class="auth-title">Class123 Plus</h2>
