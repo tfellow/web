@@ -18,7 +18,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.5.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.6.0</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -35,16 +35,13 @@
         <span>👥</span> 우리반
       </button>
       <button class="nav-tab" id="top-tab-random" data-view="luckydraw-random" onclick="switchView('luckydraw', 'random')">
-        <span>🎲</span> 랜덤 뽑기
+        <span>🎲</span> 뽑기
       </button>
       <button class="nav-tab" id="top-tab-flip" data-view="luckydraw-flip" onclick="switchView('luckydraw', 'flip')">
-        <span>🍀</span> 행운의 뽑기
+        <span>🍀</span> 뒤집기
       </button>
       <button class="nav-tab" id="top-tab-progress" data-view="progress" onclick="switchView('progress')">
         <span>📚</span> 진도표
-      </button>
-      <button class="nav-tab" id="top-tab-report" data-view="report" onclick="switchView('report')">
-        <span>📊</span> 리포트
       </button>
     </nav>
 
@@ -57,7 +54,6 @@
         <button class="btn-auth-logout" onclick="handleLogout()" title="로그아웃">로그아웃</button>
       </div>
 
-      <button class="btn-icon-pill" style="font-weight:800; color:var(--eussuk-blue); border-color:rgba(37,99,235,0.35);" onclick="window.open('manual.html', '_blank')" title="동적 사용 설명서 및 버전 기록 열기">📖 사용 설명서</button>
       <button id="btn-sound-toggle" class="util-btn active-toggle" onclick="toggleSound()" title="효과음 켜기/끄기">🔊</button>
       <button class="util-btn" onclick="openSettingsModal()" title="쑥쑥카드 설정">⚙️</button>
       <button class="util-btn" onclick="openBackupModal()" title="데이터 백업 및 복원">💾</button>
@@ -81,6 +77,11 @@
         <span class="tool-label">학급온도계</span>
       </button>
 
+      <button class="tool-btn" id="left-btn-report" onclick="switchView('report')" title="학급 상세 리포트 & 통계 보기">
+        <div class="tool-icon">📊</div>
+        <span class="tool-label">리포트</span>
+      </button>
+
       <div class="tool-divider"></div>
       <span class="tool-section-label">편의도구</span>
 
@@ -97,6 +98,11 @@
       <button class="tool-btn" id="left-btn-theme" onclick="toggleTheme()" title="밝은/어두운 화면 테마 전환">
         <div class="tool-icon" id="btn-theme-toggle">🌙</div>
         <span class="tool-label" id="label-theme-toggle">다크테마</span>
+      </button>
+
+      <button class="tool-btn" onclick="window.open('manual.html', '_blank')" title="동적 사용 설명서 및 버전 기록 새 창 열기">
+        <div class="tool-icon">📖</div>
+        <span class="tool-label">설명서</span>
       </button>
     </aside>
 

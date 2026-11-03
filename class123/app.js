@@ -3,7 +3,7 @@
    현재 버전: v1.4.0
    ========================================================================== */
 
-const APP_VERSION = 'v1.5.0';
+const APP_VERSION = 'v1.6.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // 관리자 인증 설정
@@ -649,14 +649,14 @@ function syncNavActiveState() {
     }
   } else if (viewName === 'progress') {
     document.getElementById('top-tab-progress')?.classList.add('active');
-  } else if (viewName === 'report') {
-    document.getElementById('top-tab-report')?.classList.add('active');
   }
 
-  // 좌측 툴바 활성화 (학급온도계)
+  // 좌측 툴바 활성화 (학급온도계, 리포트)
   document.querySelectorAll('.left-toolbar .tool-btn').forEach(btn => btn.classList.remove('active'));
   if (viewName === 'thermometer') {
     document.getElementById('left-btn-thermometer')?.classList.add('active');
+  } else if (viewName === 'report') {
+    document.getElementById('left-btn-report')?.classList.add('active');
   }
 }
 
