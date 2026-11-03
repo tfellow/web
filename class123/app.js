@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.0 (Firebase 실시간 클라우드 자동 동기화 지원)
+   현재 버전: v2.0.1 (Firebase 실시간 클라우드 자동 동기화 & 자가 진단 도구)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.0';
+const APP_VERSION = 'v2.0.1';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -25,6 +25,7 @@ let cloudDbRef = null;
 let isLocalSavingToCloud = false;
 let cloudSaveTimer = null;
 let cloudLastSyncTime = null;
+let cloudLastErrorMsg = '';
 
 // 최근 부여 실행 취소(Undo) 제어 변수
 let lastActionBatchId = null;
@@ -257,26 +258,24 @@ function saveState() {
 }
 
 // ==========================================================================
-// Firebase 클라우드 실시간 동기화 모듈 (v2.0.0)
+// Firebase 클라우드 실시간 동기화 모듈 (v2.0.1)
 // ==========================================================================
 function getCloudWorkspaceKey() {
-  const user = getLoggedInUser();
+  const user = getStoredAuthUser();
   const email = (user && user.email) ? user.email.toLowerCase().trim() : '';
 
-  // tfellow 계정(개인/학교)은 동일한 데이터베이스를 공유하여 완벽한 다기기 실시간 통합 제공
-  if (email === 'tfellow@gmail.com' || email === 'tfellow@smy.ms.kr') {
+  // tfellow 계정(개인/학교) 및 기본 모드는 동일한 데이터베이스를 공유하여 완벽한 다기기 실시간 통합 제공
+  if (!email || email === 'tfellow@gmail.com' || email === 'tfellow@smy.ms.kr') {
     return 'tfellow_workspace';
   }
 
-  if (email) {
-    return 'user_' + email.replace(/[^a-zA-Z0-9]/g, '_');
-  }
-  return 'shared_workspace';
+  return 'user_' + email.replace(/[^a-zA-Z0-9]/g, '_');
 }
 
 function initFirebaseCloud() {
   if (typeof firebase === 'undefined') {
     console.warn('Firebase SDK가 로드되지 않아 오프라인 모드로 동작합니다.');
+    cloudLastErrorMsg = 'Firebase SDK 스크립트가 로드되지 않았습니다. (인터넷/방화벽 확인)';
     updateCloudStatusUI('offline', '⚠️ Firebase 오프라인');
     return;
   }
@@ -300,9 +299,20 @@ function initFirebaseCloud() {
 
     updateCloudStatusUI('syncing', '🔄 클라우드 연결 중...');
 
+    // 네트워크 실시간 연결 상태 모니터링
+    firebaseDb.ref('.info/connected').on('value', snap => {
+      if (snap.val() === true) {
+        console.log('[Firebase] Realtime Database 웹소켓 연결 성공');
+        updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+      } else {
+        console.log('[Firebase] Realtime Database 연결 대기 중...');
+      }
+    });
+
     // Firebase 실시간 리스너 연결 (on 'value')
     cloudDbRef.on('value', snapshot => {
       cloudLastSyncTime = new Date();
+      cloudLastErrorMsg = '';
       updateModalCloudSyncTime();
 
       if (isLocalSavingToCloud) {
@@ -338,11 +348,13 @@ function initFirebaseCloud() {
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
     }, error => {
       console.warn('[Firebase] 실시간 연결 오류:', error);
-      updateCloudStatusUI('offline', '⚠️ 오프라인 (로컬 보존)');
+      cloudLastErrorMsg = error ? error.message : '실시간 연결 오류';
+      updateCloudStatusUI('offline', '⚠️ 연결 오류 (로컬 보존)');
     });
 
   } catch (err) {
     console.error('[Firebase] 초기화 중 오류 발생:', err);
+    cloudLastErrorMsg = err.message;
     updateCloudStatusUI('offline', '⚠️ 클라우드 오프라인');
   }
 }
@@ -367,11 +379,13 @@ function pushStateToCloud(dataToPush) {
     cloudDbRef.set(payload)
       .then(() => {
         cloudLastSyncTime = new Date();
+        cloudLastErrorMsg = '';
         updateModalCloudSyncTime();
         updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
       })
       .catch(err => {
         console.warn('[Firebase] 클라우드 전송 실패:', err);
+        cloudLastErrorMsg = err.message;
         updateCloudStatusUI('offline', '⚠️ 전송 실패 (로컬 안전)');
       })
       .finally(() => {
@@ -388,7 +402,9 @@ function pushStateToCloud(dataToPush) {
 function handleManualCloudSync() {
   if (!cloudDbRef) {
     initFirebaseCloud();
-    showUndoToast('☁️ Firebase 클라우드 연결을 시도합니다.');
+  }
+  if (!cloudDbRef) {
+    alert('Firebase 클라우드 초기화에 실패했습니다. [연결 상태 진단]을 실행해 주세요.');
     return;
   }
 
@@ -396,6 +412,7 @@ function handleManualCloudSync() {
   cloudDbRef.once('value').then(snapshot => {
     const val = snapshot.val();
     cloudLastSyncTime = new Date();
+    cloudLastErrorMsg = '';
     updateModalCloudSyncTime();
 
     if (val && Array.isArray(val.classes)) {
@@ -409,14 +426,55 @@ function handleManualCloudSync() {
     }
     updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
   }).catch(err => {
-    alert('동기화 실패: ' + err.message);
+    cloudLastErrorMsg = err.message;
+    alert('동기화 실패: ' + err.message + '\n\n[연결 상태 진단] 버튼을 눌러 원인을 확인해 보세요.');
     updateCloudStatusUI('offline', '⚠️ 동기화 실패');
   });
 }
 
+// 현재 컴퓨터의 데이터를 클라우드로 강제 업로드 (v2.0.1 신설)
+function forcePushToCloud() {
+  if (!cloudDbRef) {
+    initFirebaseCloud();
+  }
+  if (!cloudDbRef) {
+    alert('Firebase 클라우드 초기화에 실패했습니다. [연결 상태 진단]을 실행해 주세요.');
+    return;
+  }
+  if (!confirm('현재 이 컴퓨터에 있는 학급 데이터(학생 명단, 으쓱/머쓱 점수, 진도표 등)를 클라우드에 강제로 등록할까요?\n\n(다른 컴퓨터에서도 이 데이터로 동기화됩니다.)')) {
+    return;
+  }
+
+  updateCloudStatusUI('syncing', '🔄 클라우드 업로드 중...');
+  const payload = JSON.parse(JSON.stringify(state));
+  payload.updatedAt = Date.now();
+  state.updatedAt = payload.updatedAt;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {}
+
+  cloudDbRef.set(payload)
+    .then(() => {
+      cloudLastSyncTime = new Date();
+      cloudLastErrorMsg = '';
+      updateModalCloudSyncTime();
+      updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+      showUndoToast('☁️ 현재 컴퓨터의 데이터가 클라우드에 성공적으로 저장되었습니다!');
+      alert('성공: 현재 학급 데이터가 클라우드에 안전하게 저장되었습니다.\n이제 다른 컴퓨터나 브라우저에서 로그인하시면 이 데이터가 그대로 보입니다.');
+    })
+    .catch(err => {
+      cloudLastErrorMsg = err.message;
+      alert('클라우드 업로드 실패: ' + err.message);
+      updateCloudStatusUI('offline', '⚠️ 업로드 실패');
+    });
+}
+
 function forcePullFromCloud() {
   if (!cloudDbRef) {
-    alert('Firebase 클라우드에 아직 연결되지 않았습니다.');
+    initFirebaseCloud();
+  }
+  if (!cloudDbRef) {
+    alert('Firebase 클라우드에 아직 연결되지 않았습니다. [연결 상태 진단]을 눌러 확인해 주세요.');
     return;
   }
   if (!confirm('클라우드에 저장된 최신 데이터를 강제로 불러와 현재 화면의 내용을 덮어씌울까요?')) {
@@ -426,7 +484,7 @@ function forcePullFromCloud() {
   cloudDbRef.once('value').then(snapshot => {
     const val = snapshot.val();
     if (!val || !Array.isArray(val.classes)) {
-      alert('클라우드에 저장된 학급 데이터가 없습니다.');
+      alert('클라우드에 저장된 학급 데이터가 아직 없습니다.\n[내 데이터 클라우드에 올리기] 버튼을 먼저 눌러 현재 컴퓨터의 데이터를 클라우드에 등록해 주세요.');
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
       return;
     }
@@ -437,8 +495,56 @@ function forcePullFromCloud() {
     showUndoToast('☁️ 클라우드 최신 데이터를 성공적으로 불러왔습니다!');
     updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
   }).catch(err => {
+    cloudLastErrorMsg = err.message;
     alert('클라우드 데이터 불러오기 실패: ' + err.message);
   });
+}
+
+// 클라우드 연결 상태 자가 진단 도구 (v2.0.1 신설)
+function diagnoseCloudConnection() {
+  const isSdkLoaded = typeof firebase !== 'undefined';
+  const cfg = DEFAULT_FIREBASE_CONFIG;
+  const user = getStoredAuthUser();
+  const wsKey = getCloudWorkspaceKey();
+
+  let msg = `[클라우드 연결 상태 진단 결과]\n\n`;
+  msg += `1. Firebase SDK 로드: ${isSdkLoaded ? '✅ 정상 로드됨' : '❌ 로드 실패 (네트워크 차단)'}\n`;
+  msg += `2. 연결 프로젝트: ${cfg.projectId} (Realtime DB)\n`;
+  msg += `3. DB 주소: ${cfg.databaseURL}\n`;
+  msg += `4. 로그인 계정: ${user ? user.email : '관리자 공용 모드'}\n`;
+  msg += `5. 클라우드 작업공간: ${wsKey}\n`;
+  msg += `6. 마지막 에러 기록: ${cloudLastErrorMsg || '없음 (정상)'}\n\n`;
+
+  if (!isSdkLoaded) {
+    msg += `👉 해결 팁: 학교망 방화벽이나 광고 차단기(AdBlock)가 gstatic.com 스크립트를 차단하고 있는지 확인해 주세요.`;
+    alert(msg);
+    return;
+  }
+
+  if (!cloudDbRef) {
+    initFirebaseCloud();
+  }
+
+  if (cloudDbRef) {
+    cloudDbRef.once('value').then(snap => {
+      const val = snap.val();
+      const hasData = val && Array.isArray(val.classes);
+      msg += `7. 실시간 서버 응답: ✅ 통신 성공!\n`;
+      msg += `8. 클라우드 데이터 유무: ${hasData ? `있음 (${val.classes.length}개 학급, ${val.classes.reduce((sum, c) => sum + (c.students ? c.students.length : 0), 0)}명 학생)` : '비어있음 (아직 업로드 안 됨)'}\n\n`;
+      if (!hasData) {
+        msg += `💡 안내: 클라우드에 아직 데이터가 없습니다. [내 데이터 클라우드에 올리기] 버튼을 눌러 현재 컴퓨터 데이터를 올려주시면 다른 컴퓨터에서도 바로 연동됩니다.`;
+      } else {
+        msg += `🎉 정상: 다기기 실시간 동기화가 원활하게 작동 중입니다.`;
+      }
+      alert(msg);
+    }).catch(err => {
+      msg += `7. 실시간 서버 응답: ❌ 통신 실패 (${err.message})\n\n`;
+      msg += `👉 해결 팁: 네트워크 상태나 브라우저를 확인해 주세요.`;
+      alert(msg);
+    });
+  } else {
+    alert(msg + `\n❌ 클라우드 데이터베이스 초기화 실패`);
+  }
 }
 
 function updateCloudStatusUI(status, label) {
