@@ -1,10 +1,30 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v1.4.0
+   현재 버전: v2.0.0 (Firebase 실시간 클라우드 자동 동기화 지원)
    ========================================================================== */
 
-const APP_VERSION = 'v1.9.0';
+const APP_VERSION = 'v2.0.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
+
+// Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDE-zsT6njzKpoGLl3Izw0CxPcpDepcO4g',
+  authDomain: 'my-kahoot-smy.firebaseapp.com',
+  databaseURL: 'https://my-kahoot-smy-default-rtdb.firebaseio.com',
+  projectId: 'my-kahoot-smy',
+  storageBucket: 'my-kahoot-smy.firebasestorage.app',
+  messagingSenderId: '905782620870',
+  appId: '1:905782620870:web:c8a52bb0ec186ddba71dc7'
+};
+const FIREBASE_CONFIG_STORAGE_KEY = 'CLASS123_FIREBASE_CONFIG_V1';
+
+// Firebase 런타임 제어 변수
+let firebaseApp = null;
+let firebaseDb = null;
+let cloudDbRef = null;
+let isLocalSavingToCloud = false;
+let cloudSaveTimer = null;
+let cloudLastSyncTime = null;
 
 // 최근 부여 실행 취소(Undo) 제어 변수
 let lastActionBatchId = null;
@@ -186,7 +206,8 @@ function createInitialState() {
     showProgressMatrix: false,
     cards: getDefaultCards(),
     syllabus: getDefaultSyllabus(),
-    classes: [class1, class2]
+    classes: [class1, class2],
+    updatedAt: Date.now()
   };
 }
 
@@ -213,6 +234,9 @@ function loadState() {
           parsed.cardsVersion = 2;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
         }
+        if (!parsed.updatedAt) {
+          parsed.updatedAt = Date.now();
+        }
         return parsed;
       }
     }
@@ -223,11 +247,252 @@ function loadState() {
 }
 
 function saveState() {
+  state.updatedAt = Date.now();
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
     console.error('LocalStorage 저장 오류:', e);
   }
+  scheduleCloudSave();
+}
+
+// ==========================================================================
+// Firebase 클라우드 실시간 동기화 모듈 (v2.0.0)
+// ==========================================================================
+function getCloudWorkspaceKey() {
+  const user = getLoggedInUser();
+  const email = (user && user.email) ? user.email.toLowerCase().trim() : '';
+
+  // tfellow 계정(개인/학교)은 동일한 데이터베이스를 공유하여 완벽한 다기기 실시간 통합 제공
+  if (email === 'tfellow@gmail.com' || email === 'tfellow@smy.ms.kr') {
+    return 'tfellow_workspace';
+  }
+
+  if (email) {
+    return 'user_' + email.replace(/[^a-zA-Z0-9]/g, '_');
+  }
+  return 'shared_workspace';
+}
+
+function initFirebaseCloud() {
+  if (typeof firebase === 'undefined') {
+    console.warn('Firebase SDK가 로드되지 않아 오프라인 모드로 동작합니다.');
+    updateCloudStatusUI('offline', '⚠️ Firebase 오프라인');
+    return;
+  }
+
+  try {
+    const rawConfig = localStorage.getItem(FIREBASE_CONFIG_STORAGE_KEY);
+    let cfg = DEFAULT_FIREBASE_CONFIG;
+    if (rawConfig) {
+      try { cfg = JSON.parse(rawConfig); } catch (e) {}
+    }
+
+    if (!firebase.apps.length) {
+      firebaseApp = firebase.initializeApp(cfg);
+    } else {
+      firebaseApp = firebase.app();
+    }
+
+    firebaseDb = firebase.database();
+    const wsKey = getCloudWorkspaceKey();
+    cloudDbRef = firebaseDb.ref('class123_plus/' + wsKey);
+
+    updateCloudStatusUI('syncing', '🔄 클라우드 연결 중...');
+
+    // Firebase 실시간 리스너 연결 (on 'value')
+    cloudDbRef.on('value', snapshot => {
+      cloudLastSyncTime = new Date();
+      updateModalCloudSyncTime();
+
+      if (isLocalSavingToCloud) {
+        // 본인이 방금 로컬에서 발생시킨 저장 이벤트는 리스너 재반영을 건너뜀
+        return;
+      }
+
+      const val = snapshot.val();
+      if (!val || !Array.isArray(val.classes)) {
+        // 클라우드 저장소가 아직 비어있으면 현재 로컬 데이터를 클라우드에 초기 등록
+        console.log('[Firebase] 클라우드가 비어있어 로컬 데이터를 최초 업로드합니다.');
+        pushStateToCloud(state);
+        updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+        return;
+      }
+
+      const localUpdated = state.updatedAt || 0;
+      const cloudUpdated = val.updatedAt || 0;
+
+      // 타임스탬프 비교: 클라우드가 더 최신인 경우 화면과 로컬스토리지 갱신
+      if (cloudUpdated > localUpdated) {
+        console.log('[Firebase] 다른 컴퓨터/브라우저의 최신 변경사항 감지 -> 동기화 적용');
+        state = val;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+        refreshAppViews();
+        showUndoToast('☁️ 다른 기기의 최신 학급 데이터가 실시간 동기화되었습니다.');
+      } else if (localUpdated > cloudUpdated) {
+        // 로컬이 더 최신인 경우 클라우드로 전송
+        pushStateToCloud(state);
+      }
+      updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+    }, error => {
+      console.warn('[Firebase] 실시간 연결 오류:', error);
+      updateCloudStatusUI('offline', '⚠️ 오프라인 (로컬 보존)');
+    });
+
+  } catch (err) {
+    console.error('[Firebase] 초기화 중 오류 발생:', err);
+    updateCloudStatusUI('offline', '⚠️ 클라우드 오프라인');
+  }
+}
+
+function scheduleCloudSave() {
+  if (!cloudDbRef) return;
+  if (cloudSaveTimer) clearTimeout(cloudSaveTimer);
+
+  updateCloudStatusUI('syncing', '🔄 클라우드 저장 중...');
+
+  cloudSaveTimer = setTimeout(() => {
+    pushStateToCloud(state);
+  }, 400);
+}
+
+function pushStateToCloud(dataToPush) {
+  if (!cloudDbRef) return;
+  isLocalSavingToCloud = true;
+
+  try {
+    const payload = JSON.parse(JSON.stringify(dataToPush));
+    cloudDbRef.set(payload)
+      .then(() => {
+        cloudLastSyncTime = new Date();
+        updateModalCloudSyncTime();
+        updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+      })
+      .catch(err => {
+        console.warn('[Firebase] 클라우드 전송 실패:', err);
+        updateCloudStatusUI('offline', '⚠️ 전송 실패 (로컬 안전)');
+      })
+      .finally(() => {
+        setTimeout(() => {
+          isLocalSavingToCloud = false;
+        }, 500);
+      });
+  } catch (e) {
+    isLocalSavingToCloud = false;
+    console.error('[Firebase] 직렬화 오류:', e);
+  }
+}
+
+function handleManualCloudSync() {
+  if (!cloudDbRef) {
+    initFirebaseCloud();
+    showUndoToast('☁️ Firebase 클라우드 연결을 시도합니다.');
+    return;
+  }
+
+  updateCloudStatusUI('syncing', '🔄 동기화 확인 중...');
+  cloudDbRef.once('value').then(snapshot => {
+    const val = snapshot.val();
+    cloudLastSyncTime = new Date();
+    updateModalCloudSyncTime();
+
+    if (val && Array.isArray(val.classes)) {
+      state = val;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      refreshAppViews();
+      showUndoToast('☁️ 클라우드 최신 데이터와 성공적으로 동기화되었습니다!');
+    } else {
+      pushStateToCloud(state);
+      showUndoToast('☁️ 현재 학급 데이터가 클라우드에 성공적으로 등록되었습니다.');
+    }
+    updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+  }).catch(err => {
+    alert('동기화 실패: ' + err.message);
+    updateCloudStatusUI('offline', '⚠️ 동기화 실패');
+  });
+}
+
+function forcePullFromCloud() {
+  if (!cloudDbRef) {
+    alert('Firebase 클라우드에 아직 연결되지 않았습니다.');
+    return;
+  }
+  if (!confirm('클라우드에 저장된 최신 데이터를 강제로 불러와 현재 화면의 내용을 덮어씌울까요?')) {
+    return;
+  }
+  updateCloudStatusUI('syncing', '🔄 클라우드 불러오는 중...');
+  cloudDbRef.once('value').then(snapshot => {
+    const val = snapshot.val();
+    if (!val || !Array.isArray(val.classes)) {
+      alert('클라우드에 저장된 학급 데이터가 없습니다.');
+      updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+      return;
+    }
+    state = val;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    refreshAppViews();
+    closeModal('modal-backup');
+    showUndoToast('☁️ 클라우드 최신 데이터를 성공적으로 불러왔습니다!');
+    updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+  }).catch(err => {
+    alert('클라우드 데이터 불러오기 실패: ' + err.message);
+  });
+}
+
+function updateCloudStatusUI(status, label) {
+  const dot = document.getElementById('cloud-sync-dot');
+  const text = document.getElementById('cloud-sync-text');
+  const modalTag = document.getElementById('modal-cloud-status-tag');
+
+  if (dot) {
+    dot.className = 'sync-dot';
+    if (status === 'syncing') dot.classList.add('syncing');
+    else if (status === 'offline') dot.classList.add('offline');
+    else if (status === 'error') dot.classList.add('error');
+  }
+
+  if (text) text.textContent = label;
+
+  if (modalTag) {
+    if (status === 'connected') {
+      modalTag.style.background = '#10b981';
+      modalTag.textContent = '🟢 실시간 연결됨';
+    } else if (status === 'syncing') {
+      modalTag.style.background = '#3b82f6';
+      modalTag.textContent = '🔄 동기화 중...';
+    } else if (status === 'offline') {
+      modalTag.style.background = '#f59e0b';
+      modalTag.textContent = '⚠️ 오프라인 (로컬 보존)';
+    } else {
+      modalTag.style.background = '#ef4444';
+      modalTag.textContent = '❌ 오류';
+    }
+  }
+}
+
+function updateModalCloudSyncTime() {
+  const el = document.getElementById('modal-cloud-last-sync');
+  if (el) {
+    if (!cloudLastSyncTime) {
+      el.textContent = '방금 전';
+    } else {
+      el.textContent = cloudLastSyncTime.toLocaleTimeString();
+    }
+  }
+}
+
+function refreshAppViews() {
+  renderClassSelector();
+  updateTopControlsUI();
+  updateUndoButtonUI();
+  const curView = state.currentView || 'students';
+  if (curView === 'students') renderStudents();
+  else if (curView === 'luckydraw') renderLuckyDraw();
+  else if (curView === 'progress') renderProgress();
+  else if (curView === 'report') renderReport();
+  else if (curView === 'thermometer') renderThermometer();
 }
 
 function getVisibleClasses() {
@@ -592,6 +857,9 @@ function initApp() {
   if (!checkAuthState()) {
     return; // 로그인 인증 전에는 메인 앱 렌더링을 차단
   }
+
+  // Firebase 실시간 클라우드 연결 시작
+  initFirebaseCloud();
 
   if (state.darkMode) {
     document.body.classList.add('theme-dark');
@@ -2917,6 +3185,7 @@ function exportProgressCSV() {
 }
 
 function openBackupModal() {
+  updateModalCloudSyncTime();
   openModal('modal-backup');
 }
 

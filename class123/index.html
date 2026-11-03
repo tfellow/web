@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>클래스123 Plus - 스마트 학급 경영 & 수업 도구</title>
   <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <!-- Google Identity Services (Google OAuth 로그인) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -18,7 +21,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.9.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v2.0.0</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -47,6 +50,12 @@
 
     <!-- 우측 빠른 도구 -->
     <div class="top-actions">
+      <!-- Firebase 실시간 클라우드 동기화 상태 뱃지 -->
+      <div id="cloud-sync-badge" class="cloud-sync-badge" onclick="handleManualCloudSync()" title="Firebase 클라우드 실시간 동기화 상태 (클릭 시 지금 동기화)">
+        <span id="cloud-sync-dot" class="sync-dot"></span>
+        <span id="cloud-sync-text">☁️ 클라우드 동기화됨</span>
+      </div>
+
       <!-- 최근 부여 취소 (Undo) 버튼 -->
       <button id="btn-undo-action" class="btn-icon-pill" style="font-weight:800; color:#ef4444; border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.06); display:none;" onclick="undoLastRewardAction()" title="방금 부여한 카드 취소 (단축키: Ctrl + Z)">
         ↩️ 취소
@@ -829,24 +838,49 @@
        모달 7: 데이터 파일 백업(JSON) 및 복원 모달
        ====================================================================== -->
   <div id="modal-backup" class="modal-backdrop">
-    <div class="modal-dialog" style="max-width: 540px;">
+    <div class="modal-dialog" style="max-width: 580px;">
       <div class="modal-header">
-        <div class="modal-title">💾 데이터 백업 및 불러오기</div>
+        <div class="modal-title">💾 데이터 백업 및 클라우드 동기화</div>
         <button class="btn-icon-pill" onclick="closeModal('modal-backup')">✖ 닫기</button>
       </div>
 
       <div class="modal-body">
-        <p style="font-size:0.92rem; color:var(--text-secondary); margin-bottom:18px;">
-          모든 데이터는 현재 브라우저에 실시간 자동 저장됩니다.<br/>
-          다른 컴퓨터(교실 PC ↔ 교무실 PC ↔ 집 PC)로 데이터를 옮기거나 안전하게 보관하려면 백업 파일을 다운로드하세요.
+        <!-- Firebase 클라우드 실시간 동기화 카드 (v2.0.0) -->
+        <div class="cloud-sync-card">
+          <div class="cloud-status-row">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.2rem;">☁️</span>
+              <strong style="font-size:0.98rem;">Firebase 클라우드 자동 동기화</strong>
+            </div>
+            <span id="modal-cloud-status-tag" class="cloud-badge-tag">🟢 실시간 연결됨</span>
+          </div>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 10px 0; line-height:1.45;">
+            교실 PC, 집 노트북, 태블릿 등 <strong>어느 기기에서든 로그인하시면 동일한 학급 데이터가 실시간으로 자동 동기화</strong>됩니다. (연결 프로젝트: <code>my-kahoot-smy</code>)
+          </p>
+          <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:10px;">
+            마지막 동기화: <span id="modal-cloud-last-sync" style="font-weight:700; color:var(--text-primary);">-</span>
+          </div>
+          <div class="cloud-action-btn-group">
+            <button class="cloud-mini-btn" onclick="handleManualCloudSync()">
+              <span>🔄</span> 지금 즉시 동기화
+            </button>
+            <button class="cloud-mini-btn" onclick="forcePullFromCloud()">
+              <span>☁️➡️💻</span> 클라우드 최신 불러오기
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size:0.92rem; color:var(--text-secondary); margin:18px 0 12px 0;">
+          <strong>📁 오프라인 파일 백업 및 복원 (.json)</strong><br/>
+          클라우드와 별개로 내 컴퓨터에 파일로 영구 보관하거나 수동으로 복원할 수 있습니다.
         </p>
 
-        <div style="display:flex; flex-direction:column; gap:14px;">
-          <button class="btn btn-eussuk" style="justify-content:center; padding:14px;" onclick="downloadBackupJSON()">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <button class="btn btn-eussuk" style="justify-content:center; padding:12px;" onclick="downloadBackupJSON()">
             📥 현재 전체 데이터 파일로 백업 받기 (.json)
           </button>
 
-          <label class="btn btn-secondary" style="justify-content:center; padding:14px; cursor:pointer;">
+          <label class="btn btn-secondary" style="justify-content:center; padding:12px; cursor:pointer;">
             📂 백업 파일(.json) 불러와서 복원하기
             <input type="file" accept=".json" style="display:none;" onchange="restoreBackupJSON(event)" />
           </label>
