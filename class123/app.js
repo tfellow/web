@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.2 (클라우드 동기화 화면 렌더링 핫픽스)
+   현재 버전: v2.0.3 (영구 데이터 보존 & 관리자 비밀번호 클라우드 영구 동기화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.2';
+const APP_VERSION = 'v2.0.3';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -258,8 +258,17 @@ function saveState() {
 }
 
 // ==========================================================================
-// Firebase 클라우드 실시간 동기화 모듈 (v2.0.1)
+// Firebase 클라우드 실시간 동기화 모듈 (v2.0.3)
 // ==========================================================================
+function isSampleState(st) {
+  if (!st || !Array.isArray(st.classes) || st.classes.length === 0) return true;
+  // 1반, 2반 2개만 있고 이름이 기본 샘플인 경우
+  if (st.classes.length === 2 && st.classes[0].name === '1반' && st.classes[1].name === '2반') {
+    return true;
+  }
+  return false;
+}
+
 function getCloudWorkspaceKey() {
   const user = getStoredAuthUser();
   const email = (user && user.email) ? user.email.toLowerCase().trim() : '';
@@ -322,18 +331,33 @@ function initFirebaseCloud() {
 
       const val = snapshot.val();
       if (!val || !Array.isArray(val.classes)) {
-        // 클라우드 저장소가 아직 비어있으면 현재 로컬 데이터를 클라우드에 초기 등록
-        console.log('[Firebase] 클라우드가 비어있어 로컬 데이터를 최초 업로드합니다.');
-        pushStateToCloud(state);
+        // 클라우드가 비어있고 로컬에 실제 데이터가 있다면 최초 업로드
+        if (!isSampleState(state)) {
+          console.log('[Firebase] 클라우드가 비어있어 로컬의 실제 데이터를 클라우드에 최초 업로드합니다.');
+          pushStateToCloud(state);
+        }
         updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
         return;
       }
 
       const localUpdated = state.updatedAt || 0;
       const cloudUpdated = val.updatedAt || 0;
+      const isLocalSample = isSampleState(state);
+      const isCloudSample = isSampleState(val);
 
-      // 타임스탬프 비교: 클라우드가 더 최신인 경우 화면과 로컬스토리지 갱신
-      if (cloudUpdated > localUpdated) {
+      // [핵심 데이터 보호 규칙]
+      // 1. 클라우드에 실제 학급 데이터가 있고, 로컬은 초기 샘플(1반, 2반)인 경우:
+      //    로컬 타임스탬프가 제아무리 최신이라도 무조건 클라우드의 실제 데이터를 최우선 복원!
+      if (!isCloudSample && isLocalSample) {
+        console.log('[Firebase] 클라우드의 실제 학급 데이터를 로컬로 안전하게 복원합니다.');
+        state = val;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+        refreshAppViews();
+        showUndoToast('☁️ 클라우드에 보관된 실제 학급 데이터를 성공적으로 불러왔습니다.');
+      } else if (cloudUpdated > localUpdated) {
+        // 2. 클라우드가 로컬보다 최신인 경우 동기화
         console.log('[Firebase] 다른 컴퓨터/브라우저의 최신 변경사항 감지 -> 동기화 적용');
         state = val;
         try {
@@ -341,10 +365,16 @@ function initFirebaseCloud() {
         } catch (e) {}
         refreshAppViews();
         showUndoToast('☁️ 다른 기기의 최신 학급 데이터가 실시간 동기화되었습니다.');
-      } else if (localUpdated > cloudUpdated) {
-        // 로컬이 더 최신인 경우 클라우드로 전송
+      } else if (localUpdated > cloudUpdated && !isLocalSample) {
+        // 3. 로컬이 더 최신이고 샘플이 아닌 경우에만 클라우드로 전송 (샘플로 덮어쓰기 원천 차단)
         pushStateToCloud(state);
       }
+
+      // [관리자 비밀번호 클라우드 자동 동기화]
+      if (val.adminPassword) {
+        localStorage.setItem(ADMIN_PW_STORAGE_KEY, val.adminPassword);
+      }
+
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
     }, error => {
       console.warn('[Firebase] 실시간 연결 오류:', error);
@@ -376,6 +406,7 @@ function pushStateToCloud(dataToPush) {
 
   try {
     const payload = JSON.parse(JSON.stringify(dataToPush));
+    payload.adminPassword = getAdminPassword();
     cloudDbRef.set(payload)
       .then(() => {
         cloudLastSyncTime = new Date();
@@ -843,7 +874,7 @@ function checkAuthState() {
 }
 
 // 1. 관리자 직접 로그인 (이메일 & 비밀번호)
-function handleDirectLogin(e) {
+async function handleDirectLogin(e) {
   if (e) e.preventDefault();
   const selectEl = document.getElementById('admin-select-email');
   const passEl = document.getElementById('admin-pass-input');
@@ -859,8 +890,25 @@ function handleDirectLogin(e) {
     return;
   }
 
-  const expectedPass = getAdminPassword();
-  if (pass !== expectedPass) {
+  let expectedPass = getAdminPassword();
+  let isMatch = (pass === expectedPass);
+
+  // 로컬 비밀번호와 불일치 시 클라우드에 보관된 최신 비밀번호와 실시간 대조
+  if (!isMatch && typeof firebase !== 'undefined') {
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(DEFAULT_FIREBASE_CONFIG);
+      }
+      const snap = await firebase.database().ref('class123_plus/tfellow_workspace/adminPassword').once('value');
+      const cloudPw = snap.val();
+      if (cloudPw && pass === cloudPw) {
+        isMatch = true;
+        localStorage.setItem(ADMIN_PW_STORAGE_KEY, cloudPw);
+      }
+    } catch (_) {}
+  }
+
+  if (!isMatch) {
     showAuthAlert('관리자 비밀번호가 일치하지 않습니다.');
     return;
   }
@@ -945,9 +993,15 @@ function changeAdminPassword() {
     return;
   }
   localStorage.setItem(ADMIN_PW_STORAGE_KEY, newPw);
+
+  // 클라우드에도 관리자 비밀번호를 안전하게 영구 저장
+  if (cloudDbRef) {
+    cloudDbRef.child('adminPassword').set(newPw).catch(() => {});
+  }
+
   if (newPwInput) newPwInput.value = '';
   playSound('eussuk');
-  alert('관리자 비밀번호가 성공적으로 변경되었습니다!');
+  alert('관리자 비밀번호가 성공적으로 변경되었습니다!\n(클라우드에도 함께 저장되어 다른 컴퓨터나 브라우저에서도 동일하게 유지됩니다.)');
 }
 
 // ==========================================================================

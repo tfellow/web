@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.2)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.0.3)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.0.2 최신</span>
+          <span class="version-pill">v2.0.3 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.0.2</div>
+          <div class="num">v2.0.3</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -1072,12 +1072,27 @@
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[15차 프롬프트] 클라우드 동기화 후 화면 갱신 함수 오타 수정</strong>
-            <span class="version-pill">v2.0.2 최신</span>
+            <span class="version-pill">v2.0.2 업데이트</span>
           </div>
           <div class="prompt-quote">"(스크린샷) 동기화 실패: renderStudents is not defined"</div>
           <div class="impl-tags">
             <span class="impl-tag">🛠️ renderCurrentView 뷰 렌더러 연결로 런타임 오류 완전 해결</span>
             <span class="impl-tag">🔄 동기화 직후 화면 자동 갱신 안정화</span>
+          </div>
+        </div>
+
+        <!-- 16차 프롬프트 -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[16차 프롬프트] 영구 데이터 보존 아키텍처 및 관리자 비밀번호 클라우드 영구 동기화</strong>
+            <span class="version-pill">v2.0.3 최신</span>
+          </div>
+          <div class="prompt-quote">"네가 버전을 업데이트 할 때마다 데이터가 초기화되네. 그리고 관리자 비밀번호도 새로운 버전이 나올 때마다 초기화 되는 거 같아. 그러면 안 될 거 같은데 어떻게 하면 좋을까?"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🛡️ isSampleState 샘플 판별로 실제 8개 반 데이터 최우선 보호 복원</span>
+            <span class="impl-tag">🚫 임시 샘플 데이터의 클라우드 역덮어쓰기 원천 차단</span>
+            <span class="impl-tag">🔐 관리자 비밀번호 클라우드 실시간 동기화 (기기/버전 무관 영구 유지)</span>
+            <span class="impl-tag">🔑 로그인 시 클라우드 비밀번호 실시간 폴백 대조 지원</span>
           </div>
         </div>
       </div>
@@ -1105,7 +1120,16 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.2 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.0.3 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>실제 학급 데이터 영구 보호 복원</strong>: 클라우드에 안전 보관된 8개 학급 실제 데이터를 최우선 복원하고 임시 샘플 데이터의 덮어쓰기 원천 차단<br/>
+                  • <strong>관리자 비밀번호 클라우드 실시간 동기화</strong>: 비밀번호 변경 시 클라우드에도 영구 보관되며, 새 기기/업데이트 후에도 변경된 비밀번호로 자동 로그인 지원
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>app.js</code>, <code>index.html</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:800;">v2.0.2</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-03</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>동기화 화면 갱신 오타 핫픽스</strong>: <code>refreshAppViews()</code> 내부에서 미정의 함수 <code>renderStudents</code> 대신 통합 뷰 렌더러 <code>renderCurrentView()</code>를 호출하도록 수정<br/>
