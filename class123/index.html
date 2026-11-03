@@ -18,7 +18,7 @@
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
         Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.8.0</span>
+        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v1.9.0</span>
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -163,12 +163,15 @@
         <!-- 하단 플로팅 다중 선택 액션 바 -->
         <div id="floating-selection-bar" class="floating-selection-bar">
           <span id="selected-students-badge" class="selection-count-badge">0명 선택됨</span>
-          <span id="selected-students-names" style="font-size:0.9rem; color:#cbd5e1; max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
-          <button class="btn btn-eussuk" onclick="openGiveCardModal('eussuk')">
-            ⭐ 으쓱카드 주기
+          <span id="selected-students-names" style="font-size:0.9rem; color:#cbd5e1; max-width:260px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
+          <button class="btn btn-eussuk" onclick="openGiveCardModal('eussuk')" title="선택된 학생들에게 으쓱카드 선택 부여">
+            ⭐ 으쓱카드
           </button>
-          <button class="btn btn-meossuk" onclick="openGiveCardModal('meossuk')">
-            🌧️ 머쓱카드 주기
+          <button class="btn btn-meossuk" onclick="openGiveCardModal('meossuk')" title="선택된 학생들에게 머쓱카드 선택 부여">
+            🌧️ 머쓱카드
+          </button>
+          <button id="btn-floating-recent-card" class="btn btn-gold" onclick="giveRecentCardToSelectedStudents()" title="선택된 학생들에게 가장 최근에 사용한 카드 즉시 부여">
+            ⚡ 최근카드
           </button>
           <button class="btn btn-secondary" style="background:rgba(255,255,255,0.12); color:#fff; border:none;" onclick="clearStudentSelection()">
             ✖ 선택 해제
