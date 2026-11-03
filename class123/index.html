@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>클래스123 Plus - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
+  <link rel="stylesheet" href="styles.css?v=2.0.5" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -21,8 +24,7 @@
     <div class="brand-area">
       <div class="brand-logo" onclick="switchView('students')">
         <div class="brand-logo-icon"><span>🌱</span></div>
-        Class123 Plus
-        <span id="app-version-badge" style="font-family:'Pretendard',sans-serif; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:999px; background:rgba(16,185,129,0.15); color:#059669; -webkit-text-fill-color:#059669;">v2.0.4</span>
+        Class123
       </div>
 
       <!-- 학급 전환 및 관리 -->
@@ -119,6 +121,9 @@
         <div class="tool-icon">📖</div>
         <span class="tool-label">설명서</span>
       </button>
+
+      <!-- 설명서 아래 버전 표시 배지 -->
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.5 (클릭 시 사용 설명서 열기)">v2.0.5</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -1055,6 +1060,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.0.5"></script>
 </body>
 </html>

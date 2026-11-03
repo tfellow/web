@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.3 (영구 데이터 보존 & 관리자 비밀번호 클라우드 영구 동기화)
+   현재 버전: v2.0.5 (로고 간소화, 버전 위치 이동, 학급 선택 인원수 괄호 제거)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.4';
+const APP_VERSION = 'v2.0.5';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -46029,9 +46029,55 @@ function changeAdminPassword() {
 }
 
 // ==========================================================================
+// 최신 버전 UI 강제 동기화 (브라우저 캐시 잔여 요소 실시간 패치)
+// ==========================================================================
+function ensureLatestUiVersion() {
+  try {
+    document.title = '클래스123 - 스마트 학급 경영 & 수업 도구';
+
+    // 1. 상단 로고의 'Class123 Plus' -> 'Class123' 강제 보정 및 상단에 남은 이전 버전 배지 제거
+    const brandLogo = document.querySelector('.brand-logo');
+    if (brandLogo) {
+      const oldBadges = brandLogo.querySelectorAll('#app-version-badge, span[style*="font-size:0.72rem"]');
+      oldBadges.forEach(b => b.remove());
+
+      const logoIcon = brandLogo.querySelector('.brand-logo-icon');
+      brandLogo.innerHTML = '';
+      if (logoIcon) {
+        brandLogo.appendChild(logoIcon);
+      } else {
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'brand-logo-icon';
+        iconDiv.innerHTML = '<span>🌱</span>';
+        brandLogo.appendChild(iconDiv);
+      }
+      brandLogo.appendChild(document.createTextNode(' Class123'));
+    }
+
+    // 2. 좌측 툴바 설명서 아래 버전 뱃지 배치 및 최신 버전 강제 갱신
+    const leftToolbar = document.querySelector('.left-toolbar');
+    if (leftToolbar) {
+      let sidebarBadge = leftToolbar.querySelector('#app-version-badge');
+      if (!sidebarBadge) {
+        sidebarBadge = document.createElement('div');
+        sidebarBadge.id = 'app-version-badge';
+        sidebarBadge.className = 'sidebar-version-badge';
+        sidebarBadge.title = `클래스123 버전 ${APP_VERSION} (클릭 시 사용 설명서 열기)`;
+        sidebarBadge.onclick = () => window.open('manual.html', '_blank');
+        leftToolbar.appendChild(sidebarBadge);
+      }
+      sidebarBadge.textContent = APP_VERSION;
+    }
+  } catch (err) {
+    console.warn('UI 버전 동기화 처리 중 경미한 알림:', err);
+  }
+}
+
+// ==========================================================================
 // 초기화 및 전체 렌더링
 // ==========================================================================
 function initApp() {
+  ensureLatestUiVersion();
   if (!checkAuthState()) {
     return; // 로그인 인증 전에는 메인 앱 렌더링을 차단
   }
@@ -46073,7 +46119,7 @@ function renderClassSelector() {
     state.currentClassId = visibleClasses[0].id;
   }
   select.innerHTML = visibleClasses
-    .map(c => `<option value="${c.id}" ${c.id === state.currentClassId ? 'selected' : ''}>🏫 ${escapeHtml(c.name)} (${c.students.length}명)</option>`)
+    .map(c => `<option value="${c.id}" ${c.id === state.currentClassId ? 'selected' : ''}>🏫 ${escapeHtml(c.name)}</option>`)
     .join('');
 }
 
@@ -48451,4 +48497,10 @@ window.addEventListener('keydown', e => {
 });
 
 // 앱 시작
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+  ensureLatestUiVersion();
+  initApp();
+});
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  ensureLatestUiVersion();
+}
