@@ -3,7 +3,7 @@
    현재 버전: v2.0.3 (영구 데이터 보존 & 관리자 비밀번호 클라우드 영구 동기화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.3';
+const APP_VERSION = 'v2.0.4';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -95,6 +95,9 @@ function createSampleClass(id, name, grade, rosterNames) {
 }
 
 function createInitialState() {
+  if (typeof CLASS123_BACKUP_DATA !== 'undefined' && CLASS123_BACKUP_DATA && Array.isArray(CLASS123_BACKUP_DATA.classes)) {
+    return JSON.parse(JSON.stringify(CLASS123_BACKUP_DATA));
+  }
   const sampleRoster1 = [
     { name: '안구름', gender: 'F', e: 5, m: 0 },
     { name: '이소라', gender: 'F', e: 4, m: 1 },
@@ -262,8 +265,14 @@ function saveState() {
 // ==========================================================================
 function isSampleState(st) {
   if (!st || !Array.isArray(st.classes) || st.classes.length === 0) return true;
-  // 1반, 2반 2개만 있고 이름이 기본 샘플인 경우
-  if (st.classes.length === 2 && st.classes[0].name === '1반' && st.classes[1].name === '2반') {
+  // 실제 학급(2026-로 시작)이 하나라도 포함되어 있으면 100% 실제 데이터로 판정 (절대 샘플 아님)
+  const hasRealClasses = st.classes.some(c => c.name && c.name.startsWith('2026-'));
+  if (hasRealClasses) return false;
+
+  // 구버전 가짜 샘플 학급명이거나 학급 수가 2개 이하인 경우만 샘플로 간주
+  const sampleNames = ['2학년 1반', '2학년 2반', '1반', '2반'];
+  const allSample = st.classes.every(c => sampleNames.includes(c.name) || c.id === 'cls_1' || c.id === 'cls_2');
+  if (allSample || st.classes.length <= 2) {
     return true;
   }
   return false;
@@ -2053,14 +2062,11 @@ function renderPickedWinners(winners) {
             현재 쑥쑥점수: <strong style="color:#4ade80;">${(w.visibleEussuk || 0) - (w.visibleMeossuk || 0)}점</strong>
           </div>
           <div class="winner-individual-actions">
-            <button class="btn btn-eussuk" style="padding:6px 10px; font-size:0.78rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'eussuk')" title="최근 으쓱 항목 즉시 부여">
+            <button class="btn btn-eussuk" style="padding:7px 12px; font-size:0.84rem; flex:1;" onclick="giveQuickRecentCardToStudent('${w.id}', 'eussuk')" title="최근 으쓱 항목 즉시 부여">
               ⭐ 으쓱
             </button>
-            <button class="btn btn-meossuk" style="padding:6px 10px; font-size:0.78rem;" onclick="giveQuickRecentCardToStudent('${w.id}', 'meossuk')" title="최근 머쓱 항목 즉시 부여">
+            <button class="btn btn-meossuk" style="padding:7px 12px; font-size:0.84rem; flex:1;" onclick="giveQuickRecentCardToStudent('${w.id}', 'meossuk')" title="최근 머쓱 항목 즉시 부여">
               🌧️ 머쓱
-            </button>
-            <button class="btn btn-secondary" style="padding:6px 10px; font-size:0.78rem; background:rgba(255,255,255,0.18); color:#ffffff; border:1px solid rgba(255,255,255,0.35);" onclick="openGiveCardModalForSingle('${w.id}')" title="쑥쑥카드 목록에서 직접 선택하여 부여">
-              🌱 카드선택
             </button>
           </div>
         </div>
@@ -2125,22 +2131,22 @@ function renderFlipCardsGrid() {
               <div class="font-display" style="font-size:1.05rem; color:#ffffff; margin-top:8px;">클릭해 뒤집기</div>
             </div>
 
-            <!-- 앞면 (뒤집혀서 공개된 상태 + 즉시 으쓱/머쓱 버튼!) -->
+            <!-- 앞면 (뒤집혀서 공개된 상태 + 큰 번호&이름 + 즉시 으쓱/머쓱 버튼!) -->
             <div class="flip-card-back">
               <div class="flip-back-header">
-                <span>#${slot.order}번째</span>
-                <span>${stu.number}번 · 🌱${ssuk}점</span>
+                <span class="flip-header-order">#${slot.order}번째</span>
+                <span class="flip-header-score">🌱 ${ssuk}점</span>
               </div>
-              <div class="flip-student-name">${escapeHtml(stu.name)}</div>
+              <div class="flip-student-name">
+                <span class="flip-student-num">${stu.number}</span>
+                <span class="flip-student-nametext">${escapeHtml(stu.name)}</span>
+              </div>
               <div class="flip-reward-actions" onclick="event.stopPropagation();">
                 <button class="flip-reward-btn eussuk" onclick="giveQuickRecentCardToStudent('${stu.id}', 'eussuk')" title="최근 으쓱 항목으로 즉시 1장 부여">
                   ⭐ 으쓱
                 </button>
                 <button class="flip-reward-btn meossuk" onclick="giveQuickRecentCardToStudent('${stu.id}', 'meossuk')" title="최근 머쓱 항목으로 즉시 1장 부여">
                   🌧️ 머쓱
-                </button>
-                <button class="flip-reward-btn select" onclick="openGiveCardModalForSingle('${stu.id}')" title="쑥쑥카드 목록에서 직접 선택하여 부여">
-                  🌱 선택
                 </button>
               </div>
             </div>

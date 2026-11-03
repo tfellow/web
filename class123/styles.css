@@ -87,7 +87,7 @@ body {
    상단 글로벌 네비게이션 바 (Header)
    ========================================================================== */
 .top-navbar {
-  height: 70px;
+  height: 68px;
   background: var(--surface-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -95,34 +95,36 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .brand-area {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
+  flex-shrink: 0;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   font-family: 'Jua', sans-serif;
   font-size: 1.55rem;
   background: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
+  user-select: none;
 }
 
 .brand-logo-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 12px;
   background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
   display: flex;
@@ -130,10 +132,11 @@ body {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
   transform: rotate(-5deg);
+  flex-shrink: 0;
 }
 
 .brand-logo-icon span {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   -webkit-text-fill-color: initial;
 }
 
@@ -141,11 +144,12 @@ body {
 .class-selector-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: var(--surface-subtle);
-  padding: 5px 8px;
+  gap: 6px;
+  background: var(--surface-card);
+  padding: 4px 6px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .class-select {
@@ -153,9 +157,9 @@ body {
   border: none;
   color: var(--text-primary);
   font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
-  font-size: 1.02rem;
-  padding: 6px 12px;
+  font-weight: 800;
+  font-size: 0.98rem;
+  padding: 5px 10px;
   cursor: pointer;
   outline: none;
 }
@@ -166,18 +170,19 @@ body {
 }
 
 .btn-icon-pill {
-  background: var(--surface-card);
+  background: var(--surface-subtle);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
-  padding: 6px 12px;
+  padding: 5px 11px;
   border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.82rem;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
-  transition: all 0.2s ease;
+  gap: 4px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
 }
 
 .btn-icon-pill:hover {
@@ -185,44 +190,51 @@ body {
   color: #fff;
   border-color: var(--eussuk-blue);
   transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 /* 중앙 메인 탭 메뉴 */
 .main-nav-tabs {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: var(--surface-subtle);
-  padding: 6px;
+  gap: 5px;
+  background: rgba(148, 163, 184, 0.1);
+  padding: 4px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .nav-tab {
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  font-weight: 700;
-  font-size: 0.96rem;
-  padding: 9px 18px;
+  font-weight: 800;
+  font-size: 0.94rem;
+  padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  gap: 7px;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
 }
 
 .nav-tab:hover {
   color: var(--text-primary);
-  background: rgba(148, 163, 184, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+body.theme-dark .nav-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .nav-tab.active {
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   color: #0f172a;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
-  transform: scale(1.03);
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.4);
+  transform: scale(1.02);
 }
 
 /* 우측 유틸리티 버튼 영역 */
@@ -230,22 +242,24 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .util-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
   border: 1px solid var(--border-color);
   background: var(--surface-card);
   color: var(--text-secondary);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .util-btn:hover {
@@ -1435,7 +1449,15 @@ body.theme-dark .student-card.selected .student-card-name {
 .winner-individual-actions {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  width: 100%;
+}
+
+.winner-individual-actions .btn {
+  flex: 1;
+  font-weight: 800;
+  border-radius: 12px;
+  letter-spacing: -0.2px;
 }
 
 /* 모드 2: 학생 섞기 / 카드 뒤집기 (3D Flip Cards) */
@@ -1524,7 +1546,7 @@ body.theme-dark .student-card.selected .student-card-name {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* 카드 앞면 (뒤집힌 후: 학생 이름 + 즉시 으쓱/머쓱 버튼!) */
+/* 카드 앞면 (뒤집힌 후: 학생 번호 & 이름 + 즉시 으쓱/머쓱 버튼!) */
 .flip-card-back {
   background: linear-gradient(160deg, #ffffff 0%, #fef9c3 100%);
   color: #0f172a;
@@ -1532,6 +1554,7 @@ body.theme-dark .student-card.selected .student-card-name {
   transform: rotateY(180deg);
   box-shadow: 0 0 25px rgba(251, 191, 36, 0.45);
   justify-content: space-between;
+  padding: 12px 14px;
 }
 
 .flip-back-header {
@@ -1539,38 +1562,83 @@ body.theme-dark .student-card.selected .student-card-name {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: #64748b;
+  padding: 0 2px;
+}
+
+.flip-header-order {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.flip-header-score {
+  color: #15803d;
+  font-weight: 800;
+  font-size: 0.82rem;
 }
 
 .flip-student-name {
   font-family: 'Jua', sans-serif;
-  font-size: 1.55rem;
+  font-size: 1.6rem;
   color: #0f172a;
-  margin: 4px 0;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.flip-student-num {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.12);
+  padding: 1px 8px;
+  border-radius: 8px;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.flip-student-nametext {
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .flip-reward-actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
 }
 
 .flip-reward-btn {
   flex: 1;
   border: none;
-  padding: 7px 4px;
-  border-radius: 10px;
+  padding: 8px 6px;
+  border-radius: 11px;
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   cursor: pointer;
   color: #fff;
-  transition: transform 0.15s ease;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .flip-reward-btn:hover {
-  transform: scale(1.07);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .flip-reward-btn.eussuk {
@@ -2095,7 +2163,9 @@ body.theme-dark .student-card.selected .student-card-name {
   background: rgba(37, 99, 235, 0.08);
   border: 1px solid rgba(37, 99, 235, 0.25);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 0 12px;
+  height: 38px;
+  box-sizing: border-box;
   font-size: 0.82rem;
 }
 
@@ -2481,7 +2551,9 @@ body.theme-dark .student-card.selected .student-card-name {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 5px 12px;
+  padding: 0 14px;
+  height: 38px;
+  box-sizing: border-box;
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 700;
