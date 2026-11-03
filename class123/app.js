@@ -95,124 +95,1982 @@ function createSampleClass(id, name, grade, rosterNames) {
 }
 
 function createInitialState() {
-  if (typeof CLASS123_BACKUP_DATA !== 'undefined' && CLASS123_BACKUP_DATA && Array.isArray(CLASS123_BACKUP_DATA.classes)) {
-    return JSON.parse(JSON.stringify(CLASS123_BACKUP_DATA));
-  }
-  const sampleRoster1 = [
-    { name: '안구름', gender: 'F', e: 5, m: 0 },
-    { name: '이소라', gender: 'F', e: 4, m: 1 },
-    { name: '홍하늘', gender: 'F', e: 3, m: 0 },
-    { name: '장여름', gender: 'F', e: 8, m: 0 },
-    { name: '장가온', gender: 'F', e: 4, m: 0 },
-    { name: '박초롱', gender: 'F', e: 2, m: 1 },
-    { name: '권라온', gender: 'F', e: 7, m: 0 },
-    { name: '최하늘', gender: 'F', e: 3, m: 0 },
-    { name: '황가람', gender: 'F', e: 5, m: 0 },
-    { name: '장바다', gender: 'F', e: 6, m: 1 },
-    { name: '윤하늘', gender: 'F', e: 4, m: 0 },
-    { name: '류구름', gender: 'F', e: 5, m: 0 },
-    { name: '이다온', gender: 'F', e: 3, m: 0 },
-    { name: '홍미리', gender: 'F', e: 6, m: 0 },
-    { name: '강하린', gender: 'F', e: 2, m: 0 },
-    { name: '정유나', gender: 'F', e: 4, m: 0 },
-    { name: '임가온', gender: 'F', e: 9, m: 0 },
-    { name: '류하늘', gender: 'F', e: 5, m: 0 },
-    { name: '류봄비', gender: 'F', e: 6, m: 0 },
-    { name: '안소담', gender: 'F', e: 7, m: 1 },
-    { name: '한겨울', gender: 'F', e: 3, m: 0 },
-    { name: '정새봄', gender: 'F', e: 4, m: 0 },
-    { name: '서누리', gender: 'F', e: 5, m: 0 },
-    { name: '이해솔', gender: 'F', e: 8, m: 1 },
-    { name: '홍서윤', gender: 'F', e: 4, m: 0 },
-    { name: '정샛별', gender: 'F', e: 3, m: 0 },
-    { name: '이보미', gender: 'F', e: 5, m: 0 },
-    { name: '장가람', gender: 'F', e: 4, m: 0 },
-    { name: '조구름', gender: 'F', e: 6, m: 0 }
-  ];
-
-  const class1 = createSampleClass('cls_1', '2학년 1반', '중학교 2학년', sampleRoster1);
-  // 샘플 히스토리 및 진도 기록 추가
-  const nowStr = new Date().toISOString().slice(0, 10);
-  class1.history = [
-    {
-      id: 'h_1',
-      studentId: class1.students[16].id,
-      studentName: class1.students[16].name,
-      studentNumber: class1.students[16].number,
-      cardId: 'c_e2',
-      type: 'eussuk',
-      category: '참여',
-      icon: '🎤',
-      cardTitle: '발표를 자신있게 잘 했어요',
-      count: 2,
-      memo: '꼼꼼히 조사해 오고 발표 태도도 매우 훌륭했어요!',
-      important: true,
-      timestamp: `${nowStr} 10:15`
-    },
-    {
-      id: 'h_2',
-      studentId: class1.students[23].id,
-      studentName: class1.students[23].name,
-      studentNumber: class1.students[23].number,
-      cardId: 'c_e1',
-      type: 'eussuk',
-      category: '집중',
-      icon: '🎯',
-      cardTitle: '수업 태도가 정말 좋아요',
-      count: 2,
-      memo: '모둠 토의에서 경청하는 자세가 돋보임',
-      important: true,
-      timestamp: `${nowStr} 10:22`
-    },
-    {
-      id: 'h_3',
-      studentId: class1.students[3].id,
-      studentName: class1.students[3].name,
-      studentNumber: class1.students[3].number,
-      cardId: 'c_e5',
-      type: 'eussuk',
-      category: '최선',
-      icon: '🏅',
-      cardTitle: '최선을 다하는 자세가 훌륭해요',
-      count: 1,
-      memo: '',
-      important: false,
-      timestamp: `${nowStr} 10:30`
-    }
-  ];
-
-  class1.progressRecords = {
-    syl_1: { completed: true, date: nowStr, note: '모둠 구성 및 규칙 안내 완료', nextTodo: '교과서 12쪽 읽어오기' },
-    syl_2: { completed: true, date: nowStr, note: '학생 참여도 높음, 질문 3건 해결', nextTodo: '학습지 1번 파일철 정리' }
-  };
-
-  const class2 = createSampleClass(
-    'cls_2',
-    '2학년 2반',
-    '중학교 2학년',
-    sampleRoster1.slice(0, 24).map(s => ({ ...s, e: Math.floor(Math.random() * 4), m: 0 }))
-  );
-  class2.progressRecords = {
-    syl_1: { completed: true, date: nowStr, note: '오리엔테이션 완료', nextTodo: '교과서 챙겨오기' }
-  };
-
   return {
-    cardsVersion: 2,
-    currentClassId: 'cls_1',
-    currentView: 'students',
-    scoreDisplayMode: 'ssukssuk', // 'ssukssuk' | 'both' | 'eussuk' | 'meossuk' | 'hidden'
-    soundEnabled: true,
-    darkMode: false,
-    thermoSidebarMode: 'tree', // 'tree' | 'hof'
-    thermoSidebarHidden: false,
-    drawMode: 'random', // 'random' | 'flip'
-    drawGenderFilter: 'ALL', // 'ALL' | 'F' | 'M'
-    showProgressMatrix: false,
-    cards: getDefaultCards(),
-    syllabus: getDefaultSyllabus(),
-    classes: [class1, class2],
-    updatedAt: Date.now()
-  };
+  "currentClassId": "cls_1793670027646_0_194",
+  "currentView": "students",
+  "scoreDisplayMode": "both",
+  "soundEnabled": true,
+  "darkMode": false,
+  "thermoSidebarMode": "tree",
+  "thermoSidebarHidden": false,
+  "drawMode": "random",
+  "drawGenderFilter": "ALL",
+  "showProgressMatrix": true,
+  "cards": [
+    {
+      "id": "c_e1",
+      "type": "eussuk",
+      "icon": "📒",
+      "category": "숙제",
+      "title": "숙제"
+    },
+    {
+      "id": "c_e2",
+      "type": "eussuk",
+      "icon": "🎮",
+      "category": "Kahoot",
+      "title": "Kahoot"
+    },
+    {
+      "id": "c_e3",
+      "type": "eussuk",
+      "icon": "🧩",
+      "category": "QuizN",
+      "title": "QuizN"
+    },
+    {
+      "id": "c_e4",
+      "type": "eussuk",
+      "icon": "🎤",
+      "category": "발표 우수",
+      "title": "발표 우수"
+    },
+    {
+      "id": "c_e5",
+      "type": "eussuk",
+      "icon": "🔍",
+      "category": "오류 발견",
+      "title": "오류 발견"
+    },
+    {
+      "id": "c_m1",
+      "type": "meossuk",
+      "icon": "⏰",
+      "category": "지각",
+      "title": "지각"
+    },
+    {
+      "id": "c_m2",
+      "type": "meossuk",
+      "icon": "🎒",
+      "category": "준비물",
+      "title": "준비물"
+    },
+    {
+      "id": "c_m3",
+      "type": "meossuk",
+      "icon": "⚠️",
+      "category": "수업태도 불량",
+      "title": "수업태도 불량"
+    },
+    {
+      "id": "c_1793331795985",
+      "type": "eussuk",
+      "icon": "🎯",
+      "category": "독서 우수",
+      "title": "독서 우수"
+    }
+  ],
+  "syllabus": [
+    {
+      "id": "syl_1",
+      "order": "1차시",
+      "title": "오리엔테이션 및 학급·수업 규칙 안내"
+    },
+    {
+      "id": "syl_2",
+      "order": "2차시",
+      "title": "I-1. 단원 도입 및 핵심 개념 탐구 (1)"
+    },
+    {
+      "id": "syl_3",
+      "order": "3차시",
+      "title": "I-2. 핵심 개념 탐구 및 사례 분석 (2)"
+    },
+    {
+      "id": "syl_4",
+      "order": "4차시",
+      "title": "I-3. 탐구 활동 및 모둠 토의·발표"
+    },
+    {
+      "id": "syl_5",
+      "order": "5차시",
+      "title": "I-4. 단원 마무리 정리 및 형성평가"
+    },
+    {
+      "id": "syl_6",
+      "order": "6차시",
+      "title": "II-1. 새로운 단원 도입 및 핵심 주제 학습"
+    }
+  ],
+  "classes": [
+    {
+      "id": "cls_1793105911208",
+      "name": "2026-1-1",
+      "grade": "중학교",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 682,
+      "visibleClassMeossuk": 0,
+      "students": [
+        {
+          "id": "stu_1793105902180_0_rqw6",
+          "number": 1,
+          "name": "권가온",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_1_4fx1",
+          "number": 2,
+          "name": "조새봄",
+          "gender": "F",
+          "visibleEussuk": 42,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_2_47vg",
+          "number": 3,
+          "name": "김해솔",
+          "gender": "F",
+          "visibleEussuk": 42,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_3_fjyz",
+          "number": 4,
+          "name": "정시아",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_4_k6db",
+          "number": 5,
+          "name": "박나래",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_5_kzmu",
+          "number": 6,
+          "name": "홍이슬",
+          "gender": "F",
+          "visibleEussuk": 37,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_6_v3hk",
+          "number": 7,
+          "name": "오누리",
+          "gender": "F",
+          "visibleEussuk": 31,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_7_feoj",
+          "number": 8,
+          "name": "김구름",
+          "gender": "F",
+          "visibleEussuk": 40,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_8_zfnu",
+          "number": 9,
+          "name": "이새봄",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902180_9_kzze",
+          "number": 10,
+          "name": "박보미",
+          "gender": "F",
+          "visibleEussuk": 42,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_10_2zas",
+          "number": 11,
+          "name": "홍나래",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_11_5jbb",
+          "number": 12,
+          "name": "윤한별",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_12_uliz",
+          "number": 13,
+          "name": "장소담",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_13_l0m5",
+          "number": 14,
+          "name": "황해솔",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_14_9pam",
+          "number": 15,
+          "name": "홍겨울",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_15_za6w",
+          "number": 16,
+          "name": "박예린",
+          "gender": "F",
+          "visibleEussuk": 40,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_16_yyx3",
+          "number": 17,
+          "name": "강유나",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_17_x3la",
+          "number": 18,
+          "name": "장단비",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793105902181_18_krss",
+          "number": 19,
+          "name": "김노을",
+          "gender": "F",
+          "visibleEussuk": 31,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793676110965_7gnft_stu_1793105902181_18_krss",
+          "studentId": "stu_1793105902181_18_krss",
+          "studentName": "김노을",
+          "studentNumber": 19,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 12:21"
+        },
+        {
+          "id": "h_1793676110965_vbgaz_stu_1793105902181_17_x3la",
+          "studentId": "stu_1793105902181_17_x3la",
+          "studentName": "장단비",
+          "studentNumber": 18,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 12:21"
+        },
+        {
+          "id": "h_1793676110965_m30au_stu_1793105902181_16_yyx3",
+          "studentId": "stu_1793105902181_16_yyx3",
+          "studentName": "강유나",
+          "studentNumber": 17,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 12:21"
+        },
+        {
+          "id": "h_1793676110965_immbi_stu_1793105902181_15_za6w",
+          "studentId": "stu_1793105902181_15_za6w",
+          "studentName": "박예린",
+          "studentNumber": 16,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 12:21"
+        },
+        {
+          "id": "h_1793676110965_ufztu_stu_1793105902181_14_9pam",
+          "studentId": "stu_1793105902181_14_9pam",
+          "studentName": "홍겨울",
+          "studentNumber": 15,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 12:21"
+        }
+      ],
+      "progressRecords": {
+        "syl_1": {
+          "completed": false,
+          "date": "2026-10-27",
+          "note": "",
+          "nextTodo": ""
+        }
+      },
+      "hidden": false
+    },
+    {
+      "id": "cls_1793107374371_0_qs3",
+      "name": "2026-1-2",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 30,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 각자 간식 준비하여 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 471,
+      "visibleClassMeossuk": 3,
+      "students": [
+        {
+          "id": "stu_1793107607137_0_t3py",
+          "number": 1,
+          "name": "홍가람",
+          "gender": "F",
+          "visibleEussuk": 27,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_1_0oje",
+          "number": 2,
+          "name": "황하늘",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_2_me85",
+          "number": 3,
+          "name": "송나래",
+          "gender": "F",
+          "visibleEussuk": 23,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793107607137_3_rdy5",
+          "number": 4,
+          "name": "임바다",
+          "gender": "F",
+          "visibleEussuk": 33,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_4_llwt",
+          "number": 5,
+          "name": "최샛별",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_5_vmwk",
+          "number": 6,
+          "name": "조시아",
+          "gender": "F",
+          "visibleEussuk": 33,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_6_6m8o",
+          "number": 7,
+          "name": "이구름",
+          "gender": "F",
+          "visibleEussuk": 16,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_7_bpm2",
+          "number": 8,
+          "name": "서샛별",
+          "gender": "F",
+          "visibleEussuk": 18,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_8_ho5a",
+          "number": 9,
+          "name": "신하린",
+          "gender": "F",
+          "visibleEussuk": 23,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793107607137_9_77xr",
+          "number": 10,
+          "name": "송가온",
+          "gender": "F",
+          "visibleEussuk": 11,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_10_p4a8",
+          "number": 11,
+          "name": "신노을",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_11_yvby",
+          "number": 12,
+          "name": "류초롱",
+          "gender": "F",
+          "visibleEussuk": 20,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_12_xdz0",
+          "number": 13,
+          "name": "강샛별",
+          "gender": "F",
+          "visibleEussuk": 26,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_13_fr74",
+          "number": 14,
+          "name": "류새봄",
+          "gender": "F",
+          "visibleEussuk": 24,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_14_3nbo",
+          "number": 15,
+          "name": "윤예린",
+          "gender": "F",
+          "visibleEussuk": 31,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_15_1ovu",
+          "number": 16,
+          "name": "김미리",
+          "gender": "F",
+          "visibleEussuk": 31,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793107607137_16_nqps",
+          "number": 17,
+          "name": "한시아",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_17_zh94",
+          "number": 18,
+          "name": "최시아",
+          "gender": "F",
+          "visibleEussuk": 25,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107607137_18_a189",
+          "number": 19,
+          "name": "최겨울",
+          "gender": "F",
+          "visibleEussuk": 9,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793331805673_29w2q",
+          "studentId": "stu_1793107607137_5_vmwk",
+          "studentName": "조시아",
+          "studentNumber": 6,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 12:43"
+        },
+        {
+          "id": "h_1793331805673_xm1vj",
+          "studentId": "stu_1793107607137_4_llwt",
+          "studentName": "최샛별",
+          "studentNumber": 5,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 12:43"
+        },
+        {
+          "id": "h_1793331668674_9wjrv",
+          "studentId": "stu_1793107607137_3_rdy5",
+          "studentName": "임바다",
+          "studentNumber": 4,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 12:41"
+        },
+        {
+          "id": "h_1793331457673_z2x4a",
+          "studentId": "stu_1793107607137_7_bpm2",
+          "studentName": "서샛별",
+          "studentNumber": 8,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 12:37"
+        },
+        {
+          "id": "h_1793331437442_7aj77",
+          "studentId": "stu_1793107607137_18_a189",
+          "studentName": "최겨울",
+          "studentNumber": 19,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 2,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 12:37"
+        }
+      ],
+      "progressRecords": {
+        "syl_1": {
+          "completed": false,
+          "date": "2026-10-27",
+          "note": "",
+          "nextTodo": ""
+        }
+      }
+    },
+    {
+      "id": "cls_1793107378556_0_q15",
+      "name": "2026-1-3",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 555,
+      "visibleClassMeossuk": 1,
+      "students": [
+        {
+          "id": "stu_1793107638903_0_omel",
+          "number": 1,
+          "name": "조가람",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_1_jbe4",
+          "number": 2,
+          "name": "윤노을",
+          "gender": "F",
+          "visibleEussuk": 21,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_2_27wg",
+          "number": 3,
+          "name": "권한별",
+          "gender": "F",
+          "visibleEussuk": 28,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_3_4juy",
+          "number": 4,
+          "name": "윤아라",
+          "gender": "F",
+          "visibleEussuk": 26,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793107638903_4_503x",
+          "number": 5,
+          "name": "박다솜",
+          "gender": "F",
+          "visibleEussuk": 21,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_5_ltri",
+          "number": 6,
+          "name": "송예린",
+          "gender": "F",
+          "visibleEussuk": 37,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_6_1awz",
+          "number": 7,
+          "name": "조한별",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_7_t3qt",
+          "number": 8,
+          "name": "박여름",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_8_vm58",
+          "number": 9,
+          "name": "임누리",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_9_qnjd",
+          "number": 10,
+          "name": "강온유",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_10_it5p",
+          "number": 11,
+          "name": "박이슬",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_11_eubg",
+          "number": 12,
+          "name": "김소라",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_12_u5t4",
+          "number": 13,
+          "name": "황단비",
+          "gender": "F",
+          "visibleEussuk": 21,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_13_vvqi",
+          "number": 14,
+          "name": "장다솜",
+          "gender": "F",
+          "visibleEussuk": 27,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_14_yhhl",
+          "number": 15,
+          "name": "안나린",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_15_dw19",
+          "number": 16,
+          "name": "윤나래",
+          "gender": "F",
+          "visibleEussuk": 26,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_16_xkl3",
+          "number": 17,
+          "name": "권겨울",
+          "gender": "F",
+          "visibleEussuk": 37,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107638903_17_o4gs",
+          "number": 18,
+          "name": "박해솔",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793339548262_8c611",
+          "studentId": "stu_1793107638903_3_4juy",
+          "studentName": "윤아라",
+          "studentNumber": 4,
+          "cardId": "c_m3",
+          "type": "meossuk",
+          "category": "수업태도 불량",
+          "icon": "⚠️",
+          "cardTitle": "수업태도 불량",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 14:52"
+        },
+        {
+          "id": "h_1793338282102_yxoql",
+          "studentId": "stu_1793107638903_6_1awz",
+          "studentName": "조한별",
+          "studentNumber": 7,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 14:31"
+        },
+        {
+          "id": "h_1793338281118_lk3ro",
+          "studentId": "stu_1793107638903_6_1awz",
+          "studentName": "조한별",
+          "studentNumber": 7,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 14:31"
+        },
+        {
+          "id": "h_1793338280030_npvqw",
+          "studentId": "stu_1793107638903_6_1awz",
+          "studentName": "조한별",
+          "studentNumber": 7,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 14:31"
+        },
+        {
+          "id": "h_1793338278990_q057q",
+          "studentId": "stu_1793107638903_6_1awz",
+          "studentName": "조한별",
+          "studentNumber": 7,
+          "cardId": "c_1793331795985",
+          "type": "eussuk",
+          "category": "독서 우수",
+          "icon": "🎯",
+          "cardTitle": "독서 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-30 14:31"
+        }
+      ],
+      "progressRecords": {}
+    },
+    {
+      "id": "cls_1793107389504_0_8mv",
+      "name": "2026-2-1",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 536,
+      "visibleClassMeossuk": 0,
+      "students": [
+        {
+          "id": "stu_1793107663826_0_5ld0",
+          "number": 1,
+          "name": "안한별",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_1_rrt7",
+          "number": 2,
+          "name": "서겨울",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_2_fz6v",
+          "number": 3,
+          "name": "이서윤",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_3_29ax",
+          "number": 4,
+          "name": "정채원",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_4_s3bd",
+          "number": 5,
+          "name": "권아라",
+          "gender": "F",
+          "visibleEussuk": 16,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_5_6hwx",
+          "number": 6,
+          "name": "최서윤",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_6_zmpn",
+          "number": 7,
+          "name": "권별하",
+          "gender": "F",
+          "visibleEussuk": 10,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_7_b77e",
+          "number": 8,
+          "name": "한온유",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_8_89gw",
+          "number": 9,
+          "name": "강라온",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_9_uccz",
+          "number": 10,
+          "name": "황하린",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_10_ugl3",
+          "number": 11,
+          "name": "한단비",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_11_g1aa",
+          "number": 12,
+          "name": "홍노을",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_12_26b6",
+          "number": 13,
+          "name": "신예린",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_13_zhfb",
+          "number": 14,
+          "name": "조여름",
+          "gender": "F",
+          "visibleEussuk": 10,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_14_77lu",
+          "number": 15,
+          "name": "류바다",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107663826_15_97ut",
+          "number": 16,
+          "name": "오아라",
+          "gender": "F",
+          "visibleEussuk": 44,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [
+        "stu_1793107663826_0_5ld0"
+      ],
+      "history": [
+        {
+          "id": "h_1793669730405_dqarp",
+          "studentId": "stu_1793107663826_11_g1aa",
+          "studentName": "홍노을",
+          "studentNumber": 12,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 10:35"
+        },
+        {
+          "id": "h_1793669658245_ut3zy",
+          "studentId": "stu_1793107663826_14_77lu",
+          "studentName": "류바다",
+          "studentNumber": 15,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 10:34"
+        },
+        {
+          "id": "h_1793669613293_u8g22",
+          "studentId": "stu_1793107663826_7_b77e",
+          "studentName": "한온유",
+          "studentNumber": 8,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 10:33"
+        },
+        {
+          "id": "h_1793669593469_lvr79",
+          "studentId": "stu_1793107663826_4_s3bd",
+          "studentName": "권아라",
+          "studentNumber": 5,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 10:33"
+        },
+        {
+          "id": "h_1793669522693_cjcp5",
+          "studentId": "stu_1793107663826_5_6hwx",
+          "studentName": "최서윤",
+          "studentNumber": 6,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 10:32"
+        }
+      ],
+      "progressRecords": {}
+    },
+    {
+      "id": "cls_1793107392572_0_5w9",
+      "name": "2026-2-2",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 445,
+      "visibleClassMeossuk": 0,
+      "students": [
+        {
+          "id": "stu_1793107676048_0_s8gq",
+          "number": 1,
+          "name": "홍바다",
+          "gender": "F",
+          "visibleEussuk": 18,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_1_xjnr",
+          "number": 2,
+          "name": "윤온유",
+          "gender": "F",
+          "visibleEussuk": 28,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_2_wew8",
+          "number": 3,
+          "name": "최온유",
+          "gender": "F",
+          "visibleEussuk": 19,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_3_m31g",
+          "number": 4,
+          "name": "서하린",
+          "gender": "F",
+          "visibleEussuk": 37,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_4_qwm8",
+          "number": 5,
+          "name": "한하늘",
+          "gender": "F",
+          "visibleEussuk": 40,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_5_zxch",
+          "number": 6,
+          "name": "신보미",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_6_4rif",
+          "number": 7,
+          "name": "권새봄",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_7_lghj",
+          "number": 8,
+          "name": "조노을",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_8_42nx",
+          "number": 9,
+          "name": "류서윤",
+          "gender": "F",
+          "visibleEussuk": 14,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_9_vulg",
+          "number": 10,
+          "name": "오초롱",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_10_kvw1",
+          "number": 11,
+          "name": "홍하린",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_11_3yqi",
+          "number": 12,
+          "name": "송이슬",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_12_o3ll",
+          "number": 13,
+          "name": "권봄비",
+          "gender": "F",
+          "visibleEussuk": 26,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_13_nasd",
+          "number": 14,
+          "name": "장예린",
+          "gender": "F",
+          "visibleEussuk": 8,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_14_tmhd",
+          "number": 15,
+          "name": "이하린",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107676048_15_v6mp",
+          "number": 16,
+          "name": "황가온",
+          "gender": "F",
+          "visibleEussuk": 22,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793251930689_4aw98",
+          "studentId": "stu_1793107676048_15_v6mp",
+          "studentName": "황가온",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:32"
+        },
+        {
+          "id": "h_1793251930529_g9vub",
+          "studentId": "stu_1793107676048_15_v6mp",
+          "studentName": "황가온",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:32"
+        },
+        {
+          "id": "h_1793251929418_16sub",
+          "studentId": "stu_1793107676048_15_v6mp",
+          "studentName": "황가온",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:32"
+        },
+        {
+          "id": "h_1793251929017_crwnb",
+          "studentId": "stu_1793107676048_15_v6mp",
+          "studentName": "황가온",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:32"
+        },
+        {
+          "id": "h_1793251928433_noz8d",
+          "studentId": "stu_1793107676048_15_v6mp",
+          "studentName": "황가온",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:32"
+        }
+      ],
+      "progressRecords": {}
+    },
+    {
+      "id": "cls_1793107395227_0_8ub",
+      "name": "2026-2-3",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 511,
+      "visibleClassMeossuk": 0,
+      "students": [
+        {
+          "id": "stu_1793107687200_0_95gb",
+          "number": 1,
+          "name": "홍소담",
+          "gender": "F",
+          "visibleEussuk": 31,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_1_g9t3",
+          "number": 2,
+          "name": "안하린",
+          "gender": "F",
+          "visibleEussuk": 28,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_2_p91k",
+          "number": 3,
+          "name": "류예린",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_3_ov9x",
+          "number": 4,
+          "name": "김시아",
+          "gender": "F",
+          "visibleEussuk": 38,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_4_c1ef",
+          "number": 5,
+          "name": "김나린",
+          "gender": "F",
+          "visibleEussuk": 9,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_5_lwil",
+          "number": 6,
+          "name": "오나린",
+          "gender": "F",
+          "visibleEussuk": 23,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_6_4eh3",
+          "number": 7,
+          "name": "정초롱",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_7_ovlx",
+          "number": 8,
+          "name": "윤나린",
+          "gender": "F",
+          "visibleEussuk": 29,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_8_15ie",
+          "number": 9,
+          "name": "김하린",
+          "gender": "F",
+          "visibleEussuk": 42,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_9_v8gv",
+          "number": 10,
+          "name": "권채원",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_10_jae8",
+          "number": 11,
+          "name": "한누리",
+          "gender": "F",
+          "visibleEussuk": 41,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_11_nys6",
+          "number": 12,
+          "name": "박겨울",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_12_9uyx",
+          "number": 13,
+          "name": "한단비",
+          "gender": "F",
+          "visibleEussuk": 22,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_13_shz5",
+          "number": 14,
+          "name": "서한별",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_14_y160",
+          "number": 15,
+          "name": "김초롱",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107687200_15_cmjj",
+          "number": 16,
+          "name": "안로운",
+          "gender": "F",
+          "visibleEussuk": 36,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793252066040_hmspg",
+          "studentId": "stu_1793107687200_15_cmjj",
+          "studentName": "안로운",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:34"
+        },
+        {
+          "id": "h_1793252065295_273oy",
+          "studentId": "stu_1793107687200_15_cmjj",
+          "studentName": "안로운",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:34"
+        },
+        {
+          "id": "h_1793252065160_mnzr7",
+          "studentId": "stu_1793107687200_15_cmjj",
+          "studentName": "안로운",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:34"
+        },
+        {
+          "id": "h_1793252065000_fkzz8",
+          "studentId": "stu_1793107687200_15_cmjj",
+          "studentName": "안로운",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:34"
+        },
+        {
+          "id": "h_1793252064849_ksywd",
+          "studentId": "stu_1793107687200_15_cmjj",
+          "studentName": "안로운",
+          "studentNumber": 16,
+          "cardId": "c_e1",
+          "type": "eussuk",
+          "category": "숙제",
+          "icon": "📒",
+          "cardTitle": "숙제",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-10-29 14:34"
+        }
+      ],
+      "progressRecords": {}
+    },
+    {
+      "id": "cls_1793107400612_0_d0t",
+      "name": "2026-2-4",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 459,
+      "visibleClassMeossuk": 0,
+      "students": [
+        {
+          "id": "stu_1793107697828_0_9t81",
+          "number": 1,
+          "name": "박하랑",
+          "gender": "F",
+          "visibleEussuk": 37,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_1_tvmd",
+          "number": 2,
+          "name": "이봄비",
+          "gender": "F",
+          "visibleEussuk": 13,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_2_8bxc",
+          "number": 3,
+          "name": "조새봄",
+          "gender": "F",
+          "visibleEussuk": 39,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_3_ytke",
+          "number": 4,
+          "name": "홍다솜",
+          "gender": "F",
+          "visibleEussuk": 27,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_4_8s6f",
+          "number": 5,
+          "name": "권별하",
+          "gender": "F",
+          "visibleEussuk": 33,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_5_hbn1",
+          "number": 6,
+          "name": "서가람",
+          "gender": "F",
+          "visibleEussuk": 28,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_6_bdzf",
+          "number": 7,
+          "name": "윤샛별",
+          "gender": "F",
+          "visibleEussuk": 6,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_7_lam2",
+          "number": 8,
+          "name": "정겨울",
+          "gender": "F",
+          "visibleEussuk": 33,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_8_owwa",
+          "number": 9,
+          "name": "박구름",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_9_9z5m",
+          "number": 10,
+          "name": "안아라",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_10_apct",
+          "number": 11,
+          "name": "황나린",
+          "gender": "F",
+          "visibleEussuk": 30,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_11_ostc",
+          "number": 12,
+          "name": "김이슬",
+          "gender": "F",
+          "visibleEussuk": 34,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_12_0ryh",
+          "number": 13,
+          "name": "홍예린",
+          "gender": "F",
+          "visibleEussuk": 35,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_13_anpp",
+          "number": 14,
+          "name": "송서윤",
+          "gender": "F",
+          "visibleEussuk": 18,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793107697828_14_n5b0",
+          "number": 15,
+          "name": "송다솜",
+          "gender": "F",
+          "visibleEussuk": 32,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793252211592_0_d6b5",
+          "number": 16,
+          "name": "황하늘",
+          "gender": "F",
+          "visibleEussuk": 28,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [],
+      "history": [
+        {
+          "id": "h_1793666083527_trw0l",
+          "studentId": "stu_1793252211592_0_d6b5",
+          "studentName": "황하늘",
+          "studentNumber": 16,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 09:34"
+        },
+        {
+          "id": "h_1793666083527_90glb",
+          "studentId": "stu_1793107697828_13_anpp",
+          "studentName": "송서윤",
+          "studentNumber": 14,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 09:34"
+        },
+        {
+          "id": "h_1793666083527_9gd61",
+          "studentId": "stu_1793107697828_11_ostc",
+          "studentName": "김이슬",
+          "studentNumber": 12,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 09:34"
+        },
+        {
+          "id": "h_1793666083527_n0j9r",
+          "studentId": "stu_1793107697828_9_9z5m",
+          "studentName": "안아라",
+          "studentNumber": 10,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 09:34"
+        },
+        {
+          "id": "h_1793666083527_7q1fl",
+          "studentId": "stu_1793107697828_7_lam2",
+          "studentName": "정겨울",
+          "studentNumber": 8,
+          "cardId": "c_e4",
+          "type": "eussuk",
+          "category": "발표 우수",
+          "icon": "🎤",
+          "cardTitle": "발표 우수",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 09:34"
+        }
+      ],
+      "progressRecords": {}
+    },
+    {
+      "id": "cls_1793670027646_0_194",
+      "name": "2026-테스트",
+      "grade": "",
+      "motto": "서로 존중하고 배려하는 행복한 우리 반!",
+      "goalEggs": 20,
+      "goalReward": "🎉 즐거운 특별 자유시간 & 간식 파티!",
+      "bonusEggs": 0,
+      "deductEggOnMeossuk": false,
+      "visibleClassEussuk": 49,
+      "visibleClassMeossuk": 3,
+      "students": [
+        {
+          "id": "stu_1793670074093_0_c7ix",
+          "number": 1,
+          "name": "조채원",
+          "gender": "F",
+          "visibleEussuk": 11,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793670074093_1_o4ci",
+          "number": 2,
+          "name": "조누리",
+          "gender": "F",
+          "visibleEussuk": 3,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_2_ny30",
+          "number": 3,
+          "name": "박봄비",
+          "gender": "F",
+          "visibleEussuk": 5,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793670074093_3_8u32",
+          "number": 4,
+          "name": "장로운",
+          "gender": "F",
+          "visibleEussuk": 5,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_4_gofc",
+          "number": 5,
+          "name": "황소라",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_5_k5o1",
+          "number": 6,
+          "name": "황라온",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_6_veo0",
+          "number": 7,
+          "name": "홍나린",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_7_g2y9",
+          "number": 8,
+          "name": "한노을",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_8_622u",
+          "number": 9,
+          "name": "황바다",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_9_m75k",
+          "number": 10,
+          "name": "황별하",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 1
+        },
+        {
+          "id": "stu_1793670074093_10_cfjv",
+          "number": 11,
+          "name": "한샛별",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_11_l92d",
+          "number": 12,
+          "name": "한하린",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_12_hh9o",
+          "number": 13,
+          "name": "권예린",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_13_qhfz",
+          "number": 14,
+          "name": "윤은별",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_14_io32",
+          "number": 15,
+          "name": "권다온",
+          "gender": "F",
+          "visibleEussuk": 3,
+          "visibleMeossuk": 0
+        },
+        {
+          "id": "stu_1793670074093_15_esr0",
+          "number": 16,
+          "name": "송누리",
+          "gender": "F",
+          "visibleEussuk": 2,
+          "visibleMeossuk": 0
+        }
+      ],
+      "pickedIds": [
+        "stu_1793670074093_5_k5o1",
+        "stu_1793670074093_14_io32",
+        "stu_1793670074093_2_ny30",
+        "stu_1793670074093_6_veo0",
+        "stu_1793670074093_4_gofc"
+      ],
+      "history": [
+        {
+          "id": "h_1793679268163_j6kqf",
+          "batchId": "b_1793679268163_iksxb",
+          "studentId": "stu_1793670074093_0_c7ix",
+          "studentName": "조채원",
+          "studentNumber": 1,
+          "cardId": "c_e3",
+          "type": "eussuk",
+          "category": "QuizN",
+          "icon": "🧩",
+          "cardTitle": "QuizN",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 13:14"
+        },
+        {
+          "id": "h_1793679267943_2ec0y",
+          "batchId": "b_1793679267943_s567t",
+          "studentId": "stu_1793670074093_0_c7ix",
+          "studentName": "조채원",
+          "studentNumber": 1,
+          "cardId": "c_e3",
+          "type": "eussuk",
+          "category": "QuizN",
+          "icon": "🧩",
+          "cardTitle": "QuizN",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 13:14"
+        },
+        {
+          "id": "h_1793679267744_8ohjk",
+          "batchId": "b_1793679267744_k2zv6",
+          "studentId": "stu_1793670074093_0_c7ix",
+          "studentName": "조채원",
+          "studentNumber": 1,
+          "cardId": "c_e3",
+          "type": "eussuk",
+          "category": "QuizN",
+          "icon": "🧩",
+          "cardTitle": "QuizN",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 13:14"
+        },
+        {
+          "id": "h_1793679267574_i40et",
+          "batchId": "b_1793679267574_vc65v",
+          "studentId": "stu_1793670074093_0_c7ix",
+          "studentName": "조채원",
+          "studentNumber": 1,
+          "cardId": "c_e3",
+          "type": "eussuk",
+          "category": "QuizN",
+          "icon": "🧩",
+          "cardTitle": "QuizN",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 13:14"
+        },
+        {
+          "id": "h_1793679267397_tqyw3",
+          "batchId": "b_1793679267397_5iryh",
+          "studentId": "stu_1793670074093_0_c7ix",
+          "studentName": "조채원",
+          "studentNumber": 1,
+          "cardId": "c_e3",
+          "type": "eussuk",
+          "category": "QuizN",
+          "icon": "🧩",
+          "cardTitle": "QuizN",
+          "count": 1,
+          "memo": "",
+          "important": false,
+          "timestamp": "2026-11-03 13:14"
+        }
+      ],
+      "progressRecords": {}
+    }
+  ],
+  "cardsVersion": 2,
+  "lastUsedCardIdByType": {
+    "eussuk": "c_e3",
+    "meossuk": "c_m1"
+  }
+};
 }
 
 // 전역 상태 변수
