@@ -2223,6 +2223,27 @@ body.theme-dark .student-card.selected .student-card-name {
   height: 38px;
   box-sizing: border-box;
   font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+/* 상단바 교사 프로필 아바타 (v2.0.7) */
+.auth-header-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ffffff;
+  border: 1.5px solid #60a5fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  margin-right: -2px;
+}
+
+/* 다크 테마 시 상단바 관리자 이메일 및 뱃지 가독성 대폭 향상 (v2.0.7) */
+body.theme-dark .auth-user-badge,
+body.dark-mode .auth-user-badge {
+  background: rgba(30, 58, 138, 0.45) !important;
+  border-color: rgba(96, 165, 250, 0.45) !important;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
 }
 
 .auth-role-tag {
@@ -2242,6 +2263,13 @@ body.theme-dark .student-card.selected .student-card-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 다크 테마에서 관리자 이메일 폰트 밝고 또렷하게 표시 */
+body.theme-dark .auth-user-email,
+body.dark-mode .auth-user-email {
+  color: #f8fafc !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .btn-auth-logout {
@@ -2288,9 +2316,66 @@ body.theme-dark .student-card.selected .student-card-name {
   border-radius: 28px;
   width: 100%;
   max-width: 480px;
-  padding: 36px 32px;
+  padding: 32px 28px;
   text-align: center;
   animation: authCardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 문영여중 교사 캐릭터 웰컴 환영 배너 (시안 1 - v2.0.7) */
+.auth-teacher-welcome-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+  border: 2px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+  text-align: left;
+}
+
+.auth-teacher-avatar-frame {
+  flex-shrink: 0;
+  width: 64px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.12));
+}
+
+.auth-teacher-welcome-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  animation: teacherWaveHand 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes teacherWaveHand {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg) scale(1.03); }
+  100% { transform: rotate(2deg); }
+}
+
+.auth-teacher-welcome-speech {
+  flex: 1;
+}
+
+.teacher-speech-title {
+  font-family: 'Jua', sans-serif;
+  font-size: 1.15rem;
+  color: #1e3a8a;
+  margin-bottom: 3px;
+  letter-spacing: -0.3px;
+}
+
+.teacher-speech-desc {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.35;
+  word-break: keep-all;
 }
 
 @keyframes authCardPop {
@@ -3005,5 +3090,367 @@ body.theme-dark .cloud-sync-card {
     margin: 8px auto !important;
     border-radius: 18px !important;
   }
+
+  .modal-timer-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    padding: 16px 12px !important;
+  }
+
+  .timer-big-digits {
+    font-size: 3.6rem !important;
+  }
 }
+
+/* ==========================================================================
+   수업 집중 타이머 & 스톱워치 스타일 (v2.0.7)
+   ========================================================================== */
+
+/* 좌측 툴바 타이머 미니 뱃지 */
+.toolbar-timer-badge {
+  display: inline-block;
+  margin-top: 3px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 6px;
+  letter-spacing: -0.3px;
+  animation: timerBadgePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes timerBadgePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+
+.modal-timer-dialog {
+  background: var(--bg-card, #ffffff);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-color, #e2e8f0);
+  overflow: hidden;
+}
+
+.timer-modal-body {
+  padding: 16px 20px 20px;
+}
+
+.timer-mode-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-input, #f1f5f9);
+  padding: 4px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+body.theme-dark .timer-mode-tabs {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.timer-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-secondary, #64748b);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timer-tab-btn.active {
+  background: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.theme-dark .timer-tab-btn.active {
+  background: #1e293b;
+  color: #60a5fa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* 타이머 대형 디스플레이 카드 */
+.timer-display-card {
+  position: relative;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #334155;
+  border-radius: 20px;
+  padding: 22px 16px;
+  text-align: center;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.timer-progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.timer-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #38bdf8);
+  border-radius: 999px;
+  transition: width 0.3s linear;
+}
+
+.timer-progress-fill.warning {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.timer-big-digits {
+  font-family: 'Jua', 'Courier New', monospace;
+  font-size: 4.6rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #38bdf8;
+  text-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+  line-height: 1.1;
+  user-select: none;
+}
+
+.timer-big-digits.urgent {
+  color: #f87171;
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.7);
+  animation: digitsUrgent 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes digitsUrgent {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+/* 타임오버 축하 배너 */
+.timer-finished-banner {
+  margin-top: 14px;
+  background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+  border: 2px solid #ca8a04;
+  border-radius: 16px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: authCardPop 0.3s ease;
+  text-align: left;
+}
+
+.timer-finish-teacher-img {
+  width: 54px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+  animation: teacherWaveHand 1.2s ease-in-out infinite alternate;
+}
+
+.timer-finish-title {
+  font-family: 'Jua', sans-serif;
+  font-size: 1.1rem;
+  color: #713f12;
+  margin-bottom: 2px;
+}
+
+.timer-finish-sub {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #854d0e;
+}
+
+/* 프리셋 버튼 그룹 */
+.timer-preset-group {
+  margin-bottom: 12px;
+}
+
+.preset-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary, #64748b);
+  margin-bottom: 6px;
+}
+
+.preset-buttons, .time-set-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-preset {
+  flex: 1;
+  min-width: 58px;
+  background: var(--bg-hover, #f1f5f9);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 10px;
+  padding: 8px 4px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary, #1e293b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+body.theme-dark .btn-preset {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+
+.btn-preset:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.timer-quick-set-row {
+  margin-bottom: 18px;
+}
+
+.btn-time-set {
+  flex: 1;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 10px;
+  padding: 7px 4px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-secondary, #64748b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+body.theme-dark .btn-time-set {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+}
+
+.btn-time-set.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff !important;
+}
+
+.btn-time-set:hover:not(.active) {
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+/* 타이머 조작 버튼 */
+.timer-control-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.btn-timer-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-timer-start {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+}
+
+.btn-timer-start:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.btn-timer-pause {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+}
+
+.btn-timer-lap {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+}
+
+.btn-timer-reset {
+  background: var(--bg-hover, #e2e8f0);
+  color: var(--text-primary, #334155);
+}
+
+body.theme-dark .btn-timer-reset {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+}
+
+.btn-timer-reset:hover {
+  background: #ef4444;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* 스톱워치 랩 기록 */
+.stopwatch-laps-box {
+  margin-top: 14px;
+  background: var(--bg-input, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 14px;
+  padding: 10px 14px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+body.theme-dark .stopwatch-laps-box {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.laps-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-secondary, #64748b);
+  margin-bottom: 6px;
+}
+
+.laps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-size: 0.86rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.theme-dark .lap-item {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
 
