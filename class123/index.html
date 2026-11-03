@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.0.7" />
+  <link rel="stylesheet" href="styles.css?v=2.0.8" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -124,7 +124,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.7 (클릭 시 사용 설명서 열기)">v2.0.7</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.8 (클릭 시 사용 설명서 열기)">v2.0.8</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -965,8 +965,11 @@
           <button class="btn-preset-chip add" onclick="addTimerSeconds(300)">+5분</button>
         </div>
 
-        <!-- 우측 액션: 축소하여 수업화면 보기 (아이콘 아래 작은 타이머 유지) -->
+        <!-- 우측 액션: 전체화면 토글 / 축소하여 수업화면 보기 (아이콘 아래 작은 타이머 유지) -->
         <div class="timer-window-actions">
+          <button class="btn-timer-fullscreen-toggle" onclick="toggleNativeFullscreen()" title="브라우저 전체화면 켜기/끄기 (F11 효과)">
+            <span id="fullscreen-btn-icon">⛶</span> 전체화면
+          </button>
           <button class="btn-timer-minimize" onclick="minimizeTimer()" title="축소하여 수업 화면 보기 (좌측 툴바에서 계속 작동)">
             <span>🗕 축소 (수업화면 보기)</span>
           </button>
@@ -982,11 +985,26 @@
             <div id="timer-progress-fill" class="timer-display-progress-fill" style="width: 100%;"></div>
           </div>
 
-          <!-- 타이머 디스플레이 숫자 -->
-          <div id="timer-digits" class="online-stopwatch-digits">03:00</div>
+          <!-- 타이머 디스플레이 숫자 (각 자릿수 고정 박스 슬롯으로 절대 흔들리지 않음) -->
+          <div id="timer-digits" class="online-stopwatch-digits">
+            <span class="timer-digit-slot" id="td-m1">0</span>
+            <span class="timer-digit-slot" id="td-m2">3</span>
+            <span class="timer-digit-colon">:</span>
+            <span class="timer-digit-slot" id="td-s1">0</span>
+            <span class="timer-digit-slot" id="td-s2">0</span>
+          </div>
 
-          <!-- 스톱워치 디스플레이 숫자 (스톱워치 모드일 때) -->
-          <div id="stopwatch-digits" class="online-stopwatch-digits" style="display:none;">00:00.00</div>
+          <!-- 스톱워치 디스플레이 숫자 (각 자릿수 고정 박스 슬롯) -->
+          <div id="stopwatch-digits" class="online-stopwatch-digits" style="display:none;">
+            <span class="timer-digit-slot" id="sw-m1">0</span>
+            <span class="timer-digit-slot" id="sw-m2">0</span>
+            <span class="timer-digit-colon">:</span>
+            <span class="timer-digit-slot" id="sw-s1">0</span>
+            <span class="timer-digit-slot" id="sw-s2">0</span>
+            <span class="timer-digit-dot">.</span>
+            <span class="timer-digit-slot ms" id="sw-ms1">0</span>
+            <span class="timer-digit-slot ms" id="sw-ms2">0</span>
+          </div>
 
           <!-- 타임오버 심플 알림 배너 (캐릭터 없음) -->
           <div id="timer-finished-banner" class="timer-simple-finished-banner" style="display:none;">
