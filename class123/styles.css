@@ -3024,8 +3024,8 @@ body.theme-dark .cloud-sync-card {
 }
 
 /* ==========================================================================
-   심플 대형 전체화면 수업 타이머 & 스톱워치 스타일 (v2.0.7)
-   (온라인 스톱워치 online-stopwatch 스타일 전광판)
+   진짜 전체화면(True Fullscreen) 수업 타이머 & 스톱워치 스타일 (v2.0.8)
+   (online-stopwatch 스타일 전광판 + 숫자 흔들림 없는 고정 슬롯 박스)
    ========================================================================== */
 
 /* 좌측 툴바 타이머 미니 뱃지 (축소 시 실시간 지속) */
@@ -3048,346 +3048,424 @@ body.theme-dark .cloud-sync-card {
   50% { transform: scale(1.06); }
 }
 
-/* 전체화면 모달 백드롭 */
+/* 화면 전체를 100% 꽉 채우는 트루 전체화면 백드롭 */
 .timer-fullscreen-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 99990;
-  background: rgba(15, 23, 42, 0.94);
-  backdrop-filter: blur(14px);
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background: #0b1120 !important; /* 꽉 차는 모던 딥 스페이스 배경 */
   display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+body:not(.theme-dark) .timer-fullscreen-backdrop {
+  background: #f1f5f9 !important; /* 라이트 테마 시 꽉 차는 산뜻한 배경 */
 }
 
 .timer-fullscreen-backdrop.open {
   display: flex !important;
-  animation: timerFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: timerFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes timerFadeIn {
-  from { opacity: 0; transform: scale(0.96); }
+  from { opacity: 0; transform: scale(0.98); }
   to { opacity: 1; transform: scale(1); }
 }
 
+/* 꽉 찬 전체화면 메인 컨테이너 */
 .timer-fullscreen-container {
-  width: 95vw;
-  max-width: 1040px;
-  min-height: 520px;
-  max-height: 90vh;
-  background: var(--bg-card, #ffffff);
-  border-radius: 28px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-  border: 2px solid var(--border-color, #e2e8f0);
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
   display: flex;
   flex-direction: column;
-  padding: 20px 28px 22px;
+  justify-content: space-between;
+  padding: 20px 36px 24px;
   box-sizing: border-box;
 }
 
-body.theme-dark .timer-fullscreen-container {
-  background: #0f172a;
-  border-color: #334155;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(37, 99, 235, 0.2);
-}
-
-/* 상단 툴바 */
+/* 상단 컨트롤 툴바 */
 .timer-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
   padding-bottom: 14px;
-  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
 }
 
-body.theme-dark .timer-top-bar {
-  border-bottom-color: #334155;
+body:not(.theme-dark) .timer-top-bar {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
 }
 
 .timer-mode-switcher {
   display: flex;
-  background: var(--bg-input, #f1f5f9);
-  padding: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px;
   border-radius: 12px;
 }
 
-body.theme-dark .timer-mode-switcher {
-  background: rgba(255, 255, 255, 0.08);
+body:not(.theme-dark) .timer-mode-switcher {
+  background: #e2e8f0;
 }
 
 .timer-mode-pill {
   border: none;
   background: transparent;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 9px;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  color: var(--text-secondary, #64748b);
+  color: #94a3b8;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.timer-mode-pill.active {
-  background: #ffffff;
-  color: #2563eb;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+body:not(.theme-dark) .timer-mode-pill {
+  color: #64748b;
 }
 
-body.theme-dark .timer-mode-pill.active {
-  background: #1e293b;
-  color: #60a5fa;
+.timer-mode-pill.active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
 }
 
 /* 프리셋 툴바 */
 .timer-presets-toolbar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .preset-title {
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 800;
-  color: var(--text-secondary, #64748b);
+  color: #94a3b8;
+}
+
+body:not(.theme-dark) .preset-title {
+  color: #475569;
 }
 
 .preset-sep {
-  color: var(--border-color, #cbd5e1);
-  margin: 0 2px;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 4px;
+}
+
+body:not(.theme-dark) .preset-sep {
+  color: #cbd5e1;
 }
 
 .btn-preset-chip {
-  background: var(--bg-hover, #f8fafc);
-  border: 1px solid var(--border-color, #cbd5e1);
-  padding: 5px 10px;
-  border-radius: 8px;
-  font-size: 0.84rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
   font-weight: 800;
-  color: var(--text-primary, #1e293b);
+  color: #f1f5f9;
   cursor: pointer;
   transition: all 0.12s ease;
 }
 
-body.theme-dark .btn-preset-chip {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #f1f5f9;
+body:not(.theme-dark) .btn-preset-chip {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
 }
 
 .btn-preset-chip:hover {
   background: #3b82f6;
   border-color: #3b82f6;
   color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .btn-preset-chip.active {
   background: #2563eb;
   border-color: #2563eb;
   color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
 }
 
 .btn-preset-chip.add {
-  color: #2563eb;
+  color: #60a5fa;
   font-weight: 900;
 }
 
-body.theme-dark .btn-preset-chip.add {
-  color: #60a5fa;
+body:not(.theme-dark) .btn-preset-chip.add {
+  color: #2563eb;
 }
 
-/* 우측 액션: 축소 / 닫기 */
+/* 우측 액션: 전체화면 토글 / 축소 / 닫기 */
 .timer-window-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.btn-timer-minimize {
-  background: #eff6ff;
-  border: 1.5px solid #93c5fd;
-  color: #1d4ed8;
-  font-size: 0.86rem;
+.btn-timer-fullscreen-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  font-size: 0.88rem;
   font-weight: 800;
-  padding: 7px 14px;
+  padding: 8px 14px;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-body.theme-dark .btn-timer-minimize {
-  background: rgba(37, 99, 235, 0.2);
+body:not(.theme-dark) .btn-timer-fullscreen-toggle {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.btn-timer-fullscreen-toggle:hover {
+  background: #3b82f6;
   border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-timer-minimize {
+  background: rgba(37, 99, 235, 0.25);
+  border: 1.5px solid #3b82f6;
   color: #93c5fd;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+body:not(.theme-dark) .btn-timer-minimize {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
 }
 
 .btn-timer-minimize:hover {
   background: #2563eb;
+  border-color: #2563eb;
   color: #ffffff;
 }
 
 .btn-timer-close {
   background: transparent;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  color: var(--text-secondary, #64748b);
+  color: #94a3b8;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 8px;
 }
 
 .btn-timer-close:hover {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.15);
   color: #ef4444;
 }
 
-/* 메인 전광판 보드 */
+/* 메인 전광판 보드 래퍼 */
 .timer-board-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px 0 16px;
+  padding: 16px 0;
+  width: 100%;
 }
 
+/* 온라인 스톱워치 스타일의 거대한 전광판 박스 */
 .timer-digital-display-box {
   width: 100%;
-  max-width: 920px;
-  background: #eef2ff;
-  border: 6px solid #1e293b;
-  border-radius: 28px;
-  padding: 24px 20px 20px;
+  max-width: 1120px;
+  background: #1e293b;
+  border: 8px solid #334155;
+  border-radius: 36px;
+  padding: 32px 28px 28px;
   text-align: center;
-  box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.12);
-  margin-bottom: 24px;
+  box-shadow: inset 0 6px 24px rgba(0, 0, 0, 0.6), 0 20px 50px rgba(0, 0, 0, 0.5);
+  margin-bottom: 28px;
   position: relative;
   overflow: hidden;
 }
 
-body.theme-dark .timer-digital-display-box {
-  background: #1e293b;
-  border-color: #475569;
-  box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.6), 0 10px 30px rgba(0, 0, 0, 0.4);
+body:not(.theme-dark) .timer-digital-display-box {
+  background: #eef2ff;
+  border-color: #1e293b;
+  box-shadow: inset 0 6px 20px rgba(0, 0, 0, 0.08), 0 20px 45px rgba(0, 0, 0, 0.15);
 }
 
 .timer-display-progress {
   width: 100%;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.08);
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 999px;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   overflow: hidden;
 }
 
-body.theme-dark .timer-display-progress {
-  background: rgba(255, 255, 255, 0.1);
+body:not(.theme-dark) .timer-display-progress {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .timer-display-progress-fill {
   height: 100%;
-  background: #2563eb;
+  background: linear-gradient(90deg, #10b981, #38bdf8);
   border-radius: 999px;
   transition: width 0.3s linear;
 }
 
 .timer-display-progress-fill.warning {
-  background: #ef4444;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
 }
 
+/* ==========================================================================
+   ★ 숫자 흔들림 방지: 개별 고정폭 슬롯 박스 (Fixed Width Digit Slots)
+   ========================================================================== */
 .online-stopwatch-digits {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Jua', 'Pretendard', sans-serif;
-  font-size: min(15vw, 132px);
+  font-size: min(18vw, 156px);
   font-weight: 900;
-  line-height: 1.05;
-  color: #0f172a;
-  letter-spacing: 4px;
+  line-height: 1;
+  color: #38bdf8;
+  text-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
   user-select: none;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
-body.theme-dark .online-stopwatch-digits {
-  color: #38bdf8;
-  text-shadow: 0 0 30px rgba(56, 189, 248, 0.35);
+body:not(.theme-dark) .online-stopwatch-digits {
+  color: #0f172a;
+  text-shadow: none;
+}
+
+/* 숫자 하나하나가 완벽하게 동일한 폭을 차지하는 고정 박스 슬롯 */
+.timer-digit-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.65em; /* 0.65em 고정 너비로 숫자가 바뀌어도 0.1px도 흔들리지 않음 */
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.timer-digit-slot.ms {
+  font-size: 0.62em;
+  width: 0.6em;
+  align-self: flex-end;
+  margin-bottom: 0.06em;
+}
+
+.timer-digit-colon,
+.timer-digit-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.3em;
+  text-align: center;
 }
 
 .online-stopwatch-digits.urgent {
-  color: #dc2626 !important;
-  text-shadow: 0 0 35px rgba(239, 68, 68, 0.6);
+  color: #ef4444 !important;
+  text-shadow: 0 0 45px rgba(239, 68, 68, 0.7) !important;
   animation: digitsUrgent 0.6s infinite alternate;
 }
 
 @keyframes digitsUrgent {
   0% { transform: scale(1); }
-  100% { transform: scale(1.04); }
+  100% { transform: scale(1.03); }
 }
 
 /* 타임오버 심플 알림 배너 */
 .timer-simple-finished-banner {
-  margin-top: 14px;
+  margin-top: 18px;
   background: #fef08a;
-  border: 3px solid #ca8a04;
-  border-radius: 14px;
-  padding: 10px 16px;
+  border: 4px solid #ca8a04;
+  border-radius: 16px;
+  padding: 12px 24px;
   animation: timerFadeIn 0.3s ease;
 }
 
 .finish-text-main {
   font-family: 'Jua', sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   font-weight: 900;
   color: #854d0e;
+  margin-bottom: 2px;
 }
 
 .finish-text-sub {
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #a16207;
 }
 
-/* 하단 대형 조작 버튼 (online-stopwatch 스타일 Start/Clear) */
+/* 하단 대형 조작 버튼 (Start / Clear) */
 .timer-board-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 28px;
   width: 100%;
 }
 
 .btn-stopwatch-action {
   font-family: 'Jua', 'Pretendard', sans-serif;
-  font-size: 1.75rem;
+  font-size: 2.1rem;
   font-weight: 900;
-  padding: 14px 56px;
+  padding: 16px 72px;
   border-radius: 999px;
-  border: 4px solid #0f172a;
+  border: 4px solid #ffffff;
   cursor: pointer;
-  box-shadow: 0 6px 0 #0f172a;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
   transition: all 0.12s ease;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-body.theme-dark .btn-stopwatch-action {
-  border-color: #ffffff;
-  box-shadow: 0 6px 0 #ffffff;
+body:not(.theme-dark) .btn-stopwatch-action {
+  border-color: #0f172a;
+  box-shadow: 0 8px 0 #0f172a;
 }
 
 .btn-stopwatch-action:hover {
-  transform: translateY(2px);
-  box-shadow: 0 4px 0 #0f172a;
+  transform: translateY(3px);
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4);
 }
 
-body.theme-dark .btn-stopwatch-action:hover {
-  box-shadow: 0 4px 0 #ffffff;
+body:not(.theme-dark) .btn-stopwatch-action:hover {
+  box-shadow: 0 5px 0 #0f172a;
 }
 
 .btn-stopwatch-action:active {
-  transform: translateY(6px);
+  transform: translateY(8px);
   box-shadow: none;
 }
 
@@ -3413,46 +3491,51 @@ body.theme-dark .btn-stopwatch-action:hover {
 
 /* 스톱워치 랩 기록 */
 .stopwatch-fullscreen-laps {
-  margin-top: 16px;
+  margin-top: 18px;
   width: 100%;
-  max-width: 720px;
-  background: var(--bg-input, #f8fafc);
-  border: 1px solid var(--border-color, #e2e8f0);
+  max-width: 840px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 12px 18px;
   max-height: 120px;
   overflow-y: auto;
 }
 
-body.theme-dark .stopwatch-fullscreen-laps {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: #334155;
+body:not(.theme-dark) .stopwatch-fullscreen-laps {
+  background: #ffffff;
+  border-color: #cbd5e1;
 }
 
 .laps-list-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .lap-item {
   font-family: monospace;
-  font-size: 0.9rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.05);
-}
-
-body.theme-dark .lap-item {
+  font-size: 0.95rem;
+  padding: 5px 10px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
   color: #e2e8f0;
 }
 
+body:not(.theme-dark) .lap-item {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
 .timer-bottom-hint {
-  font-size: 0.82rem;
-  color: var(--text-secondary, #64748b);
+  font-size: 0.88rem;
+  color: #94a3b8;
   text-align: center;
-  padding-top: 10px;
+  padding-top: 8px;
+}
+
+body:not(.theme-dark) .timer-bottom-hint {
+  color: #64748b;
 }
 
 

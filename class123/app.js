@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.7 (심플 대형 전체화면 타이머 탑재, 다크테마 가독성 개선)
+   현재 버전: v2.0.8 (트루 전체화면 타이머 & 흔들림 없는 고정 슬롯 전광판 탑재)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.7';
+const APP_VERSION = 'v2.0.8';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -48663,6 +48663,21 @@ function onTimerFinished() {
   }
 }
 
+function toggleNativeFullscreen() {
+  const icon = document.getElementById('fullscreen-btn-icon');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().then(() => {
+      if (icon) icon.textContent = '🗗';
+    }).catch(err => console.log('Fullscreen error:', err));
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().then(() => {
+        if (icon) icon.textContent = '⛶';
+      }).catch(err => console.log('Exit fullscreen error:', err));
+    }
+  }
+}
+
 function updateTimerUI() {
   const digitsEl = document.getElementById('timer-digits');
   const fillEl = document.getElementById('timer-progress-fill');
@@ -48671,10 +48686,24 @@ function updateTimerUI() {
   const toggleText = document.getElementById('timer-toggle-text');
   const tbBadge = document.getElementById('toolbar-timer-badge');
 
-  const formatted = formatTimerDigits(smartTimer.remainingSec);
+  const m = Math.floor(Math.max(0, smartTimer.remainingSec) / 60);
+  const s = Math.max(0, smartTimer.remainingSec) % 60;
+  const mStr = String(m).padStart(2, '0');
+  const sStr = String(s).padStart(2, '0');
+  const formatted = `${mStr}:${sStr}`;
+
+  // ★ 각 자릿수 고정 슬롯 업데이트 (폭 변화로 인한 흔들림 100% 방지)
+  const elM1 = document.getElementById('td-m1');
+  const elM2 = document.getElementById('td-m2');
+  const elS1 = document.getElementById('td-s1');
+  const elS2 = document.getElementById('td-s2');
+
+  if (elM1) elM1.textContent = mStr[0];
+  if (elM2) elM2.textContent = mStr[1];
+  if (elS1) elS1.textContent = sStr[0];
+  if (elS2) elS2.textContent = sStr[1];
 
   if (digitsEl) {
-    digitsEl.textContent = formatted;
     if (smartTimer.remainingSec <= 10 && smartTimer.remainingSec > 0 && smartTimer.isRunning) {
       digitsEl.classList.add('urgent');
     } else {
@@ -48801,9 +48830,29 @@ function updateStopwatchUI() {
   const toggleIcon = document.getElementById('timer-toggle-icon');
   const toggleText = document.getElementById('timer-toggle-text');
 
-  if (digitsEl) {
-    digitsEl.textContent = formatStopwatchDigits(smartTimer.stopwatchElapsedMs);
-  }
+  const totalSec = Math.floor(smartTimer.stopwatchElapsedMs / 1000);
+  const minutes = Math.floor(totalSec / 60);
+  const seconds = totalSec % 60;
+  const hundredths = Math.floor((smartTimer.stopwatchElapsedMs % 1000) / 10);
+
+  const mStr = String(minutes).padStart(2, '0');
+  const sStr = String(seconds).padStart(2, '0');
+  const msStr = String(hundredths).padStart(2, '0');
+
+  // ★ 스톱워치 각 자릿수 슬롯 업데이트
+  const swM1 = document.getElementById('sw-m1');
+  const swM2 = document.getElementById('sw-m2');
+  const swS1 = document.getElementById('sw-s1');
+  const swS2 = document.getElementById('sw-s2');
+  const swMs1 = document.getElementById('sw-ms1');
+  const swMs2 = document.getElementById('sw-ms2');
+
+  if (swM1) swM1.textContent = mStr[0];
+  if (swM2) swM2.textContent = mStr[1];
+  if (swS1) swS1.textContent = sStr[0];
+  if (swS2) swS2.textContent = sStr[1];
+  if (swMs1) swMs1.textContent = msStr[0];
+  if (swMs2) swMs2.textContent = msStr[1];
 
   if (toggleBtn && toggleIcon && toggleText && smartTimer.mode === 'stopwatch') {
     if (smartTimer.stopwatchRunning) {
