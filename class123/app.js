@@ -1,9 +1,9 @@
 /* ==========================================================================
    Class123 Plus - 메인 애플리케이션 로직 (app.js)
-   현재 버전: v2.0.9 (밝은 테마 프리셋 버튼 가독성 버그 수정 및 active 스타일 최적화)
+   현재 버전: v2.1.0 (박스 밖 풀와이드 60fps 무빙 프로그레스 바 적용)
    ========================================================================== */
 
-const APP_VERSION = 'v2.0.9';
+const APP_VERSION = 'v2.1.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -48476,14 +48476,15 @@ function closeModal(id) {
 }
 
 // ==========================================================================
-// 신규 수업 도구: 심플 대형 전체화면 수업 집중 타이머 & 스톱워치 (v2.0.7)
+// 신규 수업 도구: 심플 대형 전체화면 수업 집중 타이머 & 스톱워치 (v2.1.0)
 // ==========================================================================
 const smartTimer = {
   mode: 'timer', // 'timer' | 'stopwatch'
   durationSec: 180, // 기본 3분
   remainingSec: 180,
   isRunning: false,
-  intervalId: null,
+  endTimestamp: 0, // 60fps 부드러운 잔여 시간 계산용
+  rafId: null, // requestAnimationFrame ID
 
   // 스톱워치 상태
   stopwatchRunning: false,
@@ -48511,7 +48512,7 @@ function switchTimerTab(mode) {
   const digitsStopwatch = document.getElementById('stopwatch-digits');
   const presetsBar = document.getElementById('timer-presets-toolbar');
   const lapBtn = document.getElementById('btn-stopwatch-lap');
-  const progressWrap = document.querySelector('.timer-display-progress');
+  const progressTrack = document.querySelector('.timer-screen-progress-track');
   const banner = document.getElementById('timer-finished-banner');
 
   if (banner) banner.style.display = 'none';
@@ -48523,7 +48524,7 @@ function switchTimerTab(mode) {
     if (digitsStopwatch) digitsStopwatch.style.display = 'none';
     if (presetsBar) presetsBar.style.display = 'flex';
     if (lapBtn) lapBtn.style.display = 'none';
-    if (progressWrap) progressWrap.style.display = 'block';
+    if (progressTrack) progressTrack.style.display = 'block';
     updateTimerUI();
   } else {
     tabStopwatch?.classList.add('active');
@@ -48532,7 +48533,7 @@ function switchTimerTab(mode) {
     if (digitsStopwatch) digitsStopwatch.style.display = 'block';
     if (presetsBar) presetsBar.style.display = 'none';
     if (lapBtn) lapBtn.style.display = 'inline-flex';
-    if (progressWrap) progressWrap.style.display = 'none';
+    if (progressTrack) progressTrack.style.display = 'none';
     updateStopwatchUI();
   }
 }
@@ -48562,9 +48563,13 @@ function setTimerDuration(seconds) {
 }
 
 function addTimerSeconds(extraSec) {
+  const wasRunning = smartTimer.isRunning;
   smartTimer.remainingSec += extraSec;
   if (smartTimer.remainingSec > smartTimer.durationSec) {
     smartTimer.durationSec = smartTimer.remainingSec;
+  }
+  if (wasRunning) {
+    smartTimer.endTimestamp += (extraSec * 1000);
   }
   const banner = document.getElementById('timer-finished-banner');
   if (banner) banner.style.display = 'none';
@@ -48583,34 +48588,68 @@ function toggleTimer() {
   }
 }
 
+// 60fps 물 흐르듯 매끄러운 타이머 프로그레스 애니메이션 루프
+function stepTimerProgress() {
+  if (!smartTimer.isRunning) return;
+
+  const now = performance.now();
+  const diffMs = Math.max(0, smartTimer.endTimestamp - now);
+  const newSec = Math.ceil(diffMs / 1000);
+
+  // 초가 바뀔 때만 숫자 슬롯 업데이트 (깜빡임/부하 방지)
+  if (newSec !== smartTimer.remainingSec) {
+    smartTimer.remainingSec = newSec;
+    renderTimerDigits(newSec);
+  }
+
+  // 상단 막대 프로그레스 게이지: 60fps로 매끄럽게 픽셀 단위 갱신!
+  const fillEl = document.getElementById('timer-progress-fill');
+  if (fillEl) {
+    const totalMs = Math.max(1000, smartTimer.durationSec * 1000);
+    const pct = Math.max(0, Math.min(100, (diffMs / totalMs) * 100));
+    fillEl.style.width = `${pct}%`;
+    if (smartTimer.remainingSec <= 10) {
+      fillEl.classList.add('warning');
+    } else {
+      fillEl.classList.remove('warning');
+    }
+  }
+
+  // 시간 종료 판정
+  if (diffMs <= 0) {
+    smartTimer.remainingSec = 0;
+    renderTimerDigits(0);
+    pauseTimer();
+    onTimerFinished();
+    return;
+  }
+
+  smartTimer.rafId = requestAnimationFrame(stepTimerProgress);
+}
+
 function startTimer() {
   if (smartTimer.remainingSec <= 0) {
     smartTimer.remainingSec = smartTimer.durationSec || 180;
   }
   smartTimer.isRunning = true;
-  clearInterval(smartTimer.intervalId);
+  smartTimer.endTimestamp = performance.now() + (smartTimer.remainingSec * 1000);
+
+  if (smartTimer.rafId) cancelAnimationFrame(smartTimer.rafId);
+
   const banner = document.getElementById('timer-finished-banner');
   if (banner) banner.style.display = 'none';
 
-  smartTimer.intervalId = setInterval(() => {
-    smartTimer.remainingSec--;
-    if (smartTimer.remainingSec <= 0) {
-      smartTimer.remainingSec = 0;
-      pauseTimer();
-      onTimerFinished();
-    }
-    updateTimerUI();
-  }, 1000);
-
-  updateTimerUI();
+  updateTimerControlButtons();
+  smartTimer.rafId = requestAnimationFrame(stepTimerProgress);
 }
 
 function pauseTimer() {
   smartTimer.isRunning = false;
-  if (smartTimer.intervalId) {
-    clearInterval(smartTimer.intervalId);
-    smartTimer.intervalId = null;
+  if (smartTimer.rafId) {
+    cancelAnimationFrame(smartTimer.rafId);
+    smartTimer.rafId = null;
   }
+  updateTimerControlButtons();
   updateTimerUI();
 }
 
@@ -48623,7 +48662,91 @@ function resetTimer() {
   smartTimer.remainingSec = smartTimer.durationSec || 180;
   const banner = document.getElementById('timer-finished-banner');
   if (banner) banner.style.display = 'none';
+
+  const fillEl = document.getElementById('timer-progress-fill');
+  if (fillEl) {
+    fillEl.style.width = '100%';
+    fillEl.classList.remove('warning');
+  }
+
   updateTimerUI();
+}
+
+function renderTimerDigits(sec) {
+  const m = Math.floor(Math.max(0, sec) / 60);
+  const s = Math.max(0, sec) % 60;
+  const mStr = String(m).padStart(2, '0');
+  const sStr = String(s).padStart(2, '0');
+  const formatted = `${mStr}:${sStr}`;
+
+  // 자릿수 고정 슬롯 갱신
+  const elM1 = document.getElementById('td-m1');
+  const elM2 = document.getElementById('td-m2');
+  const elS1 = document.getElementById('td-s1');
+  const elS2 = document.getElementById('td-s2');
+
+  if (elM1) elM1.textContent = mStr[0];
+  if (elM2) elM2.textContent = mStr[1];
+  if (elS1) elS1.textContent = sStr[0];
+  if (elS2) elS2.textContent = sStr[1];
+
+  const digitsEl = document.getElementById('timer-digits');
+  if (digitsEl) {
+    if (sec <= 10 && sec > 0 && smartTimer.isRunning) {
+      digitsEl.classList.add('urgent');
+    } else {
+      digitsEl.classList.remove('urgent');
+    }
+  }
+
+  // 좌측 툴바 미니 뱃지 실시간 갱신
+  const tbBadge = document.getElementById('toolbar-timer-badge');
+  if (tbBadge) {
+    if (smartTimer.isRunning || (sec > 0 && sec < smartTimer.durationSec)) {
+      tbBadge.style.display = 'inline-block';
+      tbBadge.textContent = formatted;
+      tbBadge.style.background = sec <= 10 ? '#ef4444' : '#2563eb';
+    } else {
+      tbBadge.style.display = 'none';
+    }
+  }
+}
+
+function updateTimerControlButtons() {
+  const toggleBtn = document.getElementById('btn-timer-toggle');
+  const toggleIcon = document.getElementById('timer-toggle-icon');
+  const toggleText = document.getElementById('timer-toggle-text');
+
+  if (toggleBtn && toggleIcon && toggleText && smartTimer.mode === 'timer') {
+    if (smartTimer.isRunning) {
+      toggleBtn.classList.remove('btn-stopwatch-start');
+      toggleBtn.classList.add('btn-stopwatch-pause');
+      toggleIcon.textContent = '⏸';
+      toggleText.textContent = 'Pause';
+    } else {
+      toggleBtn.classList.remove('btn-stopwatch-pause');
+      toggleBtn.classList.add('btn-stopwatch-start');
+      toggleIcon.textContent = '▶';
+      toggleText.textContent = smartTimer.remainingSec < smartTimer.durationSec ? 'Resume' : 'Start';
+    }
+  }
+}
+
+function updateTimerUI() {
+  renderTimerDigits(smartTimer.remainingSec);
+  updateTimerControlButtons();
+
+  const fillEl = document.getElementById('timer-progress-fill');
+  if (fillEl && !smartTimer.isRunning) {
+    const total = Math.max(1, smartTimer.durationSec);
+    const pct = Math.max(0, Math.min(100, (smartTimer.remainingSec / total) * 100));
+    fillEl.style.width = `${pct}%`;
+    if (smartTimer.remainingSec <= 10) {
+      fillEl.classList.add('warning');
+    } else {
+      fillEl.classList.remove('warning');
+    }
+  }
 }
 
 function onTimerFinished() {

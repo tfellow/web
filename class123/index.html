@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.0.9" />
+  <link rel="stylesheet" href="styles.css?v=2.1.0" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -124,7 +124,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.0.9 (클릭 시 사용 설명서 열기)">v2.0.9</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.1.0 (클릭 시 사용 설명서 열기)">v2.1.0</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -977,14 +977,14 @@
         </div>
       </div>
 
+      <!-- 상단 전체 가로를 시원하게 채우는 60fps 무빙 프로그레스 바 (박스 밖으로 배치!) -->
+      <div class="timer-screen-progress-track">
+        <div id="timer-progress-fill" class="timer-screen-progress-fill" style="width: 100%;"></div>
+      </div>
+
       <!-- 메인 전광판 디스플레이 영역 (온라인 스톱워치 스타일) -->
       <div class="timer-board-wrapper">
         <div class="timer-digital-display-box" id="timer-display-box">
-          <!-- 상단 진행률 프로그레스 바 -->
-          <div class="timer-display-progress">
-            <div id="timer-progress-fill" class="timer-display-progress-fill" style="width: 100%;"></div>
-          </div>
-
           <!-- 타이머 디스플레이 숫자 (각 자릿수 고정 박스 슬롯으로 절대 흔들리지 않음) -->
           <div id="timer-digits" class="online-stopwatch-digits">
             <span class="timer-digit-slot" id="td-m1">0</span>
