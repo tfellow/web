@@ -48475,6 +48475,326 @@ function closeModal(id) {
   if (el) el.classList.remove('open');
 }
 
+// ==========================================================================
+// 신규 수업 도구: 깜깜이 아래 편리한 수업 집중 타이머 & 스톱워치 (v2.0.7)
+// ==========================================================================
+const smartTimer = {
+  mode: 'timer', // 'timer' | 'stopwatch'
+  durationSec: 180, // 기본 3분
+  remainingSec: 180,
+  isRunning: false,
+  intervalId: null,
+
+  // 스톱워치 상태
+  stopwatchRunning: false,
+  stopwatchStartTime: 0,
+  stopwatchElapsedMs: 0,
+  stopwatchIntervalId: null,
+  stopwatchLaps: []
+};
+
+function openTimerModal() {
+  openModal('modal-timer');
+  updateTimerUI();
+  updateStopwatchUI();
+}
+
+function switchTimerTab(mode) {
+  smartTimer.mode = mode;
+  const tabTimer = document.getElementById('tab-timer-mode');
+  const tabStopwatch = document.getElementById('tab-stopwatch-mode');
+  const secTimer = document.getElementById('timer-view-section');
+  const secStopwatch = document.getElementById('stopwatch-view-section');
+
+  if (mode === 'timer') {
+    tabTimer?.classList.add('active');
+    tabStopwatch?.classList.remove('active');
+    if (secTimer) secTimer.style.display = 'block';
+    if (secStopwatch) secStopwatch.style.display = 'none';
+  } else {
+    tabStopwatch?.classList.add('active');
+    tabTimer?.classList.remove('active');
+    if (secTimer) secTimer.style.display = 'none';
+    if (secStopwatch) secStopwatch.style.display = 'block';
+  }
+}
+
+function formatTimerDigits(totalSec) {
+  const m = Math.floor(Math.max(0, totalSec) / 60);
+  const s = Math.max(0, totalSec) % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function setTimerDuration(seconds) {
+  const wasRunning = smartTimer.isRunning;
+  if (wasRunning) pauseTimer();
+  smartTimer.durationSec = seconds;
+  smartTimer.remainingSec = seconds;
+
+  // 버튼 active 표시
+  document.querySelectorAll('.btn-time-set').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick')?.includes(`(${seconds})`));
+  });
+
+  const banner = document.getElementById('timer-finished-banner');
+  if (banner) banner.style.display = 'none';
+
+  updateTimerUI();
+  if (wasRunning) startTimer();
+}
+
+function addTimerSeconds(extraSec) {
+  smartTimer.remainingSec += extraSec;
+  if (smartTimer.remainingSec > smartTimer.durationSec) {
+    smartTimer.durationSec = smartTimer.remainingSec;
+  }
+  const banner = document.getElementById('timer-finished-banner');
+  if (banner) banner.style.display = 'none';
+  updateTimerUI();
+}
+
+function toggleTimer() {
+  if (smartTimer.isRunning) {
+    pauseTimer();
+  } else {
+    startTimer();
+  }
+}
+
+function startTimer() {
+  if (smartTimer.remainingSec <= 0) {
+    smartTimer.remainingSec = smartTimer.durationSec || 180;
+  }
+  smartTimer.isRunning = true;
+  clearInterval(smartTimer.intervalId);
+  const banner = document.getElementById('timer-finished-banner');
+  if (banner) banner.style.display = 'none';
+
+  smartTimer.intervalId = setInterval(() => {
+    smartTimer.remainingSec--;
+    if (smartTimer.remainingSec <= 0) {
+      smartTimer.remainingSec = 0;
+      pauseTimer();
+      onTimerFinished();
+    }
+    updateTimerUI();
+  }, 1000);
+
+  updateTimerUI();
+}
+
+function pauseTimer() {
+  smartTimer.isRunning = false;
+  if (smartTimer.intervalId) {
+    clearInterval(smartTimer.intervalId);
+    smartTimer.intervalId = null;
+  }
+  updateTimerUI();
+}
+
+function resetTimer() {
+  pauseTimer();
+  smartTimer.remainingSec = smartTimer.durationSec || 180;
+  const banner = document.getElementById('timer-finished-banner');
+  if (banner) banner.style.display = 'none';
+  updateTimerUI();
+}
+
+function onTimerFinished() {
+  // 타임오버 축하 배너 노출
+  const banner = document.getElementById('timer-finished-banner');
+  if (banner) banner.style.display = 'flex';
+
+  // 알림음 & 효과
+  if (typeof playSound === 'function') {
+    playSound('fanfare');
+  }
+  if (typeof launchConfetti === 'function') {
+    launchConfetti('goal');
+  }
+
+  // 맑은 4단 차임벨 연주 (Web Audio API)
+  try {
+    const ctx = getAudioContext();
+    if (ctx && state.soundEnabled) {
+      const now = ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.16);
+        gain.gain.setValueAtTime(0.4, now + idx * 0.16);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.16 + 0.6);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.16);
+        osc.stop(now + idx * 0.16 + 0.65);
+      });
+    }
+  } catch (err) {
+    console.warn('Audio chime error:', err);
+  }
+}
+
+function updateTimerUI() {
+  const digitsEl = document.getElementById('timer-digits');
+  const fillEl = document.getElementById('timer-progress-fill');
+  const toggleBtn = document.getElementById('btn-timer-toggle');
+  const toggleIcon = document.getElementById('timer-toggle-icon');
+  const toggleText = document.getElementById('timer-toggle-text');
+  const tbBadge = document.getElementById('toolbar-timer-badge');
+
+  const formatted = formatTimerDigits(smartTimer.remainingSec);
+
+  if (digitsEl) {
+    digitsEl.textContent = formatted;
+    // 10초 이하 시 시각적 긴급 경고
+    if (smartTimer.remainingSec <= 10 && smartTimer.remainingSec > 0 && smartTimer.isRunning) {
+      digitsEl.classList.add('urgent');
+    } else {
+      digitsEl.classList.remove('urgent');
+    }
+  }
+
+  if (fillEl) {
+    const total = Math.max(1, smartTimer.durationSec);
+    const pct = Math.max(0, Math.min(100, (smartTimer.remainingSec / total) * 100));
+    fillEl.style.width = `${pct}%`;
+    if (smartTimer.remainingSec <= 10) {
+      fillEl.classList.add('warning');
+    } else {
+      fillEl.classList.remove('warning');
+    }
+  }
+
+  if (toggleBtn && toggleIcon && toggleText) {
+    if (smartTimer.isRunning) {
+      toggleBtn.classList.remove('btn-timer-start');
+      toggleBtn.classList.add('btn-timer-pause');
+      toggleIcon.textContent = '⏸';
+      toggleText.textContent = '일시정지';
+    } else {
+      toggleBtn.classList.remove('btn-timer-pause');
+      toggleBtn.classList.add('btn-timer-start');
+      toggleIcon.textContent = '▶';
+      toggleText.textContent = smartTimer.remainingSec < smartTimer.durationSec ? '계속하기' : '시작하기';
+    }
+  }
+
+  // 좌측 툴바 미니 뱃지 실시간 연동
+  if (tbBadge) {
+    if (smartTimer.isRunning || (smartTimer.remainingSec > 0 && smartTimer.remainingSec < smartTimer.durationSec)) {
+      tbBadge.style.display = 'inline-block';
+      tbBadge.textContent = formatted;
+      tbBadge.style.background = smartTimer.remainingSec <= 10 ? '#ef4444' : '#2563eb';
+    } else {
+      tbBadge.style.display = 'none';
+    }
+  }
+}
+
+// 스톱워치 로직
+function formatStopwatchDigits(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSec / 60);
+  const seconds = totalSec % 60;
+  const hundredths = Math.floor((ms % 1000) / 10);
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
+}
+
+function toggleStopwatch() {
+  if (smartTimer.stopwatchRunning) {
+    pauseStopwatch();
+  } else {
+    startStopwatch();
+  }
+}
+
+function startStopwatch() {
+  smartTimer.stopwatchRunning = true;
+  smartTimer.stopwatchStartTime = performance.now() - smartTimer.stopwatchElapsedMs;
+  clearInterval(smartTimer.stopwatchIntervalId);
+
+  smartTimer.stopwatchIntervalId = setInterval(() => {
+    smartTimer.stopwatchElapsedMs = performance.now() - smartTimer.stopwatchStartTime;
+    updateStopwatchUI();
+  }, 33); // 약 30fps
+
+  updateStopwatchUI();
+}
+
+function pauseStopwatch() {
+  smartTimer.stopwatchRunning = false;
+  if (smartTimer.stopwatchIntervalId) {
+    clearInterval(smartTimer.stopwatchIntervalId);
+    smartTimer.stopwatchIntervalId = null;
+  }
+  updateStopwatchUI();
+}
+
+function resetStopwatch() {
+  pauseStopwatch();
+  smartTimer.stopwatchElapsedMs = 0;
+  smartTimer.stopwatchLaps = [];
+  const box = document.getElementById('stopwatch-laps-box');
+  if (box) box.style.display = 'none';
+  updateStopwatchUI();
+}
+
+function recordStopwatchLap() {
+  if (smartTimer.stopwatchElapsedMs <= 0) return;
+  const lapTime = formatStopwatchDigits(smartTimer.stopwatchElapsedMs);
+  smartTimer.stopwatchLaps.unshift({
+    no: smartTimer.stopwatchLaps.length + 1,
+    time: lapTime
+  });
+  renderStopwatchLaps();
+}
+
+function renderStopwatchLaps() {
+  const box = document.getElementById('stopwatch-laps-box');
+  const list = document.getElementById('stopwatch-laps-list');
+  if (!box || !list) return;
+
+  if (smartTimer.stopwatchLaps.length === 0) {
+    box.style.display = 'none';
+    return;
+  }
+  box.style.display = 'block';
+  list.innerHTML = smartTimer.stopwatchLaps.map(lap => `
+    <div class="lap-item">
+      <span>🚩 랩 ${lap.no}</span>
+      <strong>${lap.time}</strong>
+    </div>
+  `).join('');
+}
+
+function updateStopwatchUI() {
+  const digitsEl = document.getElementById('stopwatch-digits');
+  const toggleBtn = document.getElementById('btn-stopwatch-toggle');
+  const toggleIcon = document.getElementById('stopwatch-toggle-icon');
+  const toggleText = document.getElementById('stopwatch-toggle-text');
+
+  if (digitsEl) {
+    digitsEl.textContent = formatStopwatchDigits(smartTimer.stopwatchElapsedMs);
+  }
+
+  if (toggleBtn && toggleIcon && toggleText) {
+    if (smartTimer.stopwatchRunning) {
+      toggleBtn.classList.remove('btn-timer-start');
+      toggleBtn.classList.add('btn-timer-pause');
+      toggleIcon.textContent = '⏸';
+      toggleText.textContent = '일시정지';
+    } else {
+      toggleBtn.classList.remove('btn-timer-pause');
+      toggleBtn.classList.add('btn-timer-start');
+      toggleIcon.textContent = '▶';
+      toggleText.textContent = smartTimer.stopwatchElapsedMs > 0 ? '계속하기' : '시작하기';
+    }
+  }
+}
+
 function escapeHtml(str) {
   return String(str ?? '')
     .replace(/&/g, '&amp;')
