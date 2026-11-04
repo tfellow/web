@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "53"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "54"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -154,7 +154,13 @@
     "Vietnam": { map: "Vietnam", ko: "베트남", iso: "VN", at: [106, 16] },
     "Philippines": { map: "Philippines", ko: "필리핀", iso: "PH", at: [122, 12.5] },
     "New Zealand": { map: "New Zealand", ko: "뉴질랜드", iso: "NZ", at: [172, -41.5] },
-    "Australia": { map: "Australia", ko: "호주", iso: "AU", at: [134, -25] }
+    "Australia": { map: "Australia", ko: "호주", iso: "AU", at: [134, -25] },
+    "Mali": { map: "Mali", ko: "말리", iso: "ML", at: [-2, 17] },
+    "Kenya": { map: "Kenya", ko: "케냐", iso: "KE", at: [37.9, 0.2] },
+    "Hungary": { map: "Hungary", ko: "헝가리", iso: "HU", at: [19.5, 47.2] },
+    "Uruguay": { map: "Uruguay", ko: "우루과이", iso: "UY", at: [-56, -32.8] },
+    "Lebanon": { map: "Lebanon", ko: "레바논", iso: "LB", at: [35.9, 33.9] },
+    "Panama": { map: "Panama", ko: "파나마", iso: "PA", at: [-80.1, 8.5] }
   };
   // 대륙 배지: 각 대륙에 첫 여권 도장을 찍으면 받아요 (지도 이름 → 대륙)
   var CONTINENTS = [
@@ -169,7 +175,8 @@
     "United States of America": "NA", "Canada": "NA", "Mexico": "NA", "Cuba": "NA", "Algeria": "AF", "Romania": "EU", "Ukraine": "EU", "Israel": "AS", "Iran": "AS", "Sri Lanka": "AS",
     "Brazil": "SA", "Colombia": "SA", "Chile": "SA", "Argentina": "SA",
     "Egypt": "AF", "Nigeria": "AF", "Ghana": "AF", "Ethiopia": "AF", "Malawi": "AF", "South Africa": "AF",
-    "Peru": "SA", "Iraq": "AS", "Mongolia": "AS", "Vietnam": "AS", "Philippines": "AS", "Australia": "OC", "New Zealand": "OC"
+    "Peru": "SA", "Iraq": "AS", "Mongolia": "AS", "Vietnam": "AS", "Philippines": "AS", "Australia": "OC", "New Zealand": "OC",
+    "Mali": "AF", "Kenya": "AF", "Hungary": "EU", "Uruguay": "SA", "Lebanon": "AS", "Panama": "NA"
   };
 
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
