@@ -8146,5 +8146,329 @@ window.BOOKS = [
   "places": [
    "Czechia"
   ]
+ },
+ {
+  "id": "the-dog-in-the-manger",
+  "title": "The Dog in the Manger",
+  "titleKo": "여물통 속의 개",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐕",
+  "color": "#b08d57",
+  "cefr": "A0",
+  "lexile": "약 250L",
+  "words": 102,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-hare-with-many-friends",
+  "title": "The Hare with Many Friends",
+  "titleKo": "친구가 많은 토끼",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐰",
+  "color": "#7a9e7e",
+  "cefr": "A0",
+  "lexile": "약 250L",
+  "words": 99,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "baucis-and-philemon",
+  "title": "Baucis and Philemon",
+  "titleKo": "바우키스와 필레몬",
+  "author": "Ovid",
+  "authorKo": "오비디우스",
+  "country": "Italy",
+  "emoji": "🌳",
+  "color": "#6b8f5e",
+  "cefr": "A1",
+  "lexile": "약 480L",
+  "words": 176,
+  "places": [
+   "Italy",
+   "Turkey"
+  ]
+ },
+ {
+  "id": "kuafu-chases-the-sun",
+  "title": "Kuafu Chases the Sun",
+  "titleKo": "태양을 쫓은 과보",
+  "author": "Chinese Myth",
+  "authorKo": "중국 신화",
+  "country": "China",
+  "emoji": "☀️",
+  "color": "#d9822b",
+  "cefr": "A1",
+  "lexile": "약 420L",
+  "words": 135,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "pangu-creates-the-world",
+  "title": "Pangu Creates the World",
+  "titleKo": "세상을 만든 반고",
+  "author": "Chinese Myth",
+  "authorKo": "중국 신화",
+  "country": "China",
+  "emoji": "🥚",
+  "color": "#3f6c8c",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 143,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "pyramus-and-thisbe",
+  "title": "Pyramus and Thisbe",
+  "titleKo": "피라모스와 티스베",
+  "author": "Ovid",
+  "authorKo": "오비디우스",
+  "country": "Italy",
+  "emoji": "🌹",
+  "color": "#8e3b46",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 159,
+  "places": [
+   "Italy",
+   "Iraq"
+  ]
+ },
+ {
+  "id": "savitri-and-satyavan",
+  "title": "Savitri and Satyavan",
+  "titleKo": "사비트리와 사티아반",
+  "author": "Mahabharata",
+  "authorKo": "마하바라타",
+  "country": "India",
+  "emoji": "🌺",
+  "color": "#e67e22",
+  "cefr": "A2",
+  "lexile": "약 630L",
+  "words": 195,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "scheherazade-and-the-sultan",
+  "title": "Scheherazade and the Sultan",
+  "titleKo": "세헤라자데와 술탄",
+  "author": "One Thousand and One Nights",
+  "authorKo": "천일야화",
+  "country": "Iraq",
+  "emoji": "🧞",
+  "color": "#8e44ad",
+  "cefr": "A2",
+  "lexile": "약 650L",
+  "words": 202,
+  "places": [
+   "Iraq"
+  ]
+ },
+ {
+  "id": "the-blue-bird",
+  "title": "The Blue Bird",
+  "titleKo": "파랑새",
+  "author": "Maurice Maeterlinck",
+  "authorKo": "모리스 마테를링크",
+  "country": "Belgium",
+  "emoji": "🐦",
+  "color": "#4a90e2",
+  "cefr": "A2",
+  "lexile": "약 500L",
+  "words": 221,
+  "places": [
+   "Belgium"
+  ]
+ },
+ {
+  "id": "the-golem-of-prague",
+  "title": "The Golem of Prague",
+  "titleKo": "프라하의 골렘",
+  "author": "Czech Legend",
+  "authorKo": "체코 전설",
+  "country": "Czechia",
+  "emoji": "🗿",
+  "color": "#7f8c8d",
+  "cefr": "A2",
+  "lexile": "약 620L",
+  "words": 191,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "the-night-before-christmas",
+  "title": "The Night Before Christmas",
+  "titleKo": "크리스마스 전야",
+  "author": "Nikolai Gogol",
+  "authorKo": "니콜라이 고골",
+  "country": "Ukraine",
+  "emoji": "🌙",
+  "color": "#1b2a47",
+  "cefr": "A2",
+  "lexile": "약 600L",
+  "words": 192,
+  "places": [
+   "Ukraine"
+  ]
+ },
+ {
+  "id": "a-country-doctor",
+  "title": "A Country Doctor",
+  "titleKo": "시골 의사",
+  "author": "Franz Kafka",
+  "authorKo": "프란츠 카프카",
+  "country": "Czechia",
+  "emoji": "🩺",
+  "color": "#2c3e50",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 269,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "arms-and-the-man",
+  "title": "Arms and the Man",
+  "titleKo": "무기와 인간",
+  "author": "George Bernard Shaw",
+  "authorKo": "조지 버나드 쇼",
+  "country": "Ireland",
+  "emoji": "🍫",
+  "color": "#9b59b6",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 298,
+  "places": [
+   "Ireland",
+   "Bulgaria"
+  ]
+ },
+ {
+  "id": "boys-and-girls",
+  "title": "Boys and Girls",
+  "titleKo": "소년과 소녀",
+  "author": "Alice Munro",
+  "authorKo": "앨리스 먼로",
+  "country": "Canada",
+  "emoji": "🦊",
+  "color": "#c0392b",
+  "cefr": "B1",
+  "lexile": "약 750L",
+  "words": 289,
+  "places": [
+   "Canada"
+  ]
+ },
+ {
+  "id": "eveline",
+  "title": "Eveline",
+  "titleKo": "에블린",
+  "author": "James Joyce",
+  "authorKo": "제임스 조이스",
+  "country": "Ireland",
+  "emoji": "🚢",
+  "color": "#34495e",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 292,
+  "places": [
+   "Ireland"
+  ]
+ },
+ {
+  "id": "rinconete-and-cortadillo",
+  "title": "Rinconete and Cortadillo",
+  "titleKo": "린코네테와 코르타디요",
+  "author": "Miguel de Cervantes",
+  "authorKo": "미겔 데 세르반테스",
+  "country": "Spain",
+  "emoji": "🃏",
+  "color": "#e67e22",
+  "cefr": "B1",
+  "lexile": "약 800L",
+  "words": 273,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "synnove-solbakken",
+  "title": "Synnøve Solbakken",
+  "titleKo": "시뇌베 솔바켄",
+  "author": "Bjørnstjerne Bjørnson",
+  "authorKo": "비에른스티에르네 비에른손",
+  "country": "Norway",
+  "emoji": "☀️",
+  "color": "#f1c40f",
+  "cefr": "B1",
+  "lexile": "약 780L",
+  "words": 270,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "kappa",
+  "title": "Kappa",
+  "titleKo": "갓파",
+  "author": "Ryūnosuke Akutagawa",
+  "authorKo": "아쿠타가와 류노스케",
+  "country": "Japan",
+  "emoji": "🐸",
+  "color": "#27ae60",
+  "cefr": "B2",
+  "lexile": "약 920L",
+  "words": 382,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "quo-vadis",
+  "title": "Quo Vadis",
+  "titleKo": "쿼바디스",
+  "author": "Henryk Sienkiewicz",
+  "authorKo": "헨릭 시엔키에비치",
+  "country": "Poland",
+  "emoji": "🏛️",
+  "color": "#c0392b",
+  "cefr": "B2",
+  "lexile": "약 900L",
+  "words": 403,
+  "places": [
+   "Poland",
+   "Italy"
+  ]
+ },
+ {
+  "id": "ten-nights-of-dream",
+  "title": "Ten Nights of Dream",
+  "titleKo": "몽십야",
+  "author": "Natsume Sōseki",
+  "authorKo": "나쓰메 소세키",
+  "country": "Japan",
+  "emoji": "💭",
+  "color": "#34495e",
+  "cefr": "B2",
+  "lexile": "약 880L",
+  "words": 374,
+  "places": [
+   "Japan"
+  ]
  }
 ];
