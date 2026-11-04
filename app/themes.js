@@ -453,5 +453,6 @@ window.BOOK_THEMES = {
   "the-three-musketeers": "friend,adventure|adv",
   "the-prisoner-of-zenda": "justice,adventure|adv",
   "the-scarlet-pimpernel": "justice,love|hist",
-  "emma": "growth,love|classic"
+  "emma": "growth,love|classic",
+  "the-fisherman-and-his-wife": "wisdom,family|tale"
 };
