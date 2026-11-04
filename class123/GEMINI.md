@@ -16,6 +16,11 @@
 - 웹앱(`index.html`, `styles.css`, `app.js`)을 사용자의 지시로 수정할 때마다 반드시 **버전 번호(예: `v1.5.0` → `v1.6.0`)를 업데이트**합니다.
 - 파일이 수정되면 동적 사용 설명서(`manual.html`)와 버전 기록 문서(`CHANGELOG.md`)에도 **사용자의 프롬프트/지시사항, 변경된 기능 설명, 버전 히스토리**를 즉시 함께 반영합니다.
 
-## 4. GitHub 및 웹 배포 안정성 유지
+## 4. GitHub 및 웹 배포 안정성 유지 (공식 배포 주소 및 배포 규칙)
+- **공식 서비스 웹 배포 URL**: `https://tfellow.github.io/web/class123`
+- **배포 GitHub 저장소 로컬 경로**: `C:\Users\Rainbow\.copilot\repos\web` (원격: `https://github.com/tfellow/web.git`, 브랜치: `master`)
+- **웹 자동 배포(게시) 프로세스**:
+  - 웹앱 파일(`index.html`, `app.js`, `styles.css`, `manual.html`, `CHANGELOG.md`, `README.md`, `GEMINI.md`)을 수정할 때마다 배포 저장소의 `class123/` 하위 폴더로 즉시 복사하고,
+  - `git commit` 및 `git push origin master`를 실행하여 `https://tfellow.github.io/web/class123` 웹 사이트에 항상 즉각 배포(게시)를 완료합니다.
 - 외부 서버 백엔드 의존성 없이 GitHub Pages 또는 모든 정적 웹 호스팅 환경에서 100% 자율 동작하도록 클라이언트 사이드 아키텍처를 유지합니다.
 - 로컬 스토리지(`LocalStorage`) 기반 자동 저장 및 JSON 백업/복원 기능을 영속적으로 보장합니다.
