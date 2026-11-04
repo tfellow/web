@@ -6858,5 +6858,311 @@ window.BOOKS = [
   "places": [
    "Germany"
   ]
+ },
+ {
+  "id": "the-blind-men-and-the-elephant",
+  "title": "The Blind Men and the Elephant",
+  "titleKo": "시각장애인들과 코끼리",
+  "author": "Indian Parable",
+  "authorKo": "인도 우화",
+  "country": "India",
+  "emoji": "🐘",
+  "color": "#4a6fa5",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 98,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-tale-of-squirrel-nutkin",
+  "title": "The Tale of Squirrel Nutkin",
+  "titleKo": "다람쥐 넛킨 이야기",
+  "author": "Beatrix Potter",
+  "authorKo": "베아트릭스 포터",
+  "country": "United Kingdom",
+  "emoji": "🐿️",
+  "color": "#d98a4c",
+  "cefr": "A0",
+  "lexile": "약 550L",
+  "words": 105,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "nasreddin-hodja-tales",
+  "title": "Nasreddin Hodja Tales",
+  "titleKo": "나스레딘 호자 이야기",
+  "author": "Turkish Folktale",
+  "authorKo": "튀르키예 민담",
+  "country": "Turkey",
+  "emoji": "👳",
+  "color": "#d4af37",
+  "cefr": "A1",
+  "lexile": "약 600L",
+  "words": 151,
+  "places": [
+   "Turkey"
+  ]
+ },
+ {
+  "id": "the-restaurant-of-many-orders",
+  "title": "The Restaurant of Many Orders",
+  "titleKo": "주문 많은 음식점",
+  "author": "Kenji Miyazawa",
+  "authorKo": "미야자와 겐지",
+  "country": "Japan",
+  "emoji": "🍽️",
+  "color": "#8b0000",
+  "cefr": "A1",
+  "lexile": "약 650L",
+  "words": 166,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-weaver-girl-and-the-cowherd",
+  "title": "The Weaver Girl and the Cowherd",
+  "titleKo": "직녀와 견우",
+  "author": "Chinese Folktale",
+  "authorKo": "중국 민담",
+  "country": "China",
+  "emoji": "🌌",
+  "color": "#191970",
+  "cefr": "A1",
+  "lexile": "약 600L",
+  "words": 165,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "wangaris-trees-of-peace",
+  "title": "Wangari's Trees of Peace",
+  "titleKo": "왕가리의 평화의 나무",
+  "author": "Jeanette Winter",
+  "authorKo": "자넷 윈터",
+  "country": "Kenya",
+  "emoji": "🌳",
+  "color": "#228b22",
+  "cefr": "A1",
+  "lexile": "약 550L",
+  "words": 122,
+  "places": [
+   "Kenya"
+  ]
+ },
+ {
+  "id": "from-the-apennines-to-the-andes",
+  "title": "From the Apennines to the Andes",
+  "titleKo": "엄마 찾아 삼만리",
+  "author": "Edmondo De Amicis",
+  "authorKo": "에드몬도 데 아미치스",
+  "country": "Italy",
+  "emoji": "🚢",
+  "color": "#005b96",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 182,
+  "places": [
+   "Italy",
+   "Argentina"
+  ]
+ },
+ {
+  "id": "hans-brinker",
+  "title": "Hans Brinker, or The Silver Skates",
+  "titleKo": "한스 브링커 (은스케이트)",
+  "author": "Mary Mapes Dodge",
+  "authorKo": "메리 메이프스 다지",
+  "country": "Netherlands",
+  "emoji": "⛸️",
+  "color": "#c0c0c0",
+  "cefr": "A2",
+  "lexile": "약 780L",
+  "words": 189,
+  "places": [
+   "Netherlands"
+  ]
+ },
+ {
+  "id": "sundiata-lion-king-of-mali",
+  "title": "Sundiata, Lion King of Mali",
+  "titleKo": "말리의 사자왕 순디아타",
+  "author": "West African Epic",
+  "authorKo": "서아프리카 서사시",
+  "country": "Mali",
+  "emoji": "🦁",
+  "color": "#e2a76f",
+  "cefr": "A2",
+  "lexile": "약 700L",
+  "words": 198,
+  "places": [
+   "Mali"
+  ]
+ },
+ {
+  "id": "the-wonderful-adventures-of-nils",
+  "title": "The Wonderful Adventures of Nils",
+  "titleKo": "닐스의 모험",
+  "author": "Selma Lagerlöf",
+  "authorKo": "셀마 라게를뢰프",
+  "country": "Sweden",
+  "emoji": "🪿",
+  "color": "#add8e6",
+  "cefr": "A2",
+  "lexile": "약 820L",
+  "words": 191,
+  "places": [
+   "Sweden"
+  ]
+ },
+ {
+  "id": "kong-yiji",
+  "title": "Kong Yiji",
+  "titleKo": "공을기",
+  "author": "Lu Xun",
+  "authorKo": "루쉰",
+  "country": "China",
+  "emoji": "🍷",
+  "color": "#8b0000",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 293,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "lazarillo-de-tormes",
+  "title": "Lazarillo de Tormes",
+  "titleKo": "라사리요 데 토르메스",
+  "author": "Anonymous (Spanish)",
+  "authorKo": "작자 미상 (스페인)",
+  "country": "Spain",
+  "emoji": "🥖",
+  "color": "#c19a6b",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 251,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "the-drovers-wife",
+  "title": "The Drover's Wife",
+  "titleKo": "양치기 아내",
+  "author": "Henry Lawson",
+  "authorKo": "헨리 로슨",
+  "country": "Australia",
+  "emoji": "🐍",
+  "color": "#cd853f",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 265,
+  "places": [
+   "Australia"
+  ]
+ },
+ {
+  "id": "the-feather-pillow",
+  "title": "The Feather Pillow",
+  "titleKo": "깃털 베개",
+  "author": "Horacio Quiroga",
+  "authorKo": "오라시오 키로가",
+  "country": "Uruguay",
+  "emoji": "🪶",
+  "color": "#f5f5dc",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 269,
+  "places": [
+   "Uruguay"
+  ]
+ },
+ {
+  "id": "the-lighthouse-keeper",
+  "title": "The Lighthouse Keeper",
+  "titleKo": "등대지기",
+  "author": "Henryk Sienkiewicz",
+  "authorKo": "헨리크 시엔키에비치",
+  "country": "Poland",
+  "emoji": "🗼",
+  "color": "#4682b4",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 257,
+  "places": [
+   "Poland",
+   "Panama"
+  ]
+ },
+ {
+  "id": "the-paul-street-boys",
+  "title": "The Paul Street Boys",
+  "titleKo": "파울 거리의 소년들",
+  "author": "Ferenc Molnár",
+  "authorKo": "페렌츠 몰나르",
+  "country": "Hungary",
+  "emoji": "👦",
+  "color": "#8b4513",
+  "cefr": "B1",
+  "lexile": "약 800L",
+  "words": 252,
+  "places": [
+   "Hungary"
+  ]
+ },
+ {
+  "id": "i-am-a-cat",
+  "title": "I Am a Cat",
+  "titleKo": "나는 고양이로소이다",
+  "author": "Natsume Sōseki",
+  "authorKo": "나쓰메 소세키",
+  "country": "Japan",
+  "emoji": "🐈",
+  "color": "#f4a460",
+  "cefr": "B2",
+  "lexile": "약 900L",
+  "words": 351,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "r-u-r",
+  "title": "R.U.R.",
+  "titleKo": "R.U.R. (로섬의 만능 로봇)",
+  "author": "Karel Čapek",
+  "authorKo": "카렐 차페크",
+  "country": "Czechia",
+  "emoji": "🤖",
+  "color": "#708090",
+  "cefr": "B2",
+  "lexile": "약 880L",
+  "words": 353,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "the-prophet",
+  "title": "The Prophet",
+  "titleKo": "예언자",
+  "author": "Kahlil Gibran",
+  "authorKo": "칼릴 지브란",
+  "country": "Lebanon",
+  "emoji": "⛵",
+  "color": "#dda0dd",
+  "cefr": "B2",
+  "lexile": "약 950L",
+  "words": 352,
+  "places": [
+   "Lebanon"
+  ]
  }
 ];
