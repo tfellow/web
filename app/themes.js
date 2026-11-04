@@ -529,5 +529,10 @@ window.BOOK_THEMES = {
   "when-buckwheat-flowers-bloom": "family,nature|short",
   "dom-casmurro": "love,growth|classic",
   "noli-me-tangere": "justice,history|classic",
-  "the-interesting-narrative-of-olaudah-equiano": "history,growth|true"
+  "the-interesting-narrative-of-olaudah-equiano": "history,growth|true",
+  "bartek-the-victor": "history,wisdom|short",
+  "dashenka-or-the-life-of-a-puppy": "growth,family|picture",
+  "kalila-and-dimna": "wisdom,honesty|fable",
+  "mulan": "family,adventure|myth",
+  "old-czech-legends": "history,myth|myth"
 };

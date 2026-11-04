@@ -8065,5 +8065,86 @@ window.BOOKS = [
    "United Kingdom",
    "United States"
   ]
+ },
+ {
+  "id": "bartek-the-victor",
+  "title": "Bartek the Victor",
+  "titleKo": "승리자 바르테크",
+  "author": "Henryk Sienkiewicz",
+  "authorKo": "헨리크 시엔키에비치",
+  "country": "Poland",
+  "emoji": "🎖️",
+  "color": "#b22222",
+  "cefr": "A2",
+  "lexile": "약 760L",
+  "words": 211,
+  "places": [
+   "Poland"
+  ]
+ },
+ {
+  "id": "dashenka-or-the-life-of-a-puppy",
+  "title": "Dashenka, or the Life of a Puppy",
+  "titleKo": "다센카 (강아지의 삶)",
+  "author": "Karel Čapek",
+  "authorKo": "카렐 차페크",
+  "country": "Czechia",
+  "emoji": "🐶",
+  "color": "#fffacd",
+  "cefr": "A2",
+  "lexile": "약 710L",
+  "words": 233,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "kalila-and-dimna",
+  "title": "Kalila and Dimna",
+  "titleKo": "칼릴라와 딤나",
+  "author": "Arabic Fables",
+  "authorKo": "아랍 우화",
+  "country": "Iraq",
+  "emoji": "🦊",
+  "color": "#cd853f",
+  "cefr": "A2",
+  "lexile": "약 790L",
+  "words": 240,
+  "places": [
+   "Iraq",
+   "India"
+  ]
+ },
+ {
+  "id": "mulan",
+  "title": "Mulan",
+  "titleKo": "뮬란",
+  "author": "Chinese Legend",
+  "authorKo": "중국 전설",
+  "country": "China",
+  "emoji": "⚔️",
+  "color": "#8b0000",
+  "cefr": "A2",
+  "lexile": "약 780L",
+  "words": 237,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "old-czech-legends",
+  "title": "Old Czech Legends",
+  "titleKo": "체코의 옛 전설",
+  "author": "Alois Jirásek",
+  "authorKo": "알로이스 이라세크",
+  "country": "Czechia",
+  "emoji": "🏰",
+  "color": "#4682b4",
+  "cefr": "A2",
+  "lexile": "약 780L",
+  "words": 243,
+  "places": [
+   "Czechia"
+  ]
  }
 ];
