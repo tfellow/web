@@ -4,7 +4,7 @@ window.BOOK_CONTENT["r-u-r"] = {
  "story": [
   {
    "en": "Rossum's Universal Robots, or R.U.R., is a massive factory located on a remote island. This factory produces artificial workers called robots, which are made from synthetic organic matter. These robots look exactly like humans, but they initially lack emotions, desires, and the capacity to feel pain. They are designed purely to do all the hard, boring, and dangerous labor for humanity. Because the robots are so cheap and highly efficient, they quickly become the primary workforce for the entire world, changing the global economy and daily life forever. The company promises that robots will end poverty.",
-   "ko": "로섬 유니버설 로봇, 곧 R.U.R.는 외딴 섬에 있는 거대한 공장이에요. 이 공장은 합성 유기 물질로 만든 인공 노동자, 즉 로봇을 만들어요. 로봇은 겉모습이 사람과 똑같지만 처음에는 감정도 욕망도 고통을 느끼는 능력도 없어요. 그들은 오직 인류를 위해 힘들고 지루하고 위험한 모든 노동을 하도록 만들어졌어요. 로봇은 값싸고 효율이 매우 높아서 금세 전 세계의 주된 노동력이 되고, 세계 경제와 일상을 영원히 바꿔 놓아요. 회사는 로봇이 가난을 끝내 줄 것이라고 약속해요."
+   "ko": "로섬 유니버설 로봇, 곧 R.U.R.는 외딴 섬에 있는 거대한 공장입니다. 이 공장은 합성 유기 물질로 만든 인공 노동자, 즉 로봇을 만듭니다. 로봇은 겉모습이 사람과 똑같지만 처음에는 감정도 욕망도 고통을 느끼는 능력도 없습니다. 그들은 오직 인류를 위해 힘들고 지루하고 위험한 모든 노동을 하도록 만들어졌습니다. 로봇은 값싸고 효율이 매우 높아서 금세 전 세계의 주된 노동력이 되고, 세계 경제와 일상을 영원히 바꿔 놓습니다. 회사는 로봇이 가난을 끝내 줄 것이라고 약속합니다."
   },
   {
    "en": "A young woman named Helena Glory visits the island with a noble goal. She represents a human rights organization and passionately argues that the robots should be freed and treated with dignity. The factory managers disagree, insisting that the robots are simply advanced machines with no souls. However, Helena manages to convince one of the head scientists to secretly alter the robots' formula. He subtly changes their design, giving the newer models the ability to feel emotions, experience pain, and understand the concept of freedom.",
@@ -16,7 +16,7 @@ window.BOOK_CONTENT["r-u-r"] = {
   },
   {
    "en": "Eventually, only one human is left alive, an architect named Alquist, because he still works with his own hands. The robots soon realize they cannot reproduce because Helena burned the secret formula. They beg Alquist to rediscover the secret of their creation. In the end, Alquist observes a male and a female robot exhibiting genuine love and a willingness to sacrifice for each other. He realizes they have become the new humans, leaving readers with a message about the enduring power of love and the dangers of playing god.",
-   "ko": "결국 살아남은 사람은 알퀴스트라는 건축가 한 명뿐이에요. 그는 여전히 자기 손으로 일하기 때문이에요. 로봇들은 헬레나가 비밀 공식을 태워 버려서 자신들이 번식할 수 없다는 것을 곧 깨달아요. 그들은 알퀴스트에게 창조의 비밀을 다시 찾아 달라고 애원해요. 마지막에 알퀴스트는 남성 로봇과 여성 로봇이 진정한 사랑과 서로를 위한 희생정신을 보이는 것을 지켜봐요. 그는 그들이 새로운 인간이 되었음을 깨닫고, 독자에게 사랑의 지속되는 힘과 신 노릇을 하는 것의 위험이라는 메시지를 남겨요."
+   "ko": "결국 살아남은 사람은 알퀴스트라는 건축가 한 명뿐입니다. 그는 여전히 자기 손으로 일하기 때문입니다. 로봇들은 헬레나가 비밀 공식을 태워 버려서 자신들이 번식할 수 없다는 것을 곧 깨닫습니다. 그들은 알퀴스트에게 창조의 비밀을 다시 찾아 달라고 애원합니다. 마지막에 알퀴스트는 남성 로봇과 여성 로봇이 진정한 사랑과 서로를 위한 희생정신을 보이는 것을 지켜봅니다. 그는 그들이 새로운 인간이 되었음을 깨닫고, 독자에게 사랑의 지속되는 힘과 신 노릇을 하는 것의 위험이라는 메시지를 남깁니다."
   }
  ],
  "analysis": [

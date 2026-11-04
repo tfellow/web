@@ -16,7 +16,7 @@ window.BOOK_CONTENT["sundiata-lion-king-of-mali"] = {
   },
   {
    "en": "Sundiata finally returned to Mali to save his people. He faced the cruel king in a great battle and won. He brought peace and fairness back to his homeland. He became the famous Lion King and built a great, wealthy, and happy empire for everyone.",
-   "ko": "순디아타는 마침내 백성을 구하기 위해 말리로 돌아왔어요. 그는 잔인한 왕과 큰 전투를 벌여 승리했어요. 그는 고향에 평화와 공정함을 되찾아 주었어요. 그는 유명한 ‘사자왕’이 되어 모두를 위한 크고 부유하고 행복한 제국을 세웠어요."
+   "ko": "순디아타는 마침내 백성을 구하기 위해 말리로 돌아왔습니다. 그는 잔인한 왕과 큰 전투를 벌여 승리했습니다. 그는 고향에 평화와 공정함을 되찾아 주었습니다. 그는 유명한 ‘사자왕’이 되어 모두를 위한 크고 부유하고 행복한 제국을 세웠습니다."
   }
  ],
  "analysis": [
