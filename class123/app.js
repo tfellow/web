@@ -3,7 +3,7 @@
    현재 버전: v2.1.1 (다중 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.1.1';
+const APP_VERSION = 'v2.1.2';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -45365,28 +45365,33 @@ function initFirebaseCloud() {
       const localHistoryCount = (state.classes || []).reduce((sum, c) => sum + (c.history ? c.history.length : 0), 0);
 
       // [핵심 데이터 보호 규칙]
-      // 1. 클라우드에 실제 학급 데이터가 있고 로컬이 샘플이거나,
-      //    클라우드의 상세 이력이 로컬보다 더 많이 보존되어 있는 경우(이력 유실 방지):
+      // 1. 클라우드가 샘플이고 로컬이 실제 데이터인 경우:
+      //    절대로 클라우드의 샘플로 로컬을 덮어쓰지 않고, 오히려 로컬의 실제 데이터를 클라우드로 즉시 승격 업로드!
+      if (isCloudSample && !isLocalSample) {
+        console.log('[Firebase] 클라우드가 샘플 상태이므로 로컬의 실제 학급 데이터를 클라우드에 즉시 승격 업로드합니다.');
+        pushStateToCloud(state);
+        updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+        return;
+      }
+
+      // 2. 클라우드에 실제 학급 데이터가 있고 로컬이 샘플인 경우:
       //    무조건 클라우드의 완전한 실제 데이터를 최우선 복원!
-      if ((!isCloudSample && isLocalSample) || (cloudHistoryCount > localHistoryCount + 5)) {
-        console.log('[Firebase] 클라우드의 완전한 실제 학급 데이터를 로컬로 안전하게 복원합니다. (히스토리 수:', cloudHistoryCount, ')');
-        state = val;
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {}
-        refreshAppViews();
-        showUndoToast('☁️ 클라우드에 보관된 실제 학급 데이터(전체 상세 이력 ' + cloudHistoryCount + '건)를 성공적으로 복원했습니다.');
-      } else if (cloudUpdated > localUpdated) {
-        // 2. 클라우드가 로컬보다 최신인 경우 동기화
+      if (!isCloudSample && isLocalSample) {
+        console.log('[Firebase] 클라우드의 완전한 실제 학급 데이터를 로컬로 안전하게 복원합니다. (이력 수: ' + cloudHistoryCount + ')');
+        applyCloudStateToApp(val);
+        showUndoToast('☁️ 클라우드에 보관된 실제 학급 데이터 전체 상세 이력 ' + cloudHistoryCount + '건을 성공적으로 복원했습니다.');
+      } else if (!isCloudSample && cloudHistoryCount > localHistoryCount + 5) {
+        // 3. 둘 다 실제 데이터이지만 클라우드의 상세 이력이 로컬보다 더 많이 보존되어 있는 경우 (이력 유실 방지):
+        console.log('[Firebase] 클라우드의 상세 이력이 로컬보다 많아 안전 복원합니다. (클라우드: ' + cloudHistoryCount + ', 로컬: ' + localHistoryCount + ')');
+        applyCloudStateToApp(val);
+        showUndoToast('☁️ 클라우드 최신 상세 이력 ' + cloudHistoryCount + '건을 성공적으로 복원했습니다.');
+      } else if (!isCloudSample && cloudUpdated > localUpdated) {
+        // 4. 둘 다 실제 데이터이고 클라우드가 로컬보다 최신인 경우 동기화
         console.log('[Firebase] 다른 컴퓨터/브라우저의 최신 변경사항 감지 -> 동기화 적용');
-        state = val;
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {}
-        refreshAppViews();
+        applyCloudStateToApp(val);
         showUndoToast('☁️ 다른 기기의 최신 학급 데이터가 실시간 동기화되었습니다.');
       } else if (localUpdated > cloudUpdated && !isLocalSample) {
-        // 3. 로컬이 더 최신이고 샘플이 아닌 경우에만 클라우드로 전송 (단, 히스토리가 더 적은 상태로의 역덮어쓰기 원천 차단)
+        // 5. 로컬이 더 최신이고 샘플이 아닌 경우에만 클라우드로 전송 (단, 히스토리가 더 적은 상태로의 덮어쓰기 원천 차단)
         if (localHistoryCount >= cloudHistoryCount) {
           pushStateToCloud(state);
         } else {
@@ -45397,7 +45402,6 @@ function initFirebaseCloud() {
       // [관리자 비밀번호 클라우드 자동 동기화 & 보호]
       if (val.adminPassword) {
         const currentLocalPw = localStorage.getItem(ADMIN_PW_STORAGE_KEY);
-        // 로컬에 이미 변경된 비밀번호가 있고 클라우드가 기본값인 경우 로컬 값 보호
         if (!currentLocalPw || currentLocalPw === DEFAULT_ADMIN_PASSWORD || val.adminPassword !== DEFAULT_ADMIN_PASSWORD) {
           localStorage.setItem(ADMIN_PW_STORAGE_KEY, val.adminPassword);
         }
@@ -45415,6 +45419,38 @@ function initFirebaseCloud() {
     cloudLastErrorMsg = err.message;
     updateCloudStatusUI('offline', '⚠️ 클라우드 오프라인');
   }
+}
+
+// 클라우드 데이터를 로컬 state 및 전체 UI 컴포넌트에 안전하게 완전 반영하는 통합 함수 (v2.1.2)
+function applyCloudStateToApp(val, alertMessage) {
+  if (!val || !Array.isArray(val.classes) || val.classes.length === 0) {
+    return false;
+  }
+  state = val;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error('LocalStorage 저장 오류:', e);
+  }
+
+  // 현재 학급 유효성 보정 (해당 학급이 없으면 첫 번째 유효 학급으로 설정)
+  if (!state.currentClassId || !state.classes.some(c => c.id === state.currentClassId)) {
+    const visible = getVisibleClasses();
+    state.currentClassId = (visible && visible[0]) ? visible[0].id : state.classes[0].id;
+  }
+
+  // 전체 앱 뷰 및 UI 컴포넌트 완전 동기화 재렌더링
+  updateTopControlsUI();
+  renderClassSelector();
+  updateUndoButtonUI();
+  renderThermoSidebar();
+  switchView(state.currentView || 'students');
+  shuffleFlipCards(false);
+
+  if (alertMessage) {
+    alert(alertMessage);
+  }
+  return true;
 }
 
 function scheduleCloudSave() {
@@ -45474,10 +45510,8 @@ function handleManualCloudSync() {
     cloudLastErrorMsg = '';
     updateModalCloudSyncTime();
 
-    if (val && Array.isArray(val.classes)) {
-      state = val;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      refreshAppViews();
+    if (val && Array.isArray(val.classes) && val.classes.length > 0) {
+      applyCloudStateToApp(val);
       showUndoToast('☁️ 클라우드 최신 데이터와 성공적으로 동기화되었습니다!');
     } else {
       pushStateToCloud(state);
@@ -45491,7 +45525,7 @@ function handleManualCloudSync() {
   });
 }
 
-// 현재 컴퓨터의 데이터를 클라우드로 강제 업로드 (v2.0.1 신설)
+// 현재 컴퓨터의 데이터를 클라우드로 강제 업로드 (v2.0.1 신설, v2.1.2 강화)
 function forcePushToCloud() {
   if (!cloudDbRef) {
     initFirebaseCloud();
@@ -45500,7 +45534,19 @@ function forcePushToCloud() {
     alert('Firebase 클라우드 초기화에 실패했습니다. [연결 상태 진단]을 실행해 주세요.');
     return;
   }
-  if (!confirm('현재 이 컴퓨터에 있는 학급 데이터(학생 명단, 으쓱/머쓱 점수, 진도표 등)를 클라우드에 강제로 등록할까요?\n\n(다른 컴퓨터에서도 이 데이터로 동기화됩니다.)')) {
+
+  const localClassNames = state.classes.map(c => c.name || '무제').join(', ');
+  const localTotalStudents = state.classes.reduce((sum, c) => sum + (c.students ? c.students.length : 0), 0);
+  const localTotalHistory = state.classes.reduce((sum, c) => sum + (c.history ? c.history.length : 0), 0);
+
+  let confirmMsg = '[내 데이터 클라우드에 올리기]\n\n';
+  confirmMsg += '현재 이 컴퓨터의 학급 데이터를 클라우드에 등록하시겠습니까?\n\n';
+  confirmMsg += '• 업로드 학급: 총 ' + state.classes.length + '개 (' + localClassNames + ')\n';
+  confirmMsg += '• 총 학생 수: ' + localTotalStudents + '명\n';
+  confirmMsg += '• 으쓱/머쓱 활동 이력: ' + localTotalHistory + '건\n\n';
+  confirmMsg += '(다른 컴퓨터나 스마트폰에서도 이 데이터로 실시간 동기화됩니다.)';
+
+  if (!confirm(confirmMsg)) {
     return;
   }
 
@@ -45508,10 +45554,13 @@ function forcePushToCloud() {
   const payload = JSON.parse(JSON.stringify(state));
   payload.updatedAt = Date.now();
   state.updatedAt = payload.updatedAt;
+  payload.adminPassword = getAdminPassword();
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {}
 
+  isLocalSavingToCloud = true;
   cloudDbRef.set(payload)
     .then(() => {
       cloudLastSyncTime = new Date();
@@ -45519,15 +45568,21 @@ function forcePushToCloud() {
       updateModalCloudSyncTime();
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
       showUndoToast('☁️ 현재 컴퓨터의 데이터가 클라우드에 성공적으로 저장되었습니다!');
-      alert('성공: 현재 학급 데이터가 클라우드에 안전하게 저장되었습니다.\n이제 다른 컴퓨터나 브라우저에서 로그인하시면 이 데이터가 그대로 보입니다.');
+      alert('🎉 성공: 현재 학급 데이터가 클라우드에 안전하게 저장되었습니다!\n\n• 등록된 학급: 총 ' + state.classes.length + '개 (' + localClassNames + ')\n• 총 학생 수: ' + localTotalStudents + '명\n• 활동 이력: ' + localTotalHistory + '건\n\n이제 다른 컴퓨터나 브라우저에서 [클라우드에서 내려받기]를 누르면 언제든지 동일한 데이터가 불러와집니다.');
     })
     .catch(err => {
       cloudLastErrorMsg = err.message;
       alert('클라우드 업로드 실패: ' + err.message);
       updateCloudStatusUI('offline', '⚠️ 업로드 실패');
+    })
+    .finally(() => {
+      setTimeout(() => {
+        isLocalSavingToCloud = false;
+      }, 500);
     });
 }
 
+// 클라우드에 저장된 최신 데이터를 강제로 내려받기 (v2.1.2 전체 렌더링 & 상세 검증 강화)
 function forcePullFromCloud() {
   if (!cloudDbRef) {
     initFirebaseCloud();
@@ -45536,46 +45591,75 @@ function forcePullFromCloud() {
     alert('Firebase 클라우드에 아직 연결되지 않았습니다. [연결 상태 진단]을 눌러 확인해 주세요.');
     return;
   }
-  if (!confirm('클라우드에 저장된 최신 데이터를 강제로 불러와 현재 화면의 내용을 덮어씌울까요?')) {
-    return;
-  }
-  updateCloudStatusUI('syncing', '🔄 클라우드 불러오는 중...');
+
+  updateCloudStatusUI('syncing', '🔄 클라우드 데이터 확인 중...');
   cloudDbRef.once('value').then(snapshot => {
     const val = snapshot.val();
-    if (!val || !Array.isArray(val.classes)) {
+    if (!val || !Array.isArray(val.classes) || val.classes.length === 0) {
       alert('클라우드에 저장된 학급 데이터가 아직 없습니다.\n[내 데이터 클라우드에 올리기] 버튼을 먼저 눌러 현재 컴퓨터의 데이터를 클라우드에 등록해 주세요.');
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
       return;
     }
-    state = val;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    refreshAppViews();
+
+    const isCloudSample = isSampleState(val);
+    const isLocalSample = isSampleState(state);
+    const cloudClassNames = val.classes.map(c => c.name || '무제').join(', ');
+    const cloudTotalStudents = val.classes.reduce((sum, c) => sum + (c.students ? c.students.length : 0), 0);
+    const cloudTotalHistory = val.classes.reduce((sum, c) => sum + (c.history ? c.history.length : 0), 0);
+    const cloudTimeStr = val.updatedAt ? new Date(val.updatedAt).toLocaleString('ko-KR') : '시간 기록 없음';
+
+    let confirmMsg = '[클라우드 데이터 내려받기]\n\n';
+    confirmMsg += '• 클라우드 학급 수: ' + val.classes.length + '개 (' + cloudClassNames + ')\n';
+    confirmMsg += '• 총 학생 수: ' + cloudTotalStudents + '명\n';
+    confirmMsg += '• 으쓱/머쓱 활동 이력: ' + cloudTotalHistory + '건\n';
+    confirmMsg += '• 최종 클라우드 저장일시: ' + cloudTimeStr + '\n\n';
+
+    if (isCloudSample && !isLocalSample) {
+      confirmMsg += '⚠️ [주의] 클라우드에 저장된 데이터는 샘플/임시 학급입니다.\n현재 컴퓨터의 실제 학급 데이터가 지워질 수 있습니다.\n\n정말로 현재 화면의 내용을 덮어씌울까요?';
+    } else {
+      confirmMsg += '클라우드에 저장된 위 데이터를 내려받아 현재 화면과 컴퓨터에 즉시 적용할까요?';
+    }
+
+    if (!confirm(confirmMsg)) {
+      updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+      return;
+    }
+
+    updateCloudStatusUI('syncing', '🔄 클라우드 데이터 적용 중...');
+    applyCloudStateToApp(val);
+
     closeModal('modal-backup');
-    showUndoToast('☁️ 클라우드 최신 데이터를 성공적으로 불러왔습니다!');
+    cloudLastSyncTime = new Date();
+    cloudLastErrorMsg = '';
+    updateModalCloudSyncTime();
     updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
+
+    alert('🎉 클라우드 최신 데이터를 성공적으로 내려받았습니다!\n\n• 반영된 학급: 총 ' + val.classes.length + '개 (' + cloudClassNames + ')\n• 총 학생 수: ' + cloudTotalStudents + '명\n• 활동 이력: ' + cloudTotalHistory + '건\n\n상단 학급 선택 드롭다운과 학생 명단, 으쓱/머쓱 점수가 즉시 화면에 적용되었습니다.');
+    showUndoToast('☁️ 클라우드 최신 데이터를 성공적으로 불러왔습니다!');
   }).catch(err => {
     cloudLastErrorMsg = err.message;
     alert('클라우드 데이터 불러오기 실패: ' + err.message);
+    updateCloudStatusUI('offline', '⚠️ 내려받기 실패');
   });
 }
 
-// 클라우드 연결 상태 자가 진단 도구 (v2.0.1 신설)
+// 클라우드 연결 상태 자가 진단 도구 (v2.0.1 신설, v2.1.2 상세 진단 강화)
 function diagnoseCloudConnection() {
   const isSdkLoaded = typeof firebase !== 'undefined';
   const cfg = DEFAULT_FIREBASE_CONFIG;
   const user = getStoredAuthUser();
   const wsKey = getCloudWorkspaceKey();
 
-  let msg = `[클라우드 연결 상태 진단 결과]\n\n`;
-  msg += `1. Firebase SDK 로드: ${isSdkLoaded ? '✅ 정상 로드됨' : '❌ 로드 실패 (네트워크 차단)'}\n`;
-  msg += `2. 연결 프로젝트: ${cfg.projectId} (Realtime DB)\n`;
-  msg += `3. DB 주소: ${cfg.databaseURL}\n`;
-  msg += `4. 로그인 계정: ${user ? user.email : '관리자 공용 모드'}\n`;
-  msg += `5. 클라우드 작업공간: ${wsKey}\n`;
-  msg += `6. 마지막 에러 기록: ${cloudLastErrorMsg || '없음 (정상)'}\n\n`;
+  let msg = '[클라우드 연결 상태 진단 결과]\n\n';
+  msg += '1. Firebase SDK 로드: ' + (isSdkLoaded ? '✅ 정상 로드됨' : '❌ 로드 실패 (네트워크 차단)') + '\n';
+  msg += '2. 연결 프로젝트: ' + cfg.projectId + ' (Realtime DB)\n';
+  msg += '3. DB 주소: ' + cfg.databaseURL + '\n';
+  msg += '4. 로그인 계정: ' + (user ? user.email : '관리자 공용 모드') + '\n';
+  msg += '5. 클라우드 작업공간: ' + wsKey + '\n';
+  msg += '6. 마지막 에러 기록: ' + (cloudLastErrorMsg || '없음 (정상)') + '\n\n';
 
   if (!isSdkLoaded) {
-    msg += `👉 해결 팁: 학교망 방화벽이나 광고 차단기(AdBlock)가 gstatic.com 스크립트를 차단하고 있는지 확인해 주세요.`;
+    msg += '💡 해결 팁: 학교망 방화벽이나 광고 차단기(AdBlock)가 gstatic.com 스크립트를 차단하고 있는지 확인해 주세요.';
     alert(msg);
     return;
   }
@@ -45587,51 +45671,56 @@ function diagnoseCloudConnection() {
   if (cloudDbRef) {
     cloudDbRef.once('value').then(snap => {
       const val = snap.val();
-      const hasData = val && Array.isArray(val.classes);
-      msg += `7. 실시간 서버 응답: ✅ 통신 성공!\n`;
-      msg += `8. 클라우드 데이터 유무: ${hasData ? `있음 (${val.classes.length}개 학급, ${val.classes.reduce((sum, c) => sum + (c.students ? c.students.length : 0), 0)}명 학생)` : '비어있음 (아직 업로드 안 됨)'}\n\n`;
-      if (!hasData) {
-        msg += `💡 안내: 클라우드에 아직 데이터가 없습니다. [내 데이터 클라우드에 올리기] 버튼을 눌러 현재 컴퓨터 데이터를 올려주시면 다른 컴퓨터에서도 바로 연동됩니다.`;
+      const hasData = val && Array.isArray(val.classes) && val.classes.length > 0;
+      msg += '7. 실시간 서버 응답: ✅ 통신 성공!\n';
+      if (hasData) {
+        const classNames = val.classes.map(c => c.name || '무제').join(', ');
+        const totalStu = val.classes.reduce((sum, c) => sum + (c.students ? c.students.length : 0), 0);
+        const totalHist = val.classes.reduce((sum, c) => sum + (c.history ? c.history.length : 0), 0);
+        const timeStr = val.updatedAt ? new Date(val.updatedAt).toLocaleString('ko-KR') : '기록 없음';
+        msg += '8. 클라우드 데이터: ✅ 보관 중\n';
+        msg += '   • 학급: 총 ' + val.classes.length + '개 (' + classNames + ')\n';
+        msg += '   • 학생: 총 ' + totalStu + '명\n';
+        msg += '   • 활동 이력: 총 ' + totalHist + '건\n';
+        msg += '   • 최종 동기화: ' + timeStr + '\n\n';
+        msg += '🎉 정상: 다기기 실시간 동기화 및 클라우드 내려받기가 원활하게 작동 중입니다.';
       } else {
-        msg += `🎉 정상: 다기기 실시간 동기화가 원활하게 작동 중입니다.`;
+        msg += '8. 클라우드 데이터: ⚠️ 비어있음 (아직 업로드 안 됨)\n\n';
+        msg += '📢 안내: [내 데이터 클라우드에 올리기] 버튼을 눌러 현재 컴퓨터 데이터를 올려주시면 다른 컴퓨터에서도 바로 연동됩니다.';
       }
       alert(msg);
     }).catch(err => {
-      msg += `7. 실시간 서버 응답: ❌ 통신 실패 (${err.message})\n\n`;
-      msg += `👉 해결 팁: 네트워크 상태나 브라우저를 확인해 주세요.`;
+      msg += '7. 실시간 서버 응답: ❌ 통신 실패 (' + err.message + ')\n\n';
+      msg += '💡 해결 팁: 네트워크 상태와 브라우저를 확인해 주세요.';
       alert(msg);
     });
   } else {
-    alert(msg + `\n❌ 클라우드 데이터베이스 초기화 실패`);
+    alert(msg + '\n❌ 클라우드 데이터베이스 초기화 실패');
   }
 }
 
-function updateCloudStatusUI(status, label) {
+function updateCloudStatusUI(status, text) {
+  const badge = document.getElementById('cloud-sync-badge');
   const dot = document.getElementById('cloud-sync-dot');
-  const text = document.getElementById('cloud-sync-text');
+  const txt = document.getElementById('cloud-sync-text');
   const modalTag = document.getElementById('modal-cloud-status-tag');
 
-  if (dot) {
-    dot.className = 'sync-dot';
-    if (status === 'syncing') dot.classList.add('syncing');
-    else if (status === 'offline') dot.classList.add('offline');
-    else if (status === 'error') dot.classList.add('error');
+  if (txt) txt.textContent = text;
+  if (badge) {
+    badge.className = 'cloud-sync-badge ' + (status === 'connected' ? 'sync-connected' : status === 'syncing' ? 'sync-syncing' : 'sync-offline');
   }
-
-  if (text) text.textContent = label;
-
+  if (dot) {
+    dot.className = 'sync-dot ' + (status === 'connected' ? 'sync-dot-connected' : status === 'syncing' ? 'sync-dot-syncing' : 'sync-dot-offline');
+  }
   if (modalTag) {
     if (status === 'connected') {
-      modalTag.style.background = '#10b981';
+      modalTag.className = 'cloud-badge-tag tag-connected';
       modalTag.textContent = '🟢 실시간 연결됨';
     } else if (status === 'syncing') {
-      modalTag.style.background = '#3b82f6';
-      modalTag.textContent = '🔄 동기화 중...';
-    } else if (status === 'offline') {
-      modalTag.style.background = '#f59e0b';
-      modalTag.textContent = '⚠️ 오프라인 (로컬 보존)';
+      modalTag.className = 'cloud-badge-tag tag-syncing';
+      modalTag.textContent = '🔄 동기화 중';
     } else {
-      modalTag.style.background = '#ef4444';
+      modalTag.className = 'cloud-badge-tag tag-offline';
       modalTag.textContent = '❌ 오류';
     }
   }
@@ -45647,7 +45736,6 @@ function updateModalCloudSyncTime() {
     }
   }
 }
-
 function refreshAppViews() {
   updateTopControlsUI();
   updateUndoButtonUI();
