@@ -7821,5 +7821,249 @@ window.BOOKS = [
   "places": [
    "South Africa"
   ]
+ },
+ {
+  "id": "issun-boshi-the-one-inch-boy",
+  "title": "Issun-boshi, the One-Inch Boy",
+  "titleKo": "일촌법사 (1인치 소년)",
+  "author": "Japanese Folktale",
+  "authorKo": "일본 민담",
+  "country": "Japan",
+  "emoji": "🗡️",
+  "color": "#4682b4",
+  "cefr": "A0",
+  "lexile": "약 420L",
+  "words": 106,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-magic-porridge-pot",
+  "title": "The Magic Porridge Pot",
+  "titleKo": "마법의 죽 냄비",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🍲",
+  "color": "#d2b48c",
+  "cefr": "A0",
+  "lexile": "약 430L",
+  "words": 93,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "son-tinh-and-thuy-tinh",
+  "title": "Son Tinh and Thuy Tinh",
+  "titleKo": "선띤과 투이띤",
+  "author": "Vietnamese Folktale",
+  "authorKo": "베트남 민담",
+  "country": "Vietnam",
+  "emoji": "🌊",
+  "color": "#4682b4",
+  "cefr": "A1",
+  "lexile": "약 650L",
+  "words": 148,
+  "places": [
+   "Vietnam"
+  ]
+ },
+ {
+  "id": "the-blue-jackal",
+  "title": "The Blue Jackal",
+  "titleKo": "푸른 자칼",
+  "author": "Panchatantra",
+  "authorKo": "판차탄트라",
+  "country": "India",
+  "emoji": "🦊",
+  "color": "#4169e1",
+  "cefr": "A1",
+  "lexile": "약 670L",
+  "words": 167,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-fisherman-and-the-jinni",
+  "title": "The Fisherman and the Jinni",
+  "titleKo": "어부와 지니",
+  "author": "One Thousand and One Nights",
+  "authorKo": "천일야화",
+  "country": "Iraq",
+  "emoji": "🏺",
+  "color": "#cd853f",
+  "cefr": "A1",
+  "lexile": "약 710L",
+  "words": 146,
+  "places": [
+   "Iraq"
+  ]
+ },
+ {
+  "id": "the-monkey-king-jataka",
+  "title": "The Monkey King (Jataka)",
+  "titleKo": "원숭이 왕 (본생경)",
+  "author": "Jataka Tales",
+  "authorKo": "자타카 이야기",
+  "country": "India",
+  "emoji": "🐒",
+  "color": "#2e8b57",
+  "cefr": "A1",
+  "lexile": "약 690L",
+  "words": 142,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "first-love",
+  "title": "First Love",
+  "titleKo": "첫사랑",
+  "author": "Ivan Turgenev",
+  "authorKo": "이반 투르게네프",
+  "country": "Russia",
+  "emoji": "🌸",
+  "color": "#ffb6c1",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 261,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "michael-strogoff",
+  "title": "Michel Strogoff",
+  "titleKo": "미하일 스트로고프",
+  "author": "Jules Verne",
+  "authorKo": "쥘 베른",
+  "country": "France",
+  "emoji": "🏇",
+  "color": "#b22222",
+  "cefr": "B1",
+  "lexile": "약 890L",
+  "words": 270,
+  "places": [
+   "France",
+   "Russia"
+  ]
+ },
+ {
+  "id": "peter-schlemihl",
+  "title": "Peter Schlemihl",
+  "titleKo": "피터 슐레밀의 기이한 이야기",
+  "author": "Adelbert von Chamisso",
+  "authorKo": "아델베르트 폰 샤미소",
+  "country": "Germany",
+  "emoji": "👤",
+  "color": "#708090",
+  "cefr": "B1",
+  "lexile": "약 830L",
+  "words": 274,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "the-captains-daughter",
+  "title": "The Captain's Daughter",
+  "titleKo": "대위의 딸",
+  "author": "Alexander Pushkin",
+  "authorKo": "알렉산드르 푸시킨",
+  "country": "Russia",
+  "emoji": "❄️",
+  "color": "#4682b4",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 287,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "the-mysterious-island",
+  "title": "The Mysterious Island",
+  "titleKo": "신비의 섬",
+  "author": "Jules Verne",
+  "authorKo": "쥘 베른",
+  "country": "France",
+  "emoji": "🏝️",
+  "color": "#20b2aa",
+  "cefr": "B1",
+  "lexile": "약 890L",
+  "words": 250,
+  "places": [
+   "France",
+   "United States"
+  ]
+ },
+ {
+  "id": "when-buckwheat-flowers-bloom",
+  "title": "When Buckwheat Flowers Bloom",
+  "titleKo": "메밀꽃 필 무렵",
+  "author": "Yi Hyo-seok",
+  "authorKo": "이효석",
+  "country": "South Korea",
+  "emoji": "🌼",
+  "color": "#f5f5dc",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 276,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "dom-casmurro",
+  "title": "Dom Casmurro",
+  "titleKo": "돔 카스무루",
+  "author": "Machado de Assis",
+  "authorKo": "마샤두 지 아시스",
+  "country": "Brazil",
+  "emoji": "📓",
+  "color": "#808080",
+  "cefr": "B2",
+  "lexile": "약 960L",
+  "words": 350,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "noli-me-tangere",
+  "title": "Noli Me Tángere",
+  "titleKo": "놀리 메 탕헤레",
+  "author": "José Rizal",
+  "authorKo": "호세 리살",
+  "country": "Philippines",
+  "emoji": "📜",
+  "color": "#8b4513",
+  "cefr": "B2",
+  "lexile": "약 950L",
+  "words": 368,
+  "places": [
+   "Philippines"
+  ]
+ },
+ {
+  "id": "the-interesting-narrative-of-olaudah-equiano",
+  "title": "The Interesting Narrative of Olaudah Equiano",
+  "titleKo": "올라우다 에퀴아노의 흥미로운 이야기",
+  "author": "Olaudah Equiano",
+  "authorKo": "올라우다 에퀴아노",
+  "country": "Nigeria",
+  "emoji": "📖",
+  "color": "#a0522d",
+  "cefr": "B2",
+  "lexile": "약 1050L",
+  "words": 350,
+  "places": [
+   "Nigeria",
+   "United Kingdom",
+   "United States"
+  ]
  }
 ];

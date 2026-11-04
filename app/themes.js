@@ -514,5 +514,20 @@ window.BOOK_THEMES = {
   "the-queen-of-spades": "honesty,wisdom|mystery",
   "eclipse-of-the-crescent-moon": "history,adventure|hist",
   "maria": "love,nature|classic",
-  "the-story-of-an-african-farm": "growth,justice|classic"
+  "the-story-of-an-african-farm": "growth,justice|classic",
+  "issun-boshi-the-one-inch-boy": "adventure,growth|tale",
+  "the-magic-porridge-pot": "family,wisdom|tale",
+  "son-tinh-and-thuy-tinh": "nature,myth|myth",
+  "the-blue-jackal": "honesty,wisdom|fable",
+  "the-fisherman-and-the-jinni": "wisdom,adventure|tale",
+  "the-monkey-king-jataka": "wisdom,justice|fable",
+  "first-love": "love,growth|classic",
+  "michael-strogoff": "adventure,history|adv",
+  "peter-schlemihl": "adventure,myth|myth",
+  "the-captains-daughter": "history,love|classic",
+  "the-mysterious-island": "adventure,wisdom|sf",
+  "when-buckwheat-flowers-bloom": "family,nature|short",
+  "dom-casmurro": "love,growth|classic",
+  "noli-me-tangere": "justice,history|classic",
+  "the-interesting-narrative-of-olaudah-equiano": "history,growth|true"
 };
