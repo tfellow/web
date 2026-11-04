@@ -16,7 +16,7 @@ window.BOOK_CONTENT["from-the-apennines-to-the-andes"] = {
   },
   {
    "en": "Finally, Marco reached the town of Tucumán, near the mountains. He found his mother, but she was very sick in bed. When she saw Marco, she was so happy and surprised. Seeing her brave son gave her new strength. She quickly recovered, and they hugged each other with joy.",
-   "ko": "마침내 마르코는 산이 가까운 투쿠만 마을에 도착했어요. 그는 어머니를 찾았지만, 어머니는 심하게 아파서 누워 있었어요. 어머니는 마르코를 보자 너무 기쁘고 놀랐어요. 용감한 아들을 보자 새로운 힘이 솟았어요. 어머니는 금세 회복했고, 두 사람은 기쁨에 겨워 서로 껴안았어요."
+   "ko": "마침내 마르코는 산이 가까운 투쿠만 마을에 도착했습니다. 그는 어머니를 찾았지만, 어머니는 심하게 아파서 누워 있었습니다. 어머니는 마르코를 보자 너무 기쁘고 놀랐습니다. 용감한 아들을 보자 새로운 힘이 솟았습니다. 어머니는 금세 회복했고, 두 사람은 기쁨에 겨워 서로 껴안았습니다."
   }
  ],
  "analysis": [

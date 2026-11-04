@@ -4,7 +4,7 @@ window.BOOK_CONTENT["i-am-a-cat"] = {
  "story": [
   {
    "en": "The story is told from the unique perspective of a clever, nameless cat who lives in the house of a Japanese school teacher named Mr. Sneaze. The cat is very observant and highly intelligent, often believing that he is much smarter than the humans around him. He spends his days quietly watching the daily lives, strange habits, and endless conversations of his master and his master's eccentric friends. To the cat, the human world is a fascinating, yet completely ridiculous place full of unnecessary worries and foolish behaviors. The family never gave him a name, so he proudly tells everyone that he is simply a cat, nothing more.",
-   "ko": "이야기는 일본인 학교 교사 스니즈(Sneaze) 선생의 집에 사는, 이름 없는 영리한 고양이의 독특한 시선으로 전해져요. 고양이는 관찰력이 아주 뛰어나고 똑똑해서, 자신이 주변 사람들보다 훨씬 영리하다고 자주 믿어요. 그는 주인과 주인의 별난 친구들의 일상, 이상한 버릇, 끝없는 대화를 조용히 지켜보며 하루를 보내요. 고양이에게 인간 세상은 흥미롭지만 불필요한 걱정과 어리석은 행동으로 가득한 우스꽝스러운 곳이에요. 가족은 그에게 이름을 지어 주지 않았기에, 그는 자랑스럽게 자신은 그냥 고양이일 뿐이라고 모두에게 말해요."
+   "ko": "이야기는 일본인 학교 교사 스니즈 씨의 집에 사는, 이름 없는 영리한 고양이의 독특한 시선으로 전해집니다. 고양이는 관찰력이 아주 뛰어나고 똑똑해서, 자신이 주변 사람들보다 훨씬 영리하다고 자주 믿습니다. 그는 주인과 주인의 별난 친구들의 일상, 이상한 버릇, 끝없는 대화를 조용히 지켜보며 하루를 보냅니다. 고양이에게 인간 세상은 흥미롭지만 불필요한 걱정과 어리석은 행동으로 가득한 우스꽝스러운 곳입니다. 가족은 그에게 이름을 지어 주지 않았기에, 그는 자랑스럽게 자신은 그냥 고양이일 뿐이라고 모두에게 말합니다."
   },
   {
    "en": "Mr. Sneaze is a lazy and somewhat grumpy man who constantly complains about his stomach problems and reads books, only to fall asleep with them on his face. His friends frequently visit the house, and they spend hours debating silly topics, telling exaggerated stories, and pretending to be very intellectual and important. The cat listens to all their philosophical discussions and silently judges them. He finds it highly amusing that humans try so hard to appear dignified while actually being quite petty and absurd.",
@@ -16,7 +16,7 @@ window.BOOK_CONTENT["i-am-a-cat"] = {
   },
   {
    "en": "Instead of facing a tragic or painful end, the cat simply continues his philosophical observations until a quiet, accidental moment concludes his journey. One night, he drinks some leftover beer, becomes dizzy, and slips into a water jar. Realizing that struggling is useless, he peacefully accepts his fate and drifts into a calm, eternal sleep. The novel remains a brilliant and funny reflection on human nature, showing us our own flaws through the objective and witty gaze of a humble household pet.",
-   "ko": "비극적이거나 고통스러운 결말 대신, 고양이는 조용하고 우연한 순간이 그의 여정을 끝낼 때까지 철학적인 관찰을 계속해요. 어느 날 밤 그는 먹다 남은 맥주를 마시고 어지러워져 물항아리에 빠져요. 버둥거려 봐야 소용없다는 것을 깨닫고 그는 평온하게 운명을 받아들이며 고요하고 영원한 잠에 빠져들어요. 이 소설은 평범한 집고양이의 객관적이고 재치 있는 시선으로 우리 자신의 결점을 보여 주는, 인간 본성에 대한 훌륭하고 재미있는 성찰로 남아 있어요."
+   "ko": "비극적이거나 고통스러운 결말 대신, 고양이는 조용하고 우연한 순간이 그의 여정을 끝낼 때까지 철학적인 관찰을 계속합니다. 어느 날 밤 그는 먹다 남은 맥주를 마시고 어지러워져 물항아리에 빠집니다. 버둥거려 봐야 소용없다는 것을 깨닫고 그는 평온하게 운명을 받아들이며 고요하고 영원한 잠에 빠져듭니다. 이 소설은 평범한 집고양이의 객관적이고 재치 있는 시선으로 우리 자신의 결점을 보여 주는, 인간 본성에 대한 훌륭하고 재미있는 성찰로 남아 있습니다."
   }
  ],
  "analysis": [

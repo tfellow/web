@@ -7164,5 +7164,342 @@ window.BOOKS = [
   "places": [
    "Lebanon"
   ]
+ },
+ {
+  "id": "kabuliwala",
+  "title": "Kabuliwala",
+  "titleKo": "카불리왈라",
+  "author": "Rabindranath Tagore",
+  "authorKo": "라빈드라나트 타고르",
+  "country": "India",
+  "emoji": "🍇",
+  "color": "#d2b48c",
+  "cefr": "A2",
+  "lexile": "약 760L",
+  "words": 208,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "little-half-chick",
+  "title": "Little Half-Chick",
+  "titleKo": "반쪽 병아리",
+  "author": "Spanish Folktale",
+  "authorKo": "스페인 민담",
+  "country": "Spain",
+  "emoji": "🐥",
+  "color": "#ffb6c1",
+  "cefr": "A0",
+  "lexile": "약 450L",
+  "words": 104,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "the-monkey-and-the-turtle",
+  "title": "The Monkey and the Turtle",
+  "titleKo": "원숭이와 거북이",
+  "author": "Filipino Folktale",
+  "authorKo": "필리핀 민담",
+  "country": "Philippines",
+  "emoji": "🐒",
+  "color": "#228b22",
+  "cefr": "A0",
+  "lexile": "약 420L",
+  "words": 93,
+  "places": [
+   "Philippines"
+  ]
+ },
+ {
+  "id": "anansi-and-the-sky-gods-stories",
+  "title": "Anansi and the Sky God's Stories",
+  "titleKo": "아난시와 하늘 신의 이야기",
+  "author": "Ghanaian Folktale",
+  "authorKo": "가나 민담",
+  "country": "Ghana",
+  "emoji": "🕷️",
+  "color": "#8b008b",
+  "cefr": "A1",
+  "lexile": "약 640L",
+  "words": 167,
+  "places": [
+   "Ghana"
+  ]
+ },
+ {
+  "id": "malin-kundang",
+  "title": "Malin Kundang",
+  "titleKo": "말린 쿤당",
+  "author": "Indonesian Folktale",
+  "authorKo": "인도네시아 민담",
+  "country": "Indonesia",
+  "emoji": "⛵",
+  "color": "#a0522d",
+  "cefr": "A1",
+  "lexile": "약 650L",
+  "words": 165,
+  "places": [
+   "Indonesia"
+  ]
+ },
+ {
+  "id": "the-legend-of-lake-toba",
+  "title": "The Legend of Lake Toba",
+  "titleKo": "토바 호수의 전설",
+  "author": "Indonesian Folktale",
+  "authorKo": "인도네시아 민담",
+  "country": "Indonesia",
+  "emoji": "🐟",
+  "color": "#00ced1",
+  "cefr": "A1",
+  "lexile": "약 620L",
+  "words": 168,
+  "places": [
+   "Indonesia"
+  ]
+ },
+ {
+  "id": "the-legend-of-mayon-volcano",
+  "title": "The Legend of Mayon Volcano",
+  "titleKo": "마욘 화산의 전설",
+  "author": "Filipino Folktale",
+  "authorKo": "필리핀 민담",
+  "country": "Philippines",
+  "emoji": "🌋",
+  "color": "#8b0000",
+  "cefr": "A1",
+  "lexile": "약 680L",
+  "words": 177,
+  "places": [
+   "Philippines"
+  ]
+ },
+ {
+  "id": "mansa-musa-of-mali",
+  "title": "Mansa Musa of Mali",
+  "titleKo": "말리의 만사 무사",
+  "author": "World History",
+  "authorKo": "세계사",
+  "country": "Mali",
+  "emoji": "👑",
+  "color": "#ffd700",
+  "cefr": "A2",
+  "lexile": "약 810L",
+  "words": 191,
+  "places": [
+   "Mali",
+   "Egypt"
+  ]
+ },
+ {
+  "id": "quetzalcoatl",
+  "title": "Quetzalcoatl",
+  "titleKo": "케찰코아틀",
+  "author": "Aztec Myth",
+  "authorKo": "아즈텍 신화",
+  "country": "Mexico",
+  "emoji": "🐍",
+  "color": "#3cb371",
+  "cefr": "A2",
+  "lexile": "약 720L",
+  "words": 200,
+  "places": [
+   "Mexico"
+  ]
+ },
+ {
+  "id": "sampo-the-magic-mill",
+  "title": "Sampo, the Magic Mill (Kalevala)",
+  "titleKo": "마법의 맷돌, 삼포 (칼레발라)",
+  "author": "Finnish Epic",
+  "authorKo": "핀란드 서사시",
+  "country": "Finland",
+  "emoji": "❄️",
+  "color": "#add8e6",
+  "cefr": "A2",
+  "lexile": "약 780L",
+  "words": 196,
+  "places": [
+   "Finland"
+  ]
+ },
+ {
+  "id": "tam-and-cam",
+  "title": "Tam and Cam",
+  "titleKo": "떰과 깜",
+  "author": "Vietnamese Folktale",
+  "authorKo": "베트남 민담",
+  "country": "Vietnam",
+  "emoji": "👠",
+  "color": "#fffacd",
+  "cefr": "A2",
+  "lexile": "약 710L",
+  "words": 248,
+  "places": [
+   "Vietnam"
+  ]
+ },
+ {
+  "id": "the-popol-vuh-the-hero-twins",
+  "title": "The Popol Vuh: The Hero Twins",
+  "titleKo": "포폴 부: 영웅 쌍둥이",
+  "author": "Maya Epic",
+  "authorKo": "마야 서사시",
+  "country": "Guatemala",
+  "emoji": "🌽",
+  "color": "#e2a76f",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 196,
+  "places": [
+   "Guatemala"
+  ]
+ },
+ {
+  "id": "botchan",
+  "title": "Botchan",
+  "titleKo": "도련님",
+  "author": "Natsume Sōseki",
+  "authorKo": "나쓰메 소세키",
+  "country": "Japan",
+  "emoji": "🏫",
+  "color": "#4682b4",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 263,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "iracema",
+  "title": "Iracema",
+  "titleKo": "이라세마",
+  "author": "José de Alencar",
+  "authorKo": "조제 지 알렝카르",
+  "country": "Brazil",
+  "emoji": "🌴",
+  "color": "#2e8b57",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 257,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "memories-of-my-childhood",
+  "title": "Memories of My Childhood",
+  "titleKo": "내 어린 시절의 추억",
+  "author": "Ion Creangă",
+  "authorKo": "이온 크레앙가",
+  "country": "Romania",
+  "emoji": "🍒",
+  "color": "#e9967a",
+  "cefr": "B1",
+  "lexile": "약 840L",
+  "words": 257,
+  "places": [
+   "Romania"
+  ]
+ },
+ {
+  "id": "the-alienist",
+  "title": "The Alienist",
+  "titleKo": "정신과 의사",
+  "author": "Machado de Assis",
+  "authorKo": "마샤두 지 아시스",
+  "country": "Brazil",
+  "emoji": "🧠",
+  "color": "#483d8b",
+  "cefr": "B1",
+  "lexile": "약 890L",
+  "words": 264,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "the-madman",
+  "title": "The Madman",
+  "titleKo": "광인",
+  "author": "Kahlil Gibran",
+  "authorKo": "칼릴 지브란",
+  "country": "Lebanon",
+  "emoji": "🎭",
+  "color": "#800080",
+  "cefr": "B1",
+  "lexile": "약 850L",
+  "words": 273,
+  "places": [
+   "Lebanon"
+  ]
+ },
+ {
+  "id": "the-painted-skin",
+  "title": "The Painted Skin",
+  "titleKo": "화피",
+  "author": "Pu Songling",
+  "authorKo": "포송령",
+  "country": "China",
+  "emoji": "👹",
+  "color": "#8b0000",
+  "cefr": "B1",
+  "lexile": "약 840L",
+  "words": 257,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "martin-fierro",
+  "title": "Martín Fierro",
+  "titleKo": "마르틴 피에로",
+  "author": "José Hernández",
+  "authorKo": "호세 에르난데스",
+  "country": "Argentina",
+  "emoji": "🎸",
+  "color": "#8b4513",
+  "cefr": "B2",
+  "lexile": "약 900L",
+  "words": 350,
+  "places": [
+   "Argentina"
+  ]
+ },
+ {
+  "id": "mhudi",
+  "title": "Mhudi",
+  "titleKo": "무디",
+  "author": "Sol Plaatje",
+  "authorKo": "솔 플라제",
+  "country": "South Africa",
+  "emoji": "🦁",
+  "color": "#cd5c5c",
+  "cefr": "B2",
+  "lexile": "약 950L",
+  "words": 350,
+  "places": [
+   "South Africa"
+  ]
+ },
+ {
+  "id": "under-the-yoke",
+  "title": "Under the Yoke",
+  "titleKo": "멍에 아래서",
+  "author": "Ivan Vazov",
+  "authorKo": "이반 바조프",
+  "country": "Bulgaria",
+  "emoji": "⚔️",
+  "color": "#800000",
+  "cefr": "B2",
+  "lexile": "약 920L",
+  "words": 352,
+  "places": [
+   "Bulgaria"
+  ]
  }
 ];

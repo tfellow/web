@@ -4,11 +4,11 @@ window.BOOK_CONTENT["the-restaurant-of-many-orders"] = {
  "story": [
   {
    "en": "Two young hunters from the city were walking in the deep woods of Japan. They were hungry and tired after a long day. Suddenly, they saw a large restaurant called 'Wildcat House'. They went inside, hoping to eat a delicious meal.",
-   "ko": "도시에서 온 젊은 사냥꾼 두 명이 일본의 깊은 숲속을 걷고 있었어요. 하루 종일 걸어서 배고프고 지쳤어요. 그때 갑자기 ‘산고양이 집’이라는 큰 음식점이 보였어요. 그들은 맛있는 식사를 기대하며 안으로 들어갔어요."
+   "ko": "도시에서 온 젊은 사냥꾼 두 명이 일본의 깊은 숲속을 걷고 있었습니다. 하루 종일 걸어서 배고프고 지쳐 있었습니다. 그때 갑자기 ‘산고양이 집’이라는 큰 음식점이 보였습니다. 그들은 맛있는 식사를 기대하며 안으로 들어갔습니다."
   },
   {
    "en": "They opened the first door and saw a sign asking them to leave their guns. They thought this was a polite rule. At the next doors, signs told them to take off their hats and coats. Then, a sign asked them to rub cream on their faces and salt on their bodies.",
-   "ko": "그들이 첫 번째 문을 열자 총을 두고 가라는 안내문이 있었어요. 그들은 정중한 규칙이라고 생각했어요. 다음 문들에서는 모자와 외투를 벗으라는 안내문이 있었어요. 그다음에는 얼굴에 크림을 바르고 몸에 소금을 문지르라고 했어요."
+   "ko": "그들이 첫 번째 문을 열자 총을 두고 가라는 안내문이 있었습니다. 그들은 정중한 규칙이라고 생각했습니다. 다음 문들에서는 모자와 외투를 벗으라는 안내문이 있었습니다. 그다음에는 얼굴에 크림을 바르고 몸에 소금을 문지르라고 했습니다."
   },
   {
    "en": "The hunters did everything the signs asked. They were excited for the grand feast. Finally, they reached the last door. The final sign said, 'Now we will eat you.' The hunters realized they were the food.",

@@ -8,15 +8,15 @@ window.BOOK_CONTENT["the-paul-street-boys"] = {
   },
   {
    "en": "Most of the Paul Street Boys are officers, but little Nemecsek is only a private. The others often ignore him, yet he loves the grund more than anyone else. To prove his great bravery to everyone, Nemecsek secretly sneaks into the Redshirts' camp in the botanical garden to spy on them. He is caught and thrown into the cold water of a pond, and he catches a terrible cold.",
-   "ko": "파울 거리 소년단은 대부분 장교지만, 작은 네메체크는 일반 병사일 뿐이에요. 다른 아이들은 그를 자주 무시하지만, 그는 누구보다 그룬트를 사랑해요. 모두에게 자신의 큰 용기를 증명하려고 네메체크는 몰래 식물원에 있는 붉은 셔츠단의 야영지에 숨어들어 염탐해요. 그는 붙잡혀 연못의 차가운 물에 던져지고, 심한 감기에 걸려요."
+   "ko": "파울 거리 소년단은 대부분 장교이지만, 작은 네메체크는 일반 병사일 뿐입니다. 다른 아이들은 그를 자주 무시하지만, 그는 누구보다 그룬드를 사랑합니다. 모두에게 자신의 큰 용기를 증명하려고 네메체크는 몰래 식물원에 있는 붉은 셔츠단의 야영지에 숨어들어 염탐합니다. 그는 붙잡혀 연못의 차가운 물에 던져지고, 심한 감기에 걸립니다."
   },
   {
    "en": "Even though he is very sick, Nemecsek refuses to stay in bed. When the day of the great battle for the grund arrives, he escapes from his house to help his friends. The battle is fierce, and the Paul Street Boys are almost losing. Suddenly, the sick little boy jumps out and defeats the leader of the Redshirts, and his team wins the battle.",
-   "ko": "많이 아픈데도 네메체크는 침대에 누워 있기를 거부해요. 그룬트를 두고 벌이는 큰 싸움의 날이 오자, 그는 친구들을 도우려고 집에서 빠져나와요. 싸움은 치열하고 파울 거리 소년들은 거의 지고 있어요. 그때 아픈 작은 소년이 갑자기 뛰어나와 붉은 셔츠단의 우두머리를 물리치고, 팀은 싸움에서 이겨요."
+   "ko": "많이 아픈데도 네메체크는 침대에 누워 있기를 거부합니다. 그룬드를 두고 벌이는 큰 싸움의 날이 오자, 그는 친구들을 도우려고 집에서 빠져나옵니다. 싸움은 치열하고 파울 거리 소년들은 거의 지고 있습니다. 그때 아픈 작은 소년이 갑자기 뛰어나와 붉은 셔츠단의 우두머리를 물리치고, 팀은 싸움에서 이깁니다."
   },
   {
    "en": "After the battle, Nemecsek becomes too weak to play and never gets well again. His friends visit him and promote him to captain, because they finally understand how brave he is. Soon after, they learn sad news: a company is going to build a large house on their beloved grund. Their victory has come at a heavy price.",
-   "ko": "싸움이 끝난 뒤 네메체크는 너무 약해져서 더 이상 놀 수 없고, 다시는 건강해지지 못해요. 친구들은 그를 찾아가 그가 얼마나 용감한지 마침내 깨닫고 대장으로 승진시켜요. 곧 슬픈 소식이 들려와요. 한 회사가 그들이 사랑하는 그룬트에 큰 건물을 짓는다는 거예요. 승리에는 무거운 대가가 따랐어요."
+   "ko": "싸움이 끝난 뒤 네메체크는 너무 약해져서 더 이상 놀 수 없고, 다시는 건강해지지 못합니다. 친구들은 그를 찾아가 그가 얼마나 용감한지 마침내 깨닫고 대장으로 승진시킵니다. 곧 슬픈 소식이 들려옵니다. 한 회사가 그들이 사랑하는 그룬드에 큰 건물을 짓는다는 것입니다. 승리에는 무거운 대가가 따랐습니다."
   }
  ],
  "analysis": [
