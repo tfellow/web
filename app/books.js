@@ -6842,5 +6842,21 @@ window.BOOKS = [
   "places": [
    "United Kingdom"
   ]
+ },
+ {
+  "id": "the-fisherman-and-his-wife",
+  "title": "The Fisherman and His Wife",
+  "titleKo": "어부와 아내",
+  "author": "Brothers Grimm",
+  "authorKo": "그림 형제",
+  "country": "Germany",
+  "emoji": "🐟",
+  "color": "#3a6f8f",
+  "cefr": "A1",
+  "lexile": "약 410L",
+  "words": 188,
+  "places": [
+   "Germany"
+  ]
  }
 ];
