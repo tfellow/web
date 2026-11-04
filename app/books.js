@@ -7501,5 +7501,325 @@ window.BOOKS = [
   "places": [
    "Bulgaria"
   ]
+ },
+ {
+  "id": "the-runaway-pancake",
+  "title": "The Runaway Pancake",
+  "titleKo": "도망친 팬케이크",
+  "author": "Norwegian Folktale",
+  "authorKo": "노르웨이 민담",
+  "country": "Norway",
+  "emoji": "🥞",
+  "color": "#f4a460",
+  "cefr": "A0",
+  "lexile": "약 410L",
+  "words": 107,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "why-the-sun-and-moon-live-in-the-sky",
+  "title": "Why the Sun and Moon Live in the Sky",
+  "titleKo": "해와 달이 하늘에 사는 이유",
+  "author": "Nigerian Folktale",
+  "authorKo": "나이지리아 민담",
+  "country": "Nigeria",
+  "emoji": "🌞",
+  "color": "#87ceeb",
+  "cefr": "A0",
+  "lexile": "약 480L",
+  "words": 86,
+  "places": [
+   "Nigeria"
+  ]
+ },
+ {
+  "id": "thanh-giong",
+  "title": "Thanh Giong, the Heavenly Boy",
+  "titleKo": "하늘이 보낸 소년, 탄 종",
+  "author": "Vietnamese Folktale",
+  "authorKo": "베트남 민담",
+  "country": "Vietnam",
+  "emoji": "🐎",
+  "color": "#ff4500",
+  "cefr": "A1",
+  "lexile": "약 670L",
+  "words": 154,
+  "places": [
+   "Vietnam"
+  ]
+ },
+ {
+  "id": "the-legend-of-el-dorado",
+  "title": "The Legend of El Dorado",
+  "titleKo": "엘도라도의 전설",
+  "author": "Muisca Legend",
+  "authorKo": "무이스카 전설",
+  "country": "Colombia",
+  "emoji": "🪙",
+  "color": "#ffd700",
+  "cefr": "A1",
+  "lexile": "약 650L",
+  "words": 163,
+  "places": [
+   "Colombia"
+  ]
+ },
+ {
+  "id": "the-wawel-dragon",
+  "title": "The Wawel Dragon",
+  "titleKo": "바벨의 용",
+  "author": "Polish Legend",
+  "authorKo": "폴란드 전설",
+  "country": "Poland",
+  "emoji": "🐉",
+  "color": "#8b0000",
+  "cefr": "A1",
+  "lexile": "약 630L",
+  "words": 156,
+  "places": [
+   "Poland"
+  ]
+ },
+ {
+  "id": "the-wonder-stag",
+  "title": "The Wonder Stag",
+  "titleKo": "신비한 사슴",
+  "author": "Hungarian Legend",
+  "authorKo": "헝가리 전설",
+  "country": "Hungary",
+  "emoji": "🦌",
+  "color": "#556b2f",
+  "cefr": "A1",
+  "lexile": "약 610L",
+  "words": 156,
+  "places": [
+   "Hungary"
+  ]
+ },
+ {
+  "id": "east-of-the-sun-and-west-of-the-moon",
+  "title": "East of the Sun and West of the Moon",
+  "titleKo": "해의 동쪽, 달의 서쪽",
+  "author": "Norwegian Folktale",
+  "authorKo": "노르웨이 민담",
+  "country": "Norway",
+  "emoji": "🐻",
+  "color": "#add8e6",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 210,
+  "places": [
+   "Norway"
+  ]
+ },
+ {
+  "id": "pan-twardowski",
+  "title": "Pan Twardowski",
+  "titleKo": "판 트바르도프스키",
+  "author": "Polish Legend",
+  "authorKo": "폴란드 전설",
+  "country": "Poland",
+  "emoji": "🌙",
+  "color": "#4b0082",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 206,
+  "places": [
+   "Poland"
+  ]
+ },
+ {
+  "id": "sangkuriang",
+  "title": "Sangkuriang",
+  "titleKo": "상쿠리앙",
+  "author": "Indonesian Folktale",
+  "authorKo": "인도네시아 민담",
+  "country": "Indonesia",
+  "emoji": "🛶",
+  "color": "#8b4513",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 211,
+  "places": [
+   "Indonesia"
+  ]
+ },
+ {
+  "id": "william-tell",
+  "title": "William Tell",
+  "titleKo": "빌헬름 텔",
+  "author": "Friedrich Schiller",
+  "authorKo": "프리드리히 실러",
+  "country": "Switzerland",
+  "emoji": "🏹",
+  "color": "#2e8b57",
+  "cefr": "A2",
+  "lexile": "약 780L",
+  "words": 248,
+  "places": [
+   "Switzerland"
+  ]
+ },
+ {
+  "id": "zal-and-the-simurgh",
+  "title": "Zal and the Simurgh",
+  "titleKo": "잘과 시무르그",
+  "author": "Ferdowsi",
+  "authorKo": "페르도우시",
+  "country": "Iran",
+  "emoji": "🪶",
+  "color": "#dda0dd",
+  "cefr": "A2",
+  "lexile": "약 750L",
+  "words": 210,
+  "places": [
+   "Iran"
+  ]
+ },
+ {
+  "id": "childhood",
+  "title": "Childhood",
+  "titleKo": "유년 시절",
+  "author": "Leo Tolstoy",
+  "authorKo": "레프 톨스토이",
+  "country": "Russia",
+  "emoji": "🧸",
+  "color": "#deb887",
+  "cefr": "B1",
+  "lexile": "약 870L",
+  "words": 266,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "hoichi-the-earless",
+  "title": "Hoichi the Earless",
+  "titleKo": "귀 없는 호이치",
+  "author": "Lafcadio Hearn",
+  "authorKo": "라프카디오 헌",
+  "country": "Japan",
+  "emoji": "🪕",
+  "color": "#4682b4",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 287,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "rashomon",
+  "title": "Rashomon",
+  "titleKo": "라쇼몽",
+  "author": "Ryūnosuke Akutagawa",
+  "authorKo": "아쿠타가와 류노스케",
+  "country": "Japan",
+  "emoji": "⛩️",
+  "color": "#696969",
+  "cefr": "B1",
+  "lexile": "약 880L",
+  "words": 267,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-fortune-teller",
+  "title": "The Fortune Teller",
+  "titleKo": "점쟁이",
+  "author": "Machado de Assis",
+  "authorKo": "마샤두 지 아시스",
+  "country": "Brazil",
+  "emoji": "🔮",
+  "color": "#9370db",
+  "cefr": "B1",
+  "lexile": "약 840L",
+  "words": 275,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "the-importance-of-being-earnest",
+  "title": "The Importance of Being Earnest",
+  "titleKo": "진지함의 중요성",
+  "author": "Oscar Wilde",
+  "authorKo": "오스카 와일드",
+  "country": "United Kingdom",
+  "emoji": "🎩",
+  "color": "#ff69b4",
+  "cefr": "B1",
+  "lexile": "약 920L",
+  "words": 288,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-queen-of-spades",
+  "title": "The Queen of Spades",
+  "titleKo": "스페이드의 여왕",
+  "author": "Alexander Pushkin",
+  "authorKo": "알렉산드르 푸시킨",
+  "country": "Russia",
+  "emoji": "🃏",
+  "color": "#800000",
+  "cefr": "B1",
+  "lexile": "약 890L",
+  "words": 307,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "eclipse-of-the-crescent-moon",
+  "title": "Eclipse of the Crescent Moon",
+  "titleKo": "초승달의 일식",
+  "author": "Géza Gárdonyi",
+  "authorKo": "게자 가르도니",
+  "country": "Hungary",
+  "emoji": "🏰",
+  "color": "#b22222",
+  "cefr": "B2",
+  "lexile": "약 930L",
+  "words": 350,
+  "places": [
+   "Hungary"
+  ]
+ },
+ {
+  "id": "maria",
+  "title": "María",
+  "titleKo": "마리아",
+  "author": "Jorge Isaacs",
+  "authorKo": "호르헤 이삭스",
+  "country": "Colombia",
+  "emoji": "🥀",
+  "color": "#ffb6c1",
+  "cefr": "B2",
+  "lexile": "약 910L",
+  "words": 355,
+  "places": [
+   "Colombia"
+  ]
+ },
+ {
+  "id": "the-story-of-an-african-farm",
+  "title": "The Story of an African Farm",
+  "titleKo": "아프리카 농장 이야기",
+  "author": "Olive Schreiner",
+  "authorKo": "올리브 슈라이너",
+  "country": "South Africa",
+  "emoji": "🏜️",
+  "color": "#d2b48c",
+  "cefr": "B2",
+  "lexile": "약 940L",
+  "words": 350,
+  "places": [
+   "South Africa"
+  ]
  }
 ];
