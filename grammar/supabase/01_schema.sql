@@ -49,9 +49,12 @@ create unique index if not exists mg_players_nick_uq on public.mg_players (lower
 -- ---------- 3. 문법 단원 · 문제 ----------
 create table if not exists public.mg_topics (
   id         serial primary key,
-  code       text unique not null,           -- 예: G1-01
-  grade      int,                            -- 1·2·3 (중1·중2·중3), 4 = 고등 기초
-  category   text,                           -- 예: 동사, 시제, 준동사
+  code       text unique not null,           -- 예: M1-01-2 (중1 대단원 1 소단원 2), H-04-2 (고등)
+  grade      int,                            -- 1·2·3 (중1·중2·중3), 4 = 고등·수능
+  unit_no    int,                            -- 대단원 번호
+  unit_title text,                           -- 대단원 제목
+  sub_no     int,                            -- 소단원 번호
+  category   text,                           -- 분류 (보통 대단원 제목과 같아요)
   title      text not null,                  -- 한국어 제목
   title_en   text,
   summary    text,                           -- 개념 설명 (줄바꿈 가능, **굵게** 가능)
@@ -61,6 +64,9 @@ create table if not exists public.mg_topics (
   active     boolean not null default true,
   created_at timestamptz not null default now()
 );
+alter table public.mg_topics add column if not exists unit_no int;
+alter table public.mg_topics add column if not exists unit_title text;
+alter table public.mg_topics add column if not exists sub_no int;
 
 create table if not exists public.mg_questions (
   id          serial primary key,
@@ -264,7 +270,8 @@ select q.id, q.topic_code, q.qtype, q.prompt,
 
 create or replace view public.mg_topics_public as
 select id, code, grade, category, title, title_en, summary, examples, tip, sort_order,
-       (select count(*) from public.mg_questions q where q.topic_code = t.code and q.active)::int as q_count
+       (select count(*) from public.mg_questions q where q.topic_code = t.code and q.active)::int as q_count,
+       unit_no, unit_title, sub_no
   from public.mg_topics t
  where t.active and public.mg_is_allowed();
 
@@ -352,7 +359,7 @@ begin
     into v_right_total, v_review_right from public.mg_attempts where user_id = v_uid;
   select count(*) into v_stamp_n from public.mg_stamps where user_id = v_uid;
   select count(*) into v_topic_n from public.mg_topics t where t.active
-     and exists (select 1 from public.mg_questions qq where qq.topic_code = t.code and qq.active);
+     and (select count(*) from public.mg_questions qq where qq.topic_code = t.code and qq.active) >= 3;
   foreach b in array array[
     case when v_right_total >= 1    then 'first' end,
     case when v_right_total >= 50   then 'right50' end,

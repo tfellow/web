@@ -16,8 +16,17 @@
 1. [Supabase 대시보드](https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu)에 tfellow@gmail.com 으로 로그인해요.
 2. 왼쪽 메뉴 **SQL Editor** → **New query**.
 3. `grammar/supabase/01_schema.sql` 파일 내용을 전부 복사해 붙여 넣고 **Run**. (여러 번 실행해도 안전해요.)
-4. 새 쿼리에 `grammar/supabase/02_sample_data.sql` 을 붙여 넣고 **Run**. 샘플 18단원 · 103문제가 들어가요.
+4. 새 쿼리에 `grammar/supabase/02_sample_data.sql` 을 붙여 넣고 **Run**. 4단계 교육과정 129개 소단원과 샘플 119문제가 들어가요.
 5. 학교 계정으로 학생 화면에 들어가 확인하고, 교사 화면(admin.html)에 tfellow@gmail.com 또는 tfellow@smy.ms.kr 로 들어가 보세요.
+
+> **이미 예전(G1-01 같은 코드) 단원으로 설치했다면** 01·02 대신 `grammar/supabase/03_curriculum.sql` 하나만 실행하면 돼요. 단원이 새 교육과정으로 바뀌고, 학생 기록 · 스탬프 · 선생님이 추가한 문제는 새 단원으로 옮겨져요. 여러 번 실행해도 안전해요.
+
+## 단원 체계
+
+중1 · 중2 · 중3 · 고등·수능 4단계, 대단원 → 소단원 구조예요. 전체 단원표는 [CURRICULUM.md](CURRICULUM.md)에 있어요.
+
+- 코드: `M1-01-2` = 중1 대단원 1 소단원 2, `H-04-2` = 고등·수능 대단원 4 소단원 2 (M2 = 중2, M3 = 중3)
+- 단원 내용(설명 · 예문 · 꿀팁)의 원본은 `js/curriculum.js` 예요. 교사 화면 → 단원 관리에서 바로 고칠 수도 있어요.
 
 > 독서 여권에 올려 둔 학생 명단(`roster` 테이블)이 있으면, 학생이 처음 로그인할 때 실명과 학년·반·번호를 자동으로 가져와요. 없으면 구글 계정 이름을 쓰고, 학생이 학년·반·번호를 직접 입력해요.
 
@@ -32,7 +41,7 @@
 
 | 열 | 설명 |
 | --- | --- |
-| topic_code | 단원 코드 (예: G1-01). 단원 관리에서 먼저 만들어 둬요 |
+| topic_code | 단원 코드 (예: M1-01-1). 단원 관리에 있는 코드를 써요 |
 | qtype | `mc` 객관식 · `ox` O/X · `blank` 빈칸 · `order` 단어 배열 · `error` 틀린 곳 찾기 (한국어 `객관식`, `빈칸` 등도 인식) |
 | prompt | 문제. 빈칸은 `___`, 틀린 곳 찾기는 고를 부분을 `[대괄호]`로, 배열은 우리말 뜻 |
 | choices | 객관식 보기를 `|` 로 구분 (예: `am|is|are|be`) |
@@ -65,9 +74,12 @@ grammar/
   js/core.js        공통 코드 (데이터 연결, 체험 모드, 레벨 · 배지, 인증서)
   js/app.js         학생 화면 코드
   js/admin.js       교사 화면 코드
-  js/sample-data.js 샘플 단원 · 문제 (체험 모드용, 02_sample_data.sql 의 원본)
+  js/curriculum.js  4단계 교육과정 단원 · 개념 설명 · 예문 · 꿀팁 (단원의 원본)
+  js/sample-data.js 샘플 문제 (체험 모드용, 02_sample_data.sql 의 원본)
+  CURRICULUM.md     전체 단원표
   supabase/01_schema.sql      테이블 · 보안 규칙 · 함수
-  supabase/02_sample_data.sql 샘플 단원 · 문제
+  supabase/02_sample_data.sql 단원 · 샘플 문제 (새로 설치할 때)
+  supabase/03_curriculum.sql  예전 단원 → 새 교육과정으로 바꾸기 (이미 설치했을 때)
 ```
 
 선생님 캐릭터 이미지를 쓰려면 `grammar/img/mascot.png` 로 올리고 `js/config.js` 의 `MASCOT: "img/mascot.png"` 로 바꾸면 돼요.

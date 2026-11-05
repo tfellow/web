@@ -137,7 +137,7 @@
       .sort(function (a, b) { return a.acc - b.acc; });
   }
   function stampHtml(code, on) {
-    return on ? '<span class="st on">MY<br>' + esc(code) + "<br>✔</span>" : '<span class="st">' + esc(code.split("-")[1] || "?") + "</span>";
+    return on ? '<span class="st on">MY<br>' + esc(code) + "<br>✔</span>" : '<span class="st">' + esc(code.replace(/^(M\d|H|G\d)-/, "") || "?") + "</span>";
   }
 
   /* ---------- 홈 ---------- */
@@ -184,20 +184,37 @@
   function bestTime() { try { return parseInt(localStorage.getItem(bestKey()) || "0", 10); } catch (e) { return 0; } }
 
   /* ---------- 학습 (단원 목록) ---------- */
+  function unitsOf(list) {
+    var units = [], by = {};
+    list.forEach(function (t) {
+      var k = t.unit_no != null ? t.unit_no : (t.category || "");
+      if (!by[k]) { by[k] = { no: t.unit_no, title: t.unit_title || t.category || "", topics: [] }; units.push(by[k]); }
+      by[k].topics.push(t);
+    });
+    return units;
+  }
   function renderLearn(g) {
     var grades = Object.keys(S.topics.reduce(function (o, t) { o[t.grade || 0] = 1; return o; }, {})).map(Number).sort();
     if (!g || grades.indexOf(g) < 0) g = grades.indexOf(S.me.grade) >= 0 ? S.me.grade : grades[0];
     var list = S.topics.filter(function (t) { return (t.grade || 0) === g; });
+    var units = unitsOf(list);
+    var stampN = list.filter(function (t) { return S.stamps[t.code]; }).length;
     $app.innerHTML = '<h2>📖 문법 단원</h2><div class="tabs">' + grades.map(function (x) {
       return '<button class="' + (x === g ? "on" : "") + '" data-go="#/learn/' + x + '">' + esc(MG.GRADES[x] || "기타") + "</button>";
     }).join("") + "</div>" +
-      (list.length ? '<div class="grid auto">' + list.map(function (t) {
-        var st = topicStat(t.code);
-        return '<button class="topic" data-go="#/topic/' + encodeURIComponent(t.code) + '">' + stampHtml(t.code, S.stamps[t.code]) +
-          '<div class="grow"><span class="code">' + esc(t.code) + " · " + esc(t.category || "") + "</span><b>" + esc(t.title) + "</b>" +
-          '<div class="bar ' + (S.stamps[t.code] ? "ok" : "") + '" style="margin:6px 0 2px"><i style="width:' + MG.pct(st.solved, st.total) + '%"></i></div>' +
-          '<span class="small muted">' + st.solved + "/" + st.total + "문제" + (st.acc != null ? " · 정답률 " + st.acc + "%" : "") + "</span></div></button>";
-      }).join("") + "</div>" : '<div class="empty">아직 단원이 없어요.</div>');
+      '<p class="small muted">' + esc(MG.GRADE_DESC[g] || "") + " · 대단원 " + units.length + "개 · 소단원 " + list.length + "개 · 스탬프 " + stampN + "/" + list.length + "</p>" +
+      (units.length ? units.map(function (u) {
+        var done = u.topics.filter(function (t) { return S.stamps[t.code]; }).length;
+        return '<section class="unit"><div class="unit-head"><span class="unit-no">' + (u.no != null ? u.no : "") + '</span><b class="grow">' + esc(u.title) + '</b><span class="small muted">🏷️ ' + done + "/" + u.topics.length + '</span></div><div class="grid auto">' +
+          u.topics.map(function (t) {
+            var st = topicStat(t.code);
+            return '<button class="topic' + (st.total ? "" : " soon") + '" data-go="#/topic/' + encodeURIComponent(t.code) + '">' + stampHtml(t.code, S.stamps[t.code]) +
+              '<div class="grow"><span class="code">' + esc(t.code) + "</span><b>" + esc(t.title) + "</b>" +
+              (st.total ? '<div class="bar ' + (S.stamps[t.code] ? "ok" : "") + '" style="margin:6px 0 2px"><i style="width:' + MG.pct(st.solved, st.total) + '%"></i></div>' +
+                '<span class="small muted">' + st.solved + "/" + st.total + "문제" + (st.acc != null ? " · 정답률 " + st.acc + "%" : "") + "</span>"
+                : '<span class="small muted">개념 보기 · 문제 준비 중</span>') + "</div></button>";
+          }).join("") + "</div></section>";
+      }).join("") : '<div class="empty">아직 단원이 없어요.</div>');
     bindGo();
   }
 
@@ -211,16 +228,22 @@
       return '<div class="ex"><button class="say" data-say="' + esc(en) + '" aria-label="듣기">🔊</button><div><div class="en">' + esc(en) + '</div><div class="ko">' + esc((p[1] || "").trim()) + "</div></div></div>";
     }).join("");
     $app.innerHTML = '<a class="linkbtn" href="#/learn/' + (t.grade || "") + '">← 단원 목록</a>' +
-      '<div class="card lesson mt"><div class="row between wrap gap"><div><span class="qtype">' + esc(MG.GRADES[t.grade] || "") + " · " + esc(t.category || "") + "</span><h2 style=\"font-size:1.5rem\">" + esc(t.title) + (t.title_en ? ' <span class="muted" style="font-size:1rem">' + esc(t.title_en) + "</span>" : "") + "</h2></div>" +
+      '<div class="card lesson mt"><div class="row between wrap gap"><div><span class="qtype">' + esc(t.code) + " · " + esc(MG.GRADES[t.grade] || "") + (t.unit_title ? " · 대단원 " + (t.unit_no || "") + " " + esc(t.unit_title) : "") + "</span><h2 style=\"font-size:1.5rem\">" + esc(t.title) + (t.title_en ? ' <span class="muted" style="font-size:1rem">' + esc(t.title_en) + "</span>" : "") + "</h2></div>" +
       '<div class="topic" style="width:auto;box-shadow:none;border:0;padding:0">' + stampHtml(code, S.stamps[code]) + "</div></div>" +
       '<div class="summary">' + MG.rich(t.summary || "") + "</div></div>" +
       (ex ? '<div class="card"><h2>🗣️ 예문 <span class="sub">🔊 를 눌러 들어 보세요</span></h2>' + ex + "</div>" : "") +
       (t.tip ? '<div class="tip mb">💡 ' + MG.rich(t.tip) + "</div>" : "") +
       '<div class="card"><div class="row between wrap gap"><div><b>문제 ' + st.total + "개</b> · 맞힌 문제 " + st.solved + "개" + (st.acc != null ? " · 정답률 " + st.acc + "%" : "") +
-      '<div class="small muted">' + (S.stamps[code] ? "🎉 스탬프를 받은 단원이에요. 복습으로 실력을 지켜요!" : "문제의 80%를 맞히면 스탬프를 받아요.") + "</div></div>" +
-      '<button class="btn primary" data-go="#/quiz/topic/' + encodeURIComponent(code) + '"' + (st.total ? "" : " disabled") + ">✏️ 문제 풀기</button></div></div>";
+      '<div class="small muted">' + (!st.total ? "이 단원의 문제는 선생님이 곧 올려 주실 거예요." : st.total < 3 ? "문제가 3개 이상 올라오면 스탬프를 받을 수 있어요." : S.stamps[code] ? "🎉 스탬프를 받은 단원이에요. 복습으로 실력을 지켜요!" : "문제의 80%를 맞히면 스탬프를 받아요.") + "</div></div>" +
+      '<button class="btn primary" data-go="#/quiz/topic/' + encodeURIComponent(code) + '"' + (st.total ? "" : " disabled") + ">✏️ 문제 풀기</button></div></div>" + topicNav(code);
     bindGo();
     $$("[data-say]").forEach(function (b) { b.onclick = function () { MG.speak(b.getAttribute("data-say")); }; });
+  }
+
+  function topicNav(code) {
+    var i = S.topics.map(function (t) { return t.code; }).indexOf(code), a = S.topics[i - 1], b = S.topics[i + 1];
+    return '<div class="row between gap wrap">' + (a ? '<button class="btn sm ghost" data-go="#/topic/' + encodeURIComponent(a.code) + '">← ' + esc(a.title) + "</button>" : "<span></span>") +
+      (b ? '<button class="btn sm ghost" data-go="#/topic/' + encodeURIComponent(b.code) + '">' + esc(b.title) + " →</button>" : "") + "</div>";
   }
 
   /* ---------- 복습 ---------- */
@@ -520,9 +543,13 @@
       '<div class="card"><h2>🎓 내 인증서 <span class="sub">' + S.certs.length + "개</span></h2>" + (S.certs.length ? '<div class="grid auto">' + S.certs.map(function (c, i) {
         return '<button class="tile" data-cert="' + i + '"><span class="em">🎓</span><b>' + esc(c.title) + "</b><small>" + esc(c.detail || "") + "<br>" + MG.kstDate(c.issued_at) + "</small></button>";
       }).join("") + "</div>" : '<p class="muted">레벨 5 달성, 스탬프 5개, 30일 연속 학습 등을 이루면 인증서가 자동으로 발급돼요.</p>') + "</div>" +
-      '<div class="card"><h2>🏷️ 스탬프 북 <span class="sub">' + Object.keys(S.stamps).length + "/" + S.topics.length + '</span></h2><div class="stampbook">' + S.topics.map(function (t) {
-        return '<div class="stampbox ' + (S.stamps[t.code] ? "on" : "") + '">' + stampHtml(t.code, S.stamps[t.code]) + esc(t.title) + "</div>";
-      }).join("") + "</div></div>" +
+      '<div class="card"><h2>🏷️ 스탬프 북 <span class="sub">' + Object.keys(S.stamps).filter(function (c) { return S.topicBy[c]; }).length + "/" + S.topics.length + "</span></h2>" +
+      Object.keys(MG.GRADES).map(Number).filter(function (g) { return S.topics.some(function (t) { return t.grade === g; }); }).map(function (g) {
+        var ts = S.topics.filter(function (t) { return t.grade === g; }), n = ts.filter(function (t) { return S.stamps[t.code]; }).length;
+        return '<details class="sbk"' + (g === S.me.grade || (!S.me.grade && g === 1) ? " open" : "") + '><summary><b>' + esc(MG.GRADES[g]) + '</b> <span class="muted small">' + n + "/" + ts.length + '</span></summary><div class="stampbook">' + ts.map(function (t) {
+          return '<div class="stampbox ' + (S.stamps[t.code] ? "on" : "") + '">' + stampHtml(t.code, S.stamps[t.code]) + esc(t.title) + "</div>";
+        }).join("") + "</div></details>";
+      }).join("") + "</div>" +
       '<div class="card"><h2>🎖️ 배지 <span class="sub">' + Object.keys(S.badges).length + "/" + MG.BADGES.length + '</span></h2><div class="badges">' + MG.BADGES.map(function (b) {
         return '<div class="bdg ' + (S.badges[b.code] ? "" : "off") + '"><span class="em">' + b.em + "</span><b>" + esc(b.name) + "</b>" + esc(b.desc) + "</div>";
       }).join("") + "</div></div>" +
