@@ -409,6 +409,7 @@
       '<div><label>유형</label><select id="q_y">' + Object.keys(MG.QTYPES).map(function (k) { return '<option value="' + k + '"' + (k === q.qtype ? " selected" : "") + ">" + MG.QTYPES[k] + "</option>"; }).join("") + "</select></div></div>" +
       '<label>문제 <span class="muted small" id="q_hint"></span></label><textarea id="q_p" style="min-height:80px;font-family:inherit;font-size:1rem">' + esc(q.prompt || "") + "</textarea>" +
       '<div id="q_chwrap"><label>보기 (객관식)</label><div class="grid g2">' + ch.map(function (c, i) { return '<input class="q_c" placeholder="보기 ' + (i + 1) + '" value="' + esc(c) + '">'; }).join("") + "</div></div>" +
+      '<div id="q_pickwrap" style="display:none"><label>틀린 부분을 눌러 정답으로 정해요</label><div class="err-sent card" id="q_pick" style="font-size:1.1rem;padding:10px 14px"></div></div>' +
       '<label>정답 <span class="muted small" id="q_ahint"></span></label><input id="q_a" value="' + esc(q.answer || "") + '">' +
       '<label>해설 (틀렸을 때 학생에게 보여요)</label><input id="q_e" value="' + esc(q.explanation || "") + '">' +
       '<div class="grid g3"><div><label>난이도</label><select id="q_d">' + [1, 2, 3].map(function (d) { return "<option value=\"" + d + '"' + (d === q.difficulty ? " selected" : "") + ">" + ["쉬움 ★", "보통 ★★", "어려움 ★★★"][d - 1] + "</option>"; }).join("") + "</select></div>" +
@@ -421,14 +422,35 @@
     ox: ["참·거짓을 판단할 문장이나 질문", "O 또는 X"],
     blank: ["빈칸은 ___ (밑줄 3개)", "정답이 여러 개면 | 로 구분 (예: is not|isn't)"],
     order: ["우리말 뜻을 적어요", "완성된 영어 문장 (띄어쓰기 단위로 단어 카드가 만들어져요)"],
-    error: ["고를 부분을 [대괄호]로 감싸요. 예: She [go] to [school] [every] day.", "대괄호 안의 틀린 부분을 그대로 (예: go)"]
+    error: ["틀린 부분이 들어간 문장을 그대로 써요. 학생이 고를 부분만 [대괄호]로 감싸도 되고, 그냥 쓰면 모든 단어를 고를 수 있어요.", "위 문장에서 틀린 부분을 누르면 저절로 들어가요"]
   };
   function bindQForm(root) {
     var upd = function () {
       var y = $("#q_y", root).value;
       $("#q_chwrap", root).style.display = y === "mc" ? "" : "none";
       $("#q_hint", root).textContent = HINTS[y][0]; $("#q_ahint", root).textContent = HINTS[y][1];
+      $("#q_pickwrap", root).style.display = y === "error" ? "" : "none";
+      if (y === "error") drawPick();
     };
+    // 틀린 곳 찾기: 학생 화면처럼 문장을 보여 주고, 선생님도 눌러서 정답을 골라요.
+    var drawPick = function () {
+      var pr = $("#q_p", root).value.replace(/[［【〔]/g, "[").replace(/[］】〕]/g, "]"), ans = $("#q_a", root).value.trim();
+      var bracketed = /\[[^\]]+\]/.test(pr), i = 0;
+      var parts = bracketed ? MG.parseError(pr) : pr.split(/([A-Za-z][A-Za-z'’-]*)/).map(function (t, k) { return k % 2 ? { t: t, pick: true } : { t: t }; });
+      var box = $("#q_pick", root);
+      if (!parts.some(function (x) { return x.pick; })) { box.innerHTML = '<span class="muted small">위에 문장을 쓰면 여기에 나와요.</span>'; return; }
+      box.innerHTML = parts.map(function (x) {
+        return x.pick ? '<button type="button" class="err-part' + (x.t === ans ? " wrong" : "") + '" data-i="' + (i++) + '">' + esc(x.t) + "</button>" : esc(x.t);
+      }).join("");
+      $$("#q_pick .err-part", root).forEach(function (b) {
+        b.onclick = function () {
+          if (!bracketed) $("#q_p", root).value = parts.map(function (x) { return x.pick ? "[" + x.t + "]" : x.t; }).join("");
+          $("#q_a", root).value = b.textContent; drawPick();
+        };
+      });
+    };
+    $("#q_p", root).addEventListener("input", function () { if ($("#q_y", root).value === "error") drawPick(); });
+    $("#q_a", root).addEventListener("input", function () { if ($("#q_y", root).value === "error") drawPick(); });
     $("#q_y", root).onchange = upd; upd();
   }
   function readQForm(root) {
@@ -438,6 +460,28 @@
       choices: y === "mc" ? $$(".q_c", root).map(function (i) { return i.value.trim(); }).filter(Boolean) : null };
     var e = validate(row); if (e) throw new Error(e);
     return row;
+  }
+  // 대괄호 없이 문장만 쓴 경우: 정답(틀린 부분)이 문장에 있으면 모든 단어를 고를 수 있게 [ ]로 감싸요.
+  function autoBracket(prompt, ans) {
+    if (/[\[\]]/.test(prompt)) return null;
+    var a = String(ans).split(/\s*(?:→|->|=>|⇒)\s*/)[0].replace(/^[\("'“‘]+|[\)"'”’]+$/g, "").trim();
+    if (!a) return null;
+    var low = prompt.toLowerCase(), at = -1, re = new RegExp("(^|[^A-Za-z'])" + a.toLowerCase().replace(/[.*+?^${}()|\\]/g, "\\$&") + "(?=$|[^A-Za-z'])"), m = re.exec(low);
+    if (m) at = m.index + m[1].length; else return null;
+    var wrap = function (seg) { return seg.replace(/[A-Za-z][A-Za-z'’-]*/g, function (w) { return "[" + w + "]"; }); };
+    return wrap(prompt.slice(0, at)) + "[" + prompt.substr(at, a.length) + "]" + wrap(prompt.slice(at + a.length));
+  }
+  // 틀린 곳 찾기 정답 읽기: "go", "[go]", "3", "③", "go → goes" 모두 받아요.
+  function resolveErrorAnswer(ans, parts) {
+    var a = String(ans).trim(), fix = null;
+    var arrow = a.split(/\s*(?:→|->|=>|⇒)\s*/);
+    if (arrow.length > 1) { a = arrow[0]; fix = arrow.slice(1).join(" ").trim() || null; }
+    a = a.replace(/^[\[\("'“‘]+|[\]\)"'”’]+$/g, "").trim();
+    var circ = "①②③④⑤⑥⑦⑧⑨".indexOf(a.charAt(0));
+    var n = circ >= 0 && a.length === 1 ? circ + 1 : (/^\d$/.test(a) ? +a : 0);
+    if (n >= 1 && n <= parts.length && !parts.some(function (p) { return p.t === a; })) return { text: parts[n - 1].t, fix: fix };
+    var hit = parts.filter(function (p) { return p.t === a; })[0] || parts.filter(function (p) { return MG.norm(p.t) === MG.norm(a); })[0];
+    return hit ? { text: hit.t, fix: fix } : null;
   }
   function validate(r) {
     if (!D.topicBy[r.topic_code]) return "단원 코드 '" + r.topic_code + "' 가 없어요. 먼저 단원을 만들어 주세요.";
@@ -452,9 +496,16 @@
     if (r.qtype === "ox") r.answer = r.answer.toUpperCase();
     if (r.qtype === "order" && r.answer.split(/\s+/).length < 2) return "배열 문제의 정답은 두 단어 이상이어야 해요.";
     if (r.qtype === "error") {
+      // 문장 속 틀린 부분은 일부러 넣은 거라 그대로 둬요. 괄호 모양과 정답 적는 방식만 너그럽게 맞춰요.
+      r.prompt = r.prompt.replace(/[［【〔]/g, "[").replace(/[］】〕]/g, "]");
       var parts = MG.parseError(r.prompt).filter(function (p) { return p.pick; });
-      if (parts.length < 2) return "틀린 곳 찾기는 [대괄호] 부분이 2개 이상 필요해요.";
-      if (!parts.some(function (p) { return p.t === r.answer; })) return "정답이 대괄호 안의 부분과 똑같지 않아요.";
+      if (parts.length < 2) { var auto = autoBracket(r.prompt, r.answer); if (auto) { r.prompt = auto; parts = MG.parseError(r.prompt).filter(function (p) { return p.pick; }); } }
+      if (parts.length < 2) return "틀린 곳 찾기는 학생이 고를 부분을 [대괄호]로 2개 이상 감싸 주세요. 예: She [go] to [school] [every] day.";
+      var fixed = resolveErrorAnswer(r.answer, parts);
+      if (!fixed) return "정답은 [대괄호] 안의 틀린 부분 하나를 그대로 적어 주세요 (번호도 돼요). 지금 고를 수 있는 부분: " +
+        parts.map(function (p, i) { return (i + 1) + ") " + p.t; }).join(" · ");
+      if (fixed.fix && !r.explanation) r.explanation = fixed.text + " → " + fixed.fix;
+      r.answer = fixed.text;
     }
     if (r.qtype === "blank" && !/_{2,}/.test(r.prompt)) return "빈칸 문제에는 ___ 를 넣어 주세요.";
     if (!(r.difficulty >= 1 && r.difficulty <= 3)) r.difficulty = 2;
