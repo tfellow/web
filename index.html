@@ -245,7 +245,7 @@
         <ul class="links" aria-label="앱별 로그인 상태">
           <li>MY Reading Passport <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>Quiz Queens <span class="pill off" data-auth="qq">앱에서 로그인</span></li>
+          <li>Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>단어숲 <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
           <li>MY Cloze · Class123 <span class="pill off" id="teacherPill">교사 전용</span></li>
@@ -565,9 +565,6 @@
     $("#meEmail").textContent = e || "";
     setPills("sb", !!state.sbEmail, "로그인 필요");
     setPills("fb", !!state.fbEmail, e ? "앱에서 한 번 더 로그인" : "로그인 필요");
-    let qq = false;
-    try { qq = !!localStorage.getItem("qq_current_user_v14"); } catch (err) {}
-    setPills("qq", qq, "앱에서 로그인");
     /* 교사 전용 도구: 관리자 계정으로 로그인했을 때만 열려요 */
     const admin = isAdmin(e);
     document.body.classList.toggle("is-admin", admin);

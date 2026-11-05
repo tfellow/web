@@ -209,6 +209,7 @@ window.addEventListener('DOMContentLoaded', () => {
     refreshAllUI();
   } else {
     openLoginModal();
+    resumeSharedLogin();
   }
 
   if (state.gasUrl) {
@@ -585,6 +586,27 @@ async function handleGoogleCredentialResponse(response) {
     return;
   }
 
+  // 같은 구글 로그인으로 MY English 통합 로그인(Supabase)에도 들어가 두면 독서 여권·MY Grammar 에서 다시 로그인하지 않아도 돼요
+  if (sbClient && sbClient.auth) {
+    sbClient.auth.signInWithIdToken({ provider: 'google', token: response.credential }).catch(() => {});
+  }
+  loginFromGoogleIdentity(payload);
+}
+
+// MY English 홈페이지나 독서 여권에서 이미 로그인했다면 그 계정으로 바로 들어가요
+async function resumeSharedLogin() {
+  if (!sbClient || !sbClient.auth) return;
+  try {
+    const { data } = await sbClient.auth.getSession();
+    const user = data && data.session && data.session.user;
+    if (!user || !user.email || state.currentUser) return;
+    const meta = user.user_metadata || {};
+    loginFromGoogleIdentity({ email: user.email, name: meta.full_name || meta.name || '' });
+  } catch (e) {}
+}
+
+function loginFromGoogleIdentity(payload) {
+  const errEl = document.getElementById('googleLoginErrorMsg');
   const email = payload.email.toLowerCase().trim();
   const googleName = (payload.name || payload.given_name || '').trim();
 
