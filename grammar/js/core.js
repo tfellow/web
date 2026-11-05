@@ -127,7 +127,8 @@
   ];
   MG.badge = function (code) { return MG.BADGES.filter(function (b) { return b.code === code; })[0] || { code: code, em: "🎖️", name: code, desc: "" }; };
   MG.QTYPES = { mc: "객관식", ox: "O / X", blank: "빈칸 채우기", order: "단어 배열", error: "틀린 곳 찾기" };
-  MG.GRADES = { 1: "중1", 2: "중2", 3: "중3", 4: "고등 기초" };
+  MG.GRADES = { 1: "중1", 2: "중2", 3: "중3", 4: "고등·수능" };
+  MG.GRADE_DESC = { 1: "기초 영문법 체계", 2: "구조 확장 및 문법 심화", 3: "고등 내신 연계 및 완성", 4: "고등학교 · 모의고사 · 수능 핵심 어법" };
   MG.MODES = { topic: "단원 학습", review: "복습", mix: "섞어 풀기", time: "타임어택" };
 
   /* ---------- 답 비교 (서버와 같은 규칙) ---------- */
@@ -228,7 +229,7 @@
   }
 
   /* ---------- 체험(데모) 모드: 이 기기 브라우저에만 저장 ---------- */
-  var DKEY = "mg_demo_v1";
+  var DKEY = "mg_demo_v2";
   function DemoApi() {
     var self = this, db;
     function save() { try { localStorage.setItem(DKEY, JSON.stringify(db)); } catch (e) {} }

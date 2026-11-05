@@ -270,3 +270,16 @@ tr.click { cursor: pointer; } tr.click:hover td { background: var(--brand-soft);
 .chart text { fill: var(--muted); font-size: 11px; font-family: var(--body); }
 .kbd { font-family: ui-monospace, Consolas, monospace; background: var(--paper2); border-radius: 6px; padding: 1px 6px; font-size: .86em; }
 @media print { .topbar, .sidenav, .bottomnav, .demo-flag { display: none !important; } .shell { display: block; } }
+
+/* 대단원 묶음 */
+.unit { margin-bottom: 22px; }
+.unit-head { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 1.08rem; }
+.unit-no { width: 34px; height: 34px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
+.topic.soon { opacity: .72; box-shadow: none; }
+.topic .st.on { font-size: .62rem; }
+.stampbox.on .st { font-size: .66rem; }
+.sbk { border-top: 1px solid var(--line); padding: 10px 0; }
+.sbk summary { cursor: pointer; padding: 4px 0 10px; font-size: 1.02rem; }
+.sbk .stampbook { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+.topic .st:not(.on) { font-size: 1.02rem; white-space: nowrap; letter-spacing: -.02em; }
+.stampbox .st:not(.on) { white-space: nowrap; }

@@ -487,11 +487,11 @@
 
   /* ---------- 문제 추가 (하나 · 일괄 · AI) ---------- */
   function addPage() {
-    var tmpl = toTSV([{ topic_code: "G1-01", qtype: "mc", prompt: "They ___ my classmates.", choices: ["am", "is", "are", "be"], answer: "are", explanation: "They(복수) → are", difficulty: 1, source: "교과서 1과" },
-      { topic_code: "G1-01", qtype: "blank", prompt: "She ___ my best friend.", answer: "is", explanation: "She → is", difficulty: 1, source: "" },
-      { topic_code: "G1-01", qtype: "ox", prompt: "\"We is happy.\" 는 올바른 문장이다.", answer: "X", explanation: "We → are", difficulty: 1 },
-      { topic_code: "G1-01", qtype: "order", prompt: "그들은 교실에 있다.", answer: "They are in the classroom.", explanation: "be동사: ~에 있다", difficulty: 2 },
-      { topic_code: "G1-01", qtype: "error", prompt: "My parents [is] [very] [kind] [to me].", answer: "is", explanation: "My parents(복수) → are", difficulty: 2 }]);
+    var tmpl = toTSV([{ topic_code: "M1-01-1", qtype: "mc", prompt: "They ___ my classmates.", choices: ["am", "is", "are", "be"], answer: "are", explanation: "They(복수) → are", difficulty: 1, source: "교과서 1과" },
+      { topic_code: "M1-01-1", qtype: "blank", prompt: "She ___ my best friend.", answer: "is", explanation: "She → is", difficulty: 1, source: "" },
+      { topic_code: "M1-01-1", qtype: "ox", prompt: "\"We is happy.\" 는 올바른 문장이다.", answer: "X", explanation: "We → are", difficulty: 1 },
+      { topic_code: "M1-01-1", qtype: "order", prompt: "그들은 교실에 있다.", answer: "They are in the classroom.", explanation: "be동사: ~에 있다", difficulty: 2 },
+      { topic_code: "M1-01-1", qtype: "error", prompt: "My parents [is] [very] [kind] [to me].", answer: "is", explanation: "My parents(복수) → are", difficulty: 2 }]);
     page('<div class="card"><h2>➕ 문제 하나 추가</h2>' + qForm() + '<div class="row gap mt" style="justify-content:flex-end"><button class="btn" id="q_prev">👀 미리보기</button><button class="btn primary" id="q_add">추가하기</button></div></div>' +
       '<div class="card"><h2>📋 여러 문제 한꺼번에 등록 <span class="sub">구글 시트 · 엑셀에서 복사해 붙여넣기</span></h2>' +
       '<p class="small">1) <button class="linkbtn" id="tmpl">양식(TSV) 내려받기</button> 를 구글 시트나 엑셀에서 열어요. 2) 한 줄에 한 문제씩 채워요. 3) 표 전체(제목 줄 포함)를 복사해서 아래에 붙여 넣어요.<br>' +
@@ -549,11 +549,11 @@
   function aiPrompt(code, n, diff, extra) {
     var t = D.topicBy[code] || {};
     return "너는 한국 중학교 영어 교사를 돕는 문법 문제 출제 전문가야.\n" +
-      "단원: " + code + " " + (t.title || "") + " (" + (MG.GRADES[t.grade] || "") + ")\n" +
+      "단원: " + code + " " + (t.unit_title ? "[대단원 " + (t.unit_no || "") + " " + t.unit_title + "] " : "") + (t.title || "") + " (" + (MG.GRADES[t.grade] || "") + ")\n" +
       "단원 핵심: " + String(t.summary || "").replace(/\*\*/g, "").replace(/\n/g, " / ") + "\n\n" +
       "이 단원으로 문제 " + n + "개를 만들어 줘. 난이도: " + diff + ".\n" +
       "유형을 골고루 섞어 줘: mc(4지선다), ox(참/거짓), blank(빈칸, 문제에 ___ 표시), order(우리말 뜻을 주고 영어 문장 배열), error(틀린 곳 찾기: 고를 부분 4개를 [대괄호]로 감싸고 그중 하나만 틀리게).\n" +
-      "한국 중학생 수준의 쉬운 어휘와 자연스러운 상황을 쓰고, 해설은 한국어로 짧게(왜 그 답인지).\n" +
+      (t.grade === 4 ? "고등학교 모의고사·수능 어법 문제 스타일로, 고1 수준 어휘를 쓰고" : "한국 중학생 수준의 쉬운 어휘") + "와 자연스러운 상황을 쓰고, 해설은 한국어로 짧게(왜 그 답인지).\n" +
       (extra ? "추가 요청: " + extra + "\n" : "") +
       "\n출력 형식(아주 중요): 아래 8개 열의 탭(Tab)으로 구분된 표만 코드 블록 하나에 출력해. 첫 줄은 제목 줄 그대로.\n" +
       COLS.join("\t") + "\n" +
@@ -611,20 +611,22 @@
     page('<div class="card"><div class="row between wrap gap"><h2>📖 단원 관리</h2><button class="btn primary sm" id="tnew">➕ 새 단원</button></div>' +
       table("tp", [
         { k: "sort_order", label: "순서", num: true }, { k: "code", label: "코드", f: function (t) { return "<b>" + esc(t.code) + "</b>"; } },
-        { k: "grade", label: "학년", f: function (t) { return esc(MG.GRADES[t.grade] || "-"); } }, { k: "category", label: "분류" },
+        { k: "grade", label: "학년", f: function (t) { return esc(MG.GRADES[t.grade] || "-"); } },
+        { k: "unit_no", label: "대단원", f: function (t) { return t.unit_no != null ? t.unit_no + ". " + esc(t.unit_title || "") : esc(t.category || ""); } },
         { k: "title", label: "제목", wrap: true }, { k: "n", label: "공개 문제", num: true, v: function (t) { return cnt[t.code] || 0; } },
         { k: "s", label: "스탬프 받은 학생", num: true, v: function (t) { return stc[t.code] || 0; } },
         { k: "active", label: "공개", f: function (t) { return t.active ? '<span class="tag ok">공개</span>' : '<span class="tag">숨김</span>'; } }
-      ], D.topics, { click: true, key: "code" }) + '<p class="small muted">단원을 누르면 설명·예문·꿀팁을 고칠 수 있어요. 학생은 \'공개\' 단원만 볼 수 있어요.</p></div>');
+      ], D.topics, { click: true, key: "code" }) + '<p class="small muted">단원을 누르면 설명·예문·꿀팁을 고칠 수 있어요. 학생은 \'공개\' 단원만 볼 수 있어요. 코드 규칙: M1-01-2 = 중1 대단원 1 소단원 2, H-04-2 = 고등·수능 대단원 4 소단원 2</p></div>');
     bindTable("tp", topics, function (code) { editTopic(D.topicBy[code]); });
     $("#tnew").onclick = function () { editTopic(null); };
   }
   function editTopic(t) {
-    var isNew = !t; t = t || { grade: 1, active: true, sort_order: (D.topics.length + 1) };
+    var isNew = !t; t = t || { grade: 1, active: true, sort_order: 0 };
     var ov = MG.modal("<h2>" + (isNew ? "➕ 새 단원" : "✏️ 단원 수정") + "</h2>" +
-      '<div class="grid g3"><div><label>코드 (예: G1-08)</label><input id="t_code" value="' + esc(t.code || "") + '"' + (isNew ? "" : " disabled") + '></div><div><label>학년</label><select id="t_g">' +
+      '<div class="grid g3"><div><label>코드 (예: M1-03-4)</label><input id="t_code" value="' + esc(t.code || "") + '"' + (isNew ? "" : " disabled") + '></div><div><label>학년</label><select id="t_g">' +
       Object.keys(MG.GRADES).map(function (g) { return '<option value="' + g + '"' + (+g === t.grade ? " selected" : "") + ">" + MG.GRADES[g] + "</option>"; }).join("") + "</select></div>" +
-      '<div><label>분류</label><input id="t_cat" value="' + esc(t.category || "") + '" placeholder="동사, 시제, 준동사…"></div></div>' +
+      '<div><label>대단원 번호 · 소단원 번호</label><div class="row gap"><input id="t_un" type="number" value="' + (t.unit_no != null ? t.unit_no : "") + '"><input id="t_sn" type="number" value="' + (t.sub_no != null ? t.sub_no : "") + '"></div></div></div>' +
+      '<label>대단원 제목</label><input id="t_cat" value="' + esc(t.unit_title || t.category || "") + '" placeholder="예: be동사, 수동태">' +
       '<div class="grid g2"><div><label>제목</label><input id="t_title" value="' + esc(t.title || "") + '"></div><div><label>영어 제목</label><input id="t_en" value="' + esc(t.title_en || "") + '"></div></div>' +
       '<label>개념 설명 <span class="small muted">줄바꿈 가능, **굵게**</span></label><textarea id="t_sum" style="font-family:inherit;font-size:.95rem">' + esc(t.summary || "") + "</textarea>" +
       '<label>예문 <span class="small muted">한 줄에 하나, "영어 | 해석"</span></label><textarea id="t_ex" style="font-family:inherit;font-size:.95rem">' + esc(t.examples || "") + "</textarea>" +
@@ -632,8 +634,9 @@
       '<div class="grid g2"><div><label>순서</label><input id="t_so" type="number" value="' + (t.sort_order || 0) + '"></div><div><label>공개</label><select id="t_act"><option value="1"' + (t.active ? " selected" : "") + '>공개</option><option value="0"' + (t.active ? "" : " selected") + ">숨김</option></select></div></div>" +
       '<div class="err" id="t_err"></div><div class="row gap mt between">' + (isNew ? "<span></span>" : '<button class="btn danger sm" id="t_del">삭제</button>') + '<button class="btn primary" id="t_save">저장</button></div>', { wide: true });
     $("#t_save", ov).onclick = async function () {
-      var row = { code: ($("#t_code", ov).value || "").trim().toUpperCase(), grade: +$("#t_g", ov).value, category: $("#t_cat", ov).value.trim() || null, title: $("#t_title", ov).value.trim(),
-        title_en: $("#t_en", ov).value.trim() || null, summary: $("#t_sum", ov).value, examples: $("#t_ex", ov).value, tip: $("#t_tip", ov).value.trim() || null, sort_order: +$("#t_so", ov).value || 0, active: $("#t_act", ov).value === "1" };
+      var un = $("#t_un", ov).value, sn = $("#t_sn", ov).value, ut = $("#t_cat", ov).value.trim() || null;
+      var row = { code: ($("#t_code", ov).value || "").trim().toUpperCase(), grade: +$("#t_g", ov).value, unit_no: un === "" ? null : +un, sub_no: sn === "" ? null : +sn, unit_title: ut, category: ut, title: $("#t_title", ov).value.trim(),
+        title_en: $("#t_en", ov).value.trim() || null, summary: $("#t_sum", ov).value, examples: $("#t_ex", ov).value, tip: $("#t_tip", ov).value.trim() || null, sort_order: +$("#t_so", ov).value || ((un === "" ? 0 : +un) * 10 + (sn === "" ? 0 : +sn)), active: $("#t_act", ov).value === "1" };
       if (!row.code || !row.title) { $("#t_err", ov).textContent = "코드와 제목은 꼭 필요해요."; return; }
       if (isNew && D.topicBy[row.code]) { $("#t_err", ov).textContent = "이미 있는 코드예요."; return; }
       try { if (isNew) await A.upsertTopics([row]); else { delete row.code; await A.updateTopic(t.code, row); } await loadBase(); ov.remove(); route(); MG.toast("저장했어요"); }
