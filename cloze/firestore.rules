@@ -55,6 +55,16 @@ service cloud.firestore {
       allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
     }
 
+    // 과제: 학교 계정이면 읽기 (학생 첫 화면에 표시), 그 테스트를 만든 교사만 내기·고치기·취소
+    match /assignments/{aid} {
+      allow read: if isSchool();
+      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid
+        && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.auth.uid;
+      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+    }
+
     // ===================== 단어숲 (danuhsup) =====================
     function vocabTeacher() {
       return isTeacher() && request.auth.token.firebase.sign_in_provider == 'google.com';

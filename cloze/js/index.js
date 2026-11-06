@@ -1,5 +1,5 @@
-import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, tsNum, editProfileModal } from "./common.js";
-import { collection, query, where, getDocs, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, tsNum, editProfileModal, toDate, toLocalInput } from "./common.js";
+import { collection, query, where, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { tokenize } from "./core.js";
 
 const ctx = await gate({ needProfile: true });
@@ -11,6 +11,7 @@ async function studentHome() {
   const preset = new URLSearchParams(location.search).get("code") || "";
   app.innerHTML = `
   <div class="container">
+    <div id="hw"></div>
     <div class="card join center">
       <h2>테스트 참여하기</h2>
       <p class="muted">선생님이 알려 준 6자리 코드를 입력하세요.</p>
@@ -33,9 +34,18 @@ async function studentHome() {
   $("#code").oninput = e => { e.target.value = e.target.value.toUpperCase(); };
   $("#editP").onclick = () => editProfileModal(ctx);
 
+  let subs = [];
   try {
     const snap = await getDocs(query(collection(db, "submissions"), where("uid", "==", ctx.user.uid)));
-    const subs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    subs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error(e);
+    $("#mine").innerHTML = `<p class="alert err">기록을 불러오지 못했습니다: ${esc(e.code || e.message)}</p>`;
+    subs = null;
+  }
+  studentAssignments(p, subs || []);
+  if (!subs) return;
+  try {
     if (!subs.length) { $("#mine").innerHTML = `<p class="muted">아직 기록이 없습니다.</p>`; return; }
     const by = new Map();
     for (const s of subs) { if (!by.has(s.testId)) by.set(s.testId, []); by.get(s.testId).push(s); }
@@ -53,8 +63,91 @@ async function studentHome() {
   }
 }
 
+// ================= 과제 (공통) =================
+// 학번 5자리 → 학년(첫 자리)·반(둘째~셋째 자리)
+function gradeClassOf(no) {
+  const s = String(no || "");
+  if (!/^\d{5}$/.test(s)) return { grade: 0, classNo: 0 };
+  return { grade: +s[0], classNo: parseInt(s.slice(1, 3), 10) };
+}
+function targetLabel(a) {
+  if (a.target === "grade") return `${a.grade}학년 전체`;
+  if (a.target === "class") return `${a.grade}학년 ${a.classNo}반`;
+  return "전체 학생";
+}
+function isForStudent(a, studentNo) {
+  if (!a.target || a.target === "all") return true;
+  const g = gradeClassOf(studentNo);
+  if (a.target === "grade") return g.grade === a.grade;
+  if (a.target === "class") return g.grade === a.grade && g.classNo === a.classNo;
+  return false;
+}
+const DAY = 24 * 3600 * 1000;
+function dueText(a) {
+  const d = toDate(a.dueAt);
+  if (!d) return "";
+  const left = d.getTime() - Date.now();
+  if (left < 0) return `<span class="badge gray">마감 ${fmtDate(d)}</span>`;
+  const days = Math.floor(left / DAY);
+  const cls = left < DAY ? "amber" : "blue";
+  const rest = days >= 1 ? `D-${days}` : `${Math.max(1, Math.ceil(left / 3600000))}시간 남음`;
+  return `<span class="badge ${cls}">마감 ${fmtDate(d)} · ${rest}</span>`;
+}
+
+// 학생 홈 맨 위: 나에게 온 과제
+async function studentAssignments(p, subs) {
+  const box = $("#hw");
+  let list = [];
+  try {
+    const snap = await getDocs(collection(db, "assignments"));
+    list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(a => isForStudent(a, p.studentNo));
+  } catch (e) {
+    console.error(e);
+    return; // 규칙이 아직 게시되지 않았으면 조용히 건너뜀
+  }
+  // 마감이 지나고 3일이 넘은 과제는 숨김
+  list = list.filter(a => { const d = toDate(a.dueAt); return !d || Date.now() - d.getTime() < 3 * DAY; });
+  // 휴지통에 간 테스트는 숨김
+  const tests = await Promise.all(list.map(a => getDoc(doc(db, "tests", a.testId)).then(s => (s.exists() ? s.data() : null)).catch(() => null)));
+  list = list.map((a, i) => ({ ...a, test: tests[i] })).filter(a => a.test && !a.test.deleted);
+  if (!list.length) return;
+
+  const doneOf = a => {
+    const mine = subs.filter(s => s.testId === a.testId);
+    if (!mine.length) return null;
+    return mine.reduce((m, s) => (s.score > m.score ? s : m), mine[0]);
+  };
+  list.forEach(a => { a.best = doneOf(a); });
+  // 안 한 과제 먼저, 그다음 마감 빠른 순
+  list.sort((a, b) => (!!a.best - !!b.best) || ((toDate(a.dueAt)?.getTime() ?? 9e15) - (toDate(b.dueAt)?.getTime() ?? 9e15)) || (tsNum(b.createdAt) - tsNum(a.createdAt)));
+  const todo = list.filter(a => !a.best).length;
+
+  box.innerHTML = `<div class="card hw-card">
+    <div class="row between wrap"><h2 class="m0">📌 과제</h2>
+      <span class="badge ${todo ? "amber" : "green"}">${todo ? `해야 할 과제 ${todo}개` : "모두 완료!"}</span></div>
+    <div class="hw-list">${list.map(a => {
+      const closed = a.test.settings?.open === false;
+      const status = a.best
+        ? `<span class="badge green">완료 ✓ 최고 ${a.best.score} / ${a.best.total}</span>`
+        : `<span class="badge amber">아직 안 함</span>`;
+      const btn = closed
+        ? `<span class="badge gray">응시 닫힘</span>`
+        : `<a class="btn ${a.best ? "" : "primary"}" href="play.html?id=${encodeURIComponent(a.testId)}">${a.best ? "다시 하기" : "시작하기"}</a>`;
+      return `<div class="hw-item ${a.best ? "done" : ""}">
+        <div class="hw-main">
+          <div class="hw-title">${esc(a.test.title || a.testTitle || "")}</div>
+          <div class="meta"><span class="badge ${a.test.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[a.test.mode] || ""}</span> ${status} ${dueText(a)}</div>
+          ${a.note ? `<div class="hw-note">${esc(a.note)}</div>` : ""}
+        </div>
+        <div>${btn}</div>
+      </div>`;
+    }).join("")}</div>
+  </div>`;
+}
+
 // ================= 교사 =================
 let tests = [];
+let assignments = [];
 const SORTS = {
   updated: "최근 수정순",
   newest: "최신순 (만든 날짜)",
@@ -81,6 +174,7 @@ async function teacherHome() {
         <a class="btn primary" href="editor.html?mode=order">+ 문장 순서 만들기</a>
       </div>
     </div>
+    <div id="hwPanel"></div>
     <div class="dash">
       <aside class="card side"><div id="folders"></div></aside>
       <section>
@@ -97,6 +191,122 @@ async function teacherHome() {
   $("#q").oninput = e => { state.q = e.target.value.trim().toLowerCase(); renderGrid(); };
   $("#sort").onchange = e => { state.sort = e.target.value; saveSort(state.sort); renderGrid(); };
   await loadTests();
+  loadAssignments();
+}
+
+// ---------- 과제 관리 (교사) ----------
+async function loadAssignments() {
+  const box = $("#hwPanel");
+  try {
+    const snap = await getDocs(query(collection(db, "assignments"), where("ownerUid", "==", ctx.user.uid)));
+    assignments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error(e);
+    box.innerHTML = `<p class="alert warn">과제 목록을 불러오지 못했습니다 (${esc(e.code || e.message)}). Firebase 콘솔에 새 firestore.rules 를 게시했는지 확인하세요.</p>`;
+    return;
+  }
+  if (tests.length) renderGrid();
+  if (!assignments.length) { box.innerHTML = ""; return; }
+  assignments.sort((a, b) => ((toDate(a.dueAt)?.getTime() ?? 9e15) - (toDate(b.dueAt)?.getTime() ?? 9e15)) || (tsNum(b.createdAt) - tsNum(a.createdAt)));
+  box.innerHTML = `<div class="card">
+    <div class="row between wrap"><h3 class="m0">📌 낸 과제 (${assignments.length})</h3>
+    <span class="muted small">학생이 로그인하면 첫 화면 맨 위에 보입니다.</span></div>
+    <table class="tbl mt"><thead><tr><th>테스트</th><th>대상</th><th>마감</th><th class="r">제출</th><th>낸 날</th><th></th></tr></thead><tbody>
+    ${assignments.map(a => {
+      const t = tests.find(x => x.id === a.testId);
+      const gone = !t || t.deleted;
+      return `<tr data-hw="${a.id}">
+        <td>${esc(t?.title || a.testTitle || "")}${gone ? ` <span class="badge gray">테스트 삭제됨</span>` : ""}${a.note ? `<div class="muted small">${esc(a.note)}</div>` : ""}</td>
+        <td>${targetLabel(a)}</td>
+        <td>${a.dueAt ? dueText(a) : `<span class="muted">없음</span>`}</td>
+        <td class="r" data-cnt>…</td>
+        <td>${fmtDate(a.createdAt)}</td>
+        <td class="nowrap">${gone ? "" : `<a class="btn small" href="results.html?id=${a.testId}">결과</a> `}<button class="btn small danger" data-del>과제 취소</button></td>
+      </tr>`;
+    }).join("")}</tbody></table></div>`;
+  $$("#hwPanel [data-del]").forEach(b => {
+    b.onclick = async () => {
+      const id = b.closest("tr").dataset.hw;
+      if (!confirm("이 과제를 취소할까요? 학생 화면에서 사라집니다. (테스트와 제출 기록은 그대로 남습니다)")) return;
+      try { await deleteDoc(doc(db, "assignments", id)); toast("과제를 취소했습니다."); loadAssignments(); }
+      catch (e) { console.error(e); toast("실패: " + (e.code || e.message), "err"); }
+    };
+  });
+  // 제출한 학생 수 (대상 학년·반에 맞는 학생만, 한 사람은 한 번만 셈)
+  const byTest = new Map();
+  for (const a of assignments) {
+    const cell = $(`#hwPanel tr[data-hw="${a.id}"] [data-cnt]`);
+    try {
+      if (!byTest.has(a.testId)) {
+        byTest.set(a.testId, getDocs(query(collection(db, "submissions"), where("ownerUid", "==", ctx.user.uid), where("testId", "==", a.testId))).then(s => s.docs.map(d => d.data())));
+      }
+      const subs = await byTest.get(a.testId);
+      const n = new Set(subs.filter(s => isForStudent(a, s.studentNo)).map(s => s.uid)).size;
+      cell.textContent = n + "명";
+    } catch (e) { console.error(e); cell.textContent = "-"; }
+  }
+}
+
+function assignModal(t) {
+  const ov = document.createElement("div");
+  ov.className = "overlay";
+  const dl = t.settings?.deadline ? toDate(t.settings.deadline) : null;
+  ov.innerHTML = `<div class="card narrow">
+    <h2>과제로 내기</h2>
+    <p><b>${esc(t.title || "(제목 없음)")}</b></p>
+    <div class="lbl">대상</div>
+    <label class="radio"><input type="radio" name="hwT" value="all" checked> 전체 학생</label>
+    <label class="radio"><input type="radio" name="hwT" value="grade"> 학년 전체</label>
+    <label class="radio"><input type="radio" name="hwT" value="class"> 학년·반 지정</label>
+    <div class="row sub" id="hwGC">
+      <label class="inline"><input type="number" id="hwG" min="1" max="3" value="1"> 학년</label>
+      <label class="inline" id="hwCWrap"><input type="number" id="hwC" min="1" max="20" value="1"> 반</label>
+    </div>
+    <label>마감 (선택)<input type="datetime-local" id="hwDue" value="${dl ? toLocalInput(dl) : ""}"></label>
+    <label class="check"><input type="checkbox" id="hwClose"> 마감이 지나면 응시도 닫기 (테스트 설정의 마감 시각을 이 날짜로 바꿉니다)</label>
+    <label>학생에게 보일 메모 (선택)<input id="hwNote" maxlength="100" placeholder="예: 금요일 수업 전까지 2번 이상 풀어 오세요"></label>
+    <p class="muted small">학년·반은 학생이 입력한 학번(예: 10305 → 1학년 3반)으로 판단합니다.</p>
+    <div class="row end"><button class="btn" id="hwCancel">취소</button><button class="btn primary" id="hwSave">과제 내기</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  const sync = () => {
+    const v = $('input[name="hwT"]:checked', ov).value;
+    $("#hwGC", ov).classList.toggle("hidden", v === "all");
+    $("#hwCWrap", ov).classList.toggle("hidden", v !== "class");
+  };
+  $$('input[name="hwT"]', ov).forEach(r => (r.onchange = sync));
+  sync();
+  $("#hwCancel", ov).onclick = () => ov.remove();
+  $("#hwSave", ov).onclick = async () => {
+    const target = $('input[name="hwT"]:checked', ov).value;
+    const grade = parseInt($("#hwG", ov).value, 10) || 0;
+    const classNo = parseInt($("#hwC", ov).value, 10) || 0;
+    if (target !== "all" && !(grade >= 1 && grade <= 9)) return toast("학년을 확인하세요.", "err");
+    if (target === "class" && !(classNo >= 1 && classNo <= 99)) return toast("반을 확인하세요.", "err");
+    const dv = $("#hwDue", ov).value;
+    const dueAt = dv ? new Date(dv) : null;
+    if ($("#hwClose", ov).checked && !dueAt) return toast("응시를 닫으려면 마감을 정하세요.", "err");
+    const data = {
+      testId: t.id, testTitle: t.title || "", mode: t.mode || "cloze", ownerUid: ctx.user.uid,
+      target, grade: target === "all" ? 0 : grade, classNo: target === "class" ? classNo : 0,
+      dueAt, note: $("#hwNote", ov).value.trim(), createdAt: serverTimestamp()
+    };
+    const btn = $("#hwSave", ov);
+    btn.disabled = true;
+    try {
+      await addDoc(collection(db, "assignments"), data);
+      if ($("#hwClose", ov).checked) await updateDoc(doc(db, "tests", t.id), { "settings.deadline": dueAt, updatedAt: serverTimestamp() });
+      const open = t.settings?.open !== false;
+      ov.remove();
+      toast(open ? `과제를 냈습니다 (${targetLabel(data)}).` : "과제를 냈습니다. 이 테스트는 지금 '응시 닫힘' 상태이니 [⋯ → 응시 열기]를 눌러 주세요.", open ? "" : "warn");
+      await loadTests();
+      loadAssignments();
+    } catch (e) {
+      console.error(e);
+      btn.disabled = false;
+      toast("실패: " + (e.code || e.message) + " — Firebase 콘솔에 새 보안 규칙을 게시했는지 확인하세요.", "err");
+    }
+  };
 }
 
 async function loadTests() {
@@ -158,6 +368,7 @@ function renderGrid() {
          <a class="btn small" href="answers.html?id=${t.id}" target="_blank">정답보기</a>
          <a class="btn small" href="live.html?id=${t.id}" target="_blank">실시간 순위</a>
          <button class="btn small" data-a="link">링크</button>
+         <button class="btn small" data-a="assign">과제 내기</button>
          <details class="more"><summary class="btn small">⋯</summary><div class="menu">
            <button data-a="toggle">${open ? "응시 닫기" : "응시 열기"}</button>
            <button data-a="dup">복제</button>
@@ -171,7 +382,7 @@ function renderGrid() {
       <div class="thumb">${esc(preview(t))}</div>
       <div class="tbody">
         <div class="ttitle">${esc(t.title || "(제목 없음)")}</div>
-        <div class="meta"><span class="badge ${t.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[t.mode] || ""}</span> <span>${n}</span> <span class="badge ${open ? "green" : "gray"}">${open ? "응시 가능" : "닫힘"}</span></div>
+        <div class="meta"><span class="badge ${t.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[t.mode] || ""}</span> <span>${n}</span> <span class="badge ${open ? "green" : "gray"}">${open ? "응시 가능" : "닫힘"}</span>${assignments.some(a => a.testId === t.id) ? ` <span class="badge amber">과제</span>` : ""}</div>
         <div class="meta small muted">코드 <b class="mono">${esc(t.code)}</b> · ${fmtDate(t.updatedAt)}${t.folder ? ` · ${esc(t.folder)}` : ""}</div>
         <div class="actions">${actions}</div>
       </div></div>`;
@@ -295,6 +506,7 @@ async function act(id, a) {
   const ref = doc(db, "tests", id);
   try {
     if (a === "link") return copyText(playUrl(t.code));
+    if (a === "assign") return assignModal(t);
     if (a === "toggle") {
       const open = t.settings?.open === false;
       await updateDoc(ref, { "settings.open": open, updatedAt: serverTimestamp() });
