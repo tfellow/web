@@ -43,6 +43,13 @@ label.check,label.radio{display:flex;align-items:center;margin:6px 0}
 .tbl tr.detail td{background:#fafafa}
 /* 학생 홈 */
 .join .code-input{font-size:28px;text-align:center;letter-spacing:6px;max-width:260px;font-family:Consolas,monospace;text-transform:uppercase}
+/* 과제 */
+.hw-card{border:2px solid #f59e0b;background:#fffbeb}
+.hw-list{margin-top:8px}
+.hw-item{display:flex;gap:12px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-top:8px}
+.hw-item.done{opacity:.8}
+.hw-main{flex:1;min-width:0}.hw-title{font-weight:700;font-size:17px}
+.hw-note{font-size:14px;color:#92400e;margin-top:4px}
 /* 교사 대시보드 */
 .dash{display:grid;grid-template-columns:220px 1fr;gap:14px}
 .side{padding:12px}.folder{display:flex;justify-content:space-between;width:100%;padding:7px 10px;border:0;background:none;border-radius:6px;cursor:pointer;font:inherit;text-align:left}
