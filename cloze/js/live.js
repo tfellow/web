@@ -35,6 +35,7 @@ app.innerHTML = `
       <select id="lTop"><option value="10">상위 10명</option><option value="20">상위 20명</option><option value="999">전체</option></select>
       <button class="btn small" id="lRound">새 라운드 시작</button>
       <button class="btn small" id="lJoin">참여 안내 숨기기</button>
+      <button class="btn small" id="lBig">코드·QR 크게 보기</button>
       <button class="btn small" id="lFull">전체 화면</button>
     </div>
   </div>
@@ -51,7 +52,7 @@ app.innerHTML = `
 </div>`;
 
 if (window.QRCode) {
-  try { new QRCode($("#qr"), { text: url, width: 220, height: 220 }); } catch (e) { console.warn(e); }
+  try { new QRCode($("#qr"), { text: url, width: 640, height: 640 }); } catch (e) { console.warn(e); }
 }
 $("#lName").onchange = e => { V.name = e.target.value; render(); };
 $("#lCls").onchange = e => { V.cls = e.target.value; render(); };
@@ -70,6 +71,14 @@ $("#lJoin").onclick = e => {
   p.classList.toggle("hidden");
   e.target.textContent = p.classList.contains("hidden") ? "참여 안내 보이기" : "참여 안내 숨기기";
 };
+$("#lBig").onclick = e => {
+  const on = document.body.classList.toggle("live-bigqr");
+  e.target.textContent = on ? "순위 보기" : "코드·QR 크게 보기";
+  $("#lJoin").disabled = on;
+};
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && document.body.classList.contains("live-bigqr")) $("#lBig").click();
+});
 $("#lFull").onclick = () => {
   if (document.fullscreenElement) document.exitFullscreen();
   else document.documentElement.requestFullscreen().catch(() => {});
@@ -103,7 +112,7 @@ function render() {
     const key = s.score + "|" + s.timeSec;
     next.set(s.uid, key);
     const isNew = prev.size > 0 && prev.get(s.uid) !== key;
-    const nm = V.name === "real" ? `${esc(s.realName || "")}` : esc(s.nickname || "");
+    const nm = V.name === "real" ? esc(`${s.studentNo || ""} ${s.realName || ""}`.trim()) : esc(s.nickname || "");
     const pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
     return `<div class="lrow ${i < 3 ? "top" + (i + 1) : ""} ${isNew ? "flash" : ""}">
       <div class="lrank">${i + 1}</div>

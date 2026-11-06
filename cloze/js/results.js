@@ -93,10 +93,12 @@ function current() {
   if (V.cls !== "__all") list = list.filter(s => classOf(s.studentNo) === V.cls);
   return pickPerStudent(list, V.pick);
 }
-function nameOf(s) {
+// withNo: 실명 앞에 학번을 붙임 (학번 칸이 바로 옆에 있는 표에서는 false)
+function nameOf(s, withNo = true) {
   if (V.name === "nick") return esc(s.nickname || "");
-  if (V.name === "both") return `${esc(s.realName || "")} <span class="muted">(${esc(s.nickname || "")})</span>`;
-  return esc(s.realName || "");
+  const real = esc(withNo ? `${s.studentNo || ""} ${s.realName || ""}`.trim() : s.realName || "");
+  if (V.name === "both") return `${real} <span class="muted">(${esc(s.nickname || "")})</span>`;
+  return real;
 }
 const isBlank = v => v == null || v === "";
 
@@ -178,7 +180,7 @@ function renderRank(list) {
   const r = rankSort(pickPerStudent(list, "best")).slice(0, 10);
   if (!r.length) { $("#rank").innerHTML = `<p class="muted">아직 제출이 없습니다.</p>`; return; }
   $("#rank").innerHTML = `<table class="tbl"><thead><tr><th>순위</th><th>학번</th><th>이름</th><th class="r">점수</th><th class="r">시간</th></tr></thead><tbody>
-    ${r.map((s, i) => `<tr><td>${i + 1}</td><td>${esc(s.studentNo || "")}</td><td>${nameOf(s)}</td><td class="r">${s.score}</td><td class="r">${fmtSec(s.timeSec)}</td></tr>`).join("")}
+    ${r.map((s, i) => `<tr><td>${i + 1}</td><td>${esc(s.studentNo || "")}</td><td>${nameOf(s, false)}</td><td class="r">${s.score}</td><td class="r">${fmtSec(s.timeSec)}</td></tr>`).join("")}
   </tbody></table>`;
 }
 
@@ -191,7 +193,7 @@ function renderStudents(list) {
   else L.sort((a, b) => String(a.studentNo).localeCompare(String(b.studentNo)) || tsNum(a.submittedAt) - tsNum(b.submittedAt));
   el.innerHTML = `<table class="tbl"><thead><tr><th>학번</th><th>이름</th><th>제출 시각</th><th class="r">점수</th><th class="r">틀림</th><th class="r">시간</th><th class="r">화면 이탈</th><th class="r">회차</th><th></th></tr></thead><tbody>
     ${L.map(s => `<tr class="srow" data-id="${s.id}">
-      <td>${esc(s.studentNo || "")}</td><td>${nameOf(s)}</td><td>${fmtDate(s.submittedAt)}${s.autoSubmitted ? ` <span class="badge amber">자동 제출</span>` : ""}</td>
+      <td>${esc(s.studentNo || "")}</td><td>${nameOf(s, false)}</td><td>${fmtDate(s.submittedAt)}${s.autoSubmitted ? ` <span class="badge amber">자동 제출</span>` : ""}</td>
       <td class="r"><b>${s.score}</b> / ${s.total}</td><td class="r">${s.total - s.score}</td><td class="r">${fmtSec(s.timeSec)}</td>
       <td class="r ${(s.leaveCount || 0) > 0 ? "warn-text" : ""}">${s.leaveCount || 0}</td><td class="r">${s.attemptNo || 1}</td>
       <td class="nowrap"><button class="btn small ghost" data-open="${s.id}">답 보기</button><button class="btn small ghost danger" data-del="${s.id}">삭제</button></td></tr>
@@ -213,7 +215,7 @@ function detailHtml(s) {
 
 async function delSub(sid) {
   const s = subs.find(x => x.id === sid);
-  if (!s || !confirm(`${s.realName} 학생의 제출 기록(${s.score}점)을 삭제할까요?`)) return;
+  if (!s || !confirm(`${s.studentNo || ""} ${s.realName} 학생의 제출 기록(${s.score}점)을 삭제할까요?`)) return;
   try {
     await deleteDoc(doc(db, "submissions", sid));
     try { await deleteDoc(doc(db, "board", sid)); } catch (e) { console.warn(e); }
