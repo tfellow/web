@@ -116,6 +116,19 @@ hr{border:0;border-top:1px solid var(--border);margin:10px 0}
 .live-code{font-family:Consolas,monospace;font-size:52px;font-weight:800;letter-spacing:6px;color:var(--primary)}
 #qr{display:flex;justify-content:center;margin:10px 0}.live-url{font-size:12px;word-break:break-all;color:var(--muted)}
 .live-board{flex:1}
+#qr img,#qr canvas{width:220px;height:220px;image-rendering:pixelated}
+.live-bigqr .live{padding:0}
+.live-bigqr .live-top{position:fixed;top:10px;right:14px;margin:0;z-index:5}
+.live-bigqr .live-top>div:first-child,.live-bigqr .live-ctrl>:not(#lBig):not(#lFull){display:none}
+.live-bigqr .live-board,.live-bigqr .live-url{display:none}
+.live-bigqr .live-main{height:100vh;align-items:center;justify-content:center}
+.live-bigqr .live-join{display:grid!important;grid-template-columns:auto auto;grid-template-areas:"lab qr" "code qr" "hint qr";align-content:center;align-items:center;column-gap:4vw;width:auto;background:transparent;border:none;padding:0}
+.live-bigqr .live-join>.muted:first-child{grid-area:lab;font-size:clamp(20px,3vw,48px);font-weight:700;align-self:end}
+.live-bigqr .live-code{grid-area:code;font-size:clamp(64px,min(12.5vw,30vh),420px);letter-spacing:.06em;line-height:1.1}
+.live-bigqr #qr{grid-area:qr;margin:0}
+.live-bigqr #qr img,.live-bigqr #qr canvas{width:min(86vh,40vw);height:min(86vh,40vw)}
+.live-bigqr .live-join .small{grid-area:hint;font-size:clamp(16px,1.8vw,30px);align-self:start}
+@media (max-aspect-ratio:1/1){.live-bigqr .live-join{grid-template-columns:auto;grid-template-areas:"lab" "code" "qr" "hint";justify-items:center}.live-bigqr #qr img,.live-bigqr #qr canvas{width:min(80vw,50vh);height:min(80vw,50vh)}.live-bigqr .live-code{font-size:min(15vw,18vh)}}
 .live-empty{font-size:28px;color:var(--muted);text-align:center;padding:80px 0}
 .lrow{display:grid;grid-template-columns:64px 1fr 30% 110px 110px;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;margin-bottom:8px;font-size:26px}
 .lrank{font-weight:800;font-size:30px;text-align:center;color:var(--muted)}
