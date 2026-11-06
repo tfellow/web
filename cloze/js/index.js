@@ -1,10 +1,9 @@
 import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, tsNum, editProfileModal } from "./common.js";
-import { collection, query, where, getDocs, doc, updateDoc, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, query, where, getDocs, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { tokenize } from "./core.js";
 
 const ctx = await gate({ needProfile: true });
 const app = $("#app");
-if (ctx.teacher) teacherHome(); else studentHome();
 
 // ================= 학생 =================
 async function studentHome() {
@@ -56,7 +55,21 @@ async function studentHome() {
 
 // ================= 교사 =================
 let tests = [];
-const state = { folder: "__all", q: "", trash: false, sort: "updated" };
+const SORTS = {
+  updated: "최근 수정순",
+  newest: "최신순 (만든 날짜)",
+  oldest: "오래된 순 (만든 날짜)",
+  title: "이름순 (가나다)",
+  titleDesc: "이름 역순",
+  manual: "직접 정렬 (끌어서 옮기기)"
+};
+const SORT_KEY = "cloze.teacher.sort";
+function loadSort() {
+  try { const v = localStorage.getItem(SORT_KEY); if (v && SORTS[v]) return v; } catch (e) {}
+  return "updated";
+}
+function saveSort(v) { try { localStorage.setItem(SORT_KEY, v); } catch (e) {} }
+const state = { folder: "__all", q: "", trash: false, sort: loadSort() };
 
 async function teacherHome() {
   app.innerHTML = `
@@ -73,14 +86,16 @@ async function teacherHome() {
       <section>
         <div class="row wrap toolbar">
           <input id="q" placeholder="제목·본문 검색" class="grow">
-          <select id="sort"><option value="updated">최근 수정순</option><option value="created">만든 순</option><option value="title">이름순</option></select>
+          <label class="sort-label small muted" for="sort">정렬</label>
+          <select id="sort">${Object.entries(SORTS).map(([k, v]) => `<option value="${k}" ${state.sort === k ? "selected" : ""}>${v}</option>`).join("")}</select>
         </div>
+        <p id="manualHint" class="manual-hint small" hidden>⠿ 손잡이를 끌어 순서를 바꾸거나 ◀ ▶ 버튼으로 한 칸씩 옮기세요. 바뀐 순서는 자동 저장됩니다.</p>
         <div id="grid" class="grid"><div class="loading">불러오는 중…</div></div>
       </section>
     </div>
   </div>`;
   $("#q").oninput = e => { state.q = e.target.value.trim().toLowerCase(); renderGrid(); };
-  $("#sort").onchange = e => { state.sort = e.target.value; renderGrid(); };
+  $("#sort").onchange = e => { state.sort = e.target.value; saveSort(state.sort); renderGrid(); };
   await loadTests();
 }
 
@@ -125,11 +140,10 @@ function renderGrid() {
   let list = tests.filter(t => !!t.deleted === state.trash);
   if (!state.trash && state.folder !== "__all") list = list.filter(t => (t.folder || "") === state.folder);
   if (state.q) list = list.filter(t => ((t.title || "") + " " + (t.text || "")).toLowerCase().includes(state.q));
-  if (state.sort === "title") list.sort((a, b) => (a.title || "").localeCompare(b.title || "", "ko"));
-  else {
-    const f = state.sort === "created" ? "createdAt" : "updatedAt";
-    list.sort((a, b) => tsNum(b[f]) - tsNum(a[f]));
-  }
+  sortList(list);
+  const manual = state.sort === "manual" && !state.trash;
+  $("#manualHint").hidden = !manual;
+  $("#grid").classList.toggle("manual", manual);
   if (!list.length) {
     $("#grid").innerHTML = `<p class="muted">${state.trash ? "휴지통이 비어 있습니다." : "테스트가 없습니다. 위의 버튼으로 새로 만드세요."}</p>`;
     return;
@@ -150,7 +164,10 @@ function renderGrid() {
            <button data-a="move">폴더 이동</button>
            <button data-a="trash">휴지통으로</button>
          </div></details>`;
-    return `<div class="tcard" data-id="${t.id}">
+    const handle = manual
+      ? `<div class="reorder"><span class="grab" title="끌어서 순서 바꾸기">⠿</span><button class="btn small" data-m="-1" title="앞으로">◀</button><button class="btn small" data-m="1" title="뒤로">▶</button></div>`
+      : "";
+    return `<div class="tcard" data-id="${t.id}">${handle}
       <div class="thumb">${esc(preview(t))}</div>
       <div class="tbody">
         <div class="ttitle">${esc(t.title || "(제목 없음)")}</div>
@@ -161,6 +178,115 @@ function renderGrid() {
   }).join("");
   $$("#grid [data-a]").forEach(b => {
     b.onclick = e => { e.preventDefault(); act(b.closest(".tcard").dataset.id, b.dataset.a); };
+  });
+  if (manual) setupReorder(list);
+}
+
+// ---------- 정렬 ----------
+const byTitle = (a, b) => (a.title || "").localeCompare(b.title || "", "ko", { numeric: true });
+// 직접 정렬: order 값이 있는 것은 그 순서대로, 아직 순서가 없는 새 테스트는 맨 앞에 (최신순)
+function manualCmp(a, b) {
+  const ha = typeof a.order === "number", hb = typeof b.order === "number";
+  if (ha && hb) return a.order - b.order;
+  if (ha !== hb) return ha ? 1 : -1;
+  return tsNum(b.createdAt) - tsNum(a.createdAt);
+}
+function sortList(list) {
+  const s = state.sort;
+  if (s === "title") list.sort(byTitle);
+  else if (s === "titleDesc") list.sort((a, b) => byTitle(b, a));
+  else if (s === "newest") list.sort((a, b) => tsNum(b.createdAt) - tsNum(a.createdAt));
+  else if (s === "oldest") list.sort((a, b) => tsNum(a.createdAt) - tsNum(b.createdAt));
+  else if (s === "manual") list.sort(manualCmp);
+  else list.sort((a, b) => tsNum(b.updatedAt) - tsNum(a.updatedAt));
+  return list;
+}
+
+// id 를 target 앞/뒤로 옮긴 뒤 (휴지통 제외) 전체 순서를 다시 매겨 바뀐 것만 저장
+async function moveTest(id, targetId, after) {
+  if (id === targetId) return;
+  const all = tests.filter(t => !t.deleted).sort(manualCmp);
+  const from = all.findIndex(t => t.id === id);
+  if (from < 0) return;
+  const [item] = all.splice(from, 1);
+  let to = all.findIndex(t => t.id === targetId);
+  if (to < 0) return;
+  if (after) to++;
+  all.splice(to, 0, item);
+  const changed = [];
+  all.forEach((t, i) => { if (t.order !== i) { t.order = i; changed.push(t); } });
+  renderGrid();
+  if (!changed.length) return;
+  try {
+    for (let i = 0; i < changed.length; i += 450) {
+      const batch = writeBatch(db);
+      changed.slice(i, i + 450).forEach(t => batch.update(doc(db, "tests", t.id), { order: t.order }));
+      await batch.commit();
+    }
+  } catch (e) {
+    console.error(e);
+    toast("순서 저장 실패: " + (e.code || e.message), "err");
+    await loadTests();
+  }
+}
+
+function setupReorder(list) {
+  const grid = $("#grid");
+  $$("#grid [data-m]").forEach(b => {
+    b.onclick = e => {
+      e.preventDefault();
+      const id = b.closest(".tcard").dataset.id;
+      const i = list.findIndex(t => t.id === id), d = +b.dataset.m, j = i + d;
+      if (j < 0 || j >= list.length) return;
+      moveTest(id, list[j].id, d > 0);
+    };
+  });
+  $$("#grid .grab").forEach(h => {
+    h.onpointerdown = e => {
+      if (e.button) return;
+      e.preventDefault();
+      const card = h.closest(".tcard");
+      const rect = card.getBoundingClientRect();
+      const ghost = card.cloneNode(true);
+      ghost.classList.add("ghost");
+      ghost.style.width = rect.width + "px";
+      ghost.style.height = rect.height + "px";
+      const dx = e.clientX - rect.left, dy = e.clientY - rect.top;
+      const place = (x, y) => { ghost.style.left = (x - dx) + "px"; ghost.style.top = (y - dy) + "px"; };
+      place(e.clientX, e.clientY);
+      document.body.appendChild(ghost);
+      card.classList.add("dragging");
+      grid.classList.add("drag-on");
+      let drop = null;
+      const clearMark = () => $$("#grid .drop-before, #grid .drop-after").forEach(c => c.classList.remove("drop-before", "drop-after"));
+      const move = ev => {
+        place(ev.clientX, ev.clientY);
+        // 화면 위아래 가장자리에서 자동 스크롤
+        if (ev.clientY < 60) window.scrollBy(0, -14); else if (ev.clientY > innerHeight - 60) window.scrollBy(0, 14);
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const over = el && el.closest("#grid .tcard");
+        clearMark();
+        drop = null;
+        if (!over || over === card) return;
+        const r = over.getBoundingClientRect();
+        const after = ev.clientX > r.left + r.width / 2;
+        over.classList.add(after ? "drop-after" : "drop-before");
+        drop = { id: over.dataset.id, after };
+      };
+      const end = () => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", end);
+        window.removeEventListener("pointercancel", end);
+        ghost.remove();
+        card.classList.remove("dragging");
+        grid.classList.remove("drag-on");
+        clearMark();
+        if (drop) moveTest(card.dataset.id, drop.id, drop.after);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", end);
+      window.addEventListener("pointercancel", end);
+    };
   });
 }
 
@@ -181,6 +307,7 @@ async function act(id, a) {
       data.createdAt = serverTimestamp();
       data.updatedAt = serverTimestamp();
       data.deleted = false;
+      delete data.order;
       await addDoc(collection(db, "tests"), data);
       toast("복제했습니다. 학생 기록은 복제되지 않습니다.");
     }
@@ -201,3 +328,6 @@ async function act(id, a) {
     toast("실패: " + (e.code || e.message), "err");
   }
 }
+
+// 맨 아래에서 시작 (위의 const 선언들이 먼저 준비되도록)
+if (ctx.teacher) teacherHome(); else studentHome();
