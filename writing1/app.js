@@ -749,37 +749,39 @@ function decomposeSentenceIntoChunks(sentence = "") {
   const cleaned = (sentence || "")
     .replace(/\[[^\]]*\]/g, "")
     .replace(/\([^)]*\)/g, "")
-    .replace(/[.!?]+$/g, "")
     .replace(/\s+/g, " ")
     .trim();
   if (!cleaned) return [];
 
   const words = cleaned.split(" ");
-  if (words.length <= 4) return [cleaned];
+  if (words.length <= 4) return [cleaned.replace(/[.!?]+$/g, "")];
 
   const chunks = [];
   let current = [];
 
   const boundaryStarters = new Set([
-    "in", "for", "on", "at", "with", "from", "into", "around", "about",
+    "in", "for", "on", "at", "with", "from", "into", "around", "about", "all",
     "which", "that", "who", "whom", "because", "when", "if", "while", "although"
   ]);
 
   for (let i = 0; i < words.length; i++) {
     const w = words[i];
-    const wl = w.toLowerCase();
-    const nextWl = (words[i + 1] || "").toLowerCase();
+    const wl = w.toLowerCase().replace(/[^a-z]/g, "");
+    const nextWl = (words[i + 1] || "").toLowerCase().replace(/[^a-z]/g, "");
 
-    // "so that" 접속사 경계
-    if (wl === "so" && nextWl === "that" && current.length >= 2) {
-      chunks.push(current.join(" "));
+    // "so that" 또는 "all over" 구문 경계
+    if (
+      ((wl === "so" && nextWl === "that") || (wl === "all" && nextWl === "over")) &&
+      current.length >= 2
+    ) {
+      chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
       current = [w];
       continue;
     }
 
     // "like + 명사" (be like ~ 구문에서 주어+be동사 뒤의 핵심 구문 분리)
     if (wl === "like" && i >= 2 && current.length >= 2 && /^(are|is|was|were|am)$/i.test(words[i - 1])) {
-      chunks.push(current.join(" "));
+      chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
       current = [w];
       continue;
     }
@@ -789,43 +791,54 @@ function decomposeSentenceIntoChunks(sentence = "") {
       wl === "to" &&
       i >= 2 &&
       current.length >= 2 &&
-      !/^(want|wants|wanted|need|needs|needed|have|has|had|like|likes|try|tried|been)$/i.test(words[i - 1])
+      !/^(want|wants|wanted|need|needs|needed|have|has|had|like|likes|try|tried|been)$/i.test(
+        words[i - 1].replace(/[^a-zA-Z]/g, "")
+      )
     ) {
-      chunks.push(current.join(" "));
+      chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
       current = [w];
       continue;
     }
 
-    // 전치사구 / 관계사절 경계 (앞 블록이 최소 2단어 이상 모였을 때 분리)
-    if (boundaryStarters.has(wl) && current.length >= 2 && i < words.length - 1) {
-      chunks.push(current.join(" "));
+    // 전치사구 / 관계사절 경계 (앞 블록이 최소 2단어 이상 모였을 때 분리, 단 all은 all over일 때만 위에서 분리)
+    if (wl !== "all" && boundaryStarters.has(wl) && current.length >= 2 && i < words.length - 1) {
+      chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
       current = [w];
       continue;
     }
 
     current.push(w);
+
+    // 문장 종결 부호(., !, ?)가 있으면 해당 문장 끝에서 블록 분리!
+    if (/[.!?]$/.test(w) && current.length >= 2 && i < words.length - 1) {
+      chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
+      current = [];
+    }
   }
 
   if (current.length > 0) {
-    chunks.push(current.join(" "));
+    chunks.push(current.join(" ").replace(/[.!?]+$/g, ""));
   }
 
-  return chunks;
+  return chunks.filter(Boolean);
 }
 
 /**
- * [구문 블록(Chunk Slot)별 학생 답안 달성도 정밀 진단기]
+ * [구문 블록(Chunk Slot)별 학생 답안 달성도 정밀 진단기 (철자·어순·관사·단복수 통합 검사)]
  */
 function evaluateChunkSlotAlignment(studentText, candSentence, allowArticleSwap = true) {
   const chunks = decomposeSentenceIntoChunks(candSentence);
   const studentNorm = normalizeSentenceForCompare(studentText);
   const studentFlex = studentNorm.replace(/\b(a|an|the)\b/g, "DET");
+  const studentExactWordSet = new Set(studentNorm.match(/[a-z]+/g) || []);
+  const studentStemSet = new Set(Array.from(studentExactWordSet).map(normalizeEnWord));
 
   return chunks.map((chunk, idx) => {
     const chunkNorm = normalizeSentenceForCompare(chunk);
     const chunkFlex = chunkNorm.replace(/\b(a|an|the)\b/g, "DET");
     const chunkWords = chunkNorm.match(/[a-z]+/g) || [];
 
+    // ★ 철자(Spelling), 단복수, 어순이 100% 정확히 포함되어야 pass!
     const exactHit =
       studentNorm.includes(chunkNorm) || (allowArticleSwap && studentFlex.includes(chunkFlex));
 
@@ -834,20 +847,28 @@ function evaluateChunkSlotAlignment(studentText, candSentence, allowArticleSwap 
         index: idx + 1,
         chunk,
         status: "pass",
-        detail: "어순·형태 정확"
+        detail: "철자·어순·형태 정확"
       };
     }
 
-    // 블록 내 단어들이 어순이 뒤바뀌었거나 단복수/관사만 틀린 상태인지 확인
-    const studentTokens = new Set((studentNorm.match(/[a-z]+/g) || []).map(normalizeEnWord));
-    const matchedWordsCount = chunkWords.filter((w) => studentTokens.has(normalizeEnWord(w))).length;
+    // 어떤 단어가 철자 오류이거나 누락되었는지 추적
+    const missingExactWords = chunkWords.filter(
+      (w) => !studentExactWordSet.has(w) && !(allowArticleSwap && /^(a|an|the)$/.test(w))
+    );
+    const matchedWordsCount = chunkWords.filter(
+      (w) => studentExactWordSet.has(w) || studentStemSet.has(normalizeEnWord(w))
+    ).length;
 
-    if (matchedWordsCount >= Math.max(1, Math.ceil(chunkWords.length * 0.6))) {
+    if (matchedWordsCount >= Math.max(1, Math.ceil(chunkWords.length * 0.5))) {
+      const fixHint =
+        missingExactWords.length > 0
+          ? `철자·형태 오류 → '${missingExactWords.slice(0, 2).join(", ")}' 확인`
+          : "어순·관사 오류";
       return {
         index: idx + 1,
         chunk,
         status: "warn",
-        detail: "어순·관사·수일치 오류"
+        detail: fixHint
       };
     }
 
@@ -2059,17 +2080,15 @@ function evaluateWritingLocally({
   }
 
   // ============================================================================
-  // [방법 ④: LanguageTool 외부 영문법 엔진 이중 검증 (중복 감점 방지 Deduplication 적용!)]
-  // 이미 내장 엔진(수일치/어순/관사/단복수/대소문자)이 감점한 단어는 절대 중복 감점하지 않습니다!
+  // [방법 ④: LanguageTool 외부 영문법·철자 엔진 이중 검증 (중복 감점 방지 & correctedText 즉시 교정 반영!)]
+  // 이미 내장 엔진(수일치/어순/관사/단복수/대소문자)이 감점한 단어는 절대 중복 감점하지 않으며,
+  // 발견된 철자·어휘·문법 오류(예: populer -> popular, word -> world)를 correctedText와 1:1 비교표에 즉시 반영합니다!
   // ============================================================================
-  if (
-    Array.isArray(ltMatches) &&
-    ltMatches.length > 0 &&
-    !(bestCandidateMatch && bestCandidateMatch.isExactMatch)
-  ) {
+  let hasExternalSpellingOrGrammarError = false;
+  if (Array.isArray(ltMatches) && ltMatches.length > 0) {
     let ltAddedCount = 0;
     for (const m of ltMatches) {
-      if (ltAddedCount >= 2) break;
+      if (ltAddedCount >= 5) break;
       const ruleId = String(m.rule?.id || "").toUpperCase();
       // 대소문자/공백 등 이미 4영역(mechanics)에서 처리한 규칙은 건너뜀
       if (
@@ -2084,6 +2103,13 @@ function evaluateWritingLocally({
       if (!badSpan || !replacement || badSpan.toLowerCase() === replacement.toLowerCase()) {
         continue;
       }
+      // 만약 교사 모범 답안에 해당 표현이 그대로 들어있다면 오탐이므로 건너뜀
+      if (
+        bestCandidateMatch?.bestCandidate &&
+        bestCandidateMatch.bestCandidate.toLowerCase().includes(badSpan.toLowerCase())
+      ) {
+        continue;
+      }
       // 이미 내장 규칙에서 감점된 단어가 포함되어 있다면 중복 감점(Double-Penalty) 스킵!
       const spanWords = badSpan.toLowerCase().match(/[a-z]+/g) || [];
       const alreadyPenalized = spanWords.some(
@@ -2093,11 +2119,23 @@ function evaluateWritingLocally({
 
       markTokensPenalized(badSpan);
       ltAddedCount += 1;
+      hasExternalSpellingOrGrammarError = true;
+      if (bestCandidateMatch) {
+        bestCandidateMatch.isExactMatch = false;
+      }
+
+      // ★ 학생 교정 문장(correctedText)에 철자/어휘 교정 사항을 실제로 치환 반영!
+      const escapedBad = badSpan.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      correctedText = correctedText.replace(new RegExp(escapedBad, "i"), replacement);
+
       grammarScore = Math.max(0, grammarScore - Math.round(4 * strictMeta.penaltyMultiplier));
+      meaningAccuracy = Math.max(0, meaningAccuracy - Math.round(3 * strictMeta.penaltyMultiplier));
+      meaningScore = Math.round((meaningAccuracy / 100) * 40);
+
       grammarFeedback.push({
         original: badSpan,
         corrected: replacement,
-        explanation: `[외부 영문법 엔진 이중검증] '${badSpan}' 표현을 '${replacement}'(으)로 고치면 문법·철자상 더 정확합니다. (${m.message})`
+        explanation: `[철자·영문법 정밀 교정] '${badSpan}' 표현을 '${replacement}'(으)로 고치면 철자·문법상 정확합니다. (${m.message})`
       });
     }
   }
@@ -2108,8 +2146,20 @@ function evaluateWritingLocally({
   // ============================================================================
   if (geminiResult && typeof geminiResult === "object") {
     if (Array.isArray(geminiResult.feedbackItems)) {
-      for (const gf of geminiResult.feedbackItems.slice(0, 2)) {
+      for (const gf of geminiResult.feedbackItems.slice(0, 3)) {
         if (gf && gf.explanation) {
+          if (
+            gf.original &&
+            gf.corrected &&
+            gf.original.trim().toLowerCase() !== gf.corrected.trim().toLowerCase()
+          ) {
+            hasExternalSpellingOrGrammarError = true;
+            if (bestCandidateMatch) bestCandidateMatch.isExactMatch = false;
+            const escOrig = gf.original.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            if (new RegExp(escOrig, "i").test(correctedText)) {
+              correctedText = correctedText.replace(new RegExp(escOrig, "i"), gf.corrected.trim());
+            }
+          }
           grammarFeedback.push({
             original: gf.original || safeContent,
             corrected: gf.corrected || bestCandidateMatch?.bestCandidate || correctedText,
@@ -2122,7 +2172,6 @@ function evaluateWritingLocally({
       typeof geminiResult.score === "number" &&
       !(bestCandidateMatch && bestCandidateMatch.isExactMatch)
     ) {
-      // 오답이 100점을 받지 못하도록 내장 상한선을 유지하면서 AI 점수를 반영
       const currentDetScore = meaningScore + targetScore + grammarScore + mechanicsScore;
       if (geminiResult.score < currentDetScore) {
         const diff = Math.min(10, currentDetScore - geminiResult.score);
@@ -2131,8 +2180,8 @@ function evaluateWritingLocally({
     }
   }
 
-  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가 (오직 isExactMatch === true 일 때만 100% 일치 문구 출력!)
-  if (grammarFeedback.length === 0) {
+  // 교정 사항이 하나도 없는 완벽한 문장일 때만 격려 피드백 추가
+  if (grammarFeedback.length === 0 && !hasExternalSpellingOrGrammarError) {
     if (candidateAnswers.length > 1 && bestCandidateMatch && bestCandidateMatch.isExactMatch) {
       const otherCandidates = candidateAnswers.filter(
         (_, idx) => idx !== bestCandidateMatch.matchedIndex
@@ -2151,7 +2200,7 @@ function evaluateWritingLocally({
         original: safeContent,
         corrected: correctedText,
         explanation:
-          "🌟 한국어 제시문의 의미 전달, 핵심 목표 구문 어순, 주어-동사 수일치, 문장부호까지 모두 100% 완벽하게 작성했습니다!"
+          "🌟 한국어 제시문의 의미 전달, 핵심 목표 구문 어순, 철자 및 주어-동사 수일치, 문장부호까지 모두 100% 완벽하게 작성했습니다!"
       });
     }
   }
@@ -2182,20 +2231,36 @@ function evaluateWritingLocally({
       ? referenceAnswer.trim()
       : generatedAlternativeModel || correctedText;
 
-  const visualDiffHtml =
-    mode === "korean_prompt" && bestCandidateMatch
-      ? buildWordByWordDiffHtml(
-          safeContent,
-          bestCandidateMatch.bestCandidate,
-          bestCandidateMatch.chunkAnalysis,
-          bestCandidateMatch.isExactMatch
-        )
-      : buildWordByWordDiffHtml(
-          safeContent,
-          correctedText,
-          evaluateChunkSlotAlignment(safeContent, correctedText, true),
-          normalizeSentenceForCompare(safeContent) === normalizeSentenceForCompare(correctedText)
-        );
+  // ★ 1:1 시각적 비교(Visual Diff) 및 구문 블록(Chunk) 진단에 사용할 최종 기준 문장 결정:
+  // 모범 답안 후보가 존재하고 학생 원문과 다르면 모범 답안 후보를 사용하고,
+  // 자유 영작이거나 철자 교정(populer -> popular, word -> world 등)이 반영된 경우에는 교정 완료 문장(correctedText)과 비교!
+  const diffTargetSentence =
+    mode === "korean_prompt" &&
+    bestCandidateMatch?.bestCandidate &&
+    normalizeSentenceForCompare(bestCandidateMatch.bestCandidate) !==
+      normalizeSentenceForCompare(safeContent)
+      ? bestCandidateMatch.bestCandidate
+      : correctedText;
+
+  const isTrulyExact =
+    !hasExternalSpellingOrGrammarError &&
+    (mode === "korean_prompt" && bestCandidateMatch
+      ? bestCandidateMatch.isExactMatch
+      : normalizeSentenceForCompare(safeContent) ===
+        normalizeSentenceForCompare(diffTargetSentence));
+
+  const finalChunkAnalysis = evaluateChunkSlotAlignment(
+    safeContent,
+    diffTargetSentence,
+    strictMeta.allowArticleSwap
+  );
+
+  const visualDiffHtml = buildWordByWordDiffHtml(
+    safeContent,
+    diffTargetSentence,
+    finalChunkAnalysis,
+    isTrulyExact
+  );
 
   const relevantVocabList = buildRelevantVocabularyList({
     koreanPrompt,
@@ -2445,14 +2510,61 @@ selectKoreanMission.addEventListener("change", () => {
   updateSelectedKoreanMissionDetail();
 });
 
+// 학생의 기존 제출 내역 캐시 (과제별 제출 횟수 제한 확인용)
+let studentSubmissionsCache = [];
+
+function getStudentUsedAttemptsForMission(mission) {
+  if (!mission || !currentUser) return 0;
+  const uid = currentUser.uid;
+  const studentId = currentStudentInfo?.studentId || "";
+  const localSaved = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
+    } catch (e) {
+      return [];
+    }
+  })();
+
+  const combined = [...studentSubmissionsCache, ...localSaved];
+  const seenKeys = new Set();
+  let count = 0;
+
+  for (const rec of combined) {
+    if (!rec) continue;
+    const isMyRec =
+      (uid && rec.uid === uid) || (studentId && studentId !== "미등록" && rec.studentId === studentId);
+    if (!isMyRec) continue;
+
+    const matchMission =
+      (rec.missionId && rec.missionId === mission.id) ||
+      (rec.topic === mission.title && rec.koreanPrompt === mission.koreanPrompt);
+    if (!matchMission) continue;
+
+    // 동일 제출 중복 카운트 방지 (createdAtMs 기준 2초 이내 동일 내용 하나로 취급)
+    const dedupKey = `${Math.round((rec.createdAtMs || rec.ts || 0) / 2000)}_${rec.originalContent || ""}`;
+    if (seenKeys.has(dedupKey)) continue;
+    seenKeys.add(dedupKey);
+    count++;
+  }
+  return count;
+}
+
+function formatMaxAttemptsLabel(maxAttempts) {
+  const n = maxAttempts === undefined || maxAttempts === null ? 1 : Number(maxAttempts);
+  if (n <= 0) return "♾️ 무제한";
+  return `🔒 ${n}회 제한`;
+}
+
 function updateSelectedKoreanMissionDetail() {
   stopMissionTimer();
   essayContent.disabled = false;
   btnSubmitEssay.disabled = false;
+  btnSubmitEssay.textContent = "🤖 AI 채점 및 피드백 받기";
 
   const selectedId = selectKoreanMission.value;
   const mission = koreanPrompts.find((p) => p.id === selectedId);
   const strictBadgeEl = document.getElementById("display-strictness-badge");
+  const attemptsBadgeEl = document.getElementById("display-attempts-badge");
 
   if (!mission) {
     displayKoreanSentence.textContent = "등록된 한국어 제시문이 없습니다.";
@@ -2461,6 +2573,10 @@ function updateSelectedKoreanMissionDetail() {
     if (strictBadgeEl) {
       strictBadgeEl.className = "strictness-pill standard";
       strictBadgeEl.textContent = "⚖️ 표준 정밀 채점";
+    }
+    if (attemptsBadgeEl) {
+      attemptsBadgeEl.className = "strictness-pill strict";
+      attemptsBadgeEl.textContent = "🔒 제출 기회: 1회";
     }
     return;
   }
@@ -2473,6 +2589,35 @@ function updateSelectedKoreanMissionDetail() {
     const sMeta = getStrictnessMeta(mission.strictness || "standard");
     strictBadgeEl.className = `strictness-pill ${sMeta.mode}`;
     strictBadgeEl.textContent = sMeta.label;
+  }
+
+  // 제출 허용 횟수 확인 (기본값 1회, 0이면 무제한, 교사 테스트 모드는 횟수 무제한 허용)
+  const maxAttempts =
+    mission.maxAttempts === undefined || mission.maxAttempts === null ? 1 : Number(mission.maxAttempts);
+  const usedAttempts = getStudentUsedAttemptsForMission(mission);
+  const isTeacherTesting = currentStudentInfo?.studentId === "TEACHER";
+
+  if (attemptsBadgeEl) {
+    if (maxAttempts <= 0) {
+      attemptsBadgeEl.className = "strictness-pill fluency";
+      attemptsBadgeEl.textContent = `♾️ 제출 횟수: 무제한 허용 (현재 ${usedAttempts}회 제출)`;
+    } else {
+      const remain = Math.max(0, maxAttempts - usedAttempts);
+      attemptsBadgeEl.className = remain > 0 ? "strictness-pill standard" : "strictness-pill strict";
+      attemptsBadgeEl.textContent =
+        remain > 0
+          ? `🔒 제출 기회: ${usedAttempts} / ${maxAttempts}회 (남은 기회 ${remain}회)`
+          : `🔒 제출 완료: ${usedAttempts} / ${maxAttempts}회 (추가 제출 불가)`;
+    }
+  }
+
+  // 이미 허용된 제출 횟수를 모두 소진한 경우 (학생 계정일 때) 입력창 및 채점 버튼 잠금
+  if (!isTeacherTesting && maxAttempts > 0 && usedAttempts >= maxAttempts) {
+    timerControlBar?.classList.add("hidden");
+    essayContent.disabled = true;
+    btnSubmitEssay.disabled = true;
+    btnSubmitEssay.textContent = `🔒 제출 완료 (${usedAttempts}/${maxAttempts}회 제출 완료 — 추가 제출 불가)`;
+    return;
   }
 
   const limitSec = Number(mission.timeLimitSec) || 0;
@@ -2690,6 +2835,7 @@ function mergeCloudPromptsWithDefaults(cloudPrompts, hasBeenCustomized) {
       targetClass: "all",
       timeLimitSec: 180,
       strictness: "standard",
+      maxAttempts: 1,
       active: true,
       ...p
     }));
@@ -2700,6 +2846,7 @@ function mergeCloudPromptsWithDefaults(cloudPrompts, hasBeenCustomized) {
     targetClass: "all",
     timeLimitSec: 180,
     strictness: "standard",
+    maxAttempts: 1,
     active: true,
     ...p
   }));
@@ -2813,6 +2960,8 @@ function resetPromptEditorForm() {
   document.getElementById("new-prompt-answer").value = "";
   const strictEl = document.getElementById("new-prompt-strictness");
   if (strictEl) strictEl.value = "standard";
+  const maxAttEl = document.getElementById("new-prompt-maxattempts");
+  if (maxAttEl) maxAttEl.value = "1";
 }
 
 document.getElementById("btn-cancel-edit-prompt")?.addEventListener("click", () => {
@@ -2838,6 +2987,7 @@ function renderTeacherPromptsTable() {
       const isActive = p.active !== false;
       const isEditingThis = editingPromptId === p.id;
       const sMeta = getStrictnessMeta(p.strictness || "standard");
+      const maxAtt = p.maxAttempts === undefined || p.maxAttempts === null ? 1 : Number(p.maxAttempts);
       const activeBadge = isActive
         ? `<div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">공개중</div>`
         : `<div style="font-size:0.7rem;color:#94a3b8;font-weight:600;margin-top:2px;">비공개(대기)</div>`;
@@ -2845,7 +2995,11 @@ function renderTeacherPromptsTable() {
         Number(p.timeLimitSec) > 0 ? "#fef3c7;color:#b45309" : "#f1f5f9;color:#475569"
       }">${formatLimitLabel(p.timeLimitSec)}</span><br/><span class="strictness-pill ${
         sMeta.mode
-      }" style="margin-top:4px;font-size:0.7rem;padding:1px 6px;">${sMeta.shortLabel}</span>`;
+      }" style="margin-top:4px;font-size:0.7rem;padding:1px 6px;">${
+        sMeta.shortLabel
+      }</span><br/><span class="strictness-pill ${
+        maxAtt <= 0 ? "fluency" : "strict"
+      }" style="margin-top:3px;font-size:0.68rem;padding:1px 6px;">${formatMaxAttemptsLabel(maxAtt)}</span>`;
 
       const rowStyle = isEditingThis
         ? "background: #eff6ff; outline: 2px solid #3b82f6;"
@@ -2906,6 +3060,7 @@ function renderTeacherPromptsTable() {
       const classEl = document.getElementById("new-prompt-class");
       const limitEl = document.getElementById("new-prompt-timelimit");
       const strictEl = document.getElementById("new-prompt-strictness");
+      const maxAttEl = document.getElementById("new-prompt-maxattempts");
       const activeEl = document.getElementById("new-prompt-active");
 
       if (gradeEl) {
@@ -2927,6 +3082,20 @@ function renderTeacherPromptsTable() {
       }
       if (strictEl) {
         strictEl.value = targetPrompt.strictness || "standard";
+      }
+      if (maxAttEl) {
+        const attStr = String(
+          targetPrompt.maxAttempts === undefined || targetPrompt.maxAttempts === null
+            ? 1
+            : Number(targetPrompt.maxAttempts)
+        );
+        if (![...maxAttEl.options].some((o) => o.value === attStr)) {
+          const customAttOpt = document.createElement("option");
+          customAttOpt.value = attStr;
+          customAttOpt.textContent = formatMaxAttemptsLabel(attStr);
+          maxAttEl.appendChild(customAttOpt);
+        }
+        maxAttEl.value = attStr;
       }
       if (activeEl) {
         activeEl.checked = targetPrompt.active !== false;
@@ -3039,6 +3208,9 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   const targetClass = document.getElementById("new-prompt-class")?.value || "all";
   const timeLimitSec = Number(document.getElementById("new-prompt-timelimit")?.value ?? 180);
   const strictness = document.getElementById("new-prompt-strictness")?.value || "standard";
+  const maxAttemptsRaw = document.getElementById("new-prompt-maxattempts")?.value;
+  const maxAttempts =
+    maxAttemptsRaw === undefined || maxAttemptsRaw === "" ? 1 : Number(maxAttemptsRaw);
   const active = document.getElementById("new-prompt-active")?.checked ?? true;
   const title = document.getElementById("new-prompt-title").value.trim();
   const targetGrammar = document.getElementById("new-prompt-target").value.trim();
@@ -3065,6 +3237,7 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
         targetClass,
         timeLimitSec,
         strictness,
+        maxAttempts,
         active,
         title,
         koreanPrompt,
@@ -3080,6 +3253,7 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
       targetClass,
       timeLimitSec,
       strictness,
+      maxAttempts,
       active,
       title,
       koreanPrompt,
@@ -3108,11 +3282,12 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
     targetClass === "all" ? "전체 반" : targetClass + "반"
   }`;
   const sMeta = getStrictnessMeta(strictness);
+  const attLabel = formatMaxAttemptsLabel(maxAttempts);
   const statusDesc = active ? "즉시 학생 공개(☑️)" : "비공개 보관(나중에 체크 시 공개)";
   alert(
     isEditing
-      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${sMeta.shortLabel} / ${statusDesc}] 과제 수정 내용이 저장되었습니다!`
-      : `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${sMeta.shortLabel} / ${statusDesc}] 새 과제가 저장되었습니다!`
+      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${sMeta.shortLabel} / ${attLabel} / ${statusDesc}] 과제 수정 내용이 저장되었습니다!`
+      : `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${sMeta.shortLabel} / ${attLabel} / ${statusDesc}] 새 과제가 저장되었습니다!`
   );
 });
 
@@ -3202,6 +3377,7 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
   let referenceAnswer = "";
   let strictness = "standard";
   let missionTimeLimitSec = 0;
+  let selectedMissionObj = null;
 
   if (currentWritingMode === "korean_prompt") {
     const selectedMission =
@@ -3210,12 +3386,32 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       if (!isForcedByTimeout) alert("선택된 한국어 제시문 과제가 없습니다.");
       return;
     }
+    selectedMissionObj = selectedMission;
     missionTimeLimitSec = Number(selectedMission.timeLimitSec) || 0;
     topic = selectedMission.title;
     koreanPrompt = selectedMission.koreanPrompt;
     targetGrammar = selectedMission.targetGrammar || "";
     referenceAnswer = selectedMission.referenceAnswer || "";
     strictness = selectedMission.strictness || "standard";
+
+    // 제출 횟수 제한 검사 (기본 1회, 0이면 무제한, 교사 테스트 계정은 무제한 허용)
+    const maxAttempts =
+      selectedMission.maxAttempts === undefined || selectedMission.maxAttempts === null
+        ? 1
+        : Number(selectedMission.maxAttempts);
+    const usedAttempts = getStudentUsedAttemptsForMission(selectedMission);
+    const isTeacherTesting = studentId === "TEACHER";
+
+    if (!isTeacherTesting && maxAttempts > 0 && usedAttempts >= maxAttempts) {
+      stopMissionTimer();
+      essayContent.disabled = true;
+      btnSubmitEssay.disabled = true;
+      btnSubmitEssay.textContent = `🔒 제출 완료 (${usedAttempts}/${maxAttempts}회 제출 완료 — 추가 제출 불가)`;
+      if (!isForcedByTimeout) {
+        alert(`이 과제는 최대 ${maxAttempts}회까지만 제출할 수 있습니다. (이미 ${usedAttempts}회 제출 완료)`);
+      }
+      return;
+    }
   } else {
     topic = essayTopic.value.trim();
   }
@@ -3351,6 +3547,7 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
     const newRecord = {
       appTag: "writing1_submission", // cloze-a8e6c vocab_results 컬렉션 내 영작문 제출 식별 태그
       bookId: "__writing1__", // 단어숲(danuhsup) 통계와 절대 섞이지 않도록 전용 bookId 부여
+      missionId: selectedMissionObj?.id || "",
       ts: Date.now(),
       uid: currentUser.uid,
       studentEmail: currentUser.email.toLowerCase(),
@@ -3387,6 +3584,7 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
       const { createdAt, ...serializableRecord } = newRecord;
       localSaved.unshift(serializableRecord);
+      studentSubmissionsCache.unshift(serializableRecord);
       localStorage.setItem("MY_WRITING_LOCAL_SUBMISSIONS", JSON.stringify(localSaved.slice(0, 300)));
     } catch (storageErr) {
       console.warn("로컬 백업 저장 실패:", storageErr);
@@ -3405,9 +3603,52 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
     alert("오류: " + error.message);
   } finally {
     isSubmittingEssay = false;
-    essayContent.disabled = false;
-    btnSubmitEssay.disabled = false;
     document.getElementById("eval-loading").classList.add("hidden");
+
+    // 제출 직후 남은 제출 횟수 갱신 및 횟수 소진 시 즉시 버튼 잠금!
+    if (currentWritingMode === "korean_prompt" && selectedMissionObj) {
+      const maxAttempts =
+        selectedMissionObj.maxAttempts === undefined || selectedMissionObj.maxAttempts === null
+          ? 1
+          : Number(selectedMissionObj.maxAttempts);
+      const usedAttempts = getStudentUsedAttemptsForMission(selectedMissionObj);
+      const isTeacherTesting = currentStudentInfo?.studentId === "TEACHER";
+      const attemptsBadgeEl = document.getElementById("display-attempts-badge");
+
+      if (attemptsBadgeEl) {
+        if (maxAttempts <= 0) {
+          attemptsBadgeEl.className = "strictness-pill fluency";
+          attemptsBadgeEl.textContent = `♾️ 제출 횟수: 무제한 허용 (현재 ${usedAttempts}회 제출)`;
+        } else {
+          const remain = Math.max(0, maxAttempts - usedAttempts);
+          attemptsBadgeEl.className = remain > 0 ? "strictness-pill standard" : "strictness-pill strict";
+          attemptsBadgeEl.textContent =
+            remain > 0
+              ? `🔒 제출 기회: ${usedAttempts} / ${maxAttempts}회 (남은 기회 ${remain}회)`
+              : `🔒 제출 완료: ${usedAttempts} / ${maxAttempts}회 (추가 제출 불가)`;
+        }
+      }
+
+      if (!isTeacherTesting && maxAttempts > 0 && usedAttempts >= maxAttempts) {
+        essayContent.disabled = true;
+        btnSubmitEssay.disabled = true;
+        btnSubmitEssay.textContent = `🔒 제출 완료 (${usedAttempts}/${maxAttempts}회 제출 완료 — 추가 제출 불가)`;
+      } else {
+        essayContent.disabled = false;
+        btnSubmitEssay.disabled = false;
+        btnSubmitEssay.textContent = "🤖 AI 채점 및 피드백 받기";
+      }
+    } else {
+      // 자유 작문 모드에서도 기본적으로 1회 제출 후 같은 주제는 버튼 잠금 (주제를 바꾸면 다시 활성화)
+      const isTeacherTesting = currentStudentInfo?.studentId === "TEACHER";
+      if (!isTeacherTesting) {
+        btnSubmitEssay.disabled = true;
+        btnSubmitEssay.textContent = "🔒 제출 완료 (1/1회 제출 완료)";
+      } else {
+        essayContent.disabled = false;
+        btnSubmitEssay.disabled = false;
+      }
+    }
   }
 }
 
@@ -3483,12 +3724,14 @@ function renderEvaluationResult(evalResult, mode, targetGrammar) {
     .join("");
 
   const vocabList = document.getElementById("res-vocab-list");
-  vocabList.innerHTML = (evalResult.vocabularySuggestions || [])
-    .map(
-      (v) =>
-        `<li><strong>${v.word}</strong> (${v.meaning})<br/><em>예: ${v.example}</em></li>`
-    )
-    .join("");
+  if (vocabList) {
+    vocabList.innerHTML = (evalResult.vocabularySuggestions || [])
+      .map(
+        (v) =>
+          `<li><strong>${v.word}</strong> (${v.meaning})<br/><em>예: ${v.example}</em></li>`
+      )
+      .join("");
+  }
 }
 
 function renderLocalStudentHistory(records) {
@@ -3537,14 +3780,22 @@ async function loadStudentHistory() {
 
     if (cloudDocs.length === 0) {
       const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-      renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
+      const myLocal = localSaved.filter((d) => d.uid === currentUser.uid);
+      studentSubmissionsCache = myLocal;
+      renderLocalStudentHistory(myLocal);
+      updateSelectedKoreanMissionDetail();
       return;
     }
 
+    studentSubmissionsCache = cloudDocs;
     renderLocalStudentHistory(cloudDocs);
+    updateSelectedKoreanMissionDetail();
   } catch (error) {
     const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-    renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
+    const myLocal = localSaved.filter((d) => d.uid === currentUser.uid);
+    studentSubmissionsCache = myLocal;
+    renderLocalStudentHistory(myLocal);
+    updateSelectedKoreanMissionDetail();
   }
 }
 

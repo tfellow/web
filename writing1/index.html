@@ -159,7 +159,10 @@
                   <span>🎯 핵심 목표 표현/문법:</span>
                   <strong id="display-target-grammar">-</strong>
                 </div>
-                <span id="display-strictness-badge" class="strictness-pill standard">⚖️ 표준 정밀 채점</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;">
+                  <span id="display-attempts-badge" class="strictness-pill strict">🔒 제출 기회: 1 / 1회</span>
+                  <span id="display-strictness-badge" class="strictness-pill standard">⚖️ 표준 정밀 채점</span>
+                </div>
               </div>
             </div>
           </div>
@@ -207,10 +210,6 @@
             <div class="result-section">
               <h3>🔍 문법 및 의미 전달 피드백</h3>
               <ul id="res-grammar-list" class="feedback-list"></ul>
-            </div>
-            <div class="result-section">
-              <h3>💡 핵심 및 추천 어휘 (Vocabulary)</h3>
-              <ul id="res-vocab-list" class="feedback-list"></ul>
             </div>
             <div class="result-section">
               <h3>💬 선생님 AI 총평</h3>
@@ -306,6 +305,13 @@
             <option value="strict">🎯 서술형 칼채점 (100% 완벽 일치형)</option>
             <option value="standard" selected>⚖️ 표준 정밀 채점 (권장 기본값)</option>
             <option value="fluency">🌱 의미 소통 격려 (기초 연습용)</option>
+          </select>
+          <select id="new-prompt-maxattempts" title="학생이 이 과제를 제출(채점)할 수 있는 최대 허용 횟수">
+            <option value="1" selected>🔒 1회만 제출 가능 (기본값)</option>
+            <option value="2">🔄 최대 2회 제출 허용</option>
+            <option value="3">🔄 최대 3회 제출 허용</option>
+            <option value="5">🔄 최대 5회 제출 허용</option>
+            <option value="0">♾️ 무제한 연습 허용</option>
           </select>
           <label class="checkbox-inline" title="체크하면 등록 즉시 학생들에게 보입니다. 해제하면 교사 목록에만 보관됩니다.">
             <input type="checkbox" id="new-prompt-active" checked />
