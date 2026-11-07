@@ -67,6 +67,9 @@ const DEFAULT_KOREAN_PROMPTS = [
   {
     id: "kp-1",
     targetGrade: "1",
+    targetClass: "all",
+    timeLimitSec: 180,
+    active: true,
     title: "[1학년] 좋아하는 계절과 이유 말하기",
     koreanPrompt: "내가 가장 좋아하는 계절은 봄인데, 왜냐하면 아름다운 꽃들이 피기 때문이다.",
     targetGrammar: "because (이유를 나타내는 접속사)",
@@ -75,6 +78,9 @@ const DEFAULT_KOREAN_PROMPTS = [
   {
     id: "kp-2",
     targetGrade: "2",
+    targetClass: "all",
+    timeLimitSec: 180,
+    active: true,
     title: "[2학년] 목적을 나타내는 so that 구문 영작",
     koreanPrompt: "나는 아픈 동물들을 도울 수 있도록 수의사가 되고 싶다.",
     targetGrammar: "so that (~할 수 있도록 / ~하기 위해서)",
@@ -83,6 +89,9 @@ const DEFAULT_KOREAN_PROMPTS = [
   {
     id: "kp-3",
     targetGrade: "3",
+    targetClass: "all",
+    timeLimitSec: 180,
+    active: true,
     title: "[3학년] 가주어-진주어(It ~ to부정사) 구문 영작",
     koreanPrompt: "전 세계 사람들과 소통하기 위해 영어를 배우는 것은 중요하다.",
     targetGrammar: "It is ~ to부정사 (가주어-진주어)",
@@ -91,6 +100,9 @@ const DEFAULT_KOREAN_PROMPTS = [
   {
     id: "kp-4",
     targetGrade: "all",
+    targetClass: "all",
+    timeLimitSec: 0,
+    active: true,
     title: "[공통] 경험 및 느낀 점 표현하기 (현재완료)",
     koreanPrompt: "나는 경복궁에 가본 적이 있는데, 한복을 입어 본 것은 정말 특별한 경험이었다.",
     targetGrammar: "have been to (현재완료 경험)",
@@ -164,6 +176,27 @@ function evaluateWritingLocally({
   content,
   studentName
 }) {
+  if (!content || content === "(제한시간 초과로 미작성 상태에서 자동 발송됨)") {
+    return {
+      cefrLevel: "A1",
+      score: 0,
+      meaningAccuracy: 0,
+      targetExpressionUsed: false,
+      correctedText: "(제한시간 내 작성된 영어 문장이 없습니다.)",
+      modelAnswer:
+        referenceAnswer ||
+        "제시된 한국어 문장의 핵심 주어와 동사를 먼저 파악한 뒤 시간 내에 작성을 시작해 보세요.",
+      grammarFeedback: [
+        {
+          original: "(미작성 시간초과)",
+          corrected: referenceAnswer || "모범 답안 참고",
+          explanation: "제한시간이 종료되어 미작성 상태로 자동 제출되었습니다. 모범 답안을 확인하고 다시 도전해 보세요!"
+        }
+      ],
+      vocabularySuggestions: [],
+      overallComment: "제한시간 동안 작성된 영작문이 없어 0점으로 자동 발송되었습니다. [다시 도전하기]를 눌러 모범 답안 표현을 연습해 보세요!"
+    };
+  }
   const safeContent = maskPersonalInfoClient(content, studentName);
   const words = safeContent.trim().split(/\s+/).filter(Boolean);
   const wordCount = words.length;
@@ -315,73 +348,195 @@ tabModeKorean.addEventListener("click", () => {
   boxFreeTopic.classList.add("hidden");
   document.getElementById("label-essay-content").textContent = "🇺🇸 제시문을 보고 영어로 영작하기";
   essayContent.placeholder = "위에 제시된 한국어 문장의 의미와 핵심 표현을 살려 영어로 작성해 보세요!";
+  updateSelectedKoreanMissionDetail();
 });
 
 tabModeFree.addEventListener("click", () => {
+  stopMissionTimer();
   currentWritingMode = "free";
   tabModeFree.classList.add("active");
   tabModeKorean.classList.remove("active");
   boxFreeTopic.classList.remove("hidden");
   boxKoreanPrompt.classList.add("hidden");
+  essayContent.disabled = false;
+  btnSubmitEssay.disabled = false;
   document.getElementById("label-essay-content").textContent = "📝 자유 영작문 본문 작성 (Essay)";
   essayContent.placeholder = "자유롭게 영어로 글을 작성해 보세요! (50~150단어 권장)";
 });
 
-// 학생 화면의 한국어 제시문 드롭다운 렌더링 및 선택 이벤트 (본인 학년 + 전학년 공통 과제만 표시)
+// ============================================================================
+// [제한시간 타이머 & 시간 초과 시 자동 강제 제출 제어]
+// ============================================================================
+let missionTimerInterval = null;
+let remainingSeconds = 0;
+let isTimerRunning = false;
+
+const timerControlBar = document.getElementById("timer-control-bar");
+const timerStatusLabel = document.getElementById("timer-status-label");
+const timerCountdownEl = document.getElementById("timer-countdown");
+const btnStartTimedMission = document.getElementById("btn-start-timed-mission");
+
+function formatMMSS(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
+function stopMissionTimer() {
+  if (missionTimerInterval) {
+    clearInterval(missionTimerInterval);
+    missionTimerInterval = null;
+  }
+  isTimerRunning = false;
+  timerControlBar?.classList.remove("urgent");
+}
+
+function startMissionTimer(limitSec) {
+  stopMissionTimer();
+  remainingSeconds = Number(limitSec) || 0;
+  if (remainingSeconds <= 0) return;
+
+  isTimerRunning = true;
+  essayContent.disabled = false;
+  essayContent.focus();
+  btnSubmitEssay.disabled = false;
+  if (btnStartTimedMission) btnStartTimedMission.classList.add("hidden");
+  if (timerStatusLabel) timerStatusLabel.textContent = "남은 시간 (종료 시 자동 제출):";
+  if (timerCountdownEl) timerCountdownEl.textContent = formatMMSS(remainingSeconds);
+
+  missionTimerInterval = setInterval(() => {
+    remainingSeconds -= 1;
+    if (timerCountdownEl) {
+      timerCountdownEl.textContent = formatMMSS(remainingSeconds);
+    }
+    if (remainingSeconds <= 30) {
+      timerControlBar?.classList.add("urgent");
+    }
+    if (remainingSeconds <= 0) {
+      stopMissionTimer();
+      // 제한시간 종료 -> 그때까지 작성한 내용 강제 발송!
+      submitEssayProcess({ isForcedByTimeout: true });
+    }
+  }, 1000);
+}
+
+btnStartTimedMission?.addEventListener("click", () => {
+  const selectedId = selectKoreanMission.value;
+  const mission = koreanPrompts.find((p) => p.id === selectedId);
+  if (!mission) return;
+  const limitSec = Number(mission.timeLimitSec) || 0;
+  displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
+  displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
+  startMissionTimer(limitSec);
+});
+
+// 학생 화면의 한국어 제시문 드롭다운 렌더링 (교사가 공개 체크한 과제 중 본인 학년/반 + 공통 과제만 표시)
 function renderStudentKoreanMissions() {
   const studentGrade = currentStudentInfo ? String(currentStudentInfo.grade) : "all";
+  const studentClass = currentStudentInfo ? String(currentStudentInfo.classNum) : "all";
 
-  // 본인 학년(예: "1") 또는 전학년 공통("all") 과제만 필터링 (다른 학년 과제는 숨김)
-  const myGradePrompts = koreanPrompts.filter(
-    (p) =>
-      studentGrade === "all" ||
-      String(p.targetGrade) === studentGrade ||
-      String(p.targetGrade) === "all"
-  );
+  // 1) 교사가 공개 체크(active !== false)한 과제만
+  // 2) 본인 학년(또는 전학년 공통) 과제만
+  // 3) 본인 반(또는 전체 반 공통) 과제만 필터링
+  const myVisiblePrompts = koreanPrompts.filter((p) => {
+    if (p.active === false) return false;
+    const pGrade = String(p.targetGrade || "all");
+    const pClass = String(p.targetClass || "all");
+    const gradeMatch = studentGrade === "all" || pGrade === "all" || pGrade === studentGrade;
+    const classMatch = studentClass === "all" || pClass === "all" || pClass === studentClass;
+    return gradeMatch && classMatch;
+  });
 
-  // 정렬: 1순위 선생님이 새로 등록한 클라우드 과제 -> 2순위 본인 학년 전용 과제 -> 3순위 최신 등록순
-  const sortedPrompts = [...myGradePrompts].sort((a, b) => {
+  // 정렬: 1순위 선생님이 새로 등록한 클라우드 과제 -> 2순위 우리 반 전용 과제 -> 3순위 우리 학년 과제
+  const sortedPrompts = [...myVisiblePrompts].sort((a, b) => {
     const aIsCustom = !String(a.id).startsWith("kp-") ? -1 : 0;
     const bIsCustom = !String(b.id).startsWith("kp-") ? -1 : 0;
     if (aIsCustom !== bIsCustom) return aIsCustom - bIsCustom;
 
-    const aMatch = String(a.targetGrade) === studentGrade ? -1 : 0;
-    const bMatch = String(b.targetGrade) === studentGrade ? -1 : 0;
-    if (aMatch !== bMatch) return aMatch - bMatch;
+    const aClassMatch = String(a.targetClass || "all") === studentClass ? -1 : 0;
+    const bClassMatch = String(b.targetClass || "all") === studentClass ? -1 : 0;
+    if (aClassMatch !== bClassMatch) return aClassMatch - bClassMatch;
+
+    const aGradeMatch = String(a.targetGrade || "all") === studentGrade ? -1 : 0;
+    const bGradeMatch = String(b.targetGrade || "all") === studentGrade ? -1 : 0;
+    if (aGradeMatch !== bGradeMatch) return aGradeMatch - bGradeMatch;
 
     return (b.createdAtMs || 0) - (a.createdAtMs || 0);
   });
 
   if (sortedPrompts.length === 0) {
-    selectKoreanMission.innerHTML = `<option value="">현재 등록된 ${studentGrade}학년 과제가 없습니다.</option>`;
-    displayKoreanSentence.textContent = "등록된 한국어 제시문이 없습니다.";
+    stopMissionTimer();
+    selectKoreanMission.innerHTML = `<option value="">현재 선생님이 공개한 우리 반(${studentGrade}학년 ${studentClass}반) 과제가 없습니다.</option>`;
+    displayKoreanSentence.textContent = "선생님이 과제를 공개(체크)하시면 여기에 즉시 표시됩니다.";
     displayTargetGrammar.textContent = "-";
+    timerControlBar?.classList.add("hidden");
     return;
   }
 
+  const prevSelected = selectKoreanMission.value;
   selectKoreanMission.innerHTML = sortedPrompts
     .map((p) => {
       const isNew = !String(p.id).startsWith("kp-");
-      const prefix = isNew ? "🆕 [선생님 새 과제] " : "";
-      return `<option value="${p.id}">${prefix}${p.title}</option>`;
+      const prefix = isNew ? "🆕 " : "";
+      const classTag = p.targetClass && p.targetClass !== "all" ? `[${p.targetGrade}-${p.targetClass}반] ` : "";
+      const timeTag = Number(p.timeLimitSec) > 0 ? ` (⏱️${Math.round(Number(p.timeLimitSec) / 60)}분)` : "";
+      return `<option value="${p.id}">${prefix}${classTag}${p.title}${timeTag}</option>`;
     })
     .join("");
 
-  updateSelectedKoreanMissionDetail();
+  if (sortedPrompts.some((p) => p.id === prevSelected)) {
+    selectKoreanMission.value = prevSelected;
+  }
+
+  // 타이머가 이미 돌고 있는 중이 아닐 때만 상세 화면 초기화
+  if (!isTimerRunning) {
+    updateSelectedKoreanMissionDetail();
+  }
 }
 
-selectKoreanMission.addEventListener("change", updateSelectedKoreanMissionDetail);
+selectKoreanMission.addEventListener("change", () => {
+  stopMissionTimer();
+  essayContent.value = "";
+  wordCountNum.textContent = "0";
+  updateSelectedKoreanMissionDetail();
+});
 
 function updateSelectedKoreanMissionDetail() {
+  stopMissionTimer();
   const selectedId = selectKoreanMission.value;
   const mission = koreanPrompts.find((p) => p.id === selectedId);
   if (!mission) {
     displayKoreanSentence.textContent = "등록된 한국어 제시문이 없습니다.";
     displayTargetGrammar.textContent = "-";
+    timerControlBar?.classList.add("hidden");
     return;
   }
-  displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
-  displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
+
+  const limitSec = Number(mission.timeLimitSec) || 0;
+  if (limitSec > 0 && currentWritingMode === "korean_prompt") {
+    timerControlBar?.classList.remove("hidden");
+    if (timerStatusLabel) {
+      timerStatusLabel.textContent = `제한시간 ${Math.round(limitSec / 60)}분 과제 (시간 초과 시 작성 내용 자동 제출)`;
+    }
+    if (timerCountdownEl) {
+      timerCountdownEl.textContent = formatMMSS(limitSec);
+    }
+    if (btnStartTimedMission) {
+      btnStartTimedMission.classList.remove("hidden");
+    }
+    // 시작 버튼을 누르기 전에는 제시문을 가리고 입력창을 잠가 공정한 시간 측정 보장
+    displayKoreanSentence.textContent = "🔒 [▶️ 영작 시작하기] 버튼을 누르면 한국어 제시문이 공개되고 타이머가 시작됩니다!";
+    displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현";
+    essayContent.disabled = true;
+    btnSubmitEssay.disabled = true;
+  } else {
+    timerControlBar?.classList.add("hidden");
+    displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
+    displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
+    essayContent.disabled = false;
+    btnSubmitEssay.disabled = false;
+  }
 }
 
 // ============================================================================
@@ -495,6 +650,25 @@ onAuthStateChanged(auth, async (user) => {
 // 절대 영향을 주지 않는 `vocab_books/_settings` 문서의 `writing1_prompts` 필드를 사용합니다.
 let unsubscribePrompts = null;
 
+function mergeCloudPromptsWithDefaults(cloudPrompts, hasBeenCustomized) {
+  if (hasBeenCustomized) {
+    return cloudPrompts.map((p) => ({
+      targetClass: "all",
+      timeLimitSec: 180,
+      active: true,
+      ...p
+    }));
+  }
+  const cloudIds = new Set(cloudPrompts.map((p) => p.id));
+  const defaultFiltered = DEFAULT_KOREAN_PROMPTS.filter((p) => !cloudIds.has(p.id));
+  return [...cloudPrompts, ...defaultFiltered].map((p) => ({
+    targetClass: "all",
+    timeLimitSec: 180,
+    active: true,
+    ...p
+  }));
+}
+
 function subscribeKoreanPromptsFromCloud() {
   if (unsubscribePrompts) return;
   try {
@@ -503,10 +677,11 @@ function subscribeKoreanPromptsFromCloud() {
       settingsDocRef,
       (snap) => {
         if (snap.exists() && Array.isArray(snap.data().writing1_prompts)) {
-          const cloudPrompts = snap.data().writing1_prompts;
-          const cloudIds = new Set(cloudPrompts.map((p) => p.id));
-          const defaultFiltered = DEFAULT_KOREAN_PROMPTS.filter((p) => !cloudIds.has(p.id));
-          koreanPrompts = [...cloudPrompts, ...defaultFiltered];
+          const data = snap.data();
+          koreanPrompts = mergeCloudPromptsWithDefaults(
+            data.writing1_prompts,
+            Boolean(data.writing1_fullSync)
+          );
           saveKoreanPromptsToStorage();
         }
         renderTeacherPromptsTable();
@@ -527,10 +702,11 @@ async function loadKoreanPromptsFromCloud() {
     const settingsDocRef = doc(db, "vocab_books", "_settings");
     const snap = await getDoc(settingsDocRef);
     if (snap.exists() && Array.isArray(snap.data().writing1_prompts)) {
-      const cloudPrompts = snap.data().writing1_prompts;
-      const cloudIds = new Set(cloudPrompts.map((p) => p.id));
-      const defaultFiltered = DEFAULT_KOREAN_PROMPTS.filter((p) => !cloudIds.has(p.id));
-      koreanPrompts = [...cloudPrompts, ...defaultFiltered];
+      const data = snap.data();
+      koreanPrompts = mergeCloudPromptsWithDefaults(
+        data.writing1_prompts,
+        Boolean(data.writing1_fullSync)
+      );
       saveKoreanPromptsToStorage();
     }
   } catch (e) {
@@ -541,12 +717,12 @@ async function loadKoreanPromptsFromCloud() {
 async function syncPromptsToCloudDoc() {
   if (!currentUser || currentUser.isDemo) return false;
   const settingsDocRef = doc(db, "vocab_books", "_settings");
-  const customOnly = koreanPrompts.filter((p) => !String(p.id).startsWith("kp-"));
   await setDoc(
     settingsDocRef,
     {
       id: "_settings",
-      writing1_prompts: customOnly,
+      writing1_prompts: koreanPrompts,
+      writing1_fullSync: true,
       writing1_updatedAt: Date.now()
     },
     { merge: true }
@@ -554,26 +730,46 @@ async function syncPromptsToCloudDoc() {
   return true;
 }
 
+function formatLimitLabel(sec) {
+  const n = Number(sec) || 0;
+  if (n <= 0) return "제한없음";
+  if (n % 60 === 0) return `⏱️ ${n / 60}분`;
+  return `⏱️ ${n}초`;
+}
+
 function renderTeacherPromptsTable() {
   const tbody = document.getElementById("teacher-prompts-tbody");
   if (!tbody) return;
 
   if (koreanPrompts.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="text-center">등록된 한국어 제시문 과제가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">등록된 한국어 제시문 과제가 없습니다.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = koreanPrompts
     .map((p) => {
-      const gradeLabel = p.targetGrade === "all" ? "전학년 공통" : `${p.targetGrade}학년`;
-      const isCloud = !String(p.id).startsWith("kp-");
-      const syncBadge = isCloud
-        ? `<span style="font-size:0.72rem;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:99px;margin-left:4px;">☁️전교생 실시간 공유</span>`
-        : `<span style="font-size:0.72rem;background:#e2e8f0;color:#475569;padding:2px 6px;border-radius:99px;margin-left:4px;">기본예시</span>`;
+      const gradeLabel = p.targetGrade === "all" ? "전학년" : `${p.targetGrade}학년`;
+      const classLabel =
+        !p.targetClass || p.targetClass === "all" ? "전체 반 공통" : `${p.targetClass}반 전용`;
+      const isActive = p.active !== false;
+      const activeBadge = isActive
+        ? `<div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">공개중</div>`
+        : `<div style="font-size:0.7rem;color:#94a3b8;font-weight:600;margin-top:2px;">비공개(대기)</div>`;
+      const limitBadge = `<span class="badge-cefr" style="background:${
+        Number(p.timeLimitSec) > 0 ? "#fef3c7;color:#b45309" : "#f1f5f9;color:#475569"
+      }">${formatLimitLabel(p.timeLimitSec)}</span>`;
+
       return `
-        <tr>
-          <td><strong>${gradeLabel}</strong></td>
-          <td>${p.title} ${syncBadge}</td>
+        <tr style="${isActive ? "" : "opacity: 0.62; background: #f8fafc;"}">
+          <td class="text-center">
+            <input type="checkbox" class="toggle-switch toggle-prompt-active" data-id="${p.id}" ${
+        isActive ? "checked" : ""
+      } title="체크하면 해당 학년/반 학생 화면에 즉시 공개됩니다" />
+            ${activeBadge}
+          </td>
+          <td><strong>${gradeLabel}</strong><br/><span style="font-size:0.78rem;color:#2563eb;font-weight:600;">${classLabel}</span></td>
+          <td>${limitBadge}</td>
+          <td><strong>${p.title}</strong></td>
           <td><strong>${p.koreanPrompt}</strong></td>
           <td>${p.targetGrammar || "-"}</td>
           <td>${p.referenceAnswer || "-"}</td>
@@ -583,6 +779,25 @@ function renderTeacherPromptsTable() {
     })
     .join("");
 
+  // 체크박스(학생 공개 토글) 이벤트 연결
+  tbody.querySelectorAll(".toggle-prompt-active").forEach((chk) => {
+    chk.addEventListener("change", async () => {
+      const targetId = chk.getAttribute("data-id");
+      const targetPrompt = koreanPrompts.find((p) => p.id === targetId);
+      if (!targetPrompt) return;
+      targetPrompt.active = chk.checked;
+      saveKoreanPromptsToStorage();
+      try {
+        await syncPromptsToCloudDoc();
+      } catch (e) {
+        console.warn("클라우드 공개 상태 동기화 실패:", e);
+      }
+      renderTeacherPromptsTable();
+      renderStudentKoreanMissions();
+    });
+  });
+
+  // 삭제 버튼 이벤트 연결
   tbody.querySelectorAll(".btn-delete-prompt").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const targetId = btn.getAttribute("data-id");
@@ -599,8 +814,25 @@ function renderTeacherPromptsTable() {
   });
 }
 
+// 학년 선택 시 반 선택 옵션 안내 연동 (1학년은 1~3반, 2·3학년은 1~4반)
+document.getElementById("new-prompt-grade")?.addEventListener("change", (e) => {
+  const gradeVal = e.target.value;
+  const classSelect = document.getElementById("new-prompt-class");
+  if (!classSelect) return;
+  const opt4 = classSelect.querySelector('option[value="4"]');
+  if (opt4) {
+    opt4.disabled = gradeVal === "1";
+    if (gradeVal === "1" && classSelect.value === "4") {
+      classSelect.value = "all";
+    }
+  }
+});
+
 document.getElementById("btn-add-prompt")?.addEventListener("click", async () => {
   const targetGrade = document.getElementById("new-prompt-grade").value;
+  const targetClass = document.getElementById("new-prompt-class")?.value || "all";
+  const timeLimitSec = Number(document.getElementById("new-prompt-timelimit")?.value ?? 180);
+  const active = document.getElementById("new-prompt-active")?.checked ?? true;
   const title = document.getElementById("new-prompt-title").value.trim();
   const targetGrammar = document.getElementById("new-prompt-target").value.trim();
   const koreanPrompt = document.getElementById("new-prompt-korean").value.trim();
@@ -614,6 +846,9 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   const newPromptObj = {
     id: isRealTeacher ? `cloud-${Date.now()}` : `kp-${Date.now()}`,
     targetGrade,
+    targetClass,
+    timeLimitSec,
+    active,
     title,
     koreanPrompt,
     targetGrammar,
@@ -639,38 +874,55 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   document.getElementById("new-prompt-target").value = "";
   document.getElementById("new-prompt-korean").value = "";
   document.getElementById("new-prompt-answer").value = "";
+
+  const targetDesc = `${targetGrade === "all" ? "전학년" : targetGrade + "학년"} ${
+    targetClass === "all" ? "전체 반" : targetClass + "반"
+  }`;
+  const statusDesc = active ? "즉시 학생 공개(☑️)" : "비공개 보관(나중에 체크 시 공개)";
   alert(
     isRealTeacher
-      ? "✅ 새 한국어 제시문 영작 과제가 클라우드에 저장되어 전교생 화면에 즉시 공유되었습니다!"
-      : "⚡ 미리보기 모드에 과제가 추가되었습니다. (실제 전교생 기기 공유를 원하시면 우측 상단 Google 학교 계정 로그인으로 선생님 계정에 로그인한 뒤 등록해 주세요!)"
+      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 과제가 저장되었습니다!`
+      : `⚡ 미리보기 모드에 [${targetDesc} / ${formatLimitLabel(timeLimitSec)}] 과제가 추가되었습니다.`
   );
 });
 
 // ============================================================================
-// 6. 학생 기능: 글자/단어 수 계산, AI 작문 평가 요청 및 과거 기록 조회
+// 6. 학생 기능: 글자/단어 수 계산, AI 작문 평가 요청 및 제한시간 강제 발송 처리
 // ============================================================================
 essayContent.addEventListener("input", () => {
   const words = essayContent.value.trim().split(/\s+/).filter(Boolean);
   wordCountNum.textContent = words.length;
 });
 
-btnSubmitEssay.addEventListener("click", async () => {
-  if (!currentUser || !currentStudentInfo) return alert("먼저 로그인해 주세요.");
+let isSubmittingEssay = false;
 
-  const content = essayContent.value.trim();
+async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
+  if (isSubmittingEssay) return;
+  if (!currentUser || !currentStudentInfo) {
+    if (!isForcedByTimeout) alert("먼저 로그인해 주세요.");
+    return;
+  }
+
+  let rawContent = essayContent.value.trim();
   const { grade, classNum, number: studentNumber, name: studentName, studentId } = currentStudentInfo;
-  const wordCount = content.split(/\s+/).filter(Boolean).length;
 
   let topic = "";
   let koreanPrompt = "";
   let targetGrammar = "";
   let referenceAnswer = "";
+  let missionTimeLimitSec = 0;
 
   if (currentWritingMode === "korean_prompt") {
     const selectedMission =
       koreanPrompts.find((p) => p.id === selectKoreanMission.value) || koreanPrompts[0];
     if (!selectedMission) {
-      return alert("선택된 한국어 제시문 과제가 없습니다.");
+      if (!isForcedByTimeout) alert("선택된 한국어 제시문 과제가 없습니다.");
+      return;
+    }
+    missionTimeLimitSec = Number(selectedMission.timeLimitSec) || 0;
+    // 제한시간이 있는 과제를 아직 [영작 시작] 버튼을 누르지 않고 제출하려 할 때 방지
+    if (!isForcedByTimeout && missionTimeLimitSec > 0 && !isMissionStarted) {
+      return alert("먼저 [🚀 영작 시작 (제시문 보기)] 버튼을 눌러 제한시간 타이머를 시작해 주세요.");
     }
     topic = selectedMission.title;
     koreanPrompt = selectedMission.koreanPrompt;
@@ -680,10 +932,52 @@ btnSubmitEssay.addEventListener("click", async () => {
     topic = essayTopic.value.trim();
   }
 
-  if (!topic || !content) {
+  if (!isForcedByTimeout && (!topic || !rawContent)) {
     return alert("과제(주제)와 영어 작문 본문을 모두 입력해 주세요.");
   }
 
+  // 제한시간 종료로 인한 강제 발송 처리
+  stopMissionTimer();
+  if (isForcedByTimeout) {
+    if (!rawContent) {
+      rawContent = "(제한시간 초과로 미작성 상태에서 자동 발송됨)";
+      essayContent.value = rawContent;
+    }
+    essayContent.disabled = true;
+    if (timerControlBar) {
+      timerControlBar.classList.remove("hidden");
+      timerControlBar.classList.add("urgent");
+    }
+    if (timerStatusLabel) {
+      timerStatusLabel.textContent = "🚨 제한시간이 종료되어 작성 중인 답안이 선생님께 자동 발송되었습니다!";
+    }
+    if (timerCountdownEl) {
+      timerCountdownEl.textContent = "00:00 (자동발송)";
+    }
+    if (btnStartTimedMission) {
+      btnStartTimedMission.classList.remove("hidden");
+      btnStartTimedMission.textContent = "🔄 다시 도전하기";
+    }
+    isMissionStarted = false;
+  } else if (missionTimeLimitSec > 0) {
+    // 제한시간 내에 정상 제출한 경우
+    if (timerStatusLabel) {
+      timerStatusLabel.textContent = "✅ 제한시간 내에 영작 제출을 완료했습니다!";
+    }
+    if (btnStartTimedMission) {
+      btnStartTimedMission.classList.remove("hidden");
+      btnStartTimedMission.textContent = "🔄 다시 작성하기";
+    }
+    isMissionStarted = false;
+  }
+
+  const content = rawContent;
+  const wordCount =
+    content === "(제한시간 초과로 미작성 상태에서 자동 발송됨)"
+      ? 0
+      : content.split(/\s+/).filter(Boolean).length;
+
+  isSubmittingEssay = true;
   btnSubmitEssay.disabled = true;
   document.getElementById("eval-empty").classList.add("hidden");
   document.getElementById("eval-result").classList.add("hidden");
@@ -731,9 +1025,14 @@ btnSubmitEssay.addEventListener("click", async () => {
       });
     }
 
+    if (isForcedByTimeout) {
+      evalResult.overallComment = `⏰ [제한시간 종료 자동 발송] 제한시간이 지나 그때까지 작성한 내용("${content}")이 자동 제출되었습니다. ` + (evalResult.overallComment || "");
+    }
+
     renderEvaluationResult(evalResult, currentWritingMode, targetGrammar);
 
     const todayStr = new Date().toISOString().split("T")[0];
+    const recordedTopic = isForcedByTimeout ? `${topic} [⏱️시간초과 강제제출]` : topic;
 
     const newRecord = {
       appTag: "writing1_submission", // cloze-a8e6c vocab_results 컬렉션 내 영작문 제출 식별 태그
@@ -748,10 +1047,11 @@ btnSubmitEssay.addEventListener("click", async () => {
       className: `${classNum}반`,
       studentNumber,
       mode: currentWritingMode,
-      topic,
+      topic: recordedTopic,
       koreanPrompt,
       targetGrammar,
       originalContent: content,
+      forcedTimeout: isForcedByTimeout,
       wordCount,
       cefrLevel: evalResult.cefrLevel,
       score: evalResult.score,
@@ -782,13 +1082,22 @@ btnSubmitEssay.addEventListener("click", async () => {
         renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
       }
     }
+
+    if (isForcedByTimeout) {
+      alert("⏰ 제한시간이 종료되어 현재까지 작성한 영작 내용이 선생님께 강제 발송(제출)되었습니다.");
+    }
   } catch (error) {
     console.error(error);
     alert("오류: " + error.message);
   } finally {
+    isSubmittingEssay = false;
     btnSubmitEssay.disabled = false;
     document.getElementById("eval-loading").classList.add("hidden");
   }
+}
+
+btnSubmitEssay.addEventListener("click", () => {
+  submitEssayProcess({ isForcedByTimeout: false });
 });
 
 function renderEvaluationResult(evalResult, mode, targetGrammar) {

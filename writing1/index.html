@@ -82,8 +82,17 @@
           <!-- 모드 A: 선생님 한국어 제시문 영작 영역 -->
           <div id="box-korean-prompt" class="prompt-mission-box">
             <div class="form-group">
-              <label for="select-korean-mission">📌 선생님이 출제한 한국어 제시문 과제 선택</label>
+              <label for="select-korean-mission">📌 선생님이 공개(체크)한 우리 반 영작 과제 선택</label>
               <select id="select-korean-mission"></select>
+            </div>
+            <!-- 제한시간 카운트다운 및 시작 제어 바 -->
+            <div id="timer-control-bar" class="timer-bar hidden">
+              <div class="timer-info">
+                <span class="timer-icon">⏱️</span>
+                <span id="timer-status-label">제한시간: -</span>
+                <strong id="timer-countdown" class="timer-digits">00:00</strong>
+              </div>
+              <button id="btn-start-timed-mission" class="btn btn-primary btn-sm">▶️ 영작 시작하기 (타이머 작동)</button>
             </div>
             <div class="mission-detail">
               <div class="mission-label">🇰🇷 한국어 제시문 (아래 문장을 영어로 영작하세요)</div>
@@ -174,9 +183,9 @@
     <section id="view-teacher" class="hidden">
       <!-- [신규] 교사용 한국어 제시문 과제 출제 및 관리 카드 -->
       <div class="card prompt-manager-card">
-        <h2>🇰🇷➡️🇺🇸 교사 한국어 제시문 영작 과제 출제 & 관리</h2>
+        <h2>🇰🇷➡️🇺🇸 교사 한국어 제시문 영작 과제 출제 & 실시간 공개(체크) 관리</h2>
         <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">
-          선생님이 한국어 문장과 목표 문법/어휘를 제시하면, 해당 학년 학생들이 보고 영작하며 AI가 의미 전달력과 문법을 자동 채점합니다.
+          과제를 미리 여러 개 만들어 두고 <strong>[학생 공개] 체크박스(☑️)</strong>를 켜면 해당 학년·반 학생 화면에 즉시 나타나며, <strong>제한시간(분)</strong>이 끝나면 학생이 그 시점까지 작성한 내용이 자동 강제 제출됩니다.
         </p>
         <div class="prompt-Creator-grid">
           <select id="new-prompt-grade">
@@ -185,20 +194,44 @@
             <option value="2">2학년 대상</option>
             <option value="3">3학년 대상</option>
           </select>
-          <input type="text" id="new-prompt-title" placeholder="단원/과제명 (예: 2학년 3단원 조건 영작)" />
+          <select id="new-prompt-class">
+            <option value="all">전체 반 공통</option>
+            <option value="1">1반 전용</option>
+            <option value="2">2반 전용</option>
+            <option value="3">3반 전용</option>
+            <option value="4">4반 전용</option>
+          </select>
+          <select id="new-prompt-timelimit">
+            <option value="0">⏱️ 시간제한 없음</option>
+            <option value="60">⏱️ 1분 (시간 종료 시 강제제출)</option>
+            <option value="120">⏱️ 2분 (시간 종료 시 강제제출)</option>
+            <option value="180" selected>⏱️ 3분 (시간 종료 시 강제제출)</option>
+            <option value="300">⏱️ 5분 (시간 종료 시 강제제출)</option>
+            <option value="600">⏱️ 10분 (시간 종료 시 강제제출)</option>
+            <option value="900">⏱️ 15분 (시간 종료 시 강제제출)</option>
+          </select>
+          <label class="checkbox-inline" title="체크하면 등록 즉시 학생들에게 보입니다. 해제하면 교사 목록에만 보관됩니다.">
+            <input type="checkbox" id="new-prompt-active" checked />
+            <span>등록 즉시 학생 공개</span>
+          </label>
+        </div>
+        <div class="prompt-Creator-grid2">
+          <input type="text" id="new-prompt-title" placeholder="단원/과제명 (예: 2학년 3반 3단원 조건 영작)" />
           <input type="text" id="new-prompt-target" placeholder="목표 어휘/문법 (예: so that, ~하기 위해서)" />
         </div>
         <div class="prompt-creator-row2">
           <input type="text" id="new-prompt-korean" placeholder="학생에게 제시할 한국어 문장 (예: 나는 아픈 동물들을 돕기 위해서 수의사가 되고 싶다.)" />
           <input type="text" id="new-prompt-answer" placeholder="참고 모범 영어 답안 (선택 입력 - 예: I want to be a vet so that I can help sick animals.)" />
-          <button id="btn-add-prompt" class="btn btn-primary">➕ 제시문 과제 등록</button>
+          <button id="btn-add-prompt" class="btn btn-primary">➕ 과제 저장</button>
         </div>
 
         <div class="table-wrapper" style="margin-top: 1rem;">
           <table class="data-table">
             <thead>
               <tr>
-                <th>대상 학년</th>
+                <th style="width: 90px; text-align: center;">학생 공개(☑️)</th>
+                <th>대상 학년/반</th>
+                <th>제한시간</th>
                 <th>과제명</th>
                 <th>한국어 제시문</th>
                 <th>목표 표현/문법</th>
