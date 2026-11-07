@@ -719,10 +719,9 @@ function findBestMatchingReferenceCandidate(studentText, candidateList = []) {
   }
 
   const studentNorm = normalizeSentenceForCompare(studentText);
+  const studentWordsSeq = studentNorm.match(/[a-z]+/g) || [];
   const studentRawLower = (studentText || "").toLowerCase();
-  const studentTokens = new Set(
-    (studentRawLower.match(/[a-z]+/g) || []).map(normalizeEnWord)
-  );
+  const studentTokens = new Set(studentWordsSeq.map(normalizeEnWord));
 
   const stopWords = new Set([
     "the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and",
@@ -735,30 +734,35 @@ function findBestMatchingReferenceCandidate(studentText, candidateList = []) {
   for (let i = 0; i < candidateList.length; i++) {
     const cand = candidateList[i];
     const candNorm = normalizeSentenceForCompare(cand);
+    const candWordsSeq = candNorm.match(/[a-z]+/g) || [];
 
-    // 1) 대소문자/문장부호 제외 100% 동일한 문장인지 확인
-    if (studentNorm === candNorm) {
+    // 1) 관사(a/the) 호환까지 고려한 완전 일치 여부 확인
+    // 단, 어순·단수복수·관사 유무가 모두 정확해야 isExactMatch = true!
+    const studentArticleFlex = studentNorm.replace(/\b(a|an|the)\b/g, "DET");
+    const candArticleFlex = candNorm.replace(/\b(a|an|the)\b/g, "DET");
+    const isExactMatch = studentNorm === candNorm || studentArticleFlex === candArticleFlex;
+
+    if (isExactMatch) {
       return {
         bestCandidate: cand,
         matchedIndex: i,
         isExactMatch: true,
         refRatio: 1.0,
-        missingRefWords: []
+        missingRefWords: [],
+        wordOrderInversions: [],
+        missingArticles: [],
+        numberMismatches: []
       };
     }
 
     // 2) 해당 후보 문장의 핵심 단어(Content Words) 대비 일치율 계산
-    const candWords = Array.from(
-      new Set(
-        (candNorm.match(/[a-z]+/g) || []).filter(
-          (w) => !stopWords.has(w) && w.length >= 2
-        )
-      )
+    const candContentWords = Array.from(
+      new Set(candWordsSeq.filter((w) => !stopWords.has(w) && w.length >= 2))
     );
 
     let hitCount = 0;
     const missing = [];
-    for (const cw of candWords) {
+    for (const cw of candContentWords) {
       const normCw = normalizeEnWord(cw);
       if (studentTokens.has(normCw) || studentRawLower.includes(cw)) {
         hitCount += 1;
@@ -767,21 +771,106 @@ function findBestMatchingReferenceCandidate(studentText, candidateList = []) {
       }
     }
 
-    const ratio = candWords.length > 0 ? hitCount / candWords.length : 1.0;
+    // 3) ★ 어순 뒤바뀜(Word Order Inversion) 정밀 검출!
+    // 예: 모범답안은 "like money"인데 학생이 "money like"로 쓴 경우
+    const wordOrderInversions = [];
+    for (let j = 0; j < candWordsSeq.length - 1; j++) {
+      const w1 = candWordsSeq[j];
+      const w2 = candWordsSeq[j + 1];
+      if (w1 === w2) continue;
+      // 학생 문장에서 w2 w1 순서로 인접해 나타나는지 확인
+      const reversedRegex = new RegExp(`\\b${w2}\\s+${w1}\\b`, "i");
+      const correctRegex = new RegExp(`\\b${w1}\\s+${w2}\\b`, "i");
+      if (reversedRegex.test(studentNorm) && !correctRegex.test(studentNorm)) {
+        wordOrderInversions.push({
+          wrong: `${w2} ${w1}`,
+          right: `${w1} ${w2}`
+        });
+      }
+    }
 
-    // 단어 수 차이도 보조 지표로 반영 (예: which 생략형과 which 포함형 중 학생 문장 길이와 더 가까운 후보 선택)
-    const studentWordLen = (studentNorm.match(/[a-z]+/g) || []).length;
-    const candWordLen = (candNorm.match(/[a-z]+/g) || []).length;
-    const lenDiff = Math.abs(studentWordLen - candWordLen);
-    const scoreMetric = ratio * 100 - lenDiff * 0.5;
+    // 또한 LCS(최장 공통 부분수열) 기반 전체 어순 일치율 계산
+    const dp = Array.from({ length: candWordsSeq.length + 1 }, () =>
+      Array(studentWordsSeq.length + 1).fill(0)
+    );
+    for (let r = 1; r <= candWordsSeq.length; r++) {
+      for (let c = 1; c <= studentWordsSeq.length; c++) {
+        if (normalizeEnWord(candWordsSeq[r - 1]) === normalizeEnWord(studentWordsSeq[c - 1])) {
+          dp[r][c] = dp[r - 1][c - 1] + 1;
+        } else {
+          dp[r][c] = Math.max(dp[r - 1][c], dp[r][c - 1]);
+        }
+      }
+    }
+    const lcsLen = dp[candWordsSeq.length][studentWordsSeq.length];
+    const orderRatio = candWordsSeq.length > 0 ? lcsLen / candWordsSeq.length : 1.0;
+
+    // 4) ★ 관사(a/an/the) 누락 정밀 검출!
+    // 예: 모범답안에 "in a piggy bank"가 있는데 학생이 관사 없이 "in piggy bank"로 쓴 경우
+    const missingArticles = [];
+    const prepArtNounRegex = /\b(in|for|on|at|to|with|as|of|like|into|from)\s+(a|an|the)\s+([a-z]+)\b/gi;
+    let pam;
+    while ((pam = prepArtNounRegex.exec(candNorm)) !== null) {
+      const prep = pam[1];
+      const art = pam[2];
+      const noun = pam[3];
+      // 학생 문장에 전치사 + 명사 사이에 관사/소유격 없이 바로 붙어 있는 경우 검출
+      const barePrepNounRegex = new RegExp(`\\b${prep}\\s+${noun}\\b`, "i");
+      const withDetRegex = new RegExp(`\\b${prep}\\s+(?:a|an|the|my|your|his|her|its|our|their|this|that)\\s+${noun}\\b`, "i");
+      if (barePrepNounRegex.test(studentNorm) && !withDetRegex.test(studentNorm)) {
+        missingArticles.push({
+          wrong: `${prep} ${noun}`,
+          right: `${prep} ${art} ${noun}`
+        });
+      }
+    }
+
+    // 5) ★ 단수·복수(Number) 불일치 정밀 검출!
+    // 예: 모범답안은 "Taxes are"인데 학생이 "Tax are"로 쓴 경우
+    const numberMismatches = [];
+    for (const cw of candWordsSeq) {
+      if (cw.length >= 4 && (cw.endsWith("s") && !cw.endsWith("ss") && !cw.endsWith("is"))) {
+        const singularForm = cw.endsWith("es") ? cw.slice(0, -2) : cw.slice(0, -1);
+        const hasExactPlural = new RegExp(`\\b${cw}\\b`, "i").test(studentNorm);
+        const hasSingularInstead =
+          new RegExp(`\\b${singularForm}\\b`, "i").test(studentNorm) ||
+          new RegExp(`\\b${cw.slice(0, -1)}\\b`, "i").test(studentNorm);
+        if (!hasExactPlural && hasSingularInstead) {
+          const matchedWrong = studentWordsSeq.find(
+            (sw) => sw === singularForm || sw === cw.slice(0, -1)
+          );
+          if (matchedWrong) {
+            numberMismatches.push({
+              wrong: matchedWrong,
+              right: cw
+            });
+          }
+        }
+      }
+    }
+
+    const baseRatio = candContentWords.length > 0 ? hitCount / candContentWords.length : 1.0;
+    // 어순 일치율(orderRatio)과 단어 존재율(baseRatio)을 결합!
+    const combinedRefRatio = Math.min(baseRatio, baseRatio * 0.7 + orderRatio * 0.3);
+
+    const lenDiff = Math.abs(studentWordsSeq.length - candWordsSeq.length);
+    const scoreMetric =
+      combinedRefRatio * 100 -
+      wordOrderInversions.length * 8 -
+      missingArticles.length * 4 -
+      numberMismatches.length * 5 -
+      lenDiff * 0.5;
 
     if (!bestResult || scoreMetric > bestResult.scoreMetric) {
       bestResult = {
         bestCandidate: cand,
         matchedIndex: i,
         isExactMatch: false,
-        refRatio: ratio,
+        refRatio: combinedRefRatio,
         missingRefWords: missing,
+        wordOrderInversions,
+        missingArticles,
+        numberMismatches,
         scoreMetric
       };
     }
@@ -1007,7 +1096,30 @@ function evaluateWritingLocally({
       desc: "복수 주어(we/you/they) 뒤에는 복수 동사(are/were/have/do 또는 동사원형)를 써야 합니다."
     },
     {
-      pattern: /\b(am|is|are|was|were)\s+(like|love|want|need|know|have|go|come|bloom|help|learn|think|run)\b/gi,
+      // 일반 단수 명사 주어(예: Tax, Water, Money, The building 등 -s로 끝나지 않는 단수 명사) + 복수 동사(are/were/have/do) 수일치 오류 검사
+      pattern: /^(?:(The|This|That|My|Your|His|Her|Our|Their|A|An)\s+)?([A-Za-z]+)\s+(are|were|have|do)\b/i,
+      check: (m, det, noun) => {
+        const nl = (noun || "").toLowerCase();
+        const pluralExceptions = new Set([
+          "you", "we", "they", "people", "children", "men", "women", "teeth", "feet", "mice",
+          "police", "cattle", "both", "many", "few", "several", "these", "those",
+          "there", "here", "what", "how", "where", "when", "why", "who"
+        ]);
+        if (pluralExceptions.has(nl)) return false;
+        if (nl.endsWith("s") && !nl.endsWith("ss") && !nl.endsWith("us") && nl !== "news") return false;
+        return true;
+      },
+      fix: (m, det, noun, v) => {
+        const vl = v.toLowerCase();
+        const prefix = det ? `${det} ${noun}` : noun;
+        const map = { are: "is", were: "was", have: "has", do: "does" };
+        return `${prefix} ${map[vl] || v}`;
+      },
+      desc: "단수 명사 주어 뒤에는 복수 동사(are/were/have/do)를 쓸 수 없습니다. 주어를 복수형(-s/es)으로 쓰거나 단수 동사(is/was/has/does)로 일치시켜야 합니다."
+    },
+    {
+      // be동사 + 일반동사 원형 이중동사 오류 (단, 'be like ~ (~와 같다)'에서 like는 전치사이므로 제외!)
+      pattern: /\b(am|is|are|was|were)\s+(love|want|need|know|have|go|come|bloom|help|learn|think|run|pay)\b/gi,
       fix: (m, beV, mainV) => mainV,
       desc: "[이중 동사 오류] be동사(am/is/are)와 일반동사 원형을 나란히 함께 쓸 수 없습니다. 일반동사만 단독으로 사용하세요."
     },
@@ -1559,6 +1671,80 @@ function evaluateWritingLocally({
         meaningAccuracy = Math.max(0, meaningAccuracy - 15);
       }
 
+      // ★ 1-C. 모범 답안 후보(bestCandidateMatch) 대비 어순 도치, 관사 누락, 단수·복수 불일치 정밀 감점 및 교정!
+      if (bestCandidateMatch && !bestCandidateMatch.isExactMatch) {
+        const {
+          bestCandidate,
+          wordOrderInversions = [],
+          missingArticles = [],
+          numberMismatches = []
+        } = bestCandidateMatch;
+
+        // (1) 어순 뒤바뀜 (예: "money like" -> "like money")
+        if (wordOrderInversions.length > 0) {
+          grammarScore = Math.max(0, grammarScore - 8);
+          targetScore = Math.max(0, targetScore - 6);
+          meaningAccuracy = Math.max(0, meaningAccuracy - 10);
+          const invDesc = wordOrderInversions
+            .map((inv) => `'${inv.wrong}' → '${inv.right}'`)
+            .join(", ");
+          grammarFeedback.push({
+            original: wordOrderInversions.map((i) => i.wrong).join(", "),
+            corrected: bestCandidate,
+            explanation: `[어순 오류 교정] 영어 어순이 뒤바뀌었습니다(${invDesc}). 전치사·수식어 어순을 모범 답안('${bestCandidate}')과 같이 바로잡아야 합니다.`
+          });
+          correctedText = bestCandidate;
+        }
+
+        // (2) 관사 누락 (예: "in piggy bank" -> "in a piggy bank")
+        if (missingArticles.length > 0) {
+          grammarScore = Math.max(0, grammarScore - 5);
+          meaningAccuracy = Math.max(0, meaningAccuracy - 4);
+          const artDesc = missingArticles
+            .map((a) => `'${a.wrong}' → '${a.right}'`)
+            .join(", ");
+          grammarFeedback.push({
+            original: missingArticles.map((a) => a.wrong).join(", "),
+            corrected: bestCandidate,
+            explanation: `[관사(a/an/the) 누락 교정] 셀 수 있는 단수 명사 앞에 관사가 빠졌습니다(${artDesc}).`
+          });
+          correctedText = bestCandidate;
+        }
+
+        // (3) 단수·복수 형태 불일치 (예: "Tax are" -> "Taxes are")
+        if (numberMismatches.length > 0) {
+          grammarScore = Math.max(0, grammarScore - 6);
+          meaningAccuracy = Math.max(0, meaningAccuracy - 4);
+          const numDesc = numberMismatches
+            .map((n) => `'${n.wrong}' → '${n.right}'`)
+            .join(", ");
+          grammarFeedback.push({
+            original: numberMismatches.map((n) => n.wrong).join(", "),
+            corrected: bestCandidate,
+            explanation: `[단수·복수 수일치 교정] 문맥 및 동사와 어울리는 명사의 단수/복수 형태를 확인하세요(${numDesc}).`
+          });
+          correctedText = bestCandidate;
+        }
+
+        // (4) 위 3가지 외에 모범 답안과 어순/구문이 완전히 일치하지 않는 경우 100점 방지 및 정밀 비교 안내
+        if (
+          wordOrderInversions.length === 0 &&
+          missingArticles.length === 0 &&
+          numberMismatches.length === 0 &&
+          missingConceptLabels.length === 0 &&
+          missingRefWords.length === 0
+        ) {
+          grammarScore = Math.min(grammarScore, 16);
+          meaningAccuracy = Math.min(meaningAccuracy, 92);
+          grammarFeedback.push({
+            original: safeContent,
+            corrected: bestCandidate,
+            explanation: `[모범답안 어순·구문 비교] 핵심 단어는 포함되었으나 표준 모범 답안('${bestCandidate}')과 어순이나 전치사·관사 쓰임에 차이가 있습니다.`
+          });
+          correctedText = bestCandidate;
+        }
+      }
+
       // 누락된 의미 어휘가 있으면 구체적으로 피드백에 안내!
       if (missingConceptLabels.length > 0) {
         grammarFeedback.push({
@@ -1587,9 +1773,9 @@ function evaluateWritingLocally({
     meaningScore = Math.round((meaningAccuracy / 100) * 40);
   }
 
-  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가 (복수 정답인 경우 일치한 정답 및 다른 가능한 정답 안내!)
+  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가 (오직 isExactMatch === true 일 때만 100% 일치 문구 출력!)
   if (grammarFeedback.length === 0) {
-    if (candidateAnswers.length > 1 && bestCandidateMatch) {
+    if (candidateAnswers.length > 1 && bestCandidateMatch && bestCandidateMatch.isExactMatch) {
       const otherCandidates = candidateAnswers.filter(
         (_, idx) => idx !== bestCandidateMatch.matchedIndex
       );
