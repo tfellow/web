@@ -3007,28 +3007,35 @@ async function loadKoreanPromptsFromCloud() {
 
 async function syncPromptsToCloudDoc() {
   if (!currentUser || currentUser.isDemo) return false;
-  const settingsDocRef = doc(db, "vocab_books", "_settings");
-  await setDoc(
-    settingsDocRef,
-    {
-      id: "_settings",
-      writing1_prompts: koreanPrompts,
-      writing1_geminiEnabled: Boolean(geminiAiEnabled),
-      writing1_fullSync: true,
-      writing1_updatedAt: Date.now(),
-      // 학생도 읽을 수 있는 문서라서 키·명렬표는 여기 두지 않아요
-      writing1_geminiKey: deleteField(),
-      writing1_roster: deleteField()
-    },
-    { merge: true }
-  );
-  if (TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase())) {
-    await setDoc(
-      doc(db, ...PRIVATE_CONFIG_PATH),
-      { geminiKey: geminiApiKey || "", updatedAt: Date.now() },
-      { merge: true }
-    );
+  const isRegistered = TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase());
+  // 1) 교사 전용 저장소에 먼저 저장해요 (보안 규칙이 아직 없으면 실패할 수 있어요)
+  let privateSaved = false;
+  if (isRegistered) {
+    try {
+      const priv = { geminiKey: geminiApiKey || "", updatedAt: Date.now() };
+      if (STUDENT_ROSTER.length > 0) {
+        priv.roster = STUDENT_ROSTER.map((st) => `${st.studentId}:${st.name}`);
+      }
+      await setDoc(doc(db, ...PRIVATE_CONFIG_PATH), priv, { merge: true });
+      privateSaved = true;
+    } catch (e) {
+      console.warn("교사 전용 저장소에 저장하지 못했어요 (Firestore 보안 규칙을 확인해 주세요):", e);
+    }
   }
+  // 2) 학생도 읽는 설정 문서에는 과제만 저장해요.
+  //    키·명렬표가 교사 전용 저장소에 안전하게 옮겨졌을 때만 예전 자리에서 지워요.
+  const pub = {
+    id: "_settings",
+    writing1_prompts: koreanPrompts,
+    writing1_geminiEnabled: Boolean(geminiAiEnabled),
+    writing1_fullSync: true,
+    writing1_updatedAt: Date.now()
+  };
+  if (privateSaved) {
+    pub.writing1_geminiKey = deleteField();
+    pub.writing1_roster = deleteField();
+  }
+  await setDoc(doc(db, "vocab_books", "_settings"), pub, { merge: true });
   return true;
 }
 
