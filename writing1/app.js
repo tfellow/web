@@ -2509,6 +2509,42 @@ btnLogout.addEventListener("click", async () => {
   await signOut(auth);
 });
 
+const btnTeacherToggleView = document.getElementById("btn-teacher-toggle-view");
+
+btnTeacherToggleView?.addEventListener("click", () => {
+  if (!currentUser) return;
+  const isShowingTeacher = !viewTeacher.classList.contains("hidden");
+  if (isShowingTeacher) {
+    // 교사가 학생 화면으로 전환하여 모든 학년/반 과제를 채점 테스트할 수 있도록 설정
+    currentStudentInfo = {
+      grade: "all",
+      classNum: "all",
+      number: 0,
+      name: currentUser.displayName || "교사테스트",
+      studentId: "TEACHER",
+      email: (currentUser.email || "").toLowerCase()
+    };
+    document.getElementById("student-id").value = "교사테스트";
+    document.getElementById("student-grade").value = "전학년";
+    document.getElementById("student-class").value = "전체반";
+    document.getElementById("student-number").value = "-";
+    document.getElementById("student-name").value = currentStudentInfo.name;
+
+    viewTeacher.classList.add("hidden");
+    viewStudent.classList.remove("hidden");
+    btnTeacherToggleView.textContent = "👩‍🏫 교사 관리 화면으로 돌아가기";
+    renderStudentKoreanMissions();
+    loadStudentHistory();
+  } else {
+    stopMissionTimer();
+    viewStudent.classList.add("hidden");
+    viewTeacher.classList.remove("hidden");
+    btnTeacherToggleView.textContent = "✍️ 학생 화면으로 채점 테스트";
+    renderTeacherPromptsTable();
+    loadTeacherDashboard();
+  }
+});
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     currentUser = null;
@@ -2516,6 +2552,7 @@ onAuthStateChanged(auth, async (user) => {
     userInfoText.textContent = "로그인이 필요합니다";
     btnLogin.classList.remove("hidden");
     btnLogout.classList.add("hidden");
+    btnTeacherToggleView?.classList.add("hidden");
     viewLogin.classList.remove("hidden");
     viewStudent.classList.add("hidden");
     viewTeacher.classList.add("hidden");
@@ -2542,6 +2579,10 @@ onAuthStateChanged(auth, async (user) => {
     userInfoText.textContent = `${user.displayName || email} (교사 관리자)`;
     btnLogin.classList.add("hidden");
     btnLogout.classList.remove("hidden");
+    if (btnTeacherToggleView) {
+      btnTeacherToggleView.classList.remove("hidden");
+      btnTeacherToggleView.textContent = "✍️ 학생 화면으로 채점 테스트";
+    }
     viewLogin.classList.add("hidden");
     viewTeacher.classList.remove("hidden");
     viewStudent.classList.add("hidden");
@@ -2552,6 +2593,7 @@ onAuthStateChanged(auth, async (user) => {
     populateRosterDropdown();
     await loadTeacherDashboard();
   } else {
+    btnTeacherToggleView?.classList.add("hidden");
     currentStudentInfo = matchedStudent || {
       grade: 1,
       classNum: 1,
