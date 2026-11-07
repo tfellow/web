@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>서울문영여중 AI 영작문 튜터 & 교사 대시보드</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Chart.js (교사 대시보드 통계 시각화용) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- 상단 네비게이션 바 -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-icon">✍️</span>
+      <h1>서울문영여중 AI 영작문 튜터</h1>
+      <span class="badge-free">smy.ms.kr 전용</span>
+    </div>
+    <div id="user-status" class="user-status">
+      <span id="user-info-text">로그인이 필요합니다</span>
+      <button id="btn-login" class="btn btn-primary">Google 학교 계정 로그인</button>
+      <button id="btn-logout" class="btn btn-outline hidden">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. 비로그인 안내 화면 -->
+    <section id="view-login" class="card login-card">
+      <h2>환영합니다! 👋</h2>
+      <p>서울문영여자중학교 Google 계정(<strong>@smy.ms.kr</strong>) 또는 관리자 계정(<strong>tfellow@smy.ms.kr / tfellow@gmail.com</strong>)으로 로그인하면 학번·학년·반·이름이 자동으로 인식됩니다.</p>
+      <div class="notice-box">
+        <strong>🔒 개인정보 보호 안내:</strong> 작성한 글에 포함된 성명, 학번(예: 10101), 연락처 등 개인정보는 AI 평가 전송 전 자동으로 마스킹(비식별화) 처리됩니다.
+      </div>
+      <div class="demo-bar" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <span style="font-size: 0.9rem; font-weight: 600; color: #475569;">⚡ 빠른 화면 미리보기:</span>
+        <button id="btn-demo-student" class="btn btn-outline">👩‍🎓 학생 화면 미리보기 (10101 김나은)</button>
+        <button id="btn-demo-teacher" class="btn btn-outline">👩‍🏫 교사 대시보드 미리보기 (tfellow@smy.ms.kr)</button>
+      </div>
+    </section>
+
+    <!-- 2. 학생 페이지 (Student View) -->
+    <section id="view-student" class="hidden">
+      <!-- 명렬표 기반 자동 인식된 학년/반/번호/학번/성명 바 -->
+      <div class="card profile-bar">
+        <div class="profile-inputs">
+          <span class="badge-verified" id="roster-badge">✅ 명렬표 자동 매칭 완료</span>
+          <label>학번:
+            <input type="text" id="student-id" readonly />
+          </label>
+          <label>학년:
+            <select id="student-grade" disabled>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+            </select>
+          </label>
+          <label>반:
+            <select id="student-class" disabled>
+              <option value="1">1반</option>
+              <option value="2">2반</option>
+              <option value="3">3반</option>
+              <option value="4">4반</option>
+            </select>
+          </label>
+          <label>번호:
+            <input type="number" id="student-number" min="1" max="30" readonly />
+          </label>
+          <label>성명:
+            <input type="text" id="student-name" readonly />
+          </label>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- 좌측: 글쓰기 에디터 (모드 전환 탭 포함) -->
+        <div class="card">
+          <div class="mode-tabs">
+            <button id="tab-mode-korean" class="mode-tab active">🇰🇷➡️🇺🇸 선생님 한국어 제시문 영작</button>
+            <button id="tab-mode-free" class="mode-tab">📝 자유 주제 영작</button>
+          </div>
+
+          <!-- 모드 A: 선생님 한국어 제시문 영작 영역 -->
+          <div id="box-korean-prompt" class="prompt-mission-box">
+            <div class="form-group">
+              <label for="select-korean-mission">📌 선생님이 출제한 한국어 제시문 과제 선택</label>
+              <select id="select-korean-mission"></select>
+            </div>
+            <div class="mission-detail">
+              <div class="mission-label">🇰🇷 한국어 제시문 (아래 문장을 영어로 영작하세요)</div>
+              <p id="display-korean-sentence" class="korean-sentence-text">-</p>
+              <div class="mission-hint">
+                <span>🎯 핵심 목표 표현/문법:</span>
+                <strong id="display-target-grammar">-</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 모드 B: 자유 주제 입력란 -->
+          <div id="box-free-topic" class="form-group hidden">
+            <label for="essay-topic">작문 주제 (Topic)</label>
+            <input type="text" id="essay-topic" placeholder="예: My Favorite Season and Why" />
+          </div>
+
+          <div class="form-group">
+            <label for="essay-content" id="label-essay-content">🇺🇸 나의 영어 영작 (English Writing)</label>
+            <textarea id="essay-content" rows="6" placeholder="제시된 한국어 문장의 의미와 핵심 표현을 살려 영어로 작성해 보세요!"></textarea>
+            <div class="word-count">단어 수: <span id="word-count-num">0</span> words</div>
+          </div>
+          <button id="btn-submit-essay" class="btn btn-primary btn-full">🤖 AI 채점 및 피드백 받기</button>
+        </div>
+
+        <!-- 우측: AI 즉시 평가 결과 -->
+        <div class="card">
+          <h2>📊 AI 작문 평가 결과</h2>
+          <div id="eval-loading" class="hidden loading-state">AI 튜터가 의미 전달 정확도와 문법을 꼼꼼히 분석하고 있습니다... ⏳</div>
+          <div id="eval-empty" class="empty-state">글을 제출하면 의미 전달 정확도, CEFR 등급, 교정 문장 및 모범 답안이 이곳에 표시됩니다.</div>
+          
+          <div id="eval-result" class="hidden">
+            <div class="score-badges">
+              <div class="score-badge">종합 점수: <strong id="res-score">-</strong> / 100</div>
+              <div class="score-badge" id="badge-meaning">의미 전달력: <strong id="res-meaning">-</strong>%</div>
+              <div class="score-badge">CEFR 등급: <strong id="res-cefr">-</strong></div>
+            </div>
+            <div id="res-target-status" class="target-status-banner hidden"></div>
+            <div class="result-section">
+              <h3>✅ 학생 문장 교정 (Corrected Text)</h3>
+              <p id="res-corrected" class="corrected-box"></p>
+            </div>
+            <div class="result-section" id="sec-model-answer">
+              <h3>🌟 추천 모범 영작 답안 (Model Answer)</h3>
+              <p id="res-model-answer" class="corrected-box model-answer-box"></p>
+            </div>
+            <div class="result-section">
+              <h3>🔍 문법 및 의미 전달 피드백</h3>
+              <ul id="res-grammar-list" class="feedback-list"></ul>
+            </div>
+            <div class="result-section">
+              <h3>💡 핵심 및 추천 어휘 (Vocabulary)</h3>
+              <ul id="res-vocab-list" class="feedback-list"></ul>
+            </div>
+            <div class="result-section">
+              <h3>💬 선생님 AI 총평</h3>
+              <p id="res-comment" class="comment-box"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단: 내 과거 작문 기록 -->
+      <div class="card">
+        <h2>📚 나의 영작문 기록 (날짜별 조회)</h2>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>제출일</th>
+                <th>유형</th>
+                <th>주제 / 한국어 제시문</th>
+                <th>나의 영작</th>
+                <th>CEFR</th>
+                <th>점수</th>
+                <th>총평 요약</th>
+              </tr>
+            </thead>
+            <tbody id="student-history-tbody">
+              <tr><td colspan="7" class="text-center">아직 제출한 작문 기록이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 교사 대시보드 (Teacher View) -->
+    <section id="view-teacher" class="hidden">
+      <!-- [신규] 교사용 한국어 제시문 과제 출제 및 관리 카드 -->
+      <div class="card prompt-manager-card">
+        <h2>🇰🇷➡️🇺🇸 교사 한국어 제시문 영작 과제 출제 & 관리</h2>
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">
+          선생님이 한국어 문장과 목표 문법/어휘를 제시하면, 해당 학년 학생들이 보고 영작하며 AI가 의미 전달력과 문법을 자동 채점합니다.
+        </p>
+        <div class="prompt-Creator-grid">
+          <select id="new-prompt-grade">
+            <option value="all">전학년 공통</option>
+            <option value="1">1학년 대상</option>
+            <option value="2">2학년 대상</option>
+            <option value="3">3학년 대상</option>
+          </select>
+          <input type="text" id="new-prompt-title" placeholder="단원/과제명 (예: 2학년 3단원 조건 영작)" />
+          <input type="text" id="new-prompt-target" placeholder="목표 어휘/문법 (예: so that, ~하기 위해서)" />
+        </div>
+        <div class="prompt-creator-row2">
+          <input type="text" id="new-prompt-korean" placeholder="학생에게 제시할 한국어 문장 (예: 나는 아픈 동물들을 돕기 위해서 수의사가 되고 싶다.)" />
+          <input type="text" id="new-prompt-answer" placeholder="참고 모범 영어 답안 (선택 입력 - 예: I want to be a vet so that I can help sick animals.)" />
+          <button id="btn-add-prompt" class="btn btn-primary">➕ 제시문 과제 등록</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top: 1rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>대상 학년</th>
+                <th>과제명</th>
+                <th>한국어 제시문</th>
+                <th>목표 표현/문법</th>
+                <th>참고 모범 답안</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-prompts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 기존 교사 통계 관리 대시보드 카드 -->
+      <div class="card">
+        <div class="dashboard-header">
+          <h2>👩‍🏫 서울문영여중 교사 통계 관리 대시보드 (재학생 총 185명 등록)</h2>
+        </div>
+
+        <!-- 필터 영역: 학년 / 반 / 명렬표 학생 선택 / 검색 / 기간 -->
+        <div class="filter-bar">
+          <select id="filter-grade">
+            <option value="all">전체 학년 (1~3학년)</option>
+            <option value="1">1학년 (1~3반, 56명)</option>
+            <option value="2">2학년 (1~4반, 64명)</option>
+            <option value="3">3학년 (1~4반, 65명)</option>
+          </select>
+
+          <select id="filter-class">
+            <option value="all">전체 반</option>
+            <option value="1">1반</option>
+            <option value="2">2반</option>
+            <option value="3">3반</option>
+            <option value="4">4반</option>
+          </select>
+
+          <select id="filter-roster-student">
+            <option value="all">명렬표 학생 선택 (전체)</option>
+          </select>
+
+          <input type="text" id="filter-student" placeholder="성명 또는 학번(예: 10101) 검색" />
+          <input type="date" id="filter-date-start" />
+          <span>~</span>
+          <input type="date" id="filter-date-end" />
+          <button id="btn-apply-filter" class="btn btn-primary">조회</button>
+          <button id="btn-export-csv" class="btn btn-outline">📥 CSV 다운로드</button>
+        </div>
+
+        <!-- 요약 통계 카드 (제출 학생 / 미제출 학생 현황) -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span class="summary-label">조회 대상 재학생</span>
+            <strong id="stat-total-roster">185명</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">제출 완료 학생</span>
+            <strong id="stat-submitted-students">0명</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">총 제출 건수</span>
+            <strong id="stat-total-submissions">0건</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">평균 작문 점수</span>
+            <strong id="stat-avg-score">0점</strong>
+          </div>
+        </div>
+
+        <!-- Chart.js 시각화 영역 -->
+        <div class="grid-2col chart-grid">
+          <div class="chart-box">
+            <h3>학급별 평균 점수 현황 (1-1 ~ 3-4)</h3>
+            <canvas id="chart-class-avg"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>학생별 제출 빈도 (상위 10명)</h3>
+            <canvas id="chart-student-freq"></canvas>
+          </div>
+        </div>
+
+        <!-- 전체 제출 목록 -->
+        <h3 style="margin-top: 1.5rem;">📋 학생 제출 기록 목록</h3>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>제출일</th>
+                <th>학번</th>
+                <th>학년/반/번호</th>
+                <th>성명</th>
+                <th>유형</th>
+                <th>과제명 / 한국어 제시문</th>
+                <th>학생 영작문</th>
+                <th>점수 (의미전달)</th>
+                <th>AI 총평</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-submissions-tbody">
+              <tr><td colspan="9" class="text-center">데이터를 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
