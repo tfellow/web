@@ -23,11 +23,13 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 서울문영여자중학교 전체 명렬표(185명) 데이터 및 헬퍼 함수 불러오기
+// 서울문영여자중학교 보안 명렬표(AES-256-GCM 암호화) 및 헬퍼 함수 불러오기
 import {
   STUDENT_ROSTER,
   CLASSES_BY_GRADE,
-  findStudentByEmail
+  findStudentByEmail,
+  setRuntimeRoster,
+  unlockEncryptedRosterForAuthorizedUser
 } from "./students.js";
 
 // ============================================================================
@@ -2694,6 +2696,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     currentUser = null;
     currentStudentInfo = null;
+    setRuntimeRoster([]); // 로그아웃 상태에서는 런타임 메모리에서도 명렬표 즉시 초기화
     userInfoText.textContent = "로그인이 필요합니다";
     btnLogin.classList.remove("hidden");
     btnLogout.classList.add("hidden");
@@ -2709,13 +2712,16 @@ onAuthStateChanged(auth, async (user) => {
   const isRegisteredTeacher = TEACHER_EMAILS.includes(email);
 
   if (!isRegisteredTeacher && emailDomain !== ALLOWED_DOMAIN) {
+    setRuntimeRoster([]);
     alert(`접근 제한: 서울문영여자중학교 계정(@${ALLOWED_DOMAIN}) 또는 등록된 교사 관리자 계정으로만 로그인이 가능합니다.`);
     await signOut(auth);
     return;
   }
 
   currentUser = user;
-  const matchedStudent = findStudentByEmail(email);
+  // 학교 계정(@smy.ms.kr) 또는 등록된 교사 인증이 완료된 경우에만 AES-256-GCM 암호화 명렬표 복호화
+  await unlockEncryptedRosterForAuthorizedUser(ALLOWED_DOMAIN, firebaseConfig.projectId);
+  const matchedStudent = findStudentByEmail(email, user.displayName || "");
 
   const isTeacher =
     isRegisteredTeacher || (!matchedStudent && !/^2026\d{5}@smy\.ms\.kr$/.test(email));

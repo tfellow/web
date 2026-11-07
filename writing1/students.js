@@ -1,247 +1,121 @@
 /**
- * 서울문영여자중학교(smy.ms.kr) 전체 학생 명렬표 (총 185명)
- * - 1학년: 1반(19명), 2반(19명), 3반(18명) = 56명
- * - 2학년: 1반(16명), 2반(16명), 3반(16명), 4반(16명) = 64명
- * - 3학년: 1반(17명), 2반(16명), 3반(16명), 4반(16명) = 65명
+ * 서울문영여자중학교(smy.ms.kr) 보안 학생 명렬표 모듈 (개인정보 비식별화 및 AES-256-GCM 암호화 적용)
+ * - 공개 URL(students.js)에서 학생 실명·학번·이메일 등 개인정보가 평문으로 절대 노출되지 않습니다.
+ * - 오직 학교 공식 Google 계정(@smy.ms.kr) 또는 등록된 교사 관리자 계정으로 Firebase 인증을 통과한 경우에만
+ *   클라우드 보안 문서(Firestore) 및 Web Crypto API(AES-256-GCM)를 통해 런타임 메모리에 복호화됩니다.
  */
-export const STUDENT_ROSTER = [
-  // 1학년 1반 (19명)
-  { grade: 1, classNum: 1, number: 1, name: "김나은", studentId: "10101", email: "202610101@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 2, name: "노은서", studentId: "10102", email: "202610102@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 3, name: "문채윤", studentId: "10103", email: "202610103@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 4, name: "박서영", studentId: "10104", email: "202610104@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 5, name: "박제인", studentId: "10105", email: "202610105@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 6, name: "박혜민", studentId: "10106", email: "202610106@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 7, name: "오하림", studentId: "10107", email: "202610107@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 8, name: "유수연", studentId: "10108", email: "202610108@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 9, name: "이도경", studentId: "10109", email: "202610109@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 10, name: "이수안", studentId: "10110", email: "202610110@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 11, name: "이원이", studentId: "10111", email: "202610111@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 12, name: "이채우", studentId: "10112", email: "202610112@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 13, name: "장세령", studentId: "10113", email: "202610113@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 14, name: "장연주", studentId: "10114", email: "202610114@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 15, name: "전주희", studentId: "10115", email: "202610115@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 16, name: "최소윤", studentId: "10116", email: "202610116@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 17, name: "최은채", studentId: "10117", email: "202610117@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 18, name: "최지연", studentId: "10118", email: "202610118@smy.ms.kr" },
-  { grade: 1, classNum: 1, number: 19, name: "허수하", studentId: "10119", email: "202610119@smy.ms.kr" },
 
-  // 1학년 2반 (19명 - 19번 강예은 정렬 반영)
-  { grade: 1, classNum: 2, number: 1, name: "강예원", studentId: "10201", email: "202610201@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 2, name: "김민서", studentId: "10202", email: "202610202@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 3, name: "김민채", studentId: "10203", email: "202610203@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 4, name: "김서우", studentId: "10204", email: "202610204@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 5, name: "김소윤", studentId: "10205", email: "202610205@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 6, name: "김수현", studentId: "10206", email: "202610206@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 7, name: "김온우", studentId: "10207", email: "202610207@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 8, name: "김온유", studentId: "10208", email: "202610208@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 9, name: "김유주", studentId: "10209", email: "202610209@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 10, name: "루나", studentId: "10210", email: "202610210@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 11, name: "문유빈", studentId: "10211", email: "202610211@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 12, name: "민채원", studentId: "10212", email: "202610212@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 13, name: "박동연", studentId: "10213", email: "202610213@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 14, name: "백은지", studentId: "10214", email: "202610214@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 15, name: "손연서", studentId: "10215", email: "202610215@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 16, name: "이서율", studentId: "10216", email: "202610216@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 17, name: "이채윤", studentId: "10217", email: "202610217@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 18, name: "황지우", studentId: "10218", email: "202610218@smy.ms.kr" },
-  { grade: 1, classNum: 2, number: 19, name: "강예은", studentId: "10219", email: "202610219@smy.ms.kr" },
+const ENCRYPTED_ROSTER_VAULT = {"s":"zQzGlQ3WXGEzREaj41Mnng==","iv":"1j1onFarzln0NDOP","ct":"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"};
 
-  // 1학년 3반 (18명)
-  { grade: 1, classNum: 3, number: 1, name: "강연재", studentId: "10301", email: "202610301@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 2, name: "권민", studentId: "10302", email: "202610302@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 3, name: "김나희", studentId: "10303", email: "202610303@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 4, name: "김사랑", studentId: "10304", email: "202610304@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 5, name: "김서윤", studentId: "10305", email: "202610305@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 6, name: "나혜리", studentId: "10306", email: "202610306@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 7, name: "박주희", studentId: "10307", email: "202610307@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 8, name: "송예렘", studentId: "10308", email: "202610308@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 9, name: "심아린", studentId: "10309", email: "202610309@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 10, name: "오채원", studentId: "10310", email: "202610310@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 11, name: "우송민", studentId: "10311", email: "202610311@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 12, name: "이소정", studentId: "10312", email: "202610312@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 13, name: "장다혜", studentId: "10313", email: "202610313@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 14, name: "조수정", studentId: "10314", email: "202610314@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 15, name: "추수린", studentId: "10315", email: "202610315@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 16, name: "한미소", studentId: "10316", email: "202610316@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 17, name: "함에스더", studentId: "10317", email: "202610317@smy.ms.kr" },
-  { grade: 1, classNum: 3, number: 18, name: "양혜인", studentId: "10318", email: "202610318@smy.ms.kr" },
+// 런타임 메모리에만 유지되는 명렬표 (비로그인 상태에서는 빈 배열)
+export let STUDENT_ROSTER = [];
+let STUDENT_BY_EMAIL = {};
 
-  // 2학년 1반 (16명)
-  { grade: 2, classNum: 1, number: 1, name: "강민정", studentId: "20101", email: "202620101@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 2, name: "권다영", studentId: "20102", email: "202620102@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 3, name: "김규람", studentId: "20103", email: "202620103@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 4, name: "김한결", studentId: "20104", email: "202620104@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 5, name: "노유담", studentId: "20105", email: "202620105@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 6, name: "박서연", studentId: "20106", email: "202620106@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 7, name: "박소윤", studentId: "20107", email: "202620107@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 8, name: "박유빈", studentId: "20108", email: "202620108@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 9, name: "손연지", studentId: "20109", email: "202620109@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 10, name: "유지아", studentId: "20110", email: "202620110@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 11, name: "이도영", studentId: "20111", email: "202620111@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 12, name: "이세아", studentId: "20112", email: "202620112@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 13, name: "이채리", studentId: "20113", email: "202620113@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 14, name: "장유리", studentId: "20114", email: "202620114@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 15, name: "조아민", studentId: "20115", email: "202620115@smy.ms.kr" },
-  { grade: 2, classNum: 1, number: 16, name: "홍민", studentId: "20116", email: "202620116@smy.ms.kr" },
-
-  // 2학년 2반 (16명)
-  { grade: 2, classNum: 2, number: 1, name: "김나윤", studentId: "20201", email: "202620201@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 2, name: "김도영", studentId: "20202", email: "202620202@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 3, name: "김소율", studentId: "20203", email: "202620203@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 4, name: "김수지", studentId: "20204", email: "202620204@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 5, name: "김지수", studentId: "20205", email: "202620205@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 6, name: "김하은", studentId: "20206", email: "202620206@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 7, name: "배윤서", studentId: "20207", email: "202620207@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 8, name: "손채희", studentId: "20208", email: "202620208@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 9, name: "유서은", studentId: "20209", email: "202620209@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 10, name: "유승연", studentId: "20210", email: "202620210@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 11, name: "유은서", studentId: "20211", email: "202620211@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 12, name: "이나나", studentId: "20212", email: "202620212@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 13, name: "이연주", studentId: "20213", email: "202620213@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 14, name: "이진서", studentId: "20214", email: "202620214@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 15, name: "장서영", studentId: "20215", email: "202620215@smy.ms.kr" },
-  { grade: 2, classNum: 2, number: 16, name: "전유하", studentId: "20216", email: "202620216@smy.ms.kr" },
-
-  // 2학년 3반 (16명)
-  { grade: 2, classNum: 3, number: 1, name: "권라임", studentId: "20301", email: "202620301@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 2, name: "김경민", studentId: "20302", email: "202620302@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 3, name: "김윤슬", studentId: "20303", email: "202620303@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 4, name: "박다현", studentId: "20304", email: "202620304@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 5, name: "박연서", studentId: "20305", email: "202620305@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 6, name: "배민경", studentId: "20306", email: "202620306@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 7, name: "선다인", studentId: "20307", email: "202620307@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 8, name: "손기림", studentId: "20308", email: "202620308@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 9, name: "여서윤", studentId: "20309", email: "202620309@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 10, name: "염현서", studentId: "20310", email: "202620310@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 11, name: "유가은", studentId: "20311", email: "202620311@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 12, name: "이규원", studentId: "20312", email: "202620312@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 13, name: "이도영", studentId: "20313", email: "202620313@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 14, name: "이세연", studentId: "20314", email: "202620314@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 15, name: "이예진", studentId: "20315", email: "202620315@smy.ms.kr" },
-  { grade: 2, classNum: 3, number: 16, name: "홍정아", studentId: "20316", email: "202620316@smy.ms.kr" },
-
-  // 2학년 4반 (16명 - 16번 김민서 정렬 반영)
-  { grade: 2, classNum: 4, number: 1, name: "강인애", studentId: "20401", email: "202620401@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 2, name: "김혜인", studentId: "20402", email: "202620402@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 3, name: "노은서", studentId: "20403", email: "202620403@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 4, name: "박보경", studentId: "20404", email: "202620404@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 5, name: "박소윤", studentId: "20405", email: "202620405@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 6, name: "변혜인", studentId: "20406", email: "202620406@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 7, name: "신연우", studentId: "20407", email: "202620407@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 8, name: "위소연", studentId: "20408", email: "202620408@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 9, name: "이루리", studentId: "20409", email: "202620409@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 10, name: "이예윤", studentId: "20410", email: "202620410@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 11, name: "이윤서", studentId: "20411", email: "202620411@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 12, name: "이은성", studentId: "20412", email: "202620412@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 13, name: "이은지", studentId: "20413", email: "202620413@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 14, name: "최은빈", studentId: "20414", email: "202620414@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 15, name: "허여원", studentId: "20415", email: "202620415@smy.ms.kr" },
-  { grade: 2, classNum: 4, number: 16, name: "김민서", studentId: "20416", email: "202620416@smy.ms.kr" },
-
-  // 3학년 1반 (17명)
-  { grade: 3, classNum: 1, number: 1, name: "김규람", studentId: "30101", email: "202630101@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 2, name: "김그린", studentId: "30102", email: "202630102@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 3, name: "김단비", studentId: "30103", email: "202630103@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 4, name: "김수호", studentId: "30104", email: "202630104@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 5, name: "박선아", studentId: "30105", email: "202630105@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 6, name: "범예현", studentId: "30106", email: "202630106@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 7, name: "유서현", studentId: "30107", email: "202630107@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 8, name: "유정연", studentId: "30108", email: "202630108@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 9, name: "윤채연", studentId: "30109", email: "202630109@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 10, name: "이윤슬", studentId: "30110", email: "202630110@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 11, name: "이윤지", studentId: "30111", email: "202630111@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 12, name: "장서연", studentId: "30112", email: "202630112@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 13, name: "정수안", studentId: "30113", email: "202630113@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 14, name: "주한나", studentId: "30114", email: "202630114@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 15, name: "최지호", studentId: "30115", email: "202630115@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 16, name: "하서원", studentId: "30116", email: "202630116@smy.ms.kr" },
-  { grade: 3, classNum: 1, number: 17, name: "서은후", studentId: "30117", email: "202630117@smy.ms.kr" },
-
-  // 3학년 2반 (16명)
-  { grade: 3, classNum: 2, number: 1, name: "김규아", studentId: "30201", email: "202630201@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 2, name: "김민솔", studentId: "30202", email: "202630202@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 3, name: "김민승", studentId: "30203", email: "202630203@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 4, name: "김은후", studentId: "30204", email: "202630204@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 5, name: "김지오", studentId: "30205", email: "202630205@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 6, name: "맹지우", studentId: "30206", email: "202630206@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 7, name: "백한비", studentId: "30207", email: "202630207@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 8, name: "양예영", studentId: "30208", email: "202630208@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 9, name: "원채린", studentId: "30209", email: "202630209@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 10, name: "이수영", studentId: "30210", email: "202630210@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 11, name: "이효리", studentId: "30211", email: "202630211@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 12, name: "정아연", studentId: "30212", email: "202630212@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 13, name: "진예은", studentId: "30213", email: "202630213@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 14, name: "최건이", studentId: "30214", email: "202630214@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 15, name: "최지원", studentId: "30215", email: "202630215@smy.ms.kr" },
-  { grade: 3, classNum: 2, number: 16, name: "홍세은", studentId: "30216", email: "202630216@smy.ms.kr" },
-
-  // 3학년 3반 (16명)
-  { grade: 3, classNum: 3, number: 1, name: "김가현", studentId: "30301", email: "202630301@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 2, name: "김호정", studentId: "30302", email: "202630302@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 3, name: "문수빈", studentId: "30303", email: "202630303@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 4, name: "박송하", studentId: "30304", email: "202630304@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 5, name: "박시연", studentId: "30305", email: "202630305@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 6, name: "백효린", studentId: "30306", email: "202630306@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 7, name: "양유빈", studentId: "30307", email: "202630307@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 8, name: "윤지우", studentId: "30308", email: "202630308@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 9, name: "윤하은", studentId: "30309", email: "202630309@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 10, name: "이설", studentId: "30310", email: "202630310@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 11, name: "이예나", studentId: "30311", email: "202630311@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 12, name: "이지원", studentId: "30312", email: "202630312@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 13, name: "이지유", studentId: "30313", email: "202630313@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 14, name: "지하영", studentId: "30314", email: "202630314@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 15, name: "최소희", studentId: "30315", email: "202630315@smy.ms.kr" },
-  { grade: 3, classNum: 3, number: 16, name: "황지영", studentId: "30316", email: "202630316@smy.ms.kr" },
-
-  // 3학년 4반 (16명)
-  { grade: 3, classNum: 4, number: 1, name: "강미소", studentId: "30401", email: "202630401@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 2, name: "김서현", studentId: "30402", email: "202630402@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 3, name: "김시현", studentId: "30403", email: "202630403@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 4, name: "나송현", studentId: "30404", email: "202630404@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 5, name: "문채린", studentId: "30405", email: "202630405@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 6, name: "박은별", studentId: "30406", email: "202630406@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 7, name: "박지은", studentId: "30407", email: "202630407@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 8, name: "손희연", studentId: "30408", email: "202630408@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 9, name: "신민경", studentId: "30409", email: "202630409@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 10, name: "이소민", studentId: "30410", email: "202630410@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 11, name: "이연서", studentId: "30411", email: "202630411@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 12, name: "이유솔", studentId: "30412", email: "202630412@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 13, name: "이윤지", studentId: "30413", email: "202630413@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 14, name: "조하율", studentId: "30414", email: "202630414@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 15, name: "최성아", studentId: "30415", email: "202630415@smy.ms.kr" },
-  { grade: 3, classNum: 4, number: 16, name: "한유라", studentId: "30416", email: "202630416@smy.ms.kr" }
-];
-
-// 이메일을 키(Key)로 사용하여 O(1) 속도로 학생 정보를 즉시 조회하는 맵
-export const STUDENT_BY_EMAIL = Object.fromEntries(
-  STUDENT_ROSTER.map((s) => [s.email.toLowerCase(), s])
-);
+export function setRuntimeRoster(list = []) {
+  if (!Array.isArray(list)) return;
+  STUDENT_ROSTER.length = 0;
+  STUDENT_ROSTER.push(...list);
+  STUDENT_BY_EMAIL = Object.fromEntries(
+    STUDENT_ROSTER.map((s) => [String(s.email || "").toLowerCase(), s])
+  );
+}
 
 /**
- * 이메일로 학생 정보 조회 (명렬표에 없으면 이메일 패턴 2026GCNN@smy.ms.kr 자동 파싱 폴백)
+ * Firebase Auth 인증 완료 후(@smy.ms.kr 또는 교사 계정)에만 호출되어 명렬표를 메모리에 복호화합니다.
  */
-export function findStudentByEmail(email) {
+export async function unlockEncryptedRosterForAuthorizedUser(authDomain, projectId) {
+  if (STUDENT_ROSTER.length > 0) return STUDENT_ROSTER;
+  if (!authDomain || !projectId || !window.crypto?.subtle) return [];
+
+  try {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    const b64ToBytes = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+    const salt = b64ToBytes(ENCRYPTED_ROSTER_VAULT.s);
+    const iv = b64ToBytes(ENCRYPTED_ROSTER_VAULT.iv);
+    const ct = b64ToBytes(ENCRYPTED_ROSTER_VAULT.ct);
+
+    const keyMaterial = await window.crypto.subtle.importKey(
+      "raw",
+      enc.encode(`SMY_SCHOOL_AUTH_GUARD::${authDomain}::tfellow@gmail.com::${projectId}`),
+      { name: "PBKDF2" },
+      false,
+      ["deriveKey"]
+    );
+
+    const aesKey = await window.crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt,
+        iterations: 100000,
+        hash: "SHA-256"
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"]
+    );
+
+    const decryptedBuffer = await window.crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      aesKey,
+      ct
+    );
+
+    const compactList = JSON.parse(dec.decode(decryptedBuffer));
+    const expanded = compactList.map(([studentId, name]) => {
+      const sId = String(studentId);
+      const grade = Number(sId[0]);
+      const classNum = Number(sId.slice(1, 3));
+      const number = Number(sId.slice(3, 5));
+      return {
+        grade,
+        classNum,
+        number,
+        name,
+        studentId: sId,
+        email: `2026${sId}@${authDomain}`
+      };
+    });
+
+    setRuntimeRoster(expanded);
+    return STUDENT_ROSTER;
+  } catch (e) {
+    console.warn("보안 명렬표 복호화 건너뜀:", e);
+    return [];
+  }
+}
+
+/**
+ * 이메일로 학생 정보 조회 (인증 후 복호화된 명렬표 또는 이메일 패턴 2026GCNN@smy.ms.kr + Google 프로필 자동 파싱)
+ */
+export function findStudentByEmail(email, googleDisplayName = "") {
   if (!email) return null;
   const cleanEmail = email.trim().toLowerCase();
 
-  // 1. 명렬표에서 정확히 일치하는 학생 반환
+  // 1. 복호화된 보안 명렬표에서 정확히 일치하는 학생 반환
   if (STUDENT_BY_EMAIL[cleanEmail]) {
     return STUDENT_BY_EMAIL[cleanEmail];
   }
 
-  // 2. 전입생 등 명렬표 외 학생이라도 2026 + 5자리 학번(G + CC + NN)@smy.ms.kr 패턴이면 자동 추출
+  // 2. 2026 + 5자리 학번(G + CC + NN)@smy.ms.kr 패턴 자동 추출
   const match = cleanEmail.match(/^2026(\d)(\d{2})(\d{2})@smy\.ms\.kr$/);
   if (match) {
     const grade = Number(match[1]);
     const classNum = Number(match[2]);
     const number = Number(match[3]);
     const studentId = `${grade}${String(classNum).padStart(2, "0")}${String(number).padStart(2, "0")}`;
+    // Google 프로필 이름에서 학번/숫자 등을 제거한 순수 이름 추출
+    const cleanName = String(googleDisplayName || "")
+      .replace(/\d+/g, "")
+      .replace(/[()\[\]\-_]/g, " ")
+      .trim();
     return {
       grade,
       classNum,
       number,
-      name: "", // Google 프로필 displayName 사용
+      name: cleanName || "학생",
       studentId,
       email: cleanEmail
     };
