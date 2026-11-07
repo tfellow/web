@@ -11,12 +11,15 @@ import {
   getFirestore,
   collection,
   addDoc,
+  setDoc,
+  getDoc,
   deleteDoc,
   doc,
   query,
   where,
   orderBy,
   getDocs,
+  onSnapshot,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -327,15 +330,25 @@ tabModeFree.addEventListener("click", () => {
 // 학생 화면의 한국어 제시문 드롭다운 렌더링 및 선택 이벤트
 function renderStudentKoreanMissions() {
   const studentGrade = currentStudentInfo ? String(currentStudentInfo.grade) : "all";
-  // 본인 학년 과제 또는 전학년 공통 과제를 우선 표시하되 전체 과제 선택 가능
+  // 1순위: 선생님이 새로 등록한 클라우드 과제 & 본인 학년 과제 최우선 정렬
   const sortedPrompts = [...koreanPrompts].sort((a, b) => {
+    const aIsCustom = !String(a.id).startsWith("kp-") ? -1 : 0;
+    const bIsCustom = !String(b.id).startsWith("kp-") ? -1 : 0;
+    if (aIsCustom !== bIsCustom) return aIsCustom - bIsCustom;
+
     const aMatch = a.targetGrade === studentGrade ? -1 : 0;
     const bMatch = b.targetGrade === studentGrade ? -1 : 0;
-    return aMatch - bMatch;
+    if (aMatch !== bMatch) return aMatch - bMatch;
+
+    return (b.createdAtMs || 0) - (a.createdAtMs || 0);
   });
 
   selectKoreanMission.innerHTML = sortedPrompts
-    .map((p) => `<option value="${p.id}">${p.title}</option>`)
+    .map((p) => {
+      const isNew = !String(p.id).startsWith("kp-");
+      const prefix = isNew ? "🆕 [선생님 새 과제] " : "";
+      return `<option value="${p.id}">${prefix}${p.title}</option>`;
+    })
     .join("");
 
   updateSelectedKoreanMissionDetail();
@@ -420,6 +433,7 @@ onAuthStateChanged(auth, async (user) => {
     viewStudent.classList.add("hidden");
 
     await loadKoreanPromptsFromCloud();
+    subscribeKoreanPromptsFromCloud();
     renderTeacherPromptsTable();
     populateRosterDropdown();
     await loadTeacherDashboard();
@@ -451,26 +465,77 @@ onAuthStateChanged(auth, async (user) => {
     viewTeacher.classList.add("hidden");
 
     await loadKoreanPromptsFromCloud();
+    subscribeKoreanPromptsFromCloud();
     renderStudentKoreanMissions();
     await loadStudentHistory();
   }
 });
 
 // ============================================================================
-// 5. 교사 한국어 제시문 출제/삭제 기능 (Firestore + LocalStorage 하이브리드 동기화)
+// 5. 교사 한국어 제시문 출제/삭제 및 학생 실시간 동기화 (cloze-a8e6c 완벽 호환)
 // ============================================================================
+// ★ 중요: cloze-a8e6c 프로젝트의 기존 Firestore 보안 규칙(firestore.rules)에서
+// 교사 쓰기 및 전교생(@smy.ms.kr) 읽기가 허용되고, MY Cloze 및 단어숲 단어장 목록에
+// 절대 영향을 주지 않는 `vocab_books/_settings` 문서의 `writing1_prompts` 필드를 사용합니다.
+let unsubscribePrompts = null;
+
+function subscribeKoreanPromptsFromCloud() {
+  if (unsubscribePrompts) return;
+  try {
+    const settingsDocRef = doc(db, "vocab_books", "_settings");
+    unsubscribePrompts = onSnapshot(
+      settingsDocRef,
+      (snap) => {
+        if (snap.exists() && Array.isArray(snap.data().writing1_prompts)) {
+          const cloudPrompts = snap.data().writing1_prompts;
+          const cloudIds = new Set(cloudPrompts.map((p) => p.id));
+          const defaultFiltered = DEFAULT_KOREAN_PROMPTS.filter((p) => !cloudIds.has(p.id));
+          koreanPrompts = [...cloudPrompts, ...defaultFiltered];
+          saveKoreanPromptsToStorage();
+        }
+        renderTeacherPromptsTable();
+        renderStudentKoreanMissions();
+      },
+      (err) => {
+        console.warn("실시간 과제 구독 대신 1회 조회를 수행합니다:", err);
+        loadKoreanPromptsFromCloud();
+      }
+    );
+  } catch (e) {
+    loadKoreanPromptsFromCloud();
+  }
+}
+
 async function loadKoreanPromptsFromCloud() {
   try {
-    const q = query(collection(db, "prompts"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    if (!snapshot.empty) {
-      const cloudPrompts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-      koreanPrompts = [...cloudPrompts, ...DEFAULT_KOREAN_PROMPTS];
+    const settingsDocRef = doc(db, "vocab_books", "_settings");
+    const snap = await getDoc(settingsDocRef);
+    if (snap.exists() && Array.isArray(snap.data().writing1_prompts)) {
+      const cloudPrompts = snap.data().writing1_prompts;
+      const cloudIds = new Set(cloudPrompts.map((p) => p.id));
+      const defaultFiltered = DEFAULT_KOREAN_PROMPTS.filter((p) => !cloudIds.has(p.id));
+      koreanPrompts = [...cloudPrompts, ...defaultFiltered];
       saveKoreanPromptsToStorage();
     }
   } catch (e) {
     loadKoreanPromptsFromStorage();
   }
+}
+
+async function syncPromptsToCloudDoc() {
+  if (!currentUser || currentUser.isDemo) return false;
+  const settingsDocRef = doc(db, "vocab_books", "_settings");
+  const customOnly = koreanPrompts.filter((p) => !String(p.id).startsWith("kp-"));
+  await setDoc(
+    settingsDocRef,
+    {
+      id: "_settings",
+      writing1_prompts: customOnly,
+      writing1_updatedAt: Date.now()
+    },
+    { merge: true }
+  );
+  return true;
 }
 
 function renderTeacherPromptsTable() {
@@ -485,10 +550,14 @@ function renderTeacherPromptsTable() {
   tbody.innerHTML = koreanPrompts
     .map((p) => {
       const gradeLabel = p.targetGrade === "all" ? "전학년 공통" : `${p.targetGrade}학년`;
+      const isCloud = !String(p.id).startsWith("kp-");
+      const syncBadge = isCloud
+        ? `<span style="font-size:0.72rem;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:99px;margin-left:4px;">☁️전교생 실시간 공유</span>`
+        : `<span style="font-size:0.72rem;background:#e2e8f0;color:#475569;padding:2px 6px;border-radius:99px;margin-left:4px;">기본예시</span>`;
       return `
         <tr>
           <td><strong>${gradeLabel}</strong></td>
-          <td>${p.title}</td>
+          <td>${p.title} ${syncBadge}</td>
           <td><strong>${p.koreanPrompt}</strong></td>
           <td>${p.targetGrammar || "-"}</td>
           <td>${p.referenceAnswer || "-"}</td>
@@ -504,9 +573,9 @@ function renderTeacherPromptsTable() {
       koreanPrompts = koreanPrompts.filter((p) => p.id !== targetId);
       saveKoreanPromptsToStorage();
       try {
-        await deleteDoc(doc(db, "prompts", targetId));
+        await syncPromptsToCloudDoc();
       } catch (e) {
-        // 로컬 전용 과제인 경우 무시
+        // 기본 예시이거나 로컬 전용 과제인 경우 무시
       }
       renderTeacherPromptsTable();
       renderStudentKoreanMissions();
@@ -525,29 +594,28 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
     return alert("과제명과 학생에게 제시할 한국어 문장을 입력해 주세요.");
   }
 
+  const isRealTeacher = currentUser && !currentUser.isDemo;
   const newPromptObj = {
-    id: `kp-${Date.now()}`,
+    id: isRealTeacher ? `cloud-${Date.now()}` : `kp-${Date.now()}`,
     targetGrade,
     title,
     koreanPrompt,
     targetGrammar,
-    referenceAnswer
+    referenceAnswer,
+    createdAtMs: Date.now()
   };
-
-  try {
-    if (!currentUser?.isDemo) {
-      const docRef = await addDoc(collection(db, "prompts"), {
-        ...newPromptObj,
-        createdAt: serverTimestamp()
-      });
-      newPromptObj.id = docRef.id;
-    }
-  } catch (e) {
-    console.warn("로컬 스토리지에 한국어 제시문 과제를 저장합니다.");
-  }
 
   koreanPrompts.unshift(newPromptObj);
   saveKoreanPromptsToStorage();
+
+  try {
+    if (isRealTeacher) {
+      await syncPromptsToCloudDoc();
+    }
+  } catch (e) {
+    console.error("클라우드 과제 저장 오류:", e);
+  }
+
   renderTeacherPromptsTable();
   renderStudentKoreanMissions();
 
@@ -555,7 +623,11 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   document.getElementById("new-prompt-target").value = "";
   document.getElementById("new-prompt-korean").value = "";
   document.getElementById("new-prompt-answer").value = "";
-  alert("새 한국어 제시문 영작 과제가 등록되었습니다!");
+  alert(
+    isRealTeacher
+      ? "✅ 새 한국어 제시문 영작 과제가 클라우드에 저장되어 전교생 화면에 즉시 공유되었습니다!"
+      : "⚡ 미리보기 모드에 과제가 추가되었습니다. (실제 전교생 기기 공유를 원하시면 우측 상단 Google 학교 계정 로그인으로 선생님 계정에 로그인한 뒤 등록해 주세요!)"
+  );
 });
 
 // ============================================================================
@@ -648,6 +720,9 @@ btnSubmitEssay.addEventListener("click", async () => {
     const todayStr = new Date().toISOString().split("T")[0];
 
     const newRecord = {
+      appTag: "writing1_submission", // cloze-a8e6c vocab_results 컬렉션 내 영작문 제출 식별 태그
+      bookId: "__writing1__", // 단어숲(danuhsup) 통계와 절대 섞이지 않도록 전용 bookId 부여
+      ts: Date.now(),
       uid: currentUser.uid,
       studentEmail: currentUser.email.toLowerCase(),
       studentId,
@@ -672,6 +747,7 @@ btnSubmitEssay.addEventListener("click", async () => {
       vocabularySuggestions: evalResult.vocabularySuggestions,
       overallComment: evalResult.overallComment,
       dateString: todayStr,
+      createdAtMs: Date.now(),
       createdAt: serverTimestamp()
     };
 
@@ -680,7 +756,8 @@ btnSubmitEssay.addEventListener("click", async () => {
       renderLocalStudentHistory(DEMO_SUBMISSIONS.filter((d) => d.studentId === studentId));
     } else {
       try {
-        await addDoc(collection(db, "submissions"), newRecord);
+        // cloze-a8e6c 보안 규칙에서 학생 쓰기 및 교사 전체 읽기가 허용된 `vocab_results` 컬렉션 사용
+        await addDoc(collection(db, "vocab_results"), newRecord);
         await loadStudentHistory();
       } catch (dbErr) {
         const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
@@ -769,20 +846,23 @@ function renderLocalStudentHistory(records) {
 async function loadStudentHistory() {
   try {
     const q = query(
-      collection(db, "submissions"),
-      where("uid", "==", currentUser.uid),
-      orderBy("createdAt", "desc")
+      collection(db, "vocab_results"),
+      where("uid", "==", currentUser.uid)
     );
     const snapshot = await getDocs(q);
 
-    if (snapshot.empty) {
+    const cloudDocs = snapshot.docs
+      .map((doc) => doc.data())
+      .filter((d) => d.appTag === "writing1_submission")
+      .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
+
+    if (cloudDocs.length === 0) {
       const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
       renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
       return;
     }
 
-    const docsData = snapshot.docs.map((doc) => doc.data());
-    renderLocalStudentHistory(docsData);
+    renderLocalStudentHistory(cloudDocs);
   } catch (error) {
     const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
     renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
@@ -854,9 +934,14 @@ function populateRosterDropdown() {
 
 async function loadTeacherDashboard() {
   try {
-    const q = query(collection(db, "submissions"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "vocab_results"),
+      where("appTag", "==", "writing1_submission")
+    );
     const snapshot = await getDocs(q);
-    const cloudList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const cloudList = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
     const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
     allTeacherSubmissions = [...cloudList, ...localSaved];
     if (allTeacherSubmissions.length === 0) {
