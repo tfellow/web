@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MY Kahoot - 서울문영여자중학교 실시간 스피드 퀴즈</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- SheetJS for Excel (.xlsx) Template Upload & Report Download -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- QRCode.js for Smartboard Instant QR Join -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Firebase App / Auth / Database (Compat SDK for seamless dynamic initialization) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+</head>
+<body>
+
+  <!-- ==================== 상단 네비게이션 바 ==================== -->
+  <header class="top-navbar">
+    <div class="brand-wrap" onclick="MYKahoot.switchMainView('landing')">
+      <div class="brand-logo">MY!</div>
+      <div class="brand-title">
+        <h1>MY Kahoot <span style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 7px; border-radius:6px; font-weight:700;">v1.0</span></h1>
+        <span class="brand-subtitle">Seoul Moonyoung Girls' Middle School · 서울문영여자중학교</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="conn-badge" id="connStatusBadge" title="클릭하여 Firebase 클라우드 연결 상태 확인" onclick="MYKahoot.openTeacherTab('settings')">
+        <span class="conn-dot" id="connStatusDot"></span>
+        <span id="connStatusText">실시간 동기화 준비됨</span>
+      </div>
+      <button class="btn btn-ghost-light btn-sm" id="btnSoundToggle" onclick="MYKahoot.toggleSound()">
+        🔊 효과음/BGM 켜짐
+      </button>
+      <button class="btn btn-accent btn-sm" onclick="MYKahoot.resumeOrStartHostScreen()">
+        📺 전자칠판 화면 (퀴즈 시작/진행)
+      </button>
+      <button class="btn btn-ghost-light btn-sm" onclick="MYKahoot.openStudentViewSmart()">
+        📱 학생 화면
+      </button>
+      <button class="btn btn-gold btn-sm" onclick="MYKahoot.switchMainView('teacher')">
+        👩‍🏫 교사 페이지 (출제·명단·통계)
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== 1. 랜딩 & 학생 입장 화면 ==================== -->
+  <section id="view-landing" class="view-section active">
+    <div class="landing-hero">
+      <div class="landing-container">
+        <!-- 좌측 소개 영역 -->
+        <div>
+          <div class="hero-badge">🏫 서울문영여자중학교 전용 스마트 수업 플랫폼</div>
+          <h2 class="hero-title">빠르고 정확할수록<br/>더 높은 점수! <span>MY Kahoot</span></h2>
+          <p class="hero-desc">
+            선생님 전자칠판의 <strong>게임 PIN 번호</strong>를 입력하고, 우리 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인하세요.<br/>
+            사전 등록된 문영여중 학생 명단과 자동 매칭되어 학번과 이름이 바로 연결됩니다!
+          </p>
+          <div class="hero-features">
+            <div class="hero-feature-item">⚡ <strong>0.01초 스피드 점수제</strong><br/><span style="font-size:0.8rem; opacity:0.85;">빨리 맞힐수록 최대 1,000점 획득</span></div>
+            <div class="hero-feature-item">🔥 <strong>연속 정답(Streak) 보너스</strong><br/><span style="font-size:0.8rem; opacity:0.85;">연속 정답 시 최대 +500점 추가</span></div>
+            <div class="hero-feature-item">🔐 <strong>@smy.ms.kr 명단 인증</strong><br/><span style="font-size:0.8rem; opacity:0.85;">등록된 우리 학교 학생만 안전 입장</span></div>
+            <div class="hero-feature-item">📺 <strong>모든 기기 완벽 호환</strong><br/><span style="font-size:0.8rem; opacity:0.85;">핸드폰 · 태블릿 · 노트북 · 전자칠판</span></div>
+          </div>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-gold btn-lg" onclick="MYKahoot.switchMainView('teacher')">
+              👩‍🏫 선생님 대시보드 열기
+            </button>
+            <button class="btn btn-ghost-light btn-lg" onclick="MYKahoot.quickStartDemoHost()">
+              📺 전자칠판 라이브 바로 체험하기
+            </button>
+          </div>
+        </div>
+
+        <!-- 우측 학생 입장 & 구글 학교 로그인 카드 -->
+        <div class="join-card">
+          <h2>🎮 학생 퀴즈방 입장</h2>
+          <p>전자칠판에 표시된 6자리 PIN 번호와 학교 이메일로 입장하세요</p>
+
+          <label style="display:block; text-align:left; font-weight:800; font-size:0.88rem; margin-bottom:0.35rem; color:var(--my-primary-dark);">
+            1단계: 게임 PIN 번호 입력
+          </label>
+          <input type="text" id="studentPinInput" class="pin-input-big" placeholder="PIN 번호" maxlength="6" />
+
+          <div class="google-login-box">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+              <span style="font-weight:800; font-size:0.9rem; color:var(--my-primary-dark);">2단계: 학교 구글 계정 인증</span>
+              <span class="domain-pill" id="allowedDomainBadge">@smy.ms.kr 전용</span>
+            </div>
+            <p style="font-size:0.82rem; color:var(--my-text-muted); margin-bottom:0.75rem;">
+              선생님께서 사전 등록한 <strong>서울문영여자중학교 학생 명단</strong>에 있는 이메일 주소만 로그인할 수 있습니다.
+            </p>
+
+            <!-- Google OAuth 버튼 (Firebase 연결 시 팝업 / 로컬 모드 시 이메일 검증) -->
+            <button class="btn btn-primary" style="width:100%; margin-bottom:0.75rem; padding:0.8rem;" onclick="MYKahoot.handleStudentGoogleLogin()">
+              <span style="background:#fff; color:#4285F4; font-weight:900; padding:2px 7px; border-radius:6px;">G</span>
+              학교 구글 계정(@smy.ms.kr)으로 로그인
+            </button>
+
+            <!-- 학교 이메일 직접 입력/선택 확인란 (교실 공용 태블릿 및 즉시 테스트 겸용) -->
+            <div style="border-top:1px dashed var(--my-border); padding-top:0.75rem; margin-top:0.4rem;">
+              <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--my-text-muted); margin-bottom:0.35rem;">
+                학교 이메일 주소 확인 (명단 자동 대조):
+              </label>
+              <div style="display:flex; gap:0.4rem;">
+                <input type="email" id="studentEmailInput" placeholder="Google 로그인하면 자동으로 채워져요" readonly style="font-size:0.9rem;" />
+                <button class="btn btn-outline btn-sm" onclick="MYKahoot.verifyStudentEmailFromRoster()">명단 확인</button>
+              </div>
+              <div id="studentMatchedInfo" style="margin-top:0.55rem; font-size:0.86rem; font-weight:800; display:none; padding:0.55rem 0.75rem; border-radius:8px;"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-accent btn-lg" style="width:100%; font-size:1.18rem;" onclick="MYKahoot.joinGameAsStudent()">
+            🚀 MY Kahoot 입장하기!
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 교사 대시보드 페이지 ==================== -->
+  <section id="view-teacher" class="view-section">
+    <div class="teacher-container">
+      <!-- 상단 타이틀 & 탭 메뉴 -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+        <div>
+          <h2 style="font-size:1.75rem; font-weight:900; color:var(--my-primary-dark);">👩‍🏫 MY Kahoot 교사 관리 센터</h2>
+          <p style="color:var(--my-text-muted); font-size:0.92rem;">퀴즈 템플릿 관리 · 전교생 명단(@smy.ms.kr) 화이트리스트 관리 · 학급/문항/학생별 정밀 통계</p>
+        </div>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+          <button class="btn btn-accent" onclick="MYKahoot.startHostLobbyWithCurrentQuiz()">
+            📺 선택된 퀴즈로 전자칠판 수업 시작
+          </button>
+        </div>
+      </div>
+
+      <div class="teacher-tabs">
+        <button class="tab-btn active" id="tabBtn-quizzes" onclick="MYKahoot.openTeacherTab('quizzes')">
+          📝 퀴즈 보관함 & 템플릿 업로드
+        </button>
+        <button class="tab-btn" id="tabBtn-roster" onclick="MYKahoot.openTeacherTab('roster')">
+          👩‍🎓 우리 학교 학생 명단 (@smy.ms.kr)
+        </button>
+        <button class="tab-btn" id="tabBtn-stats" onclick="MYKahoot.openTeacherTab('stats')">
+          📊 종합 통계 & 성적 리포트
+        </button>
+        <button class="tab-btn" id="tabBtn-settings" onclick="MYKahoot.openTeacherTab('settings')">
+          ⚙️ 도메인 보안 & Firebase 클라우드 설정
+        </button>
+      </div>
+
+      <!-- [탭 1] 퀴즈 보관함 & 엑셀 업로드 -->
+      <div id="tabPane-quizzes" class="tab-pane active">
+        <div class="grid-2">
+          <!-- 좌측: 퀴즈 세트 목록 및 엑셀 업로드 -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📂 퀴즈 세트 목록</div>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.createNewQuizSet()">+ 새 퀴즈 세트 만들기</button>
+            </div>
+            <div id="quizSetListContainer" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.25rem;"></div>
+
+            <div class="card-header" style="margin-top:1.5rem;">
+              <div class="card-title">📥 엑셀(.xlsx) / CSV 템플릿으로 문제 일괄 등록</div>
+              <button class="btn btn-gold btn-sm" onclick="MYKahoot.downloadQuizExcelTemplate()">
+                ⬇️ MY Kahoot 퀴즈 템플릿 다운로드
+              </button>
+            </div>
+            <div class="upload-zone" onclick="document.getElementById('quizFileInput').click()">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem;">📊</div>
+              <div style="font-weight:800; color:var(--my-primary-dark); margin-bottom:0.25rem;">
+                클릭하여 퀴즈 엑셀(.xlsx) 또는 CSV 파일 업로드
+              </div>
+              <div style="font-size:0.83rem; color:var(--my-text-muted);">
+                * <strong>MY Kahoot 전용 템플릿</strong> 및 기존 <strong>퀴즈 템플릿.xlsx (퀴즈앤 양식)</strong> 모두 자동 인식합니다!
+              </div>
+              <input type="file" id="quizFileInput" accept=".xlsx,.xls,.csv" style="display:none;" onchange="MYKahoot.handleQuizExcelUpload(event)" />
+            </div>
+          </div>
+
+          <!-- 우측: 현재 선택된 퀴즈의 문항 편집기 -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title" id="currentQuizTitleDisplay">선택된 퀴즈 문항 목록</div>
+                <span style="font-size:0.82rem; color:var(--my-text-muted);" id="currentQuizSubDisplay">문항별 제한시간과 2배 점수(Double Points)를 자유롭게 조절하세요.</span>
+              </div>
+              <div style="display:flex; gap:0.45rem;">
+                <button class="btn btn-primary btn-sm" onclick="MYKahoot.openQuestionModal(-1)">+ 문항 직접 추가</button>
+                <button class="btn btn-accent btn-sm" onclick="MYKahoot.startHostLobbyWithCurrentQuiz()">📺 이 퀴즈 시작</button>
+              </div>
+            </div>
+            <div id="questionListContainer" style="display:flex; flex-direction:column; gap:0.75rem; max-height:540px; overflow-y:auto;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [탭 2] 우리 학교 학생 명단 관리 (@smy.ms.kr 사전 등록 화이트리스트) -->
+      <div id="tabPane-roster" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">👩‍🎓 서울문영여자중학교 사전 등록 학생 명단 (로그인 허용 화이트리스트)</div>
+              <p style="font-size:0.86rem; color:var(--my-text-muted); margin-top:0.2rem;">
+                아래 명단에 등록된 <strong>학년 · 반 · 번호 · 이름 · 이메일(@smy.ms.kr)</strong> 학생만 퀴즈에 로그인할 수 있으며, 로그인 즉시 학번과 이름이 자동 부여됩니다.
+              </p>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="btn btn-gold btn-sm" onclick="MYKahoot.downloadRosterExcelTemplate()">
+                ⬇️ 학생명단 엑셀 양식 다운로드
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="document.getElementById('rosterFileInput').click()">
+                📤 학생명단 엑셀(.xlsx/CSV) 일괄 업로드
+              </button>
+              <input type="file" id="rosterFileInput" accept=".xlsx,.xls,.csv" style="display:none;" onchange="MYKahoot.handleRosterExcelUpload(event)" />
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.exportCurrentRosterToExcel()">
+                💾 현재 명단 엑셀 저장
+              </button>
+            </div>
+          </div>
+
+          <!-- 명단 업로드 옵션 및 개별 학생 추가 바 -->
+          <div style="background:#f8f6fc; border:1px solid var(--my-border); border-radius:12px; padding:1rem; margin-bottom:1.1rem;">
+            <div style="font-weight:800; font-size:0.88rem; color:var(--my-primary-dark); margin-bottom:0.55rem;">
+              ➕ 개별 학생 빠른 추가 / 수정
+            </div>
+            <div style="display:grid; grid-template-columns: 90px 90px 90px 140px 1fr auto; gap:0.5rem; align-items:center;">
+              <input type="number" id="addStuGrade" placeholder="학년(예:2)" min="1" max="3" value="2" />
+              <input type="number" id="addStuClass" placeholder="반(예:7)" min="1" max="20" value="7" />
+              <input type="number" id="addStuNum" placeholder="번호(예:21)" min="1" max="40" />
+              <input type="text" id="addStuName" placeholder="이름(예:김문영)" />
+              <input type="email" id="addStuEmail" placeholder="학교 이메일 (예: 20721@smy.ms.kr)" />
+              <button class="btn btn-primary btn-sm" onclick="MYKahoot.addSingleStudentToRoster()">추가/저장</button>
+            </div>
+          </div>
+
+          <!-- 필터 & 검색 바 -->
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.85rem; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <span style="font-weight:800; font-size:0.9rem;">학급 필터:</span>
+              <select id="rosterFilterClass" style="width:170px; padding:0.45rem 0.7rem;" onchange="MYKahoot.renderStudentRosterTable()">
+                <option value="ALL">전체 학년/반 보기</option>
+              </select>
+              <input type="text" id="rosterSearchInput" placeholder="이름 또는 이메일 검색..." style="width:220px; padding:0.45rem 0.75rem;" oninput="MYKahoot.renderStudentRosterTable()" />
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="badge badge-purple" id="rosterTotalCountBadge" style="font-size:0.88rem; padding:0.4rem 0.85rem;">총 20명 등록됨</span>
+              <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:#fecaca;" onclick="MYKahoot.clearAllRoster()">전체 초기화</button>
+            </div>
+          </div>
+
+          <!-- 학생 명단 테이블 -->
+          <div class="table-responsive" style="max-height:460px; overflow-y:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>학년</th>
+                  <th>반</th>
+                  <th>번호</th>
+                  <th>학번코드</th>
+                  <th>이름</th>
+                  <th>학교 구글 이메일 (@smy.ms.kr)</th>
+                  <th>누적 참여 횟수</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="studentRosterTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- [탭 3] 교사용 종합 통계 대시보드 -->
+      <div id="tabPane-stats" class="tab-pane">
+        <!-- 상단 회차 선택 및 엑셀 다운로드 바 -->
+        <div class="card">
+          <div class="card-header" style="margin-bottom:0;">
+            <div style="display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;">
+              <span class="card-title">📊 퀴즈 결과 리포트 선택:</span>
+              <select id="statsSessionSelect" style="width:340px; font-weight:700;" onchange="MYKahoot.renderStatsDashboard()"></select>
+              <select id="statsClassFilter" style="width:160px;" onchange="MYKahoot.renderStatsDashboard()">
+                <option value="ALL">전체 학급 보기</option>
+              </select>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="btn btn-success btn-sm" onclick="MYKahoot.exportSessionReportToExcel()">
+                📥 현재 회차 성적표·통계 엑셀(.xlsx) 다운로드
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.generateSampleQuizHistory()">
+                🧪 샘플 수업 통계 데이터 생성(체험용)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4대 핵심 요약 지표 -->
+        <div class="grid-4" style="margin-bottom:1.25rem;">
+          <div class="stat-metric-card">
+            <div class="stat-metric-label">참여 학생 수</div>
+            <div class="stat-metric-value" id="statMetricPlayers">0명</div>
+            <div class="stat-metric-sub" id="statMetricClassInfo">대상 학급 전체</div>
+          </div>
+          <div class="stat-metric-card">
+            <div class="stat-metric-label">학급 평균 정답률</div>
+            <div class="stat-metric-value" id="statMetricAccuracy">0%</div>
+            <div class="stat-metric-sub" id="statMetricAccuracySub">전 문항 평균 성취도</div>
+          </div>
+          <div class="stat-metric-card">
+            <div class="stat-metric-label">평균 응답 속도 (스피드)</div>
+            <div class="stat-metric-value" id="statMetricAvgTime">0.00초</div>
+            <div class="stat-metric-sub">정답 선택까지 걸린 평균 시간</div>
+          </div>
+          <div class="stat-metric-card">
+            <div class="stat-metric-label">학급 평균 점수 / 최고점</div>
+            <div class="stat-metric-value" id="statMetricAvgScore">0점</div>
+            <div class="stat-metric-sub" id="statMetricTopScorer">최고 득점자: -</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- 가장 많이 틀린 문항 워스트 3 (오답 노트/피드백용) -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🚨 집중 피드백 필요! 오답률 워스트 3 문항</div>
+              <span class="badge badge-red">수업 중 즉시 오답 해설용</span>
+            </div>
+            <div id="worstQuestionsContainer" style="display:flex; flex-direction:column; gap:0.85rem;"></div>
+          </div>
+
+          <!-- 학급별(반별) 누적 성취도 비교 & 개인별 성장 추이 -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏫 학급별(반별) 누적 비교 & 학생 성장 추이</div>
+            </div>
+            <div id="classComparisonContainer" style="margin-bottom:1.1rem;"></div>
+            <div style="border-top:1px solid var(--my-border); padding-top:0.9rem;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.6rem;">
+                <span style="font-weight:800; font-size:0.92rem; color:var(--my-primary-dark);">📈 학생 개인별 누적 성장 추이 조회:</span>
+                <select id="studentGrowthSelect" style="width:230px; padding:0.4rem;" onchange="MYKahoot.renderStudentGrowthTrend()"></select>
+              </div>
+              <div id="studentGrowthContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 문항별 선지 선택 비율 상세 분석표 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📋 문항별 정답률 & 선지(▲◆●■) 선택 비율 분석</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>문항</th>
+                  <th>문제 내용</th>
+                  <th>정답</th>
+                  <th>정답률</th>
+                  <th>평균 응답속도</th>
+                  <th>▲ 보기1</th>
+                  <th>◆ 보기2</th>
+                  <th>● 보기3</th>
+                  <th>■ 보기4</th>
+                </tr>
+              </thead>
+              <tbody id="questionStatsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 학생별 종합 성적표 (순위, 학번, 이름, 총점, 정답률, 평균 응답시간, 연속정답) -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏅 학생별 상세 성적 리포트 (스피드 점수 & 응답 시간 포함)</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>순위</th>
+                  <th>학년-반-번호</th>
+                  <th>이름</th>
+                  <th>학교 이메일</th>
+                  <th>총점 (스피드+보너스)</th>
+                  <th>정답 수 / 문항 수</th>
+                  <th>정답률</th>
+                  <th>평균 응답 속도</th>
+                  <th>최대 연속 정답(🔥)</th>
+                  <th>문항별 정오답</th>
+                </tr>
+              </thead>
+              <tbody id="studentStatsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- [탭 4] 도메인 보안 & Firebase 클라우드 설정 -->
+      <div id="tabPane-settings" class="tab-pane">
+        <div class="grid-2">
+          <!-- 학교 도메인 & 명단 화이트리스트 정책 -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔐 서울문영여자중학교 로그인 보안 정책</div>
+            </div>
+            <div style="margin-bottom:1rem;">
+              <label style="display:block; font-weight:800; margin-bottom:0.4rem;">허용할 학교 구글 도메인 주소</label>
+              <input type="text" id="settingAllowedDomain" value="@smy.ms.kr" />
+              <p style="font-size:0.82rem; color:var(--my-text-muted); margin-top:0.3rem;">
+                기본값: <code>@smy.ms.kr</code> (학생 이메일이 해당 도메인으로 끝나야만 로그인 가능)
+              </p>
+            </div>
+
+            <div style="margin-bottom:1rem; background:#f8f6fc; padding:1rem; border-radius:12px; border:1px solid var(--my-border);">
+              <label style="display:flex; align-items:center; gap:0.6rem; font-weight:800; cursor:pointer;">
+                <input type="checkbox" id="settingStrictRosterOnly" checked style="width:20px; height:20px;" />
+                <span>사전 등록된 [우리 학교 학생 명단]에 있는 이메일만 로그인 허용 (강력 추천)</span>
+              </label>
+              <p style="font-size:0.82rem; color:var(--my-text-muted); margin-top:0.4rem; padding-left:1.8rem;">
+                체크 시: 선생님께서 [우리 학교 학생 명단] 탭에 넣어두신 학년·반·번호·이름·이메일과 일치하는 학생만 입장할 수 있으며, 외부인이나 타 계정 입장을 100% 차단합니다.
+              </p>
+            </div>
+
+            <div style="margin-bottom:1.2rem; background:#f8f6fc; padding:1rem; border-radius:12px; border:1px solid var(--my-border);">
+              <label style="display:flex; align-items:center; gap:0.6rem; font-weight:800; cursor:pointer;">
+                <input type="checkbox" id="settingShowQuestionsOnStudent" checked style="width:20px; height:20px;" />
+                <span>학생 핸드폰/태블릿 화면에도 문제와 보기 텍스트 함께 표시</span>
+              </label>
+              <p style="font-size:0.82rem; color:var(--my-text-muted); margin-top:0.4rem; padding-left:1.8rem;">
+                교실 뒷자리 학생이나 시력이 약한 학생도 자신의 기기에서 문제를 선명하게 읽고 답할 수 있습니다.
+              </p>
+            </div>
+
+            <button class="btn btn-primary" onclick="MYKahoot.saveSecuritySettings()">💾 보안 및 수업 설정 저장</button>
+          </div>
+
+          <!-- Firebase 실시간 클라우드 & 구글 OAuth 연동 -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">☁️ Firebase 실시간 서버 & 구글 로그인 연결</div>
+              <span class="badge badge-purple" id="firebaseStatusPill">로컬/멀티탭 모드 작동 중</span>
+            </div>
+            <p style="font-size:0.88rem; color:var(--my-text-muted); line-height:1.55; margin-bottom:1rem;">
+              현재 상태에서도 <strong>한 PC 내 여러 창 연동 및 20명 가상 학생 시뮬레이션</strong>이 즉시 작동합니다.<br/>
+              교실에서 20명 학생들이 각자 스마트폰(LTE/와이파이)으로 접속하고 실제 Google 로그인 창을 띄우려면 아래에 Firebase 설정(firebaseConfig)을 붙여넣어 주세요.
+            </p>
+            <textarea id="firebaseConfigInput" rows="7" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "my-kahoot-smy.firebaseapp.com",
+  "databaseURL": "https://my-kahoot-smy-default-rtdb.firebaseio.com",
+  "projectId": "my-kahoot-smy"
+}' style="font-family:monospace; font-size:0.84rem; margin-bottom:0.85rem;"></textarea>
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="MYKahoot.connectFirebaseFromInput()">☁️ Firebase 연결 및 저장</button>
+              <button class="btn btn-outline" onclick="MYKahoot.disconnectFirebase()">로컬 모드로 전환</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 3. 전자칠판 라이브 호스트 화면 (교사/전자칠판용) ==================== -->
+  <section id="view-host" class="view-section">
+    <!-- 전자칠판 터치 및 키보드(→) 화살표 연동 플로팅 다음 버튼 -->
+    <button class="host-floating-next-arrow" id="hostFloatingNextArrow" onclick="MYKahoot.hostNextStepByArrow()" title="클릭하거나 키보드 오른쪽 화살표(→) / 스페이스바를 누르면 다음 화면으로 넘어갑니다!">
+      <span class="arrow-icon">❯</span>
+      <span class="arrow-label" id="hostFloatingArrowLabel">다음 (→)</span>
+    </button>
+
+    <div class="host-screen">
+
+      <!-- [호스트 단계 A] 입장 대기 로비 (PIN + QR + 학생 입장 목록) -->
+      <div id="hostStage-lobby" style="display:flex; flex-direction:column; flex:1; justify-content:space-between;">
+        <div class="lobby-header-box">
+          <div>
+            <div class="lobby-pin-label">📱 스마트폰/태블릿에서 접속 후 아래 게임 PIN 입력! (<span id="hostDomainNotice">@smy.ms.kr</span> 전용)</div>
+            <div class="lobby-pin-number" id="hostPinDisplay">742819</div>
+            <div style="font-size:0.95rem; font-weight:700; color:var(--my-primary);">
+              퀴즈 제목: <span id="hostQuizTitleLobby">-</span> (<span id="hostQuizCountLobby">0</span>문항)
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0.65rem;">
+            <button class="btn btn-accent btn-lg" style="font-size:1.45rem; padding:1.1rem 2.4rem; box-shadow: 0 6px 0 #9f1239;" onclick="MYKahoot.hostStartFirstQuestion()">
+              🚀 지금 바로 퀴즈 시작하기!
+            </button>
+            <span style="font-size:0.82rem; font-weight:700; color:var(--my-text-muted);">
+              * 20명 전원 안 들어와도(1명만 입장해도) 바로 시작 가능!
+            </span>
+          </div>
+
+          <div class="lobby-qr-box">
+            <div id="hostQrCodeContainer" style="background:#fff; padding:6px; border-radius:10px;"></div>
+            <div>
+              <div style="font-weight:900; color:var(--my-primary-dark); font-size:1.05rem; margin-bottom:0.25rem;">📷 QR코드 스캔 입장</div>
+              <div style="font-size:0.82rem; color:var(--my-text-muted); max-width:220px;">
+                카메라로 스캔하거나 아래 주소로 접속:<br/>
+                <strong style="color:var(--my-primary);">tfellow.github.io/web/kahoot/student.html</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 중앙: 입장한 학생 명단 칩 -->
+        <div style="flex:1; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
+            <div style="font-size:1.5rem; font-weight:900;">
+              👩‍🎓 입장 완료 학생: <span id="hostLobbyPlayerCount" style="color:var(--my-gold); font-size:2rem;">0</span>명
+              <span style="font-size:0.95rem; font-weight:600; opacity:0.85;">(서울문영여중 사전등록 명단 자동인증)</span>
+            </div>
+            <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+              <button class="btn btn-ghost-light" onclick="MYKahoot.spawnVirtualClassStudents(20)" title="수업 전 선생님 혼자 전자칠판 화면과 통계를 테스트할 때 우리 반 20명 가상 학생을 즉시 입장시킵니다.">
+                🤖 우리 반 가상 학생 20명 자동 입장 (테스트용)
+              </button>
+              <button class="btn btn-ghost-light" onclick="MYKahoot.openStudentWindowPreview()">
+                📱 새 창으로 학생 핸드폰 화면 띄우기
+              </button>
+            </div>
+          </div>
+
+          <div id="hostLobbyPlayersGrid" class="lobby-players-grid"></div>
+        </div>
+
+        <!-- 하단 시작 컨트롤 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.2); padding-top:1rem;">
+          <button class="btn btn-ghost-light" onclick="MYKahoot.switchMainView('teacher')">← 교사 페이지로 돌아가기</button>
+          <button class="btn btn-gold btn-lg" style="font-size:1.45rem; padding:1rem 2.6rem;" onclick="MYKahoot.hostStartFirstQuestion()">
+            🚀 퀴즈 시작하기! (Start MY Kahoot)
+          </button>
+        </div>
+      </div>
+
+      <!-- [호스트 단계 B] 문제 출제 & 실시간 스피드 카운트다운 + 결과 분포 -->
+      <div id="hostStage-question" style="display:none; flex-direction:column; flex:1; justify-content:space-between;">
+        <div class="host-q-topbar">
+          <div class="host-q-badge" id="hostQIndexBadge">문제 1 / 5</div>
+          <div class="host-q-badge" id="hostQPointsBadge" style="background:rgba(255,184,0,0.25); border:1px solid var(--my-gold); color:#ffd86b;">
+            ⚡ 스피드 배점: 최대 1,000점
+          </div>
+          <div style="display:flex; gap:0.6rem;">
+            <button class="btn btn-gold" id="hostBtnEndQuestionNow" onclick="MYKahoot.hostRevealAnswer()">⏱️ 즉시 마감 & 정답 공개</button>
+            <button class="btn btn-accent" id="hostBtnNextStep" style="display:none;" onclick="MYKahoot.hostGoToScoreboardOrPodium()">다음 (순위 발표) ➡️</button>
+          </div>
+        </div>
+
+        <!-- 초대형 문제 배너 -->
+        <div class="host-question-banner" id="hostQuestionText">문제 텍스트가 여기에 표시됩니다.</div>
+
+        <!-- 중앙: 타이머 원형 + (정답 공개 시 선지별 막대그래프) + 응답 완료 수 -->
+        <div class="host-middle-stage">
+          <div class="timer-circle" id="hostTimerCircle">
+            <div class="timer-number" id="hostTimerNumber">20</div>
+            <div style="font-size:0.8rem; font-weight:700; opacity:0.85;">초 남음</div>
+          </div>
+
+          <!-- 문제 풀이 중에는 스피드 안내 / 마감 후에는 선지 분포 그래프 & 해설 표시 -->
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <div id="hostQuestionLiveNotice" style="text-align:center;">
+              <div style="font-size:1.6rem; font-weight:900; color:var(--my-gold); margin-bottom:0.35rem;">
+                ⚡ 빨리 정답을 누를수록 더 높은 점수를 획득합니다!
+              </div>
+              <div style="font-size:1.05rem; opacity:0.9;">
+                핸드폰/태블릿 화면의 4색 도형 버튼(▲ ◆ ● ■)을 터치하세요!
+              </div>
+            </div>
+
+            <div id="hostResultDistWrap" style="display:none; width:100%;">
+              <div class="dist-bars-wrap" id="hostDistBarsContainer"></div>
+              <div id="hostExplanationBox" style="margin-top:0.85rem; background:rgba(255,255,255,0.16); padding:0.75rem 1.25rem; border-radius:14px; font-size:1.1rem; font-weight:700; text-align:center;"></div>
+            </div>
+          </div>
+
+          <div class="answer-counter-box">
+            <div class="answer-counter-num" id="hostAnsweredCount">0 / 20</div>
+            <div style="font-size:1rem; font-weight:800;">응답 완료</div>
+          </div>
+        </div>
+
+        <!-- 하단 4지선다 대형 카드 -->
+        <div class="answers-grid-4" id="hostAnswersGrid">
+          <div class="ans-card ans-0" id="hostAnsCard-0">
+            <div class="ans-shape">▲</div>
+            <span id="hostAnsText-0">보기 1</span>
+          </div>
+          <div class="ans-card ans-1" id="hostAnsCard-1">
+            <div class="ans-shape">◆</div>
+            <span id="hostAnsText-1">보기 2</span>
+          </div>
+          <div class="ans-card ans-2" id="hostAnsCard-2">
+            <div class="ans-shape">●</div>
+            <span id="hostAnsText-2">보기 3</span>
+          </div>
+          <div class="ans-card ans-3" id="hostAnsCard-3">
+            <div class="ans-shape">■</div>
+            <span id="hostAnsText-3">보기 4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- [호스트 단계 C] 문항 중간 순위 발표 (Scoreboard & 스피드왕/급상승 하이라이트) -->
+      <div id="hostStage-scoreboard" style="display:none; flex-direction:column; flex:1; justify-content:space-between;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <h2 style="font-size:2.2rem; font-weight:900;">🔥 실시간 스피드 순위표 (Top 5)</h2>
+          <button class="btn btn-gold btn-lg" onclick="MYKahoot.hostAdvanceToNextQuestion()">다음 문제 출제 ➡️</button>
+        </div>
+
+        <!-- 이번 라운드 스피드왕 & 순위 급상승 배너 -->
+        <div id="hostRoundHighlights" style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:0.85rem 0;"></div>
+
+        <!-- 상위 5명 리더보드 -->
+        <div id="hostMidLeaderboardList" class="leaderboard-list" style="width:100%; flex:1; justify-content:center;"></div>
+
+        <div style="text-align:center; opacity:0.85; font-size:0.95rem;">
+          * 정답 속도와 연속 정답(🔥Streak) 보너스가 반영된 실시간 점수입니다.
+        </div>
+      </div>
+
+      <!-- [호스트 단계 D] 최종 시상대(Podium 1~3위) & 1등~10등 순위표 (+ 전체 등수 펼치기 버튼) -->
+      <div id="hostStage-podium" style="display:none; flex-direction:column; flex:1; justify-content:space-between; overflow-y:auto;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="font-size:2.3rem; font-weight:900; color:var(--my-gold);">🏆 MY Kahoot 명예의 전당 시상식</h2>
+            <p style="font-size:1rem; opacity:0.9;">서울문영여자중학교 스피드 퀴즈 최종 결과</p>
+          </div>
+          <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+            <button class="btn btn-gold" id="btnShowTop10AfterPodium" onclick="MYKahoot.scrollToTop10Section()">
+              📋 1등 ~ 10등 순위표 보기
+            </button>
+            <button class="btn btn-ghost-light" onclick="MYKahoot.openTeacherStatsAfterGame()">
+              📊 교사 페이지에서 상세 통계·엑셀 다운로드
+            </button>
+          </div>
+        </div>
+
+        <!-- 1, 2, 3위 포디움 -->
+        <div class="podium-stage" id="hostPodiumStage"></div>
+
+        <!-- 포디움 아래: 기본 1등~10등 표시 + [모든 등수 보기] 버튼 -->
+        <div id="hostFinalLeaderboardSection" style="background:rgba(0,0,0,0.28); border-radius:24px; padding:1.75rem; margin-top:1rem;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.1rem;">
+            <div>
+              <h3 style="font-size:1.55rem; font-weight:900; color:#fff;" id="finalRankHeaderTitle">
+                🌟 최종 순위 발표 (1등 ~ 10등)
+              </h3>
+              <p style="font-size:0.88rem; opacity:0.85;">
+                기본적으로 상위 10명까지만 표시됩니다. 전체 등수를 확인하려면 우측 버튼을 눌러주세요.
+              </p>
+            </div>
+            <button class="btn btn-accent" id="btnToggleAllRanks" onclick="MYKahoot.toggleFullFinalLeaderboard()">
+              ➕ 모든 등수 보기 (11등 이하 전체 펼치기)
+            </button>
+          </div>
+
+          <div id="hostFinalLeaderboardList" class="leaderboard-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 4. 학생 모바일/태블릿 플레이 화면 ==================== -->
+  <section id="view-student" class="view-section">
+    <div class="student-screen">
+      <!-- 상단 학생 정보 상태바 -->
+      <div class="student-status-bar">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="badge badge-gold" id="stuBarClassNum">2-7 1번</span>
+          <span style="font-size:1.05rem;" id="stuBarName">김서연</span>
+          <button class="btn btn-ghost-light btn-sm" style="padding:0.2rem 0.5rem; font-size:0.74rem;" onclick="MYKahoot.switchMainView('landing')">계정 변경</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+          <button class="btn btn-gold btn-sm" style="padding:0.25rem 0.65rem; font-size:0.78rem;" onclick="MYKahoot.resumeOrStartHostScreen()">
+            📺 전자칠판 화면 보기
+          </button>
+          <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.25rem; cursor:pointer; background:rgba(255,255,255,0.15); padding:0.25rem 0.55rem; border-radius:8px;">
+            <input type="checkbox" id="stuToggleShowText" checked onchange="MYKahoot.refreshStudentPadText()" />
+            문제 함께 보기
+          </label>
+          <span class="streak-pill" id="stuBarStreak">🔥 0연속</span>
+          <span style="background:#fff; color:var(--my-primary-dark); padding:0.25rem 0.7rem; border-radius:999px; font-weight:900;" id="stuBarScore">0점</span>
+        </div>
+      </div>
+
+      <!-- [학생 단계 1] 대기 중 화면 -->
+      <div id="stuStage-waiting" class="student-feedback-screen" style="display:flex;">
+        <div style="font-size:3.8rem; margin-bottom:0.8rem;">🙌</div>
+        <h2 style="font-size:1.8rem; font-weight:900; margin-bottom:0.5rem;" id="stuWaitingTitle">입장 완료! 대기 중...</h2>
+        <p style="font-size:1.05rem; opacity:0.9; max-width:420px; line-height:1.5; margin-bottom:1.5rem;" id="stuWaitingDesc">
+          전자칠판 화면에 내 학번과 이름이 떴는지 확인해 보세요.<br/>선생님께서 전자칠판 화면에서 [퀴즈 시작하기]를 누르면 문제 화면으로 자동 전환됩니다!
+        </p>
+
+        <!-- 한 컴퓨터에서 테스트하시는 선생님을 위한 안내 박스 -->
+        <div style="background:rgba(255,255,255,0.12); border:1.5px dashed rgba(255,184,0,0.6); border-radius:16px; padding:1.1rem 1.4rem; max-width:460px;">
+          <div style="font-size:0.88rem; color:var(--my-gold); font-weight:800; margin-bottom:0.55rem;">
+            👩‍🏫 선생님 안내: 현재 화면은 [학생의 핸드폰 대기 화면]입니다!
+          </div>
+          <p style="font-size:0.82rem; opacity:0.9; margin-bottom:0.85rem; line-height:1.45;">
+            학생이 1명만 입장해도 바로 시작할 수 있습니다.<br/>
+            퀴즈를 시작하시려면 아래 버튼을 눌러 <strong>[전자칠판 화면]</strong>으로 전환해 주세요!
+          </p>
+          <button class="btn btn-gold" onclick="MYKahoot.resumeOrStartHostScreen()">
+            📺 전자칠판(선생님 화면)으로 이동하여 퀴즈 시작하기 ➡️
+          </button>
+        </div>
+      </div>
+
+      <!-- [학생 단계 2] 4색 정답 선택 패드 -->
+      <div id="stuStage-pad" class="student-pad-container" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; font-weight:800; opacity:0.9;">
+          <span id="stuPadQNum">문제 1</span>
+          <span id="stuPadSpeedHint" style="color:var(--my-gold);">⚡ 빨리 누를수록 고득점!</span>
+        </div>
+
+        <div class="student-question-box" id="stuPadQuestionText">
+          문제가 여기에 표시됩니다.
+        </div>
+
+        <div class="student-pad-grid">
+          <button class="student-pad-btn" style="background:var(--ans-red); box-shadow:0 6px 0 var(--ans-red-dark);" onclick="MYKahoot.submitStudentAnswer(0)">
+            <span class="pad-shape">▲</span>
+            <span id="stuPadOpt-0">보기 1</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-blue); box-shadow:0 6px 0 var(--ans-blue-dark);" onclick="MYKahoot.submitStudentAnswer(1)">
+            <span class="pad-shape">◆</span>
+            <span id="stuPadOpt-1">보기 2</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-yellow); box-shadow:0 6px 0 var(--ans-yellow-dark);" onclick="MYKahoot.submitStudentAnswer(2)">
+            <span class="pad-shape">●</span>
+            <span id="stuPadOpt-2">보기 3</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-green); box-shadow:0 6px 0 var(--ans-green-dark);" onclick="MYKahoot.submitStudentAnswer(3)">
+            <span class="pad-shape">■</span>
+            <span id="stuPadOpt-3">보기 4</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- [학생 단계 3] 응답 제출 후 결과/정오답 피드백 화면 -->
+      <div id="stuStage-feedback" class="student-feedback-screen" style="display:none;">
+        <div style="font-size:4rem; margin-bottom:0.6rem;" id="stuFeedbackEmoji">⚡</div>
+        <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.4rem;" id="stuFeedbackTitle">응답 제출 완료!</h2>
+        <div style="font-size:1.35rem; font-weight:900; color:var(--my-gold); margin-bottom:0.6rem;" id="stuFeedbackPoints"></div>
+        <p style="font-size:1rem; opacity:0.92; max-width:380px; line-height:1.5;" id="stuFeedbackSub"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 문항 직접 추가/편집 모달 ==================== -->
+  <div id="questionEditModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:300; align-items:center; justify-content:center; padding:1rem;">
+    <div class="card" style="max-width:640px; width:100%; margin:0;">
+      <div class="card-header">
+        <div class="card-title" id="qModalTitle">문항 편집</div>
+        <button class="btn btn-outline btn-sm" onclick="MYKahoot.closeQuestionModal()">닫기 ✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div>
+          <label style="font-weight:800; font-size:0.88rem;">문제 지문</label>
+          <input type="text" id="qModalQuestion" placeholder="문제를 입력하세요" />
+        </div>
+        <div class="grid-2" style="gap:0.65rem;">
+          <div>
+            <label style="font-weight:800; font-size:0.85rem; color:var(--ans-red);">▲ 보기 1 (빨강)</label>
+            <input type="text" id="qModalOpt0" />
+          </div>
+          <div>
+            <label style="font-weight:800; font-size:0.85rem; color:var(--ans-blue);">◆ 보기 2 (파랑)</label>
+            <input type="text" id="qModalOpt1" />
+          </div>
+          <div>
+            <label style="font-weight:800; font-size:0.85rem; color:var(--ans-yellow);">● 보기 3 (노랑)</label>
+            <input type="text" id="qModalOpt2" />
+          </div>
+          <div>
+            <label style="font-weight:800; font-size:0.85rem; color:var(--ans-green);">■ 보기 4 (초록)</label>
+            <input type="text" id="qModalOpt3" />
+          </div>
+        </div>
+        <div class="grid-3" style="gap:0.65rem;">
+          <div>
+            <label style="font-weight:800; font-size:0.85rem;">정답 번호</label>
+            <select id="qModalAnswer">
+              <option value="0">1번 (▲ 빨강)</option>
+              <option value="1">2번 (◆ 파랑)</option>
+              <option value="2">3번 (● 노랑)</option>
+              <option value="3">4번 (■ 초록)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-weight:800; font-size:0.85rem;">제한 시간(초)</label>
+            <input type="number" id="qModalTimeLimit" value="20" min="5" max="120" />
+          </div>
+          <div>
+            <label style="font-weight:800; font-size:0.85rem;">점수 배수</label>
+            <select id="qModalMultiplier">
+              <option value="1">기본 배점 (최대 1,000점)</option>
+              <option value="2">🔥 2배 찬스 (최대 2,000점)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-weight:800; font-size:0.85rem;">정답 해설 (선택사항 - 정답 공개 시 전자칠판에 표시)</label>
+          <input type="text" id="qModalExplanation" placeholder="예: 액체가 기화할 때 흡수하는 열에너지는 기화열입니다." />
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">
+          <button class="btn btn-outline" onclick="MYKahoot.closeQuestionModal()">취소</button>
+          <button class="btn btn-primary" onclick="MYKahoot.saveQuestionFromModal()">문항 저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>

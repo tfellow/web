@@ -1,0 +1,21 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "database.rules.json",
+      ".firebaserc",
+      "server.py",
+      "firebase_sdkconfig.json",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md",
+      "mykahoot-security-files/**",
+      "mykahoot-security-files.zip",
+      "**/*.zip"
+    ]
+  }
+}

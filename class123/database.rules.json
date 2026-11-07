@@ -31,6 +31,10 @@
       "$key": {
         ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $key"
       }
+    },
+    "teacherData": {
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
     }
   }
 }

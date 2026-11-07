@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MY Kahoot 학생용 - 서울문영여자중학교</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase App / Auth / Database -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+</head>
+<body data-role="student-only">
+
+  <!-- ==================== 학생 전용 상단 바 (교사 메뉴 없음!) ==================== -->
+  <header class="top-navbar">
+    <div class="brand-wrap">
+      <div class="brand-logo">MY!</div>
+      <div class="brand-title">
+        <h1>MY Kahoot <span style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 7px; border-radius:6px; font-weight:700;">학생용</span></h1>
+        <span class="brand-subtitle">Seoul Moonyoung Girls' Middle School · 서울문영여자중학교</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="conn-badge">
+        <span class="conn-dot" id="connStatusDot"></span>
+        <span id="connStatusText">실시간 연결됨</span>
+      </div>
+      <button class="btn btn-ghost-light btn-sm" id="btnSoundToggle" onclick="MYKahoot.toggleSound()">
+        🔊 효과음 켜짐
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== 1. 학생 로그인 & PIN 입력 화면 ==================== -->
+  <section id="view-landing" class="view-section active">
+    <div class="landing-hero" style="padding:1.25rem;">
+      <div style="max-width:460px; width:100%; margin:0 auto;">
+        <div class="join-card">
+          <div class="hero-badge" style="background:#ede9fe; color:var(--my-primary); border-color:#c4b5fd; margin-bottom:0.75rem;">
+            🏫 서울문영여자중학교 학생 전용 입장
+          </div>
+          <h2>🎮 MY Kahoot 퀴즈 입장</h2>
+          <p>교실 전자칠판에 표시된 6자리 PIN 번호와 학교 계정으로 입장하세요</p>
+
+          <label style="display:block; text-align:left; font-weight:800; font-size:0.88rem; margin-bottom:0.35rem; color:var(--my-primary-dark);">
+            1단계: 게임 PIN 번호 (6자리)
+          </label>
+          <input type="text" id="studentPinInput" class="pin-input-big" placeholder="PIN 번호" maxlength="6" />
+
+          <div class="google-login-box">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+              <span style="font-weight:800; font-size:0.9rem; color:var(--my-primary-dark);">2단계: 학교 구글 계정 인증</span>
+              <span class="domain-pill" id="allowedDomainBadge">@smy.ms.kr 전용</span>
+            </div>
+            <p style="font-size:0.82rem; color:var(--my-text-muted); margin-bottom:0.75rem;">
+              선생님께서 등록하신 <strong>서울문영여자중학교 학생 명단</strong>에 있는 이메일 주소만 입장할 수 있습니다.
+            </p>
+
+            <button class="btn btn-primary" style="width:100%; margin-bottom:0.75rem; padding:0.8rem;" onclick="MYKahoot.handleStudentGoogleLogin()">
+              <span style="background:#fff; color:#4285F4; font-weight:900; padding:2px 7px; border-radius:6px;">G</span>
+              학교 구글 계정(@smy.ms.kr)으로 로그인
+            </button>
+
+            <div style="border-top:1px dashed var(--my-border); padding-top:0.75rem; margin-top:0.4rem;">
+              <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--my-text-muted); margin-bottom:0.35rem;">
+                내 학교 이메일 주소 확인:
+              </label>
+              <div style="display:flex; gap:0.4rem;">
+                <input type="email" id="studentEmailInput" placeholder="Google 로그인하면 자동으로 채워져요" readonly style="font-size:0.9rem;" />
+                <button class="btn btn-outline btn-sm" onclick="MYKahoot.verifyStudentEmailFromRoster()">확인</button>
+              </div>
+              <div id="studentMatchedInfo" style="margin-top:0.55rem; font-size:0.86rem; font-weight:800; display:none; padding:0.55rem 0.75rem; border-radius:8px;"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-accent btn-lg" style="width:100%; font-size:1.18rem;" onclick="MYKahoot.joinGameAsStudent()">
+            🚀 MY Kahoot 입장하기!
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 학생 모바일/태블릿 플레이 화면 ==================== -->
+  <section id="view-student" class="view-section">
+    <div class="student-screen">
+      <div class="student-status-bar">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="badge badge-gold" id="stuBarClassNum">2-7 1번</span>
+          <span style="font-size:1.05rem;" id="stuBarName">김서연</span>
+          <button class="btn btn-ghost-light btn-sm" style="padding:0.2rem 0.5rem; font-size:0.74rem;" onclick="MYKahoot.switchMainView('landing')">계정 변경</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+          <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.25rem; cursor:pointer; background:rgba(255,255,255,0.15); padding:0.25rem 0.55rem; border-radius:8px;">
+            <input type="checkbox" id="stuToggleShowText" checked onchange="MYKahoot.refreshStudentPadText()" />
+            문제 함께 보기
+          </label>
+          <span class="streak-pill" id="stuBarStreak">🔥 0연속</span>
+          <span style="background:#fff; color:var(--my-primary-dark); padding:0.25rem 0.7rem; border-radius:999px; font-weight:900;" id="stuBarScore">0점</span>
+        </div>
+      </div>
+
+      <!-- [학생 단계 1] 대기 중 화면 -->
+      <div id="stuStage-waiting" class="student-feedback-screen" style="display:flex;">
+        <div style="font-size:3.8rem; margin-bottom:0.8rem;">🙌</div>
+        <h2 style="font-size:1.8rem; font-weight:900; margin-bottom:0.5rem;" id="stuWaitingTitle">입장 완료! 대기 중...</h2>
+        <p style="font-size:1.05rem; opacity:0.9; max-width:420px; line-height:1.5;" id="stuWaitingDesc">
+          전자칠판 화면에 내 학번과 이름이 떴는지 확인해 보세요.<br/>선생님께서 전자칠판에서 [퀴즈 시작하기]를 누르시면 문제 화면으로 자동 전환됩니다!
+        </p>
+      </div>
+
+      <!-- [학생 단계 2] 4색 정답 선택 패드 -->
+      <div id="stuStage-pad" class="student-pad-container" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; font-weight:800; opacity:0.9;">
+          <span id="stuPadQNum">문제 1</span>
+          <span id="stuPadSpeedHint" style="color:var(--my-gold);">⚡ 빨리 누를수록 고득점!</span>
+        </div>
+
+        <div class="student-question-box" id="stuPadQuestionText">
+          문제가 여기에 표시됩니다.
+        </div>
+
+        <div class="student-pad-grid">
+          <button class="student-pad-btn" style="background:var(--ans-red); box-shadow:0 6px 0 var(--ans-red-dark);" onclick="MYKahoot.submitStudentAnswer(0)">
+            <span class="pad-shape">▲</span>
+            <span id="stuPadOpt-0">보기 1</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-blue); box-shadow:0 6px 0 var(--ans-blue-dark);" onclick="MYKahoot.submitStudentAnswer(1)">
+            <span class="pad-shape">◆</span>
+            <span id="stuPadOpt-1">보기 2</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-yellow); box-shadow:0 6px 0 var(--ans-yellow-dark);" onclick="MYKahoot.submitStudentAnswer(2)">
+            <span class="pad-shape">●</span>
+            <span id="stuPadOpt-2">보기 3</span>
+          </button>
+          <button class="student-pad-btn" style="background:var(--ans-green); box-shadow:0 6px 0 var(--ans-green-dark);" onclick="MYKahoot.submitStudentAnswer(3)">
+            <span class="pad-shape">■</span>
+            <span id="stuPadOpt-3">보기 4</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- [학생 단계 3] 응답 제출 후 결과/정오답 피드백 화면 -->
+      <div id="stuStage-feedback" class="student-feedback-screen" style="display:none;">
+        <div style="font-size:4rem; margin-bottom:0.6rem;" id="stuFeedbackEmoji">⚡</div>
+        <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.4rem;" id="stuFeedbackTitle">응답 제출 완료!</h2>
+        <div style="font-size:1.35rem; font-weight:900; color:var(--my-gold); margin-bottom:0.6rem;" id="stuFeedbackPoints"></div>
+        <p style="font-size:1rem; opacity:0.92; max-width:380px; line-height:1.5;" id="stuFeedbackSub"></p>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>
