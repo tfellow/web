@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
+  getIdToken,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -20,7 +21,9 @@ import {
   orderBy,
   getDocs,
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
+  deleteField,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // 서울문영여자중학교 보안 명렬표(무키 AES-256-GCM 금고 & Firestore 서버 보호) 및 헬퍼 함수 불러오기
@@ -28,9 +31,8 @@ import {
   STUDENT_ROSTER,
   CLASSES_BY_GRADE,
   findStudentByEmail,
-  setRuntimeRoster,
-  decryptRosterVaultWithTeacherCode
-} from "./students.js";
+  setRuntimeRoster
+} from "./students.js?v=2";
 
 // ============================================================================
 // 1. 환경 설정 (서울문영여중 공식 Google 로그인 연동 cloze-a8e6c Firebase 프로젝트)
@@ -51,6 +53,15 @@ const TEACHER_EMAILS = [
   "tfellow@gmail.com",
   "engwords@gmail.com"
 ];
+
+// ★ 보안: Gemini API 키는 학생 브라우저에 절대 보내지 않아요.
+// 학생 답안 채점은 이 서버 함수(Supabase Edge Function)가 키를 대신 들고 Gemini 에 물어봐요.
+// 함수가 아직 없으면 내장 정밀 채점 엔진으로 자동 전환돼요.
+const GEMINI_PROXY_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co/functions/v1/writing1-grade";
+
+// 교사 전용 저장소 (Firestore 보안 규칙으로 교사만 읽고 쓸 수 있어요)
+const PRIVATE_CONFIG_PATH = ["writing1_private", "config"];
+const STUDENT_DIR_COLLECTION = "writing1_students";
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
@@ -2719,12 +2730,23 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-  // 1차로 Firestore 보안 문서(vocab_books/_settings)에서 과제 및 보안 명렬표 로드
+  if (isRegisteredTeacher) {
+    // 교사: 교사 전용 저장소에서 명렬표와 Gemini 키를 불러와요 (예전 위치에 남아 있으면 옮기고 지워요)
+    await loadTeacherPrivateConfig();
+  } else {
+    // 학생: 예전에 브라우저에 저장된 키가 있으면 지워요
+    geminiApiKey = "";
+    try { localStorage.removeItem("MY_WRITING_GEMINI_KEY"); } catch (e) {}
+  }
   await loadKoreanPromptsFromCloud();
-  const matchedStudent = findStudentByEmail(email, user.displayName || "");
+  let matchedStudent = findStudentByEmail(email, user.displayName || "");
+  if (!isRegisteredTeacher) {
+    const own = await lookupOwnStudentEntry(email);
+    if (own) matchedStudent = { ...(matchedStudent || {}), ...own };
+  }
 
-  const isTeacher =
-    isRegisteredTeacher || (!matchedStudent && !/^2026\d{5}@smy\.ms\.kr$/.test(email));
+  // 교사 화면은 등록된 교사 이메일만 열 수 있어요
+  const isTeacher = isRegisteredTeacher;
 
   if (isTeacher) {
     userInfoText.textContent = `${user.displayName || email} (교사 관리자)`;
@@ -2831,45 +2853,45 @@ function updateGeminiConfigUI() {
   }
   if (vaultStatus) {
     if (STUDENT_ROSTER.length > 0) {
-      vaultStatus.textContent = `✅ Firestore 보안 서버 동기화 완료 (전교생 ${STUDENT_ROSTER.length}명 보호 중)`;
+      vaultStatus.textContent = `✅ 교사 전용 저장소에 ${STUDENT_ROSTER.length}명 등록됨`;
       vaultStatus.style.color = "#15803d";
     } else {
-      vaultStatus.textContent = "⚠️ 미등록 (우측에 교사 보안 코드를 1회 입력해 Firestore 보안 서버에 등록하세요)";
+      vaultStatus.textContent = "⚠️ 미등록 (오른쪽 버튼으로 '학번 이름' 목록 파일을 올려 주세요)";
       vaultStatus.style.color = "#b45309";
     }
   }
 }
 
-document.getElementById("btn-sync-secure-roster")?.addEventListener("click", async () => {
-  const codeInput = document.getElementById("input-roster-secret-code");
-  const code = (codeInput?.value || "").trim();
-  if (!code) {
-    return alert("교사 보안 코드를 입력해 주세요.");
+document.getElementById("btn-sync-secure-roster")?.addEventListener("click", () => {
+  document.getElementById("input-roster-file")?.click();
+});
+
+document.getElementById("input-roster-file")?.addEventListener("change", async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  ev.target.value = "";
+  if (!file) return;
+  if (!currentUser || !TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase())) {
+    return alert("교사 계정으로 로그인해야 명렬표를 올릴 수 있어요.");
   }
-  const compactList = await decryptRosterVaultWithTeacherCode(code);
-  if (!compactList || compactList.length === 0) {
-    return alert("❌ 교사 보안 코드가 일치하지 않습니다.");
+  const compactList = parseRosterText(await file.text());
+  if (compactList.length === 0) {
+    return alert("❌ 파일에서 '학번 이름' 줄을 찾지 못했어요. 예: 10101 김문영");
   }
+  if (!confirm(`학생 ${compactList.length}명을 교사 전용 저장소에 올릴까요? (기존 명렬표는 바뀝니다)`)) return;
   try {
-    const settingsDocRef = doc(db, "vocab_books", "_settings");
+    setRuntimeRoster(compactList);
     await setDoc(
-      settingsDocRef,
-      {
-        id: "_settings",
-        writing1_roster: compactList,
-        writing1_updatedAt: Date.now()
-      },
+      doc(db, ...PRIVATE_CONFIG_PATH),
+      { roster: compactList, updatedAt: Date.now() },
       { merge: true }
     );
-    if (codeInput) codeInput.value = "";
+    await writeStudentDirectory(STUDENT_ROSTER);
     updateGeminiConfigUI();
     populateRosterDropdown();
     applyTeacherFilters();
-    alert(
-      `✅ 전교생 ${STUDENT_ROSTER.length}명 명렬표가 Google Firestore 보안 서버(vocab_books/_settings)에 영구 등록되었습니다!\n이제 외부인은 절대 열람할 수 없으며, 학교 계정(@smy.ms.kr) 및 교사 로그인 시에만 서버에서 안전하게 불러옵니다.`
-    );
+    alert(`✅ 학생 ${STUDENT_ROSTER.length}명 명렬표를 교사 전용 저장소에 올렸어요. 학생은 자기 이름만 볼 수 있어요.`);
   } catch (e) {
-    alert("Firestore 저장 중 오류가 발생했습니다: " + e.message);
+    alert("저장 중 오류가 발생했습니다: " + e.message);
   }
 });
 
@@ -2925,28 +2947,12 @@ function subscribeKoreanPromptsFromCloud() {
       (snap) => {
         if (snap.exists()) {
           const data = snap.data();
-          if (typeof data.writing1_geminiKey === "string" && data.writing1_geminiKey) {
-            geminiApiKey = data.writing1_geminiKey;
-            localStorage.setItem("MY_WRITING_GEMINI_KEY", geminiApiKey);
-          }
           if (typeof data.writing1_geminiEnabled === "boolean") {
             geminiAiEnabled = data.writing1_geminiEnabled;
             localStorage.setItem("MY_WRITING_GEMINI_ENABLED", String(geminiAiEnabled));
           }
-          if (Array.isArray(data.writing1_roster) && data.writing1_roster.length > 0) {
-            setRuntimeRoster(data.writing1_roster);
-            if (currentStudentInfo && currentStudentInfo.studentId !== "TEACHER" && currentUser?.email) {
-              const refreshed = findStudentByEmail(currentUser.email, currentUser.displayName || "");
-              if (refreshed && refreshed.name && refreshed.name !== "학생") {
-                currentStudentInfo.name = refreshed.name;
-                document.getElementById("student-name").value = refreshed.name;
-                userInfoText.textContent = `${currentStudentInfo.grade}학년 ${currentStudentInfo.classNum}반 ${currentStudentInfo.number}번 ${refreshed.name} (${currentStudentInfo.studentId})`;
-              }
-            }
-            populateRosterDropdown();
-            if (!viewTeacher.classList.contains("hidden")) {
-              applyTeacherFilters();
-            }
+          if (data.writing1_geminiKey !== undefined || data.writing1_roster !== undefined) {
+            migrateLegacySecrets(data);
           }
           updateGeminiConfigUI();
 
@@ -2977,16 +2983,12 @@ async function loadKoreanPromptsFromCloud() {
     const snap = await getDoc(settingsDocRef);
     if (snap.exists()) {
       const data = snap.data();
-      if (typeof data.writing1_geminiKey === "string" && data.writing1_geminiKey) {
-        geminiApiKey = data.writing1_geminiKey;
-        localStorage.setItem("MY_WRITING_GEMINI_KEY", geminiApiKey);
-      }
       if (typeof data.writing1_geminiEnabled === "boolean") {
         geminiAiEnabled = data.writing1_geminiEnabled;
         localStorage.setItem("MY_WRITING_GEMINI_ENABLED", String(geminiAiEnabled));
       }
-      if (Array.isArray(data.writing1_roster) && data.writing1_roster.length > 0) {
-        setRuntimeRoster(data.writing1_roster);
+      if (data.writing1_geminiKey !== undefined || data.writing1_roster !== undefined) {
+        await migrateLegacySecrets(data);
       }
       updateGeminiConfigUI();
 
@@ -3005,20 +3007,143 @@ async function loadKoreanPromptsFromCloud() {
 
 async function syncPromptsToCloudDoc() {
   if (!currentUser || currentUser.isDemo) return false;
-  const settingsDocRef = doc(db, "vocab_books", "_settings");
-  await setDoc(
-    settingsDocRef,
-    {
-      id: "_settings",
-      writing1_prompts: koreanPrompts,
-      writing1_geminiKey: geminiApiKey || "",
-      writing1_geminiEnabled: Boolean(geminiAiEnabled),
-      writing1_fullSync: true,
-      writing1_updatedAt: Date.now()
-    },
-    { merge: true }
-  );
+  const isRegistered = TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase());
+  // 1) 교사 전용 저장소에 먼저 저장해요 (보안 규칙이 아직 없으면 실패할 수 있어요)
+  let privateSaved = false;
+  if (isRegistered) {
+    try {
+      const priv = { geminiKey: geminiApiKey || "", updatedAt: Date.now() };
+      if (STUDENT_ROSTER.length > 0) {
+        priv.roster = STUDENT_ROSTER.map((st) => `${st.studentId}:${st.name}`);
+      }
+      await setDoc(doc(db, ...PRIVATE_CONFIG_PATH), priv, { merge: true });
+      privateSaved = true;
+    } catch (e) {
+      console.warn("교사 전용 저장소에 저장하지 못했어요 (Firestore 보안 규칙을 확인해 주세요):", e);
+    }
+  }
+  // 2) 학생도 읽는 설정 문서에는 과제만 저장해요.
+  //    키·명렬표가 교사 전용 저장소에 안전하게 옮겨졌을 때만 예전 자리에서 지워요.
+  const pub = {
+    id: "_settings",
+    writing1_prompts: koreanPrompts,
+    writing1_geminiEnabled: Boolean(geminiAiEnabled),
+    writing1_fullSync: true,
+    writing1_updatedAt: Date.now()
+  };
+  if (privateSaved) {
+    pub.writing1_geminiKey = deleteField();
+    pub.writing1_roster = deleteField();
+  }
+  await setDoc(doc(db, "vocab_books", "_settings"), pub, { merge: true });
   return true;
+}
+
+// ---------------------------------------------------------------------------
+// 교사 전용 저장소: 명렬표 + Gemini 키
+// ---------------------------------------------------------------------------
+async function loadTeacherPrivateConfig() {
+  try {
+    const snap = await getDoc(doc(db, ...PRIVATE_CONFIG_PATH));
+    if (snap.exists()) {
+      const data = snap.data();
+      if (typeof data.geminiKey === "string") {
+        geminiApiKey = data.geminiKey;
+        localStorage.setItem("MY_WRITING_GEMINI_KEY", geminiApiKey);
+      }
+      if (Array.isArray(data.roster) && data.roster.length > 0) {
+        setRuntimeRoster(data.roster);
+      }
+    }
+  } catch (e) {
+    console.warn("교사 전용 설정을 불러오지 못했어요:", e);
+  }
+}
+
+// 예전에 학생도 읽을 수 있는 문서(vocab_books/_settings)에 저장했던 키·명렬표를
+// 교사가 접속하면 교사 전용 저장소로 옮기고 원래 자리에서는 지워요.
+let legacyMigrationRunning = false;
+async function migrateLegacySecrets(data) {
+  if (!currentUser || !TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase())) return;
+  if (legacyMigrationRunning) return;
+  legacyMigrationRunning = true;
+  try {
+    const update = { updatedAt: Date.now() };
+    if (typeof data.writing1_geminiKey === "string" && data.writing1_geminiKey) {
+      geminiApiKey = data.writing1_geminiKey;
+      update.geminiKey = geminiApiKey;
+      localStorage.setItem("MY_WRITING_GEMINI_KEY", geminiApiKey);
+    } else if (geminiApiKey) {
+      update.geminiKey = geminiApiKey;
+    }
+    const legacyRoster = Array.isArray(data.writing1_roster) ? data.writing1_roster : [];
+    if (legacyRoster.length > 0) {
+      setRuntimeRoster(legacyRoster);
+      update.roster = legacyRoster;
+    }
+    await setDoc(doc(db, ...PRIVATE_CONFIG_PATH), update, { merge: true });
+    if (legacyRoster.length > 0) await writeStudentDirectory(STUDENT_ROSTER);
+    await setDoc(
+      doc(db, "vocab_books", "_settings"),
+      { writing1_geminiKey: deleteField(), writing1_roster: deleteField() },
+      { merge: true }
+    );
+    populateRosterDropdown();
+    updateGeminiConfigUI();
+  } catch (e) {
+    console.warn("예전 설정을 옮기지 못했어요:", e);
+  } finally {
+    legacyMigrationRunning = false;
+  }
+}
+
+// 학생 한 명씩 자기 줄만 읽을 수 있도록 이메일별 문서로 나눠 저장해요
+async function writeStudentDirectory(list) {
+  const rows = (list || []).filter((s) => s && s.email && s.studentId && s.name);
+  for (let i = 0; i < rows.length; i += 400) {
+    const batch = writeBatch(db);
+    rows.slice(i, i + 400).forEach((s) => {
+      batch.set(doc(db, STUDENT_DIR_COLLECTION, String(s.email).toLowerCase()), {
+        studentId: s.studentId,
+        name: s.name,
+        updatedAt: Date.now()
+      });
+    });
+    await batch.commit();
+  }
+}
+
+async function lookupOwnStudentEntry(email) {
+  try {
+    const snap = await getDoc(doc(db, STUDENT_DIR_COLLECTION, String(email).toLowerCase()));
+    if (!snap.exists()) return null;
+    const d = snap.data();
+    const sId = String(d.studentId || "");
+    if (!/^\d{5}$/.test(sId)) return null;
+    return {
+      grade: Number(sId[0]),
+      classNum: Number(sId.slice(1, 3)),
+      number: Number(sId.slice(3, 5)),
+      studentId: sId,
+      name: String(d.name || "").trim() || "학생",
+      email: String(email).toLowerCase()
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+// "10101 김문영", "10101,김문영", "10101:김문영" 같은 줄을 읽어요
+function parseRosterText(text) {
+  const out = [];
+  const seen = new Set();
+  String(text || "").split(/\r?\n/).forEach((line) => {
+    const m = line.match(/(?:2026)?([1-3]\d{4})\D+([가-힣A-Za-z][가-힣A-Za-z ]{0,19})/);
+    if (!m || seen.has(m[1])) return;
+    seen.add(m[1]);
+    out.push(`${m[1]}:${m[2].trim()}`);
+  });
+  return out;
 }
 
 function formatLimitLabel(sec) {
@@ -3384,7 +3509,7 @@ async function callGeminiHybridGrading({
   studentContent,
   fetchWithTimeout
 }) {
-  if (!geminiAiEnabled || !geminiApiKey || !studentContent) return null;
+  if (!geminiAiEnabled || !studentContent) return null;
   try {
     const promptText = `당신은 한국 중학교 영어 서술형 채점 교사입니다.
 한국어 제시문: "${koreanPrompt || "자유 주제"}"
@@ -3402,26 +3527,44 @@ async function callGeminiHybridGrading({
   "overallComment": "학생을 위한 1~2문장 한국어 총평"
 }`;
 
-    const res = await fetchWithTimeout(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(
-        geminiApiKey
-      )}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": geminiApiKey
+    const geminiBody = JSON.stringify({
+      contents: [{ parts: [{ text: promptText }] }],
+      generationConfig: {
+        temperature: 0.1,
+        responseMimeType: "application/json"
+      }
+    });
+    let res = null;
+    // 1) 서버 함수 (키는 서버에만 있어요)
+    try {
+      const idToken = currentUser ? await getIdToken(currentUser) : "";
+      if (idToken) {
+        res = await fetchWithTimeout(
+          GEMINI_PROXY_URL,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: geminiBody
+          },
+          6000
+        );
+      }
+    } catch (e) {
+      res = null;
+    }
+    // 2) 교사 화면에서 테스트할 때만: 교사 브라우저에 있는 키로 직접 호출
+    if ((!res || !res.ok) && geminiApiKey && currentUser && TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase())) {
+      res = await fetchWithTimeout(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": geminiApiKey },
+          body: geminiBody
         },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: promptText }] }],
-          generationConfig: {
-            temperature: 0.1,
-            responseMimeType: "application/json"
-          }
-        })
-      },
-      2200
-    );
+        2200
+      );
+    }
+    if (!res) return null;
     if (!res.ok) return null;
     const data = await res.json();
     const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;

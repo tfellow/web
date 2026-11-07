@@ -98,5 +98,16 @@ service cloud.firestore {
       allow read: if isSchool();
       allow write: if vocabTeacher();
     }
+
+    // ===================== AI 영작문 튜터 (writing1) =====================
+    // 명렬표와 Gemini 키: 교사만 읽고 쓰기 (학생은 볼 수 없어요)
+    match /writing1_private/{id} {
+      allow read, write: if vocabTeacher();
+    }
+    // 학생 한 명의 학번·이름: 본인과 교사만 읽기, 교사만 쓰기
+    match /writing1_students/{email} {
+      allow read: if vocabTeacher() || (isSchool() && myEmail() == email);
+      allow write: if vocabTeacher();
+    }
   }
 }

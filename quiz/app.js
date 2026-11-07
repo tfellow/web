@@ -38,6 +38,50 @@ const SUPABASE_KEY = 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF';
 const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzem2As4a_5FqOJ5KTF49AiVgT8M4h_cDrOEMMlZZmEvbD-bHZD-RSDDKHOKL3o_copYQ/exec';
 
 let sbClient = null;
+
+// ---------------------------------------------------------------------------
+// 보안 도우미
+// 학생이 입력한 글(닉네임·문제·보기)은 화면에 그릴 때 HTML 로 해석되지 않도록
+// 꺾쇠·따옴표를 모양이 비슷한 안전한 글자로 바꿔 둡니다.
+// ---------------------------------------------------------------------------
+function safeText(v) {
+  if (v === null || v === undefined) return v;
+  return String(v)
+    .replace(/</g, '＜').replace(/>/g, '＞')
+    .replace(/"/g, '＂').replace(/'/g, '＇').replace(/`/g, '｀');
+}
+function sanitizeUser(u) {
+  if (!u || typeof u !== 'object') return u;
+  ['email', 'nickname', 'name', 'classId'].forEach(k => { if (typeof u[k] === 'string') u[k] = safeText(u[k]); });
+  return u;
+}
+function sanitizeQuestion(q) {
+  if (!q || typeof q !== 'object') return q;
+  ['id', 'category', 'question', 'author', 'status'].forEach(k => { if (typeof q[k] === 'string') q[k] = safeText(q[k]); });
+  if (Array.isArray(q.options)) q.options = q.options.map(o => safeText(o));
+  return q;
+}
+
+// 구글 시트 서버가 "누가 보냈는지" 확인할 수 있도록 로그인 증명(토큰)을 함께 보냅니다.
+const GOOGLE_ID_TOKEN_KEY = 'qq_google_id_token';
+async function getAuthProof() {
+  const proof = {};
+  try {
+    if (sbClient && sbClient.auth) {
+      const { data } = await sbClient.auth.getSession();
+      const token = data && data.session && data.session.access_token;
+      if (token) proof.token = token;
+    }
+  } catch (e) {}
+  try {
+    const raw = sessionStorage.getItem(GOOGLE_ID_TOKEN_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved && saved.t && saved.exp * 1000 > Date.now() + 60000) proof.idToken = saved.t;
+    }
+  } catch (e) {}
+  return proof;
+}
 try {
   if (window.supabase && window.supabase.createClient) {
     sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -437,10 +481,11 @@ function loadPersistentState() {
     }
 
     const customQs = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOM_QUESTIONS) || '[]');
-    state.questions = [...DEFAULT_QUESTIONS, ...customQs];
+    state.questions = [...DEFAULT_QUESTIONS, ...customQs.map(sanitizeQuestion)];
 
     state.allUsers = JSON.parse(localStorage.getItem(STORAGE_KEYS.ALL_USERS) || '{}');
     Object.values(state.allUsers).forEach(u => {
+      sanitizeUser(u);
       if (u && u.classId && u.email !== '__admin_config__') {
         u.classId = normalizeClassId(u.classId);
       }
@@ -452,6 +497,7 @@ function loadPersistentState() {
 
     const savedCurrent = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || 'null');
     if (savedCurrent && savedCurrent.email) {
+      sanitizeUser(savedCurrent);
       savedCurrent.classId = normalizeClassId(savedCurrent.classId);
       state.currentUser = state.allUsers[savedCurrent.email] || savedCurrent;
       state.currentUser.classId = normalizeClassId(state.currentUser.classId);
@@ -585,6 +631,9 @@ async function handleGoogleCredentialResponse(response) {
     if (errEl) errEl.textContent = 'Google 인증 정보를 읽지 못했습니다. 다시 시도해 주세요.';
     return;
   }
+  try {
+    sessionStorage.setItem(GOOGLE_ID_TOKEN_KEY, JSON.stringify({ t: response.credential, exp: payload.exp || 0 }));
+  } catch (e) {}
 
   // 같은 구글 로그인으로 MY English 통합 로그인(Supabase)에도 들어가 두면 독서 여권·MY Grammar 에서 다시 로그인하지 않아도 돼요
   if (sbClient && sbClient.auth) {
@@ -735,8 +784,8 @@ function handleProfileSaveSubmit(event) {
   const emailRaw = document.getElementById('loginEmail').value.trim().toLowerCase();
   const classId = document.getElementById('loginClass').value;
   const studentNo = document.getElementById('loginNumber').value;
-  const nickname = document.getElementById('loginNickname').value.trim();
-  const name = document.getElementById('loginName').value.trim();
+  const nickname = safeText(document.getElementById('loginNickname').value.trim());
+  const name = safeText(document.getElementById('loginName').value.trim());
 
   const isTeacherAdmin = isTeacherEmail(emailRaw) || (state.currentUser && state.currentUser.isAdmin);
 
@@ -767,6 +816,8 @@ async function signOutGoogle() {
 }
 
 function quickLogin(mode) {
+  // 내 컴퓨터에서 파일로 열었을 때만 쓰는 미리보기예요. 웹 주소에서는 작동하지 않아요.
+  if (location.protocol !== 'file:') return;
   if (mode === 'student') {
     loginWithProfile({
       email: 'moonyoung07@smy.ms.kr',
@@ -1687,7 +1738,7 @@ function submitAnswer(selectedNum) {
     expTitle.textContent = `💡 아쉽네요! 오답입니다. (도전 격려 +${earnedXp} XP)`;
   }
 
-  expText.innerHTML = `<strong>정답:</strong> ${correctNum}번 [${q.questionObj.options[correctNum - 1]}]`;
+  expText.innerHTML = `<strong>정답:</strong> ${correctNum}번 [${safeText(q.questionObj.options[correctNum - 1])}]`;
   expBox.classList.remove('hidden');
 
   if (user.level > prevLevel) {
@@ -3203,17 +3254,37 @@ function saveGasUrl() {
 async function postToGoogleSheets(payload) {
   if (!state.gasUrl) return null;
   try {
+    const proof = await getAuthProof();
     const res = await fetch(state.gasUrl, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ ...payload, ...proof })
     });
     return res;
   } catch (e) {
     console.warn('Google Sheets 전송 실패:', e);
     return null;
   }
+}
+
+// 시트 데이터 읽기: 로그인 증명을 보내야 서버가 알맞은 범위만 돌려줘요
+// (학생에게는 다른 학생의 실명·이메일·번호를 보내지 않아요).
+async function fetchInitialData() {
+  const proof = await getAuthProof();
+  try {
+    const res = await fetch(state.gasUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'getInitialData', ...proof })
+    });
+    if (res.ok) {
+      const data = await res.clone().json();
+      if (data && Array.isArray(data.users)) return res;
+    }
+  } catch (e) {}
+  // 아직 예전 Apps Script 가 배포되어 있으면 예전 방식으로 읽어요
+  return fetch(`${state.gasUrl}?action=getInitialData`);
 }
 
 function normalizeCategoryId(raw) {
@@ -3336,7 +3407,7 @@ async function uploadDefaultQuestionsToSheet() {
 
   let existingSheetIds = new Set();
   try {
-    const res = await fetch(`${state.gasUrl}?action=getInitialData`);
+    const res = await fetchInitialData();
     if (res.ok) {
       const data = await res.json();
       if (data.questions && Array.isArray(data.questions)) {
@@ -3369,10 +3440,17 @@ async function syncWithGoogleSheets(showNotification = true) {
   }
 
   try {
-    const res = await fetch(`${state.gasUrl}?action=getInitialData`);
+    const res = await fetchInitialData();
     if (res.ok) {
       const data = await res.json();
       if (data.users && Array.isArray(data.users)) {
+        data.users.forEach(sanitizeUser);
+        // 학생 계정은 서버가 준 공개 랭킹만 보관해요 (예전에 받아 둔 다른 학생 실명은 지워요)
+        if (state.currentUser && !state.currentUser.isAdmin) {
+          const me = state.currentUser;
+          state.allUsers = { [me.email]: me };
+          state.rosterMap = {};
+        }
         // 1) 먼저 __admin_config__ 행에서 추가 등록된 교사 이메일 목록 복원
         const adminRow = data.users.find(u => u && String(u.email).toLowerCase().trim() === '__admin_config__');
         if (adminRow && Array.isArray(adminRow.mascots)) {
@@ -3410,10 +3488,10 @@ async function syncWithGoogleSheets(showNotification = true) {
       }
       if (data.questions && Array.isArray(data.questions) && data.questions.length > 0) {
         data.questions.forEach(rawQ => {
-          const q = {
+          const q = sanitizeQuestion({
             ...rawQ,
             category: normalizeCategoryId(rawQ.category)
-          };
+          });
           const idx = state.questions.findIndex(item => String(item.id) === String(q.id));
           if (idx !== -1) {
             state.questions[idx] = q;
@@ -3504,6 +3582,7 @@ function handleStudentQuestionSubmit(event) {
     status: '정상',
     createdAt: new Date().toISOString()
   };
+  sanitizeQuestion(newQ);
 
   state.questions.push(newQ);
 
@@ -3560,13 +3639,13 @@ function renderAdminStudentQuestionsSubPanel() {
     return `
       <tr style="${isPaused ? 'background:#FEF2F2;' : ''}">
         <td><span class="badge-tag" style="background:${cat.color}20; color:${cat.color};">${cat.icon} ${cat.shortName}</span></td>
-        <td><strong>${q.author || '학생'}</strong></td>
-        <td><div style="font-weight:700; word-break:break-all;">Q. ${q.question}</div></td>
+        <td><strong>${safeText(q.author || '학생')}</strong></td>
+        <td><div style="font-weight:700; word-break:break-all;">Q. ${safeText(q.question)}</div></td>
         <td style="font-size:0.78rem;">
-          ① ${q.options[0]}<br/>
-          ② ${q.options[1]}<br/>
-          ③ ${q.options[2]}<br/>
-          ④ ${q.options[3]}<br/>
+          ① ${safeText(q.options[0])}<br/>
+          ② ${safeText(q.options[1])}<br/>
+          ③ ${safeText(q.options[2])}<br/>
+          ④ ${safeText(q.options[3])}<br/>
           <strong style="color:#059669;">[정답: ${q.answer}번]</strong>
         </td>
         <td>
