@@ -1672,18 +1672,100 @@ function syncCategoryTabsToQuestionBank() {
 /**
  * GET 요청 처리: 학생 통계 목록 및 통합된 [문제은행] 반환 (초고속 단일 조회)
  */
-function doGet(e) {
-  setupSheets();
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+// ============================================================================
+// 보안: 누가 요청했는지 서버에서 직접 확인해요 (2026-11-07)
+// - 학생: 학교 계정(@smy.ms.kr)으로 로그인한 사람만 기록을 쓸 수 있고, 자기 기록만 고칠 수 있어요.
+// - 다른 학생의 실명·이메일·번호는 교사에게만 보내요. 학생에게는 닉네임 랭킹만 보내요.
+// - 문제 상태 변경, 교사 목록 변경은 교사만 할 수 있어요.
+// ============================================================================
+const QQ_ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+const QQ_SCHOOL_DOMAIN = '@smy.ms.kr';
+const QQ_SUPABASE_URL = 'https://jkxdhyvnrvsiokbbbjtu.supabase.co';
+const QQ_SUPABASE_KEY = 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF';
+const QQ_GOOGLE_CLIENT_ID = '359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com';
+const QQ_ADMIN_CONFIG_EMAIL = '__admin_config__';
 
-  // 학생 통계 조회
+function verifyEmailFromProof_(body) {
+  const cache = CacheService.getScriptCache();
+  // 1) MY English 통합 로그인(Supabase) 토큰
+  if (body && body.token) {
+    const key = 'sb_' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(body.token)));
+    const hit = cache.get(key);
+    if (hit) return hit;
+    try {
+      const res = UrlFetchApp.fetch(QQ_SUPABASE_URL + '/auth/v1/user', {
+        headers: { apikey: QQ_SUPABASE_KEY, Authorization: 'Bearer ' + body.token },
+        muteHttpExceptions: true
+      });
+      if (res.getResponseCode() === 200) {
+        const u = JSON.parse(res.getContentText());
+        const email = String((u && u.email) || '').toLowerCase().trim();
+        if (email) { cache.put(key, email, 600); return email; }
+      }
+    } catch (err) {}
+  }
+  // 2) Google 로그인 ID 토큰 (1시간 유효)
+  if (body && body.idToken) {
+    const key = 'gi_' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(body.idToken)));
+    const hit = cache.get(key);
+    if (hit) return hit;
+    try {
+      const res = UrlFetchApp.fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(body.idToken), { muteHttpExceptions: true });
+      if (res.getResponseCode() === 200) {
+        const t = JSON.parse(res.getContentText());
+        const ok = t.aud === QQ_GOOGLE_CLIENT_ID && String(t.email_verified) === 'true' && Number(t.exp) * 1000 > Date.now();
+        const email = ok ? String(t.email || '').toLowerCase().trim() : '';
+        if (email) { cache.put(key, email, 600); return email; }
+      }
+    } catch (err) {}
+  }
+  return '';
+}
+
+function getExtraAdminEmails_(ss) {
+  const sheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
+  if (!sheet) return [];
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]).toLowerCase().trim() === QQ_ADMIN_CONFIG_EMAIL) {
+      const list = safeJsonParse(rows[i][13], []);
+      return Array.isArray(list) ? list.map(e => String(e).toLowerCase().trim()).filter(Boolean) : [];
+    }
+  }
+  return [];
+}
+
+function getCaller_(ss, body) {
+  const email = verifyEmailFromProof_(body);
+  const admins = QQ_ADMIN_EMAILS.concat(email ? getExtraAdminEmails_(ss) : []);
+  const isTeacher = !!email && admins.indexOf(email) !== -1;
+  const isSchool = !!email && (isTeacher || email.slice(-QQ_SCHOOL_DOMAIN.length) === QQ_SCHOOL_DOMAIN);
+  return { email: email, isTeacher: isTeacher, isSchool: isSchool };
+}
+
+// 시트에 저장할 학생 입력값: 수식으로 해석되거나 HTML 로 실행되지 않게 정리해요
+function cleanCell_(v, maxLen) {
+  let t = String(v === null || v === undefined ? '' : v);
+  t = t.replace(/</g, '＜').replace(/>/g, '＞').replace(/"/g, '＂').replace(/'/g, '＇').replace(/`/g, '｀');
+  if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; // 시트가 수식으로 실행하지 않게 글자로 저장
+  return t.slice(0, maxLen || 300);
+}
+
+function anonId_(email) {
+  const d = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, 'qq-anon:' + String(email).toLowerCase());
+  return 'anon_' + Utilities.base64EncodeWebSafe(d).replace(/[^A-Za-z0-9]/g, '').slice(0, 12);
+}
+
+function buildInitialData_(ss, caller) {
   const stuSheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
   const stuValues = stuSheet.getDataRange().getValues();
+  const admins = QQ_ADMIN_EMAILS.concat(getExtraAdminEmails_(ss));
   const users = [];
   for (let i = 1; i < stuValues.length; i++) {
     const r = stuValues[i];
     if (!r[0]) continue;
-    users.push({
+    const email = String(r[0]).toLowerCase().trim();
+    const full = {
       email: String(r[0]),
       nickname: String(r[1] || r[2]),
       name: String(r[2] || r[1]),
@@ -1701,10 +1783,39 @@ function doGet(e) {
       certificates: safeJsonParse(r[14], []),
       categoryStats: safeJsonParse(r[15], {}),
       updatedAt: r[16] ? String(r[16]) : ''
+    };
+    if (email === QQ_ADMIN_CONFIG_EMAIL) {
+      if (caller.isTeacher) { full.mascots = full.badges; users.push(full); }
+      continue;
+    }
+    if (caller.isTeacher || email === caller.email) {
+      users.push(full);
+      continue;
+    }
+    if (admins.indexOf(email) !== -1) continue;
+    // 다른 학생: 랭킹에 필요한 닉네임·학급·점수만
+    const nick = String(r[1] || '익명');
+    users.push({
+      email: anonId_(email),
+      nickname: nick,
+      name: nick,
+      classId: full.classId,
+      studentNo: null,
+      level: full.level,
+      xp: full.xp,
+      streak: full.streak,
+      maxStreak: full.maxStreak,
+      totalAnswered: full.totalAnswered,
+      correctCount: full.correctCount,
+      accuracy: full.accuracy,
+      maxCombo: full.maxCombo,
+      badges: full.badges,
+      certificates: full.certificates,
+      categoryStats: full.categoryStats,
+      updatedAt: full.updatedAt
     });
   }
 
-  // [문제은행] 통합 탭에서 문제 목록 읽기
   const masterSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
   const qValues = masterSheet ? masterSheet.getDataRange().getValues() : [];
   const questions = [];
@@ -1714,10 +1825,7 @@ function doGet(e) {
     const cat = String(r[1] || '').trim();
     const questionText = String(r[2] || '').trim();
     const status = String(r[11] || '정상').trim();
-
-    // 보류 상태인 문제는 출제 제외
     if (!questionText || status === '보류') continue;
-
     questions.push({
       id: qId,
       category: cat,
@@ -1731,63 +1839,85 @@ function doGet(e) {
     });
   }
 
-  // 학생 출제 전체 목록 (교사용 검토 목적)
-  const subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
-  const subValues = subSheet ? subSheet.getDataRange().getValues() : [];
+  // 학생 출제 전체 목록은 교사에게만
   const submissions = [];
-  for (let i = 1; i < subValues.length; i++) {
-    const r = subValues[i];
-    if (!r[1]) continue;
-    submissions.push({
-      submittedAt: String(r[0] || ''),
-      id: String(r[1]),
-      category: String(r[2]),
-      question: String(r[3]),
-      options: [String(r[4] || ''), String(r[5] || ''), String(r[6] || ''), String(r[7] || '')],
-      answer: Number(r[8]) || 1,
-      author: String(r[9]),
-      likes: Number(r[10]) || 0,
-      dislikes: Number(r[11]) || 0,
-      status: String(r[12] || '정상')
-    });
+  if (caller.isTeacher) {
+    const subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
+    const subValues = subSheet ? subSheet.getDataRange().getValues() : [];
+    for (let i = 1; i < subValues.length; i++) {
+      const r = subValues[i];
+      if (!r[1]) continue;
+      submissions.push({
+        submittedAt: String(r[0] || ''),
+        id: String(r[1]),
+        category: String(r[2]),
+        question: String(r[3]),
+        options: [String(r[4] || ''), String(r[5] || ''), String(r[6] || ''), String(r[7] || '')],
+        answer: Number(r[8]) || 1,
+        author: String(r[9]),
+        likes: Number(r[10]) || 0,
+        dislikes: Number(r[11]) || 0,
+        status: String(r[12] || '정상')
+      });
+    }
   }
 
-  const result = {
+  return {
     success: true,
+    role: caller.isTeacher ? 'teacher' : (caller.isSchool ? 'student' : 'guest'),
     users: users,
     questions: questions,
     submissions: submissions,
     timestamp: new Date().toISOString()
   };
-
-  return ContentService.createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
 /**
- * POST 요청 처리: 통계 동기화, 문제 평가(좋아요/나빠요), 학생 출제 등록 등
+ * GET: 로그인 증명 없이 오는 요청이라 공개 정보(닉네임 랭킹·문제)만 돌려줘요.
+ */
+function doGet(e) {
+  setupSheets();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  return jsonResponse(buildInitialData_(ss, { email: '', isTeacher: false, isSchool: false }));
+}
+
+/**
+ * POST 요청 처리: 데이터 읽기, 통계 동기화, 문제 평가(좋아요/나빠요), 학생 출제 등록 등
  */
 function doPost(e) {
   try {
     const body = JSON.parse(e.postData.contents);
     const action = body.action;
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const caller = getCaller_(ss, body);
+
+    // 0) 데이터 읽기 (로그인한 사람에 맞춰 범위를 정해요)
+    if (action === 'getInitialData') {
+      setupSheets();
+      return jsonResponse(buildInitialData_(ss, caller));
+    }
+
+    if (!caller.isSchool) {
+      return jsonResponse({ success: false, error: '학교 계정으로 로그인해야 저장할 수 있어요.' });
+    }
 
     // 1) 학생 퀴즈 직접 출제 등록
     if (action === 'submitStudentQuestion') {
-      const q = body.question;
+      const q = body.question || {};
+      const opts = Array.isArray(q.options) ? q.options : [];
       const subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS) || ss.insertSheet(SHEET_NAMES.STUDENT_SUBMISSIONS);
+      const ans = Math.min(4, Math.max(1, Number(q.answer) || 1));
       const newRow = [
         new Date().toISOString(),
-        q.id || `stu_${Date.now()}`,
-        q.category,
-        q.question,
-        q.options[0],
-        q.options[1],
-        q.options[2],
-        q.options[3],
-        q.answer,
-        q.author || '학생',
+        'stu_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+        cleanCell_(q.category, 40),
+        cleanCell_(q.question, 500),
+        cleanCell_(opts[0], 200),
+        cleanCell_(opts[1], 200),
+        cleanCell_(opts[2], 200),
+        cleanCell_(opts[3], 200),
+        ans,
+        cleanCell_(q.author || '학생', 60),
         0, // likes
         0, // dislikes
         '정상' // status
@@ -1845,8 +1975,9 @@ function doPost(e) {
 
     // 3) 교사: 학생 출제 문제 상태 변경 (승인/보류)
     if (action === 'updateQuestionStatus') {
+      if (!caller.isTeacher) return jsonResponse({ success: false, error: '교사만 바꿀 수 있어요.' });
       const qId = String(body.questionId);
-      const newStatus = body.status; // '정상' or '보류'
+      const newStatus = body.status === '보류' ? '보류' : '정상';
       const masterSheet = ss.getSheetByName(SHEET_NAMES.MASTER_QUESTIONS);
       if (masterSheet) {
         const rows = masterSheet.getDataRange().getValues();
@@ -1860,35 +1991,50 @@ function doPost(e) {
       return jsonResponse({ success: true, status: newStatus });
     }
 
-    // 4) 기존 학생 데이터 동기화
+    // 4) 학생 데이터 동기화
     if (action === 'syncUser' || !action) {
       const userData = body.user || body;
+      const target = String((userData && userData.email) || '').toLowerCase().trim();
+      if (!target) return jsonResponse({ success: false, error: '이메일이 없어요.' });
+
+      // 교사 목록 행은 교사만, 학생 기록은 본인(또는 교사)만 고칠 수 있어요
+      if (target === QQ_ADMIN_CONFIG_EMAIL) {
+        if (!caller.isTeacher) return jsonResponse({ success: false, error: '교사만 바꿀 수 있어요.' });
+      } else if (target !== caller.email && !caller.isTeacher) {
+        return jsonResponse({ success: false, error: '본인 기록만 저장할 수 있어요.' });
+      }
+
       const stuSheet = ss.getSheetByName(SHEET_NAMES.STUDENTS);
-      if (stuSheet && userData && userData.email) {
+      if (stuSheet) {
         const data = stuSheet.getDataRange().getValues();
         let rowIndex = -1;
         for (let i = 1; i < data.length; i++) {
-          if (String(data[i][0]).toLowerCase() === String(userData.email).toLowerCase()) {
+          if (String(data[i][0]).toLowerCase().trim() === target) {
             rowIndex = i + 1;
             break;
           }
         }
 
+        const isConfig = target === QQ_ADMIN_CONFIG_EMAIL;
+        const extraAdmins = isConfig && Array.isArray(userData.mascots)
+          ? userData.mascots.map(x => String(x).toLowerCase().trim()).filter(x => /^[^@\s]+@[^@\s]+$/.test(x))
+          : null;
+
         const rowValues = [
-          userData.email,
-          userData.nickname || userData.name,
-          userData.name || userData.nickname,
-          userData.classId || '',
-          userData.studentNo || '',
+          target,
+          cleanCell_(userData.nickname || userData.name, 40),
+          cleanCell_(userData.name || userData.nickname, 40),
+          cleanCell_(userData.classId || '', 10),
+          Number(userData.studentNo) || '',
           Number(userData.level) || 1,
           Number(userData.xp) || 0,
-          Number(userData.streak) || 1,
-          Number(userData.maxStreak) || 1,
-          Number(userData.totalAnswered) || 0,
-          Number(userData.correctCount) || 0,
+          Number(userData.streak || userData.streakDays) || 1,
+          Number(userData.maxStreak || userData.maxStreakDays) || 1,
+          Number(userData.totalAnswered || userData.totalSolved) || 0,
+          Number(userData.correctCount || userData.totalCorrect) || 0,
           Number(userData.accuracy) || 0,
           Number(userData.maxCombo) || 0,
-          JSON.stringify(userData.badges || []),
+          JSON.stringify(isConfig ? extraAdmins : (userData.badges || [])),
           JSON.stringify(userData.certificates || []),
           JSON.stringify(userData.categoryStats || {}),
           new Date().toISOString()

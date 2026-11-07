@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -13,7 +14,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <!-- Google Identity Services (Google OAuth 로그인) -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <!-- 폭죽/파티클 애니메이션 캔버스 -->
@@ -757,15 +757,12 @@
         <!-- 관리자 계정 및 보안 설정 -->
         <div style="margin-top:20px; background:var(--surface-subtle); border:1px solid var(--border-color); border-radius:18px; padding:18px;">
           <h4 style="font-weight:800; color:var(--text-primary); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-            <span>🔒</span> 관리자 인증 & 비밀번호 변경
+            <span>🔒</span> 관리자 인증
           </h4>
-          <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:12px;">
-            등록된 관리자: <strong style="color:var(--eussuk-blue);">tfellow@gmail.com</strong> · <strong style="color:var(--eussuk-blue);">tfellow@smy.ms.kr</strong>
+          <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:0;">
+            등록된 관리자: <strong style="color:var(--eussuk-blue);">tfellow@gmail.com</strong> · <strong style="color:var(--eussuk-blue);">tfellow@smy.ms.kr</strong><br />
+            비밀번호 없이 Google 계정으로만 로그인해요. 클라우드 학급 데이터도 이 두 계정만 열 수 있어요.
           </p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-            <input type="password" id="settings-new-admin-pw" class="inline-input" style="flex:1; min-width:200px;" placeholder="새 관리자 비밀번호 (4자리 이상)" />
-            <button class="btn btn-secondary" onclick="changeAdminPassword()">비밀번호 변경 저장</button>
-          </div>
         </div>
       </div>
 
@@ -1113,55 +1110,17 @@
             </svg>
             <span>Google 계정으로 로그인</span>
           </button>
-          <div id="g_id_signin_placeholder" style="margin-top:8px; display:flex; justify-content:center;"></div>
         </div>
 
-        <div class="auth-divider">
-          <span>또는 관리자 계정 직접 로그인</span>
+        <div class="auth-hint" style="text-align:center; margin-top:10px;">
+          관리자 Google 계정으로만 들어올 수 있어요. 학급 데이터도 이 계정으로 로그인해야 열려요.
         </div>
-
-        <!-- 옵션 2: 관리자 이메일 & 비밀번호 로그인 (교내망/오프라인 환경 보장) -->
-        <form class="auth-login-form" onsubmit="handleDirectLogin(event)">
-          <div class="auth-field">
-            <label for="admin-select-email">관리자 계정 선택</label>
-            <select id="admin-select-email" class="auth-select">
-              <option value="tfellow@gmail.com">tfellow@gmail.com (Google / 개인)</option>
-              <option value="tfellow@smy.ms.kr">tfellow@smy.ms.kr (문영여중 교직원)</option>
-            </select>
-          </div>
-
-          <div class="auth-field">
-            <label for="admin-pass-input">관리자 비밀번호</label>
-            <input
-              type="password"
-              id="admin-pass-input"
-              class="auth-input"
-              placeholder="관리자 인증 비밀번호"
-              required
-              autocomplete="current-password"
-            />
-            <div class="auth-hint">
-              * 기본 비밀번호: <code>class123</code> (로그인 후 ⚙️설정에서 변경 가능)
-            </div>
-          </div>
-
-          <div class="auth-remember-row">
-            <label style="display:flex; align-items:center; gap:6px; font-size:0.86rem; color:#475569; cursor:pointer;">
-              <input type="checkbox" id="auth-remember-check" checked />
-              이 브라우저에서 로그인 상태 유지
-            </label>
-          </div>
-
-          <button type="submit" class="btn-auth-submit">
-            🚀 관리자로 시스템 접속하기
-          </button>
-        </form>
 
         <div id="auth-alert-box" class="auth-alert-box" style="display:none;"></div>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=2.0.7"></script>
+  <script src="app.js?v=2.1.0"></script>
 </body>
 </html>

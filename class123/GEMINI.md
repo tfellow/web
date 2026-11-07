@@ -10,7 +10,7 @@
   1. `tfellow@gmail.com` (Google 계정 / 개인)
   2. `tfellow@smy.ms.kr` (서울문영여자중학교 교직원 계정)
 - 로그인하지 않은 사용자는 모든 학생 명렬, 보상, 진도표 데이터를 열람할 수 없도록 로그인 게이트(`auth-gate-overlay`)로 차단됩니다.
-- 초기 관리자 마스터 비밀번호: `class123` (앱 내 ⚙️설정에서 변경 가능)
+- 로그인은 Firebase Authentication Google 로그인만 사용해요 (비밀번호 로그인 없음). Realtime Database 규칙도 관리자 이메일만 허용해요. 가짜 로그인(prompt)이나 비밀번호 방식을 다시 넣지 마세요.
 
 ## 3. 버전 관리 및 설명서 동기화 규칙
 - 웹앱(`index.html`, `styles.css`, `app.js`)을 사용자의 지시로 수정할 때마다 반드시 **버전 번호(예: `v1.5.0` → `v1.6.0`)를 업데이트**합니다.

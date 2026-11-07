@@ -35,7 +35,6 @@ let undoToastTimer = null;
 const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
 const AUTH_STORAGE_KEY = 'CLASS123_AUTH_USER_V1';
 const ADMIN_PW_STORAGE_KEY = 'CLASS123_ADMIN_PW_V1';
-const DEFAULT_ADMIN_PASSWORD = 'class123';
 
 // 기본 추천 으쓱/머쓱 카드 정의
 function getDefaultCards() {
@@ -183,7 +182,7 @@ function isSampleState(st) {
 }
 
 function getCloudWorkspaceKey() {
-  const user = getStoredAuthUser();
+  const user = authUser;
   const email = (user && user.email) ? user.email.toLowerCase().trim() : '';
 
   // tfellow 계정(개인/학교) 및 기본 모드는 동일한 데이터베이스를 공유하여 완벽한 다기기 실시간 통합 제공
@@ -202,18 +201,15 @@ function initFirebaseCloud() {
     return;
   }
 
-  try {
-    const rawConfig = localStorage.getItem(FIREBASE_CONFIG_STORAGE_KEY);
-    let cfg = DEFAULT_FIREBASE_CONFIG;
-    if (rawConfig) {
-      try { cfg = JSON.parse(rawConfig); } catch (e) {}
-    }
+  if (!isAdminUser(authUser)) {
+    updateCloudStatusUI('offline', '🔒 로그인 후 연결');
+    return;
+  }
 
-    if (!firebase.apps.length) {
-      firebaseApp = firebase.initializeApp(cfg);
-    } else {
-      firebaseApp = firebase.app();
-    }
+  try {
+    ensureFirebaseApp();
+    firebaseApp = firebase.app();
+    if (cloudDbRef) cloudDbRef.off();
 
     firebaseDb = firebase.database();
     const wsKey = getCloudWorkspaceKey();
@@ -237,6 +233,7 @@ function initFirebaseCloud() {
       cloudLastErrorMsg = '';
       updateModalCloudSyncTime();
 
+      cloudFirstSnapshotSeen = true;
       if (isLocalSavingToCloud) {
         // 본인이 방금 로컬에서 발생시킨 저장 이벤트는 리스너 재반영을 건너뜀
         return;
@@ -296,13 +293,6 @@ function initFirebaseCloud() {
         }
       }
 
-      // [관리자 비밀번호 클라우드 자동 동기화 & 보호]
-      if (val.adminPassword) {
-        const currentLocalPw = localStorage.getItem(ADMIN_PW_STORAGE_KEY);
-        if (!currentLocalPw || currentLocalPw === DEFAULT_ADMIN_PASSWORD || val.adminPassword !== DEFAULT_ADMIN_PASSWORD) {
-          localStorage.setItem(ADMIN_PW_STORAGE_KEY, val.adminPassword);
-        }
-      }
 
       updateCloudStatusUI('connected', '☁️ 클라우드 동기화됨');
     }, error => {
@@ -361,13 +351,16 @@ function scheduleCloudSave() {
   }, 400);
 }
 
+let cloudFirstSnapshotSeen = false;
 function pushStateToCloud(dataToPush) {
   if (!cloudDbRef) return;
+  // 클라우드 데이터를 한 번 받아 보기 전에는, 그리고 예시(샘플) 상태는 절대 올리지 않아요
+  if (!cloudFirstSnapshotSeen || isSampleState(dataToPush)) return;
   isLocalSavingToCloud = true;
 
   try {
     const payload = JSON.parse(JSON.stringify(dataToPush));
-    payload.adminPassword = getAdminPassword();
+    delete payload.adminPassword; // 예전 비밀번호 방식의 흔적은 클라우드에서 지워요
     cloudDbRef.set(payload)
       .then(() => {
         cloudLastSyncTime = new Date();
@@ -403,6 +396,7 @@ function handleManualCloudSync() {
   updateCloudStatusUI('syncing', '🔄 동기화 확인 중...');
   cloudDbRef.once('value').then(snapshot => {
     const val = snapshot.val();
+    cloudFirstSnapshotSeen = true;
     cloudLastSyncTime = new Date();
     cloudLastErrorMsg = '';
     updateModalCloudSyncTime();
@@ -451,7 +445,7 @@ function forcePushToCloud() {
   const payload = JSON.parse(JSON.stringify(state));
   payload.updatedAt = Date.now();
   state.updatedAt = payload.updatedAt;
-  payload.adminPassword = getAdminPassword();
+  delete payload.adminPassword;
 
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -544,7 +538,7 @@ function forcePullFromCloud() {
 function diagnoseCloudConnection() {
   const isSdkLoaded = typeof firebase !== 'undefined';
   const cfg = DEFAULT_FIREBASE_CONFIG;
-  const user = getStoredAuthUser();
+  const user = authUser;
   const wsKey = getCloudWorkspaceKey();
 
   let msg = '[클라우드 연결 상태 진단 결과]\n\n';
@@ -831,104 +825,42 @@ function animateConfetti() {
 // ==========================================================================
 // 관리자 인증 및 로그인 게이트 시스템
 // ==========================================================================
-function getAdminPassword() {
-  return localStorage.getItem(ADMIN_PW_STORAGE_KEY) || DEFAULT_ADMIN_PASSWORD;
-}
+// 진짜 Google 로그인(Firebase Authentication)으로만 들어올 수 있어요.
+// 클라우드(Realtime Database) 보안 규칙도 같은 관리자 이메일만 읽고 쓰게 막아요.
+let authUser = null;      // Firebase 가 확인한 로그인 사용자
+let authReady = false;    // 첫 로그인 상태 확인이 끝났는지
 
-function getStoredAuthUser() {
-  const sessionUser = sessionStorage.getItem(AUTH_STORAGE_KEY);
-  if (sessionUser) {
+function ensureFirebaseApp() {
+  if (typeof firebase === 'undefined') return false;
+  if (!firebase.apps.length) {
+    let cfg = DEFAULT_FIREBASE_CONFIG;
     try {
-      return JSON.parse(sessionUser);
+      const raw = localStorage.getItem(FIREBASE_CONFIG_STORAGE_KEY);
+      if (raw) cfg = JSON.parse(raw);
     } catch (e) {}
+    firebaseApp = firebase.initializeApp(cfg);
   }
-  const localUser = localStorage.getItem(AUTH_STORAGE_KEY);
-  if (localUser) {
-    try {
-      return JSON.parse(localUser);
-    } catch (e) {}
-  }
-  return null;
+  return true;
 }
 
-function setStoredAuthUser(userObj, rememberMe = true) {
-  const data = JSON.stringify(userObj);
-  sessionStorage.setItem(AUTH_STORAGE_KEY, data);
-  localStorage.setItem(AUTH_STORAGE_KEY, data); // 언제나 확실하게 영구 로그인 유지
-}
-
-function clearStoredAuthUser() {
-  sessionStorage.removeItem(AUTH_STORAGE_KEY);
-  localStorage.removeItem(AUTH_STORAGE_KEY);
+function isAdminUser(u) {
+  return !!(u && u.email && ADMIN_EMAILS.includes(String(u.email).toLowerCase()));
 }
 
 function checkAuthState() {
-  const user = getStoredAuthUser();
   const overlay = document.getElementById('auth-gate-overlay');
   const userBadge = document.getElementById('auth-user-badge');
   const emailSpan = document.getElementById('auth-user-email');
 
-  if (user && ADMIN_EMAILS.includes(user.email)) {
-    // 인증 성공: 로그인 게이트 숨김 및 상단 관리자 뱃지 표시
+  if (isAdminUser(authUser)) {
     if (overlay) overlay.classList.add('hidden');
     if (userBadge) userBadge.style.display = 'inline-flex';
-    if (emailSpan) emailSpan.textContent = user.email;
+    if (emailSpan) emailSpan.textContent = authUser.email;
     return true;
-  } else {
-    // 미인증: 로그인 게이트 노출 & 상단 뱃지 숨김
-    if (overlay) overlay.classList.remove('hidden');
-    if (userBadge) userBadge.style.display = 'none';
-    return false;
   }
-}
-
-// 1. 관리자 직접 로그인 (이메일 & 비밀번호)
-async function handleDirectLogin(e) {
-  if (e) e.preventDefault();
-  const selectEl = document.getElementById('admin-select-email');
-  const passEl = document.getElementById('admin-pass-input');
-  const rememberEl = document.getElementById('auth-remember-check');
-  const alertBox = document.getElementById('auth-alert-box');
-
-  const email = selectEl ? selectEl.value.trim() : '';
-  const pass = passEl ? passEl.value : '';
-  const remember = rememberEl ? rememberEl.checked : true;
-
-  if (!ADMIN_EMAILS.includes(email)) {
-    showAuthAlert('허가되지 않은 관리자 계정입니다.');
-    return;
-  }
-
-  let expectedPass = getAdminPassword();
-  let isMatch = (pass === expectedPass);
-
-  // 로컬 비밀번호와 불일치 시 클라우드에 보관된 최신 비밀번호와 실시간 대조
-  if (!isMatch && typeof firebase !== 'undefined') {
-    try {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(DEFAULT_FIREBASE_CONFIG);
-      }
-      const snap = await firebase.database().ref('class123_plus/tfellow_workspace/adminPassword').once('value');
-      const cloudPw = snap.val();
-      if (cloudPw && pass === cloudPw) {
-        isMatch = true;
-        localStorage.setItem(ADMIN_PW_STORAGE_KEY, cloudPw);
-      }
-    } catch (_) {}
-  }
-
-  if (!isMatch) {
-    showAuthAlert('관리자 비밀번호가 일치하지 않습니다.');
-    return;
-  }
-
-  // 로그인 성공
-  setStoredAuthUser({ email, method: 'direct', loginAt: new Date().toISOString() }, remember);
-  if (alertBox) alertBox.style.display = 'none';
-  if (passEl) passEl.value = '';
-  checkAuthState();
-  playSound('eussuk');
-  initApp();
+  if (overlay) overlay.classList.remove('hidden');
+  if (userBadge) userBadge.style.display = 'none';
+  return false;
 }
 
 function showAuthAlert(msg) {
@@ -939,78 +871,81 @@ function showAuthAlert(msg) {
   }
 }
 
-// 2. Google OAuth 로그인
-function startGoogleAuth() {
-  const selectedEmail = prompt(
-    'Google 계정으로 로그인합니다.\n인가된 관리자 계정(tfellow@gmail.com 또는 tfellow@smy.ms.kr)을 입력해 주세요:',
-    'tfellow@gmail.com'
-  );
-
-  if (!selectedEmail) return;
-
-  const trimmed = selectedEmail.trim();
-  if (ADMIN_EMAILS.includes(trimmed)) {
-    setStoredAuthUser({ email: trimmed, method: 'google', loginAt: new Date().toISOString() }, true);
-    checkAuthState();
-    playSound('fanfare');
-    initApp();
-  } else {
-    alert(`접근 불가: [${selectedEmail}] 계정은 관리자로 등록되어 있지 않습니다.\n(허용 관리자: ${ADMIN_EMAILS.join(', ')})`);
-  }
-}
-
-function handleGoogleCredentialResponse(response) {
-  try {
-    const base64Url = response.credential.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    const payload = JSON.parse(jsonPayload);
-    const email = payload.email;
-
-    if (ADMIN_EMAILS.includes(email)) {
-      setStoredAuthUser({ email, name: payload.name, method: 'google', loginAt: new Date().toISOString() }, true);
-      checkAuthState();
-      playSound('fanfare');
-      initApp();
-    } else {
-      alert(`접근 거부: [${email}]은 등록된 관리자 계정이 아닙니다.`);
-    }
-  } catch (err) {
-    console.error('Google 로그인 디코딩 오류:', err);
-  }
-}
-
-// 3. 로그아웃
-function handleLogout() {
-  if (!confirm('로그아웃 하시겠습니까?')) return;
-  clearStoredAuthUser();
-  checkAuthState();
-  playSound('tick');
-}
-
-// 4. 관리자 비밀번호 변경
-function changeAdminPassword() {
-  const newPwInput = document.getElementById('settings-new-admin-pw');
-  const newPw = newPwInput ? newPwInput.value.trim() : '';
-  if (!newPw || newPw.length < 4) {
-    alert('새 관리자 비밀번호는 4자리 이상이어야 합니다.');
+function watchAuthState() {
+  if (!ensureFirebaseApp()) {
+    showAuthAlert('Firebase 스크립트를 불러오지 못했어요. 인터넷 연결이나 광고 차단기를 확인해 주세요.');
     return;
   }
-  localStorage.setItem(ADMIN_PW_STORAGE_KEY, newPw);
+  firebase.auth().onAuthStateChanged(async (user) => {
+    authReady = true;
+    if (user && !isAdminUser(user)) {
+      showAuthAlert(`[${user.email}] 계정은 관리자로 등록되어 있지 않아요. (허용: ${ADMIN_EMAILS.join(', ')})`);
+      await firebase.auth().signOut();
+      return;
+    }
+    const wasIn = isAdminUser(authUser);
+    authUser = user || null;
+    if (authUser && !wasIn) {
+      const alertBox = document.getElementById('auth-alert-box');
+      if (alertBox) alertBox.style.display = 'none';
+      initApp();
+    } else if (!authUser) {
+      stopCloudSync();
+      checkAuthState();
+    }
+  });
+}
 
-  // 클라우드에도 관리자 비밀번호를 안전하게 영구 저장
-  if (cloudDbRef) {
-    cloudDbRef.child('adminPassword').set(newPw).catch(() => {});
+function stopCloudSync() {
+  try { if (cloudDbRef) cloudDbRef.off(); } catch (e) {}
+  cloudDbRef = null;
+  cloudFirstSnapshotSeen = false;
+}
+
+// Google 계정으로 로그인 (Firebase 팝업)
+async function startGoogleAuth() {
+  if (!ensureFirebaseApp()) {
+    showAuthAlert('Firebase 스크립트를 불러오지 못했어요.');
+    return;
   }
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    const cred = await firebase.auth().signInWithPopup(provider);
+    if (isAdminUser(cred.user)) playSound('fanfare');
+  } catch (err) {
+    console.warn('Google 로그인 오류:', err);
+    const code = err && err.code ? err.code : '';
+    if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+    if (code === 'auth/operation-not-allowed') {
+      showAuthAlert('Firebase 콘솔(my-kahoot-smy)에서 Google 로그인이 아직 켜져 있지 않아요.');
+    } else if (code === 'auth/unauthorized-domain') {
+      showAuthAlert('Firebase 콘솔(my-kahoot-smy) 승인된 도메인에 tfellow.github.io 를 추가해 주세요.');
+    } else if (code === 'auth/popup-blocked') {
+      showAuthAlert('팝업이 차단되었어요. 브라우저 주소창에서 팝업을 허용해 주세요.');
+    } else {
+      showAuthAlert('로그인하지 못했어요: ' + (err && err.message ? err.message : code));
+    }
+  }
+}
 
-  if (newPwInput) newPwInput.value = '';
-  playSound('eussuk');
-  alert('관리자 비밀번호가 성공적으로 변경되었습니다!\n(클라우드에도 함께 저장되어 다른 컴퓨터나 브라우저에서도 동일하게 유지됩니다.)');
+// 로그아웃
+async function handleLogout() {
+  if (!confirm('로그아웃 하시겠습니까?')) return;
+  try {
+    // 예전 방식의 로그인 흔적도 함께 지워요
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.removeItem(ADMIN_PW_STORAGE_KEY);
+  } catch (e) {}
+  stopCloudSync();
+  authUser = null;
+  if (typeof firebase !== 'undefined' && firebase.apps.length) {
+    await firebase.auth().signOut().catch(() => {});
+  }
+  checkAuthState();
+  playSound('tick');
 }
 
 // ==========================================================================
@@ -4001,7 +3936,9 @@ window.addEventListener('keydown', e => {
 // 앱 시작
 document.addEventListener('DOMContentLoaded', () => {
   ensureLatestUiVersion();
-  initApp();
+  try { localStorage.removeItem(ADMIN_PW_STORAGE_KEY); } catch (e) {}
+  checkAuthState();
+  watchAuthState();
 });
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   ensureLatestUiVersion();
