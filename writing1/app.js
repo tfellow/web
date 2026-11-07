@@ -46,7 +46,8 @@ const firebaseConfig = {
 const ALLOWED_DOMAIN = "smy.ms.kr";
 const TEACHER_EMAILS = [
   "tfellow@smy.ms.kr",
-  "tfellow@gmail.com"
+  "tfellow@gmail.com",
+  "engwords@gmail.com"
 ];
 
 // Firebase 초기화
