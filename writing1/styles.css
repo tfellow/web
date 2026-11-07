@@ -197,7 +197,7 @@ body {
 
 .prompt-Creator-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
   gap: 0.75rem;
   margin-bottom: 0.75rem;
   align-items: center;
@@ -665,4 +665,161 @@ textarea {
 .text-center {
   text-align: center !important;
   color: var(--text-muted);
+}
+
+/* ==========================================================================
+   5대 통합 정밀 채점 시스템 스타일 (엄격도 배지, 1:1 시각적 Diff, 구문 블록, AI 설정)
+   ========================================================================== */
+.strictness-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.strictness-pill.strict {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.strictness-pill.standard {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.strictness-pill.fluency {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.visual-diff-box {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+.diff-tokens-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.32rem;
+  align-items: center;
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.65rem;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.diff-token {
+  display: inline-block;
+  padding: 0.1rem 0.42rem;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.diff-match {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.diff-del {
+  background: #fee2e2;
+  color: #b91c1c;
+  text-decoration: line-through;
+  border: 1px solid #fca5a5;
+}
+
+.diff-ins {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.diff-missing {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px dashed #f59e0b;
+}
+
+.chunk-slots-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.chunk-slot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.chunk-slot-pill.pass {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.chunk-slot-pill.warn {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.chunk-slot-pill.fail {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.ai-engine-config-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+.ai-engine-config-box summary {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: #1e293b;
+  list-style: none;
+}
+
+.ai-engine-config-box summary::-webkit-details-marker {
+  display: none;
+}
+
+.ai-status-pill {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.ai-engine-config-body {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #e2e8f0;
 }

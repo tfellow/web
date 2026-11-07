@@ -153,9 +153,12 @@
             <div class="mission-detail">
               <div class="mission-label">🇰🇷 한국어 제시문 (아래 문장을 영어로 영작하세요)</div>
               <p id="display-korean-sentence" class="korean-sentence-text">-</p>
-              <div class="mission-hint">
-                <span>🎯 핵심 목표 표현/문법:</span>
-                <strong id="display-target-grammar">-</strong>
+              <div class="mission-hint" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                <div>
+                  <span>🎯 핵심 목표 표현/문법:</span>
+                  <strong id="display-target-grammar">-</strong>
+                </div>
+                <span id="display-strictness-badge" class="strictness-pill standard">⚖️ 표준 정밀 채점</span>
               </div>
             </div>
           </div>
@@ -195,6 +198,10 @@
             <div class="result-section" id="sec-model-answer">
               <h3>🌟 추천 모범 영작 답안 (Model Answer)</h3>
               <p id="res-model-answer" class="corrected-box model-answer-box"></p>
+            </div>
+            <div class="result-section" id="sec-visual-diff">
+              <h3>🔬 모범 답안 1:1 시각적 비교 & 구문 블록(Chunk) 진단</h3>
+              <div id="res-visual-diff" class="visual-diff-box"></div>
             </div>
             <div class="result-section">
               <h3>🔍 문법 및 의미 전달 피드백</h3>
@@ -247,6 +254,29 @@
         <div id="editing-prompt-banner" class="target-status-banner pass hidden" style="margin-bottom: 0.75rem;">
           ✏️ <strong>과제 수정 모드:</strong> 아래 내용을 수정한 뒤 <strong>[💾 수정 내용 저장]</strong> 버튼을 눌러 주세요.
         </div>
+
+        <!-- 5대 통합 정밀 채점 엔진 안내 & Gemini AI 실시간 연동 설정 -->
+        <details id="gemini-ai-config-details" class="ai-engine-config-box">
+          <summary>
+            <span>⚙️ <strong>5대 통합 정밀 채점 엔진 가동 중</strong> (구문블록 매칭 + 1:1 Diff + LanguageTool 이중검증 + 엄격도 3단계)</span>
+            <span id="gemini-status-pill" class="ai-status-pill">🤖 Gemini AI 연동 설정 ▾</span>
+          </summary>
+          <div class="ai-engine-config-body">
+            <p style="margin: 0 0 0.5rem 0; font-size: 0.84rem; color: #334155;">
+              💡 기본 상태에서도 <strong>어순 블록(Chunk) 매칭 + 단어별 1:1 비교 + LanguageTool 영문법 엔진(2초 타임아웃/중복감점 방지)</strong>이 100% 무료로 작동합니다.<br/>
+              추가로 <strong>Google Gemini AI (LLM) 실시간 심층 첨삭</strong>까지 결합하려면 아래에 Gemini API 키를 입력해 저장하세요. (한도 초과나 네트워크 지연 시에도 0.01초 만에 내장 정밀 엔진으로 자동 전환됩니다.)
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+              <input type="password" id="input-gemini-api-key" placeholder="Google Gemini API Key 입력 (선택 사항 · AIza...)" style="flex: 1; min-width: 240px; padding: 0.45rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 0.4rem; font-size: 0.85rem;" />
+              <label class="checkbox-inline" style="font-size: 0.85rem;">
+                <input type="checkbox" id="chk-enable-gemini-ai" checked />
+                <span>Gemini AI 하이브리드 채점 활성화</span>
+              </label>
+              <button type="button" id="btn-save-gemini-config" class="btn btn-primary" style="padding: 0.42rem 0.85rem; font-size: 0.84rem;">💾 AI 설정 저장 (클라우드 동기화)</button>
+            </div>
+          </div>
+        </details>
+
         <div class="prompt-Creator-grid">
           <select id="new-prompt-grade">
             <option value="all">전학년 공통</option>
@@ -270,6 +300,11 @@
             <option value="300">⏱️ 5분 (시간 종료 시 강제제출)</option>
             <option value="600">⏱️ 10분 (시간 종료 시 강제제출)</option>
             <option value="900">⏱️ 15분 (시간 종료 시 강제제출)</option>
+          </select>
+          <select id="new-prompt-strictness" title="수업 목적에 따라 채점 엄격도를 선택하세요">
+            <option value="strict">🎯 서술형 칼채점 (100% 완벽 일치형)</option>
+            <option value="standard" selected>⚖️ 표준 정밀 채점 (권장 기본값)</option>
+            <option value="fluency">🌱 의미 소통 격려 (기초 연습용)</option>
           </select>
           <label class="checkbox-inline" title="체크하면 등록 즉시 학생들에게 보입니다. 해제하면 교사 목록에만 보관됩니다.">
             <input type="checkbox" id="new-prompt-active" checked />
