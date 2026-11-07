@@ -28,16 +28,15 @@ import {
 } from "./students.js";
 
 // ============================================================================
-// 1. 환경 설정 (서울문영여중 my-kahoot-smy Firebase 프로젝트 자동 연결)
+// 1. 환경 설정 (서울문영여중 공식 Google 로그인 연동 cloze-a8e6c Firebase 프로젝트)
 // ============================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyDE-zsT6njzKpoGLl3Izw0CxPcpDepcO4g",
-  authDomain: "my-kahoot-smy.firebaseapp.com",
-  databaseURL: "https://my-kahoot-smy-default-rtdb.firebaseio.com",
-  projectId: "my-kahoot-smy",
-  storageBucket: "my-kahoot-smy.firebasestorage.app",
-  messagingSenderId: "905782620870",
-  appId: "1:905782620870:web:c8a52bb0ec186ddba71dc7"
+  apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE",
+  authDomain: "cloze-a8e6c.firebaseapp.com",
+  projectId: "cloze-a8e6c",
+  storageBucket: "cloze-a8e6c.firebasestorage.app",
+  messagingSenderId: "410570182902",
+  appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7"
 };
 
 // 서울문영여자중학교 공식 도메인 및 교사(관리자) 이메일 목록 설정
