@@ -1,12 +1,13 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false,
     "class123_plus": {
       "$workspace": {
         ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
         ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
       }
-    }
+    },
+    "activePin": { ".read": true, ".write": true },
+    "rooms": { ".read": true, ".write": true },
+    "schoolRoster": { ".read": true, ".write": true }
   }
 }
