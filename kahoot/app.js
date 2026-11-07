@@ -1216,6 +1216,7 @@ const MYKahoot = (() => {
   // 교사로 로그인되면 클라우드 명단을 받아 오고, 처음 한 번 학생별 조회용 명단(rosterByEmail)도 맞춰 둬요.
   function onTeacherSignedIn() {
     if (!isFirebaseConnected || !firebaseDb || teacherRosterSubscribed) return;
+    if (!isTeacherSignedIn()) return; // 이메일 확인 안 된 계정은 서버가 막으니 구독하지 않아요
     teacherRosterSubscribed = true;
     syncTeacherDataOnLogin();
     let first = true;
@@ -1243,7 +1244,18 @@ const MYKahoot = (() => {
         // 클라우드가 비어 있고 이 PC에 명단이 있으면 올려요.
         syncRosterToCloud();
       }
-    }, () => {});
+    }, (err) => {
+      // 읽기가 막히면 다음 로그인 때 다시 받아 오도록 풀어 둬요.
+      console.warn('schoolRoster 읽기 실패', err);
+      teacherRosterSubscribed = false;
+    });
+  }
+
+  function stopTeacherSync() {
+    if (!teacherRosterSubscribed) return;
+    try { firebaseDb.ref('schoolRoster').off(); } catch (_) {}
+    teacherRosterSubscribed = false;
+    teacherDataReady = false;
   }
 
   function sameRoster(a, b) {
@@ -1281,6 +1293,7 @@ const MYKahoot = (() => {
     if (!firebaseAuth) { resolveAuthReady(); return; }
     firebaseAuth.onAuthStateChanged(async (user) => {
       authUser = user || null;
+      if (!authUser || !isTeacherSignedIn()) stopTeacherSync();
       if (authUser && isTeacherEmail(authUser.email)) {
         onTeacherSignedIn();
       } else if (authUser) {
