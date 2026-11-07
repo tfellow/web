@@ -1502,17 +1502,21 @@ const MYKahoot = (() => {
     if (savedRoomRaw) {
       try {
         const saved = JSON.parse(savedRoomRaw);
-        if (saved && saved.pin && saved.status && saved.status !== 'IDLE') {
+        if (isResumableRoom(saved)) {
           liveRoom = {
             ...liveRoom,
             ...saved,
-            players: { ...(saved.players || {}), ...(liveRoom.players || {}) }
+            players: withoutBots({ ...(saved.players || {}), ...(liveRoom.players || {}) })
           };
+        } else {
+          // 오래됐거나 이미 끝난 방은 다시 열지 않음 (이전 게임 학생이 대기화면에 남지 않도록)
+          liveRoom.status = 'IDLE';
+          liveRoom.players = {};
         }
       } catch (_) {}
     }
 
-    if (liveRoom.pin && liveRoom.status && liveRoom.status !== 'IDLE') {
+    if (liveRoom.pin && liveRoom.status && liveRoom.status !== 'IDLE' && liveRoom.status !== 'PODIUM') {
       const qSet = quizSets.find(q => q.id === liveRoom.quizId) || quizSets[selectedQuizIndex] || quizSets[0];
       switchMainView('host');
       if (liveRoom.status === 'LOBBY') {
@@ -1540,6 +1544,27 @@ const MYKahoot = (() => {
     startHostLobbyWithCurrentQuiz();
   }
 
+  // 진행 중인 게임을 이어서 열지 판단: 문제 진행 중이면 3시간, 대기화면이면 20분 안에 저장된 방만 이어서 엽니다.
+  function isResumableRoom(room) {
+    if (!room || !room.pin || !room.status) return false;
+    const age = Date.now() - Number(room.updatedAt || 0);
+    if (room.status === 'QUESTION' || room.status === 'RESULT' || room.status === 'SCOREBOARD') {
+      return age < 3 * 60 * 60 * 1000;
+    }
+    if (room.status === 'LOBBY') {
+      return age < 20 * 60 * 1000 && Object.keys(withoutBots(room.players)).length > 0;
+    }
+    return false;
+  }
+
+  function withoutBots(players) {
+    const out = {};
+    Object.entries(players || {}).forEach(([k, p]) => {
+      if (p && !p.isBot) out[k] = p;
+    });
+    return out;
+  }
+
   function getSyncApiUrl() {
     if (window.location.protocol.startsWith('http') && window.location.port === '8765') {
       return `${window.location.origin}/api/room`;
@@ -1557,24 +1582,12 @@ const MYKahoot = (() => {
     clearHostTimers();
     const pin = String(Math.floor(100000 + Math.random() * 900000));
 
-    // 이미 대기 중인 학생이 있다면 명단은 유지하되, 새 퀴즈를 위해 이전 점수·연속정답·답안 기록을 깨끗이 초기화!
-    const cleanPlayers = {};
-    if (liveRoom && liveRoom.players) {
-      Object.entries(liveRoom.players).forEach(([em, p]) => {
-        if (!p.isBot) {
-          const safeKey = emailToKey(p.email || em);
-          cleanPlayers[safeKey] = {
-            ...p,
-            email: normalizeEmail(p.email || em),
-            score: 0,
-            streak: 0,
-            maxStreak: 0,
-            prevRank: 0,
-            answers: {}
-          };
-        }
-      });
+    // 새 게임은 항상 빈 대기화면으로 시작합니다. 이전 게임 방은 서버에서 지웁니다.
+    const oldPin = liveRoom && liveRoom.pin;
+    if (oldPin && oldPin !== pin && isFirebaseConnected && firebaseDb && isTeacherSignedIn()) {
+      firebaseDb.ref(`rooms/${oldPin}`).remove().catch(() => {});
     }
+    const cleanPlayers = {};
 
     liveRoom = {
       pin,
@@ -1698,7 +1711,6 @@ const MYKahoot = (() => {
       grid.innerHTML = `
         <div style="grid-column:1/-1; text-align:center; padding:2.5rem; background:rgba(255,255,255,0.08); border-radius:18px; font-size:1.15rem;">
           학생들이 스마트폰/태블릿에서 <strong>PIN 번호(${liveRoom.pin})</strong>로 입장하면 이곳에 실시간으로 학번과 이름이 표시됩니다.<br/>
-          <span style="font-size:0.92rem; opacity:0.8;">(선생님 혼자 미리 테스트하시려면 우측 상단의 <strong>[🤖 우리 반 가상 학생 20명 자동 입장]</strong> 버튼을 눌러보세요!)</span>
         </div>
       `;
       return;
@@ -1712,32 +1724,10 @@ const MYKahoot = (() => {
     `).join('');
   }
 
-  // 선생님 수업 테스트용: 사전 등록 명단에서 20명 가상 학생 즉시 입장
-  function spawnVirtualClassStudents(targetCount = 20) {
-    const class7 = studentRoster.filter(s => s.classNum === 7);
-    const pool = class7.length >= targetCount ? class7.slice(0, targetCount) : studentRoster.slice(0, targetCount);
-
-    pool.forEach((stu, i) => {
-      setTimeout(() => {
-        registerPlayerIntoLiveRoom({ ...stu, isBot: true });
-      }, i * 55);
-    });
-  }
-
-  function openStudentWindowPreview() {
-    const baseStudentUrl = window.location.href.split('?')[0].replace(/index\.html$/i, 'student.html');
-    const url = `${baseStudentUrl}?pin=${liveRoom.pin}`;
-    window.open(url, '_blank', 'width=430,height=780');
-  }
-
   function hostStartFirstQuestion() {
     if (Object.keys(liveRoom.players).length === 0) {
-      if (confirm('아직 입장한 학생이 없습니다. 우리 반 가상 학생 20명을 자동으로 입장시켜 바로 체험해 보시겠습니까?')) {
-        const pool = studentRoster.slice(0, 20);
-        pool.forEach(stu => registerPlayerIntoLiveRoom({ ...stu, isBot: true }));
-      } else {
-        return;
-      }
+      alert('아직 입장한 학생이 없습니다. 학생이 PIN으로 입장하면 시작할 수 있어요.');
+      return;
     }
     SoundFX.stopBGM();
     liveRoom.currentQIndex = 0;
@@ -1797,21 +1787,6 @@ const MYKahoot = (() => {
         hostRevealAnswer();
       }
     }, 1000);
-
-    // 가상 학생(isBot)들의 현실적인 스피드 응답 시뮬레이션 (0.6초 ~ 제한시간의 85% 사이)
-    Object.values(liveRoom.players).forEach(p => {
-      if (p.isBot) {
-        const delayMs = Math.floor(600 + Math.random() * (liveRoom.timeLimit * 820));
-        const tId = setTimeout(() => {
-          if (liveRoom.status !== 'QUESTION' || liveRoom.currentQIndex !== qIdx) return;
-          // 72% 확률로 정답, 28% 확률로 오답 선택
-          const isRight = Math.random() < 0.72;
-          const choice = isRight ? q.answer : [0, 1, 2, 3].filter(c => c !== q.answer)[Math.floor(Math.random() * 3)];
-          recordPlayerAnswer(p.email, qIdx, choice, (Date.now() - liveRoom.questionStartedAt) / 1000);
-        }, delayMs);
-        liveRoom.botTimers.push(tId);
-      }
-    });
 
     persistAndBroadcastRoomState();
     syncStudentScreenWithRoom();
@@ -2461,7 +2436,8 @@ const MYKahoot = (() => {
       currentQIndex: liveRoom.currentQIndex,
       questionStartedAt: liveRoom.questionStartedAt,
       timeLimit: liveRoom.timeLimit,
-      players: safePlayers
+      players: safePlayers,
+      updatedAt: Date.now()
     };
     localStorage.setItem(STORAGE_KEYS.LIVE_ROOM, JSON.stringify(serializableRoom));
     broadcastEvent('ROOM_STATE_UPDATE', serializableRoom);
@@ -3327,8 +3303,6 @@ const MYKahoot = (() => {
     handleRosterExcelUpload,
     quickStartDemoHost,
     startHostLobbyWithCurrentQuiz,
-    spawnVirtualClassStudents,
-    openStudentWindowPreview,
     hostStartFirstQuestion,
     hostRevealAnswer,
     hostGoToScoreboardOrPodium,
