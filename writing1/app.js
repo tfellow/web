@@ -231,11 +231,25 @@ const KO_EN_CONCEPT_DICT = [
   { ko: ["여행"], en: ["trip", "travel", "journey", "tour"], label: "여행(trip/travel)", pos: "명사/동사", dictWord: "travel / trip", dictMeaning: "여행하다, 여행" },
   { ko: ["가족", "부모님"], en: ["family", "parents", "parent"], label: "가족/부모님(family/parents)", pos: "명사", dictWord: "family / parents", dictMeaning: "가족, 부모님" },
   { ko: ["시간"], en: ["time", "hour"], label: "시간(time)", pos: "명사", dictWord: "time", dictMeaning: "시간" },
-  { ko: ["미래", "꿈"], en: ["future", "dream", "dreams"], label: "미래/꿈(future/dream)", pos: "명사", dictWord: "dream / future", dictMeaning: "꿈, 미래" }
+  { ko: ["미래", "꿈"], en: ["future", "dream", "dreams"], label: "미래/꿈(future/dream)", pos: "명사", dictWord: "dream / future", dictMeaning: "꿈, 미래" },
+  { ko: ["세금"], en: ["tax", "taxes"], label: "세금(tax/taxes)", pos: "명사", dictWord: "tax (복수: taxes)", dictMeaning: "세금" },
+  { ko: ["지불", "비용을 대다", "돈을 내다"], en: ["pay", "pays", "paid", "pay for"], label: "지불하다/비용을 대다(pay for)", pos: "숙어/동사", dictWord: "pay for ~", dictMeaning: "~에 대한 비용을 지불하다(대다)" },
+  { ko: ["깨끗한", "맑은", "청정한"], en: ["clean", "clear", "fresh"], label: "깨끗한(clean)", pos: "형용사", dictWord: "clean", dictMeaning: "깨끗한, 청결한" },
+  { ko: ["공기"], en: ["air"], label: "공기(air)", pos: "명사", dictWord: "air", dictMeaning: "공기, 대기" },
+  { ko: ["필요", "필요로"], en: ["need", "needs", "needed"], label: "필요로 하다(need)", pos: "동사", dictWord: "need", dictMeaning: "필요로 하다, 필요하다" }
 ];
 
 // 영작 모범답안 단어별 정확 한국어 뜻 사전 (핵심 및 추천 어휘 자동 추출용)
 const EN_WORD_MEANING_DICT = {
+  tax: { word: "tax (복수: taxes)", meaning: "세금 (명사)" },
+  taxes: { word: "taxes (단수: tax)", meaning: "세금 (명사)" },
+  pay: { word: "pay for ~", meaning: "~에 대한 비용을 지불하다, 대다 (숙어/동사)" },
+  pays: { word: "pay for ~", meaning: "~에 대한 비용을 지불하다, 대다 (숙어/동사)" },
+  clean: { word: "clean", meaning: "깨끗한, 맑은 (형용사)" },
+  air: { word: "air", meaning: "공기 (셀 수 없는 명사)" },
+  need: { word: "need", meaning: "필요로 하다 (동사)" },
+  needs: { word: "need", meaning: "필요로 하다 (동사)" },
+  which: { word: "which / that (관계대명사)", meaning: "선행사(사물)를 수식하는 관계대명사 (목적격일 때 생략 가능)" },
   favorite: { word: "favorite", meaning: "가장 좋아하는 (형용사/명사)" },
   season: { word: "season", meaning: "계절 (명사)" },
   spring: { word: "spring", meaning: "봄 (명사)" },
@@ -441,19 +455,24 @@ function synthesizeModelAnswerFromKorean({
     if (refTrimmed) return refTrimmed;
   }
 
-  // 2) 교사가 입력한 참고 모범답안이 있는 경우 그대로 사용
+  // 2) 교사가 입력한 참고 모범답안이 있는 경우: 복수 정답(/, |, ;, 줄바꿈) 및 관계대명사(which/that/생략) 자동 확장 적용
   if (refTrimmed) {
-    return refTrimmed;
+    if (refTrimmed.includes("[What 감탄문]") || refTrimmed.includes("(참고")) {
+      return refTrimmed;
+    }
+    const expanded = parseAndExpandReferenceAnswers(refTrimmed);
+    return expanded.length > 1 ? expanded.join(" / ") : refTrimmed;
   }
 
-  // 3) 실시간 신경망 번역 결과(autoTranslatedRef)가 있는 경우 문장부호/대소문자 정돈 후 반환
+  // 3) 실시간 신경망 번역 결과(autoTranslatedRef)가 있는 경우 문장부호/대소문자 정돈 및 복수 정답 자동 확장 후 반환
   if (autoTrimmed) {
     let cleaned = autoTrimmed.replace(/\s+/g, " ").trim();
     cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
     if (!/[.!?]$/.test(cleaned)) {
       cleaned += isExclamatoryPrompt ? "!" : ".";
     }
-    return cleaned;
+    const expandedAuto = parseAndExpandReferenceAnswers(cleaned);
+    return expandedAuto.length > 1 ? expandedAuto.join(" / ") : cleaned;
   }
 
   // 4) 오프라인 상태에서 한국어 제시문의 핵심 개념어로 기본 모범 문장 조합
@@ -615,10 +634,161 @@ function normalizeEnWord(word) {
   return w;
 }
 
+function normalizeSentenceForCompare(str) {
+  return (str || "")
+    .replace(/\[[^\]]*\]/g, " ")
+    .replace(/\([^)]*\)/g, " ")
+    .toLowerCase()
+    .replace(/[.!?,;:"']/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /**
- * [정적 호스팅(GitHub Pages) & 로컬 서버 공통]
- * 4단계 루브릭 기반 한국어 제시문 & 영문법 정밀 평가 알고리즘
+ * [복수 정답 파싱 및 문법적 동치 문장(관계대명사 which/that/생략, 감탄문 What/How 등) 자동 확장기]
+ * 교사가 슬래시(/), 세로선(|), 세미콜론(;), 줄바꿈(\n) 등으로 구분해 입력한 여러 개의 정답을 개별 후보 배열로 분리하고,
+ * 단일 정답만 입력된 경우에도 목적격 관계대명사(which / that / 생략) 등 표준 복수 정답을 자동으로 확장합니다.
  */
+function parseAndExpandReferenceAnswers(rawRefStr = "") {
+  if (!rawRefStr || !rawRefStr.trim()) return [];
+
+  // 1) /, |, ;, 줄바꿈으로 구분된 복수 정답 분리
+  const rawParts = rawRefStr
+    .split(/\s*(?:\/|\||;|\n)\s*/)
+    .map((s) =>
+      s
+        .replace(/^\[[^\]]+\]\s*/g, "")
+        .replace(/^\(참고[^)]*\)\s*/g, "")
+        .replace(/\s*\(참고[^)]*\)\s*$/g, "")
+        .trim()
+    )
+    .filter((s) => s.length >= 2 && /[a-zA-Z]/.test(s));
+
+  const expandedSet = new Set();
+  const resultList = [];
+
+  const addCandidate = (sentence) => {
+    const clean = sentence.replace(/\s+/g, " ").trim();
+    const norm = normalizeSentenceForCompare(clean);
+    if (norm && !expandedSet.has(norm)) {
+      expandedSet.add(norm);
+      resultList.push(clean);
+    }
+  };
+
+  for (const part of rawParts) {
+    addCandidate(part);
+
+    // 2) 목적격 관계대명사 (선행사 + which/that/whom + 대명사주어(I/we/you/they/he/she) + 동사) 자동 3종(which / that / 생략) 확장!
+    // 예: "Taxes pay for the clean air which we need."
+    //  -> "Taxes pay for the clean air which we need."
+    //  -> "Taxes pay for the clean air that we need."
+    //  -> "Taxes pay for the clean air we need." (목적격 관계대명사 생략)
+    const objRelMatch = part.match(
+      /^(.*?\b[a-z]+)\s+(which|that|whom|who)\s+((?:i|we|you|they|he|she)\s+[a-z]+.*)$/i
+    );
+    if (objRelMatch) {
+      const prefix = objRelMatch[1];
+      const relPron = objRelMatch[2].toLowerCase();
+      const suffix = objRelMatch[3];
+      if (relPron === "which" || relPron === "that") {
+        addCandidate(`${prefix} which ${suffix}`);
+        addCandidate(`${prefix} that ${suffix}`);
+        addCandidate(`${prefix} ${suffix}`);
+      } else if (relPron === "whom" || relPron === "who") {
+        addCandidate(`${prefix} whom ${suffix}`);
+        addCandidate(`${prefix} who ${suffix}`);
+        addCandidate(`${prefix} that ${suffix}`);
+        addCandidate(`${prefix} ${suffix}`);
+      }
+    }
+  }
+
+  return resultList;
+}
+
+/**
+ * [학생 답안 vs 복수 정답 후보군 1:N 최적 매칭 비교기]
+ * 여러 개의 복수 정답 후보 중 학생이 작성한 답안과 가장 일치도가 높은 후보(bestCandidate)를 찾아
+ * 다른 복수 정답에만 있는 단어(예: 3번째 생략형 정답을 썼는데 1번째 정답의 which가 없다고 감점하는 현상)로 인해
+ * 억울하게 감점되지 않도록 1:1 최적 비교 결과를 반환합니다.
+ */
+function findBestMatchingReferenceCandidate(studentText, candidateList = []) {
+  if (!candidateList || candidateList.length === 0) {
+    return null;
+  }
+
+  const studentNorm = normalizeSentenceForCompare(studentText);
+  const studentRawLower = (studentText || "").toLowerCase();
+  const studentTokens = new Set(
+    (studentRawLower.match(/[a-z]+/g) || []).map(normalizeEnWord)
+  );
+
+  const stopWords = new Set([
+    "the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and",
+    "so", "very", "really", "that", "this", "it", "they", "is", "are", "was", "were",
+    "what", "how"
+  ]);
+
+  let bestResult = null;
+
+  for (let i = 0; i < candidateList.length; i++) {
+    const cand = candidateList[i];
+    const candNorm = normalizeSentenceForCompare(cand);
+
+    // 1) 대소문자/문장부호 제외 100% 동일한 문장인지 확인
+    if (studentNorm === candNorm) {
+      return {
+        bestCandidate: cand,
+        matchedIndex: i,
+        isExactMatch: true,
+        refRatio: 1.0,
+        missingRefWords: []
+      };
+    }
+
+    // 2) 해당 후보 문장의 핵심 단어(Content Words) 대비 일치율 계산
+    const candWords = Array.from(
+      new Set(
+        (candNorm.match(/[a-z]+/g) || []).filter(
+          (w) => !stopWords.has(w) && w.length >= 2
+        )
+      )
+    );
+
+    let hitCount = 0;
+    const missing = [];
+    for (const cw of candWords) {
+      const normCw = normalizeEnWord(cw);
+      if (studentTokens.has(normCw) || studentRawLower.includes(cw)) {
+        hitCount += 1;
+      } else {
+        missing.push(cw);
+      }
+    }
+
+    const ratio = candWords.length > 0 ? hitCount / candWords.length : 1.0;
+
+    // 단어 수 차이도 보조 지표로 반영 (예: which 생략형과 which 포함형 중 학생 문장 길이와 더 가까운 후보 선택)
+    const studentWordLen = (studentNorm.match(/[a-z]+/g) || []).length;
+    const candWordLen = (candNorm.match(/[a-z]+/g) || []).length;
+    const lenDiff = Math.abs(studentWordLen - candWordLen);
+    const scoreMetric = ratio * 100 - lenDiff * 0.5;
+
+    if (!bestResult || scoreMetric > bestResult.scoreMetric) {
+      bestResult = {
+        bestCandidate: cand,
+        matchedIndex: i,
+        isExactMatch: false,
+        refRatio: ratio,
+        missingRefWords: missing,
+        scoreMetric
+      };
+    }
+  }
+
+  return bestResult;
+}
 function evaluateWritingLocally({
   mode,
   topic,
@@ -1247,24 +1417,45 @@ function evaluateWritingLocally({
         });
       }
     } else {
-      const englishKeywords = targetGrammar
-        .toLowerCase()
-        .replace(/\([^)]*\)/g, "")
-        .split(/[,/~]+/)
-        .map((k) => k.trim())
-        .filter((k) => /^[a-z\s']+$/i.test(k) && k.length >= 2);
+      // ★ 복수 정답 후보(또는 목적격 관계대명사 생략 후보)와 1:1 매칭 여부 먼저 확인
+      const candidateListForTarget = parseAndExpandReferenceAnswers(
+        referenceAnswer && referenceAnswer.trim() ? referenceAnswer : independentModelAnswer
+      );
+      const bestTargetCand = findBestMatchingReferenceCandidate(correctedText, candidateListForTarget);
 
-      if (englishKeywords.length > 0) {
-        targetExpressionUsed = englishKeywords.some((kw) =>
-          correctedText.toLowerCase().includes(kw)
+      // 목적격 관계대명사 생략 구조(명사 + 대명사주어 I/we/you/they/he/she + 동사)인지 확인
+      const hasOmittedObjRelClause =
+        /\b[a-z]+\s+(i|we|you|they|he|she)\s+(need|needs|needed|want|wants|wanted|like|likes|liked|love|loves|loved|know|knows|knew|have|has|had|see|saw|met|meet|buy|bought|made|make|use|used)\b/i.test(
+          correctedText
         );
-        if (!targetExpressionUsed) {
-          targetScore = 8;
-          grammarFeedback.push({
-            original: `목표 표현(${targetGrammar}) 미사용`,
-            corrected: referenceAnswer || correctedText,
-            explanation: `[목표 표현 누락] 선생님이 지정하신 핵심 표현("${targetGrammar}")을 포함하여 영작해 보세요!`
-          });
+
+      if (bestTargetCand && bestTargetCand.isExactMatch) {
+        // 복수 정답 후보 중 하나와 정확히 일치하면 목표 구문 100% 달성!
+        targetExpressionUsed = true;
+        targetScore = 30;
+      } else {
+        const englishKeywords = targetGrammar
+          .toLowerCase()
+          .replace(/\([^)]*\)/g, "")
+          .split(/[,/|~]+/)
+          .map((k) => k.trim())
+          .filter((k) => /^[a-z\s']+$/i.test(k) && k.length >= 2);
+
+        if (englishKeywords.length > 0) {
+          targetExpressionUsed =
+            englishKeywords.some((kw) => correctedText.toLowerCase().includes(kw)) ||
+            ((/관계대명사|목적격|which|that|whom/i.test(targetGrammar) ||
+              candidateListForTarget.length > 1) &&
+              hasOmittedObjRelClause);
+
+          if (!targetExpressionUsed) {
+            targetScore = 8;
+            grammarFeedback.push({
+              original: `목표 표현(${targetGrammar}) 미사용`,
+              corrected: independentModelAnswer || referenceAnswer || correctedText,
+              explanation: `[목표 표현 누락] 선생님이 지정하신 핵심 표현("${targetGrammar}")을 포함하여 영작해 보세요!`
+            });
+          }
         }
       }
     }
@@ -1274,7 +1465,7 @@ function evaluateWritingLocally({
   if (!hasFiniteVerb && grammarFeedback.length === 0) {
     grammarFeedback.push({
       original: safeContent,
-      corrected: referenceAnswer || autoTranslatedRef || `${correctedText.replace(/[.!?]+$/, "")} is ...`,
+      corrected: independentModelAnswer || `${correctedText.replace(/[.!?]+$/, "")} is ...`,
       explanation:
         "[동사(Verb) 누락 오류] 영어 문장에는 주어의 상태나 동작을 나타내는 동사(is/are/일반동사 등)가 반드시 포함되어야 합니다."
     });
@@ -1285,6 +1476,8 @@ function evaluateWritingLocally({
 
   // ============================================================================
   // [1영역] 한국어 제시문 의미 전달 정확도 산출 (40점 만점 / 의미 전달력 0~100%)
+  // ★ 복수 정답(/, |, ;, 줄바꿈 구분) 지원: 전체 합산이 아니라 개별 정답 후보들과 1:1 비교 후
+  //    학생 답안과 가장 일치율이 높은 정답 후보(bestCandidate)를 기준으로 채점합니다!
   // ============================================================================
   let meaningAccuracy = 100;
   let meaningScore = 40;
@@ -1294,133 +1487,129 @@ function evaluateWritingLocally({
       ? referenceAnswer.trim()
       : independentModelAnswer || (autoTranslatedRef || "").trim();
 
+  const candidateAnswers = parseAndExpandReferenceAnswers(effectiveRef);
+  const bestCandidateMatch = findBestMatchingReferenceCandidate(safeContent, candidateAnswers);
+
   if (mode === "korean_prompt") {
-    // 교정 후 문장이 아니라 학생이 실제 작성한 원문(safeContent) 기준으로 의미 전달력 평가!
-    const studentTokens = new Set(
-      (safeContent.toLowerCase().match(/[a-z]+/g) || []).map(normalizeEnWord)
-    );
-    const studentRawLower = safeContent.toLowerCase();
-
-    // 1-A. 한국어 제시문(koreanPrompt)에서 핵심 개념 추출 후 학생 영작문 포함 여부 검사
-    const matchedKoreanConcepts = [];
-    if (koreanPrompt && koreanPrompt.trim()) {
-      for (const item of KO_EN_CONCEPT_DICT) {
-        if (item.ko.some((k) => koreanPrompt.includes(k))) {
-          matchedKoreanConcepts.push(item);
-        }
-      }
-    }
-
-    let koConceptHit = 0;
-    for (const concept of matchedKoreanConcepts) {
-      const hit = concept.en.some(
-        (enWord) =>
-          studentRawLower.includes(enWord) || studentTokens.has(normalizeEnWord(enWord))
+    // 만약 복수 정답 후보 중 어느 하나와 정확히 일치한다면 의미 전달력 100%(40점 만점) 즉시 부여!
+    if (bestCandidateMatch && bestCandidateMatch.isExactMatch) {
+      meaningAccuracy = 100;
+      meaningScore = 40;
+    } else {
+      // 교정 후 문장이 아니라 학생이 실제 작성한 원문(safeContent) 기준으로 의미 전달력 평가!
+      const studentTokens = new Set(
+        (safeContent.toLowerCase().match(/[a-z]+/g) || []).map(normalizeEnWord)
       );
-      if (hit) {
-        koConceptHit += 1;
-      } else {
-        missingConceptLabels.push(concept.label);
-      }
-    }
+      const studentRawLower = safeContent.toLowerCase();
 
-    // 1-B. 모범 답안(effectiveRef)의 핵심 내용어(Content Words) 대비 어근/동의어 일치율 정밀 계산
-    // 기능어(what, how, is, are, the, a, it 등)는 제외하여 진짜 의미 단어만 비교
-    const stopWords = new Set([
-      "the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and",
-      "so", "very", "really", "that", "this", "it", "they", "is", "are", "was", "were",
-      "what", "how"
-    ]);
-    let refRatio = null;
-    const missingRefWords = [];
-
-    if (effectiveRef) {
-      const cleanedRefForTokens = effectiveRef.replace(/\[[^\]]*\]|\([^)]*\)/g, " ");
-      const refRawWords = Array.from(
-        new Set(
-          (cleanedRefForTokens.toLowerCase().match(/[a-z]+/g) || []).filter(
-            (w) => !stopWords.has(w) && w.length >= 2
-          )
-        )
-      );
-      if (refRawWords.length > 0) {
-        let hitCount = 0;
-        for (const rw of refRawWords) {
-          const normRw = normalizeEnWord(rw);
-          if (studentTokens.has(normRw) || studentRawLower.includes(rw)) {
-            hitCount += 1;
-          } else {
-            missingRefWords.push(rw);
+      // 1-A. 한국어 제시문(koreanPrompt)에서 핵심 개념 추출 후 학생 영작문 포함 여부 검사
+      const matchedKoreanConcepts = [];
+      if (koreanPrompt && koreanPrompt.trim()) {
+        for (const item of KO_EN_CONCEPT_DICT) {
+          if (item.ko.some((k) => koreanPrompt.includes(k))) {
+            matchedKoreanConcepts.push(item);
           }
         }
-        refRatio = hitCount / refRawWords.length;
       }
+
+      let koConceptHit = 0;
+      for (const concept of matchedKoreanConcepts) {
+        const hit = concept.en.some(
+          (enWord) =>
+            studentRawLower.includes(enWord) || studentTokens.has(normalizeEnWord(enWord))
+        );
+        if (hit) {
+          koConceptHit += 1;
+        } else {
+          missingConceptLabels.push(concept.label);
+        }
+      }
+
+      // 1-B. 복수 정답 후보들 중 학생 문장과 가장 가까운 후보(bestCandidateMatch)의 핵심 단어 일치율 사용!
+      // (예: 3번째 생략형 정답 "Taxes pay for the clean air we need."를 썼을 때 3번째 후보와 비교하여 100% 일치 판정!)
+      const refRatio = bestCandidateMatch ? bestCandidateMatch.refRatio : null;
+      const missingRefWords = bestCandidateMatch ? bestCandidateMatch.missingRefWords : [];
+
+      const koRatio =
+        matchedKoreanConcepts.length > 0 ? koConceptHit / matchedKoreanConcepts.length : null;
+
+      if (refRatio !== null && koRatio !== null) {
+        const combinedRatio = Math.max(refRatio, koRatio * 0.85 + refRatio * 0.15);
+        meaningAccuracy = Math.round(combinedRatio * 100);
+      } else if (koRatio !== null) {
+        meaningAccuracy = Math.round(koRatio * 100);
+      } else if (refRatio !== null) {
+        meaningAccuracy = Math.round(refRatio * 100);
+      } else {
+        const expectedMinWords = Math.max(3, Math.round((koreanPrompt || "").split(/\s+/).length * 0.9));
+        const lengthRatio = Math.min(1, wordCount / expectedMinWords);
+        meaningAccuracy = Math.round(
+          (lengthRatio * 0.5 + (targetScore / 30) * 0.3 + (grammarScore / 20) * 0.2) * 100
+        );
+      }
+
+      // 제시문과 핵심 의미 어휘가 전혀 일치하지 않는 무관한 문장인 경우 엄격 감점 처리
+      if (meaningAccuracy < 25) {
+        targetScore = Math.min(targetScore, 8);
+        grammarScore = Math.min(grammarScore, 10);
+      }
+
+      // 동사(is/are 등) 누락이나 불완전한 문장 구조인 경우 서술어 의미("~이다/구나")가 빠졌으므로 의미 전달력에서도 15% 감점!
+      if (!hasFiniteVerb || incompleteSentenceStructure) {
+        meaningAccuracy = Math.max(0, meaningAccuracy - 15);
+      }
+
+      // 누락된 의미 어휘가 있으면 구체적으로 피드백에 안내!
+      if (missingConceptLabels.length > 0) {
+        grammarFeedback.push({
+          original: `의미 누락/불일치 (${missingConceptLabels.join(", ")})`,
+          corrected: bestCandidateMatch?.bestCandidate || independentModelAnswer,
+          explanation: `[의미 전달 점검] 한국어 제시문에 있는 ${missingConceptLabels.join(
+            ", "
+          )}의 의미가 영어 문장에서 확인되지 않았습니다.`
+        });
+      } else if (missingRefWords.length > 0 && meaningAccuracy < 85) {
+        grammarFeedback.push({
+          original: safeContent,
+          corrected: bestCandidateMatch?.bestCandidate || independentModelAnswer,
+          explanation: `[모범답안 비교] 가장 가까운 정답('${
+            bestCandidateMatch?.bestCandidate || independentModelAnswer
+          }') 대비 핵심 어휘(${missingRefWords.slice(0, 4).join(", ")})를 보완해 보세요.`
+        });
+      }
+
+      meaningAccuracy = Math.min(100, Math.max(0, meaningAccuracy));
+      meaningScore = Math.round((meaningAccuracy / 100) * 40);
     }
-
-    const koRatio =
-      matchedKoreanConcepts.length > 0 ? koConceptHit / matchedKoreanConcepts.length : null;
-
-    if (refRatio !== null && koRatio !== null) {
-      const combinedRatio = Math.max(refRatio, koRatio * 0.85 + refRatio * 0.15);
-      meaningAccuracy = Math.round(combinedRatio * 100);
-    } else if (koRatio !== null) {
-      meaningAccuracy = Math.round(koRatio * 100);
-    } else if (refRatio !== null) {
-      meaningAccuracy = Math.round(refRatio * 100);
-    } else {
-      const expectedMinWords = Math.max(3, Math.round((koreanPrompt || "").split(/\s+/).length * 0.9));
-      const lengthRatio = Math.min(1, wordCount / expectedMinWords);
-      meaningAccuracy = Math.round(
-        (lengthRatio * 0.5 + (targetScore / 30) * 0.3 + (grammarScore / 20) * 0.2) * 100
-      );
-    }
-
-    // 제시문과 핵심 의미 어휘가 전혀 일치하지 않는 무관한 문장인 경우 엄격 감점 처리
-    if (meaningAccuracy < 25) {
-      targetScore = Math.min(targetScore, 8);
-      grammarScore = Math.min(grammarScore, 10);
-    }
-
-    // 동사(is/are 등) 누락이나 불완전한 문장 구조인 경우 서술어 의미("~이다/구나")가 빠졌으므로 의미 전달력에서도 15% 감점!
-    if (!hasFiniteVerb || incompleteSentenceStructure) {
-      meaningAccuracy = Math.max(0, meaningAccuracy - 15);
-    }
-
-    // 누락된 의미 어휘가 있으면 구체적으로 피드백에 안내!
-    if (missingConceptLabels.length > 0) {
-      grammarFeedback.push({
-        original: `의미 누락/불일치 (${missingConceptLabels.join(", ")})`,
-        corrected: independentModelAnswer,
-        explanation: `[의미 전달 점검] 한국어 제시문에 있는 ${missingConceptLabels.join(
-          ", "
-        )}의 의미가 영어 문장에서 확인되지 않았습니다.`
-      });
-    } else if (missingRefWords.length > 0 && meaningAccuracy < 85) {
-      grammarFeedback.push({
-        original: safeContent,
-        corrected: independentModelAnswer,
-        explanation: `[모범답안 비교] 핵심 의미 어휘(${missingRefWords
-          .slice(0, 4)
-          .join(", ")})를 보완하면 제시문의 의미를 더 정확하게 전달할 수 있습니다.`
-      });
-    }
-
-    meaningAccuracy = Math.min(100, Math.max(0, meaningAccuracy));
-    meaningScore = Math.round((meaningAccuracy / 100) * 40);
   } else {
     meaningAccuracy = Math.min(100, Math.max(50, 70 + Math.min(30, wordCount)));
     if (!hasFiniteVerb) meaningAccuracy = Math.max(30, meaningAccuracy - 20);
     meaningScore = Math.round((meaningAccuracy / 100) * 40);
   }
 
-  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가
+  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가 (복수 정답인 경우 일치한 정답 및 다른 가능한 정답 안내!)
   if (grammarFeedback.length === 0) {
-    grammarFeedback.push({
-      original: safeContent,
-      corrected: correctedText,
-      explanation:
-        "🌟 한국어 제시문의 의미 전달, 핵심 목표 구문 어순, 주어-동사 수일치, 문장부호까지 모두 100% 완벽하게 작성했습니다!"
-    });
+    if (candidateAnswers.length > 1 && bestCandidateMatch) {
+      const otherCandidates = candidateAnswers.filter(
+        (_, idx) => idx !== bestCandidateMatch.matchedIndex
+      );
+      grammarFeedback.push({
+        original: safeContent,
+        corrected: correctedText,
+        explanation: `🌟 총 ${candidateAnswers.length}개의 복수 정답 중 [${
+          bestCandidateMatch.matchedIndex + 1
+        }번 정답: "${
+          bestCandidateMatch.bestCandidate
+        }"]과 100% 완벽하게 일치합니다! (다른 가능한 정답 표현: ${otherCandidates.join(" / ")})`
+      });
+    } else {
+      grammarFeedback.push({
+        original: safeContent,
+        corrected: correctedText,
+        explanation:
+          "🌟 한국어 제시문의 의미 전달, 핵심 목표 구문 어순, 주어-동사 수일치, 문장부호까지 모두 100% 완벽하게 작성했습니다!"
+      });
+    }
   }
 
   // ============================================================================
