@@ -24,17 +24,74 @@
   </header>
 
   <main class="container">
-    <!-- 1. 비로그인 안내 화면 -->
+    <!-- 1. 비로그인 안내 화면 (실제 학교 운영 홈페이지 안내 및 사용 가이드) -->
     <section id="view-login" class="card login-card">
-      <h2>환영합니다! 👋</h2>
-      <p>서울문영여자중학교 Google 계정(<strong>@smy.ms.kr</strong>) 또는 관리자 계정(<strong>tfellow@smy.ms.kr / tfellow@gmail.com / engwords@gmail.com</strong>)으로 로그인하면 학번·학년·반·이름이 자동으로 인식됩니다.</p>
-      <div class="notice-box">
-        <strong>🔒 개인정보 보호 안내:</strong> 작성한 글에 포함된 성명, 학번(예: 10101), 연락처 등 개인정보는 AI 평가 전송 전 자동으로 마스킹(비식별화) 처리됩니다.
+      <div class="login-hero">
+        <div class="hero-badge">🏫 서울문영여자중학교 영어과 공식 학습 시스템</div>
+        <h2>서울문영여중 AI 영작문 튜터에 오신 것을 환영합니다! ✍️</h2>
+        <p class="hero-subtitle">
+          선생님이 제시한 우리 반 맞춤형 한국어 문장을 영어로 영작하고,<br />
+          즉시 <strong>정밀 문법 첨삭 · 모범 영작 답안 · 핵심 어휘 피드백</strong>을 받아보세요.
+        </p>
+        <div class="hero-action">
+          <button type="button" id="btn-hero-login" class="btn btn-primary btn-hero">
+            🔑 Google 학교 계정(@smy.ms.kr)으로 로그인하기
+          </button>
+        </div>
       </div>
-      <div class="demo-bar" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-        <span style="font-size: 0.9rem; font-weight: 600; color: #475569;">⚡ 빠른 화면 미리보기:</span>
-        <button id="btn-demo-student" class="btn btn-outline">👩‍🎓 학생 화면 미리보기 (10101 김나은)</button>
-        <button id="btn-demo-teacher" class="btn btn-outline">👩‍🏫 교사 대시보드 미리보기 (tfellow@smy.ms.kr)</button>
+
+      <hr class="section-divider" />
+
+      <div class="guide-section">
+        <h3>📌 학생 로그인 및 영작 과제 참여 방법</h3>
+        <div class="guide-steps-grid">
+          <div class="guide-step-card">
+            <span class="step-num">STEP 1</span>
+            <h4>학교 구글 계정 로그인</h4>
+            <p>
+              상단 또는 중앙의 <strong>[Google 학교 계정 로그인]</strong> 버튼을 누르고 본인의 학교 계정(<strong>@smy.ms.kr</strong>)을 선택하세요.<br />
+              <span class="guide-sub">예: 1학년 1반 1번 → <code>202610101@smy.ms.kr</code> (학번·이름 자동 인식)</span>
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 2</span>
+            <h4>우리 반 영작 과제 확인</h4>
+            <p>
+              로그인하면 <strong>우리 학년·반에 배정된 과제</strong>가 자동으로 나타납니다. 제시된 <strong>한국어 문장</strong>과 <strong>핵심 목표 문법/표현</strong>을 확인하세요.
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 3</span>
+            <h4>시간 내 영작 및 제출</h4>
+            <p>
+              제한시간이 있는 과제는 화면 진입과 동시에 <strong>카운트다운 타이머</strong>가 작동합니다. 시간 내에 영작 후 <strong>[AI 채점 및 피드백 받기]</strong>를 눌러 제출하세요.<br />
+              <span class="guide-sub">※ 제한시간(00:00)이 종료되면 그때까지 작성한 내용이 선생님께 자동 제출됩니다.</span>
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 4</span>
+            <h4>AI 첨삭 및 모범답안 복습</h4>
+            <p>
+              제출 즉시 <strong>4대 영역 점수, 내 문장 교정, 추천 모범 답안, 문법 해설, 핵심 어휘</strong>가 제공되며 하단 기록장에서 언제든 복습할 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-faq-grid">
+        <div class="notice-box">
+          <strong>💡 로그인이 안 되거나 다른 계정이 뜰 때 해결 방법</strong>
+          <ul style="margin: 0.4rem 0 0 1.1rem; padding: 0; font-size: 0.88rem; line-height: 1.6;">
+            <li>개인 지메일(<code>@gmail.com</code>)로 로그인되어 있다면 구글 계정 선택 창에서 <strong>[다른 계정 사용]</strong>을 누른 뒤 학교 계정(<code>2026학번@smy.ms.kr</code>)을 입력해 주세요.</li>
+            <li>로그인 창이 열리지 않는 경우 브라우저 주소창 우측의 <strong>팝업 차단 해제</strong>를 허용해 주세요.</li>
+          </ul>
+        </div>
+        <div class="notice-box" style="background: #f8fafc; border-left-color: #10b981; color: #065f46;">
+          <strong>🔒 학생 개인정보 보호 안내</strong>
+          <p style="margin: 0.4rem 0 0 0; font-size: 0.88rem; line-height: 1.6;">
+            작성한 영작문에 포함된 학생 성명, 학번, 이메일, 연락처 등 개인정보는 외부 전송 전 자동으로 비식별화(마스킹)되어 안전하게 보호됩니다.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -85,17 +142,13 @@
               <label for="select-korean-mission">📌 선생님이 공개(체크)한 우리 반 영작 과제 선택</label>
               <select id="select-korean-mission"></select>
             </div>
-            <!-- 제한시간 카운트다운 및 시작 제어 바 -->
+            <!-- 제한시간 카운트다운 표시 바 (학생 임의 조작 버튼 없음) -->
             <div id="timer-control-bar" class="timer-bar hidden">
               <div class="timer-info">
                 <span class="timer-icon">⏱️</span>
-                <span id="timer-status-label">제한시간 카운트다운 작동 중 (00:00 종료 시 작성 내용 강제 발송)</span>
-                <strong id="timer-countdown" class="timer-digits">03:00</strong>
+                <span id="timer-status-label">남은 제한시간 (00:00 종료 시 작성한 내용 자동 제출)</span>
               </div>
-              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button type="button" id="btn-test-timeout-5s" class="btn btn-outline btn-sm" title="시간 종료 시 강제 발송이 잘 되는지 5초 카운트다운으로 즉시 테스트합니다.">⚡ 5초 뒤 강제발송 테스트</button>
-                <button type="button" id="btn-start-timed-mission" class="btn btn-primary btn-sm">🔄 타이머 다시 시작</button>
-              </div>
+              <strong id="timer-countdown" class="timer-digits">03:00</strong>
             </div>
             <div class="mission-detail">
               <div class="mission-label">🇰🇷 한국어 제시문 (아래 문장을 영어로 영작하세요)</div>
@@ -210,8 +263,7 @@
           </select>
           <select id="new-prompt-timelimit">
             <option value="0">⏱️ 시간제한 없음</option>
-            <option value="10">⏱️ 10초 (강제발송 빠른 테스트용)</option>
-            <option value="30">⏱️ 30초 (스피드 영작)</option>
+            <option value="30">⏱️ 30초 (시간 종료 시 강제제출)</option>
             <option value="60">⏱️ 1분 (시간 종료 시 강제제출)</option>
             <option value="120">⏱️ 2분 (시간 종료 시 강제제출)</option>
             <option value="180" selected>⏱️ 3분 (시간 종료 시 강제제출)</option>
@@ -226,11 +278,12 @@
         </div>
         <div class="prompt-Creator-grid2">
           <input type="text" id="new-prompt-title" placeholder="단원/과제명 (예: 2학년 3반 3단원 조건 영작)" />
-          <input type="text" id="new-prompt-target" placeholder="목표 어휘/문법 (예: so that, ~하기 위해서)" />
+          <input type="text" id="new-prompt-target" placeholder="목표 어휘/문법 (예: What, How / so that / It ~ to)" />
         </div>
         <div class="prompt-creator-row2">
-          <input type="text" id="new-prompt-korean" placeholder="학생에게 제시할 한국어 문장 (예: 나는 아픈 동물들을 돕기 위해서 수의사가 되고 싶다.)" />
-          <input type="text" id="new-prompt-answer" placeholder="참고 모범 영어 답안 (선택 입력 - 예: I want to be a vet so that I can help sick animals.)" />
+          <input type="text" id="new-prompt-korean" placeholder="학생에게 제시할 한국어 문장 (예: 그 건물은 정말 높구나!)" />
+          <input type="text" id="new-prompt-answer" placeholder="모범 영어 답안 (미입력 시 한국어 제시문과 목표 문법에 맞춰 자동 생성됩니다)" />
+          <button type="button" id="btn-auto-generate-answer" class="btn btn-outline" title="입력한 한국어 문장과 목표 문법을 바탕으로 정확한 영어 모범 답안을 자동 완성합니다.">✨ 모범답안 자동완성</button>
           <button type="button" id="btn-add-prompt" class="btn btn-primary">➕ 과제 저장</button>
           <button type="button" id="btn-cancel-edit-prompt" class="btn btn-outline hidden">취소</button>
         </div>

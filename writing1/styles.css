@@ -212,8 +212,138 @@ body {
 
 .prompt-creator-row2 {
   display: grid;
-  grid-template-columns: 1.3fr 1.3fr auto;
-  gap: 0.75rem;
+  grid-template-columns: 1.3fr 1.3fr auto auto auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* 실제 운영 로그인 랜딩 페이지 및 학생 이용 안내 스타일 */
+.login-card {
+  padding: 2.2rem 2rem;
+}
+
+.login-hero {
+  text-align: center;
+  padding: 1rem 0 1.5rem 0;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 0.9rem;
+}
+
+.login-hero h2 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.65rem;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: #475569;
+  line-height: 1.65;
+  margin-bottom: 1.4rem;
+}
+
+.btn-hero {
+  font-size: 1.05rem;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.25rem 0 1.5rem 0;
+}
+
+.guide-section h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.guide-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.guide-step-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.1rem 1rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.guide-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
+}
+
+.step-num {
+  display: inline-block;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.guide-step-card h4 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.4rem;
+}
+
+.guide-step-card p {
+  font-size: 0.86rem;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.guide-sub {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.login-faq-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+}
+
+@media (max-width: 960px) {
+  .guide-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .login-faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .guide-steps-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .checkbox-inline {

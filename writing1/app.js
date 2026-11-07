@@ -217,22 +217,364 @@ const KO_EN_CONCEPT_DICT = [
   { ko: ["재미있", "흥미"], en: ["interesting", "fun", "exciting", "funny"], label: "재미있는(interesting/fun)" },
   { ko: ["친절", "착한"], en: ["kind", "nice", "friendly", "sweet"], label: "친절한(kind/nice)" },
   { ko: ["똑똑", "영리"], en: ["smart", "clever", "wise", "intelligent"], label: "똑똑한(smart/clever)" },
-  { ko: ["건물", "빌딩"], en: ["building", "buildings", "tower"], label: "건물/빌딩(building)" },
-  { ko: ["키가 큰", "높은", "높구", "높다", "높아"], en: ["tall", "high"], label: "높은/키가 큰(tall/high)" },
-  { ko: ["큰", "크구", "거대한"], en: ["big", "large", "huge", "great"], label: "큰(big/large/huge)" },
-  { ko: ["작은", "작구"], en: ["small", "little", "tiny"], label: "작은(small/little)" },
-  { ko: ["소년", "남자아이"], en: ["boy", "boys"], label: "소년(boy)" },
-  { ko: ["소녀", "여자아이"], en: ["girl", "girls"], label: "소녀(girl)" },
-  { ko: ["아이", "어린이"], en: ["child", "children", "kid", "kids"], label: "아이(child/kid)" },
-  { ko: ["달리", "달려", "뛰어"], en: ["run", "runs", "ran", "running"], label: "달리다(run)" },
-  { ko: ["음식", "요리"], en: ["food", "dish", "meal", "cook"], label: "음식(food)" },
-  { ko: ["음악", "노래"], en: ["music", "song", "sing"], label: "음악/노래(music/song)" },
-  { ko: ["영화"], en: ["movie", "film"], label: "영화(movie)" },
-  { ko: ["여행"], en: ["trip", "travel", "journey", "tour"], label: "여행(trip/travel)" },
-  { ko: ["가족", "부모님"], en: ["family", "parents", "parent"], label: "가족/부모님(family/parents)" },
-  { ko: ["시간"], en: ["time", "hour"], label: "시간(time)" },
-  { ko: ["미래", "꿈"], en: ["future", "dream", "dreams"], label: "미래/꿈(future/dream)" }
+  { ko: ["건물", "빌딩"], en: ["building", "buildings", "tower"], label: "건물/빌딩(building)", pos: "명사", dictWord: "building", dictMeaning: "건물, 빌딩" },
+  { ko: ["키가 큰", "높은", "높구", "높다", "높아"], en: ["tall", "high"], label: "높은/키가 큰(tall/high)", pos: "형용사", dictWord: "tall / high", dictMeaning: "(건물·나무·키가) 높은, 키가 큰" },
+  { ko: ["큰", "크구", "거대한"], en: ["big", "large", "huge", "great"], label: "큰(big/large/huge)", pos: "형용사", dictWord: "large / huge", dictMeaning: "큰, 거대한" },
+  { ko: ["작은", "작구"], en: ["small", "little", "tiny"], label: "작은(small/little)", pos: "형용사", dictWord: "small / little", dictMeaning: "작은, 아담한" },
+  { ko: ["소년", "남자아이"], en: ["boy", "boys"], label: "소년(boy)", pos: "명사", dictWord: "boy", dictMeaning: "소년, 남자아이" },
+  { ko: ["소녀", "여자아이"], en: ["girl", "girls"], label: "소녀(girl)", pos: "명사", dictWord: "girl", dictMeaning: "소녀, 여자아이" },
+  { ko: ["아이", "어린이"], en: ["child", "children", "kid", "kids"], label: "아이(child/kid)", pos: "명사", dictWord: "child (복수: children)", dictMeaning: "아이, 어린이" },
+  { ko: ["달리", "달려", "뛰어"], en: ["run", "runs", "ran", "running"], label: "달리다(run)", pos: "동사", dictWord: "run", dictMeaning: "달리다, 뛰다" },
+  { ko: ["음식", "요리"], en: ["food", "dish", "meal", "cook"], label: "음식(food)", pos: "명사", dictWord: "food / dish", dictMeaning: "음식, 요리" },
+  { ko: ["음악", "노래"], en: ["music", "song", "sing"], label: "음악/노래(music/song)", pos: "명사", dictWord: "music / song", dictMeaning: "음악, 노래" },
+  { ko: ["영화"], en: ["movie", "film"], label: "영화(movie)", pos: "명사", dictWord: "movie", dictMeaning: "영화" },
+  { ko: ["여행"], en: ["trip", "travel", "journey", "tour"], label: "여행(trip/travel)", pos: "명사/동사", dictWord: "travel / trip", dictMeaning: "여행하다, 여행" },
+  { ko: ["가족", "부모님"], en: ["family", "parents", "parent"], label: "가족/부모님(family/parents)", pos: "명사", dictWord: "family / parents", dictMeaning: "가족, 부모님" },
+  { ko: ["시간"], en: ["time", "hour"], label: "시간(time)", pos: "명사", dictWord: "time", dictMeaning: "시간" },
+  { ko: ["미래", "꿈"], en: ["future", "dream", "dreams"], label: "미래/꿈(future/dream)", pos: "명사", dictWord: "dream / future", dictMeaning: "꿈, 미래" }
 ];
+
+// 영작 모범답안 단어별 정확 한국어 뜻 사전 (핵심 및 추천 어휘 자동 추출용)
+const EN_WORD_MEANING_DICT = {
+  favorite: { word: "favorite", meaning: "가장 좋아하는 (형용사/명사)" },
+  season: { word: "season", meaning: "계절 (명사)" },
+  spring: { word: "spring", meaning: "봄 (명사)" },
+  summer: { word: "summer", meaning: "여름 (명사)" },
+  autumn: { word: "autumn / fall", meaning: "가을 (명사)" },
+  fall: { word: "fall / autumn", meaning: "가을 (명사)" },
+  winter: { word: "winter", meaning: "겨울 (명사)" },
+  beautiful: { word: "beautiful", meaning: "아름다운, 예쁜 (형용사)" },
+  pretty: { word: "pretty", meaning: "예쁜, 귀여운 (형용사)" },
+  flower: { word: "flower", meaning: "꽃 (명사)" },
+  flowers: { word: "flower", meaning: "꽃 (명사)" },
+  bloom: { word: "bloom", meaning: "(꽃이) 피다, 개화하다 (동사)" },
+  blooms: { word: "bloom", meaning: "(꽃이) 피다, 개화하다 (동사)" },
+  blossom: { word: "blossom", meaning: "(나무의) 꽃이 피다 (동사/명사)" },
+  veterinarian: { word: "veterinarian (vet)", meaning: "수의사, 동물 의사 (명사)" },
+  vet: { word: "vet (veterinarian)", meaning: "수의사 (명사)" },
+  sick: { word: "sick", meaning: "아픈, 병든 (형용사)" },
+  animal: { word: "animal", meaning: "동물 (명사)" },
+  animals: { word: "animal", meaning: "동물 (명사)" },
+  help: { word: "help", meaning: "돕다, 도와주다 (동사)" },
+  important: { word: "important", meaning: "중요한, 소중한 (형용사)" },
+  essential: { word: "essential", meaning: "필수적인, 매우 중요한 (형용사)" },
+  learn: { word: "learn", meaning: "배우다, 익히다 (동사)" },
+  study: { word: "study", meaning: "공부하다, 연구하다 (동사)" },
+  communicate: { word: "communicate with ~", meaning: "~와 소통하다, 의사소통하다 (숙어)" },
+  people: { word: "people", meaning: "사람들 (복수명사)" },
+  world: { word: "around the world", meaning: "전 세계에, 세계 곳곳의 (숙어)" },
+  palace: { word: "palace", meaning: "궁전, 고궁 (명사)" },
+  gyeongbokgung: { word: "Gyeongbokgung Palace", meaning: "경복궁 (고유명사)" },
+  wear: { word: "wear (과거: wore)", meaning: "(옷·한복 등을) 입다, 착용하다 (동사)" },
+  wearing: { word: "wearing (동명사)", meaning: "입는 것, 착용하는 것 (명사구)" },
+  special: { word: "special", meaning: "특별한, 남다른 (형용사)" },
+  experience: { word: "experience", meaning: "경험, 체험 (명사)" },
+  tall: { word: "tall", meaning: "(건물·나무·키가) 높은, 키가 큰 (형용사)" },
+  high: { word: "high / tall", meaning: "높은 (건물·탑에는 주로 tall 사용)" },
+  building: { word: "building", meaning: "건물, 빌딩 (명사)" },
+  buildings: { word: "building", meaning: "건물, 빌딩 (명사)" },
+  tower: { word: "tower", meaning: "탑, 타워 (명사)" },
+  kind: { word: "kind", meaning: "친절한, 다정한 (형용사)" },
+  smart: { word: "smart / clever", meaning: "똑똑한, 영리한 (형용사)" },
+  clever: { word: "clever", meaning: "영리한, 기발한 (형용사)" },
+  fast: { word: "fast", meaning: "빠른, 빠르게 (형용사/부사)" },
+  quick: { word: "quick", meaning: "빠른, 재빠른 (형용사)" },
+  protect: { word: "protect", meaning: "보호하다, 지키다 (동사)" },
+  environment: { word: "environment", meaning: "환경, 자연환경 (명사)" },
+  earth: { word: "the Earth", meaning: "지구 (명사)" },
+  healthy: { word: "healthy", meaning: "건강한 (형용사)" },
+  exercise: { word: "exercise", meaning: "운동하다, 운동 (동사/명사)" },
+  happy: { word: "happy", meaning: "행복한, 기쁜 (형용사)" },
+  weather: { word: "weather", meaning: "날씨 (셀 수 없는 명사 - a/an을 쓰지 않음)" },
+  friend: { word: "friend", meaning: "친구 (명사)" },
+  friends: { word: "friend", meaning: "친구 (명사)" },
+  delicious: { word: "delicious", meaning: "매우 맛있는 (형용사)" },
+  interesting: { word: "interesting", meaning: "흥미로운, 재미있는 (형용사)" },
+  exciting: { word: "exciting", meaning: "신나는, 흥미진진한 (형용사)" },
+  difficult: { word: "difficult / hard", meaning: "어려운, 힘든 (형용사)" },
+  easy: { word: "easy", meaning: "쉬운 (형용사)" },
+  future: { word: "future", meaning: "미래, 장래 (명사)" },
+  dream: { word: "dream", meaning: "꿈, 장래희망 (명사/동사)" }
+};
+
+/**
+ * [독립적 모범 답안 생성기]
+ * 학생의 답안(correctedText)을 절대 복사하지 않고,
+ * 교사의 한국어 제시문(koreanPrompt) + 목표 문법(targetGrammar) + 교사 참고답안/신경망 번역으로부터
+ * 표준 모범 영작 답안을 독립적으로 생성합니다.
+ */
+function synthesizeModelAnswerFromKorean({
+  koreanPrompt = "",
+  targetGrammar = "",
+  referenceAnswer = "",
+  autoTranslatedRef = ""
+}) {
+  const tgLower = (targetGrammar || "").toLowerCase();
+  const koText = (koreanPrompt || "").trim();
+  const refTrimmed = (referenceAnswer || "").trim();
+  const autoTrimmed = (autoTranslatedRef || "").trim();
+
+  const isExclamatoryPrompt =
+    tgLower.includes("what") ||
+    tgLower.includes("how") ||
+    tgLower.includes("감탄") ||
+    /구나\s*!|네요\s*!|얼마나\s+|참\s+.*구나/.test(koText);
+
+  // 1) 감탄문 과제인 경우: What 감탄문과 How 감탄문 표준 정답을 모두 생성하여 학생 답안과 명확히 구분·비교되도록 제공
+  if (isExclamatoryPrompt) {
+    // 1-A. 만약 교사가 이미 두 가지 형태를 모두 적어둔 경우 그대로 반환
+    if (refTrimmed && /what\b/i.test(refTrimmed) && /how\b/i.test(refTrimmed)) {
+      return refTrimmed;
+    }
+
+    // 1-B. 교사 참고 답안 또는 자동번역 문장에서 형용사(adj)와 명사(noun) 추출 시도
+    let adj = "";
+    let noun = "";
+    let isPlural = false;
+    let uncountable = false;
+
+    const sourceForParse = refTrimmed || autoTrimmed;
+    if (sourceForParse) {
+      // 패턴 1: What a(n) [adj] [noun] (it is)!
+      const mWhat = sourceForParse.match(/What\s+(?:(a|an)\s+)?([a-z]+)\s+([a-z]+)(?:\s+(?:it|they|this|that)\s+(?:is|are|was|were))?\s*[.!?]*$/i);
+      // 패턴 2: How [adj] the/this/that [noun] is/are!
+      const mHow = sourceForParse.match(/How\s+([a-z]+)\s+(?:the|this|that)\s+([a-z]+)\s+(?:is|are|was|were)\s*[.!?]*$/i);
+      // 패턴 3: 평서문 번역 결과 예: "That building is so high!" / "The building is very tall!" / "This flower is really pretty!"
+      const mDecl = sourceForParse.match(/(?:the|that|this|a|an)\s+([a-z]+)\s+(?:is|are|was|were)\s+(?:so|very|really|truly|quite)?\s*([a-z]+)/i);
+
+      if (mWhat) {
+        adj = mWhat[2].toLowerCase();
+        noun = mWhat[3].toLowerCase();
+      } else if (mHow) {
+        adj = mHow[1].toLowerCase();
+        noun = mHow[2].toLowerCase();
+      } else if (mDecl) {
+        noun = mDecl[1].toLowerCase();
+        adj = mDecl[2].toLowerCase();
+      }
+    }
+
+    // 1-C. 한국어 제시문 사전 매칭으로 형용사·명사 보강 (예: "높은/키가 큰" -> tall, "건물/빌딩" -> building)
+    const koAdjectives = [
+      { keys: ["높은", "높구", "높다", "높아", "키가 큰", "키 큰"], en: "tall" },
+      { keys: ["아름다", "예쁜", "예쁘", "고운"], en: "beautiful" },
+      { keys: ["멋진", "멋지", "훌륭"], en: "wonderful" },
+      { keys: ["귀여운", "귀엽"], en: "cute" },
+      { keys: ["친절", "착한", "다정"], en: "kind" },
+      { keys: ["똑똑", "영리", "현명"], en: "smart" },
+      { keys: ["빠른", "빨리", "빠르"], en: "fast" },
+      { keys: ["큰", "크구", "거대한"], en: "big" },
+      { keys: ["작은", "작구"], en: "small" },
+      { keys: ["재미있", "흥미"], en: "interesting" },
+      { keys: ["신나", "신난"], en: "exciting" },
+      { keys: ["맛있", "맛있는"], en: "delicious" },
+      { keys: ["특별"], en: "special" },
+      { keys: ["행복", "기쁜", "즐거"], en: "happy" },
+      { keys: ["슬픈", "슬프"], en: "sad" },
+      { keys: ["어려운", "어렵", "힘든"], en: "difficult" },
+      { keys: ["쉬운", "쉽"], en: "easy" },
+      { keys: ["좋은", "좋구", "맑은"], en: "nice" }
+    ];
+    const koNouns = [
+      { keys: ["건물", "빌딩"], en: "building" },
+      { keys: ["탑", "타워"], en: "tower" },
+      { keys: ["꽃들"], en: "flowers", plural: true },
+      { keys: ["꽃"], en: "flower" },
+      { keys: ["강아지", "개"], en: "dog" },
+      { keys: ["고양이"], en: "cat" },
+      { keys: ["소년", "남자아이"], en: "boy" },
+      { keys: ["소녀", "여자아이"], en: "girl" },
+      { keys: ["아이", "어린이"], en: "child" },
+      { keys: ["학생"], en: "student" },
+      { keys: ["선생님", "교사"], en: "teacher" },
+      { keys: ["친구"], en: "friend" },
+      { keys: ["책"], en: "book" },
+      { keys: ["영화"], en: "movie" },
+      { keys: ["노래"], en: "song" },
+      { keys: ["음악"], en: "music", uncountable: true },
+      { keys: ["날씨"], en: "weather", uncountable: true },
+      { keys: ["음식"], en: "food", uncountable: true },
+      { keys: ["하늘"], en: "sky" },
+      { keys: ["바다"], en: "sea" },
+      { keys: ["집"], en: "house" },
+      { keys: ["차", "자동차"], en: "car" },
+      { keys: ["나무"], en: "tree" },
+      { keys: ["공원"], en: "park" },
+      { keys: ["학교"], en: "school" }
+    ];
+
+    for (const item of koAdjectives) {
+      if (item.keys.some((k) => koText.includes(k))) {
+        adj = item.en;
+        break;
+      }
+    }
+    for (const item of koNouns) {
+      if (item.keys.some((k) => koText.includes(k))) {
+        noun = item.en;
+        isPlural = Boolean(item.plural);
+        uncountable = Boolean(item.uncountable);
+        break;
+      }
+    }
+
+    // 건물(building)과 high가 조합된 경우 더 자연스러운 tall로 보정
+    if (noun === "building" && adj === "high") {
+      adj = "tall";
+    }
+
+    if (adj && noun) {
+      const article = isPlural || uncountable ? "" : /^[aeiou]/i.test(adj) ? "an " : "a ";
+      const pron = isPlural ? "they are" : "it is";
+      const beVerb = isPlural ? "are" : "is";
+      const whatForm = `What ${article}${adj} ${noun} ${pron}!`;
+      const howForm = `How ${adj} the ${noun} ${beVerb}!`;
+
+      const onlyWhat = tgLower.includes("what") && !tgLower.includes("how");
+      const onlyHow = tgLower.includes("how") && !tgLower.includes("what");
+
+      if (onlyWhat) return `${whatForm} (참고 How 감탄문: ${howForm})`;
+      if (onlyHow) return `${howForm} (참고 What 감탄문: ${whatForm})`;
+      return `[What 감탄문] ${whatForm}  /  [How 감탄문] ${howForm}`;
+    }
+
+    if (refTrimmed) return refTrimmed;
+  }
+
+  // 2) 교사가 입력한 참고 모범답안이 있는 경우 그대로 사용
+  if (refTrimmed) {
+    return refTrimmed;
+  }
+
+  // 3) 실시간 신경망 번역 결과(autoTranslatedRef)가 있는 경우 문장부호/대소문자 정돈 후 반환
+  if (autoTrimmed) {
+    let cleaned = autoTrimmed.replace(/\s+/g, " ").trim();
+    cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    if (!/[.!?]$/.test(cleaned)) {
+      cleaned += isExclamatoryPrompt ? "!" : ".";
+    }
+    return cleaned;
+  }
+
+  // 4) 오프라인 상태에서 한국어 제시문의 핵심 개념어로 기본 모범 문장 조합
+  return "제시된 한국어 문장의 주어·동사와 핵심 목표 표현을 포함하여 완전한 영어 문장으로 작성해 보세요.";
+}
+
+/**
+ * [과제 맞춤형 핵심 및 추천 어휘 생성기]
+ * 무관한 고정 문구(sentence structure, expression 등)를 완전히 배제하고,
+ * 현재 한국어 제시문(koreanPrompt), 목표 문법(targetGrammar), 모범 답안(modelAnswer)에서
+ * 실제 학습해야 할 핵심 구문 공식과 필수 영어 어휘만 정확하게 추출합니다.
+ */
+function buildRelevantVocabularyList({
+  koreanPrompt = "",
+  targetGrammar = "",
+  modelAnswer = "",
+  missingConceptLabels = []
+}) {
+  const suggestions = [];
+  const usedKeys = new Set();
+  const tgLower = (targetGrammar || "").toLowerCase();
+  const koText = (koreanPrompt || "").trim();
+  const firstModelSentence = (modelAnswer || "")
+    .replace(/\[What 감탄문\]\s*/g, "")
+    .split(/\s*\/\s*|\s*\(참고/)[0]
+    .trim();
+
+  // 1순위: 목표 문법/구문 공식 및 의미 안내
+  if (tgLower.includes("what") || tgLower.includes("how") || tgLower.includes("감탄")) {
+    const whatExMatch = modelAnswer.match(/What\s+[^/!]+!/i);
+    const howExMatch = modelAnswer.match(/How\s+[^/!)✨]+!/i);
+    suggestions.push({
+      word: "What + a(n) + 형용사 + 명사 + 주어 + 동사!",
+      meaning: "명사를 강조하는 감탄문 어순 ('참 ~한 …구나!')",
+      example: whatExMatch ? whatExMatch[0].trim() : "What a tall building it is!"
+    });
+    suggestions.push({
+      word: "How + 형용사/부사 + 주어 + 동사!",
+      meaning: "형용사·부사를 강조하는 감탄문 어순 ('얼마나 ~한지!') — 주어 뒤에 반드시 동사(is/are)가 와야 함",
+      example: howExMatch ? howExMatch[0].trim() : "How tall the building is!"
+    });
+    usedKeys.add("what");
+    usedKeys.add("how");
+  } else if (tgLower.includes("so that")) {
+    suggestions.push({
+      word: "so that + 주어 + can + 동사원형",
+      meaning: "~할 수 있도록, ~하기 위해서 (목적을 나타내는 접속사 구문)",
+      example: firstModelSentence || "I want to be a veterinarian so that I can help sick animals."
+    });
+    usedKeys.add("so that");
+  } else if (/it\s*~?\s*to|가주어/i.test(targetGrammar)) {
+    suggestions.push({
+      word: "It is + 형용사 + to + 동사원형 ~",
+      meaning: "~하는 것은 …하다 (가주어 It - 진주어 to부정사 구문)",
+      example: firstModelSentence || "It is important to learn English to communicate with people."
+    });
+    usedKeys.add("it is");
+  } else if (tgLower.includes("because")) {
+    suggestions.push({
+      word: "because + 주어 + 동사",
+      meaning: "왜냐하면 ~이기 때문에 (원인·이유를 나타내는 접속사)",
+      example: firstModelSentence || "My favorite season is spring because beautiful flowers bloom."
+    });
+    usedKeys.add("because");
+  } else if (tgLower.includes("have been") || tgLower.includes("현재완료")) {
+    suggestions.push({
+      word: "have/has been to + 장소",
+      meaning: "~에 가본 적이 있다 (현재완료 경험 용법)",
+      example: firstModelSentence || "I have been to Gyeongbokgung Palace."
+    });
+    usedKeys.add("have been");
+  } else if (targetGrammar && targetGrammar.trim()) {
+    suggestions.push({
+      word: targetGrammar.trim(),
+      meaning: "이번 영작 과제의 핵심 목표 문법·표현",
+      example: firstModelSentence || modelAnswer
+    });
+  }
+
+  // 2순위: 한국어 제시문(koreanPrompt)에 매칭된 실제 핵심 어휘 추가
+  if (koText) {
+    for (const item of KO_EN_CONCEPT_DICT) {
+      if (item.ko.some((k) => koText.includes(k))) {
+        const mainEn = item.dictWord || item.en[0];
+        if (usedKeys.has(mainEn.toLowerCase())) continue;
+        usedKeys.add(mainEn.toLowerCase());
+
+        const dictEntry = EN_WORD_MEANING_DICT[item.en[0].toLowerCase()];
+        const wordTitle = dictEntry ? dictEntry.word : `${item.en.slice(0, 2).join(" / ")}`;
+        const wordMeaning = dictEntry
+          ? dictEntry.meaning
+          : item.dictMeaning || `${item.label.replace(/\([^)]*\)/g, "")} (제시문 핵심 어휘)`;
+        const isMissing = missingConceptLabels.includes(item.label);
+
+        suggestions.push({
+          word: isMissing ? `⚠️ ${wordTitle} (보완 권장)` : wordTitle,
+          meaning: wordMeaning,
+          example: firstModelSentence || modelAnswer
+        });
+      }
+    }
+  }
+
+  // 3순위: 모범 답안(modelAnswer)에 포함된 주요 영단어 사전 풀이 추가
+  const modelTokens = (modelAnswer.toLowerCase().match(/[a-z]+/g) || []);
+  for (const token of modelTokens) {
+    if (suggestions.length >= 5) break;
+    const entry = EN_WORD_MEANING_DICT[token];
+    if (entry && !usedKeys.has(entry.word.toLowerCase()) && !usedKeys.has(token)) {
+      usedKeys.add(entry.word.toLowerCase());
+      usedKeys.add(token);
+      suggestions.push({
+        word: entry.word,
+        meaning: entry.meaning,
+        example: firstModelSentence || modelAnswer
+      });
+    }
+  }
+
+  return suggestions.slice(0, 5);
+}
 
 // 영어 동의어/어근 정규화 헬퍼 (모범답안 비교 시 동일 의미 인정)
 const EN_SYNONYM_GROUPS = [
@@ -288,6 +630,14 @@ function evaluateWritingLocally({
   content,
   studentName
 }) {
+  // ★ 학생 답안과 완전히 독립적으로 한국어 제시문 + 목표 문법에서 표준 모범 답안 생성
+  const independentModelAnswer = synthesizeModelAnswerFromKorean({
+    koreanPrompt,
+    targetGrammar,
+    referenceAnswer,
+    autoTranslatedRef
+  });
+
   if (!content || content === "(제한시간 초과로 미작성 상태에서 자동 발송됨)") {
     return {
       cefrLevel: "A1",
@@ -296,20 +646,22 @@ function evaluateWritingLocally({
       targetExpressionUsed: false,
       rubric: { meaning: 0, target: 0, grammar: 0, mechanics: 0 },
       correctedText: "(제한시간 내 작성된 영어 문장이 없습니다.)",
-      modelAnswer:
-        referenceAnswer ||
-        autoTranslatedRef ||
-        "제시된 한국어 문장의 핵심 주어와 동사를 먼저 파악한 뒤 시간 내에 작성을 시작해 보세요.",
+      modelAnswer: independentModelAnswer,
       grammarFeedback: [
         {
           original: "(미작성 시간초과)",
-          corrected: referenceAnswer || autoTranslatedRef || "모범 답안 참고",
+          corrected: independentModelAnswer,
           explanation: "제한시간이 종료되어 미작성 상태로 자동 제출되었습니다. 모범 답안을 확인하고 다시 도전해 보세요!"
         }
       ],
-      vocabularySuggestions: [],
+      vocabularySuggestions: buildRelevantVocabularyList({
+        koreanPrompt,
+        targetGrammar,
+        modelAnswer: independentModelAnswer,
+        missingConceptLabels: []
+      }),
       overallComment:
-        "제한시간 동안 작성된 영작문이 없어 0점으로 자동 발송되었습니다. [타이머 재시작]을 눌러 모범 답안 표현을 연습해 보세요!"
+        "제한시간 동안 작성된 영작문이 없어 0점으로 자동 발송되었습니다. 아래 추천 모범 답안과 핵심 어휘를 확인해 보세요!"
     };
   }
 
@@ -322,21 +674,26 @@ function evaluateWritingLocally({
   if (englishWordsOnly.length === 0) {
     return {
       cefrLevel: "A1",
-      score: 5,
+      score: 0,
       meaningAccuracy: 0,
       targetExpressionUsed: false,
-      rubric: { meaning: 0, target: 0, grammar: 2, mechanics: 3 },
-      correctedText: referenceAnswer || autoTranslatedRef || "Please write your sentence in English.",
-      modelAnswer: referenceAnswer || autoTranslatedRef || "제시된 한국어 문장을 영어 단어로 바꾸어 작성해 보세요.",
+      rubric: { meaning: 0, target: 0, grammar: 0, mechanics: 0 },
+      correctedText: "(영어 단어가 인식되지 않았습니다.)",
+      modelAnswer: independentModelAnswer,
       grammarFeedback: [
         {
           original: safeContent,
-          corrected: referenceAnswer || autoTranslatedRef || "영어 문장으로 작성 필요",
+          corrected: independentModelAnswer,
           explanation: "영어 단어가 인식되지 않았습니다. 한국어 제시문의 의미를 영어 주어+동사 문장으로 작성해 주세요!"
         }
       ],
-      vocabularySuggestions: [],
-      overallComment: "영어 문장이 입력되지 않아 채점이 제한되었습니다. 제시된 목표 표현을 활용해 영어로 다시 작성해 보세요!"
+      vocabularySuggestions: buildRelevantVocabularyList({
+        koreanPrompt,
+        targetGrammar,
+        modelAnswer: independentModelAnswer,
+        missingConceptLabels: []
+      }),
+      overallComment: "영어 문장이 입력되지 않아 0점으로 처리되었습니다. 추천 모범 영작 답안과 핵심 어휘를 참고해 영어로 작성해 보세요!"
     };
   }
 
@@ -932,7 +1289,10 @@ function evaluateWritingLocally({
   let meaningAccuracy = 100;
   let meaningScore = 40;
   const missingConceptLabels = [];
-  const effectiveRef = (referenceAnswer && referenceAnswer.trim()) ? referenceAnswer.trim() : (autoTranslatedRef || "").trim();
+  const effectiveRef =
+    referenceAnswer && referenceAnswer.trim()
+      ? referenceAnswer.trim()
+      : independentModelAnswer || (autoTranslatedRef || "").trim();
 
   if (mode === "korean_prompt") {
     // 교정 후 문장이 아니라 학생이 실제 작성한 원문(safeContent) 기준으로 의미 전달력 평가!
@@ -964,14 +1324,24 @@ function evaluateWritingLocally({
       }
     }
 
-    // 1-B. 교사 참고 모범 답안(또는 실시간 신경망 번역 답안 effectiveRef) 대비 어근/동의어 일치율 정밀 계산
-    const stopWords = new Set(["the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and", "so", "very", "really", "that", "this", "it"]);
+    // 1-B. 모범 답안(effectiveRef)의 핵심 내용어(Content Words) 대비 어근/동의어 일치율 정밀 계산
+    // 기능어(what, how, is, are, the, a, it 등)는 제외하여 진짜 의미 단어만 비교
+    const stopWords = new Set([
+      "the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and",
+      "so", "very", "really", "that", "this", "it", "they", "is", "are", "was", "were",
+      "what", "how"
+    ]);
     let refRatio = null;
     const missingRefWords = [];
 
     if (effectiveRef) {
-      const refRawWords = (effectiveRef.toLowerCase().match(/[a-z]+/g) || []).filter(
-        (w) => !stopWords.has(w) && w.length >= 2
+      const cleanedRefForTokens = effectiveRef.replace(/\[[^\]]*\]|\([^)]*\)/g, " ");
+      const refRawWords = Array.from(
+        new Set(
+          (cleanedRefForTokens.toLowerCase().match(/[a-z]+/g) || []).filter(
+            (w) => !stopWords.has(w) && w.length >= 2
+          )
+        )
       );
       if (refRawWords.length > 0) {
         let hitCount = 0;
@@ -1005,6 +1375,12 @@ function evaluateWritingLocally({
       );
     }
 
+    // 제시문과 핵심 의미 어휘가 전혀 일치하지 않는 무관한 문장인 경우 엄격 감점 처리
+    if (meaningAccuracy < 25) {
+      targetScore = Math.min(targetScore, 8);
+      grammarScore = Math.min(grammarScore, 10);
+    }
+
     // 동사(is/are 등) 누락이나 불완전한 문장 구조인 경우 서술어 의미("~이다/구나")가 빠졌으므로 의미 전달력에서도 15% 감점!
     if (!hasFiniteVerb || incompleteSentenceStructure) {
       meaningAccuracy = Math.max(0, meaningAccuracy - 15);
@@ -1014,7 +1390,7 @@ function evaluateWritingLocally({
     if (missingConceptLabels.length > 0) {
       grammarFeedback.push({
         original: `의미 누락/불일치 (${missingConceptLabels.join(", ")})`,
-        corrected: effectiveRef || `핵심 어휘(${missingConceptLabels.join(", ")}) 반영 필요`,
+        corrected: independentModelAnswer,
         explanation: `[의미 전달 점검] 한국어 제시문에 있는 ${missingConceptLabels.join(
           ", "
         )}의 의미가 영어 문장에서 확인되지 않았습니다.`
@@ -1022,7 +1398,7 @@ function evaluateWritingLocally({
     } else if (missingRefWords.length > 0 && meaningAccuracy < 85) {
       grammarFeedback.push({
         original: safeContent,
-        corrected: effectiveRef || correctedText,
+        corrected: independentModelAnswer,
         explanation: `[모범답안 비교] 핵심 의미 어휘(${missingRefWords
           .slice(0, 4)
           .join(", ")})를 보완하면 제시문의 의미를 더 정확하게 전달할 수 있습니다.`
@@ -1066,10 +1442,21 @@ function evaluateWritingLocally({
       ? "A2"
       : "A1";
 
+  // ★ 추천 모범 영작 답안(Model Answer)은 학생 문장 교정(correctedText)과 절대 같아지지 않도록
+  // 오직 한국어 제시문+목표구문+교사 참고답안에서 독립 생성된 표준 모범 답안을 제시!
   const finalModelAnswer =
-    referenceAnswer && referenceAnswer.trim()
-      ? referenceAnswer
+    mode === "korean_prompt"
+      ? independentModelAnswer
+      : referenceAnswer && referenceAnswer.trim()
+      ? referenceAnswer.trim()
       : generatedAlternativeModel || correctedText;
+
+  const relevantVocabList = buildRelevantVocabularyList({
+    koreanPrompt,
+    targetGrammar,
+    modelAnswer: finalModelAnswer,
+    missingConceptLabels
+  });
 
   let overallComment = "";
   if (totalScore >= 95) {
@@ -1077,7 +1464,7 @@ function evaluateWritingLocally({
   } else if (totalScore >= 80) {
     overallComment = `👍 [총점 ${totalScore}점] 핵심 의미를 잘 전달했으나 세부 항목(의미 ${meaningScore}/40, 목표구문 ${targetScore}/30, 문법 ${grammarScore}/20, 표기 ${mechanicsScore}/10)에서 아쉬운 부분을 교정 노트로 확인해 보세요!`;
   } else {
-    overallComment = `💡 [총점 ${totalScore}점] 제시문과 어휘·구문 일치도를 높여 보세요(의미 ${meaningScore}/40, 목표구문 ${targetScore}/30, 문법 ${grammarScore}/20, 표기 ${mechanicsScore}/10). 아래 교정 설명과 모범 답안을 참고해 다시 도전해 보세요!`;
+    overallComment = `💡 [총점 ${totalScore}점] 제시문과 어휘·구문 일치도를 높여 보세요(의미 ${meaningScore}/40, 목표구문 ${targetScore}/30, 문법 ${grammarScore}/20, 표기 ${mechanicsScore}/10). 아래 교정 설명과 추천 모범 영작 답안을 참고해 다시 도전해 보세요!`;
   }
 
   return {
@@ -1094,28 +1481,7 @@ function evaluateWritingLocally({
     correctedText,
     modelAnswer: finalModelAnswer,
     grammarFeedback,
-    vocabularySuggestions: [
-      {
-        word: targetGrammar || "sentence structure",
-        meaning: targetGrammar ? "이번 과제 핵심 목표 표현/구문" : "영어 문장 구조",
-        example: finalModelAnswer
-      },
-      ...(missingConceptLabels.length > 0
-        ? [
-            {
-              word: missingConceptLabels.join(", "),
-              meaning: "한국어 제시문에서 보완이 필요한 핵심 어휘",
-              example: referenceAnswer || "제시문의 핵심 단어를 영작에 꼭 포함해 보세요."
-            }
-          ]
-        : [
-            {
-              word: "expression",
-              meaning: "표현, 어구",
-              example: "Using the target expression accurately makes your writing shine!"
-            }
-          ])
-    ],
+    vocabularySuggestions: relevantVocabList,
     overallComment
   };
 }
@@ -1180,8 +1546,6 @@ let currentTimedMissionId = null;
 const timerControlBar = document.getElementById("timer-control-bar");
 const timerStatusLabel = document.getElementById("timer-status-label");
 const timerCountdownEl = document.getElementById("timer-countdown");
-const btnStartTimedMission = document.getElementById("btn-start-timed-mission");
-const btnTestTimeout5s = document.getElementById("btn-test-timeout-5s");
 
 function formatMMSS(sec) {
   const s = Math.max(0, Math.floor(sec));
@@ -1213,10 +1577,6 @@ function startMissionTimer(limitSec, missionId = null) {
 
   timerControlBar?.classList.remove("hidden");
   isTimerRunning = true;
-  if (btnStartTimedMission) {
-    btnStartTimedMission.classList.remove("hidden");
-    btnStartTimedMission.textContent = "🔄 타이머 재시작";
-  }
   if (timerStatusLabel) {
     timerStatusLabel.textContent = "⏳ 남은 제한시간 (00:00 도달 시 작성한 내용 자동 강제 발송):";
   }
@@ -1247,28 +1607,6 @@ function startMissionTimer(limitSec, missionId = null) {
     }
   }, 1000);
 }
-
-btnStartTimedMission?.addEventListener("click", () => {
-  const selectedId = selectKoreanMission.value;
-  const mission = koreanPrompts.find((p) => p.id === selectedId);
-  if (!mission) return;
-  const limitSec = Number(mission.timeLimitSec) || 180;
-  essayContent.disabled = false;
-  btnSubmitEssay.disabled = false;
-  essayContent.focus();
-  startMissionTimer(limitSec, mission.id);
-});
-
-// 5초 뒤 강제발송 즉시 테스트 버튼 (교사/학생이 시간 초과 자동 제출 동작을 5초 만에 바로 확인 가능)
-btnTestTimeout5s?.addEventListener("click", () => {
-  const selectedId = selectKoreanMission.value;
-  const mission = koreanPrompts.find((p) => p.id === selectedId);
-  if (!mission) return;
-  essayContent.disabled = false;
-  btnSubmitEssay.disabled = false;
-  essayContent.focus();
-  startMissionTimer(5, mission.id);
-});
 
 // 학생 화면의 한국어 제시문 드롭다운 렌더링 (교사가 공개 체크한 과제 중 본인 학년/반 + 공통 과제만 표시)
 function renderStudentKoreanMissions() {
@@ -1391,28 +1729,20 @@ function updateSelectedKoreanMissionDetail() {
 // ============================================================================
 // 4. 사용자 인증 (Google 로그인 및 @smy.ms.kr 도메인 + 명렬표 자동 매칭)
 // ============================================================================
-btnLogin.addEventListener("click", async () => {
+async function triggerGoogleLogin() {
   try {
     await signInWithPopup(auth, googleProvider);
   } catch (error) {
     console.error("Google 로그인 실패:", error);
     alert("로그인 중 오류가 발생했습니다: " + error.message);
   }
-});
+}
+
+btnLogin.addEventListener("click", triggerGoogleLogin);
+document.getElementById("btn-hero-login")?.addEventListener("click", triggerGoogleLogin);
 
 btnLogout.addEventListener("click", async () => {
   stopMissionTimer();
-  if (currentUser?.isDemo) {
-    currentUser = null;
-    currentStudentInfo = null;
-    userInfoText.textContent = "로그인이 필요합니다";
-    btnLogin.classList.remove("hidden");
-    btnLogout.classList.add("hidden");
-    viewLogin.classList.remove("hidden");
-    viewStudent.classList.add("hidden");
-    viewTeacher.classList.add("hidden");
-    return;
-  }
   await signOut(auth);
 });
 
@@ -1760,6 +2090,58 @@ document.getElementById("new-prompt-grade")?.addEventListener("change", (e) => {
   }
 });
 
+// 한국어 제시문 + 목표 문법으로부터 표준 모범 답안을 비동기로 자동 생성하는 헬퍼 (교사 과제 출제용)
+async function generateModelAnswerForTeacher(koreanPrompt, targetGrammar) {
+  let autoTranslatedRef = "";
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2500);
+    const res = await fetch(
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(koreanPrompt)}&langpair=ko|en`,
+      { signal: controller.signal }
+    ).finally(() => clearTimeout(timer));
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.responseData?.translatedText) {
+        autoTranslatedRef = data.responseData.translatedText;
+      }
+    }
+  } catch (e) {
+    // 네트워크 제한 시 내장 한->영 구문 합성기 사용
+  }
+  return synthesizeModelAnswerFromKorean({
+    koreanPrompt,
+    targetGrammar,
+    referenceAnswer: "",
+    autoTranslatedRef
+  });
+}
+
+// [✨ 모범답안 자동완성] 버튼 클릭 이벤트
+document.getElementById("btn-auto-generate-answer")?.addEventListener("click", async () => {
+  const koreanPrompt = document.getElementById("new-prompt-korean")?.value.trim() || "";
+  const targetGrammar = document.getElementById("new-prompt-target")?.value.trim() || "";
+  const answerInput = document.getElementById("new-prompt-answer");
+  const btnAuto = document.getElementById("btn-auto-generate-answer");
+
+  if (!koreanPrompt) {
+    return alert("먼저 학생에게 제시할 한국어 문장을 입력해 주세요.");
+  }
+
+  const origLabel = btnAuto.textContent;
+  btnAuto.disabled = true;
+  btnAuto.textContent = "⏳ 생성 중...";
+  try {
+    const generated = await generateModelAnswerForTeacher(koreanPrompt, targetGrammar);
+    if (answerInput) {
+      answerInput.value = generated;
+    }
+  } finally {
+    btnAuto.disabled = false;
+    btnAuto.textContent = origLabel;
+  }
+});
+
 document.getElementById("btn-add-prompt")?.addEventListener("click", async () => {
   const targetGrade = document.getElementById("new-prompt-grade").value;
   const targetClass = document.getElementById("new-prompt-class")?.value || "all";
@@ -1768,13 +2150,18 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   const title = document.getElementById("new-prompt-title").value.trim();
   const targetGrammar = document.getElementById("new-prompt-target").value.trim();
   const koreanPrompt = document.getElementById("new-prompt-korean").value.trim();
-  const referenceAnswer = document.getElementById("new-prompt-answer").value.trim();
+  let referenceAnswer = document.getElementById("new-prompt-answer").value.trim();
 
   if (!title || !koreanPrompt) {
     return alert("과제명과 학생에게 제시할 한국어 문장을 입력해 주세요.");
   }
 
-  const isRealTeacher = currentUser && !currentUser.isDemo;
+  // 교사가 참고 모범 답안을 비워둔 채 저장하면 자동으로 한국어 제시문+목표 구문 기반 표준 모범 답안을 생성하여 채움!
+  if (!referenceAnswer) {
+    referenceAnswer = await generateModelAnswerForTeacher(koreanPrompt, targetGrammar);
+  }
+
+  const isRealTeacher = Boolean(currentUser);
   const isEditing = Boolean(editingPromptId);
 
   if (isEditing) {
@@ -1830,9 +2217,7 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   alert(
     isEditing
       ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 과제 수정 내용이 저장되었습니다!`
-      : isRealTeacher
-      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 새 과제가 저장되었습니다!`
-      : `⚡ 미리보기 모드에 [${targetDesc} / ${formatLimitLabel(timeLimitSec)}] 과제가 추가되었습니다.`
+      : `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 새 과제가 저장되었습니다!`
   );
 });
 
@@ -1899,17 +2284,9 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
     if (timerCountdownEl) {
       timerCountdownEl.textContent = "00:00 (강제발송 완료)";
     }
-    if (btnStartTimedMission) {
-      btnStartTimedMission.classList.remove("hidden");
-      btnStartTimedMission.textContent = "🔄 타이머 재시작";
-    }
   } else if (missionTimeLimitSec > 0) {
     if (timerStatusLabel) {
       timerStatusLabel.textContent = "✅ 제한시간 내에 영작 제출 및 채점을 완료했습니다!";
-    }
-    if (btnStartTimedMission) {
-      btnStartTimedMission.classList.remove("hidden");
-      btnStartTimedMission.textContent = "🔄 타이머 재시작";
     }
   }
 
@@ -2037,19 +2414,13 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       console.warn("로컬 백업 저장 실패:", storageErr);
     }
 
-    if (currentUser.isDemo) {
-      const { createdAt, ...demoRecord } = newRecord;
-      DEMO_SUBMISSIONS.unshift(demoRecord);
-      renderLocalStudentHistory(DEMO_SUBMISSIONS.filter((d) => d.studentId === studentId));
-    } else {
-      try {
-        // cloze-a8e6c 보안 규칙에서 학생 쓰기 및 교사 전체 읽기가 허용된 `vocab_results` 컬렉션 사용
-        await addDoc(collection(db, "vocab_results"), newRecord);
-        await loadStudentHistory();
-      } catch (dbErr) {
-        const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-        renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid || d.studentId === studentId));
-      }
+    try {
+      // cloze-a8e6c 보안 규칙에서 학생 쓰기 및 교사 전체 읽기가 허용된 `vocab_results` 컬렉션 사용
+      await addDoc(collection(db, "vocab_results"), newRecord);
+      await loadStudentHistory();
+    } catch (dbErr) {
+      const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
+      renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid || d.studentId === studentId));
     }
   } catch (error) {
     console.error(error);
@@ -2253,7 +2624,7 @@ let latestCloudSubmissions = [];
 
 function mergeTeacherSubmissions(cloudList = []) {
   const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-  const combined = [...cloudList, ...localSaved, ...DEMO_SUBMISSIONS];
+  const combined = [...cloudList, ...localSaved];
   const seenKeys = new Set();
   const deduped = [];
 
@@ -2513,185 +2884,4 @@ document.getElementById("btn-export-csv").addEventListener("click", () => {
   link.download = `서울문영여중_영작문기록_${new Date().toISOString().split("T")[0]}.csv`;
   link.click();
   URL.revokeObjectURL(url);
-});
-
-// ============================================================================
-// 8. 빠른 화면 미리보기 (Firebase 로그인 전에도 브라우저에서 즉시 체험 가능)
-// ============================================================================
-const DEMO_SUBMISSIONS = [
-  {
-    ts: 1794039900000,
-    uid: "demo-10102",
-    studentEmail: "202610102@smy.ms.kr",
-    studentId: "10102",
-    studentName: "김서연",
-    grade: 1,
-    classNum: 1,
-    className: "1반",
-    studentNumber: 2,
-    mode: "korean_prompt",
-    topic: "[1학년] 좋아하는 계절과 이유 말하기",
-    koreanPrompt: "내가 가장 좋아하는 계절은 봄인데, 왜냐하면 아름다운 꽃들이 피기 때문이다.",
-    originalContent: "My favorite season is spring because",
-    forcedTimeout: true,
-    wordCount: 6,
-    cefrLevel: "A1",
-    score: 68,
-    meaningAccuracy: 55,
-    correctedText: "My favorite season is spring because beautiful flowers bloom.",
-    overallComment: "⏰ [제한시간 종료 강제 발송] 제한시간이 지나 그때까지 작성한 내용(\"My favorite season is spring because\")이 자동 제출되었습니다. 뒷부분(beautiful flowers bloom)까지 완성해 보세요!",
-    dateString: "2026-11-07",
-    submittedTimeStr: "2026-11-07 18:35",
-    createdAtMs: 1794039900000
-  },
-  {
-    ts: 1794030000000,
-    uid: "demo-10101",
-    studentEmail: "202610101@smy.ms.kr",
-    studentId: "10101",
-    studentName: "김나은",
-    grade: 1,
-    classNum: 1,
-    className: "1반",
-    studentNumber: 1,
-    mode: "korean_prompt",
-    topic: "[1학년] 좋아하는 계절과 이유 말하기",
-    koreanPrompt: "내가 가장 좋아하는 계절은 봄인데, 왜냐하면 아름다운 꽃들이 피기 때문이다.",
-    originalContent: "My favorite season is spring because beautiful flowers bloom.",
-    forcedTimeout: false,
-    wordCount: 9,
-    cefrLevel: "A2",
-    score: 96,
-    meaningAccuracy: 98,
-    correctedText: "My favorite season is spring because beautiful flowers bloom.",
-    overallComment: "한국어 제시문의 의미와 목표 접속사(because)를 완벽하게 영작했어요!",
-    dateString: "2026-11-05",
-    submittedTimeStr: "2026-11-05 14:20",
-    createdAtMs: 1794030000000
-  },
-  {
-    ts: 1794033000000,
-    uid: "demo-10219",
-    studentEmail: "202610219@smy.ms.kr",
-    studentId: "10219",
-    studentName: "강예은",
-    grade: 1,
-    classNum: 2,
-    className: "2반",
-    studentNumber: 19,
-    mode: "korean_prompt",
-    topic: "[2학년] 목적을 나타내는 so that 구문 영작",
-    koreanPrompt: "나는 아픈 동물들을 도울 수 있도록 수의사가 되고 싶다.",
-    originalContent: "I want to be a veterinarian so that I can help sick animals.",
-    forcedTimeout: false,
-    wordCount: 13,
-    cefrLevel: "B1",
-    score: 98,
-    meaningAccuracy: 100,
-    correctedText: "I want to be a veterinarian so that I can help sick animals.",
-    overallComment: "so that 구문을 활용하여 제시문의 의미를 100% 정확하게 전달했습니다!",
-    dateString: "2026-11-06",
-    submittedTimeStr: "2026-11-06 11:10",
-    createdAtMs: 1794033000000
-  },
-  {
-    ts: 1794036000000,
-    uid: "demo-20416",
-    studentEmail: "202620416@smy.ms.kr",
-    studentId: "20416",
-    studentName: "김민서",
-    grade: 2,
-    classNum: 4,
-    className: "4반",
-    studentNumber: 16,
-    mode: "free",
-    topic: "A Memorable School Trip",
-    koreanPrompt: "",
-    originalContent: "Last week our class went to Gyeongbokgung Palace and wore Hanbok.",
-    forcedTimeout: false,
-    wordCount: 11,
-    cefrLevel: "B1",
-    score: 94,
-    meaningAccuracy: 94,
-    correctedText: "Last week, our class visited Gyeongbokgung Palace and tried on traditional Hanbok.",
-    overallComment: "과거 시제를 정확하게 사용했고 어휘 선택이 훌륭합니다!",
-    dateString: "2026-11-07",
-    submittedTimeStr: "2026-11-07 09:45",
-    createdAtMs: 1794036000000
-  },
-  {
-    ts: 1794038000000,
-    uid: "demo-30101",
-    studentEmail: "202630101@smy.ms.kr",
-    studentId: "30101",
-    studentName: "김규람",
-    grade: 3,
-    classNum: 1,
-    className: "1반",
-    studentNumber: 1,
-    mode: "korean_prompt",
-    topic: "[3학년] 가주어-진주어(It ~ to부정사) 구문 영작",
-    koreanPrompt: "전 세계 사람들과 소통하기 위해 영어를 배우는 것은 중요하다.",
-    originalContent: "It is important to learn English to communicate with people around the world.",
-    forcedTimeout: false,
-    wordCount: 13,
-    cefrLevel: "B1+",
-    score: 100,
-    meaningAccuracy: 100,
-    correctedText: "It is important to learn English to communicate with people around the world.",
-    overallComment: "가주어 It과 진주어 to부정사 구문을 완벽하게 구사했습니다!",
-    dateString: "2026-11-07",
-    submittedTimeStr: "2026-11-07 13:15",
-    createdAtMs: 1794038000000
-  }
-];
-
-document.getElementById("btn-demo-student")?.addEventListener("click", () => {
-  const sampleStudent = findStudentByEmail("202610101@smy.ms.kr");
-  currentUser = {
-    uid: "demo-10101",
-    email: sampleStudent.email,
-    displayName: sampleStudent.name,
-    isDemo: true
-  };
-  currentStudentInfo = sampleStudent;
-
-  userInfoText.textContent = `[미리보기] ${sampleStudent.grade}학년 ${sampleStudent.classNum}반 ${sampleStudent.number}번 ${sampleStudent.name} (${sampleStudent.studentId})`;
-  document.getElementById("student-id").value = sampleStudent.studentId;
-  document.getElementById("student-grade").value = String(sampleStudent.grade);
-  document.getElementById("student-class").value = String(sampleStudent.classNum);
-  document.getElementById("student-number").value = sampleStudent.number;
-  document.getElementById("student-name").value = sampleStudent.name;
-
-  btnLogin.classList.add("hidden");
-  btnLogout.classList.remove("hidden");
-  viewLogin.classList.add("hidden");
-  viewStudent.classList.remove("hidden");
-  viewTeacher.classList.add("hidden");
-
-  renderStudentKoreanMissions();
-  const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-  const myHistory = [...localSaved, ...DEMO_SUBMISSIONS].filter((d) => d.studentId === "10101");
-  renderLocalStudentHistory(myHistory);
-});
-
-document.getElementById("btn-demo-teacher")?.addEventListener("click", () => {
-  stopMissionTimer();
-  currentUser = {
-    uid: "demo-teacher",
-    email: "tfellow@smy.ms.kr",
-    displayName: "선생님 (관리자 미리보기)",
-    isDemo: true
-  };
-
-  userInfoText.textContent = `tfellow@smy.ms.kr / tfellow@gmail.com / engwords@gmail.com (교사 관리자 미리보기)`;
-  btnLogin.classList.add("hidden");
-  btnLogout.classList.remove("hidden");
-  viewLogin.classList.add("hidden");
-  viewTeacher.classList.remove("hidden");
-  viewStudent.classList.add("hidden");
-
-  renderTeacherPromptsTable();
-  populateRosterDropdown();
-  loadTeacherDashboard();
 });
