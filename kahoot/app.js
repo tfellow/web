@@ -1183,12 +1183,19 @@ const MYKahoot = (() => {
       const cred = await firebaseAuth.signInWithPopup(provider);
       authUser = cred.user;
       if (!isTeacherEmail(authUser && authUser.email)) {
-        alert('선생님 계정이 아니에요. 교사 페이지는 등록된 선생님 계정으로만 열 수 있어요.');
+        alert(`선생님 계정이 아니에요 (${authUser && authUser.email}). 교사 페이지는 ${TEACHER_EMAILS.join(', ')} 계정으로만 열 수 있어요.`);
+        await firebaseAuth.signOut();
+        authUser = null;
+        return;
+      }
+      if (!authUser.emailVerified) {
+        alert(`${authUser.email} 계정은 Google에서 '이메일 확인됨' 상태가 아니라서 교사 페이지를 열 수 없어요. 다른 선생님 계정(${TEACHER_EMAILS.join(', ')})으로 다시 로그인해 주세요.`);
         await firebaseAuth.signOut();
         authUser = null;
         return;
       }
       onTeacherSignedIn();
+      teacherLoginInFlight = false;
       next();
     } catch (err) {
       alert(authErrorMessage(err));
