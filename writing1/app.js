@@ -327,21 +327,37 @@ tabModeFree.addEventListener("click", () => {
   essayContent.placeholder = "자유롭게 영어로 글을 작성해 보세요! (50~150단어 권장)";
 });
 
-// 학생 화면의 한국어 제시문 드롭다운 렌더링 및 선택 이벤트
+// 학생 화면의 한국어 제시문 드롭다운 렌더링 및 선택 이벤트 (본인 학년 + 전학년 공통 과제만 표시)
 function renderStudentKoreanMissions() {
   const studentGrade = currentStudentInfo ? String(currentStudentInfo.grade) : "all";
-  // 1순위: 선생님이 새로 등록한 클라우드 과제 & 본인 학년 과제 최우선 정렬
-  const sortedPrompts = [...koreanPrompts].sort((a, b) => {
+
+  // 본인 학년(예: "1") 또는 전학년 공통("all") 과제만 필터링 (다른 학년 과제는 숨김)
+  const myGradePrompts = koreanPrompts.filter(
+    (p) =>
+      studentGrade === "all" ||
+      String(p.targetGrade) === studentGrade ||
+      String(p.targetGrade) === "all"
+  );
+
+  // 정렬: 1순위 선생님이 새로 등록한 클라우드 과제 -> 2순위 본인 학년 전용 과제 -> 3순위 최신 등록순
+  const sortedPrompts = [...myGradePrompts].sort((a, b) => {
     const aIsCustom = !String(a.id).startsWith("kp-") ? -1 : 0;
     const bIsCustom = !String(b.id).startsWith("kp-") ? -1 : 0;
     if (aIsCustom !== bIsCustom) return aIsCustom - bIsCustom;
 
-    const aMatch = a.targetGrade === studentGrade ? -1 : 0;
-    const bMatch = b.targetGrade === studentGrade ? -1 : 0;
+    const aMatch = String(a.targetGrade) === studentGrade ? -1 : 0;
+    const bMatch = String(b.targetGrade) === studentGrade ? -1 : 0;
     if (aMatch !== bMatch) return aMatch - bMatch;
 
     return (b.createdAtMs || 0) - (a.createdAtMs || 0);
   });
+
+  if (sortedPrompts.length === 0) {
+    selectKoreanMission.innerHTML = `<option value="">현재 등록된 ${studentGrade}학년 과제가 없습니다.</option>`;
+    displayKoreanSentence.textContent = "등록된 한국어 제시문이 없습니다.";
+    displayTargetGrammar.textContent = "-";
+    return;
+  }
 
   selectKoreanMission.innerHTML = sortedPrompts
     .map((p) => {
@@ -358,7 +374,7 @@ selectKoreanMission.addEventListener("change", updateSelectedKoreanMissionDetail
 
 function updateSelectedKoreanMissionDetail() {
   const selectedId = selectKoreanMission.value;
-  const mission = koreanPrompts.find((p) => p.id === selectedId) || koreanPrompts[0];
+  const mission = koreanPrompts.find((p) => p.id === selectedId);
   if (!mission) {
     displayKoreanSentence.textContent = "등록된 한국어 제시문이 없습니다.";
     displayTargetGrammar.textContent = "-";
