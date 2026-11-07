@@ -371,11 +371,13 @@ tabModeFree.addEventListener("click", () => {
 let missionTimerInterval = null;
 let remainingSeconds = 0;
 let isTimerRunning = false;
+let currentTimedMissionId = null;
 
 const timerControlBar = document.getElementById("timer-control-bar");
 const timerStatusLabel = document.getElementById("timer-status-label");
 const timerCountdownEl = document.getElementById("timer-countdown");
 const btnStartTimedMission = document.getElementById("btn-start-timed-mission");
+const btnTestTimeout5s = document.getElementById("btn-test-timeout-5s");
 
 function formatMMSS(sec) {
   const s = Math.max(0, Math.floor(sec));
@@ -393,20 +395,40 @@ function stopMissionTimer() {
   timerControlBar?.classList.remove("urgent");
 }
 
-function startMissionTimer(limitSec) {
+function startMissionTimer(limitSec, missionId = null) {
   stopMissionTimer();
   remainingSeconds = Number(limitSec) || 0;
-  if (remainingSeconds <= 0) return;
-
-  isTimerRunning = true;
+  currentTimedMissionId = missionId || selectKoreanMission.value;
   essayContent.disabled = false;
-  essayContent.focus();
   btnSubmitEssay.disabled = false;
-  if (btnStartTimedMission) btnStartTimedMission.classList.add("hidden");
-  if (timerStatusLabel) timerStatusLabel.textContent = "남은 시간 (종료 시 자동 제출):";
-  if (timerCountdownEl) timerCountdownEl.textContent = formatMMSS(remainingSeconds);
+
+  if (remainingSeconds <= 0) {
+    timerControlBar?.classList.add("hidden");
+    return;
+  }
+
+  timerControlBar?.classList.remove("hidden");
+  isTimerRunning = true;
+  if (btnStartTimedMission) {
+    btnStartTimedMission.classList.remove("hidden");
+    btnStartTimedMission.textContent = "🔄 타이머 재시작";
+  }
+  if (timerStatusLabel) {
+    timerStatusLabel.textContent = "⏳ 남은 제한시간 (00:00 도달 시 작성한 내용 자동 강제 발송):";
+  }
+  if (timerCountdownEl) {
+    timerCountdownEl.textContent = formatMMSS(remainingSeconds);
+  }
+  if (remainingSeconds <= 30) {
+    timerControlBar?.classList.add("urgent");
+  }
 
   missionTimerInterval = setInterval(() => {
+    // 학생 화면이 아닌 경우(로그아웃/교사화면 전환 등) 타이머 중지
+    if (viewStudent.classList.contains("hidden")) {
+      stopMissionTimer();
+      return;
+    }
     remainingSeconds -= 1;
     if (timerCountdownEl) {
       timerCountdownEl.textContent = formatMMSS(remainingSeconds);
@@ -416,7 +438,7 @@ function startMissionTimer(limitSec) {
     }
     if (remainingSeconds <= 0) {
       stopMissionTimer();
-      // 제한시간 종료 -> 그때까지 작성한 내용 강제 발송!
+      // 제한시간 종료 -> 그때까지 작성한 내용 즉시 강제 발송!
       submitEssayProcess({ isForcedByTimeout: true });
     }
   }, 1000);
@@ -426,10 +448,22 @@ btnStartTimedMission?.addEventListener("click", () => {
   const selectedId = selectKoreanMission.value;
   const mission = koreanPrompts.find((p) => p.id === selectedId);
   if (!mission) return;
-  const limitSec = Number(mission.timeLimitSec) || 0;
-  displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
-  displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
-  startMissionTimer(limitSec);
+  const limitSec = Number(mission.timeLimitSec) || 180;
+  essayContent.disabled = false;
+  btnSubmitEssay.disabled = false;
+  essayContent.focus();
+  startMissionTimer(limitSec, mission.id);
+});
+
+// 5초 뒤 강제발송 즉시 테스트 버튼 (교사/학생이 시간 초과 자동 제출 동작을 5초 만에 바로 확인 가능)
+btnTestTimeout5s?.addEventListener("click", () => {
+  const selectedId = selectKoreanMission.value;
+  const mission = koreanPrompts.find((p) => p.id === selectedId);
+  if (!mission) return;
+  essayContent.disabled = false;
+  btnSubmitEssay.disabled = false;
+  essayContent.focus();
+  startMissionTimer(5, mission.id);
 });
 
 // 학생 화면의 한국어 제시문 드롭다운 렌더링 (교사가 공개 체크한 과제 중 본인 학년/반 + 공통 과제만 표시)
@@ -472,6 +506,8 @@ function renderStudentKoreanMissions() {
     displayKoreanSentence.textContent = "선생님이 과제를 공개(체크)하시면 여기에 즉시 표시됩니다.";
     displayTargetGrammar.textContent = "-";
     timerControlBar?.classList.add("hidden");
+    essayContent.disabled = false;
+    btnSubmitEssay.disabled = false;
     return;
   }
 
@@ -481,7 +517,13 @@ function renderStudentKoreanMissions() {
       const isNew = !String(p.id).startsWith("kp-");
       const prefix = isNew ? "🆕 " : "";
       const classTag = p.targetClass && p.targetClass !== "all" ? `[${p.targetGrade}-${p.targetClass}반] ` : "";
-      const timeTag = Number(p.timeLimitSec) > 0 ? ` (⏱️${Math.round(Number(p.timeLimitSec) / 60)}분)` : "";
+      const limitNum = Number(p.timeLimitSec) || 0;
+      const timeTag =
+        limitNum > 0
+          ? limitNum % 60 === 0
+            ? ` (⏱️${limitNum / 60}분)`
+            : ` (⏱️${limitNum}초)`
+          : " (시간제한 없음)";
       return `<option value="${p.id}">${prefix}${classTag}${p.title}${timeTag}</option>`;
     })
     .join("");
@@ -490,10 +532,17 @@ function renderStudentKoreanMissions() {
     selectKoreanMission.value = prevSelected;
   }
 
-  // 타이머가 이미 돌고 있는 중이 아닐 때만 상세 화면 초기화
-  if (!isTimerRunning) {
-    updateSelectedKoreanMissionDetail();
+  // 이미 같은 과제의 타이머가 돌고 있는 중이면 제시문 텍스트만 갱신하고 타이머는 유지
+  if (isTimerRunning && currentTimedMissionId === selectKoreanMission.value) {
+    const currentMission = koreanPrompts.find((p) => p.id === selectKoreanMission.value);
+    if (currentMission) {
+      displayKoreanSentence.textContent = `"${currentMission.koreanPrompt}"`;
+      displayTargetGrammar.textContent = currentMission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
+    }
+    return;
   }
+
+  updateSelectedKoreanMissionDetail();
 }
 
 selectKoreanMission.addEventListener("change", () => {
@@ -505,6 +554,9 @@ selectKoreanMission.addEventListener("change", () => {
 
 function updateSelectedKoreanMissionDetail() {
   stopMissionTimer();
+  essayContent.disabled = false;
+  btnSubmitEssay.disabled = false;
+
   const selectedId = selectKoreanMission.value;
   const mission = koreanPrompts.find((p) => p.id === selectedId);
   if (!mission) {
@@ -514,29 +566,21 @@ function updateSelectedKoreanMissionDetail() {
     return;
   }
 
+  // 한국어 제시문과 핵심 목표 표현을 즉시 표시하고 입력창과 AI 채점 버튼을 항상 활성화
+  displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
+  displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
+
   const limitSec = Number(mission.timeLimitSec) || 0;
   if (limitSec > 0 && currentWritingMode === "korean_prompt") {
     timerControlBar?.classList.remove("hidden");
-    if (timerStatusLabel) {
-      timerStatusLabel.textContent = `제한시간 ${Math.round(limitSec / 60)}분 과제 (시간 초과 시 작성 내용 자동 제출)`;
+    // 학생 화면이 열려 있을 때 자동으로 제한시간 타이머 카운트다운 시작!
+    if (!viewStudent.classList.contains("hidden")) {
+      startMissionTimer(limitSec, mission.id);
+    } else {
+      if (timerCountdownEl) timerCountdownEl.textContent = formatMMSS(limitSec);
     }
-    if (timerCountdownEl) {
-      timerCountdownEl.textContent = formatMMSS(limitSec);
-    }
-    if (btnStartTimedMission) {
-      btnStartTimedMission.classList.remove("hidden");
-    }
-    // 시작 버튼을 누르기 전에는 제시문을 가리고 입력창을 잠가 공정한 시간 측정 보장
-    displayKoreanSentence.textContent = "🔒 [▶️ 영작 시작하기] 버튼을 누르면 한국어 제시문이 공개되고 타이머가 시작됩니다!";
-    displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현";
-    essayContent.disabled = true;
-    btnSubmitEssay.disabled = true;
   } else {
     timerControlBar?.classList.add("hidden");
-    displayKoreanSentence.textContent = `"${mission.koreanPrompt}"`;
-    displayTargetGrammar.textContent = mission.targetGrammar || "자유 표현 (의미가 통하도록 영작)";
-    essayContent.disabled = false;
-    btnSubmitEssay.disabled = false;
   }
 }
 
@@ -553,6 +597,7 @@ btnLogin.addEventListener("click", async () => {
 });
 
 btnLogout.addEventListener("click", async () => {
+  stopMissionTimer();
   if (currentUser?.isDemo) {
     currentUser = null;
     currentStudentInfo = null;
@@ -738,6 +783,25 @@ function formatLimitLabel(sec) {
   return `⏱️ ${n}초`;
 }
 
+let editingPromptId = null;
+
+function resetPromptEditorForm() {
+  editingPromptId = null;
+  document.getElementById("editing-prompt-banner")?.classList.add("hidden");
+  document.getElementById("btn-cancel-edit-prompt")?.classList.add("hidden");
+  const btnAdd = document.getElementById("btn-add-prompt");
+  if (btnAdd) btnAdd.textContent = "➕ 과제 저장";
+  document.getElementById("new-prompt-title").value = "";
+  document.getElementById("new-prompt-target").value = "";
+  document.getElementById("new-prompt-korean").value = "";
+  document.getElementById("new-prompt-answer").value = "";
+}
+
+document.getElementById("btn-cancel-edit-prompt")?.addEventListener("click", () => {
+  resetPromptEditorForm();
+  renderTeacherPromptsTable();
+});
+
 function renderTeacherPromptsTable() {
   const tbody = document.getElementById("teacher-prompts-tbody");
   if (!tbody) return;
@@ -753,6 +817,7 @@ function renderTeacherPromptsTable() {
       const classLabel =
         !p.targetClass || p.targetClass === "all" ? "전체 반 공통" : `${p.targetClass}반 전용`;
       const isActive = p.active !== false;
+      const isEditingThis = editingPromptId === p.id;
       const activeBadge = isActive
         ? `<div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">공개중</div>`
         : `<div style="font-size:0.7rem;color:#94a3b8;font-weight:600;margin-top:2px;">비공개(대기)</div>`;
@@ -760,8 +825,14 @@ function renderTeacherPromptsTable() {
         Number(p.timeLimitSec) > 0 ? "#fef3c7;color:#b45309" : "#f1f5f9;color:#475569"
       }">${formatLimitLabel(p.timeLimitSec)}</span>`;
 
+      const rowStyle = isEditingThis
+        ? "background: #eff6ff; outline: 2px solid #3b82f6;"
+        : isActive
+        ? ""
+        : "opacity: 0.62; background: #f8fafc;";
+
       return `
-        <tr style="${isActive ? "" : "opacity: 0.62; background: #f8fafc;"}">
+        <tr style="${rowStyle}">
           <td class="text-center">
             <input type="checkbox" class="toggle-switch toggle-prompt-active" data-id="${p.id}" ${
         isActive ? "checked" : ""
@@ -774,7 +845,10 @@ function renderTeacherPromptsTable() {
           <td><strong>${p.koreanPrompt}</strong></td>
           <td>${p.targetGrammar || "-"}</td>
           <td>${p.referenceAnswer || "-"}</td>
-          <td><button class="btn btn-outline btn-delete-prompt" data-id="${p.id}" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">삭제</button></td>
+          <td style="white-space: nowrap;">
+            <button type="button" class="btn btn-outline btn-edit-prompt" data-id="${p.id}" style="padding: 0.3rem 0.55rem; font-size: 0.8rem; margin-right: 0.25rem; color: #2563eb; border-color: #93c5fd;">✏️ 수정</button>
+            <button type="button" class="btn btn-outline btn-delete-prompt" data-id="${p.id}" style="padding: 0.3rem 0.55rem; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5;">🗑️ 삭제</button>
+          </td>
         </tr>
       `;
     })
@@ -798,10 +872,63 @@ function renderTeacherPromptsTable() {
     });
   });
 
+  // 수정 버튼 이벤트 연결
+  tbody.querySelectorAll(".btn-edit-prompt").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-id");
+      const targetPrompt = koreanPrompts.find((p) => p.id === targetId);
+      if (!targetPrompt) return;
+
+      editingPromptId = targetPrompt.id;
+      const gradeEl = document.getElementById("new-prompt-grade");
+      const classEl = document.getElementById("new-prompt-class");
+      const limitEl = document.getElementById("new-prompt-timelimit");
+      const activeEl = document.getElementById("new-prompt-active");
+
+      if (gradeEl) {
+        gradeEl.value = String(targetPrompt.targetGrade || "all");
+        gradeEl.dispatchEvent(new Event("change"));
+      }
+      if (classEl) {
+        classEl.value = String(targetPrompt.targetClass || "all");
+      }
+      if (limitEl) {
+        const secStr = String(Number(targetPrompt.timeLimitSec) || 0);
+        if (![...limitEl.options].some((o) => o.value === secStr)) {
+          const customOpt = document.createElement("option");
+          customOpt.value = secStr;
+          customOpt.textContent = formatLimitLabel(secStr);
+          limitEl.appendChild(customOpt);
+        }
+        limitEl.value = secStr;
+      }
+      if (activeEl) {
+        activeEl.checked = targetPrompt.active !== false;
+      }
+
+      document.getElementById("new-prompt-title").value = targetPrompt.title || "";
+      document.getElementById("new-prompt-target").value = targetPrompt.targetGrammar || "";
+      document.getElementById("new-prompt-korean").value = targetPrompt.koreanPrompt || "";
+      document.getElementById("new-prompt-answer").value = targetPrompt.referenceAnswer || "";
+
+      document.getElementById("editing-prompt-banner")?.classList.remove("hidden");
+      document.getElementById("btn-cancel-edit-prompt")?.classList.remove("hidden");
+      const btnAdd = document.getElementById("btn-add-prompt");
+      if (btnAdd) btnAdd.textContent = "💾 수정 내용 저장";
+
+      renderTeacherPromptsTable();
+      document.querySelector(".prompt-manager-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("new-prompt-korean")?.focus();
+    });
+  });
+
   // 삭제 버튼 이벤트 연결
   tbody.querySelectorAll(".btn-delete-prompt").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const targetId = btn.getAttribute("data-id");
+      if (editingPromptId === targetId) {
+        resetPromptEditorForm();
+      }
       koreanPrompts = koreanPrompts.filter((p) => p.id !== targetId);
       saveKoreanPromptsToStorage();
       try {
@@ -844,20 +971,40 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
   }
 
   const isRealTeacher = currentUser && !currentUser.isDemo;
-  const newPromptObj = {
-    id: isRealTeacher ? `cloud-${Date.now()}` : `kp-${Date.now()}`,
-    targetGrade,
-    targetClass,
-    timeLimitSec,
-    active,
-    title,
-    koreanPrompt,
-    targetGrammar,
-    referenceAnswer,
-    createdAtMs: Date.now()
-  };
+  const isEditing = Boolean(editingPromptId);
 
-  koreanPrompts.unshift(newPromptObj);
+  if (isEditing) {
+    const idx = koreanPrompts.findIndex((p) => p.id === editingPromptId);
+    if (idx !== -1) {
+      koreanPrompts[idx] = {
+        ...koreanPrompts[idx],
+        targetGrade,
+        targetClass,
+        timeLimitSec,
+        active,
+        title,
+        koreanPrompt,
+        targetGrammar,
+        referenceAnswer,
+        updatedAtMs: Date.now()
+      };
+    }
+  } else {
+    const newPromptObj = {
+      id: isRealTeacher ? `cloud-${Date.now()}` : `kp-${Date.now()}`,
+      targetGrade,
+      targetClass,
+      timeLimitSec,
+      active,
+      title,
+      koreanPrompt,
+      targetGrammar,
+      referenceAnswer,
+      createdAtMs: Date.now()
+    };
+    koreanPrompts.unshift(newPromptObj);
+  }
+
   saveKoreanPromptsToStorage();
 
   try {
@@ -868,21 +1015,19 @@ document.getElementById("btn-add-prompt")?.addEventListener("click", async () =>
     console.error("클라우드 과제 저장 오류:", e);
   }
 
+  resetPromptEditorForm();
   renderTeacherPromptsTable();
   renderStudentKoreanMissions();
-
-  document.getElementById("new-prompt-title").value = "";
-  document.getElementById("new-prompt-target").value = "";
-  document.getElementById("new-prompt-korean").value = "";
-  document.getElementById("new-prompt-answer").value = "";
 
   const targetDesc = `${targetGrade === "all" ? "전학년" : targetGrade + "학년"} ${
     targetClass === "all" ? "전체 반" : targetClass + "반"
   }`;
   const statusDesc = active ? "즉시 학생 공개(☑️)" : "비공개 보관(나중에 체크 시 공개)";
   alert(
-    isRealTeacher
-      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 과제가 저장되었습니다!`
+    isEditing
+      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 과제 수정 내용이 저장되었습니다!`
+      : isRealTeacher
+      ? `✅ [${targetDesc} / ${formatLimitLabel(timeLimitSec)} / ${statusDesc}] 새 과제가 저장되었습니다!`
       : `⚡ 미리보기 모드에 [${targetDesc} / ${formatLimitLabel(timeLimitSec)}] 과제가 추가되었습니다.`
   );
 });
@@ -921,10 +1066,6 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       return;
     }
     missionTimeLimitSec = Number(selectedMission.timeLimitSec) || 0;
-    // 제한시간이 있는 과제를 아직 [영작 시작] 버튼을 누르지 않고 제출하려 할 때 방지
-    if (!isForcedByTimeout && missionTimeLimitSec > 0 && !isMissionStarted) {
-      return alert("먼저 [🚀 영작 시작 (제시문 보기)] 버튼을 눌러 제한시간 타이머를 시작해 주세요.");
-    }
     topic = selectedMission.title;
     koreanPrompt = selectedMission.koreanPrompt;
     targetGrammar = selectedMission.targetGrammar || "";
@@ -937,39 +1078,35 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
     return alert("과제(주제)와 영어 작문 본문을 모두 입력해 주세요.");
   }
 
-  // 제한시간 종료로 인한 강제 발송 처리
+  // 타이머 중지 및 상태 표시 업데이트
   stopMissionTimer();
   if (isForcedByTimeout) {
     if (!rawContent) {
       rawContent = "(제한시간 초과로 미작성 상태에서 자동 발송됨)";
       essayContent.value = rawContent;
     }
-    essayContent.disabled = true;
     if (timerControlBar) {
       timerControlBar.classList.remove("hidden");
       timerControlBar.classList.add("urgent");
     }
     if (timerStatusLabel) {
-      timerStatusLabel.textContent = "🚨 제한시간이 종료되어 작성 중인 답안이 선생님께 자동 발송되었습니다!";
+      timerStatusLabel.textContent = "🚨 제한시간 종료! 그때까지 작성한 답안이 선생님께 자동 강제 발송되었습니다.";
     }
     if (timerCountdownEl) {
-      timerCountdownEl.textContent = "00:00 (자동발송)";
+      timerCountdownEl.textContent = "00:00 (강제발송 완료)";
     }
     if (btnStartTimedMission) {
       btnStartTimedMission.classList.remove("hidden");
-      btnStartTimedMission.textContent = "🔄 다시 도전하기";
+      btnStartTimedMission.textContent = "🔄 타이머 재시작";
     }
-    isMissionStarted = false;
   } else if (missionTimeLimitSec > 0) {
-    // 제한시간 내에 정상 제출한 경우
     if (timerStatusLabel) {
-      timerStatusLabel.textContent = "✅ 제한시간 내에 영작 제출을 완료했습니다!";
+      timerStatusLabel.textContent = "✅ 제한시간 내에 영작 제출 및 채점을 완료했습니다!";
     }
     if (btnStartTimedMission) {
       btnStartTimedMission.classList.remove("hidden");
-      btnStartTimedMission.textContent = "🔄 다시 작성하기";
+      btnStartTimedMission.textContent = "🔄 타이머 재시작";
     }
-    isMissionStarted = false;
   }
 
   const content = rawContent;
@@ -1027,13 +1164,16 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
     }
 
     if (isForcedByTimeout) {
-      evalResult.overallComment = `⏰ [제한시간 종료 자동 발송] 제한시간이 지나 그때까지 작성한 내용("${content}")이 자동 제출되었습니다. ` + (evalResult.overallComment || "");
+      evalResult.overallComment =
+        `⏰ [제한시간 종료 강제 발송] 제한시간이 지나 그때까지 작성한 내용("${content}")이 자동 제출되었습니다. ` +
+        (evalResult.overallComment || "");
     }
 
     renderEvaluationResult(evalResult, currentWritingMode, targetGrammar);
 
-    const todayStr = new Date().toISOString().split("T")[0];
-    const recordedTopic = isForcedByTimeout ? `${topic} [⏱️시간초과 강제제출]` : topic;
+    const now = new Date();
+    const todayStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0].slice(0, 5);
 
     const newRecord = {
       appTag: "writing1_submission", // cloze-a8e6c vocab_results 컬렉션 내 영작문 제출 식별 태그
@@ -1048,11 +1188,11 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       className: `${classNum}반`,
       studentNumber,
       mode: currentWritingMode,
-      topic: recordedTopic,
+      topic,
       koreanPrompt,
       targetGrammar,
       originalContent: content,
-      forcedTimeout: isForcedByTimeout,
+      forcedTimeout: Boolean(isForcedByTimeout),
       wordCount,
       cefrLevel: evalResult.cefrLevel,
       score: evalResult.score,
@@ -1064,12 +1204,24 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
       vocabularySuggestions: evalResult.vocabularySuggestions,
       overallComment: evalResult.overallComment,
       dateString: todayStr,
+      submittedTimeStr: `${todayStr} ${timeStr}`,
       createdAtMs: Date.now(),
       createdAt: serverTimestamp()
     };
 
+    // 브라우저 로컬 저장소에도 항상 백업 기록 (같은 기기에서 학생/교사 전환 시에도 100% 즉시 확인 가능)
+    try {
+      const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
+      const { createdAt, ...serializableRecord } = newRecord;
+      localSaved.unshift(serializableRecord);
+      localStorage.setItem("MY_WRITING_LOCAL_SUBMISSIONS", JSON.stringify(localSaved.slice(0, 300)));
+    } catch (storageErr) {
+      console.warn("로컬 백업 저장 실패:", storageErr);
+    }
+
     if (currentUser.isDemo) {
-      DEMO_SUBMISSIONS.unshift(newRecord);
+      const { createdAt, ...demoRecord } = newRecord;
+      DEMO_SUBMISSIONS.unshift(demoRecord);
       renderLocalStudentHistory(DEMO_SUBMISSIONS.filter((d) => d.studentId === studentId));
     } else {
       try {
@@ -1078,20 +1230,15 @@ async function submitEssayProcess({ isForcedByTimeout = false } = {}) {
         await loadStudentHistory();
       } catch (dbErr) {
         const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-        localSaved.unshift(newRecord);
-        localStorage.setItem("MY_WRITING_LOCAL_SUBMISSIONS", JSON.stringify(localSaved));
-        renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid));
+        renderLocalStudentHistory(localSaved.filter((d) => d.uid === currentUser.uid || d.studentId === studentId));
       }
-    }
-
-    if (isForcedByTimeout) {
-      alert("⏰ 제한시간이 종료되어 현재까지 작성한 영작 내용이 선생님께 강제 발송(제출)되었습니다.");
     }
   } catch (error) {
     console.error(error);
     alert("오류: " + error.message);
   } finally {
     isSubmittingEssay = false;
+    essayContent.disabled = false;
     btnSubmitEssay.disabled = false;
     document.getElementById("eval-loading").classList.add("hidden");
   }
@@ -1150,14 +1297,18 @@ function renderLocalStudentHistory(records) {
   }
   tbody.innerHTML = records
     .map((d) => {
+      const isForced = Boolean(d.forcedTimeout) || String(d.topic || "").includes("시간초과");
       const modeBadge = d.mode === "korean_prompt" ? "🇰🇷제시문" : "📝자유";
+      const forcedTag = isForced
+        ? `<br/><span style="display:inline-block;margin-top:3px;background:#fee2e2;color:#b91c1c;font-weight:700;padding:2px 6px;border-radius:4px;font-size:0.74rem;">🚨 ⏰ 시간초과 강제발송</span>`
+        : `<br/><span style="display:inline-block;margin-top:3px;background:#dcfce7;color:#15803d;font-weight:600;padding:2px 6px;border-radius:4px;font-size:0.74rem;">✅ 정상제출</span>`;
       const promptDisplay = d.koreanPrompt
         ? `<strong>${d.topic}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${d.koreanPrompt}"</span>`
         : `<strong>${d.topic}</strong>`;
       return `
-      <tr>
-        <td>${d.dateString || "-"}</td>
-        <td>${modeBadge}</td>
+      <tr style="${isForced ? "background:#fff5f5;" : ""}">
+        <td>${d.submittedTimeStr || d.dateString || "-"}</td>
+        <td>${modeBadge}${forcedTag}</td>
         <td>${promptDisplay}</td>
         <td>${d.originalContent || "-"}</td>
         <td>${d.cefrLevel}</td>
@@ -1201,6 +1352,7 @@ async function loadStudentHistory() {
 const filterGradeEl = document.getElementById("filter-grade");
 const filterClassEl = document.getElementById("filter-class");
 const filterRosterStudentEl = document.getElementById("filter-roster-student");
+const filterSubmitTypeEl = document.getElementById("filter-submit-type");
 
 filterGradeEl.addEventListener("change", () => {
   const selectedGrade = filterGradeEl.value;
@@ -1215,6 +1367,7 @@ filterClassEl.addEventListener("change", () => {
 });
 
 filterRosterStudentEl.addEventListener("change", applyTeacherFilters);
+filterSubmitTypeEl?.addEventListener("change", applyTeacherFilters);
 document.getElementById("btn-apply-filter").addEventListener("click", applyTeacherFilters);
 
 function updateClassDropdown(selectedGrade) {
@@ -1258,33 +1411,74 @@ function populateRosterDropdown() {
       .join("");
 }
 
-async function loadTeacherDashboard() {
-  try {
-    const q = query(
-      collection(db, "vocab_results"),
-      where("appTag", "==", "writing1_submission")
-    );
-    const snapshot = await getDocs(q);
-    const cloudList = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
-    const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-    allTeacherSubmissions = [...cloudList, ...localSaved];
-    if (allTeacherSubmissions.length === 0) {
-      allTeacherSubmissions = [...DEMO_SUBMISSIONS];
+let unsubscribeTeacherSubmissions = null;
+let latestCloudSubmissions = [];
+
+function mergeTeacherSubmissions(cloudList = []) {
+  const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
+  const combined = [...cloudList, ...localSaved, ...DEMO_SUBMISSIONS];
+  const seenKeys = new Set();
+  const deduped = [];
+
+  for (const item of combined) {
+    const key = item.ts
+      ? `ts-${item.ts}-${item.studentId || ""}`
+      : `${item.studentId}-${item.topic}-${item.originalContent}-${item.dateString}`;
+    if (!seenKeys.has(key)) {
+      seenKeys.add(key);
+      deduped.push(item);
     }
-    applyTeacherFilters();
-  } catch (error) {
-    const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
-    allTeacherSubmissions = [...localSaved, ...DEMO_SUBMISSIONS];
+  }
+
+  return deduped.sort((a, b) => (b.createdAtMs || b.ts || 0) - (a.createdAtMs || a.ts || 0));
+}
+
+// 다른 탭에서 학생이 강제발송/제출했을 때 교사 화면 즉시 갱신
+window.addEventListener("storage", (e) => {
+  if (e.key === "MY_WRITING_LOCAL_SUBMISSIONS" && !viewTeacher.classList.contains("hidden")) {
+    allTeacherSubmissions = mergeTeacherSubmissions(latestCloudSubmissions);
     applyTeacherFilters();
   }
+});
+
+async function loadTeacherDashboard() {
+  // 1. 먼저 로컬 저장소 + 기본 데이터로 즉시 렌더링
+  allTeacherSubmissions = mergeTeacherSubmissions(latestCloudSubmissions);
+  applyTeacherFilters();
+
+  // 2. 실시간 클라우드 제출 구독 (학생이 시간초과로 강제발송되면 새로고침 없이 교사 화면에 즉시 표시)
+  if (!unsubscribeTeacherSubmissions && currentUser && !currentUser.isDemo) {
+    try {
+      const q = query(
+        collection(db, "vocab_results"),
+        where("appTag", "==", "writing1_submission")
+      );
+      unsubscribeTeacherSubmissions = onSnapshot(
+        q,
+        (snapshot) => {
+          latestCloudSubmissions = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          allTeacherSubmissions = mergeTeacherSubmissions(latestCloudSubmissions);
+          applyTeacherFilters();
+        },
+        (err) => {
+          console.warn("교사 대시보드 실시간 구독 대신 로컬/1회 조회를 사용합니다:", err);
+        }
+      );
+    } catch (e) {
+      // 정적/권한 제한 환경에서는 로컬 병합 결과 유지
+    }
+  }
+}
+
+function isForcedSubmissionRecord(item) {
+  return Boolean(item.forcedTimeout) || String(item.topic || "").includes("시간초과");
 }
 
 function applyTeacherFilters() {
   const gradeFilter = filterGradeEl.value;
   const classFilter = filterClassEl.value;
   const rosterStudentId = filterRosterStudentEl.value;
+  const submitTypeFilter = filterSubmitTypeEl?.value || "all";
   const keywordFilter = document.getElementById("filter-student").value.trim();
   const startDate = document.getElementById("filter-date-start").value;
   const endDate = document.getElementById("filter-date-end").value;
@@ -1301,6 +1495,11 @@ function applyTeacherFilters() {
     if (gradeFilter !== "all" && String(item.grade) !== gradeFilter) return false;
     if (classFilter !== "all" && String(itemClassNum) !== classFilter) return false;
     if (rosterStudentId !== "all" && String(item.studentId) !== rosterStudentId) return false;
+
+    const isForced = isForcedSubmissionRecord(item);
+    if (submitTypeFilter === "forced" && !isForced) return false;
+    if (submitTypeFilter === "normal" && isForced) return false;
+
     if (
       keywordFilter &&
       !String(item.studentName || "").includes(keywordFilter) &&
@@ -1316,6 +1515,7 @@ function applyTeacherFilters() {
   currentFilteredSubmissions = filtered;
 
   const uniqueSubmittedIds = new Set(filtered.map((d) => d.studentId || d.studentEmail));
+  const forcedCount = filtered.filter((d) => isForcedSubmissionRecord(d)).length;
   const avgScore =
     filtered.length > 0
       ? Math.round((filtered.reduce((acc, cur) => acc + (Number(cur.score) || 0), 0) / filtered.length) * 10) / 10
@@ -1323,7 +1523,7 @@ function applyTeacherFilters() {
 
   document.getElementById("stat-total-roster").textContent = `${targetRoster.length}명`;
   document.getElementById("stat-submitted-students").textContent = `${uniqueSubmittedIds.size}명`;
-  document.getElementById("stat-total-submissions").textContent = `${filtered.length}건`;
+  document.getElementById("stat-total-submissions").innerHTML = `${filtered.length}건 <span style="font-size:0.85rem;color:#dc2626;">(강제발송 ${forcedCount}건)</span>`;
   document.getElementById("stat-avg-score").textContent = `${avgScore}점`;
 
   renderTeacherTable(filtered);
@@ -1333,7 +1533,7 @@ function applyTeacherFilters() {
 function renderTeacherTable(submissions) {
   const tbody = document.getElementById("teacher-submissions-tbody");
   if (submissions.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9" class="text-center">조건에 해당하는 제출 기록이 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" class="text-center">조건에 해당하는 제출 기록이 없습니다.</td></tr>`;
     return;
   }
 
@@ -1341,15 +1541,20 @@ function renderTeacherTable(submissions) {
     .map((d) => {
       const classLabel = d.classNum ? `${d.classNum}반` : d.className;
       const modeBadge = d.mode === "korean_prompt" ? "🇰🇷제시문" : "📝자유";
+      const isForced = isForcedSubmissionRecord(d);
+      const statusBadge = isForced
+        ? `<span style="display:inline-block;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;font-weight:800;padding:4px 8px;border-radius:6px;font-size:0.78rem;white-space:nowrap;">🚨 ⏰ 시간초과 강제발송</span>`
+        : `<span style="display:inline-block;background:#dcfce7;color:#15803d;border:1px solid #86efac;font-weight:700;padding:4px 8px;border-radius:6px;font-size:0.78rem;white-space:nowrap;">✅ 시간 내 정상제출</span>`;
       const promptInfo = d.koreanPrompt
         ? `<strong>${d.topic}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${d.koreanPrompt}"</span>`
         : `<strong>${d.topic}</strong>`;
       return `
-      <tr>
-        <td>${d.dateString || "-"}</td>
+      <tr style="${isForced ? "background-color: #fff5f5;" : ""}">
+        <td style="white-space:nowrap;">${d.submittedTimeStr || d.dateString || "-"}</td>
+        <td>${statusBadge}</td>
         <td><strong>${d.studentId || "-"}</strong></td>
         <td>${d.grade}학년 ${classLabel} ${d.studentNumber}번</td>
-        <td>${d.studentName}</td>
+        <td><strong>${d.studentName}</strong></td>
         <td>${modeBadge}</td>
         <td>${promptInfo}</td>
         <td>${d.originalContent || "-"}</td>
@@ -1428,7 +1633,8 @@ document.getElementById("btn-export-csv").addEventListener("click", () => {
   }
 
   const headers = [
-    "제출일",
+    "제출일시",
+    "제출상태(강제발송여부)",
     "학번",
     "학년",
     "반",
@@ -1444,7 +1650,8 @@ document.getElementById("btn-export-csv").addEventListener("click", () => {
     "AI총평"
   ];
   const rows = currentFilteredSubmissions.map((d) => [
-    d.dateString || "",
+    d.submittedTimeStr || d.dateString || "",
+    isForcedSubmissionRecord(d) ? "시간초과 강제발송" : "시간내 정상제출",
     d.studentId || "",
     d.grade || "",
     d.classNum || d.className || "",
@@ -1476,6 +1683,32 @@ document.getElementById("btn-export-csv").addEventListener("click", () => {
 // ============================================================================
 const DEMO_SUBMISSIONS = [
   {
+    ts: 1794039900000,
+    uid: "demo-10102",
+    studentEmail: "202610102@smy.ms.kr",
+    studentId: "10102",
+    studentName: "김서연",
+    grade: 1,
+    classNum: 1,
+    className: "1반",
+    studentNumber: 2,
+    mode: "korean_prompt",
+    topic: "[1학년] 좋아하는 계절과 이유 말하기",
+    koreanPrompt: "내가 가장 좋아하는 계절은 봄인데, 왜냐하면 아름다운 꽃들이 피기 때문이다.",
+    originalContent: "My favorite season is spring because",
+    forcedTimeout: true,
+    wordCount: 6,
+    cefrLevel: "A1",
+    score: 68,
+    meaningAccuracy: 55,
+    correctedText: "My favorite season is spring because beautiful flowers bloom.",
+    overallComment: "⏰ [제한시간 종료 강제 발송] 제한시간이 지나 그때까지 작성한 내용(\"My favorite season is spring because\")이 자동 제출되었습니다. 뒷부분(beautiful flowers bloom)까지 완성해 보세요!",
+    dateString: "2026-11-07",
+    submittedTimeStr: "2026-11-07 18:35",
+    createdAtMs: 1794039900000
+  },
+  {
+    ts: 1794030000000,
     uid: "demo-10101",
     studentEmail: "202610101@smy.ms.kr",
     studentId: "10101",
@@ -1488,15 +1721,19 @@ const DEMO_SUBMISSIONS = [
     topic: "[1학년] 좋아하는 계절과 이유 말하기",
     koreanPrompt: "내가 가장 좋아하는 계절은 봄인데, 왜냐하면 아름다운 꽃들이 피기 때문이다.",
     originalContent: "My favorite season is spring because beautiful flowers bloom.",
+    forcedTimeout: false,
     wordCount: 9,
     cefrLevel: "A2",
     score: 96,
     meaningAccuracy: 98,
     correctedText: "My favorite season is spring because beautiful flowers bloom.",
     overallComment: "한국어 제시문의 의미와 목표 접속사(because)를 완벽하게 영작했어요!",
-    dateString: "2026-11-05"
+    dateString: "2026-11-05",
+    submittedTimeStr: "2026-11-05 14:20",
+    createdAtMs: 1794030000000
   },
   {
+    ts: 1794033000000,
     uid: "demo-10219",
     studentEmail: "202610219@smy.ms.kr",
     studentId: "10219",
@@ -1509,15 +1746,19 @@ const DEMO_SUBMISSIONS = [
     topic: "[2학년] 목적을 나타내는 so that 구문 영작",
     koreanPrompt: "나는 아픈 동물들을 도울 수 있도록 수의사가 되고 싶다.",
     originalContent: "I want to be a veterinarian so that I can help sick animals.",
+    forcedTimeout: false,
     wordCount: 13,
     cefrLevel: "B1",
     score: 98,
     meaningAccuracy: 100,
     correctedText: "I want to be a veterinarian so that I can help sick animals.",
     overallComment: "so that 구문을 활용하여 제시문의 의미를 100% 정확하게 전달했습니다!",
-    dateString: "2026-11-06"
+    dateString: "2026-11-06",
+    submittedTimeStr: "2026-11-06 11:10",
+    createdAtMs: 1794033000000
   },
   {
+    ts: 1794036000000,
     uid: "demo-20416",
     studentEmail: "202620416@smy.ms.kr",
     studentId: "20416",
@@ -1530,15 +1771,19 @@ const DEMO_SUBMISSIONS = [
     topic: "A Memorable School Trip",
     koreanPrompt: "",
     originalContent: "Last week our class went to Gyeongbokgung Palace and wore Hanbok.",
+    forcedTimeout: false,
     wordCount: 11,
     cefrLevel: "B1",
     score: 94,
     meaningAccuracy: 94,
     correctedText: "Last week, our class visited Gyeongbokgung Palace and tried on traditional Hanbok.",
     overallComment: "과거 시제를 정확하게 사용했고 어휘 선택이 훌륭합니다!",
-    dateString: "2026-11-07"
+    dateString: "2026-11-07",
+    submittedTimeStr: "2026-11-07 09:45",
+    createdAtMs: 1794036000000
   },
   {
+    ts: 1794038000000,
     uid: "demo-30101",
     studentEmail: "202630101@smy.ms.kr",
     studentId: "30101",
@@ -1551,13 +1796,16 @@ const DEMO_SUBMISSIONS = [
     topic: "[3학년] 가주어-진주어(It ~ to부정사) 구문 영작",
     koreanPrompt: "전 세계 사람들과 소통하기 위해 영어를 배우는 것은 중요하다.",
     originalContent: "It is important to learn English to communicate with people around the world.",
+    forcedTimeout: false,
     wordCount: 13,
     cefrLevel: "B1+",
     score: 100,
     meaningAccuracy: 100,
     correctedText: "It is important to learn English to communicate with people around the world.",
     overallComment: "가주어 It과 진주어 to부정사 구문을 완벽하게 구사했습니다!",
-    dateString: "2026-11-07"
+    dateString: "2026-11-07",
+    submittedTimeStr: "2026-11-07 13:15",
+    createdAtMs: 1794038000000
   }
 ];
 
@@ -1585,10 +1833,13 @@ document.getElementById("btn-demo-student")?.addEventListener("click", () => {
   viewTeacher.classList.add("hidden");
 
   renderStudentKoreanMissions();
-  renderLocalStudentHistory(DEMO_SUBMISSIONS.filter((d) => d.studentId === "10101"));
+  const localSaved = JSON.parse(localStorage.getItem("MY_WRITING_LOCAL_SUBMISSIONS") || "[]");
+  const myHistory = [...localSaved, ...DEMO_SUBMISSIONS].filter((d) => d.studentId === "10101");
+  renderLocalStudentHistory(myHistory);
 });
 
 document.getElementById("btn-demo-teacher")?.addEventListener("click", () => {
+  stopMissionTimer();
   currentUser = {
     uid: "demo-teacher",
     email: "tfellow@smy.ms.kr",
@@ -1596,15 +1847,14 @@ document.getElementById("btn-demo-teacher")?.addEventListener("click", () => {
     isDemo: true
   };
 
-  userInfoText.textContent = `tfellow@smy.ms.kr / tfellow@gmail.com (교사 관리자 미리보기)`;
+  userInfoText.textContent = `tfellow@smy.ms.kr / tfellow@gmail.com / engwords@gmail.com (교사 관리자 미리보기)`;
   btnLogin.classList.add("hidden");
   btnLogout.classList.remove("hidden");
   viewLogin.classList.add("hidden");
   viewTeacher.classList.remove("hidden");
   viewStudent.classList.add("hidden");
 
-  allTeacherSubmissions = [...DEMO_SUBMISSIONS];
   renderTeacherPromptsTable();
   populateRosterDropdown();
-  applyTeacherFilters();
+  loadTeacherDashboard();
 });
