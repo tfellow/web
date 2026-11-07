@@ -3272,11 +3272,19 @@ async function postToGoogleSheets(payload) {
 // (학생에게는 다른 학생의 실명·이메일·번호를 보내지 않아요).
 async function fetchInitialData() {
   const proof = await getAuthProof();
-  return fetch(state.gasUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action: 'getInitialData', ...proof })
-  });
+  try {
+    const res = await fetch(state.gasUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'getInitialData', ...proof })
+    });
+    if (res.ok) {
+      const data = await res.clone().json();
+      if (data && Array.isArray(data.users)) return res;
+    }
+  } catch (e) {}
+  // 아직 예전 Apps Script 가 배포되어 있으면 예전 방식으로 읽어요
+  return fetch(`${state.gasUrl}?action=getInitialData`);
 }
 
 function normalizeCategoryId(raw) {
