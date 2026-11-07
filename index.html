@@ -21,18 +21,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c;
+    --c-passport: #1e3768; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a;
+    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a;
+    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -101,7 +101,7 @@
   [data-app="passport"] { --c: var(--c-passport); } [data-app="queens"] { --c: var(--c-queens); }
   [data-app="cloze"] { --c: var(--c-cloze); } [data-app="forest"] { --c: var(--c-forest); }
   [data-app="show"] { --c: var(--c-show); } [data-app="grammar"] { --c: var(--c-grammar); }
-  [data-app="class123"] { --c: var(--c-class); }
+  [data-app="class123"] { --c: var(--c-class); } [data-app="writing"] { --c: var(--c-writing); }
 
   .show { padding-block: 34px; }
   .show + .show { border-top: 1px dashed var(--line); }
@@ -224,9 +224,9 @@
       <div>
         <div class="kicker">Moonyoung · English Apps</div>
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
-        <p class="lede">세계문학 읽기부터 문법, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
+        <p class="lede">세계문학 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="#passport">독서 여권</a><a href="#grammar">MY Grammar</a><a href="#forest">단어숲</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
+          <a href="#passport">독서 여권</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
         </nav>
       </div>
 
@@ -246,7 +246,7 @@
           <li>MY Reading Passport <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>단어숲 <span class="pill off" data-auth="fb">로그인 필요</span></li>
+          <li>단어숲 · 영작문 튜터 <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
           <li>MY Cloze · Class123 <span class="pill off" id="teacherPill">교사 전용</span></li>
         </ul>
@@ -254,7 +254,7 @@
       </section>
     </div>
 
-    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;ENGLISH&lt;&lt;READ&lt;GRAMMAR&lt;VOCAB&lt;QUIZ&lt;SHOW&lt;CLOZE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;ENGLISH&lt;&lt;READ&lt;GRAMMAR&lt;WRITING&lt;VOCAB&lt;QUIZ&lt;SHOW&lt;CLOZE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
   </div>
 </header>
 
@@ -330,6 +330,35 @@
           <img src="assets/shots/grammar-home.webp" width="1280" height="800" loading="lazy" alt="MY Grammar 홈 화면: 레벨, 오늘의 복습, 섞어 풀기, 60초 타임어택">
         </button>
         <figcaption>홈 화면 (체험 모드)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="writing" id="writing">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></div>
+          <div class="tags"><span class="tag">영작문</span><span class="tag">AI 채점</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>AI 영작문 튜터<small>한국어 제시문을 영어로 쓰기</small></h3>
+        <p>선생님이 공개한 한국어 문장을 영어로 옮겨 쓰면 바로 채점해 줘요. 점수와 CEFR 등급, 고친 문장과 모범 답안을 보고, 내가 쓴 글과 한 단어씩 비교해요.</p>
+        <ul class="feats">
+          <li>목표 문법(so that, 현재완료 등) 활용 확인</li>
+          <li>의미·어휘, 문법·어순, 대소문자·부호 100점 채점</li>
+          <li>제한 시간과 제출 횟수는 선생님이 정해요</li>
+          <li>자유 주제 영작과 날짜별 내 기록</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="writing1/">영작 시작하기 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/writing-result.webp" data-cap="AI 영작문 튜터: 채점 결과 (예시)">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/writing1</span></span>
+          <img src="assets/shots/writing-result.webp" width="1280" height="800" loading="lazy" alt="AI 영작문 튜터 채점 결과 화면: 종합 점수, 의미 전달력, CEFR 등급, 교정 문장">
+        </button>
+        <figcaption>채점 결과 화면 (예시)</figcaption>
       </figure>
     </div>
   </article>
@@ -602,6 +631,7 @@
       ["grammar/admin.html", "MY Grammar · 교사 화면", "단원·문제 관리, 학생 기록, 공지"],
       ["quiz/", "Quiz Queens · 관리자 모드", "앱 오른쪽 위 관리자 버튼으로 문제·기록 관리"],
       ["cloze/", "MY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
+      ["writing1/", "AI 영작문 튜터 · 교사 대시보드", "과제 출제·공개, 제출 현황, 점수 통계, CSV 내보내기"],
       ["danuhsup/#t-dash", "단어숲 · 교사 대시보드", "참여율, 단원별 암기율, 테스트 결과, 단어장 업로드"],
       ["class123/", "Class123 Plus · 학급 경영", "학생 카드, 학급 온도계, 뽑기, 진도표 (별도 로그인)"]
     ]],
