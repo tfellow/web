@@ -15,6 +15,20 @@ export function setRuntimeRoster(list = []) {
   if (!Array.isArray(list)) return;
   const normalized = list
     .map((item) => {
+      if (typeof item === "string" && item.includes(":")) {
+        const [rawId, ...nameParts] = item.split(":");
+        const sId = String(rawId || "").trim();
+        const name = nameParts.join(":").trim();
+        if (!/^\d{5}$/.test(sId) || !name) return null;
+        return {
+          grade: Number(sId[0]),
+          classNum: Number(sId.slice(1, 3)),
+          number: Number(sId.slice(3, 5)),
+          name,
+          studentId: sId,
+          email: `2026${sId}@smy.ms.kr`
+        };
+      }
       if (Array.isArray(item)) {
         const sId = String(item[0] || "").trim();
         const name = String(item[1] || "").trim();
@@ -51,8 +65,8 @@ export function setRuntimeRoster(list = []) {
 }
 
 /**
- * 교사가 입력한 보안 암호(소스코드에 저장되지 않음)로 금고를 복호화하여 압축 명렬표([[학번, 이름], ...])를 반환합니다.
- * 복호화된 데이터는 즉시 Firestore 보안 문서(vocab_books/_settings)에 저장되어 이후 자동 로드됩니다.
+ * 교사가 입력한 보안 암호(소스코드에 저장되지 않음)로 금고를 복호화하여
+ * Firestore가 허용하는 1차원 문자열 배열(["10101:이름", ...])을 반환합니다.
  */
 export async function decryptRosterVaultWithTeacherCode(passphrase) {
   if (!passphrase || !window.crypto?.subtle) return null;
@@ -93,8 +107,12 @@ export async function decryptRosterVaultWithTeacherCode(passphrase) {
     );
 
     const compactList = JSON.parse(dec.decode(decryptedBuffer));
-    setRuntimeRoster(compactList);
-    return compactList;
+    // Firestore는 2차원 중첩 배열([[학번, 이름]])을 허용하지 않으므로 1차원 문자열 배열(["10101:이름"])로 변환
+    const flatStringList = compactList.map((entry) =>
+      Array.isArray(entry) ? `${entry[0]}:${entry[1]}` : String(entry)
+    );
+    setRuntimeRoster(flatStringList);
+    return flatStringList;
   } catch (e) {
     return null;
   }
