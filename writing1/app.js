@@ -164,9 +164,104 @@ function maskPersonalInfoClient(text, studentName = "") {
   return masked;
 }
 
+// 한->영 핵심 어휘 및 의미 매칭 사전 (참고 모범답안이 없을 때도 한국어 제시문의 의미를 정밀 채점)
+const KO_EN_CONCEPT_DICT = [
+  { ko: ["꽃", "꽃들"], en: ["flower", "flowers", "blossom", "blossoms"], label: "꽃(flower)" },
+  { ko: ["아름다", "예쁜", "예쁘", "멋진", "멋지", "고운"], en: ["beautiful", "pretty", "lovely", "wonderful", "nice", "gorgeous"], label: "아름다운/멋진(beautiful/pretty)" },
+  { ko: ["계절"], en: ["season", "seasons"], label: "계절(season)" },
+  { ko: ["봄"], en: ["spring"], label: "봄(spring)" },
+  { ko: ["여름"], en: ["summer"], label: "여름(summer)" },
+  { ko: ["가을"], en: ["fall", "autumn"], label: "가을(fall/autumn)" },
+  { ko: ["겨울"], en: ["winter"], label: "겨울(winter)" },
+  { ko: ["피다", "피기", "피어"], en: ["bloom", "blooms", "blossom", "come out"], label: "꽃이 피다(bloom)" },
+  { ko: ["좋아하", "가장 좋아하는", "제일 좋아하는"], en: ["favorite", "like", "love", "prefer", "best"], label: "좋아하는(favorite/like)" },
+  { ko: ["왜냐하면", "때문"], en: ["because", "since", "as", "because of"], label: "이유(because)" },
+  { ko: ["아픈", "다친", "병든"], en: ["sick", "ill", "injured", "hurt"], label: "아픈(sick)" },
+  { ko: ["동물"], en: ["animal", "animals", "pet", "pets"], label: "동물(animal)" },
+  { ko: ["돕", "도와", "구하"], en: ["help", "helps", "save", "assist", "care"], label: "돕다(help)" },
+  { ko: ["수의사"], en: ["vet", "veterinarian", "animal doctor"], label: "수의사(vet/veterinarian)" },
+  { ko: ["의사"], en: ["doctor", "physician"], label: "의사(doctor)" },
+  { ko: ["선생님", "교사"], en: ["teacher"], label: "교사(teacher)" },
+  { ko: ["되고 싶다", "원한다", "바란다"], en: ["want", "would like", "hope", "wish"], label: "~하고 싶다(want to)" },
+  { ko: ["세계", "세상"], en: ["world", "global"], label: "세계(world)" },
+  { ko: ["사람"], en: ["people", "person", "others"], label: "사람들(people)" },
+  { ko: ["소통", "대화", "이야기"], en: ["communicate", "talk", "speak", "converse", "share"], label: "소통하다(communicate/talk)" },
+  { ko: ["영어"], en: ["english"], label: "영어(English)" },
+  { ko: ["배우", "학습", "공부"], en: ["learn", "learning", "study", "studying", "master"], label: "배우다/공부하다(learn/study)" },
+  { ko: ["중요하", "중요한", "소중"], en: ["important", "essential", "vital", "matter", "valuable"], label: "중요한(important)" },
+  { ko: ["경복궁", "궁궐", "고궁"], en: ["gyeongbokgung", "palace"], label: "경복궁(Gyeongbokgung Palace)" },
+  { ko: ["한복"], en: ["hanbok"], label: "한복(Hanbok)" },
+  { ko: ["입다", "입어", "착용"], en: ["wear", "wearing", "wore", "worn", "try on", "put on"], label: "입다(wear)" },
+  { ko: ["특별한", "색다른"], en: ["special", "unique", "memorable", "unforgettable"], label: "특별한(special)" },
+  { ko: ["경험", "체험"], en: ["experience", "experiences", "memory"], label: "경험(experience)" },
+  { ko: ["가본 적", "해본 적"], en: ["have been", "has been", "have visited", "have tried"], label: "경험(~해본 적이 있다: have been/tried)" },
+  { ko: ["친구"], en: ["friend", "friends", "classmate"], label: "친구(friend)" },
+  { ko: ["학교"], en: ["school"], label: "학교(school)" },
+  { ko: ["학생"], en: ["student", "students"], label: "학생(student)" },
+  { ko: ["책", "독서"], en: ["book", "books", "read", "reading"], label: "책/독서(book/read)" },
+  { ko: ["운동", "체육"], en: ["exercise", "sport", "sports", "work out", "workout"], label: "운동(exercise)" },
+  { ko: ["건강"], en: ["health", "healthy", "fit"], label: "건강(health/healthy)" },
+  { ko: ["환경", "자연", "지구"], en: ["environment", "nature", "earth", "planet"], label: "환경/지구(environment/earth)" },
+  { ko: ["보호", "지키"], en: ["protect", "save", "keep", "preserve"], label: "보호하다(protect/save)" },
+  { ko: ["행복", "기쁜", "기쁘", "즐거"], en: ["happy", "happiness", "glad", "joyful", "pleased", "fun"], label: "행복한/기쁜(happy/glad)" },
+  { ko: ["슬픈", "슬프"], en: ["sad", "upset", "unhappy"], label: "슬픈(sad)" },
+  { ko: ["날씨"], en: ["weather", "day"], label: "날씨(weather/day)" },
+  { ko: ["하늘"], en: ["sky"], label: "하늘(sky)" },
+  { ko: ["바다"], en: ["sea", "ocean", "beach"], label: "바다(sea/ocean)" },
+  { ko: ["강아지", "개"], en: ["dog", "dogs", "puppy", "puppies"], label: "강아지(dog/puppy)" },
+  { ko: ["고양이"], en: ["cat", "cats", "kitten"], label: "고양이(cat)" },
+  { ko: ["빠른", "빨리"], en: ["fast", "quick", "quickly"], label: "빠른(fast/quick)" },
+  { ko: ["키가 큰", "높은"], en: ["tall", "high"], label: "키가 큰/높은(tall/high)" },
+  { ko: ["어려운", "어렵", "힘든"], en: ["difficult", "hard", "tough"], label: "어려운(difficult/hard)" },
+  { ko: ["쉬운", "쉽"], en: ["easy", "simple"], label: "쉬운(easy)" },
+  { ko: ["재미있", "흥미"], en: ["interesting", "fun", "exciting", "funny"], label: "재미있는(interesting/fun)" },
+  { ko: ["친절", "착한"], en: ["kind", "nice", "friendly", "sweet"], label: "친절한(kind/nice)" },
+  { ko: ["똑똑", "영리"], en: ["smart", "clever", "wise", "intelligent"], label: "똑똑한(smart/clever)" },
+  { ko: ["음식", "요리"], en: ["food", "dish", "meal", "cook"], label: "음식(food)" },
+  { ko: ["음악", "노래"], en: ["music", "song", "sing"], label: "음악/노래(music/song)" },
+  { ko: ["영화"], en: ["movie", "film"], label: "영화(movie)" },
+  { ko: ["여행"], en: ["trip", "travel", "journey", "tour"], label: "여행(trip/travel)" },
+  { ko: ["가족", "부모님"], en: ["family", "parents", "parent"], label: "가족/부모님(family/parents)" },
+  { ko: ["시간"], en: ["time", "hour"], label: "시간(time)" },
+  { ko: ["미래", "꿈"], en: ["future", "dream", "dreams"], label: "미래/꿈(future/dream)" }
+];
+
+// 영어 동의어/어근 정규화 헬퍼 (모범답안 비교 시 동일 의미 인정)
+const EN_SYNONYM_GROUPS = [
+  ["vet", "veterinarian"],
+  ["beautiful", "pretty", "lovely", "gorgeous"],
+  ["autumn", "fall"],
+  ["bloom", "blooms", "blossom", "blossoms"],
+  ["important", "essential", "vital"],
+  ["communicate", "talk", "converse"],
+  ["trip", "travel", "journey"],
+  ["sick", "ill", "injured"],
+  ["happy", "glad", "pleased", "joyful"],
+  ["smart", "clever", "intelligent"],
+  ["fast", "quick", "quickly"],
+  ["hard", "difficult"]
+];
+
+function normalizeEnWord(word) {
+  const w = word.toLowerCase().replace(/[^a-z]/g, "");
+  if (!w) return "";
+  for (const group of EN_SYNONYM_GROUPS) {
+    if (group.includes(w)) return group[0];
+  }
+  if (w.length > 4 && w.endsWith("ing")) return w.slice(0, -3);
+  if (w.length > 4 && w.endsWith("ed")) return w.slice(0, -2);
+  if (w.length > 3 && w.endsWith("es")) return w.slice(0, -2);
+  if (w.length > 3 && w.endsWith("s") && !w.endsWith("ss") && !w.endsWith("is")) return w.slice(0, -1);
+  return w;
+}
+
 /**
- * [정적 호스팅(GitHub Pages) 호환] 스마트 영작문 & 한국어 제시문 정밀 평가 엔진
- * 백엔드 서버가 없는 https://tfellow.github.io/web/writing1/ 환경에서도 100% 작동합니다.
+ * [정적 호스팅(GitHub Pages) & 로컬 서버 공통]
+ * 4단계 루브릭 기반 한국어 제시문 & 영문법 정밀 평가 알고리즘
+ * - 1영역: 의미 전달 정확도 (40점 만점) - 모범답안 어근/동의어 비교 + 한-영 개념 사전 매칭
+ * - 2영역: 핵심 목표 표현/구문 정확도 (30점 만점) - 감탄문(What/How), 가주어(It~to), 목적(so that), 현재완료 등 구문 구조 정밀 검증
+ * - 3영역: 일반 영문법 및 주어-동사 어순 (20점 만점) - 수일치, 관사(a/an), 조동사/to부정사 뒤 동사원형, 이중동사 오류 검출
+ * - 4영역: 대소문자·철자·문장부호 완성도 (10점 만점)
  */
 function evaluateWritingLocally({
   mode,
@@ -183,6 +278,7 @@ function evaluateWritingLocally({
       score: 0,
       meaningAccuracy: 0,
       targetExpressionUsed: false,
+      rubric: { meaning: 0, target: 0, grammar: 0, mechanics: 0 },
       correctedText: "(제한시간 내 작성된 영어 문장이 없습니다.)",
       modelAnswer:
         referenceAnswer ||
@@ -195,124 +291,585 @@ function evaluateWritingLocally({
         }
       ],
       vocabularySuggestions: [],
-      overallComment: "제한시간 동안 작성된 영작문이 없어 0점으로 자동 발송되었습니다. [다시 도전하기]를 눌러 모범 답안 표현을 연습해 보세요!"
+      overallComment:
+        "제한시간 동안 작성된 영작문이 없어 0점으로 자동 발송되었습니다. [타이머 재시작]을 눌러 모범 답안 표현을 연습해 보세요!"
     };
   }
-  const safeContent = maskPersonalInfoClient(content, studentName);
-  const words = safeContent.trim().split(/\s+/).filter(Boolean);
+
+  const safeContent = maskPersonalInfoClient(content, studentName).trim();
+  const words = safeContent.split(/\s+/).filter(Boolean);
   const wordCount = words.length;
-  const sentences = safeContent
-    .split(/(?<=[.!?])\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const englishWordsOnly = safeContent.match(/[a-zA-Z']+/g) || [];
+  const hasKoreanChars = /[가-힣ㄱ-ㅎㅏ-ㅣ]/.test(safeContent);
 
-  // 1. 기본 문법 및 표기 보정
-  let correctedText = safeContent
-    .replace(/\bi\b/g, "I")
-    .replace(/\bdont\b/gi, "don't")
-    .replace(/\bcant\b/gi, "can't")
-    .replace(/\bwont\b/gi, "won't")
-    .replace(/\bim\b/gi, "I'm")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (correctedText.length > 0) {
-    correctedText = correctedText.charAt(0).toUpperCase() + correctedText.slice(1);
-    if (!/[.!?]$/.test(correctedText)) {
-      correctedText += ".";
-    }
+  // 영어가 아예 없거나 무의미한 글자(예: asdf, 한글만 입력)인 경우 즉시 감점 처리
+  if (englishWordsOnly.length === 0) {
+    return {
+      cefrLevel: "A1",
+      score: 5,
+      meaningAccuracy: 0,
+      targetExpressionUsed: false,
+      rubric: { meaning: 0, target: 0, grammar: 2, mechanics: 3 },
+      correctedText: referenceAnswer || "Please write your sentence in English.",
+      modelAnswer: referenceAnswer || "제시된 한국어 문장을 영어 단어로 바꾸어 작성해 보세요.",
+      grammarFeedback: [
+        {
+          original: safeContent,
+          corrected: referenceAnswer || "영어 문장으로 작성 필요",
+          explanation: "영어 단어가 인식되지 않았습니다. 한국어 제시문의 의미를 영어 주어+동사 문장으로 작성해 주세요!"
+        }
+      ],
+      vocabularySuggestions: [],
+      overallComment: "영어 문장이 입력되지 않아 채점이 제한되었습니다. 제시된 목표 표현을 활용해 영어로 다시 작성해 보세요!"
+    };
   }
 
-  // 2. 목표 문법/어휘 포함 여부 검사
-  let targetExpressionUsed = true;
-  if (targetGrammar && targetGrammar.trim()) {
-    const englishKeywords = targetGrammar
-      .toLowerCase()
-      .replace(/\([^)]*\)/g, "")
-      .split(/[,/~]+/)
-      .map((k) => k.trim())
-      .filter((k) => /^[a-z\s]+$/.test(k) && k.length >= 2);
+  const grammarFeedback = [];
+  let correctedText = safeContent.replace(/\s+/g, " ").trim();
+  const lowerContent = correctedText.toLowerCase();
 
-    if (englishKeywords.length > 0) {
-      targetExpressionUsed = englishKeywords.some((kw) =>
-        safeContent.toLowerCase().includes(kw)
+  // ============================================================================
+  // [4영역] 표기법·대소문자·축약형·문장부호 검사 (10점 만점)
+  // ============================================================================
+  let mechanicsScore = 10;
+  const mechanicsIssues = [];
+
+  if (/^[a-z]/.test(correctedText)) {
+    mechanicsScore -= 3;
+    mechanicsIssues.push("첫 글자 대문자 표기");
+    correctedText = correctedText.charAt(0).toUpperCase() + correctedText.slice(1);
+  }
+  if (/\bi\b/.test(correctedText)) {
+    mechanicsScore -= 2;
+    mechanicsIssues.push("1인칭 대명사 'I' 대문자 표기");
+    correctedText = correctedText.replace(/\bi\b/g, "I");
+  }
+  if (/\b(dont|cant|wont|didnt|doesnt|isnt|arent|wasnt|werent|havent|hasnt|im)\b/i.test(correctedText)) {
+    mechanicsScore -= 2;
+    mechanicsIssues.push("축약형 아포스트로피(') 표기");
+    correctedText = correctedText
+      .replace(/\bdont\b/gi, "don't")
+      .replace(/\bcant\b/gi, "can't")
+      .replace(/\bwont\b/gi, "won't")
+      .replace(/\bdidnt\b/gi, "didn't")
+      .replace(/\bdoesnt\b/gi, "doesn't")
+      .replace(/\bisnt\b/gi, "isn't")
+      .replace(/\barent\b/gi, "aren't")
+      .replace(/\bwasnt\b/gi, "wasn't")
+      .replace(/\bwerent\b/gi, "weren't")
+      .replace(/\bhavent\b/gi, "haven't")
+      .replace(/\bhasnt\b/gi, "hasn't")
+      .replace(/\bim\b/gi, "I'm");
+  }
+
+  const isExclamatoryTarget =
+    /what|how|감탄/i.test(targetGrammar || "") ||
+    /^(what|how)\b/i.test(correctedText) ||
+    (koreanPrompt && koreanPrompt.includes("!"));
+
+  if (!/[.!?]$/.test(correctedText)) {
+    mechanicsScore -= 3;
+    mechanicsIssues.push(isExclamatoryTarget ? "감탄부호(!) 누락" : "마침표(.) 등 문장부호 누락");
+    correctedText += isExclamatoryTarget ? "!" : ".";
+  } else if (isExclamatoryTarget && /^(what|how)\b/i.test(correctedText) && correctedText.endsWith(".")) {
+    // 감탄문인데 마침표로 끝낸 경우 자연스럽게 ! 권장 (감점은 1점만)
+    mechanicsScore -= 1;
+    mechanicsIssues.push("감탄문 끝 문장부호(!) 권장");
+    correctedText = correctedText.slice(0, -1) + "!";
+  }
+  mechanicsScore = Math.max(0, mechanicsScore);
+
+  if (mechanicsIssues.length > 0) {
+    grammarFeedback.push({
+      original: safeContent,
+      corrected: correctedText,
+      explanation: `[표기/문장부호 교정] ${mechanicsIssues.join(", ")} 부분을 올바른 영어 표기법에 맞게 다듬었습니다.`
+    });
+  }
+
+  // ============================================================================
+  // [3영역] 일반 영문법 및 어순 정밀 검사 (20점 만점)
+  // ============================================================================
+  let grammarScore = 20;
+
+  if (hasKoreanChars) {
+    grammarScore -= 8;
+    grammarFeedback.push({
+      original: safeContent.match(/[가-힣]+/g)?.join(", ") || "한국어 포함",
+      corrected: "영어 표현으로 변환 필요",
+      explanation: "[미번역 한국어 포함] 영작문 안에 한국어가 그대로 남아 있습니다. 모든 단어를 영어로 영작해 주세요."
+    });
+  }
+
+  // 3-1. 문장 내 동사 존재 여부 확인
+  const commonVerbsRegex =
+    /\b(am|is|are|was|were|be|been|have|has|had|do|does|did|can|could|will|would|shall|should|may|might|must|like|likes|liked|love|loves|loved|want|wants|wanted|need|needs|help|helps|helped|learn|learns|learned|study|studies|studied|go|goes|went|gone|come|comes|came|make|makes|made|take|takes|took|see|sees|saw|seen|know|knows|knew|think|thinks|thought|get|gets|got|give|gives|gave|find|finds|found|tell|tells|told|work|works|worked|call|calls|try|tries|tried|ask|asks|feel|feels|felt|become|becomes|became|leave|leaves|left|put|puts|mean|means|keep|keeps|kept|let|lets|begin|begins|began|seem|seems|show|shows|hear|hears|heard|play|plays|played|run|runs|ran|move|moves|live|lives|lived|believe|believes|bring|brings|happen|happens|write|writes|wrote|written|sit|sits|sat|stand|stands|lose|loses|lost|pay|pays|meet|meets|met|include|includes|continue|continues|set|sets|change|changes|lead|leads|understand|understands|watch|watches|watched|follow|follows|stop|stops|create|creates|speak|speaks|spoke|read|reads|allow|allows|add|adds|spend|spends|spent|grow|grows|grew|open|opens|walk|walks|walked|win|wins|won|offer|offers|remember|remembers|consider|considers|appear|appears|buy|buys|bought|wait|waits|serve|serves|die|dies|send|sends|sent|expect|expects|build|builds|built|stay|stays|stayed|fall|falls|fell|cut|cuts|reach|reaches|kill|kills|remain|remains|suggest|suggests|raise|raises|pass|passes|sell|sells|sold|require|requires|report|reports|decide|decides|pull|pulls|bloom|blooms|bloomed|wear|wears|wore|worn|visit|visited|visits|communicate|communicates|protect|protects|exercise|exercises|eat|eats|ate|drink|drinks|drank|sleep|sleeps|slept|sing|sings|sang|swim|swims|swam|teach|teaches|taught|fly|flies|flew)\b/i;
+
+  if (!commonVerbsRegex.test(correctedText) && !/\b[a-z]+(ed|ing|es)\b/i.test(correctedText)) {
+    grammarScore -= 10;
+    grammarFeedback.push({
+      original: correctedText,
+      corrected: referenceAnswer || `${correctedText.replace(/[.!?]+$/, "")} is ...`,
+      explanation: "[동사 누락 주의] 영어 문장에는 주어의 상태나 동작을 나타내는 동사(be동사 또는 일반동사)가 반드시 포함되어야 합니다."
+    });
+  }
+
+  // 3-2. 주어-동사 수일치 (Subject-Verb Agreement) 검사
+  const svaRules = [
+    {
+      pattern: /\bI\s+(is|are|was|has|does)\b/g,
+      fix: (m, v) => `I ${v === "is" || v === "are" ? "am" : v === "has" ? "have" : v === "does" ? "do" : "was"}`,
+      desc: "주어 'I' 뒤에는 'am'(현재) 또는 'have/do'를 사용해야 합니다."
+    },
+    {
+      pattern: /\b(he|she|it)\s+(are|am|were|have|do|want|like|love|need|help|bloom|go)\b/gi,
+      fix: (m, subj, v) => {
+        const vl = v.toLowerCase();
+        const map = {
+          are: "is",
+          am: "is",
+          were: "was",
+          have: "has",
+          do: "does",
+          want: "wants",
+          like: "likes",
+          love: "loves",
+          need: "needs",
+          help: "helps",
+          bloom: "blooms",
+          go: "goes"
+        };
+        return `${subj} ${map[vl] || v}`;
+      },
+      desc: "3인칭 단수 주어(he/she/it) 뒤에는 단수 동사(is/was/has/does 또는 동사원형+s/es)를 써야 합니다."
+    },
+    {
+      pattern: /\b(they|we|you)\s+(is|was|has|does|wants|likes|loves|helps|goes|blooms)\b/gi,
+      fix: (m, subj, v) => {
+        const vl = v.toLowerCase();
+        const map = {
+          is: "are",
+          was: "were",
+          has: "have",
+          does: "do",
+          wants: "want",
+          likes: "like",
+          loves: "love",
+          helps: "help",
+          goes: "go",
+          blooms: "bloom"
+        };
+        return `${subj} ${map[vl] || v}`;
+      },
+      desc: "복수 주어(we/you/they) 뒤에는 복수 동사(are/were/have/do 또는 동사원형)를 써야 합니다."
+    },
+    {
+      pattern: /\b(am|is|are|was|were)\s+(like|love|want|need|know|have|go|come|bloom|help|learn|think)\b/gi,
+      fix: (m, beV, mainV) => mainV,
+      desc: "[이중 동사 오류] be동사(am/is/are)와 일반동사 원형을 나란히 함께 쓸 수 없습니다. 일반동사만 단독으로 사용하세요."
+    },
+    {
+      pattern: /\b(can|could|will|would|should|must|may|to)\s+([a-z]+(s|ed|ing))\b/gi,
+      check: (m) => !/\bto\s+(bed|morning|evening|spring|feeling|something|nothing|everything|anything|building|painting|reading)\b/i.test(m),
+      fix: (m, aux, verb) => {
+        const base = verb
+          .replace(/ing$/i, "")
+          .replace(/ed$/i, "")
+          .replace(/es$/i, "")
+          .replace(/s$/i, "");
+        return `${aux} ${base}`;
+      },
+      desc: "조동사(can/will/should 등)나 to부정사(to) 뒤에는 반드시 '동사원형'이 와야 합니다."
+    },
+    {
+      pattern: /\ba\s+([aeiou][a-z]+)\b/gi,
+      check: (m, word) => !/^(university|uniform|unique|useful|user|european|one)\b/i.test(word),
+      fix: (m, word) => `an ${word}`,
+      desc: "모음 소리(a, e, i, o, u)로 시작하는 단수 명사 앞에는 부정관사 'a' 대신 'an'을 씁니다."
+    },
+    {
+      pattern: /\ban\s+([bcdfghjklmnpqrstvwxyz][a-z]+)\b/gi,
+      check: (m, word) => !/^(hour|honest|honor)\b/i.test(word),
+      fix: (m, word) => `a ${word}`,
+      desc: "자음 소리로 시작하는 단수 명사 앞에는 부정관사 'an' 대신 'a'를 씁니다."
+    }
+  ];
+
+  for (const rule of svaRules) {
+    const match = correctedText.match(rule.pattern);
+    if (match) {
+      if (rule.check && ! correctedText.replace(rule.pattern, (m, g1, g2) => (rule.check(m, g1, g2) ? "HIT" : m)).includes("HIT")) {
+        continue;
+      }
+      const before = correctedText;
+      correctedText = correctedText.replace(rule.pattern, rule.fix);
+      if (before !== correctedText) {
+        grammarScore -= 6;
+        grammarFeedback.push({
+          original: match[0],
+          corrected: correctedText,
+          explanation: `[문법 교정] ${rule.desc}`
+        });
+      }
+    }
+  }
+  grammarScore = Math.max(0, grammarScore);
+
+  // ============================================================================
+  // [2영역] 핵심 목표 표현/구문 구조 정밀 검사 (30점 만점)
+  // ============================================================================
+  let targetScore = 30;
+  let targetExpressionUsed = true;
+  let generatedAlternativeModel = "";
+  const tgLower = (targetGrammar || "").toLowerCase();
+
+  if (mode === "korean_prompt" && targetGrammar && targetGrammar.trim()) {
+    // Case A: 감탄문 (What / How) 정밀 구문 판별
+    if (tgLower.includes("what") && tgLower.includes("how")) {
+      const startsWithWhat = /^what\b/i.test(correctedText);
+      const startsWithHow = /^how\b/i.test(correctedText);
+
+      if (!startsWithWhat && !startsWithHow) {
+        targetExpressionUsed = false;
+        targetScore = 5;
+        grammarFeedback.push({
+          original: correctedText,
+          corrected:
+            referenceAnswer ||
+            "What + a/an + 형용사 + 명사 + 주어 + 동사! / How + 형용사 + 주어 + 동사!",
+          explanation: `[핵심 구문 누락] 감탄문 목표 표현(What 또는 How)으로 문장을 시작해야 합니다.`
+        });
+      } else if (startsWithWhat) {
+        // What 감탄문 어순: What + (a/an) + 형용사 + 명사 (+ 주어 + 동사)!
+        // 1) 의문문 어순 오류 검사 (예: What a beautiful flower is it!)
+        if (/\b(is|are|was|were)\s+(it|they|this|that|he|she)\s*[.!?]*$/i.test(correctedText)) {
+          targetScore -= 10;
+          const fixedOrder = correctedText.replace(
+            /\b(is|are|was|were)\s+(it|they|this|that|he|she)(\s*[.!?]*)$/i,
+            "$2 $1$3"
+          );
+          grammarFeedback.push({
+            original: correctedText,
+            corrected: fixedOrder,
+            explanation:
+              "[감탄문 어순 교정] 감탄문 끝의 주어+동사는 의문문 어순(is it)이 아니라 평서문 어순(it is)으로 써야 합니다!"
+          });
+          correctedText = fixedOrder;
+        }
+
+        // 2) 단수 가산명사 앞 a/an 누락 검사 (예: What beautiful flower it is!)
+        const whatNoArticleMatch = correctedText.match(
+          /^What\s+(?!a\b|an\b)([a-z]+)\s+([a-z]+)(?:\s+(it|this|that|he|she)\s+(is|was))?/i
+        );
+        if (whatNoArticleMatch) {
+          const adj = whatNoArticleMatch[1];
+          const noun = whatNoArticleMatch[2];
+          const isPluralOrUncountable =
+            /s$/i.test(noun) ||
+            /^(weather|music|water|news|information|advice|time|food|money|air|fun)$/i.test(noun);
+          if (!isPluralOrUncountable) {
+            targetScore -= 8;
+            const article = /^[aeiou]/i.test(adj) ? "an" : "a";
+            const fixedArticle = correctedText.replace(/^What\s+/i, `What ${article} `);
+            grammarFeedback.push({
+              original: correctedText,
+              corrected: fixedArticle,
+              explanation: `[What 감탄문 관사 교정] 셀 수 있는 단수 명사(${noun})가 있는 What 감탄문은 'What + ${article} + 형용사(${adj}) + 명사(${noun}) + 주어 + 동사!' 어순으로 써야 합니다.`
+            });
+            correctedText = fixedArticle;
+          }
+        }
+
+        // What 감탄문을 완벽히 쓴 경우 -> How 감탄문 변환식도 모범답안에 함께 제시!
+        const whatFullMatch = correctedText.match(
+          /^What\s+(?:a|an)\s+([a-z]+)\s+([a-z]+)(?:\s+it\s+is)?\s*[.!?]*$/i
+        );
+        if (whatFullMatch) {
+          const adj = whatFullMatch[1].toLowerCase();
+          const noun = whatFullMatch[2].toLowerCase();
+          generatedAlternativeModel = `${correctedText}  (💡 How 감탄문 변환: How ${adj} the ${noun} is!)`;
+        }
+      } else if (startsWithHow) {
+        // How 감탄문에서 실수로 How a beautiful flower it is! 처럼 쓴 경우 검출
+        const howWithNounMatch = correctedText.match(
+          /^How\s+(?:a|an)\s+([a-z]+)\s+([a-z]+)\s+(it|this|that|he|she)\s+(is|was)\s*[.!?]*$/i
+        );
+        if (howWithNounMatch) {
+          targetScore -= 12;
+          const adj = howWithNounMatch[1];
+          const noun = howWithNounMatch[2];
+          const v = howWithNounMatch[4];
+          const fixedHow = `How ${adj} the ${noun} ${v}!`;
+          const fixedWhat = `What ${/^[aeiou]/i.test(adj) ? "an" : "a"} ${adj} ${noun} ${howWithNounMatch[3]} ${v}!`;
+          grammarFeedback.push({
+            original: correctedText,
+            corrected: `${fixedHow} (또는 ${fixedWhat})`,
+            explanation:
+              "[How vs What 감탄문 혼동 교정] 'How' 뒤에는 'a/an + 형용사 + 명사'가 올 수 없고 'How + 형용사/부사 + 주어 + 동사!' 어순이어야 합니다."
+          });
+          correctedText = fixedHow;
+        } else {
+          const howFullMatch = correctedText.match(
+            /^How\s+([a-z]+)\s+(?:the|this|that)\s+([a-z]+)\s+is\s*[.!?]*$/i
+          );
+          if (howFullMatch) {
+            const adj = howFullMatch[1].toLowerCase();
+            const noun = howFullMatch[2].toLowerCase();
+            const art = /^[aeiou]/i.test(adj) ? "an" : "a";
+            generatedAlternativeModel = `${correctedText}  (💡 What 감탄문 변환: What ${art} ${adj} ${noun} it is!)`;
+          }
+        }
+      }
+    } else if (/it\s*~?\s*to|가주어/i.test(targetGrammar)) {
+      // Case B: 가주어-진주어 (It is ~ to부정사)
+      const hasItIsTo = /\bit\s+(is|was)\s+[a-z]+(?:\s+(?:for|of)\s+[a-z]+)?\s+to\s+[a-z]+/i.test(
+        correctedText
+      );
+      if (!hasItIsTo) {
+        targetExpressionUsed = /\bit\b/i.test(correctedText) && /\bto\b/i.test(correctedText);
+        targetScore = targetExpressionUsed ? 18 : 6;
+        grammarFeedback.push({
+          original: correctedText,
+          corrected: referenceAnswer || "It is + 형용사 + to + 동사원형 ~",
+          explanation:
+            "[가주어-진주어 구문 점검] 'It is + 형용사 + to + 동사원형(~하는 것은 …하다)' 어순이 정확히 이어지는지 확인해 보세요."
+        });
+      }
+    } else if (/so\s+that/i.test(targetGrammar)) {
+      // Case C: 목적 구문 (so that + 주어 + can/could/will + 동사원형)
+      const hasSoThatModal = /\bso\s+that\s+[a-z]+\s+(can|could|will|would|may|might)\s+[a-z]+/i.test(
+        correctedText
+      );
+      const hasSoThat = /\bso\s+that\b/i.test(correctedText);
+      if (!hasSoThat) {
+        targetExpressionUsed = false;
+        targetScore = 6;
+        grammarFeedback.push({
+          original: correctedText,
+          corrected: referenceAnswer || "~ so that + 주어 + can + 동사원형",
+          explanation: `[핵심 구문 누락] 목적을 나타내는 'so that + 주어 + can + 동사원형(~할 수 있도록)' 표현을 사용해 보세요.`
+        });
+      } else if (!hasSoThatModal) {
+        targetScore = 20;
+        grammarFeedback.push({
+          original: correctedText,
+          corrected: referenceAnswer || correctedText,
+          explanation:
+            "[so that 구문 보완] 'so that' 뒤에는 '주어 + can(또는 could/will) + 동사원형'이 오면 훨씬 자연스러운 문장이 됩니다."
+        });
+      }
+    } else {
+      // Case D: 일반 목표 어휘/문법 키워드 검사
+      const englishKeywords = targetGrammar
+        .toLowerCase()
+        .replace(/\([^)]*\)/g, "")
+        .split(/[,/~]+/)
+        .map((k) => k.trim())
+        .filter((k) => /^[a-z\s']+$/i.test(k) && k.length >= 2);
+
+      if (englishKeywords.length > 0) {
+        targetExpressionUsed = englishKeywords.some((kw) =>
+          correctedText.toLowerCase().includes(kw)
+        );
+        if (!targetExpressionUsed) {
+          targetScore = 8;
+          grammarFeedback.push({
+            original: `목표 표현(${targetGrammar}) 미사용`,
+            corrected: referenceAnswer || correctedText,
+            explanation: `[목표 표현 누락] 선생님이 지정하신 핵심 표현("${targetGrammar}")을 포함하여 영작해 보세요!`
+          });
+        }
+      }
+    }
+  }
+  targetScore = Math.max(0, targetScore);
+
+  // ============================================================================
+  // [1영역] 한국어 제시문 의미 전달 정확도 산출 (40점 만점 / 의미 전달력 0~100%)
+  // ============================================================================
+  let meaningAccuracy = 100;
+  let meaningScore = 40;
+  const missingConceptLabels = [];
+
+  if (mode === "korean_prompt") {
+    const studentTokens = new Set(
+      (correctedText.toLowerCase().match(/[a-z]+/g) || []).map(normalizeEnWord)
+    );
+    const studentRawLower = correctedText.toLowerCase();
+
+    // 1-A. 한국어 제시문(koreanPrompt)에서 핵심 개념 추출 후 학생 영작문 포함 여부 검사
+    const matchedKoreanConcepts = [];
+    if (koreanPrompt && koreanPrompt.trim()) {
+      for (const item of KO_EN_CONCEPT_DICT) {
+        if (item.ko.some((k) => koreanPrompt.includes(k))) {
+          matchedKoreanConcepts.push(item);
+        }
+      }
+    }
+
+    let koConceptHit = 0;
+    for (const concept of matchedKoreanConcepts) {
+      const hit = concept.en.some(
+        (enWord) =>
+          studentRawLower.includes(enWord) || studentTokens.has(normalizeEnWord(enWord))
+      );
+      if (hit) {
+        koConceptHit += 1;
+      } else {
+        missingConceptLabels.push(concept.label);
+      }
+    }
+
+    // 1-B. 교사 참고 모범 답안(referenceAnswer)이 있는 경우: 어근/동의어 일치율 정밀 계산
+    const stopWords = new Set(["the", "a", "an", "to", "of", "in", "on", "at", "for", "with", "and"]);
+    let refRatio = null;
+    const missingRefWords = [];
+
+    if (referenceAnswer && referenceAnswer.trim()) {
+      const refRawWords = (referenceAnswer.toLowerCase().match(/[a-z]+/g) || []).filter(
+        (w) => !stopWords.has(w)
+      );
+      if (refRawWords.length > 0) {
+        let hitCount = 0;
+        for (const rw of refRawWords) {
+          const normRw = normalizeEnWord(rw);
+          if (studentTokens.has(normRw) || studentRawLower.includes(rw)) {
+            hitCount += 1;
+          } else {
+            missingRefWords.push(rw);
+          }
+        }
+        refRatio = hitCount / refRawWords.length;
+      }
+    }
+
+    const koRatio =
+      matchedKoreanConcepts.length > 0 ? koConceptHit / matchedKoreanConcepts.length : null;
+
+    if (refRatio !== null && koRatio !== null) {
+      const combinedRatio = Math.max(refRatio, koRatio * 0.9 + refRatio * 0.1);
+      meaningAccuracy = Math.round(combinedRatio * 100);
+    } else if (refRatio !== null) {
+      meaningAccuracy = Math.round(refRatio * 100);
+    } else if (koRatio !== null) {
+      meaningAccuracy = Math.round(koRatio * 100);
+    } else {
+      // 사전에 없는 새로운 한국어 문장이고 모범답안도 비어 있는 경우:
+      // 문장 구조(주어+동사+목표표현)와 단어 수 충실도로 의미 전달력 산출
+      const expectedMinWords = Math.max(3, Math.round((koreanPrompt || "").split(/\s+/).length * 0.9));
+      const lengthRatio = Math.min(1, wordCount / expectedMinWords);
+      meaningAccuracy = Math.round(
+        (lengthRatio * 0.6 + (targetScore / 30) * 0.25 + (grammarScore / 20) * 0.15) * 100
       );
     }
-  }
 
-  // 3. 한국어 제시문 모범 답안 대비 의미 전달 정확도 산출
-  let meaningAccuracy = 90;
-  if (mode === "korean_prompt" && referenceAnswer) {
-    const refWords = referenceAnswer
-      .toLowerCase()
-      .replace(/[^a-z\s]/g, "")
-      .split(/\s+/)
-      .filter((w) => w.length > 2);
-    const studentLower = safeContent.toLowerCase();
-    const matchCount = refWords.filter((w) => studentLower.includes(w)).length;
-    const ratio = refWords.length > 0 ? matchCount / refWords.length : 0.85;
-    meaningAccuracy = Math.min(100, Math.max(68, Math.round(68 + ratio * 32)));
-  }
+    // 누락된 의미 어휘가 있으면 구체적으로 피드백에 안내!
+    if (missingConceptLabels.length > 0) {
+      grammarFeedback.push({
+        original: `의미 누락/불일치 (${missingConceptLabels.join(", ")})`,
+        corrected: referenceAnswer || `핵심 어휘(${missingConceptLabels.join(", ")}) 반영 필요`,
+        explanation: `[의미 전달 점검] 한국어 제시문에 있는 ${missingConceptLabels.join(
+          ", "
+        )}의 의미가 영어 문장에서 확인되지 않았습니다.`
+      });
+    } else if (missingRefWords.length > 0 && meaningAccuracy < 85) {
+      grammarFeedback.push({
+        original: correctedText,
+        corrected: referenceAnswer,
+        explanation: `[모범답안 비교] 모범 답안의 핵심 어휘(${missingRefWords
+          .slice(0, 4)
+          .join(", ")})를 활용하면 제시문의 의미를 더 정확하게 전달할 수 있습니다.`
+      });
+    }
 
-  // 4. 문법 및 표현 피드백 구성
-  const grammarFeedback = [];
-  if (correctedText !== safeContent.trim()) {
-    grammarFeedback.push({
-      original: safeContent.trim(),
-      corrected: correctedText,
-      explanation: "영어 문장 첫 글자 대문자 표기, 1인칭 대명사 'I', 축약형 아포스트로피('), 또는 문장 부호(.)를 바르게 다듬었습니다."
-    });
+    meaningAccuracy = Math.min(100, Math.max(0, meaningAccuracy));
+    meaningScore = Math.round((meaningAccuracy / 100) * 40);
   } else {
+    // 자유 영작(free) 모드인 경우 분량 및 문장 다양성 반영
+    meaningAccuracy = Math.min(100, Math.max(50, 70 + Math.min(30, wordCount)));
+    meaningScore = Math.round((meaningAccuracy / 100) * 40);
+  }
+
+  // 교정 사항이 하나도 없는 완벽한 문장일 때 격려 피드백 추가
+  if (grammarFeedback.length === 0) {
     grammarFeedback.push({
-      original: sentences[0] || safeContent,
+      original: safeContent,
       corrected: correctedText,
-      explanation: "주어+동사 어순과 대소문자, 문장 부호가 정확하고 자연스럽게 작성되었습니다!"
+      explanation:
+        "🌟 한국어 제시문의 의미 전달, 핵심 목표 구문 어순, 주어-동사 수일치, 문장부호까지 모두 100% 완벽하게 작성했습니다!"
     });
   }
 
-  if (mode === "korean_prompt" && targetGrammar && !targetExpressionUsed) {
-    grammarFeedback.push({
-      original: `핵심 목표 표현(${targetGrammar}) 확인 필요`,
-      corrected: referenceAnswer || correctedText,
-      explanation: `선생님이 제시하신 목표 표현("${targetGrammar}")을 문장에 넣어 영작하면 만점을 받을 수 있어요!`
-    });
-  }
+  // ============================================================================
+  // 종합 점수(100점 만점) = 의미 전달(40) + 목표 표현(30) + 영문법·어순(20) + 표기·부호(10)
+  // ============================================================================
+  const totalScore = Math.min(
+    100,
+    Math.max(0, meaningScore + targetScore + grammarScore + mechanicsScore)
+  );
 
-  const cefrLevel = wordCount >= 35 ? "B1" : wordCount >= 12 ? "A2+" : "A2";
-  const baseScore =
-    mode === "korean_prompt"
-      ? meaningAccuracy
-      : Math.min(98, Math.max(80, 82 + Math.floor(wordCount / 3)));
-  const score = targetExpressionUsed ? baseScore : Math.max(65, baseScore - 8);
+  const cefrLevel =
+    totalScore >= 95 && wordCount >= 10
+      ? "B1+"
+      : totalScore >= 85 && wordCount >= 6
+      ? "B1"
+      : totalScore >= 70
+      ? "A2+"
+      : totalScore >= 50
+      ? "A2"
+      : "A1";
+
+  const finalModelAnswer =
+    referenceAnswer && referenceAnswer.trim()
+      ? referenceAnswer
+      : generatedAlternativeModel || correctedText;
+
+  let overallComment = "";
+  if (totalScore >= 95) {
+    overallComment = `💯 [총점 ${totalScore}점] 제시문의 의미 전달(${meaningScore}/40점), 목표 구문 활용(${targetScore}/30점), 영문법 어순(${grammarScore}/20점), 표기법(${mechanicsScore}/10점) 모두 완벽합니다! 최고예요! 👏`;
+  } else if (totalScore >= 80) {
+    overallComment = `👍 [총점 ${totalScore}점] 핵심 의미를 잘 전달했으나 세부 항목(의미 ${meaningScore}/40, 목표구문 ${targetScore}/30, 문법 ${grammarScore}/20, 표기 ${mechanicsScore}/10)에서 아쉬운 부분을 교정 노트로 확인해 보세요!`;
+  } else {
+    overallComment = `💡 [총점 ${totalScore}점] 제시문과 어휘·구문 일치도를 높여 보세요(의미 ${meaningScore}/40, 목표구문 ${targetScore}/30, 문법 ${grammarScore}/20, 표기 ${mechanicsScore}/10). 아래 교정 설명과 모범 답안을 참고해 다시 도전해 보세요!`;
+  }
 
   return {
     cefrLevel,
-    score,
+    score: totalScore,
     meaningAccuracy,
     targetExpressionUsed,
+    rubric: {
+      meaning: meaningScore,
+      target: targetScore,
+      grammar: grammarScore,
+      mechanics: mechanicsScore
+    },
     correctedText,
-    modelAnswer: referenceAnswer || correctedText,
+    modelAnswer: finalModelAnswer,
     grammarFeedback,
     vocabularySuggestions: [
       {
-        word: targetGrammar || "expressive",
-        meaning: targetGrammar ? "이번 과제 핵심 목표 표현" : "표현력이 풍부한",
-        example: referenceAnswer || "Your English writing is very clear and expressive!"
+        word: targetGrammar || "sentence structure",
+        meaning: targetGrammar ? "이번 과제 핵심 목표 표현/구문" : "영어 문장 구조",
+        example: finalModelAnswer
       },
-      {
-        word: "communicate",
-        meaning: "소통하다, 의미를 전달하다",
-        example: "Writing in English helps us communicate our thoughts clearly."
-      }
+      ...(missingConceptLabels.length > 0
+        ? [
+            {
+              word: missingConceptLabels.join(", "),
+              meaning: "한국어 제시문에서 보완이 필요한 핵심 어휘",
+              example: referenceAnswer || "제시문의 핵심 단어를 영작에 꼭 포함해 보세요."
+            }
+          ]
+        : [
+            {
+              word: "expression",
+              meaning: "표현, 어구",
+              example: "Using the target expression accurately makes your writing shine!"
+            }
+          ])
     ],
-    overallComment:
-      mode === "korean_prompt"
-        ? `선생님의 한국어 제시문("${koreanPrompt}")의 핵심 의미를 영어로 잘 옮겼어요! ${
-            targetExpressionUsed
-              ? "목표 문법/어휘까지 정확하게 사용하여 완성도가 매우 높습니다! 👏"
-              : `추천 모범 답안을 참고하여 목표 표현(${targetGrammar})도 함께 연습해 보세요!`
-          }`
-        : `총 ${wordCount}단어로 "${topic}" 주제에 대해 자신의 생각을 논리적으로 잘 표현했어요! 👏`
+    overallComment
   };
 }
 
@@ -1257,6 +1814,25 @@ function renderEvaluationResult(evalResult, mode, targetGrammar) {
   document.getElementById("res-model-answer").textContent =
     evalResult.modelAnswer || evalResult.correctedText;
   document.getElementById("res-comment").textContent = evalResult.overallComment;
+
+  const rubricBox = document.getElementById("res-rubric-breakdown");
+  if (rubricBox) {
+    if (evalResult.rubric) {
+      const r = evalResult.rubric;
+      rubricBox.classList.remove("hidden");
+      rubricBox.innerHTML = `
+        <div style="font-weight: 700; margin-bottom: 0.35rem; color: #1e293b;">📏 4대 영역 정밀 채점 내역 (총 ${evalResult.score}점 / 100점 만점)</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.4rem;">
+          <div>• 의미·어휘 전달: <strong>${r.meaning}</strong> / 40점</div>
+          <div>• 목표 구문 활용: <strong>${r.target}</strong> / 30점</div>
+          <div>• 영문법·어순: <strong>${r.grammar}</strong> / 20점</div>
+          <div>• 대소문자·부호: <strong>${r.mechanics}</strong> / 10점</div>
+        </div>
+      `;
+    } else {
+      rubricBox.classList.add("hidden");
+    }
+  }
 
   const targetBanner = document.getElementById("res-target-status");
   if (mode === "korean_prompt" && targetGrammar) {
