@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>서울문영여중 AI 영작문 튜터 & 교사 대시보드</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Chart.js (교사 대시보드 통계 시각화용) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- 상단 네비게이션 바 -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-icon">✍️</span>
+      <h1>서울문영여중 AI 영작문 튜터</h1>
+      <span class="badge-free">smy.ms.kr 전용</span>
+    </div>
+    <div id="user-status" class="user-status" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span id="user-info-text">로그인이 필요합니다</span>
+      <button id="btn-teacher-toggle-view" class="btn btn-outline hidden" style="border-color: #3b82f6; color: #1d4ed8; font-size: 0.84rem; padding: 0.45rem 0.85rem;">✍️ 학생 화면으로 채점 테스트</button>
+      <button id="btn-login" class="btn btn-primary">Google 학교 계정 로그인</button>
+      <button id="btn-logout" class="btn btn-outline hidden">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. 비로그인 안내 화면 (실제 학교 운영 홈페이지 안내 및 사용 가이드) -->
+    <section id="view-login" class="card login-card">
+      <div class="login-hero">
+        <div class="hero-badge">🏫 서울문영여자중학교 영어과 공식 학습 시스템</div>
+        <h2>서울문영여중 AI 영작문 튜터에 오신 것을 환영합니다! ✍️</h2>
+        <p class="hero-subtitle">
+          선생님이 제시한 우리 반 맞춤형 한국어 문장을 영어로 영작하고,<br />
+          즉시 <strong>모범 답안 1:1 시각적 비교 · 구문 블록(Chunk) 진단 · 정밀 문법 첨삭</strong>을 받아보세요.
+        </p>
+        <div class="hero-action">
+          <button type="button" id="btn-hero-login" class="btn btn-primary btn-hero">
+            🔑 Google 학교 계정(@smy.ms.kr)으로 로그인하기
+          </button>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <div class="guide-section">
+        <h3>📌 학생 로그인 및 영작 과제 참여 방법</h3>
+        <div class="guide-steps-grid">
+          <div class="guide-step-card">
+            <span class="step-num">STEP 1</span>
+            <h4>학교 구글 계정 로그인</h4>
+            <p>
+              상단 또는 중앙의 <strong>[Google 학교 계정 로그인]</strong> 버튼을 누르고 본인의 학교 계정(<strong>@smy.ms.kr</strong>)을 선택하세요.<br />
+              <span class="guide-sub">예: 1학년 1반 1번 → <code>202610101@smy.ms.kr</code> (학번·이름 자동 인식)</span>
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 2</span>
+            <h4>우리 반 과제 &amp; 제출 기회 확인</h4>
+            <p>
+              로그인하면 <strong>우리 학년·반에 배정된 과제</strong>가 자동으로 나타납니다. 제시된 <strong>한국어 문장, 핵심 목표 표현, 채점 기준, 제출 허용 횟수(기본 1회)</strong>를 확인하세요.
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 3</span>
+            <h4>시간 내 영작 및 신중한 제출 (기본 1회)</h4>
+            <p>
+              제한시간 과제는 진입 즉시 <strong>카운트다운 타이머</strong>가 작동합니다. <strong>기본적으로 1회만 제출 가능</strong>(선생님 설정에 따름)하므로 철자·어순·마침표를 확인한 뒤 <strong>[AI 채점 및 피드백 받기]</strong>를 누르세요.<br />
+              <span class="guide-sub">※ 제한시간(00:00) 종료 시 그때까지 작성한 답안이 선생님께 자동 제출됩니다.</span>
+            </p>
+          </div>
+          <div class="guide-step-card">
+            <span class="step-num">STEP 4</span>
+            <h4>1:1 시각적 비교 &amp; AI 첨삭 복습</h4>
+            <p>
+              제출 즉시 <strong>4대 영역 정밀 점수, 모범 답안 1:1 시각적 비교(철자·어순·누락 진단), 구문 블록(Chunk) 진단, 문법 및 의미 전달 피드백</strong>이 제공되며 하단 기록장에서 언제든 복습할 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-faq-grid">
+        <div class="notice-box">
+          <strong>💡 로그인이 안 되거나 다른 계정이 뜰 때 해결 방법</strong>
+          <ul style="margin: 0.4rem 0 0 1.1rem; padding: 0; font-size: 0.88rem; line-height: 1.6;">
+            <li>개인 지메일(<code>@gmail.com</code>)로 로그인되어 있다면 구글 계정 선택 창에서 <strong>[다른 계정 사용]</strong>을 누른 뒤 학교 계정(<code>2026학번@smy.ms.kr</code>)을 입력해 주세요.</li>
+            <li>로그인 창이 열리지 않는 경우 브라우저 주소창 우측의 <strong>팝업 차단 해제</strong>를 허용해 주세요.</li>
+          </ul>
+        </div>
+        <div class="notice-box" style="background: #f8fafc; border-left-color: #10b981; color: #065f46;">
+          <strong>🔒 학생 개인정보 보호 안내</strong>
+          <p style="margin: 0.4rem 0 0 0; font-size: 0.88rem; line-height: 1.6;">
+            작성한 영작문에 포함된 학생 성명, 학번, 이메일, 연락처 등 개인정보는 외부 전송 전 자동으로 비식별화(마스킹)되어 안전하게 보호됩니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 학생 페이지 (Student View) -->
+    <section id="view-student" class="hidden">
+      <!-- 명렬표 기반 자동 인식된 학년/반/번호/학번/성명 바 -->
+      <div class="card profile-bar">
+        <div class="profile-inputs">
+          <span class="badge-verified" id="roster-badge">✅ 명렬표 자동 매칭 완료</span>
+          <label>학번:
+            <input type="text" id="student-id" readonly />
+          </label>
+          <label>학년:
+            <select id="student-grade" disabled>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+            </select>
+          </label>
+          <label>반:
+            <select id="student-class" disabled>
+              <option value="1">1반</option>
+              <option value="2">2반</option>
+              <option value="3">3반</option>
+              <option value="4">4반</option>
+            </select>
+          </label>
+          <label>번호:
+            <input type="number" id="student-number" min="1" max="30" readonly />
+          </label>
+          <label>성명:
+            <input type="text" id="student-name" readonly />
+          </label>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- 좌측: 글쓰기 에디터 (모드 전환 탭 포함) -->
+        <div class="card">
+          <div class="mode-tabs">
+            <button id="tab-mode-korean" class="mode-tab active">🇰🇷➡️🇺🇸 선생님 한국어 제시문 영작</button>
+            <button id="tab-mode-free" class="mode-tab">📝 자유 주제 영작</button>
+          </div>
+
+          <!-- 모드 A: 선생님 한국어 제시문 영작 영역 -->
+          <div id="box-korean-prompt" class="prompt-mission-box">
+            <div class="form-group">
+              <label for="select-korean-mission">📌 선생님이 공개(체크)한 우리 반 영작 과제 선택</label>
+              <select id="select-korean-mission"></select>
+            </div>
+            <!-- 제한시간 카운트다운 표시 바 (학생 임의 조작 버튼 없음) -->
+            <div id="timer-control-bar" class="timer-bar hidden">
+              <div class="timer-info">
+                <span class="timer-icon">⏱️</span>
+                <span id="timer-status-label">남은 제한시간 (00:00 종료 시 작성한 내용 자동 제출)</span>
+              </div>
+              <strong id="timer-countdown" class="timer-digits">03:00</strong>
+            </div>
+            <div class="mission-detail">
+              <div class="mission-label">🇰🇷 한국어 제시문 (아래 문장을 영어로 영작하세요)</div>
+              <p id="display-korean-sentence" class="korean-sentence-text">-</p>
+              <div class="mission-hint" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                <div>
+                  <span>🎯 핵심 목표 표현/문법:</span>
+                  <strong id="display-target-grammar">-</strong>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;">
+                  <span id="display-attempts-badge" class="strictness-pill strict">🔒 제출 기회: 1 / 1회</span>
+                  <span id="display-strictness-badge" class="strictness-pill standard">⚖️ 표준 정밀 채점</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 모드 B: 자유 주제 입력란 -->
+          <div id="box-free-topic" class="form-group hidden">
+            <label for="essay-topic">작문 주제 (Topic)</label>
+            <input type="text" id="essay-topic" placeholder="예: My Favorite Season and Why" />
+          </div>
+
+          <div class="form-group">
+            <label for="essay-content" id="label-essay-content">🇺🇸 나의 영어 영작 (English Writing)</label>
+            <textarea id="essay-content" rows="6" placeholder="제시된 한국어 문장의 의미와 핵심 표현을 살려 영어로 작성해 보세요!"></textarea>
+            <div class="word-count">단어 수: <span id="word-count-num">0</span> words</div>
+          </div>
+          <button id="btn-submit-essay" class="btn btn-primary btn-full">🤖 AI 채점 및 피드백 받기</button>
+        </div>
+
+        <!-- 우측: AI 즉시 평가 결과 -->
+        <div class="card">
+          <h2>📊 AI 작문 평가 결과</h2>
+          <div id="eval-loading" class="hidden loading-state">AI 튜터가 의미 전달 정확도와 문법을 꼼꼼히 분석하고 있습니다... ⏳</div>
+          <div id="eval-empty" class="empty-state">글을 제출하면 의미 전달 정확도, CEFR 등급, 교정 문장 및 모범 답안이 이곳에 표시됩니다.</div>
+          
+          <div id="eval-result" class="hidden">
+            <div class="score-badges">
+              <div class="score-badge">종합 점수: <strong id="res-score">-</strong> / 100</div>
+              <div class="score-badge" id="badge-meaning">의미 전달력: <strong id="res-meaning">-</strong>%</div>
+              <div class="score-badge">CEFR 등급: <strong id="res-cefr">-</strong></div>
+            </div>
+            <div id="res-rubric-breakdown" class="rubric-breakdown-box" style="margin-bottom: 0.75rem; padding: 0.65rem 0.85rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.84rem; color: #334155;"></div>
+            <div id="res-target-status" class="target-status-banner hidden"></div>
+            <div class="result-section">
+              <h3>✅ 학생 문장 교정 (Corrected Text)</h3>
+              <p id="res-corrected" class="corrected-box"></p>
+            </div>
+            <div class="result-section" id="sec-model-answer">
+              <h3>🌟 추천 모범 영작 답안 (Model Answer)</h3>
+              <p id="res-model-answer" class="corrected-box model-answer-box"></p>
+            </div>
+            <div class="result-section" id="sec-visual-diff">
+              <h3>🔬 모범 답안 1:1 시각적 비교 & 구문 블록(Chunk) 진단</h3>
+              <div id="res-visual-diff" class="visual-diff-box"></div>
+            </div>
+            <div class="result-section">
+              <h3>🔍 문법 및 의미 전달 피드백</h3>
+              <ul id="res-grammar-list" class="feedback-list"></ul>
+            </div>
+            <div class="result-section">
+              <h3>💬 선생님 AI 총평</h3>
+              <p id="res-comment" class="comment-box"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단: 내 과거 작문 기록 -->
+      <div class="card">
+        <h2>📚 나의 영작문 기록 (날짜별 조회)</h2>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>제출일</th>
+                <th>유형</th>
+                <th>주제 / 한국어 제시문</th>
+                <th>나의 영작</th>
+                <th>CEFR</th>
+                <th>점수</th>
+                <th>총평 요약</th>
+              </tr>
+            </thead>
+            <tbody id="student-history-tbody">
+              <tr><td colspan="7" class="text-center">아직 제출한 작문 기록이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 교사 대시보드 (Teacher View) -->
+    <section id="view-teacher" class="hidden">
+      <!-- [신규] 교사용 한국어 제시문 과제 출제 및 관리 카드 -->
+      <div class="card prompt-manager-card">
+        <h2>🇰🇷➡️🇺🇸 교사 한국어 제시문 영작 과제 출제 & 실시간 공개(체크) 관리</h2>
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">
+          과제를 미리 여러 개 만들어 두고 <strong>[학생 공개] 체크박스(☑️)</strong>를 켜면 해당 학년·반 학생 화면에 즉시 나타나며, <strong>제한시간(분)</strong>이 끝나면 학생이 그 시점까지 작성한 내용이 자동 강제 제출됩니다.
+        </p>
+        <div id="editing-prompt-banner" class="target-status-banner pass hidden" style="margin-bottom: 0.75rem;">
+          ✏️ <strong>과제 수정 모드:</strong> 아래 내용을 수정한 뒤 <strong>[💾 수정 내용 저장]</strong> 버튼을 눌러 주세요.
+        </div>
+
+        <!-- 5대 통합 정밀 채점 엔진 안내 & Gemini AI 실시간 연동 설정 -->
+        <details id="gemini-ai-config-details" class="ai-engine-config-box">
+          <summary>
+            <span>⚙️ <strong>5대 통합 정밀 채점 엔진 가동 중</strong> (구문블록 매칭 + 1:1 Diff + LanguageTool 이중검증 + 엄격도 3단계)</span>
+            <span id="gemini-status-pill" class="ai-status-pill">🤖 Gemini AI 연동 설정 ▾</span>
+          </summary>
+          <div class="ai-engine-config-body">
+            <p style="margin: 0 0 0.5rem 0; font-size: 0.84rem; color: #334155;">
+              💡 기본 상태에서도 <strong>어순 블록(Chunk) 매칭 + 단어별 1:1 비교 + LanguageTool 영문법 엔진(2초 타임아웃/중복감점 방지)</strong>이 100% 무료로 작동합니다.<br/>
+              추가로 <strong>Google Gemini AI (LLM) 실시간 심층 첨삭</strong>까지 결합하려면 아래에 Gemini API 키를 입력해 저장하세요. (한도 초과나 네트워크 지연 시에도 0.01초 만에 내장 정밀 엔진으로 자동 전환됩니다.)
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+              <input type="password" id="input-gemini-api-key" placeholder="Google Gemini API Key 입력 (AQ.Ab... 또는 AIza...)" style="flex: 1; min-width: 240px; padding: 0.45rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 0.4rem; font-size: 0.85rem;" />
+              <label class="checkbox-inline" style="font-size: 0.85rem;">
+                <input type="checkbox" id="chk-enable-gemini-ai" checked />
+                <span>Gemini AI 하이브리드 채점 활성화</span>
+              </label>
+              <button type="button" id="btn-save-gemini-config" class="btn btn-primary" style="padding: 0.42rem 0.85rem; font-size: 0.84rem;">💾 AI 설정 저장 (클라우드 동기화)</button>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 0.75rem 0;" />
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between;">
+              <div style="font-size: 0.83rem; color: #334155;">
+                🔒 <strong>학생 명렬표 보안 금고 (students.js 무키 암호화 &amp; Firestore 서버 보호):</strong>
+                <span id="roster-vault-status-text" style="font-weight: 700; color: #15803d;">확인 중...</span>
+              </div>
+              <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                <input type="password" id="input-roster-secret-code" placeholder="교사 보안 코드 입력" style="width: 165px; padding: 0.4rem 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.4rem; font-size: 0.83rem;" />
+                <button type="button" id="btn-sync-secure-roster" class="btn btn-outline" style="padding: 0.4rem 0.75rem; font-size: 0.82rem; border-color: #10b981; color: #047857;">🔐 명렬표 Firestore 보안 서버에 영구 등록</button>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div class="prompt-Creator-grid">
+          <select id="new-prompt-grade">
+            <option value="all">전학년 공통</option>
+            <option value="1">1학년 대상</option>
+            <option value="2">2학년 대상</option>
+            <option value="3">3학년 대상</option>
+          </select>
+          <select id="new-prompt-class">
+            <option value="all">전체 반 공통</option>
+            <option value="1">1반 전용</option>
+            <option value="2">2반 전용</option>
+            <option value="3">3반 전용</option>
+            <option value="4">4반 전용</option>
+          </select>
+          <select id="new-prompt-timelimit">
+            <option value="0">⏱️ 시간제한 없음</option>
+            <option value="30">⏱️ 30초 (시간 종료 시 강제제출)</option>
+            <option value="60">⏱️ 1분 (시간 종료 시 강제제출)</option>
+            <option value="120">⏱️ 2분 (시간 종료 시 강제제출)</option>
+            <option value="180" selected>⏱️ 3분 (시간 종료 시 강제제출)</option>
+            <option value="300">⏱️ 5분 (시간 종료 시 강제제출)</option>
+            <option value="600">⏱️ 10분 (시간 종료 시 강제제출)</option>
+            <option value="900">⏱️ 15분 (시간 종료 시 강제제출)</option>
+          </select>
+          <select id="new-prompt-strictness" title="수업 목적에 따라 채점 엄격도를 선택하세요">
+            <option value="strict">🎯 서술형 칼채점 (100% 완벽 일치형)</option>
+            <option value="standard" selected>⚖️ 표준 정밀 채점 (권장 기본값)</option>
+            <option value="fluency">🌱 의미 소통 격려 (기초 연습용)</option>
+          </select>
+          <select id="new-prompt-maxattempts" title="학생이 이 과제를 제출(채점)할 수 있는 최대 허용 횟수">
+            <option value="1" selected>🔒 1회만 제출 가능 (기본값)</option>
+            <option value="2">🔄 최대 2회 제출 허용</option>
+            <option value="3">🔄 최대 3회 제출 허용</option>
+            <option value="5">🔄 최대 5회 제출 허용</option>
+            <option value="0">♾️ 무제한 연습 허용</option>
+          </select>
+          <label class="checkbox-inline" title="체크하면 등록 즉시 학생들에게 보입니다. 해제하면 교사 목록에만 보관됩니다.">
+            <input type="checkbox" id="new-prompt-active" checked />
+            <span>등록 즉시 학생 공개</span>
+          </label>
+        </div>
+        <div class="prompt-Creator-grid2">
+          <input type="text" id="new-prompt-title" placeholder="단원/과제명 (예: 2학년 3반 3단원 조건 영작)" />
+          <input type="text" id="new-prompt-target" placeholder="목표 어휘/문법 (예: What, How / so that / It ~ to)" />
+        </div>
+        <div class="prompt-creator-row2">
+          <input type="text" id="new-prompt-korean" placeholder="학생에게 제시할 한국어 문장 (예: 그 건물은 정말 높구나!)" />
+          <input type="text" id="new-prompt-answer" placeholder="모범 영어 답안 (복수 정답은 / 로 구분 입력 · 미입력 시 자동 생성)" />
+          <button type="button" id="btn-auto-generate-answer" class="btn btn-outline" title="입력한 한국어 문장과 목표 문법을 바탕으로 정확한 영어 모범 답안을 자동 완성합니다.">✨ 모범답안 자동완성</button>
+          <button type="button" id="btn-add-prompt" class="btn btn-primary">➕ 과제 저장</button>
+          <button type="button" id="btn-cancel-edit-prompt" class="btn btn-outline hidden">취소</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top: 1rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 90px; text-align: center;">학생 공개(☑️)</th>
+                <th>대상 학년/반</th>
+                <th>제한시간</th>
+                <th>과제명</th>
+                <th>한국어 제시문</th>
+                <th>목표 표현/문법</th>
+                <th>참고 모범 답안</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-prompts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 기존 교사 통계 관리 대시보드 카드 -->
+      <div class="card">
+        <div class="dashboard-header">
+          <h2>👩‍🏫 서울문영여중 교사 통계 관리 대시보드 (재학생 총 185명 등록)</h2>
+        </div>
+
+        <!-- 필터 영역: 학년 / 반 / 명렬표 학생 선택 / 검색 / 기간 -->
+        <div class="filter-bar">
+          <select id="filter-grade">
+            <option value="all">전체 학년 (1~3학년)</option>
+            <option value="1">1학년 (1~3반, 56명)</option>
+            <option value="2">2학년 (1~4반, 64명)</option>
+            <option value="3">3학년 (1~4반, 65명)</option>
+          </select>
+
+          <select id="filter-class">
+            <option value="all">전체 반</option>
+            <option value="1">1반</option>
+            <option value="2">2반</option>
+            <option value="3">3반</option>
+            <option value="4">4반</option>
+          </select>
+
+          <select id="filter-roster-student">
+            <option value="all">명렬표 학생 선택 (전체)</option>
+          </select>
+
+          <select id="filter-submit-type">
+            <option value="all">전체 제출 상태</option>
+            <option value="normal">✅ 시간 내 정상 제출</option>
+            <option value="forced">🚨 시간초과 강제발송만 보기</option>
+          </select>
+
+          <input type="text" id="filter-student" placeholder="성명 또는 학번(예: 10101) 검색" />
+          <input type="date" id="filter-date-start" />
+          <span>~</span>
+          <input type="date" id="filter-date-end" />
+          <button id="btn-apply-filter" class="btn btn-primary">조회</button>
+          <button id="btn-export-csv" class="btn btn-outline">📥 CSV 다운로드</button>
+        </div>
+
+        <!-- 요약 통계 카드 (제출 학생 / 미제출 학생 현황) -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span class="summary-label">조회 대상 재학생</span>
+            <strong id="stat-total-roster">185명</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">제출 완료 학생</span>
+            <strong id="stat-submitted-students">0명</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">총 제출 건수 (강제발송)</span>
+            <strong id="stat-total-submissions">0건</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">평균 작문 점수</span>
+            <strong id="stat-avg-score">0점</strong>
+          </div>
+        </div>
+
+        <!-- Chart.js 시각화 영역 -->
+        <div class="grid-2col chart-grid">
+          <div class="chart-box">
+            <h3>학급별 평균 점수 현황 (1-1 ~ 3-4)</h3>
+            <canvas id="chart-class-avg"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>학생별 제출 빈도 (상위 10명)</h3>
+            <canvas id="chart-student-freq"></canvas>
+          </div>
+        </div>
+
+        <!-- 전체 제출 목록 -->
+        <h3 style="margin-top: 1.5rem;">📋 학생 제출 기록 목록 (시간초과 강제발송 여부 실시간 표시)</h3>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>제출일시</th>
+                <th>제출 상태</th>
+                <th>학번</th>
+                <th>학년/반/번호</th>
+                <th>성명</th>
+                <th>유형</th>
+                <th>과제명 / 한국어 제시문</th>
+                <th>학생 영작문 (강제발송 포함)</th>
+                <th>점수 (의미전달)</th>
+                <th>AI 총평</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-submissions-tbody">
+              <tr><td colspan="10" class="text-center">데이터를 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
