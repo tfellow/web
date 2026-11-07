@@ -55,6 +55,23 @@ function sanitizeUser(u) {
   ['email', 'nickname', 'name', 'classId'].forEach(k => { if (typeof u[k] === 'string') u[k] = safeText(u[k]); });
   return u;
 }
+// 구글 시트는 풀이 수를 totalAnswered / correctCount 이름으로 저장해요.
+// 화면은 totalSolved / totalCorrect 이름을 쓰므로 여기서 맞춰 줘요.
+function fromSheetRow(u) {
+  if (!u || typeof u !== 'object') return u;
+  const num = v => (Number.isFinite(Number(v)) ? Number(v) : 0);
+  let catSolved = 0, catCorrect = 0;
+  if (u.categoryStats && typeof u.categoryStats === 'object') {
+    Object.values(u.categoryStats).forEach(c => {
+      if (c && typeof c === 'object') { catSolved += num(c.solved); catCorrect += num(c.correct); }
+    });
+  }
+  if (u.totalSolved === undefined) u.totalSolved = Math.max(num(u.totalAnswered), catSolved);
+  if (u.totalCorrect === undefined) u.totalCorrect = Math.min(u.totalSolved, Math.max(num(u.correctCount), catCorrect));
+  if (u.streakDays === undefined && u.streak !== undefined) u.streakDays = num(u.streak) || 1;
+  if (u.maxStreakDays === undefined && u.maxStreak !== undefined) u.maxStreakDays = num(u.maxStreak) || 1;
+  return u;
+}
 function sanitizeQuestion(q) {
   if (!q || typeof q !== 'object') return q;
   ['id', 'category', 'question', 'author', 'status'].forEach(k => { if (typeof q[k] === 'string') q[k] = safeText(q[k]); });
@@ -3445,6 +3462,7 @@ async function syncWithGoogleSheets(showNotification = true) {
       const data = await res.json();
       if (data.users && Array.isArray(data.users)) {
         data.users.forEach(sanitizeUser);
+        data.users.forEach(fromSheetRow);
         // 학생 계정은 서버가 준 공개 랭킹만 보관해요 (예전에 받아 둔 다른 학생 실명은 지워요)
         if (state.currentUser && !state.currentUser.isAdmin) {
           const me = state.currentUser;
