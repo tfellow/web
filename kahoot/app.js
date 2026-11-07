@@ -326,16 +326,17 @@ const MYKahoot = (() => {
   }
 
   function pushTeacherData() {
-    if (!firebaseDb) return;
+    if (!firebaseDb) return Promise.resolve();
     try {
-      firebaseDb.ref('teacherData').set({
+      return firebaseDb.ref('teacherData').set({
         quizSets: cloudSafe(quizSets),
         quizHistory: cloudSafe(quizHistory),
         settings: cloudSafe(settings),
         updatedAt: new Date().toISOString()
-      }).catch(err => console.warn('teacherData 저장 실패', err));
+      }).then(() => true).catch(err => { console.warn('teacherData 저장 실패', err); return false; });
     } catch (err) {
       console.warn('teacherData 저장 실패', err);
+      return Promise.resolve(false);
     }
   }
 
@@ -384,7 +385,7 @@ const MYKahoot = (() => {
 
     teacherDataReady = true;
     saveStateToStorage();
-    pushTeacherData();
+    const saved = await pushTeacherData();
 
     if (document.getElementById('view-teacher')?.classList.contains('active')) {
       renderQuizSetList();
@@ -393,6 +394,10 @@ const MYKahoot = (() => {
     }
 
     if (window.location.hostname === OLD_HOST) {
+      if (!saved) {
+        alert('서버에 저장하지 못했어요. 인터넷 연결을 확인하고 새로고침(Ctrl+F5)한 뒤 다시 시도해 주세요. 이 컴퓨터의 기록은 그대로 있어요.');
+        return;
+      }
       alert(`퀴즈 ${quizSets.length}개와 수업 기록 ${quizHistory.length}건을 서버에 저장했어요.\n이제 새 주소로 이동할게요:\n${NEW_BASE_URL}`);
       window.location.href = NEW_BASE_URL;
     }
