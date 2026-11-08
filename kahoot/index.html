@@ -38,9 +38,6 @@
       <button class="btn btn-accent btn-sm" onclick="MYKahoot.resumeOrStartHostScreen()">
         📺 전자칠판 화면 (퀴즈 시작/진행)
       </button>
-      <button class="btn btn-ghost-light btn-sm" onclick="MYKahoot.openStudentViewSmart()">
-        📱 학생 화면
-      </button>
       <button class="btn btn-gold btn-sm" onclick="MYKahoot.switchMainView('teacher')">
         👩‍🏫 교사 페이지 (출제·명단·통계)
       </button>
@@ -444,7 +441,7 @@
               <span class="badge badge-purple" id="firebaseStatusPill">로컬/멀티탭 모드 작동 중</span>
             </div>
             <p style="font-size:0.88rem; color:var(--my-text-muted); line-height:1.55; margin-bottom:1rem;">
-              현재 상태에서도 <strong>한 PC 내 여러 창 연동 및 20명 가상 학생 시뮬레이션</strong>이 즉시 작동합니다.<br/>
+              현재 상태에서도 <strong>한 PC 내 여러 창 연동</strong>이 즉시 작동합니다.<br/>
               교실에서 20명 학생들이 각자 스마트폰(LTE/와이파이)으로 접속하고 실제 Google 로그인 창을 띄우려면 아래에 Firebase 설정(firebaseConfig)을 붙여넣어 주세요.
             </p>
             <textarea id="firebaseConfigInput" rows="7" placeholder='{
@@ -514,12 +511,6 @@
               <span style="font-size:0.95rem; font-weight:600; opacity:0.85;">(서울문영여중 사전등록 명단 자동인증)</span>
             </div>
             <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
-              <button class="btn btn-ghost-light" onclick="MYKahoot.spawnVirtualClassStudents(20)" title="수업 전 선생님 혼자 전자칠판 화면과 통계를 테스트할 때 우리 반 20명 가상 학생을 즉시 입장시킵니다.">
-                🤖 우리 반 가상 학생 20명 자동 입장 (테스트용)
-              </button>
-              <button class="btn btn-ghost-light" onclick="MYKahoot.openStudentWindowPreview()">
-                📱 새 창으로 학생 핸드폰 화면 띄우기
-              </button>
             </div>
           </div>
 
@@ -814,6 +805,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

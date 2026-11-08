@@ -1119,3 +1119,15 @@ textarea:focus {
     font-size: 5.5rem;
   }
 }
+
+/* 다음 버튼: 화면에는 보이지 않지만 같은 자리를 누르면(또는 → 키) 다음으로 넘어갑니다. */
+.host-floating-next-arrow,
+.host-floating-next-arrow:hover,
+.host-floating-next-arrow:active {
+  opacity: 0;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.host-floating-next-arrow:focus { outline: none; }
