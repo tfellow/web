@@ -778,7 +778,7 @@ function renderConn() {
   box.querySelectorAll("[data-conn]").forEach(b => b.onclick = () => {
     const id = b.dataset.conn;
     if (id === "sb") { b.remove(); showGsi(); toast("위의 Google 버튼을 눌러 선생님 계정으로 로그인하세요."); }
-    else fbStart(id, true);
+    else fbStart(id, true, id === "fc" ? "tfellow@smy.ms.kr" : ""); // Cloze 테스트는 학교 계정으로 로그인해 만들었어요
   });
   box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
