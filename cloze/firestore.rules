@@ -42,7 +42,9 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.email == request.auth.token.email
         && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.resource.data.ownerUid;
-      allow update: if false;
+      // 다시 채점 (어순 배열 '정답으로 인정'): 그 테스트를 만든 교사가 점수·정답 여부만 고칠 수 있음
+      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['correct', 'score', 'regradedAt']);
       allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
     }
 
@@ -51,7 +53,8 @@ service cloud.firestore {
       allow read: if isSchool();
       allow create: if isSchool() && request.resource.data.uid == request.auth.uid
         && !('realName' in request.resource.data) && !('email' in request.resource.data);
-      allow update: if false;
+      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['score']);
       allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
     }
 

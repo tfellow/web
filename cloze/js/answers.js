@@ -1,7 +1,7 @@
 // 정답보기 (교사, 전자칠판용) — 빈칸을 그대로 보여 주고, 전체/개별/순서대로 정답 공개
-import { gate, db, $, $$, esc, MODE_LABEL } from "./common.js";
+import { gate, db, $, $$, esc, modeBadge } from "./common.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, shuffledPerm } from "./core.js";
+import { tokenize, shuffledPerm, shuffle, wordPrimary } from "./core.js";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
@@ -25,7 +25,11 @@ try { font = parseInt(localStorage.getItem(FS_KEY), 10) || 26; } catch {}
 
 const isOrder = test.mode === "order";
 const tokens = isOrder ? [] : tokenize(test.text);
-const n = isOrder ? test.sentences.length : test.blanks.length;
+const blanks = test.mode === "cloze" || !test.mode ? (test.blanks || []) : [];
+const WORDS = isOrder ? [] : (test.words || []);
+const NB = blanks.length;
+const wShuf = WORDS.map(w => shuffle(w.chunks || [])); // 섞인 단어 (화면용)
+const n = isOrder ? test.sentences.length : NB + WORDS.length;
 const perm = isOrder ? shuffledPerm(n) : []; // 화면에 보이는 섞인 순서 (A, B, C …)
 const letter = pos => "(" + String.fromCharCode(65 + pos) + ")";
 const shown = new Array(n).fill(false);
@@ -34,7 +38,7 @@ let current = -1;
 app.innerHTML = `
 <div class="ans-wrap">
   <div class="ans-top">
-    <div class="ptitle">${esc(test.title)} <span class="badge ${isOrder ? "purple" : "blue"}">${MODE_LABEL[test.mode]}</span></div>
+    <div class="ptitle">${esc(test.title)} ${modeBadge(test)}</div>
     <div id="aProg"></div>
     <div class="row wrap">
       <button class="btn" id="aPrev" title="← 키">◀ 이전</button>
@@ -61,21 +65,25 @@ function draw() {
       </div>`;
     $$("#aBody .aslot-row").forEach(el => { el.onclick = () => toggle(+el.dataset.row); });
   } else {
-    const bmap = new Map(test.blanks.map((b, k) => [b, k]));
-    $("#aBody").innerHTML = `<div class="ans-passage" id="aPassage">${tokens.map((t, i) => {
+    const bmap = new Map(blanks.map((b, k) => [b, k]));
+    const wHtml = WORDS.length ? `${NB ? `<h3 class="ans-wh">어순 배열</h3>` : ""}<ol class="ans-order">${WORDS.map((w, j) => `<li class="ans-wrow" data-row="${NB + j}">
+        <div class="ans-wq"><b>${NB + j + 1}.</b> ${wShuf[j].map(c => `<span class="ans-wchip">${esc(c)}</span>`).join("")}</div>
+        <div><span class="aslot wide" data-k="${NB + j}" data-n="${NB + j + 1}"></span>${(w.alts || []).length ? `<div class="ans-walt small"></div>` : ""}</div></li>`).join("")}</ol>` : "";
+    $("#aBody").innerHTML = `<div class="ans-passage" id="aPassage">${!NB ? wHtml : tokens.map((t, i) => {
       if (/\n/.test(t)) return "<br>".repeat(Math.min(2, (t.match(/\n/g) || []).length));
       if (!bmap.has(i)) return esc(t);
       const k = bmap.get(i);
       const alt = (test.accepted?.[i] || []).join(", ");
       return `<span class="aslot" data-k="${k}" data-n="${k + 1}" style="min-width:${t.length + 2}ch"${alt ? ` title="다른 정답: ${esc(alt)}"` : ""}></span>`;
-    }).join("")}</div>`;
+    }).join("") + wHtml}</div>`;
     $$("#aBody .aslot").forEach(el => { el.onclick = () => toggle(+el.dataset.k); });
   }
   $("#aPassage").style.fontSize = font + "px";
   refresh();
 }
 
-const answerOf = k => (isOrder ? letter(perm.indexOf(k)) : tokens[test.blanks[k]]);
+const wordAns = j => wordPrimary(WORDS[j]) + (WORDS[j].end || "");
+const answerOf = k => (isOrder ? letter(perm.indexOf(k)) : k >= NB ? wordAns(k - NB) : tokens[blanks[k]]);
 
 function refresh() {
   for (let k = 0; k < n; k++) {
@@ -84,6 +92,10 @@ function refresh() {
     el.classList.toggle("on", shown[k]);
     el.classList.toggle("cur", k === current);
     if (isOrder) el.parentElement.querySelector(".ans-sent").textContent = shown[k] ? test.sentences[k] : "";
+    if (k >= NB && !isOrder) {
+      const alt = el.parentElement.querySelector(".ans-walt"), w = WORDS[k - NB];
+      if (alt) alt.textContent = shown[k] ? "다른 정답: " + w.alts.map(a => a + (w.end || "")).join(" / ") : "";
+    }
   }
   const cnt = shown.filter(Boolean).length;
   $("#aProg").textContent = `${cnt} / ${n}`;

@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, toDate, pickPerStudent, rankSort, MODE_LABEL } from "./common.js";
+import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, toDate, pickPerStudent, rankSort, modeBadge } from "./common.js";
 import { collection, query, where, getDocs, doc, getDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE } from "./core.js";
+import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE, isWordCorrect, wordPrimary } from "./core.js";
 
 const ctx = await gate({ needProfile: true });
 const app = $("#app");
@@ -25,6 +25,10 @@ if (!test || test.deleted) {
 
 const S = { answerMode: "bank", timeLimitMin: 0, maxAttempts: 0, showAnswers: true, showBoard: true, tts: true, ...(test.settings || {}) };
 const tokens = tokenize(test.text);
+if (test.mode === "order" || test.mode === "words") test.blanks = [];
+test.blanks = test.blanks || [];
+const WORDS = test.mode === "order" ? [] : (test.words || []); // 어순 배열 문항 (빈칸 다음 번호)
+const NB = test.blanks.length;
 const SKEY = `cloze:${testId}:${ctx.user.uid}`;
 const deadline = S.deadline ? toDate(S.deadline) : null;
 let mySubs = [];
@@ -39,7 +43,7 @@ let timerId = null;
 
 const isClosed = () => !preview && (S.open === false || (deadline && Date.now() > deadline.getTime()));
 const isMaxed = () => !preview && S.maxAttempts > 0 && mySubs.length >= S.maxAttempts;
-const count = () => (test.mode === "order" ? test.sentences.length : test.blanks.length);
+const count = () => (test.mode === "order" ? test.sentences.length : NB + WORDS.length);
 
 function loadSaved() {
   if (preview) return null;
@@ -50,7 +54,7 @@ function loadSaved() {
 }
 function saveProgress() {
   if (!R || R.practice || R.submitted || preview) return;
-  localStorage.setItem(SKEY, JSON.stringify({ startedAt: R.startedAt, leave: R.leave, vals: R.vals, chips: R.chips, order: R.order }));
+  localStorage.setItem(SKEY, JSON.stringify({ startedAt: R.startedAt, leave: R.leave, vals: R.vals, chips: R.chips, order: R.order, w: R.w }));
 }
 
 startScreen();
@@ -63,7 +67,7 @@ function startScreen() {
   app.innerHTML = `<div class="container narrow-ish"><div class="card center">
     ${preview ? `<p class="alert warn">미리보기 모드입니다. 기록이 저장되지 않습니다.</p>` : ""}
     <h1>${esc(test.title)}</h1>
-    <p><span class="badge ${test.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[test.mode]}</span> ${count()}${test.mode === "order" ? "문장" : "문항"}</p>
+    <p>${modeBadge(test)} ${count()}${test.mode === "order" ? "문장" : "문항"}</p>
     <ul class="info-list">
       <li>시간 제한: ${S.timeLimitMin > 0 ? S.timeLimitMin + "분 (끝나면 자동 제출)" : "없음"}</li>
       <li>제출 횟수: ${S.maxAttempts > 0 ? `${mySubs.length} / ${S.maxAttempts}회 사용` : `제한 없음 (지금까지 ${mySubs.length}회)`}</li>
@@ -92,7 +96,7 @@ function startRun(opts = {}) {
     leave: saved?.leave || 0,
     submitted: false, sel: null
   };
-  if (test.mode === "cloze") setupCloze(saved); else setupOrder(saved);
+  if (test.mode !== "order") setupCloze(saved); else setupOrder(saved);
   saveProgress();
   startTimer();
 }
@@ -113,6 +117,11 @@ function shell(inner) {
 // ---------- 빈칸 채우기 ----------
 function setupCloze(saved) {
   const n = test.blanks.length;
+  if (saved && (saved.vals || []).length !== n) saved = null;
+  const okW = saved?.w && saved.w.length === WORDS.length && saved.w.every((st, j) => st.order?.length === WORDS[j].chunks.length);
+  R.w = okW ? saved.w : WORDS.map((it, j) => R.locked.has(NB + j)
+    ? { order: [...it.chunks.keys()], ans: [...it.chunks.keys()] }
+    : { order: shuffledPerm(it.chunks.length), ans: [] });
   if (S.answerMode !== "type") {
     const words = [];
     test.blanks.forEach((b, k) => { if (!R.locked.has(k)) words.push(tokens[b]); });
@@ -126,7 +135,7 @@ function setupCloze(saved) {
 }
 
 function drawCloze() {
-  const bank = S.answerMode !== "type";
+  const bank = S.answerMode !== "type" && NB > 0;
   const bmap = new Map(test.blanks.map((b, k) => [b, k]));
   const maxLen = Math.max(...test.blanks.map(b => tokens[b].length), 4);
   const textHtml = tokens.map((t, i) => {
@@ -141,12 +150,20 @@ function drawCloze() {
     if (/\n/.test(t)) return "<br>";
     return esc(t);
   }).join("");
-  shell(`${bank ? `<div class="bank" id="bank"></div>` : ""}
+  shell(`${NB ? `${bank ? `<div class="bank" id="bank"></div>` : ""}
     <div class="passage" id="passage">${textHtml}</div>
     <p class="muted small center">${bank
       ? "단어를 누르고 빈칸을 누르세요. (빈칸을 먼저 눌러도 됩니다.) 채운 빈칸을 다시 누르면 단어가 돌아갑니다. 끌어다 놓아도 됩니다."
-      : "빈칸에 알맞은 단어를 입력하세요. Enter를 누르면 다음 빈칸으로 넘어갑니다."}</p>`);
-  if (bank) { bindBank(); refreshBank(); }
+      : "빈칸에 알맞은 단어를 입력하세요. Enter를 누르면 다음 빈칸으로 넘어갑니다."}</p>` : ""}
+    ${WORDS.length ? `<div class="wsec" id="wsec">
+      <h3>${NB ? "어순 배열 — " : ""}단어를 바르게 배열하여 문장을 완성하세요.</h3>
+      <p class="muted small">아래 단어를 차례로 누르면 답 칸에 들어갑니다. 답 칸의 단어를 누르면 돌아가고, 끌어서 자리를 바꿀 수 있습니다.</p>
+      ${WORDS.map((it, j) => `<div class="wq" data-j="${j}"><div class="wq-num">${NB + j + 1}</div><div class="wq-body">
+        <div class="wq-ans"></div><div class="wq-pool"></div></div></div>`).join("")}
+    </div>` : ""}`);
+  if (WORDS.length) { bindWords(); WORDS.forEach((_, j) => refreshWord(j)); }
+  if (!NB) updateProgress();
+  else if (bank) { bindBank(); refreshBank(); }
   else {
     const all = $$(".slot-input");
     all.forEach((inp, idx) => {
@@ -234,9 +251,105 @@ function updateProgress() {
   const el = $("#progress");
   if (!el) return;
   if (test.mode === "order") { el.textContent = `${R.order.length}문장`; return; }
-  const need = test.blanks.length - R.locked.size;
-  const filled = R.vals.filter((v, k) => !R.locked.has(k) && v != null && v !== "").length;
+  const need = count() - R.locked.size;
+  const filled = R.vals.filter((v, k) => !R.locked.has(k) && v != null && v !== "").length
+    + (R.w || []).filter((st, j) => !R.locked.has(NB + j) && st.ans.length === WORDS[j].chunks.length).length;
   el.textContent = `${filled} / ${need} 채움`;
+}
+
+// ---------- 어순 배열 ----------
+function refreshWord(j) {
+  const box = $(`.wq[data-j="${j}"]`);
+  if (!box) return;
+  const it = WORDS[j], st = R.w[j], locked = R.locked.has(NB + j);
+  const chip = ci => `<button class="wchip ${locked ? "lock" : ""}" data-ci="${ci}" ${locked ? "disabled" : ""}>${esc(it.chunks[ci])}</button>`;
+  const end = it.end ? `<span class="wend">${esc(it.end)}</span>` : "";
+  $(".wq-ans", box).innerHTML = (st.ans.length ? st.ans.map(chip).join("") : `<span class="wq-ph">여기에 단어를 차례로 놓으세요</span>`) + end;
+  const left = st.order.filter(ci => !st.ans.includes(ci));
+  $(".wq-pool", box).innerHTML = left.map(chip).join("");
+  $(".wq-pool", box).classList.toggle("empty", !left.length);
+  box.classList.toggle("done", st.ans.length === it.chunks.length);
+  box.classList.toggle("locked", locked);
+  saveProgress();
+  updateProgress();
+}
+function tapWord(j, ci) {
+  const st = R.w[j];
+  const p = st.ans.indexOf(ci);
+  if (p >= 0) st.ans.splice(p, 1); else st.ans.push(ci);
+  refreshWord(j);
+}
+// 마우스·손가락 모두: 누르고 바로 떼면 '탭', 6px 넘게 움직이면 '끌기'
+function bindWords() {
+  const sec = $("#wsec");
+  sec.onclick = e => {
+    if (e.detail !== 0) return; // 키보드(Enter/Space)만 여기서 처리
+    const c = e.target.closest(".wchip:not(.lock)");
+    if (c) tapWord(+c.closest(".wq").dataset.j, +c.dataset.ci);
+  };
+  sec.onpointerdown = e => {
+    const c = e.target.closest(".wchip:not(.lock)");
+    if (!c || e.button > 0) return;
+    e.preventDefault();
+    const j = +c.closest(".wq").dataset.j, ci = +c.dataset.ci;
+    const sx = e.clientX, sy = e.clientY;
+    let drag = null;
+    const move = ev => {
+      if (!drag) {
+        if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+        const r = c.getBoundingClientRect();
+        const ghost = c.cloneNode(true);
+        ghost.classList.add("wghost");
+        ghost.style.width = r.width + "px";
+        document.body.appendChild(ghost);
+        c.classList.add("dragging");
+        drag = { ghost, dx: sx - r.left, dy: sy - r.top, target: null, mark: null };
+      }
+      ev.preventDefault();
+      drag.ghost.style.left = ev.clientX - drag.dx + "px";
+      drag.ghost.style.top = ev.clientY - drag.dy + "px";
+      dropTarget(drag, j, c, ev);
+    };
+    const up = ev => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+      if (!drag) { if (ev.type === "pointerup") tapWord(j, ci); return; }
+      drag.ghost.remove();
+      const t = ev.type === "pointerup" ? drag.target : null;
+      const st = R.w[j];
+      if (t) {
+        const p = st.ans.indexOf(ci);
+        if (p >= 0) st.ans.splice(p, 1);
+        if (t.zone === "ans") st.ans.splice(Math.min(t.idx, st.ans.length), 0, ci);
+      }
+      refreshWord(j);
+    };
+    window.addEventListener("pointermove", move, { passive: false });
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+  };
+}
+function dropTarget(drag, j, src, ev) {
+  if (drag.mark) { drag.mark.remove(); drag.mark = null; }
+  const box = $(`.wq[data-j="${j}"]`);
+  const under = document.elementFromPoint(ev.clientX, ev.clientY);
+  const ansEl = $(".wq-ans", box);
+  if (under && box.contains(under) && (ansEl.contains(under) || under.closest(".wq-pool"))) {
+    if (under.closest(".wq-pool")) { drag.target = { zone: "pool" }; return; }
+    const chips = $$(".wchip", ansEl).filter(x => x !== src);
+    let idx = chips.length;
+    for (let i = 0; i < chips.length; i++) {
+      const r = chips[i].getBoundingClientRect();
+      if (ev.clientY < r.top || (ev.clientY <= r.bottom && ev.clientX < r.left + r.width / 2)) { idx = i; break; }
+    }
+    drag.target = { zone: "ans", idx };
+    const m = document.createElement("span");
+    m.className = "wdrop";
+    if (chips[idx]) ansEl.insertBefore(m, chips[idx]);
+    else ansEl.insertBefore(m, $(".wend", ansEl) || null);
+    drag.mark = m;
+  } else drag.target = null;
 }
 
 // ---------- 문장 순서 ----------
@@ -313,21 +426,28 @@ document.addEventListener("visibilitychange", () => {
 async function submit(auto) {
   if (!R || R.submitted) return;
   if (!auto) {
-    const empty = test.mode === "cloze" ? R.vals.filter((v, k) => !R.locked.has(k) && (v == null || v === "")).length : 0;
-    if (!confirm(empty ? `빈칸 ${empty}개가 비어 있습니다. 그래도 제출할까요?` : "제출할까요?")) return;
+    const empty = test.mode !== "order" ? R.vals.filter((v, k) => !R.locked.has(k) && (v == null || v === "")).length : 0;
+    const wEmpty = (R.w || []).filter((st, j) => !R.locked.has(NB + j) && st.ans.length < WORDS[j].chunks.length).length;
+    const msg = [empty ? `빈칸 ${empty}개` : "", wEmpty ? `다 배열하지 않은 문장 ${wEmpty}개` : ""].filter(Boolean).join(", ");
+    if (!confirm(msg ? `${msg}가 남아 있습니다. 그래도 제출할까요?` : "제출할까요?")) return;
   }
   R.submitted = true;
   clearInterval(timerId);
   const limit = S.timeLimitMin > 0 && !R.practice ? S.timeLimitMin * 60 : Infinity;
   const timeSec = Math.round(Math.min(limit, (Date.now() - R.startedAt) / 1000) * 10) / 10;
   let answers, correct;
-  if (test.mode === "cloze") {
+  if (test.mode !== "order") {
     answers = R.vals.map((v, k) => {
       if (R.locked.has(k)) return tokens[test.blanks[k]];
       if (S.answerMode !== "type") return v != null ? (R.chips.find(c => c.id === v)?.w || "") : "";
       return String(v || "").trim();
     });
     correct = test.blanks.map((b, k) => isCorrect(answers[k], tokens[b], (test.accepted || {})[b], S.caseSensitive));
+    WORDS.forEach((it, j) => {
+      const a = R.locked.has(NB + j) ? wordPrimary(it) : R.w[j].ans.map(ci => it.chunks[ci]).join(" ");
+      answers.push(a);
+      correct.push(isWordCorrect(a, it, S.wordIgnorePunct !== false));
+    });
   } else {
     answers = R.order.slice();
     correct = R.order.map((si, pos) => si === pos);
@@ -343,6 +463,7 @@ async function submit(auto) {
     testId, testTitle: test.title, testCode: test.code, ownerUid: test.ownerUid, mode: test.mode,
     uid: ctx.user.uid, email: ctx.user.email, studentNo: p.studentNo, realName: p.realName, nickname: p.nickname,
     answers, correct, score, total, timeSec, attemptNo: mySubs.length + 1,
+    ...(WORDS.length ? { wordStart: NB } : {}),
     leaveCount: R.leave, autoSubmitted: !!auto, startedAt: new Date(R.startedAt), submittedAt: serverTimestamp()
   };
   try {
@@ -376,7 +497,7 @@ function showResult(res) {
       <div class="score-big">${res.score}<small> / ${res.total}</small></div>
       <div class="muted">${pct}% · ${fmtSec(res.timeSec)}${res.auto ? " · 시간 종료로 자동 제출" : ""}</div>
       <div class="row center wrap mt">
-        ${wrongK.length && test.mode === "cloze" ? `<button class="btn primary" id="retryWrong">틀린 문제만 다시 풀기 (연습)</button>` : ""}
+        ${wrongK.length && test.mode !== "order" ? `<button class="btn primary" id="retryWrong">틀린 문제만 다시 풀기 (연습)</button>` : ""}
         ${wrongK.length && test.mode === "order" ? `<button class="btn primary" id="retryAll">다시 연습하기</button>` : ""}
         ${S.tts !== false && reveal ? `<button class="btn" id="ttsBtn">본문 듣기</button>` : ""}
         ${canAgain ? `<button class="btn" id="again">다시 도전 (기록됨)</button>` : ""}
@@ -401,7 +522,13 @@ function showResult(res) {
 }
 
 function reviewHtml(res, reveal) {
-  if (test.mode === "cloze") {
+  if (test.mode !== "order") {
+    const wr = WORDS.map((it, j) => {
+      const k = NB + j, g = res.answers[k];
+      return `<li value="${k + 1}" class="${res.correct[k] ? "ok" : "no"}">${g ? esc(g + (it.end || "")) : "(빈칸)"}${!res.correct[k] && reveal ? `<div class="wright">→ <b>${esc(wordPrimary(it) + (it.end || ""))}</b></div>` : ""}</li>`;
+    }).join("");
+    const wHtml = WORDS.length ? `${NB ? "<h4>어순 배열</h4>" : ""}<ol class="rlist">${wr}</ol>` : "";
+    if (!NB) return wHtml + (reveal ? "" : `<p class="muted small">선생님이 정답 공개를 꺼 두었습니다. 틀린 곳만 표시합니다.</p>`);
     const bmap = new Map(test.blanks.map((b, k) => [b, k]));
     const html = tokens.map((t, i) => {
       if (!bmap.has(i)) return /\n/.test(t) ? "<br>" : esc(t);
@@ -410,7 +537,7 @@ function reviewHtml(res, reveal) {
       if (res.correct[k]) return `<span class="rv ok">${esc(g)}</span>`;
       return `<span class="rv no">${g ? `<s>${esc(g)}</s>` : "(빈칸)"}${reveal ? ` → <b>${esc(t)}</b>` : ""}</span>`;
     }).join("");
-    return `<div class="passage review">${html}</div>${reveal ? "" : `<p class="muted small">선생님이 정답 공개를 꺼 두었습니다. 틀린 곳만 표시합니다.</p>`}`;
+    return `<div class="passage review">${html}</div>${wHtml}${reveal ? "" : `<p class="muted small">선생님이 정답 공개를 꺼 두었습니다. 틀린 곳만 표시합니다.</p>`}`;
   }
   const mine = res.answers.map((si, pos) => `<li class="${res.correct[pos] ? "ok" : "no"}">${esc(test.sentences[si])}</li>`).join("");
   const right = reveal ? `<h4>올바른 순서</h4><ol class="rlist">${test.sentences.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : "";
@@ -420,7 +547,8 @@ function reviewHtml(res, reveal) {
 function speak(btn) {
   if (!("speechSynthesis" in window)) return toast("이 브라우저는 음성 읽기를 지원하지 않습니다.", "err");
   if (speechSynthesis.speaking) { speechSynthesis.cancel(); btn.textContent = "본문 듣기"; return; }
-  const text = test.mode === "order" ? test.sentences.join(" ") : test.text;
+  const text = test.mode === "order" ? test.sentences.join(" ")
+    : [NB ? test.text : "", ...WORDS.map(it => wordPrimary(it) + (it.end || ""))].filter(Boolean).join(" ");
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "en-US";
   u.rate = 0.9;

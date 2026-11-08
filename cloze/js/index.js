@@ -1,4 +1,4 @@
-import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, tsNum, editProfileModal, toDate, toLocalInput } from "./common.js";
+import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, modeBadge, questionCount, tsNum, editProfileModal, toDate, toLocalInput } from "./common.js";
 import { collection, query, where, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { tokenize } from "./core.js";
 
@@ -136,7 +136,7 @@ async function studentAssignments(p, subs) {
       return `<div class="hw-item ${a.best ? "done" : ""}">
         <div class="hw-main">
           <div class="hw-title">${esc(a.test.title || a.testTitle || "")}</div>
-          <div class="meta"><span class="badge ${a.test.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[a.test.mode] || ""}</span> ${status} ${dueText(a)}</div>
+          <div class="meta">${modeBadge(a.test)} ${status} ${dueText(a)}</div>
           ${a.note ? `<div class="hw-note">${esc(a.note)}</div>` : ""}
         </div>
         <div>${btn}</div>
@@ -172,6 +172,7 @@ async function teacherHome() {
       <div class="row wrap">
         <a class="btn primary" href="editor.html?mode=cloze">+ 빈칸 채우기 만들기</a>
         <a class="btn primary" href="editor.html?mode=order">+ 문장 순서 만들기</a>
+        <a class="btn primary" href="editor.html?mode=words">+ 어순 배열 만들기</a>
       </div>
     </div>
     <div id="hwPanel"></div>
@@ -341,6 +342,7 @@ function renderFolders() {
 
 function preview(t) {
   if (t.mode === "order") return (t.sentences || []).slice(0, 4).map((s, i) => `${i + 1}. ${s}`).join("\n");
+  if (t.mode === "words") return (t.words || []).slice(0, 4).map((w, i) => `${i + 1}. ${(w.chunks || []).join(" / ")}`).join("\n");
   const toks = tokenize(t.text);
   const bs = new Set(t.blanks || []);
   return toks.map((x, i) => (bs.has(i) ? "_____" : x)).join("").slice(0, 220);
@@ -360,7 +362,7 @@ function renderGrid() {
   }
   $("#grid").innerHTML = list.map(t => {
     const open = t.settings?.open !== false;
-    const n = t.mode === "order" ? (t.sentences || []).length + "문장" : (t.blanks || []).length + "문항";
+    const n = questionCount(t) + (t.mode === "order" ? "문장" : "문항");
     const actions = state.trash
       ? `<button class="btn small" data-a="restore">복원</button><button class="btn small danger" data-a="purge">영구 삭제</button>`
       : `<a class="btn small" href="editor.html?id=${t.id}">편집</a>
@@ -382,7 +384,7 @@ function renderGrid() {
       <div class="thumb">${esc(preview(t))}</div>
       <div class="tbody">
         <div class="ttitle">${esc(t.title || "(제목 없음)")}</div>
-        <div class="meta"><span class="badge ${t.mode === "order" ? "purple" : "blue"}">${MODE_LABEL[t.mode] || ""}</span> <span>${n}</span> <span class="badge ${open ? "green" : "gray"}">${open ? "응시 가능" : "닫힘"}</span>${assignments.some(a => a.testId === t.id) ? ` <span class="badge amber">과제</span>` : ""}</div>
+        <div class="meta">${modeBadge(t)} <span>${n}</span> <span class="badge ${open ? "green" : "gray"}">${open ? "응시 가능" : "닫힘"}</span>${assignments.some(a => a.testId === t.id) ? ` <span class="badge amber">과제</span>` : ""}</div>
         <div class="meta small muted">코드 <b class="mono">${esc(t.code)}</b> · ${fmtDate(t.updatedAt)}${t.folder ? ` · ${esc(t.folder)}` : ""}</div>
         <div class="actions">${actions}</div>
       </div></div>`;

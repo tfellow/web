@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, classOf, pickPerStudent, rankSort, tsNum, copyText, playUrl, MODE_LABEL } from "./common.js";
-import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, contextOf, norm } from "./core.js";
+import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, classOf, pickPerStudent, rankSort, tsNum, copyText, playUrl, modeBadge } from "./common.js";
+import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { tokenize, contextOf, norm, wordKey, isWordCorrect, fitsChunks, wordPrimary, wordStartOf, splitChunks } from "./core.js";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
@@ -21,7 +21,19 @@ if (!test) {
 }
 tokens = tokenize(test.text);
 const isCloze = test.mode !== "order";
-const Q = isCloze ? test.blanks.length : test.sentences.length;
+const BL = test.mode === "cloze" || !test.mode ? (test.blanks || []) : [];
+const NB = BL.length;
+let WORDS = isCloze ? (test.words || []) : [];
+const Q = isCloze ? NB + WORDS.length : test.sentences.length;
+const ignorePunct = () => test.settings?.wordIgnorePunct !== false;
+// k번 문항의 답·정답 여부 (어순 배열은 제출 기록마다 시작 자리가 저장되어 있음)
+function at(s, k) {
+  if (!isCloze || k < NB) return { a: s.answers?.[k], ok: !!s.correct?.[k] };
+  const ws = wordStartOf(s);
+  if (ws == null) return { a: undefined, ok: false, none: true };
+  return { a: s.answers?.[ws + k - NB], ok: !!s.correct?.[ws + k - NB] };
+}
+const wordText = (it, a) => (isBlank(a) ? "" : a + (it.end || ""));
 
 app.innerHTML = `
 <div class="container wide">
@@ -30,7 +42,7 @@ app.innerHTML = `
       <div>
         <div class="muted small">결과</div>
         <h2 class="m0">${esc(test.title)}</h2>
-        <div class="muted small">${MODE_LABEL[test.mode]} · ${Q}${isCloze ? "문항" : "문장"} · 코드 <b class="mono">${esc(test.code)}</b> · ${test.settings?.open === false ? "응시 닫힘" : "응시 가능"}</div>
+        <div class="muted small">${modeBadge(test)} · ${Q}${isCloze ? "문항" : "문장"} · 코드 <b class="mono">${esc(test.code)}</b> · ${test.settings?.open === false ? "응시 닫힘" : "응시 가능"}</div>
       </div>
       <div class="row wrap">
         <button class="btn small" id="copy">학생 링크 복사</button>
@@ -58,6 +70,10 @@ app.innerHTML = `
     <div id="students"></div>
   </div>
   <div class="card"><h3>${isCloze ? "문항별 결과" : "자리별 결과"}</h3><div id="questions"></div></div>
+  ${WORDS.length ? `<div class="card" id="wordCard">
+    <div class="row between wrap"><h3>어순 배열 — 등록되지 않은 답</h3><button class="btn small" id="regrade">어순 배열 다시 채점</button></div>
+    <p class="muted small">학생이 단어를 모두 써서 만든 답 가운데 정답 목록에 없는 답입니다. 맞는 문장이면 <b>정답으로 인정</b>을 누르세요. 다른 정답으로 저장되고, 이미 제출한 학생의 점수도 바로 다시 매겨집니다. (실시간 순위 화면에도 반영)</p>
+    <div id="wordReview"></div></div>` : ""}
 </div>`;
 
 $("#copy").onclick = () => copyText(playUrl(test.code));
@@ -66,6 +82,14 @@ $("#fPick").onchange = e => { V.pick = e.target.value; renderAll(); };
 $("#fCls").onchange = e => { V.cls = e.target.value; renderAll(); };
 $("#fName").onchange = e => { V.name = e.target.value; renderAll(); };
 $("#fSort").onchange = e => { V.sort = e.target.value; renderStudents(current()); };
+if (WORDS.length) {
+  $("#regrade").onclick = () => regrade(true);
+  $("#wordReview").onclick = e => {
+    const acc = e.target.closest("[data-accept]"), un = e.target.closest("[data-unalt]");
+    if (acc) acceptAnswer(+acc.dataset.w, acc.dataset.accept);
+    if (un) removeAlt(+un.dataset.w, +un.dataset.unalt);
+  };
+}
 
 onSnapshot(
   query(collection(db, "submissions"), where("ownerUid", "==", ctx.user.uid), where("testId", "==", id)),
@@ -109,6 +133,7 @@ function renderAll() {
   renderRank(list);
   renderStudents(list);
   renderQuestions(list);
+  renderWordReview();
 }
 
 function renderSummary(list) {
@@ -139,8 +164,10 @@ function renderCharts(list) {
   const ok = Array(Q).fill(0), no = Array(Q).fill(0), blank = Array(Q).fill(0);
   list.forEach(s => {
     for (let k = 0; k < Q; k++) {
-      if (s.correct?.[k]) ok[k]++;
-      else if (isCloze && isBlank(s.answers?.[k])) blank[k]++;
+      const x = at(s, k);
+      if (x.none) continue;
+      if (x.ok) ok[k]++;
+      else if (isCloze && isBlank(x.a)) blank[k]++;
       else no[k]++;
     }
   });
@@ -205,10 +232,15 @@ function renderStudents(list) {
 
 function detailHtml(s) {
   if (isCloze) {
-    return `<div class="ans-grid">${test.blanks.map((b, k) => {
+    const ws = wordStartOf(s);
+    const wHtml = WORDS.length && ws != null ? `<div class="ans-list">${WORDS.map((it, j) => {
+      const x = at(s, NB + j);
+      return `<div class="ans ${x.ok ? "ok" : "no"}"><b>${NB + j + 1}.</b> ${isBlank(x.a) ? "<i>(빈칸)</i>" : esc(wordText(it, x.a))}${x.ok ? "" : ` <span class="muted">→ ${esc(wordPrimary(it) + (it.end || ""))}</span>`}</div>`;
+    }).join("")}</div>` : "";
+    return `${NB ? `<div class="ans-grid">${BL.map((b, k) => {
       const g = s.answers?.[k];
       return `<div class="ans ${s.correct?.[k] ? "ok" : "no"}"><b>${k + 1}.</b> ${isBlank(g) ? "<i>(빈칸)</i>" : esc(g)}${s.correct?.[k] ? "" : ` <span class="muted">→ ${esc(tokens[b])}</span>`}</div>`;
-    }).join("")}</div>`;
+    }).join("")}</div>` : ""}${wHtml}`;
   }
   return `<ol class="rlist">${(s.answers || []).map((si, pos) => `<li class="${s.correct?.[pos] ? "ok" : "no"}">${esc(test.sentences[si] || "")}</li>`).join("")}</ol>`;
 }
@@ -229,11 +261,14 @@ function renderQuestions(list) {
   for (let k = 0; k < Q; k++) {
     let ok = 0, no = 0;
     const wrong = new Map();
+    const isW = isCloze && k >= NB, it = isW ? WORDS[k - NB] : null;
     list.forEach(s => {
-      if (s.correct?.[k]) { ok++; return; }
+      const x = at(s, k);
+      if (x.none) return;
+      if (x.ok) { ok++; return; }
       no++;
-      const g = s.answers?.[k];
-      const key = isCloze ? (isBlank(g) ? "(빈칸)" : norm(g)) : String(g);
+      const g = x.a;
+      const key = isW ? (isBlank(g) ? "(빈칸)" : wordText(it, g)) : isCloze ? (isBlank(g) ? "(빈칸)" : norm(g)) : String(g);
       wrong.set(key, (wrong.get(key) || 0) + 1);
     });
     const tot = ok + no;
@@ -242,8 +277,8 @@ function renderQuestions(list) {
       .map(([w, c]) => `${isCloze ? esc(w) : (w === "undefined" ? "-" : (parseInt(w, 10) + 1) + "번 문장")} <span class="muted">(${c})</span>`).join(", ");
     rows.push(`<tr class="${tot && rate < 50 ? "low" : ""}">
       <td>${k + 1}</td>
-      <td class="small">${isCloze ? esc(contextOf(tokens, test.blanks[k])) : esc(test.sentences[k])}</td>
-      ${isCloze ? `<td><b>${esc(tokens[test.blanks[k]])}</b></td>` : ""}
+      <td class="small">${isW ? `<span class="badge teal">어순</span> ${esc((it.chunks || []).join(" / "))}` : isCloze ? esc(contextOf(tokens, BL[k])) : esc(test.sentences[k])}</td>
+      ${isCloze ? `<td>${isW ? `<b>${esc(wordPrimary(it) + (it.end || ""))}</b>${(it.alts || []).length ? ` <span class="muted small">외 ${it.alts.length}개</span>` : ""}` : `<b>${esc(tokens[BL[k]])}</b>`}</td>` : ""}
       <td class="r">${ok}</td><td class="r">${no}</td>
       <td><div class="rate"><div class="rate-bar" style="width:${rate}%"></div><span>${tot ? rate + "%" : "-"}</span></div></td>
       <td class="small">${top || "-"}</td></tr>`);
@@ -255,13 +290,15 @@ function renderQuestions(list) {
 function exportCsv() {
   const list = current().slice().sort((a, b) => String(a.studentNo).localeCompare(String(b.studentNo)));
   const head = ["학번", "반", "이름", "닉네임", "이메일", "제출 시각", "회차", "점수", "만점", "시간(초)", "화면 이탈", "자동 제출"];
-  for (let k = 0; k < Q; k++) head.push(isCloze ? `Q${k + 1} (${tokens[test.blanks[k]]})` : `${k + 1}번째 자리`);
+  for (let k = 0; k < Q; k++) head.push(!isCloze ? `${k + 1}번째 자리` : k < NB ? `Q${k + 1} (${tokens[BL[k]]})` : `Q${k + 1} (어순)`);
   const rows = list.map(s => {
     const r = [s.studentNo, classOf(s.studentNo), s.realName, s.nickname, s.email, fmtDate(s.submittedAt), s.attemptNo || 1, s.score, s.total, s.timeSec, s.leaveCount || 0, s.autoSubmitted ? "예" : ""];
     for (let k = 0; k < Q; k++) {
-      const g = s.answers?.[k];
-      const shown = isCloze ? (isBlank(g) ? "" : g) : (g == null ? "" : (g + 1) + "번 문장");
-      r.push(`${s.correct?.[k] ? "O" : "X"} ${shown}`.trim());
+      const x = at(s, k);
+      if (x.none) { r.push(""); continue; }
+      const g = x.a;
+      const shown = isCloze ? (isBlank(g) ? "" : k >= NB ? wordText(WORDS[k - NB], g) : g) : (g == null ? "" : (g + 1) + "번 문장");
+      r.push(`${x.ok ? "O" : "X"} ${shown}`.trim());
     }
     return r;
   });
@@ -272,4 +309,93 @@ function exportCsv() {
   a.download = `${test.title.replace(/[\\/:*?"<>|]/g, "_")}_결과.csv`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ---------- 어순 배열: 등록되지 않은 답 → 정답 인정 → 다시 채점 ----------
+function renderWordReview() {
+  const el = $("#wordReview");
+  if (!el) return;
+  const ip = ignorePunct();
+  el.innerHTML = WORDS.map((it, j) => {
+    const k = NB + j;
+    const groups = new Map();
+    let partial = 0;
+    subs.forEach(s => {
+      const x = at(s, k);
+      if (x.none || x.ok || isBlank(x.a)) return;
+      if (!fitsChunks(x.a, it.chunks)) { partial++; return; }
+      const key = wordKey(x.a, ip);
+      const g = groups.get(key) || { text: x.a, n: 0, names: [] };
+      g.n++;
+      g.names.push(s.realName || s.nickname || "");
+      groups.set(key, g);
+    });
+    const list = [...groups.values()].sort((a, b) => b.n - a.n);
+    return `<div class="wrev">
+      <div class="wrev-head"><b>${k + 1}.</b> ${esc(wordPrimary(it) + (it.end || ""))}</div>
+      ${(it.alts || []).length ? `<div class="small">${it.alts.map((a, i) => `<span class="alt-tag">${esc(a + (it.end || ""))} <button class="btn small ghost danger" data-w="${j}" data-unalt="${i}" title="이 답을 다시 오답으로">인정 취소</button></span>`).join(" ")}</div>` : ""}
+      ${list.length ? `<table class="tbl"><tbody>${list.map(g => `<tr><td>${esc(wordText(it, g.text))}</td><td class="r nowrap">${g.n}건</td><td class="small muted">${esc(g.names.slice(0, 4).join(", "))}${g.names.length > 4 ? " …" : ""}</td>
+        <td class="r"><button class="btn small primary" data-w="${j}" data-accept="${esc(g.text)}">정답으로 인정</button></td></tr>`).join("")}</tbody></table>`
+        : `<p class="muted small">등록되지 않은 완성 답이 없습니다.</p>`}
+      ${partial ? `<p class="muted small">단어를 다 쓰지 않았거나 빠뜨린 답 ${partial}건은 제외했습니다.</p>` : ""}
+    </div>`;
+  }).join("");
+}
+
+async function saveWords(words) {
+  await updateDoc(doc(db, "tests", id), { words, updatedAt: serverTimestamp() });
+  test.words = words;
+  WORDS = words;
+}
+async function acceptAnswer(j, text) {
+  const it = WORDS[j];
+  const v = splitChunks(text).chunks.join(" ");
+  if (!confirm(`"${v}${it.end || ""}" 을(를) ${NB + j + 1}번의 정답으로 인정할까요?\n이미 제출한 학생의 점수도 다시 매깁니다.`)) return;
+  const words = WORDS.map(w => ({ ...w, alts: [...(w.alts || [])] }));
+  words[j].alts.push(v);
+  try {
+    await saveWords(words);
+    await regrade(false);
+  } catch (e) { console.error(e); toast("저장 실패: " + (e.code || e.message), "err"); }
+}
+async function removeAlt(j, i) {
+  const it = WORDS[j];
+  if (!confirm(`"${it.alts[i]}${it.end || ""}" 을(를) 정답 목록에서 뺄까요?\n이 답을 낸 학생은 오답으로 다시 채점됩니다.`)) return;
+  const words = WORDS.map(w => ({ ...w, alts: [...(w.alts || [])] }));
+  words[j].alts.splice(i, 1);
+  try {
+    await saveWords(words);
+    await regrade(false);
+  } catch (e) { console.error(e); toast("저장 실패: " + (e.code || e.message), "err"); }
+}
+// 지금의 정답 목록·채점 설정으로 모든 제출 기록의 어순 배열 문항을 다시 채점
+async function regrade(ask) {
+  if (ask && !confirm("지금 정답 목록과 채점 설정으로 어순 배열 문항을 모두 다시 채점할까요?")) return;
+  const ip = ignorePunct();
+  const jobs = [];
+  for (const s of subs) {
+    const ws = wordStartOf(s);
+    if (ws == null || !Array.isArray(s.correct)) continue;
+    const correct = s.correct.slice();
+    let changed = false;
+    WORDS.forEach((it, j) => {
+      const a = s.answers?.[ws + j];
+      if (a == null || ws + j >= correct.length) return;
+      const c = isWordCorrect(a, it, ip);
+      if (c !== !!correct[ws + j]) { correct[ws + j] = c; changed = true; }
+    });
+    if (!changed) continue;
+    const score = correct.filter(Boolean).length;
+    jobs.push((async () => {
+      await updateDoc(doc(db, "submissions", s.id), { correct, score, regradedAt: serverTimestamp() });
+      try { await updateDoc(doc(db, "board", s.id), { score }); } catch (e) { console.warn("board", e); }
+    })());
+  }
+  const r = await Promise.allSettled(jobs);
+  const fail = r.filter(x => x.status === "rejected");
+  if (fail.length) {
+    console.error(fail);
+    toast(`${fail.length}건을 다시 채점하지 못했습니다. Firebase 보안 규칙을 새로 게시했는지 확인하세요.`, "err");
+  } else toast(jobs.length ? `제출 ${jobs.length}건의 점수를 다시 매겼습니다.` : "점수가 바뀐 제출이 없습니다.");
+  renderAll();
 }
