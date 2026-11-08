@@ -420,8 +420,11 @@ async function fkLoad(f) {
 
   try { // 수업 시간 라이브 퀴즈
     toList(await read("teacherData/quizHistory")).forEach(ss => {
-      const t = num(String(ss.sessionId || "").replace(/\D/g, "")) || parseKoDate(ss.playedAt);
-      if (!t || String(ss.playedAt || "").includes("샘플")) return;
+      // Kahoot 의 "샘플 기록 만들기"는 sessionId 가 sess_시각_난수 이고 가짜 학생(예: 2학년 7반)으로 채워져요 → 빼요
+      const sid = String(ss.sessionId || "");
+      if (/^sess_\d+_\d+$/.test(sid) || String(ss.playedAt || "").includes("샘플")) return;
+      const t = num((sid.match(/^sess_(\d+)/) || [])[1]) || parseKoDate(ss.playedAt);
+      if (!t) return;
       const res = toList(ss.results).slice().sort((a, b) => num(b.score) - num(a.score));
       res.forEach((r, i) => {
         if (!r.email) return;
@@ -735,7 +738,15 @@ async function publishSummaries() {
       const { error } = await sbClient().from("hub_summary").upsert(rows.slice(i, i + 100), { onConflict: "email" });
       if (error) throw error;
     }
-    state.pub = { st: "ok", at: Date.now(), msg: `학생 ${rows.length}명의 요약을 올렸어요.` };
+    // 이번 목록에 없는 줄(예: 예전에 올라간 연습용 가짜 학생)은 지워요
+    const keep = new Set(rows.map(r => r.email));
+    const old = await sbAll(() => sbClient().from("hub_summary").select("email"));
+    const gone = old.map(r => r.email).filter(e => !keep.has(e));
+    for (let i = 0; i < gone.length; i += 100) {
+      const { error } = await sbClient().from("hub_summary").delete().in("email", gone.slice(i, i + 100));
+      if (error) throw error;
+    }
+    state.pub = { st: "ok", at: Date.now(), msg: `학생 ${rows.length}명의 요약을 올렸어요.${gone.length ? ` (명단 밖 ${gone.length}줄 정리)` : ""}` };
   } catch (e) {
     console.warn("publish", e);
     const missing = /hub_summary|relation|schema cache|42P01|PGRST205/i.test(e.message || e.code || "");
