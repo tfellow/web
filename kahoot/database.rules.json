@@ -32,6 +32,20 @@
         ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $key"
       }
     },
+    "homework": {
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email.toLowerCase().endsWith('@smy.ms.kr') || auth.token.email == 'tfellow@gmail.com')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+    },
+    "homeworkResults": {
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+      "$hwId": {
+        "$player": {
+          ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $player",
+          ".write": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().endsWith('@smy.ms.kr') && auth.token.email.toLowerCase().replace('.', '_') == $player && root.child('homework').child($hwId).child('open').val() == true"
+        }
+      }
+    },
     "teacherData": {
       ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
       ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"

@@ -1,11 +1,14 @@
 /**
  * ============================================================================
  * MY Kahoot (Seoul Moonyoung Girls' Middle School - 서울문영여자중학교)
- * 실시간 스피드 퀴즈 & 교사용 통계/학생명단 화이트리스트 관리 시스템 (v1.0)
+ * 실시간 스피드 퀴즈 & 교사용 통계/학생명단 화이트리스트 관리 시스템
  * ============================================================================
  */
 
 const MYKahoot = (() => {
+  // 앱 버전: 고칠 때마다 올려요 (화면 위 v 표시에 쓰여요). 바뀐 내용은 README.md 맨 아래 '버전 기록'에 적어요.
+  const APP_VERSION = '1.1';
+
   // 로컬 스토리지 키 정의
   const STORAGE_KEYS = {
     QUIZ_SETS: 'my_kahoot_quiz_sets_v1',
@@ -497,6 +500,8 @@ const MYKahoot = (() => {
     } else if (tabName === 'roster') {
       populateRosterClassFilter();
       renderStudentRosterTable();
+    } else if (tabName === 'homework') {
+      loadTeacherHomework();
     }
   }
 
@@ -1305,6 +1310,8 @@ const MYKahoot = (() => {
         await loadOwnRosterEntry();
         const emailInput = document.getElementById('studentEmailInput');
         if (emailInput && authUser) emailInput.value = normalizeEmail(authUser.email);
+        // 이미 로그인된 학생이면 바로 확인하고 과제 목록을 보여 줘요.
+        if (findStudentByEmail(authUser.email) && verifyStudentEmailFromRoster()) loadStudentHomework();
       }
       if (authUser && (currentStudent.pin || liveRoom.pin)) {
         ensureFirebaseRoomSubscription(currentStudent.pin || liveRoom.pin);
@@ -1422,6 +1429,8 @@ const MYKahoot = (() => {
       if (!ok) {
         await firebaseAuth.signOut();
         authUser = null;
+      } else {
+        loadStudentHomework();
       }
     } catch (err) {
       const code = String(err && err.code || '');
@@ -3212,6 +3221,553 @@ const MYKahoot = (() => {
     }
   }
 
+  // ==================== 📚 과제 모드 (학생이 혼자 스스로 풀기) ====================
+  // homework/{id}: 선생님이 낸 과제 (문항·정답·해설, 대상 반, 마감일, 열림 여부)
+  // homeworkResults/{id}/{학생키}: 학생 본인 결과 (본인만 쓰고 읽어요, 선생님은 전체를 봐요)
+  let hwTeacherList = {};
+  let hwTeacherResults = {};
+  let hwSelectedId = '';
+  let hwStudentList = {};
+  let hwMyResults = {};
+  let hwPlay = null;
+  let hwPendingId = '';
+
+  function hwArr(v) {
+    if (Array.isArray(v)) return v;
+    if (v && typeof v === 'object') return Object.keys(v).sort((a, b) => Number(a) - Number(b)).map(k => v[k]);
+    return [];
+  }
+
+  function hwQuestions(hw) {
+    return hwArr(hw && hw.questions).filter(Boolean).map(q => ({
+      question: String(q.question || ''),
+      options: [0, 1, 2, 3].map(i => String(hwArr(q.options)[i] ?? '')),
+      answer: Number(q.answer) || 0,
+      explanation: String(q.explanation || '')
+    }));
+  }
+
+  function hwTargets(hw) {
+    return hwArr(hw && hw.targets).map(t => String(t).trim()).filter(Boolean);
+  }
+
+  function hwTargetLabel(hw) {
+    const t = hwTargets(hw);
+    return t.length ? t.map(k => k.replace('-', '학년 ') + '반').join(', ') : '전체 학생';
+  }
+
+  function hwIsForStudent(hw, stu) {
+    const t = hwTargets(hw);
+    return t.length === 0 || t.includes(`${stu.grade}-${stu.classNum}`);
+  }
+
+  function hwLink(id) {
+    const base = window.location.protocol.startsWith('http') ? new URL('student.html', window.location.href).href : NEW_BASE_URL + 'student.html';
+    return `${base}?hw=${encodeURIComponent(id)}`;
+  }
+
+  function hwNeedsCloud() {
+    if (isFirebaseConnected && firebaseDb) return true;
+    alert('과제 기능은 인터넷(Firebase 클라우드)에 연결되어 있을 때만 쓸 수 있어요.');
+    return false;
+  }
+
+  // ---------- 선생님: 과제 내기·관리·결과 보기 ----------
+  async function loadTeacherHomework() {
+    renderTeacherHomework();
+    if (!isFirebaseConnected || !firebaseDb || !isTeacherSignedIn()) return;
+    try {
+      const [hwSnap, resSnap] = await Promise.all([
+        firebaseDb.ref('homework').once('value'),
+        firebaseDb.ref('homeworkResults').once('value')
+      ]);
+      hwTeacherList = hwSnap.val() || {};
+      hwTeacherResults = resSnap.val() || {};
+    } catch (err) {
+      console.warn('과제 읽기 실패', err);
+      const box = document.getElementById('hwTeacherListBox');
+      if (box) box.innerHTML = '<p style="color:var(--danger); font-weight:700;">과제 목록을 읽지 못했어요. 데이터베이스 규칙이 아직 배포되지 않았거나 인터넷 연결이 끊겼을 수 있어요.</p>';
+      return;
+    }
+    if (hwSelectedId && !hwTeacherList[hwSelectedId]) hwSelectedId = '';
+    renderTeacherHomework();
+  }
+
+  function renderTeacherHomework() {
+    const sel = document.getElementById('hwQuizSelect');
+    if (sel) {
+      const prev = sel.value;
+      sel.innerHTML = quizSets.map((q, i) => `<option value="${i}">${escapeHtml(q.title)} (${toList(q.questions).length}문항)</option>`).join('');
+      sel.value = (prev !== '' && quizSets[Number(prev)]) ? prev : String(selectedQuizIndex);
+    }
+    const box = document.getElementById('hwTeacherListBox');
+    if (!box) return;
+    const ids = Object.keys(hwTeacherList).sort((a, b) => String(hwTeacherList[b].createdAt || '').localeCompare(String(hwTeacherList[a].createdAt || '')));
+    if (ids.length === 0) {
+      box.innerHTML = '<p style="color:var(--my-text-muted);">아직 낸 과제가 없어요. 왼쪽에서 퀴즈를 골라 과제를 내 보세요.</p>';
+    } else {
+      box.innerHTML = ids.map(id => {
+        const hw = hwTeacherList[id];
+        const done = Object.keys(hwTeacherResults[id] || {}).length;
+        const isSel = id === hwSelectedId;
+        return `
+          <div style="padding:0.8rem 1rem; border-radius:12px; border:2px solid ${isSel ? 'var(--my-primary)' : 'var(--my-border)'}; background:${isSel ? '#f4f0ff' : '#fff'}; display:flex; flex-direction:column; gap:0.45rem;">
+            <div style="display:flex; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <div style="font-weight:800; color:var(--my-primary-dark);">${escapeHtml(hw.title)}</div>
+              <span class="badge ${hw.open ? 'badge-green' : 'badge-red'}">${hw.open ? '열림' : '마감'}</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--my-text-muted);">
+              ${hwQuestions(hw).length}문항 · 대상: ${escapeHtml(hwTargetLabel(hw))}${hw.due ? ' · 마감일: ' + escapeHtml(hw.due) : ''} · 제출 ${done}명
+            </div>
+            <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="MYKahoot.selectHomework('${id}')">📋 결과 보기</button>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.copyHomeworkLink('${id}')">🔗 학생 링크 복사</button>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.previewHomework('${id}')">👀 미리 풀어보기</button>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.toggleHomeworkOpen('${id}')">${hw.open ? '⏸ 마감하기' : '▶ 다시 열기'}</button>
+              <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="MYKahoot.deleteHomework('${id}')">삭제</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+    renderTeacherHomeworkResults();
+  }
+
+  function hwResultRows(id) {
+    const hw = hwTeacherList[id];
+    if (!hw) return [];
+    const results = hwTeacherResults[id] || {};
+    const rows = [];
+    const seen = new Set();
+    studentRoster.forEach(stu => {
+      if (!stu || !hwIsForStudent(hw, stu)) return;
+      const key = emailToKey(stu.email);
+      seen.add(key);
+      rows.push({ ...stu, result: results[key] || null });
+    });
+    Object.keys(results).forEach(key => {
+      if (seen.has(key)) return;
+      const r = results[key];
+      rows.push({ grade: r.grade, classNum: r.classNum, studentNum: r.studentNum, name: r.name, email: r.email, result: r });
+    });
+    rows.sort((a, b) => (a.grade - b.grade) || (a.classNum - b.classNum) || (a.studentNum - b.studentNum));
+    return rows;
+  }
+
+  function hwFmtTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
+  function renderTeacherHomeworkResults() {
+    const box = document.getElementById('hwTeacherResultBox');
+    if (!box) return;
+    const hw = hwTeacherList[hwSelectedId];
+    if (!hw) {
+      box.innerHTML = '<p style="color:var(--my-text-muted);">과제의 [📋 결과 보기]를 누르면 학생별 결과가 여기에 나와요.</p>';
+      return;
+    }
+    const rows = hwResultRows(hwSelectedId);
+    const doneRows = rows.filter(r => r.result);
+    const total = hwQuestions(hw).length;
+    const avg = doneRows.length ? Math.round(doneRows.reduce((s, r) => s + (Number(r.result.bestScore) || 0), 0) / doneRows.length / Math.max(1, total) * 100) : 0;
+    box.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.6rem;">
+        <div style="font-weight:800; color:var(--my-primary-dark);">${escapeHtml(hw.title)}</div>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <span class="badge badge-purple">제출 ${doneRows.length} / ${rows.length}명</span>
+          <span class="badge badge-gold">최고점 평균 ${avg}%</span>
+          <button class="btn btn-outline btn-sm" onclick="MYKahoot.loadTeacherHomework()">🔄 새로고침</button>
+          <button class="btn btn-gold btn-sm" onclick="MYKahoot.exportHomeworkToExcel()">⬇️ 엑셀 저장</button>
+        </div>
+      </div>
+      <div class="table-responsive" style="max-height:460px; overflow-y:auto;">
+        <table class="data-table">
+          <thead><tr><th>학년</th><th>반</th><th>번호</th><th>이름</th><th>상태</th><th>첫 점수</th><th>최고 점수</th><th>푼 횟수</th><th>마지막 제출</th></tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const res = r.result;
+              const late = res && hw.due && String(res.firstAt || '').slice(0, 10) > hw.due;
+              return `<tr>
+                <td>${escapeHtml(r.grade)}</td><td>${escapeHtml(r.classNum)}</td><td>${escapeHtml(r.studentNum)}</td><td>${escapeHtml(r.name)}</td>
+                <td>${res ? `<span class="badge badge-green">완료</span>${late ? ' <span class="badge badge-gold">늦게</span>' : ''}` : '<span class="badge badge-red">아직</span>'}</td>
+                <td>${res ? `${Number(res.firstScore) || 0} / ${total}` : '-'}</td>
+                <td>${res ? `<strong>${Number(res.bestScore) || 0} / ${total}</strong>` : '-'}</td>
+                <td>${res ? (Number(res.attempts) || 1) + '회' : '-'}</td>
+                <td>${res ? hwFmtTime(res.lastAt) : '-'}</td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="9" style="text-align:center; color:var(--my-text-muted);">대상 학생이 없어요. 학생 명단을 확인해 주세요.</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+  }
+
+  async function createHomeworkFromQuiz() {
+    if (!isTeacherSignedIn()) { requireTeacher(() => openTeacherTab('homework')); return; }
+    if (!hwNeedsCloud()) return;
+    const qSet = quizSets[Number(document.getElementById('hwQuizSelect')?.value)];
+    const questions = hwQuestions(qSet);
+    if (!qSet || questions.length === 0) { alert('문항이 있는 퀴즈를 골라 주세요.'); return; }
+    const rawTargets = (document.getElementById('hwTargets')?.value || '').trim();
+    const targets = rawTargets ? rawTargets.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : [];
+    const bad = targets.filter(t => !/^\d+-\d+$/.test(t));
+    if (bad.length) { alert(`대상 반은 "학년-반" 모양으로 써 주세요 (예: 2-7, 2-6). 잘못된 값: ${bad.join(', ')}`); return; }
+    const due = document.getElementById('hwDue')?.value || '';
+    const id = 'hw_' + Date.now().toString(36);
+    const data = { title: qSet.title, quizId: qSet.id, questions, targets, due, open: true, createdAt: new Date().toISOString() };
+    try {
+      await firebaseDb.ref('homework/' + id).set(cloudSafe(data));
+    } catch (err) {
+      alert('과제를 저장하지 못했어요. 데이터베이스 규칙이 배포되었는지 확인해 주세요.\n' + (err && err.message ? err.message : ''));
+      return;
+    }
+    hwSelectedId = id;
+    await loadTeacherHomework();
+    copyHomeworkLink(id, true);
+  }
+
+  function copyHomeworkLink(id, justCreated = false) {
+    const link = hwLink(id);
+    const msg = (justCreated ? '과제를 냈어요! 학생들은 학생 페이지에서 로그인하면 바로 과제 목록이 보여요.\n\n' : '') + '아래 링크를 학생들에게 보내면 바로 이 과제가 열려요:\n' + link;
+    const done = () => alert(msg + '\n\n(링크를 복사해 두었어요)');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(done).catch(() => prompt(msg, link));
+    } else {
+      prompt(msg, link);
+    }
+  }
+
+  function selectHomework(id) {
+    hwSelectedId = id;
+    renderTeacherHomework();
+    document.getElementById('hwTeacherResultBox')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function toggleHomeworkOpen(id) {
+    const hw = hwTeacherList[id];
+    if (!hw || !hwNeedsCloud()) return;
+    try {
+      await firebaseDb.ref(`homework/${id}/open`).set(!hw.open);
+      hw.open = !hw.open;
+    } catch (err) { alert('바꾸지 못했어요: ' + (err && err.message ? err.message : '')); }
+    renderTeacherHomework();
+  }
+
+  async function deleteHomework(id) {
+    const hw = hwTeacherList[id];
+    if (!hw || !hwNeedsCloud()) return;
+    const n = Object.keys(hwTeacherResults[id] || {}).length;
+    if (!confirm(`"${hw.title}" 과제를 지울까요?${n ? `\n학생 ${n}명의 결과도 함께 지워져요.` : ''}`)) return;
+    try {
+      await firebaseDb.ref('homework/' + id).remove();
+      await firebaseDb.ref('homeworkResults/' + id).remove();
+    } catch (err) { alert('지우지 못했어요: ' + (err && err.message ? err.message : '')); return; }
+    delete hwTeacherList[id];
+    delete hwTeacherResults[id];
+    if (hwSelectedId === id) hwSelectedId = '';
+    renderTeacherHomework();
+  }
+
+  function exportHomeworkToExcel() {
+    const hw = hwTeacherList[hwSelectedId];
+    if (!hw || typeof XLSX === 'undefined') return;
+    const total = hwQuestions(hw).length;
+    const rows = [['학년', '반', '번호', '이름', '이메일', '상태', '첫 점수', '최고 점수', '문항수', '푼 횟수', '처음 제출', '마지막 제출']];
+    hwResultRows(hwSelectedId).forEach(r => {
+      const res = r.result;
+      rows.push([r.grade, r.classNum, r.studentNum, r.name, r.email, res ? '완료' : '아직',
+        res ? Number(res.firstScore) || 0 : '', res ? Number(res.bestScore) || 0 : '', total,
+        res ? Number(res.attempts) || 1 : '', res ? hwFmtTime(res.firstAt) : '', res ? hwFmtTime(res.lastAt) : '']);
+    });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), '과제_결과');
+    const safeTitle = String(hw.title).replace(/[\\/:*?"<>|]/g, '_').slice(0, 25);
+    XLSX.writeFile(wb, `MY_Kahoot_과제결과_${safeTitle}.xlsx`);
+  }
+
+  function previewHomework(id) {
+    const hw = hwTeacherList[id];
+    if (!hw) return;
+    startHomeworkPlay(id, hw, { preview: true });
+  }
+
+  // ---------- 학생: 과제 목록 ----------
+  function ensureHwStudentBox() {
+    let box = document.getElementById('hwStudentBox');
+    if (box) return box;
+    const card = document.querySelector('#view-landing .join-card');
+    if (!card) return null;
+    box = document.createElement('div');
+    box.id = 'hwStudentBox';
+    box.style.cssText = 'display:none; margin-top:1rem; text-align:left; border-top:2px dashed var(--my-border); padding-top:1rem;';
+    card.appendChild(box);
+    return box;
+  }
+
+  async function loadStudentHomework() {
+    const box = ensureHwStudentBox();
+    if (!box) return;
+    if (!isFirebaseConnected || !firebaseDb || !authUser || !currentStudent.verified || isTeacherEmail(authUser.email)) {
+      box.style.display = 'none';
+      return;
+    }
+    box.style.display = 'block';
+    box.innerHTML = '<div style="font-weight:800; color:var(--my-primary-dark);">📚 내 과제 불러오는 중...</div>';
+    let all = {};
+    try {
+      all = (await firebaseDb.ref('homework').once('value')).val() || {};
+    } catch (err) {
+      console.warn('과제 목록 읽기 실패', err);
+      box.innerHTML = '<div style="font-weight:800; color:var(--my-primary-dark);">📚 혼자 풀기 과제</div><p style="font-size:0.85rem; color:var(--my-text-muted);">과제 목록을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</p>';
+      return;
+    }
+    hwStudentList = {};
+    Object.keys(all).forEach(id => {
+      const hw = all[id];
+      if (hw && hw.open && hwIsForStudent(hw, currentStudent)) hwStudentList[id] = hw;
+    });
+    const key = emailToKey(authUser.email);
+    const ids = Object.keys(hwStudentList).sort((a, b) => String(hwStudentList[b].createdAt || '').localeCompare(String(hwStudentList[a].createdAt || '')));
+    await Promise.all(ids.map(async id => {
+      try { hwMyResults[id] = (await firebaseDb.ref(`homeworkResults/${id}/${key}`).once('value')).val(); } catch (_) { hwMyResults[id] = null; }
+    }));
+    renderStudentHomeworkList(ids);
+    if (hwPendingId && hwStudentList[hwPendingId]) {
+      const id = hwPendingId;
+      hwPendingId = '';
+      startHomeworkPlay(id, hwStudentList[id]);
+    } else if (hwPendingId) {
+      alert('링크의 과제를 찾을 수 없어요. 선생님이 마감했거나 우리 반 과제가 아닐 수 있어요.');
+      hwPendingId = '';
+    }
+  }
+
+  function renderStudentHomeworkList(ids) {
+    const box = ensureHwStudentBox();
+    if (!box) return;
+    const today = new Date().toISOString().slice(0, 10);
+    box.innerHTML = `
+      <div style="font-weight:900; color:var(--my-primary-dark); font-size:1.05rem; margin-bottom:0.25rem;">📚 혼자 풀기 과제</div>
+      <p style="font-size:0.8rem; color:var(--my-text-muted); margin-bottom:0.6rem;">PIN 없이 혼자 풀 수 있어요. 시간 제한 없이 풀고 바로 정답과 해설을 확인해요.</p>
+      ${ids.length === 0 ? '<p style="font-size:0.88rem; color:var(--my-text-muted);">지금 풀 과제가 없어요.</p>' : ids.map(id => {
+        const hw = hwStudentList[id];
+        const mine = hwMyResults[id];
+        const total = hwQuestions(hw).length;
+        const overdue = hw.due && hw.due < today;
+        return `
+          <div style="border:1.5px solid var(--my-border); border-radius:12px; padding:0.7rem 0.85rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center; gap:0.6rem;">
+            <div style="min-width:0;">
+              <div style="font-weight:800; color:var(--my-text);">${escapeHtml(hw.title)}</div>
+              <div style="font-size:0.78rem; color:var(--my-text-muted);">${total}문항${hw.due ? ` · 마감 ${escapeHtml(hw.due)}${overdue ? ' (지남)' : ''}` : ''}${mine ? ` · ✅ 최고 ${Number(mine.bestScore) || 0}/${total} (${Number(mine.attempts) || 1}회)` : ' · 아직 안 풀었어요'}</div>
+            </div>
+            <button class="btn ${mine ? 'btn-outline' : 'btn-accent'} btn-sm" style="flex-shrink:0;" onclick="MYKahoot.openStudentHomework('${id}')">${mine ? '다시 풀기' : '풀기'}</button>
+          </div>`;
+      }).join('')}`;
+  }
+
+  function openStudentHomework(id) {
+    const hw = hwStudentList[id];
+    if (hw) startHomeworkPlay(id, hw);
+  }
+
+  // ---------- 과제 풀기 화면 ----------
+  function ensureHwView() {
+    let sec = document.getElementById('view-homework');
+    if (sec) return sec;
+    sec = document.createElement('section');
+    sec.id = 'view-homework';
+    sec.className = 'view-section';
+    sec.innerHTML = `
+      <div class="student-screen">
+        <div class="student-status-bar">
+          <div style="display:flex; align-items:center; gap:0.5rem; min-width:0;">
+            <span class="badge badge-gold" id="hwBarMode">📚 과제</span>
+            <span id="hwBarTitle" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="background:#fff; color:var(--my-primary-dark); padding:0.25rem 0.7rem; border-radius:999px; font-weight:900;" id="hwBarProgress"></span>
+            <button class="btn btn-ghost-light btn-sm" onclick="MYKahoot.exitHomework()">목록으로</button>
+          </div>
+        </div>
+        <div id="hwBody" class="student-pad-container" style="max-width:820px; width:100%; margin:0 auto;"></div>
+      </div>`;
+    const anchor = document.getElementById('view-student');
+    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor.nextSibling);
+    else document.body.appendChild(sec);
+    return sec;
+  }
+
+  function startHomeworkPlay(id, hw, opts = {}) {
+    const questions = hwQuestions(hw);
+    if (questions.length === 0) { alert('이 과제에는 문항이 없어요.'); return; }
+    const order = opts.only && opts.only.length ? opts.only.slice() : questions.map((_, i) => i);
+    hwPlay = { id, hw, questions, order, pos: 0, picked: null, answers: {}, preview: !!opts.preview, wrongOnly: !!(opts.only && opts.only.length) };
+    ensureHwView();
+    document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById('view-homework').classList.add('active');
+    SoundFX.stopBGM();
+    document.getElementById('hwBarMode').textContent = hwPlay.preview ? '👀 미리보기 (저장 안 됨)' : (hwPlay.wrongOnly ? '🔁 틀린 문제 다시' : '📚 과제');
+    document.getElementById('hwBarTitle').textContent = hw.title || '';
+    renderHwQuestion();
+    window.scrollTo(0, 0);
+  }
+
+  const HW_COLORS = [['--ans-red', '▲'], ['--ans-blue', '◆'], ['--ans-yellow', '●'], ['--ans-green', '■']];
+
+  function renderHwQuestion() {
+    const body = document.getElementById('hwBody');
+    if (!body || !hwPlay) return;
+    const qIdx = hwPlay.order[hwPlay.pos];
+    const q = hwPlay.questions[qIdx];
+    const picked = hwPlay.picked;
+    const answered = picked !== null;
+    document.getElementById('hwBarProgress').textContent = `${hwPlay.pos + 1} / ${hwPlay.order.length}`;
+    const isLast = hwPlay.pos === hwPlay.order.length - 1;
+    body.innerHTML = `
+      <div style="height:8px; background:rgba(255,255,255,0.15); border-radius:999px; overflow:hidden;">
+        <div style="height:100%; width:${Math.round((hwPlay.pos + (answered ? 1 : 0)) / hwPlay.order.length * 100)}%; background:var(--my-gold);"></div>
+      </div>
+      <div style="font-size:0.9rem; font-weight:800; opacity:0.9;">문제 ${qIdx + 1}</div>
+      <div class="student-question-box" style="text-align:left; white-space:pre-wrap;">${escapeHtml(q.question)}</div>
+      <div class="student-pad-grid" style="min-height:0;">
+        ${q.options.map((opt, i) => {
+          if (!opt && i >= 2) return '';
+          const [color, shape] = HW_COLORS[i];
+          let style = `background:var(${color}); box-shadow:0 5px 0 var(${color}-dark); font-size:1.05rem; min-height:92px; flex-direction:row; justify-content:flex-start; text-align:left;`;
+          if (answered) {
+            if (i === q.answer) style += ' outline:5px solid #fff; outline-offset:2px;';
+            else if (i === picked) style += ' opacity:0.55;';
+            else style += ' opacity:0.3;';
+          }
+          const mark = answered ? (i === q.answer ? ' ✅' : (i === picked ? ' ❌' : '')) : '';
+          return `<button class="student-pad-btn" style="${style}" ${answered ? 'disabled' : ''} onclick="MYKahoot.answerHomework(${i})">
+            <span class="pad-shape" style="font-size:1.8rem;">${shape}</span><span>${escapeHtml(opt)}${mark}</span></button>`;
+        }).join('')}
+      </div>
+      ${answered ? `
+        <div style="background:${picked === q.answer ? '#dcfce7' : '#fee2e2'}; color:${picked === q.answer ? '#15803d' : '#b91c1c'}; border-radius:14px; padding:0.9rem 1.1rem; font-weight:800; line-height:1.5;">
+          <div style="font-size:1.2rem;">${picked === q.answer ? '🎉 정답이에요!' : `😢 아쉬워요. 정답은 ${q.answer + 1}번 "${escapeHtml(q.options[q.answer])}"`}</div>
+          ${q.explanation ? `<div style="color:var(--my-text); font-weight:600; margin-top:0.35rem;">💡 ${escapeHtml(q.explanation)}</div>` : ''}
+        </div>
+        <button class="btn btn-gold btn-lg" style="width:100%;" onclick="MYKahoot.nextHomeworkQuestion()">${isLast ? '🏁 결과 보기' : '다음 문제 ➡️'}</button>` : ''}`;
+  }
+
+  function answerHomework(choice) {
+    if (!hwPlay || hwPlay.picked !== null) return;
+    const qIdx = hwPlay.order[hwPlay.pos];
+    hwPlay.picked = choice;
+    hwPlay.answers[qIdx] = choice;
+    const ok = choice === hwPlay.questions[qIdx].answer;
+    if (ok) SoundFX.playReveal && SoundFX.playReveal();
+    renderHwQuestion();
+  }
+
+  function nextHomeworkQuestion() {
+    if (!hwPlay || hwPlay.picked === null) return;
+    if (hwPlay.pos < hwPlay.order.length - 1) {
+      hwPlay.pos += 1;
+      hwPlay.picked = null;
+      renderHwQuestion();
+      window.scrollTo(0, 0);
+    } else {
+      finishHomework();
+    }
+  }
+
+  async function finishHomework() {
+    const p = hwPlay;
+    const body = document.getElementById('hwBody');
+    if (!p || !body) return;
+    const wrong = p.order.filter(i => p.answers[i] !== p.questions[i].answer);
+    const correct = p.order.length - wrong.length;
+    const pct = Math.round(correct / p.order.length * 100);
+    let saveNote = '';
+    if (p.preview) {
+      saveNote = '미리보기라서 결과는 저장하지 않았어요.';
+    } else if (p.wrongOnly) {
+      saveNote = '틀린 문제 다시 풀기는 연습이라 점수에 들어가지 않아요.';
+    } else {
+      saveNote = await saveHomeworkResult(p, correct, wrong);
+    }
+    if (pct >= 80 && SoundFX.playFanfare) SoundFX.playFanfare();
+    document.getElementById('hwBarProgress').textContent = `${correct} / ${p.order.length}`;
+    body.innerHTML = `
+      <div style="text-align:center; padding:1rem 0;">
+        <div style="font-size:3.5rem;">${pct === 100 ? '🏆' : pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪'}</div>
+        <h2 style="font-size:1.9rem; font-weight:900; margin:0.3rem 0;">${p.order.length}문제 중 ${correct}개 정답 (${pct}%)</h2>
+        <p style="opacity:0.85; font-size:0.92rem;">${escapeHtml(saveNote)}</p>
+      </div>
+      ${wrong.length ? `
+        <div style="background:#fff; color:var(--my-text); border-radius:16px; padding:1rem 1.1rem;">
+          <div style="font-weight:900; color:var(--my-primary-dark); margin-bottom:0.5rem;">📝 틀린 문제 다시 보기</div>
+          ${wrong.map(i => {
+            const q = p.questions[i];
+            return `<div style="border-top:1px solid var(--my-border); padding:0.6rem 0; line-height:1.5;">
+              <div style="font-weight:800;">${i + 1}. ${escapeHtml(q.question)}</div>
+              <div style="font-size:0.88rem; color:#b91c1c;">내 답: ${escapeHtml(q.options[p.answers[i]] ?? '')}</div>
+              <div style="font-size:0.88rem; color:#15803d; font-weight:700;">정답: ${escapeHtml(q.options[q.answer])}</div>
+              ${q.explanation ? `<div style="font-size:0.85rem; color:var(--my-text-muted);">💡 ${escapeHtml(q.explanation)}</div>` : ''}
+            </div>`;
+          }).join('')}
+        </div>` : ''}
+      <div style="display:flex; flex-direction:column; gap:0.6rem;">
+        ${wrong.length ? `<button class="btn btn-accent btn-lg" style="width:100%;" onclick="MYKahoot.retryHomework(true)">🔁 틀린 문제만 다시 풀기 (${wrong.length}문제)</button>` : ''}
+        <button class="btn btn-gold btn-lg" style="width:100%;" onclick="MYKahoot.retryHomework(false)">↩️ 처음부터 다시 풀기</button>
+        <button class="btn btn-ghost-light btn-lg" style="width:100%;" onclick="MYKahoot.exitHomework()">📚 과제 목록으로</button>
+      </div>`;
+    p.lastWrong = wrong;
+    window.scrollTo(0, 0);
+  }
+
+  async function saveHomeworkResult(p, correct, wrong) {
+    if (!isFirebaseConnected || !firebaseDb || !authUser) return '인터넷에 연결되어 있지 않아 결과를 저장하지 못했어요.';
+    const key = emailToKey(authUser.email);
+    const ref = firebaseDb.ref(`homeworkResults/${p.id}/${key}`);
+    const now = new Date().toISOString();
+    try {
+      const prev = (await ref.once('value')).val();
+      const rec = {
+        grade: currentStudent.grade,
+        classNum: currentStudent.classNum,
+        studentNum: currentStudent.studentNum,
+        name: currentStudent.name,
+        email: normalizeEmail(authUser.email),
+        total: p.order.length,
+        firstScore: prev ? Number(prev.firstScore) || 0 : correct,
+        bestScore: Math.max(prev ? Number(prev.bestScore) || 0 : 0, correct),
+        lastScore: correct,
+        attempts: (prev ? Number(prev.attempts) || 0 : 0) + 1,
+        firstAt: prev && prev.firstAt ? prev.firstAt : now,
+        lastAt: now,
+        lastWrong: wrong.map(i => i + 1).join(',')
+      };
+      await ref.set(rec);
+      hwMyResults[p.id] = rec;
+      return '✅ 결과가 선생님께 저장되었어요.';
+    } catch (err) {
+      console.warn('과제 결과 저장 실패', err);
+      return '⚠️ 결과를 저장하지 못했어요. 인터넷 연결을 확인하고 다시 풀어 주세요.';
+    }
+  }
+
+  function retryHomework(wrongOnly) {
+    const p = hwPlay;
+    if (!p) return;
+    startHomeworkPlay(p.id, p.hw, { preview: p.preview, only: wrongOnly ? p.lastWrong : null });
+  }
+
+  function exitHomework() {
+    const wasPreview = hwPlay && hwPlay.preview;
+    hwPlay = null;
+    if (wasPreview) {
+      openTeacherTab('homework');
+      return;
+    }
+    switchMainView('landing');
+    loadStudentHomework();
+  }
+
   // ==================== 유틸리티 & URL 파라미터 자동 감지 ====================
   function escapeHtml(str) {
     return String(str ?? '')
@@ -3271,8 +3827,19 @@ const MYKahoot = (() => {
     initFirebaseWithConfig(activeFbConfig);
     if (!isFirebaseConnected) resolveAuthReady();
 
+    document.querySelectorAll('.app-version').forEach(el => { el.textContent = 'v' + APP_VERSION; });
+
     // QR코드 스캔 등으로 ?pin=123456 접속 시 PIN 번호 자동 입력
     const params = new URLSearchParams(window.location.search);
+    // 과제 링크(?hw=...)로 들어오면 로그인 뒤 바로 그 과제를 열어요.
+    hwPendingId = (params.get('hw') || '').trim();
+    if (hwPendingId) {
+      const box = ensureHwStudentBox();
+      if (box) {
+        box.style.display = 'block';
+        box.innerHTML = '<div style="font-weight:800; color:var(--my-primary-dark);">📚 과제 링크로 들어왔어요</div><p style="font-size:0.85rem; color:var(--my-text-muted);">학교 구글 계정으로 로그인하면 과제가 바로 열려요. (PIN은 입력하지 않아도 돼요)</p>';
+      }
+    }
     const urlPin = params.get('pin');
     if (urlPin) {
       const pinEl = document.getElementById('studentPinInput');
@@ -3332,6 +3899,19 @@ const MYKahoot = (() => {
     generateSampleQuizHistory,
     saveSecuritySettings,
     connectFirebaseFromInput,
-    disconnectFirebase
+    disconnectFirebase,
+    loadTeacherHomework,
+    createHomeworkFromQuiz,
+    copyHomeworkLink,
+    selectHomework,
+    toggleHomeworkOpen,
+    deleteHomework,
+    exportHomeworkToExcel,
+    previewHomework,
+    openStudentHomework,
+    answerHomework,
+    nextHomeworkQuestion,
+    retryHomework,
+    exitHomework
   };
 })();
