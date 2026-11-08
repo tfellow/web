@@ -8,7 +8,6 @@
 //   Firebase my-kahoot-smy (RTDB) : MY Kahoot, Class123 Plus, 보상 규칙·지급 기록
 const FB_VER = "10.12.2";
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr"];
-const CLOZE_OWNER = "tfellow@smy.ms.kr"; // Cloze 테스트는 학교 계정으로만 만들어요
 const SCHOOL = "@smy.ms.kr";
 const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
 const SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
@@ -382,8 +381,16 @@ async function fcLoad(f) {
     });
   } catch (e) { warn("단어숲 결과", e); }
 
-  // Cloze 제출: 보안 규칙상 "로그인한 계정이 만든 테스트"의 제출만 읽을 수 있어요. 테스트는 학교 계정으로 만들어요.
-  if (low(f.user.email) === CLOZE_OWNER) {
+  // Cloze 제출: 보안 규칙상 "로그인한 계정이 만든 테스트"의 제출만 읽을 수 있어요.
+  // 테스트에는 만든 사람 이메일(ownerEmail)이 있어서, 다른 교사 계정으로 만든 테스트가 있으면 알려 줘요.
+  S.clozeOther = {};
+  try {
+    (await F.getDocs(F.collection(db, "tests"))).forEach(d => {
+      const o = low(d.data().ownerEmail);
+      if (o && o !== low(f.user.email)) S.clozeOther[o] = (S.clozeOther[o] || 0) + 1;
+    });
+  } catch (e) { warn("Cloze 테스트 목록", e); }
+  {
     try {
       (await F.getDocs(F.query(F.collection(db, "submissions"), F.where("ownerUid", "==", f.user.uid)))).forEach(d => {
         const s = d.data();
@@ -758,10 +765,10 @@ function renderConn() {
     const chip = { ok: `<span class="chip ok">✅ 연결됨</span>`, load: `<span class="chip load">⏳ 불러오는 중</span>`, err: `<span class="chip err">⚠️ 오류</span>`, off: `<span class="chip off">연결 안 됨</span>` }[S.st];
     let act = "";
     if (S.st === "off" || S.st === "err") act = id === "sb" ? `<div id="gsi-sb" class="gsi-slot"></div><button class="btn sm navy" data-conn="sb">Google로 연결</button>`
-      : `<button class="btn sm navy" data-conn="${id}">${id === "fc" ? "학교 계정으로 연결" : "Google로 연결"}</button>`;
+      : `<button class="btn sm navy" data-conn="${id}">Google로 연결</button>`;
     if (S.st === "ok") act = `<span class="small muted">${esc(S.email || "")}</span> <button class="btn sm" data-out="${id}">로그아웃</button>`;
-    const clozeNote = id === "fc" && S.st === "ok" && low(S.email) !== CLOZE_OWNER
-      ? `<div class="err-msg">Cloze 테스트는 학교 계정(${CLOZE_OWNER})으로 만들어서 지금은 Cloze 기록이 안 보여요. <button class="btn sm" data-switch="fc">학교 계정으로 바꾸기</button></div>` : "";
+    const other = id === "fc" && S.st === "ok" ? Object.entries(S.clozeOther || {}).filter(([e]) => isTeacher(e)) : [];
+    const clozeNote = other.map(([e, n]) => `<div class="err-msg">${esc(e)} 계정으로 만든 Cloze 테스트 ${n}개의 제출은 지금 안 보여요(보안 규칙). <button class="btn sm" data-switch="${esc(e)}">${esc(e)}로 바꾸기</button></div>`).join("");
     return `<div class="card src"><div class="src-h"><b>${d.name}</b>${chip}</div><div class="apps">${d.desc}${id === "sb" && S.roster ? ` · 명단 ${S.roster}명` : ""}</div>
       ${S.err ? `<div class="err-msg">${esc(S.err)}</div>` : ""}
       ${(S.warn || []).map(w => `<div class="err-msg">일부 못 읽음 · ${esc(w)}</div>`).join("")}
@@ -771,9 +778,9 @@ function renderConn() {
   box.querySelectorAll("[data-conn]").forEach(b => b.onclick = () => {
     const id = b.dataset.conn;
     if (id === "sb") { b.remove(); showGsi(); toast("위의 Google 버튼을 눌러 선생님 계정으로 로그인하세요."); }
-    else fbStart(id, true, id === "fc" ? CLOZE_OWNER : "");
+    else fbStart(id, true);
   });
-  box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, CLOZE_OWNER));
+  box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
     if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "grammar", "quiz"]); renderConn(); render(); }
