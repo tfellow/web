@@ -32,6 +32,7 @@ const APPS = [
   { id: "vocab", name: "단어숲", icon: "🌳", src: "fc", url: "../danuhsup/" },
   { id: "cloze", name: "Cloze", icon: "🧩", src: "fc", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", src: "fc", url: "../writing1/" },
+  { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
   { id: "c123", name: "Class123", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
 ];
@@ -221,7 +222,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "grammar", "quiz"]);
+  clearApps(["passport", "grammar", "quiz", "speaking"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -253,6 +254,13 @@ async function sbLoad() {
       addEvent({ e: email, a: "grammar", t: toMs(s.earned_at), k: "stamp", title: "단원 스탬프 " + s.topic_code });
     });
   } catch (e) { warn("문법", e); }
+
+  try { // MY Speaking (말하기 연습) — 표가 아직 없으면(SQL 실행 전) 조용히 넘어가요
+    const sets = await sbAll(() => c.from("sp_sets").select("id,title,lesson"));
+    const st = Object.fromEntries(sets.map(x => [x.id, x]));
+    const rows = await sbAll(() => c.from("sp_attempts").select("email,set_id,line_idx,score,created_at"));
+    rows.forEach(a => { const x = st[a.set_id] || {}; addEvent({ e: a.email, a: "speaking", t: toMs(a.created_at), k: "line", title: `${x.lesson ? x.lesson + " " : ""}${x.title || "대화문"} · ${a.line_idx + 1}번 줄`, s: a.score, p: a.score, set: a.set_id, line: a.line_idx }); });
+  } catch (e) { if (!/sp_sets|sp_attempts|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("말하기", e); }
 
   try { // Quiz Queens (구글 시트) — Supabase 로그인 토큰으로 선생님임을 확인해요
     const { data } = await c.auth.getSession();
@@ -597,6 +605,11 @@ function cell(id, email, x) {
       const k = kahootStats(s.items);
       return { main: s.n, on, html: `<span class="m">${k.live}판${k.acc != null ? " · " + Math.round(k.acc) + "%" : ""}</span><span class="sub">🏆3위 안 ${k.top3} · 10위 안 ${k.top10} · 과제 ${k.hw}</span>`, csv: `수업 ${k.live} / 정답률 ${k.acc != null ? Math.round(k.acc) + "%" : ""} / 3위 안 ${k.top3} / 10위 안 ${k.top10} / 과제 ${k.hw}` };
     }
+    case "speaking": {
+      if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
+      const a = avg(s.ps), lines = new Set(s.items.map(e => e.set + ":" + e.line)).size;
+      return { main: s.n, on, html: `<span class="m">${s.n}번${a != null ? " · " + Math.round(a) + "점" : ""}</span><span class="sub">${lines}줄 연습</span>`, csv: `${s.n}번 / 평균 ${a != null ? Math.round(a) : ""} / ${lines}줄` };
+    }
     case "c123": {
       const c = state.snap.c123.get(email); if (!c) return none;
       return { main: c.e, on: false, html: `<span class="m">⭐${c.e}</span><span class="sub">🌧️${c.m}</span>`, csv: `으쓱 ${c.e} / 머쓱 ${c.m}` };
@@ -742,6 +755,7 @@ function studentSummary(p, Mall, Mweek) {
   if (v || vt.length) apps.vocab = { xp: v?.xp || 0, streak: v?.streak || 0, learned: v?.learned || 0, mastered: v?.mastered || 0, tests: vt.length, avg: vt.length ? Math.round(avg(vt.map(e => num(e.p)))) : null, last: last("vocab") };
   const cz = items("cloze"); if (cz.length) apps.cloze = { n: cz.length, avg: Math.round(avg(cz.map(e => num(e.p)))), perfect: cz.filter(e => e.n && e.s === e.n).length, last: last("cloze") };
   const wr = items("writing"); if (wr.length) apps.writing = { n: wr.length, avg: Math.round(avg(wr.map(e => num(e.s)))), cefr: wr.slice().sort((a, b) => b.t - a.t)[0]?.cefr || "", last: last("writing") };
+  const spk = items("speaking"); if (spk.length) apps.speaking = { n: spk.length, avg: Math.round(avg(spk.map(e => num(e.s)))), lines: new Set(spk.map(e => e.set + ":" + e.line)).size, last: last("speaking") };
   const kh = items("kahoot"); if (kh.length) { const k = kahootStats(kh); apps.kahoot = { live: k.live, hw: k.hw, acc: k.acc != null ? Math.round(k.acc) : null, top3: k.top3, top10: k.top10, best: k.best, last: last("kahoot") }; }
   const c = state.snap.c123.get(p.email); if (c) apps.c123 = { e: c.e, m: c.m };
   const week = {}; APPS.forEach(a => { if (isActive(w, a.id)) week[a.id] = a.id === "grammar" ? (w.apps.grammar.attempts || w.apps.grammar.n) : (w.apps[a.id].n || 1); });
@@ -821,7 +835,7 @@ function renderConn() {
   box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "grammar", "quiz"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "grammar", "quiz", "speaking"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -950,6 +964,7 @@ function viewIdle(people, M) {
 function evValue(ev) {
   if (ev.a === "passport") return (isMedal(ev.medal) ? { gold: "🥇", silver: "🥈", bronze: "🥉" }[ev.medal] + " " : "") + `${ev.s}/${ev.n}`;
   if (ev.k === "stamp") return "🏷️ 스탬프";
+  if (ev.a === "speaking") return `🎤 ${ev.s}점`;
   if (ev.a === "writing") return `${ev.s}점${ev.cefr ? " · " + ev.cefr : ""}`;
   if (ev.k === "live") return `${ev.p}% · ${ev.rank}/${ev.of}등`;
   if (ev.n) return `${ev.s}/${ev.n}`;
@@ -1129,6 +1144,7 @@ function buildDemo() {
     }
     for (let i = 0; i < zeal * 3; i++) { const s = 5 + Math.floor(rnd() * 11); addEvent({ e: email, a: "cloze", t: T(), k: "test", title: pick(["Lesson 2 빈칸", "Lesson 3 순서", "Lesson 3 빈칸"]), s, n: 15, p: pct(s, 15) }); }
     for (let i = 0; i < zeal * 2.5; i++) addEvent({ e: email, a: "writing", t: T(), k: "essay", title: pick(["My Weekend", "A Letter to My Future Self", "My Favorite Place"]), s: 60 + Math.floor(rnd() * 40), cefr: pick(["A1", "A2", "A2", "B1"]) });
+    for (let i = 0; i < zeal * 8; i++) { const sc = 55 + Math.floor(rnd() * 46), ln = Math.floor(rnd() * 5); addEvent({ e: email, a: "speaking", t: T(), k: "line", title: `1-3 Listen & Talk A · ${ln + 1}번 줄`, s: sc, p: sc, set: 1, line: ln }); }
     if (rnd() < 0.6) { const s = 6 + Math.floor(rnd() * 5); addEvent({ e: email, a: "kahoot", t: T(), k: "hw", title: "Lesson 3 단어 (과제)", s, n: 10, p: s * 10, tries: 1 }); }
   }
   for (const g of [1, 2]) for (let c = 1; c <= 3; c++) for (let k = 0; k < 3; k++) {

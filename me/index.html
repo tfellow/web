@@ -35,7 +35,7 @@ h2 { margin: 0 0 10px; font-size: 18px; color: var(--navy); }
 .hero-stats div { background: rgba(255,255,255,.12); border-radius: 14px; padding: 10px; text-align: center; }
 .hero-stats b { display: block; font-size: 24px; color: var(--gold-2); }
 .hero-stats span { font-size: 12px; opacity: .9; }
-.week { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.week { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
 .week a { text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px; text-align: center; background: var(--paper); }
 .week a .i { font-size: 24px; display: block; filter: grayscale(1); opacity: .5; }
 .week a .n { font-size: 13px; font-weight: 600; }
@@ -63,7 +63,7 @@ ul.tl .v { font-weight: 700; color: var(--navy-2); white-space: nowrap; }
 .teacher-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--gold-soft); border: 1px solid var(--gold-2); border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; font-size: 14px; }
 .teacher-bar input { flex: 1 1 200px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; font: inherit; }
 @media (max-width: 560px) {
-  .week { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .week { grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .week a .n { font-size: 11px; }
   .hero-stats b { font-size: 20px; }
   ul.tl li { grid-template-columns: 1fr auto; }
@@ -95,6 +95,7 @@ const APPS = [
   { id: "vocab", name: "단어숲", icon: "🌳", url: "../danuhsup/" },
   { id: "cloze", name: "Cloze", icon: "🧩", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", url: "../writing1/" },
+  { id: "speaking", name: "말하기", icon: "🎤", url: "../speaking/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", url: "../kahoot/student.html" },
   { id: "c123", name: "으쓱", icon: "⭐", url: "" },
 ];
@@ -179,6 +180,7 @@ function show(d, email, updated) {
     appCard("vocab", v ? `단어 ${v.learned}개` : "", [v && `XP ${v.xp} · 🔥 ${v.streak}일`, v && v.tests ? `단원 테스트 ${v.tests}번 · 평균 ${v.avg}%` : ""]),
     appCard("cloze", c ? `${c.n}번 · 평균 ${c.avg}%` : "", [c && c.perfect ? `💯 만점 ${c.perfect}번` : ""]),
     appCard("writing", w ? `${w.n}편 · 평균 ${w.avg}점` : "", [w && w.cefr ? `최근 수준 ${w.cefr}` : ""]),
+    appCard("speaking", A.speaking ? `${A.speaking.lines}줄 · 평균 ${A.speaking.avg}점` : "", [A.speaking && `말하기 ${A.speaking.n}번`]),
     appCard("kahoot", k ? `${k.live}판 · ${k.acc ?? "-"}%` : "", [k && `🏆 3등 안 ${k.top3}번 · 10등 안 ${k.top10}번`, k && k.hw ? `과제 ${k.hw}개` : "", k && k.best ? `최고 ${k.best}등` : ""]),
   ].join("");
   const goals = (d.next || []).map(n => `<div class="goal"><div class="t"><span>${APP[n.app]?.icon || "🎯"} ${esc(n.label)}</span><span class="muted">${n.have}/${n.need} → ⭐${n.give}</span></div><div class="bar"><i style="width:${Math.round(n.have / n.need * 100)}%"></i></div></div>`).join("");
@@ -201,8 +203,8 @@ function demoData() {
   return { name: "김문영", grade: 1, cls: 3, no: 7,
     apps: { passport: { tries: 14, medals: 9, gold: 3, last: now - 5 * h }, grammar: { xp: 820, stamps: 7, streak: 4, last: now - 26 * h },
       quiz: { xp: 2400, level: 5, answered: 210, acc: 81, last: now - 50 * h }, vocab: { xp: 640, streak: 6, learned: 280, mastered: 120, tests: 5, avg: 88, last: now - 2 * h },
-      cloze: { n: 3, avg: 79, perfect: 1, last: now - 72 * h }, kahoot: { live: 6, hw: 2, acc: 75, top3: 1, top10: 4, best: 2, last: now - 30 * h }, c123: { e: 12, m: 1 } },
-    week: { passport: 3, grammar: 42, vocab: 2 },
+      cloze: { n: 3, avg: 79, perfect: 1, last: now - 72 * h }, speaking: { n: 12, avg: 84, lines: 9, last: now - 4 * h }, kahoot: { live: 6, hw: 2, acc: 75, top3: 1, top10: 4, best: 2, last: now - 30 * h }, c123: { e: 12, m: 1 } },
+    week: { passport: 3, grammar: 42, vocab: 2, speaking: 6 },
     next: [{ label: "독서 여권 메달 5권", have: 4, need: 5, give: 1, app: "passport" }, { label: "문법 스탬프 3개", have: 1, need: 3, give: 1, app: "grammar" }, { label: "Kahoot 3등 안", have: 0, need: 1, give: 1, app: "kahoot" }],
     rewards: [{ t: now - 30 * h, label: "독서 여권 금메달", n: 1 }, { t: now - 100 * h, label: "독서 여권 메달 5권", n: 1 }],
     recent: [{ a: "vocab", t: now - 2 * h, title: "중1 교과서 3과", v: "18/20" }, { a: "passport", t: now - 5 * h, title: "The Happy Prince", v: "🥇 10/10" }, { a: "kahoot", t: now - 30 * h, title: "Lesson 3 Review", v: "80% · 2/24등" }] };
