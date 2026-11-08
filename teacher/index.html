@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MY Teacher Hub · 통합 교사 현황</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../app/emblem.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="hub.css?v=1">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <img src="../app/emblem.png" alt="" width="40" height="36">
+    <div>
+      <h1>MY Teacher Hub</h1>
+      <p>통합 교사 현황 · 서울문영여자중학교</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="btnConnect" class="btn ghost">🔌 연결</button>
+    <button id="btnReload" class="btn ghost">🔄 새로고침</button>
+    <button id="btnCsv" class="btn gold">⬇️ CSV</button>
+  </div>
+</header>
+
+<section id="conn" class="conn"></section>
+
+<section class="filters card">
+  <label>학년 <select id="fGrade"></select></label>
+  <label>반 <select id="fClass"></select></label>
+  <label>기간
+    <select id="fPeriod">
+      <option value="today">오늘</option>
+      <option value="week" selected>이번 주</option>
+      <option value="7d">최근 7일</option>
+      <option value="month">이번 달</option>
+      <option value="30d">최근 30일</option>
+      <option value="all">전체</option>
+      <option value="custom">직접 선택</option>
+    </select>
+  </label>
+  <span id="customRange" class="hidden">
+    <input type="date" id="fFrom"> ~ <input type="date" id="fTo">
+  </span>
+  <label class="grow">검색 <input id="fQ" type="search" placeholder="이름 · 이메일"></label>
+  <details class="appsel">
+    <summary>표시할 앱</summary>
+    <div id="appToggles"></div>
+  </details>
+</section>
+
+<section id="kpis" class="kpis"></section>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="class" class="on">📊 반별 요약</button>
+  <button data-tab="students">👤 학생별</button>
+  <button data-tab="idle">😴 관심 필요</button>
+  <button data-tab="feed">🕒 최근 활동</button>
+</nav>
+
+<main id="view"></main>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-x" id="modalX" aria-label="닫기">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+
+<script type="module" src="hub.js?v=1"></script>
+</body>
+</html>
