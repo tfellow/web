@@ -102,3 +102,55 @@ export function shuffledPerm(n) {
   }
   return best;
 }
+
+// ---------- 어순 배열 ----------
+// 문장 → 단어 조각(띄어쓰기 기준) + 끝 문장부호(. ! ?)는 따로 떼어 고정
+export function splitChunks(sentence) {
+  let s = String(sentence || "").replace(/\s+/g, " ").trim();
+  const m = s.match(/\s*([.!?]+["'”’)\]]*)$/);
+  let end = "";
+  if (m && m.index > 0) { end = m[1]; s = s.slice(0, m.index).trim(); }
+  return { chunks: s ? s.split(" ") : [], end };
+}
+// 비교용 문자열: 대소문자 무시, 따옴표 통일, (옵션) 문장부호 무시
+export function wordKey(str, ignorePunct = true) {
+  let r = String(str ?? "").replace(/[’‘`]/g, "'").replace(/[“”]/g, '"').toLowerCase();
+  r = r.replace(/[.!?]+["')\]]*\s*$/, "");
+  if (ignorePunct) r = r.replace(/[^\p{L}\p{N}\s']/gu, " ");
+  return r.replace(/\s+/g, " ").trim();
+}
+export const wordPrimary = it => (it.chunks || []).join(" ");
+export const wordAnswers = it => [wordPrimary(it), ...(it.alts || [])];
+export function isWordCorrect(given, it, ignorePunct = true) {
+  const g = wordKey(given, ignorePunct);
+  if (!g) return false;
+  return wordAnswers(it).some(a => wordKey(a, ignorePunct) === g);
+}
+// 답이 이 문제의 조각을 모두 한 번씩 써서 만들 수 있는지 (대소문자·문장부호 무시)
+export function fitsChunks(answer, chunks) {
+  const words = wordKey(answer, true).split(" ").filter(Boolean);
+  const parts = chunks.map(c => wordKey(c, true).split(" ").filter(Boolean)).filter(p => p.length);
+  if (words.length !== parts.reduce((a, p) => a + p.length, 0)) return false;
+  const used = new Array(parts.length).fill(false);
+  const go = pos => {
+    if (pos === words.length) return true;
+    const tried = new Set();
+    for (let i = 0; i < parts.length; i++) {
+      if (used[i]) continue;
+      const key = parts[i].join(" ");
+      if (tried.has(key)) continue;
+      tried.add(key);
+      if (parts[i].every((w, d) => words[pos + d] === w)) {
+        used[i] = true;
+        if (go(pos + parts[i].length)) return true;
+        used[i] = false;
+      }
+    }
+    return false;
+  };
+  return go(0);
+}
+// 어순 배열 문항이 제출 기록의 answers/correct 배열에서 시작하는 자리 (어순 배열이 없던 기록은 null)
+export function wordStartOf(sub) {
+  return Number.isInteger(sub?.wordStart) ? sub.wordStart : null;
+}

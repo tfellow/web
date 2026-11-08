@@ -18,7 +18,19 @@ const TEACHERS = TEACHER_EMAILS.map(e => String(e).trim().toLowerCase());
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-export const MODE_LABEL = { cloze: "빈칸 채우기", order: "문장 순서" };
+export const MODE_LABEL = { cloze: "빈칸 채우기", order: "문장 순서", words: "어순 배열" };
+// 테스트 종류 배지 (빈칸 + 어순 배열을 섞은 테스트는 둘 다 표시)
+export function modeBadge(t) {
+  const m = t?.mode || "cloze";
+  if (m === "order") return `<span class="badge purple">${MODE_LABEL.order}</span>`;
+  if (m === "words") return `<span class="badge teal">${MODE_LABEL.words}</span>`;
+  return `<span class="badge blue">${MODE_LABEL.cloze}</span>${(t.words || []).length ? ` <span class="badge teal">+ ${MODE_LABEL.words}</span>` : ""}`;
+}
+// 문항 수: 문장 순서는 문장 수, 그 외는 빈칸 + 어순 배열 문장
+export function questionCount(t) {
+  if (t?.mode === "order") return (t.sentences || []).length;
+  return (t?.mode === "words" ? 0 : (t?.blanks || []).length) + (t?.words || []).length;
+}
 
 export function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -143,7 +155,7 @@ function renderLogin(el, msg = "") {
   el.innerHTML = `
   <div class="card narrow center login-card">
     <h1 class="logo">${esc(APP_NAME)}</h1>
-    <p class="muted">빈칸 채우기 · 문장 순서 맞추기</p>
+    <p class="muted">빈칸 채우기 · 문장 순서 맞추기 · 어순 배열</p>
     ${msg ? `<p class="alert err">${esc(msg)}</p>` : ""}
     ${inApp ? `<p class="alert warn">카카오톡·네이버 앱 안에서는 Google 로그인이 되지 않습니다.<br>오른쪽 위 메뉴에서 <b>다른 브라우저로 열기</b>를 눌러 주세요.<br><button class="btn small" id="copyUrl">주소 복사</button></p>` : ""}
     <button class="btn primary big" id="loginBtn">Google 학교 계정으로 로그인</button>
