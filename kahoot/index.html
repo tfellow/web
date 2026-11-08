@@ -22,7 +22,7 @@
     <div class="brand-wrap" onclick="MYKahoot.switchMainView('landing')">
       <div class="brand-logo">MY!</div>
       <div class="brand-title">
-        <h1>MY Kahoot <span style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 7px; border-radius:6px; font-weight:700;">v1.0</span></h1>
+        <h1>MY Kahoot <span style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 7px; border-radius:6px; font-weight:700;" class="app-version">v1.1</span></h1>
         <span class="brand-subtitle">Seoul Moonyoung Girls' Middle School · 서울문영여자중학교</span>
       </div>
     </div>
@@ -140,6 +140,9 @@
         </button>
         <button class="tab-btn" id="tabBtn-roster" onclick="MYKahoot.openTeacherTab('roster')">
           👩‍🎓 우리 학교 학생 명단 (@smy.ms.kr)
+        </button>
+        <button class="tab-btn" id="tabBtn-homework" onclick="MYKahoot.openTeacherTab('homework')">
+          📚 과제 (혼자 풀기)
         </button>
         <button class="tab-btn" id="tabBtn-stats" onclick="MYKahoot.openTeacherTab('stats')">
           📊 종합 통계 & 성적 리포트
@@ -271,6 +274,54 @@
       </div>
 
       <!-- [탭 3] 교사용 종합 통계 대시보드 -->
+      <!-- [탭] 과제 (학생이 혼자 풀기) -->
+      <div id="tabPane-homework" class="tab-pane">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📚 과제 내기</div>
+                <p style="font-size:0.86rem; color:var(--my-text-muted); margin-top:0.2rem;">
+                  퀴즈 보관함의 퀴즈를 과제로 내면, 학생이 PIN 없이 혼자 풀어요. 시간 제한 없이 한 문제씩 풀고 바로 정답과 해설을 봐요.
+                </p>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div>
+                <label style="font-weight:800; font-size:0.88rem;">과제로 낼 퀴즈</label>
+                <select id="hwQuizSelect"></select>
+              </div>
+              <div>
+                <label style="font-weight:800; font-size:0.88rem;">대상 반 (비워 두면 전체 학생)</label>
+                <input type="text" id="hwTargets" placeholder="예: 2-7, 2-6" />
+              </div>
+              <div>
+                <label style="font-weight:800; font-size:0.88rem;">마감일 (선택)</label>
+                <input type="date" id="hwDue" />
+              </div>
+              <button class="btn btn-accent" onclick="MYKahoot.createHomeworkFromQuiz()">📚 과제 내기</button>
+              <p style="font-size:0.8rem; color:var(--my-text-muted); line-height:1.5;">
+                학생은 학생 페이지에서 학교 계정으로 로그인하면 우리 반 과제가 보여요. [🔗 학생 링크 복사]로 받은 링크를 보내도 돼요.<br/>
+                처음 푼 점수와 가장 높은 점수, 푼 횟수가 저장돼요. 과제를 낸 뒤 퀴즈를 고쳐도 이미 낸 과제는 바뀌지 않아요.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🗂️ 낸 과제 목록</div>
+              <button class="btn btn-outline btn-sm" onclick="MYKahoot.loadTeacherHomework()">🔄 새로고침</button>
+            </div>
+            <div id="hwTeacherListBox" style="display:flex; flex-direction:column; gap:0.6rem; max-height:420px; overflow-y:auto;"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📋 학생별 과제 결과</div>
+          </div>
+          <div id="hwTeacherResultBox"></div>
+        </div>
+      </div>
+
       <div id="tabPane-stats" class="tab-pane">
         <!-- 상단 회차 선택 및 엑셀 다운로드 바 -->
         <div class="card">
@@ -805,6 +856,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>
