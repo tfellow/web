@@ -219,3 +219,10 @@ hr{border:0;border-top:1px solid var(--border);margin:10px 0}
  .play-top{flex-wrap:wrap}.sticky-bar{top:48px}
  .ans-passage{padding:14px 16px}.ans-top{top:48px}
 }
+/* 어순 배열: 자동 묶기·학생 화면 미리보기·놓는 방법 */
+.wtools{gap:8px;align-items:center;margin:8px 0 2px;padding:8px 10px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:6px}
+.wtools{display:flex;flex-direction:row}.wtools select,.wtools input{font:inherit;width:auto;margin:0}.wtools>*{flex:0 0 auto}
+.wprev{gap:4px;align-items:center;margin-top:6px}
+.wpchip{border:1px solid #9ca3af;border-radius:5px;padding:1px 8px;background:#fff}
+.wprev .check{margin-left:8px}
+.win-tap .wchip{touch-action:manipulation;cursor:pointer}

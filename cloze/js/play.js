@@ -1,6 +1,6 @@
 import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, toDate, pickPerStudent, rankSort, modeBadge } from "./common.js";
 import { collection, query, where, getDocs, doc, getDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE, isWordCorrect, wordPrimary } from "./core.js";
+import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE, isWordCorrect, wordPrimary, chipText } from "./core.js";
 
 const ctx = await gate({ needProfile: true });
 const app = $("#app");
@@ -28,6 +28,10 @@ const tokens = tokenize(test.text);
 if (test.mode === "order" || test.mode === "words") test.blanks = [];
 test.blanks = test.blanks || [];
 const WORDS = test.mode === "order" ? [] : (test.words || []); // 어순 배열 문항 (빈칸 다음 번호)
+const WIN = ["tap", "drag"].includes(S.wordInput) ? S.wordInput : "both"; // 조각 놓는 방법
+const WHIDE = S.wordIgnorePunct !== false; // 쉼표 등을 칩에서 감춤
+// 학생이 만든 답 문장 (첫 조각은 대문자로 시작, 나머지 첫 단어 대문자는 소문자로)
+const wordAnswerText = (it, ans) => ans.map((ci, p) => chipText(it, ci, { first: p === 0 })).join(" ");
 const NB = test.blanks.length;
 const SKEY = `cloze:${testId}:${ctx.user.uid}`;
 const deadline = S.deadline ? toDate(S.deadline) : null;
@@ -155,9 +159,13 @@ function drawCloze() {
     <p class="muted small center">${bank
       ? "단어를 누르고 빈칸을 누르세요. (빈칸을 먼저 눌러도 됩니다.) 채운 빈칸을 다시 누르면 단어가 돌아갑니다. 끌어다 놓아도 됩니다."
       : "빈칸에 알맞은 단어를 입력하세요. Enter를 누르면 다음 빈칸으로 넘어갑니다."}</p>` : ""}
-    ${WORDS.length ? `<div class="wsec" id="wsec">
+    ${WORDS.length ? `<div class="wsec win-${WIN}" id="wsec">
       <h3>${NB ? "어순 배열 — " : ""}단어를 바르게 배열하여 문장을 완성하세요.</h3>
-      <p class="muted small">아래 단어를 차례로 누르면 답 칸에 들어갑니다. 답 칸의 단어를 누르면 돌아가고, 끌어서 자리를 바꿀 수 있습니다.</p>
+      <p class="muted small">${WIN === "drag"
+        ? "아래 조각을 끌어서 답 칸에 놓으세요. 답 칸 안에서 끌어 자리를 바꾸고, 아래로 끌어 내리면 돌아갑니다."
+        : WIN === "tap"
+          ? "아래 조각을 순서대로 누르면 답 칸에 들어갑니다. 답 칸의 조각을 누르면 아래로 돌아갑니다."
+          : "아래 조각을 순서대로 누르면 답 칸에 들어갑니다. 답 칸의 조각을 누르면 돌아가고, 끌어서 자리를 바꿀 수도 있습니다."}</p>
       ${WORDS.map((it, j) => `<div class="wq" data-j="${j}"><div class="wq-num">${NB + j + 1}</div><div class="wq-body">
         <div class="wq-ans"></div><div class="wq-pool"></div></div></div>`).join("")}
     </div>` : ""}`);
@@ -262,11 +270,11 @@ function refreshWord(j) {
   const box = $(`.wq[data-j="${j}"]`);
   if (!box) return;
   const it = WORDS[j], st = R.w[j], locked = R.locked.has(NB + j);
-  const chip = ci => `<button class="wchip ${locked ? "lock" : ""}" data-ci="${ci}" ${locked ? "disabled" : ""}>${esc(it.chunks[ci])}</button>`;
+  const chip = (ci, p) => `<button class="wchip ${locked ? "lock" : ""}" data-ci="${ci}" ${locked ? "disabled" : ""}>${esc(chipText(it, ci, { first: p === 0, hidePunct: WHIDE && !locked }))}</button>`;
   const end = it.end ? `<span class="wend">${esc(it.end)}</span>` : "";
-  $(".wq-ans", box).innerHTML = (st.ans.length ? st.ans.map(chip).join("") : `<span class="wq-ph">여기에 단어를 차례로 놓으세요</span>`) + end;
+  $(".wq-ans", box).innerHTML = (st.ans.length ? st.ans.map((ci, p) => chip(ci, p)).join("") : `<span class="wq-ph">여기에 ${WIN === "drag" ? "조각을 끌어다" : "조각을 차례로"} 놓으세요</span>`) + end;
   const left = st.order.filter(ci => !st.ans.includes(ci));
-  $(".wq-pool", box).innerHTML = left.map(chip).join("");
+  $(".wq-pool", box).innerHTML = left.map(ci => chip(ci, -1)).join("");
   $(".wq-pool", box).classList.toggle("empty", !left.length);
   box.classList.toggle("done", st.ans.length === it.chunks.length);
   box.classList.toggle("locked", locked);
@@ -287,6 +295,14 @@ function bindWords() {
     const c = e.target.closest(".wchip:not(.lock)");
     if (c) tapWord(+c.closest(".wq").dataset.j, +c.dataset.ci);
   };
+  if (WIN === "tap") {
+    // 누르기만: 끌기 없음, 손가락으로 화면을 밀면 그대로 스크롤
+    sec.onclick = e => {
+      const c = e.target.closest(".wchip:not(.lock)");
+      if (c) tapWord(+c.closest(".wq").dataset.j, +c.dataset.ci);
+    };
+    return;
+  }
   sec.onpointerdown = e => {
     const c = e.target.closest(".wchip:not(.lock)");
     if (!c || e.button > 0) return;
@@ -314,7 +330,7 @@ function bindWords() {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
-      if (!drag) { if (ev.type === "pointerup") tapWord(j, ci); return; }
+      if (!drag) { if (ev.type === "pointerup" && WIN !== "drag") tapWord(j, ci); return; }
       drag.ghost.remove();
       const t = ev.type === "pointerup" ? drag.target : null;
       const st = R.w[j];
@@ -444,7 +460,7 @@ async function submit(auto) {
     });
     correct = test.blanks.map((b, k) => isCorrect(answers[k], tokens[b], (test.accepted || {})[b], S.caseSensitive));
     WORDS.forEach((it, j) => {
-      const a = R.locked.has(NB + j) ? wordPrimary(it) : R.w[j].ans.map(ci => it.chunks[ci]).join(" ");
+      const a = R.locked.has(NB + j) ? wordPrimary(it) : wordAnswerText(it, R.w[j].ans);
       answers.push(a);
       correct.push(isWordCorrect(a, it, S.wordIgnorePunct !== false));
     });

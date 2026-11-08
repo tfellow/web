@@ -1,7 +1,7 @@
 // 정답보기 (교사, 전자칠판용) — 빈칸을 그대로 보여 주고, 전체/개별/순서대로 정답 공개
 import { gate, db, $, $$, esc, modeBadge } from "./common.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, shuffledPerm, shuffle, wordPrimary } from "./core.js";
+import { tokenize, shuffledPerm, shuffle, wordPrimary, chipText } from "./core.js";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
@@ -28,7 +28,7 @@ const tokens = isOrder ? [] : tokenize(test.text);
 const blanks = test.mode === "cloze" || !test.mode ? (test.blanks || []) : [];
 const WORDS = isOrder ? [] : (test.words || []);
 const NB = blanks.length;
-const wShuf = WORDS.map(w => shuffle(w.chunks || [])); // 섞인 단어 (화면용)
+const wShuf = WORDS.map(w => shuffle((w.chunks || []).map((_, i) => chipText(w, i, { hidePunct: test.settings?.wordIgnorePunct !== false })))); // 섞인 단어 (화면용)
 const n = isOrder ? test.sentences.length : NB + WORDS.length;
 const perm = isOrder ? shuffledPerm(n) : []; // 화면에 보이는 섞인 순서 (A, B, C …)
 const letter = pos => "(" + String.fromCharCode(65 + pos) + ")";
