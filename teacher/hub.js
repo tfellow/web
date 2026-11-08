@@ -134,7 +134,7 @@ const state = {
   sort: { key: "no", dir: 1 },
   hidden: new Set(load("hub.hidden", [])),
   idleDays: 7,
-  hub: { rules: {}, granted: {}, log: {} }, hubLoaded: false,
+  hub: { rules: {}, granted: {}, log: {}, hidden: {} }, hubLoaded: false,
   c123Map: new Map(),     // email → {ck, cid, sid, cname}
   pub: { st: "", at: 0, msg: "" },
 };
@@ -485,7 +485,18 @@ function matchC123() {
 //  집계
 // ======================================================================
 // 실제 학생: 명단에 있거나(약 180명) 어느 앱이든 실제 기록이 있는 학교 계정
-function isReal(p, M) { return p.roster || (M.get(p.email)?.last || 0) > 0; }
+const isHidden = e => Object.values(state.hub.hidden || {}).includes(e);
+function isReal(p, M) { return !isHidden(p.email) && (p.roster || (M.get(p.email)?.last || 0) > 0); }
+// 테스트 계정 숨기기/다시 보이기 (보상 설정과 같은 곳에 저장)
+async function setHidden(email, hide) {
+  if (!DEMO && state.src.fk.st !== "ok") return toast("숨기기는 Firebase (Kahoot)를 연결해야 저장돼요.");
+  const k = ekey(email);
+  state.hub.hidden ||= {};
+  if (hide) state.hub.hidden[k] = email; else delete state.hub.hidden[k];
+  if (!DEMO) { try { await RT.D.set(RT.D.ref(RT.db, `${HUB_PATH}/hidden/${k}`), hide ? email : null); } catch (e) { return toast("저장 실패: " + e.message); } }
+  toast(hide ? "숨겼어요. 표·보상·학생 페이지에서 빠져요." : "다시 보이게 했어요.");
+  $("#modal").classList.add("hidden"); render(); maybePublish(true);
+}
 function visiblePeople(M) {
   const f = state.f, q = low(f.q);
   return [...state.people.values()].filter(p => isReal(p, M) &&
@@ -587,7 +598,7 @@ const sortPeople = list => list.sort((a, b) => (a.grade || 99) - (b.grade || 99)
 async function loadHub() {
   if (DEMO) return;
   const v = (await RT.D.get(RT.D.ref(RT.db, HUB_PATH))).val() || {};
-  state.hub = { rules: v.rules || {}, granted: v.granted || {}, log: v.log || {} };
+  state.hub = { rules: v.rules || {}, granted: v.granted || {}, log: v.log || {}, hidden: v.hidden || {} };
   if (!Object.keys(state.hub.rules).length) { // 처음: 추천 규칙을 "꺼진 상태"로 만들어 둬요
     const today = kday(Date.now());
     DEFAULT_RULES.forEach((r, i) => { const id = "r" + (i + 1) + "_" + uid(); state.hub.rules[id] = { ...r, on: false, since: today, grade: "", order: i }; });
@@ -984,6 +995,8 @@ function viewReward(pend, M) {
       : `<div class="empty">${Object.values(state.hub.rules).some(r => r.on) ? "지금은 받을 학생이 없어요." : "켜진 규칙이 없어요. 위에서 규칙을 켜 보세요."}</div>`}
     ${state.c123Unmatched?.length ? `<details class="note"><summary>Class123 학생 중 명단과 못 맞춘 ${state.c123Unmatched.length}명</summary>${state.c123Unmatched.map(esc).join(", ")}<br>Class123의 반 이름을 "1학년 3반"처럼, 학생 이름을 명단과 똑같이 맞추면 연결돼요.</details>` : ""}
   </div>
+  ${Object.keys(state.hub.hidden || {}).length ? `<div class="card panel"><h2>🙈 숨긴 계정 <span class="small muted">${Object.keys(state.hub.hidden).length}개</span></h2>
+    <p class="note">테스트 계정처럼 숨긴 계정은 표, 보상, 학생 페이지에서 빠져요.</p><ul class="feed">${Object.values(state.hub.hidden).map(e => { const p = state.people.get(e); return `<li><span class="t"></span><span class="ic">🙈</span><span><b>${esc(p?.name || "")}</b> ${esc(e)}</span><span><button class="btn sm" data-unhide="${esc(e)}">다시 보이기</button></span></li>`; }).join("")}</ul></div>` : ""}
   <div class="card panel"><h2>🧾 지급 기록 <span class="small muted">최근 ${logs.length}건</span></h2>
     ${logs.length ? `<ul class="feed">${logs.map(l => `<li><span class="t">${kday(l.t).slice(5).replace("-", "/")} ${new Date(l.t + KST).toISOString().slice(11, 16)}</span><span class="ic">${l.skipped ? "⏭️" : "🎁"}</span><span><b>${esc(l.name || l.email)}</b> · ${esc(l.label)}</span><span class="val">${l.skipped ? "넘김" : "⭐" + l.n}</span></li>`).join("")}</ul>` : `<div class="empty">아직 지급한 기록이 없어요.</div>`}</div>`;
 }
@@ -1009,6 +1022,7 @@ function bindReward(pend) {
     await saveRule(id, { metric: "passport_medal", every: 1, give: 1, label: METRICS.passport_medal.name, on: false, since: kday(Date.now()), grade: "", order: Object.keys(state.hub.rules).length });
     render();
   };
+  v.querySelectorAll("[data-unhide]").forEach(b => b.onclick = () => setHidden(b.dataset.unhide, false));
   const all = $("#pkAll"); if (all) all.onchange = () => v.querySelectorAll(".pk").forEach(c => c.checked = all.checked);
   const picked = () => [...v.querySelectorAll(".pk:checked")].map(c => pend[+c.dataset.i]).filter(Boolean);
   const g = $("#btnGrant"); if (g) g.onclick = async () => {
@@ -1037,11 +1051,13 @@ function openStudent(email) {
   const rw = Object.values(state.hub.log || {}).filter(l => l.email === email && !l.skipped).sort((a, b) => b.t - a.t);
   $("#modalBody").innerHTML = `<h2>${esc(p.name || email)}</h2>
     <div class="muted">${p.grade ? `${p.grade}학년 ${p.cls}반 ${p.no ?? "?"}번 · ` : ""}${esc(email)}${p.roster ? "" : " · 독서 여권 명단에 없음"}</div>
+    <div style="margin-top:6px"><button class="btn sm" id="btnHide">🙈 테스트 계정이라 숨기기</button></div>
     <p class="note">카드의 숫자는 ${periodLabel()} 기준이고, "누적"은 지금까지 전체예요.</p>
     <div class="app-cards">${cards}</div>
     ${rw.length ? `<p class="note">🎁 앱 연동 보상: ${rw.slice(0, 8).map(l => `${esc(l.label)} ⭐${l.n} (${kday(l.t).slice(5)})`).join(" · ")}</p>` : ""}
     <h3 style="margin:8px 0 4px;color:var(--navy)">전체 기록 <span class="small muted">${evs.length}건</span></h3>
     ${evs.length ? `<ul class="feed">${evs.slice(0, 200).map(e => evLine(e, false)).join("")}</ul>` : `<div class="empty">아직 기록이 없어요.</div>`}`;
+  $("#btnHide").onclick = () => { if (confirm(`${p.name || email} (${email}) 계정을 숨길까요? 나중에 🎁 보상 탭 아래에서 다시 보이게 할 수 있어요.`)) setHidden(email, true); };
   $("#modal").classList.remove("hidden");
 }
 
