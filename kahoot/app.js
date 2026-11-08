@@ -61,6 +61,7 @@ const MYKahoot = (() => {
   let resolveAuthReady = null;
   const authReady = new Promise(r => { resolveAuthReady = r; });
   let teacherRosterSubscribed = false;
+  let hostWriteWarned = false;
 
   // Firebase 인스턴스 상태
   let firebaseApp = null;
@@ -308,7 +309,9 @@ const MYKahoot = (() => {
 
   function saveStateToStorage() {
     localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-    localStorage.setItem(STORAGE_KEYS.ROSTER, JSON.stringify(studentRoster));
+    if (!authUser || isTeacherEmail(authUser.email)) {
+      localStorage.setItem(STORAGE_KEYS.ROSTER, JSON.stringify(studentRoster));
+    }
     localStorage.setItem(STORAGE_KEYS.QUIZ_SETS, JSON.stringify(quizSets));
     localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(quizHistory));
     scheduleTeacherDataPush();
@@ -1215,6 +1218,7 @@ const MYKahoot = (() => {
 
   // 교사로 로그인되면 클라우드 명단을 받아 오고, 처음 한 번 학생별 조회용 명단(rosterByEmail)도 맞춰 둬요.
   function onTeacherSignedIn() {
+    hostWriteWarned = false;
     if (!isFirebaseConnected || !firebaseDb || teacherRosterSubscribed) return;
     if (!isTeacherSignedIn()) return; // 이메일 확인 안 된 계정은 서버가 막으니 구독하지 않아요
     teacherRosterSubscribed = true;
@@ -1226,7 +1230,8 @@ const MYKahoot = (() => {
       first = false;
       const cloudList = Array.isArray(cloudRoster) ? cloudRoster.filter(Boolean)
         : (cloudRoster && typeof cloudRoster === 'object' ? Object.values(cloudRoster).filter(Boolean) : []);
-      const localIsSample = sameRoster(studentRoster, getDefaultRoster());
+      // 5명 미만 명단은 학생 테스트 로그인으로 남은 것이라 묻지 않고 서버 명단을 받아요.
+      const localIsSample = sameRoster(studentRoster, getDefaultRoster()) || studentRoster.length < 5;
       if (wasFirst && studentRoster.length > 0 && !localIsSample && !sameRoster(studentRoster, cloudList)) {
         // 이 PC 명단과 서버 명단이 다르면 선생님께 물어봐요 (말없이 덮어쓰지 않아요).
         const useLocal = confirm(`이 컴퓨터에 저장된 학생 명단(${studentRoster.length}명)과 서버 명단(${cloudList.length}명)이 달라요.\n\n[확인] 이 컴퓨터 명단(${studentRoster.length}명)을 서버에 올려요.\n[취소] 서버 명단(${cloudList.length}명)을 받아 와요.`);
@@ -1286,7 +1291,7 @@ const MYKahoot = (() => {
       entry = snap.val();
     } catch (_) {}
     studentRoster = entry ? [entry] : [];
-    localStorage.setItem(STORAGE_KEYS.ROSTER, JSON.stringify(studentRoster));
+    // 학생 한 명 줄은 이 기기에 저장하지 않아요 (같은 PC에서 선생님 명단을 덮어쓰지 않도록).
   }
 
   function watchAuthState() {
@@ -2453,12 +2458,20 @@ const MYKahoot = (() => {
       if (isFirebaseConnected && firebaseDb && liveRoom.pin) {
         firebaseDb.ref('activePin').set(liveRoom.pin).catch(() => {});
         if (mode === 'host_reset') {
-          firebaseDb.ref(`rooms/${liveRoom.pin}`).set(serializableRoom).catch(() => {});
+          firebaseDb.ref(`rooms/${liveRoom.pin}`).set(serializableRoom).catch(warnHostWriteFailed);
         } else {
-          firebaseDb.ref(`rooms/${liveRoom.pin}`).update(serializableRoom).catch(() => {});
+          firebaseDb.ref(`rooms/${liveRoom.pin}`).update(serializableRoom).catch(warnHostWriteFailed);
         }
       }
     }
+  }
+
+  // 전자칠판 진행이 서버에 저장되지 않으면(교사 로그인이 풀린 경우) 한 번 알려 줘요.
+  function warnHostWriteFailed(err) {
+    console.warn('방 상태 저장 실패', err);
+    if (hostWriteWarned) return;
+    hostWriteWarned = true;
+    alert('선생님 로그인이 풀려서 게임 진행이 학생 폰에 전달되지 않고 있어요.\n\n같은 브라우저에서 학생 계정으로 로그인하면 선생님 로그인이 바뀌어요. 학생 테스트는 다른 기기나 시크릿 창에서 해 주세요.\n\n교사 페이지에서 tfellow@gmail.com으로 다시 로그인한 뒤 새 게임을 열어 주세요.');
   }
 
   function ensureFirebaseRoomSubscription(pin) {
