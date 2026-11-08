@@ -157,7 +157,7 @@ function person(email, info = {}, strong = false) {
   if (!email.endsWith(SCHOOL) || isTeacher(email)) return null;
   let p = state.people.get(email);
   if (!p) { p = { email, name: "", grade: null, cls: null, no: null, roster: false, ...fromEmail(email) }; state.people.set(email, p); }
-  if (strong) p.roster = true;
+  if (strong) { p.roster = true; rosterN = -1; }
   for (const k of ["name", "grade", "cls", "no"]) {
     const v = info[k];
     if (v === undefined || v === null || v === "" || (typeof v === "number" && !Number.isFinite(v))) continue;
@@ -486,7 +486,23 @@ function matchC123() {
 // ======================================================================
 // 실제 학생: 명단에 있거나(약 180명) 어느 앱이든 실제 기록이 있는 학교 계정
 const isHidden = e => Object.values(state.hub.hidden || {}).includes(e);
-function isReal(p, M) { return !isHidden(p.email) && (p.roster || (M.get(p.email)?.last || 0) > 0); }
+// 명단 밖 계정은 다음 두 가지를 모두 만족해야 학생으로 봐요 (테스트·교직원 계정 걸러내기)
+//   1) 이메일이 학번 9자리 (예: 202610101@smy.ms.kr) — englee@ 같은 계정은 빠져요
+//   2) 명단을 불러왔다면, 그 학년·반이 명단에 실제로 있는 반 — 2학년 10반처럼 없는 반은 빠져요
+let rosterCls = null, rosterN = -1;
+function rosterClasses() {
+  const n = state.people.size;
+  if (rosterN !== n) { rosterN = n; rosterCls = new Set([...state.people.values()].filter(p => p.roster && p.grade && p.cls).map(p => p.grade + "-" + p.cls)); }
+  return rosterCls;
+}
+function isReal(p, M) {
+  if (isHidden(p.email)) return false;
+  if (p.roster) return true;
+  if (!((M.get(p.email)?.last || 0) > 0)) return false;
+  if (!/^\d{9}@smy\.ms\.kr$/.test(p.email)) return false;
+  const rc = rosterClasses();
+  return !rc.size || rc.has(p.grade + "-" + p.cls);
+}
 // 테스트 계정 숨기기/다시 보이기 (보상 설정과 같은 곳에 저장)
 async function setHidden(email, hide) {
   if (!DEMO && state.src.fk.st !== "ok") return toast("숨기기는 Firebase (Kahoot)를 연결해야 저장돼요.");
