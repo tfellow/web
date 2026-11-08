@@ -143,3 +143,22 @@ tr.clickable { cursor: pointer; }
   .feed .t { grid-column: 1 / -1; }
   .feed .ic { display: none; }
 }
+
+/* 보상 (2단계) */
+.badge { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--warn); color: #fff; font-size: 12px; line-height: 20px; text-align: center; }
+.tabs button.on .badge { background: var(--gold-2); color: var(--navy); }
+.in { border: 1px solid var(--line); border-radius: 8px; padding: 5px 7px; background: var(--paper); min-height: 34px; color: var(--ink); }
+.w-num { width: 64px; }
+.w-label { width: 170px; }
+table.rules td { white-space: nowrap; }
+tr.off td { opacity: .55; }
+tr.off td:first-child { opacity: 1; }
+.switch { position: relative; display: inline-block; width: 44px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch span { position: absolute; inset: 0; background: #d5ccb9; border-radius: 999px; cursor: pointer; transition: .2s; }
+.switch span::before { content: ""; position: absolute; width: 20px; height: 20px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+.switch input:checked + span { background: var(--ok); }
+.switch input:checked + span::before { transform: translateX(18px); }
+.pend-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.feed .who { all: unset; cursor: pointer; font-weight: 600; color: var(--navy); }
+details.note summary { cursor: pointer; }

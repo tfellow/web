@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MY English Journey · 나의 영어 여정</title>
+<link rel="icon" href="../app/emblem.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<style>
+:root {
+  --bg: #f5f0e6; --card: #fff; --paper: #fffcf6; --ink: #1c2233; --muted: #6a6f80; --line: #e6ddcb;
+  --navy: #1e3768; --navy-2: #2d5291; --navy-soft: #e8edf8; --gold: #c8962a; --gold-2: #e9c46a; --gold-soft: #f7ecd2;
+  --ok: #1f8a4c; --ok-soft: #dcf2e4; --warn: #b3261e;
+  --shadow: 0 1px 2px rgba(28,34,51,.05), 0 6px 18px rgba(28,34,51,.07);
+}
+* { box-sizing: border-box; }
+body { margin: 0 auto; max-width: 980px; padding: 0 16px 48px; background: var(--bg); color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, system-ui, -apple-system, "Malgun Gothic", sans-serif; line-height: 1.5; word-break: keep-all; }
+a { color: var(--navy-2); }
+.hidden { display: none !important; }
+.muted { color: var(--muted); } .small { font-size: 13px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 0; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand h1 { margin: 0; font-size: 21px; color: var(--navy); }
+.brand p { margin: 0; font-size: 13px; color: var(--muted); }
+.btn { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 8px 14px; min-height: 40px; font: inherit; font-weight: 600; cursor: pointer; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 16px; margin-bottom: 12px; }
+h2 { margin: 0 0 10px; font-size: 18px; color: var(--navy); }
+.hero { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: #fff; border: 0; }
+.hero h2 { color: #fff; font-size: 22px; margin: 0; }
+.hero .sub { opacity: .85; font-size: 14px; }
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.hero-stats div { background: rgba(255,255,255,.12); border-radius: 14px; padding: 10px; text-align: center; }
+.hero-stats b { display: block; font-size: 24px; color: var(--gold-2); }
+.hero-stats span { font-size: 12px; opacity: .9; }
+.week { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.week a { text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px; text-align: center; background: var(--paper); }
+.week a .i { font-size: 24px; display: block; filter: grayscale(1); opacity: .5; }
+.week a .n { font-size: 13px; font-weight: 600; }
+.week a .c { font-size: 12px; color: var(--muted); }
+.week a.on { background: var(--gold-soft); border-color: var(--gold-2); }
+.week a.on .i { filter: none; opacity: 1; }
+.week a.on .c { color: #7a5810; font-weight: 700; }
+.goal { margin: 10px 0; }
+.goal .t { display: flex; justify-content: space-between; font-size: 14px; gap: 8px; }
+.goal .bar { height: 10px; background: var(--navy-soft); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+.goal .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-2)); border-radius: 999px; }
+.apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.app { border: 1px solid var(--line); border-radius: 16px; padding: 12px; background: var(--paper); display: flex; flex-direction: column; gap: 4px; }
+.app .h { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--navy); }
+.app .h a { font-size: 13px; font-weight: 600; }
+.app .big { font-size: 20px; font-weight: 800; }
+.app .l { font-size: 13px; color: var(--muted); }
+.app.dim { opacity: .6; }
+ul.tl { list-style: none; padding: 0; margin: 0; }
+ul.tl li { display: grid; grid-template-columns: 74px 26px 1fr auto; gap: 6px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14px; align-items: center; }
+ul.tl .d { color: var(--muted); font-size: 12px; }
+ul.tl .v { font-weight: 700; color: var(--navy-2); white-space: nowrap; }
+.center { text-align: center; padding: 30px 16px; }
+.err { color: var(--warn); }
+.teacher-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--gold-soft); border: 1px solid var(--gold-2); border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; font-size: 14px; }
+.teacher-bar input { flex: 1 1 200px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; font: inherit; }
+@media (max-width: 560px) {
+  .week { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .week a .n { font-size: 11px; }
+  .hero-stats b { font-size: 20px; }
+  ul.tl li { grid-template-columns: 1fr auto; }
+  ul.tl .d { grid-column: 1 / -1; }
+  ul.tl .ic { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img src="../app/emblem.png" alt="" width="40" height="36">
+    <div><h1>MY English Journey</h1><p>나의 영어 여정 · 서울문영여자중학교</p></div>
+  </div>
+  <button class="btn hidden" id="out">로그아웃</button>
+</header>
+<div id="tbar"></div>
+<main id="main"><div class="card center muted">불러오는 중…</div></main>
+
+<script>
+const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
+const SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
+const SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF";
+const DEMO = new URLSearchParams(location.search).has("demo");
+const APPS = [
+  { id: "passport", name: "독서 여권", icon: "📖", url: "../app/" },
+  { id: "grammar", name: "문법", icon: "✏️", url: "../grammar/" },
+  { id: "quiz", name: "Quiz Queens", icon: "👑", url: "../quiz/" },
+  { id: "vocab", name: "단어숲", icon: "🌳", url: "../danuhsup/" },
+  { id: "cloze", name: "Cloze", icon: "🧩", url: "../cloze/" },
+  { id: "writing", name: "영작문", icon: "✍️", url: "../writing1/" },
+  { id: "kahoot", name: "Kahoot", icon: "⚡", url: "../kahoot/student.html" },
+  { id: "c123", name: "으쓱", icon: "⭐", url: "" },
+];
+const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const KST = 9 * 3600e3, DAY = 864e5;
+const kday = ms => new Date(ms + KST).toISOString().slice(0, 10);
+function when(ms) {
+  if (!ms) return "";
+  const d = Math.floor((Date.parse(kday(Date.now()) + "T00:00:00+09:00") - Date.parse(kday(ms) + "T00:00:00+09:00")) / DAY);
+  return d <= 0 ? "오늘" : d === 1 ? "어제" : d < 7 ? d + "일 전" : kday(ms).slice(5).replace("-", "/");
+}
+let sb = null;
+const client = () => sb || (sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true } }));
+
+function showLogin(msg) {
+  $("#main").innerHTML = `<div class="card center">
+    <h2>내 영어 기록을 한눈에 👀</h2>
+    <p class="muted">독서 여권, 문법, 단어숲, Cloze, 영작문, Kahoot, 으쓱까지<br>여러 앱에서 쌓은 기록을 한곳에서 볼 수 있어요.</p>
+    ${msg ? `<p class="err">${esc(msg)}</p>` : ""}
+    <div id="gsi" style="display:flex;justify-content:center;margin-top:12px"></div>
+    <p class="small muted" style="margin-top:14px">학교 구글 계정(@smy.ms.kr)으로 로그인하세요.</p></div>`;
+  const draw = () => {
+    if (!window.google?.accounts?.id) return setTimeout(draw, 300);
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: async r => {
+      const res = await client().auth.signInWithIdToken({ provider: "google", token: r.credential });
+      if (res.error) return showLogin("로그인하지 못했어요: " + res.error.message);
+      start();
+    } });
+    google.accounts.id.renderButton($("#gsi"), { theme: "filled_blue", size: "large", text: "signin_with", locale: "ko", shape: "pill" });
+  };
+  draw();
+}
+
+async function start() {
+  if (DEMO) return show(demoData(), "student@smy.ms.kr", Date.now() - 3600e3);
+  const c = client();
+  const { data } = await c.auth.getSession();
+  if (!data.session) return showLogin();
+  const email = data.session.user.email.toLowerCase();
+  $("#out").classList.remove("hidden");
+  $("#out").onclick = async () => { await c.auth.signOut(); location.reload(); };
+  let admin = false;
+  try { admin = !!(await c.rpc("is_admin")).data; } catch {}
+  if (!email.endsWith("@smy.ms.kr") && !admin) return showLogin("학교 계정(@smy.ms.kr)으로 로그인해 주세요. 지금: " + email);
+  if (admin) teacherBar();
+  const target = admin ? (new URLSearchParams(location.search).get("email") || "").toLowerCase() : email;
+  if (admin && !target) { $("#main").innerHTML = `<div class="card center muted">선생님 계정이에요. 위 칸에 학생 이메일을 넣으면 그 학생이 보는 화면을 미리 볼 수 있어요.</div>`; return; }
+  const r = await c.from("hub_summary").select("data,updated_at").eq("email", target).maybeSingle();
+  if (r.error) {
+    $("#main").innerHTML = `<div class="card center"><h2>곧 열려요 🛠️</h2><p class="muted">선생님이 이 페이지를 준비하고 있어요. 조금만 기다려 주세요.</p>${appLinks()}</div>`;
+    console.warn(r.error); return;
+  }
+  if (!r.data) {
+    $("#main").innerHTML = `<div class="card center"><h2>아직 모인 기록이 없어요 🌱</h2><p class="muted">아래 앱에서 공부하면 기록이 여기에 모여요.<br>(선생님이 기록을 모으는 시간에 맞춰 바뀌어요.)</p>${appLinks()}</div>`; return;
+  }
+  show(r.data.data || {}, target, Date.parse(r.data.updated_at));
+}
+function teacherBar() {
+  const cur = new URLSearchParams(location.search).get("email") || "";
+  $("#tbar").innerHTML = `<form class="teacher-bar" id="tf">👩‍🏫 선생님 미리보기 <input id="te" placeholder="학생 이메일 (예: 202610101@smy.ms.kr)" value="${esc(cur)}"><button class="btn">보기</button></form>`;
+  $("#tf").onsubmit = e => { e.preventDefault(); location.search = "?email=" + encodeURIComponent($("#te").value.trim()); };
+}
+const appLinks = () => `<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px">${APPS.filter(a => a.url).map(a => `<a class="btn" style="text-decoration:none;color:inherit" href="${a.url}">${a.icon} ${a.name}</a>`).join("")}</div>`;
+
+function show(d, email, updated) {
+  const A = d.apps || {}, W = d.week || {};
+  const weekN = Object.keys(W).filter(k => k !== "c123").length;
+  const eussuk = A.c123?.e ?? 0;
+  const totalRewards = (d.rewards || []).reduce((s, r) => s + (r.n || 0), 0);
+  const appCard = (id, big, lines) => {
+    const a = APP[id], has = !!A[id];
+    return `<div class="app ${has ? "" : "dim"}"><div class="h"><span>${a.icon} ${a.name}</span>${a.url ? `<a href="${a.url}">열기 →</a>` : ""}</div>
+      ${has ? `<div class="big">${big}</div>${lines.filter(Boolean).map(l => `<div class="l">${l}</div>`).join("")}${A[id].last ? `<div class="l">마지막: ${when(A[id].last)}</div>` : ""}` : `<div class="l">아직 기록이 없어요. 시작해 볼까요?</div>`}</div>`;
+  };
+  const p = A.passport, g = A.grammar, q = A.quiz, v = A.vocab, c = A.cloze, w = A.writing, k = A.kahoot;
+  const cards = [
+    appCard("passport", p ? `🏅 ${p.medals}권` : "", [p && `금메달 ${p.gold}권 · 퀴즈 ${p.tries}번`]),
+    appCard("grammar", g ? `XP ${g.xp}` : "", [g && `단원 스탬프 ${g.stamps}개`, g && g.streak ? `🔥 연속 ${g.streak}일` : ""]),
+    appCard("quiz", q ? `XP ${q.xp}` : "", [q && `레벨 ${q.level} · ${q.answered}문제`, q && q.acc != null ? `정답률 ${q.acc}%` : ""]),
+    appCard("vocab", v ? `단어 ${v.learned}개` : "", [v && `XP ${v.xp} · 🔥 ${v.streak}일`, v && v.tests ? `단원 테스트 ${v.tests}번 · 평균 ${v.avg}%` : ""]),
+    appCard("cloze", c ? `${c.n}번 · 평균 ${c.avg}%` : "", [c && c.perfect ? `💯 만점 ${c.perfect}번` : ""]),
+    appCard("writing", w ? `${w.n}편 · 평균 ${w.avg}점` : "", [w && w.cefr ? `최근 수준 ${w.cefr}` : ""]),
+    appCard("kahoot", k ? `${k.live}판 · ${k.acc ?? "-"}%` : "", [k && `🏆 3등 안 ${k.top3}번 · 10등 안 ${k.top10}번`, k && k.hw ? `과제 ${k.hw}개` : "", k && k.best ? `최고 ${k.best}등` : ""]),
+  ].join("");
+  const goals = (d.next || []).map(n => `<div class="goal"><div class="t"><span>${APP[n.app]?.icon || "🎯"} ${esc(n.label)}</span><span class="muted">${n.have}/${n.need} → ⭐${n.give}</span></div><div class="bar"><i style="width:${Math.round(n.have / n.need * 100)}%"></i></div></div>`).join("");
+  const recent = (d.recent || []).map(r => `<li><span class="d">${when(r.t)}</span><span class="ic">${APP[r.a]?.icon || ""}</span><span>${esc(r.title)}</span><span class="v">${esc(r.v)}</span></li>`).join("");
+  const rewards = (d.rewards || []).map(r => `<li><span class="d">${when(r.t)}</span><span class="ic">🎁</span><span>${esc(r.label)}</span><span class="v">⭐${r.n}</span></li>`).join("");
+  $("#main").innerHTML = `
+    <div class="card hero"><h2>${esc(d.name || email.split("@")[0])} 님의 영어 여정 ✨</h2>
+      <div class="sub">${d.grade ? `${d.grade}학년 ${d.cls}반 ${d.no}번 · ` : ""}${weekN ? `이번 주에 ${weekN}개 앱에서 공부했어요!` : "이번 주에도 한 걸음 걸어 볼까요?"}</div>
+      <div class="hero-stats"><div><b>${weekN}</b><span>이번 주 공부한 앱</span></div><div><b>⭐ ${eussuk}</b><span>받은 으쓱</span></div><div><b>${p?.medals ?? 0}</b><span>메달 받은 책</span></div></div></div>
+    <div class="card"><h2>📅 이번 주 활동</h2><div class="week">${APPS.filter(a => a.id !== "c123").map(a => `<a href="${a.url}" class="${W[a.id] ? "on" : ""}"><span class="i">${a.icon}</span><span class="n">${a.name}</span><div class="c">${W[a.id] ? (a.id === "grammar" ? W[a.id] + "문제" : W[a.id] + "번") : "-"}</div></a>`).join("")}<a href="#" onclick="return false" class="${weekN >= 3 ? "on" : ""}"><span class="i">🏅</span><span class="n">3개 앱 도전</span><div class="c">${Math.min(weekN, 3)}/3</div></a></div></div>
+    ${goals ? `<div class="card"><h2>🎯 다음 으쓱까지</h2><p class="small muted" style="margin-top:-6px">조건을 채우면 선생님이 Class123 으쓱을 줘요.</p>${goals}</div>` : ""}
+    <div class="card"><h2>📚 앱별 기록</h2><div class="apps">${cards}</div></div>
+    ${rewards ? `<div class="card"><h2>🎁 앱으로 받은 으쓱 <span class="small muted">${totalRewards}개</span></h2><ul class="tl">${rewards}</ul></div>` : ""}
+    ${recent ? `<div class="card"><h2>🕒 최근 기록</h2><ul class="tl">${recent}</ul></div>` : ""}
+    <p class="small muted" style="text-align:center">기록은 선생님이 모은 시각 기준이에요 · ${updated ? when(updated) + " " + new Date(updated + KST).toISOString().slice(11, 16) : ""}</p>`;
+}
+
+function demoData() {
+  const now = Date.now(), h = 3600e3;
+  return { name: "김문영", grade: 1, cls: 3, no: 7,
+    apps: { passport: { tries: 14, medals: 9, gold: 3, last: now - 5 * h }, grammar: { xp: 820, stamps: 7, streak: 4, last: now - 26 * h },
+      quiz: { xp: 2400, level: 5, answered: 210, acc: 81, last: now - 50 * h }, vocab: { xp: 640, streak: 6, learned: 280, mastered: 120, tests: 5, avg: 88, last: now - 2 * h },
+      cloze: { n: 3, avg: 79, perfect: 1, last: now - 72 * h }, kahoot: { live: 6, hw: 2, acc: 75, top3: 1, top10: 4, best: 2, last: now - 30 * h }, c123: { e: 12, m: 1 } },
+    week: { passport: 3, grammar: 42, vocab: 2 },
+    next: [{ label: "독서 여권 메달 5권", have: 4, need: 5, give: 1, app: "passport" }, { label: "문법 스탬프 3개", have: 1, need: 3, give: 1, app: "grammar" }, { label: "Kahoot 3등 안", have: 0, need: 1, give: 1, app: "kahoot" }],
+    rewards: [{ t: now - 30 * h, label: "독서 여권 금메달", n: 1 }, { t: now - 100 * h, label: "독서 여권 메달 5권", n: 1 }],
+    recent: [{ a: "vocab", t: now - 2 * h, title: "중1 교과서 3과", v: "18/20" }, { a: "passport", t: now - 5 * h, title: "The Happy Prince", v: "🥇 10/10" }, { a: "kahoot", t: now - 30 * h, title: "Lesson 3 Review", v: "80% · 2/24등" }] };
+}
+start();
+</script>
+</body>
+</html>
