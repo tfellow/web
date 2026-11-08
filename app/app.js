@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "59"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "60"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -71,21 +71,29 @@
   function certStyle(i) { return CERT_STYLES[i] || { a: "#a07816", b: "#fbf3dc", line: "책과 함께하는 여정의 마스터예요." }; }
   function openCertificate(i) {
     var t = readTitleAt(i), cs = certStyle(i);
+    showCert({
+      a: cs.a, b: cs.b, kind: "CERTIFICATE OF ACHIEVEMENT · 독서 칭호 인증서", em: t.em, title: t.en, sub: t.ko,
+      en: "This certifies that the reader above has finished <b>" + t.n + " books</b> with medals <br>and earned the title of <b>" + esc(t.en) + "</b>.",
+      ko: "위 독서가는 메달 받은 책 <b>" + t.n + "권</b>을 읽고 <b>" + esc(t.ko) + "</b> 칭호를 받았습니다. <br>" + esc(cs.line)
+    });
+  }
+  // 인증서 공통 틀: 칭호 인증서와 명예의 전당 인증서가 함께 써요
+  function showCert(o) {
     var nick = (state.profile && state.profile.nickname) || "";
-    var d = new Date(), date = d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + ".";
+    var d = o.date ? new Date(o.date) : new Date(), date = d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + ".";
     var ov = document.createElement("div");
     ov.className = "overlay cert-ov";
     ov.innerHTML =
       '<div class="cert-wrap">' +
-      '<div class="cert" style="--ca:' + cs.a + ";--cb:" + cs.b + '">' +
+      '<div class="cert" style="--ca:' + o.a + ";--cb:" + o.b + '">' +
       '<div class="cert-in"><div class="cert-top"><img src="emblem.png" alt="" width="60" height="53"><div><b>MY READING PASSPORT</b><small>문영 독서 여권 · MOONYOUNG</small></div></div>' +
-      '<div class="cert-kind">CERTIFICATE OF ACHIEVEMENT · 독서 칭호 인증서</div>' +
-      '<div class="cert-em">' + t.em + "</div>" +
-      '<div class="cert-title">' + esc(t.en) + "</div><div class=\"cert-ko\">" + esc(t.ko) + "</div>" +
+      '<div class="cert-kind">' + o.kind + "</div>" +
+      '<div class="cert-em">' + o.em + "</div>" +
+      '<div class="cert-title">' + esc(o.title) + "</div><div class=\"cert-ko\">" + esc(o.sub) + "</div>" +
       '<div class="cert-name" id="certname">' + esc(nick) + "</div>" +
-      '<p class="cert-text">This certifies that the reader above has finished <b>' + t.n + " books</b> with medals <br>and earned the title of <b>" + esc(t.en) + "</b>.</p>" +
-      '<p class="cert-text ko">위 독서가는 메달 받은 책 <b>' + t.n + "권</b>을 읽고 <b>" + esc(t.ko) + "</b> 칭호를 받았습니다. <br>" + esc(cs.line) + "</p>" +
-      '<div class="cert-foot"><span>' + date + '</span><span class="cert-seal">' + t.em + '<small>MY</small></span><span>서울문영여자중학교<br>MY Reading Passport</span></div></div></div>' +
+      '<p class="cert-text">' + o.en + "</p>" +
+      '<p class="cert-text ko">' + o.ko + "</p>" +
+      '<div class="cert-foot"><span>' + date + '</span><span class="cert-seal">' + (o.seal || o.em) + '<small>MY</small></span><span>서울문영여자중학교<br>MY Reading Passport</span></div></div></div>' +
       '<div class="cert-tools"><label>인증서에 넣을 이름 <input id="certin" maxlength="20" value="' + esc(nick) + '" placeholder="이름 또는 닉네임"></label>' +
       '<div class="cert-btns"><button class="btn gold" id="certprint">🖨️ 인쇄 · PDF로 저장</button><button class="btn ghost" id="certclose">닫기</button></div>' +
       '<p class="muted">이름은 저장되지 않고 이 인증서에만 들어가요. 인쇄 창에서 “PDF로 저장”을 고르면 파일로 받을 수 있어요.</p></div></div>';
@@ -96,6 +104,91 @@
     document.getElementById("certclose").onclick = close;
     document.getElementById("certin").oninput = function () { document.getElementById("certname").textContent = this.value; };
     document.getElementById("certprint").onclick = function () { window.print(); };
+  }
+
+  /* ---------- 명예의 전당: 책마다 처음 금메달(100점)을 받은 독서가 · 최초 / 올해 / 이번 달 ---------- */
+  var HOF = {};
+  var MONTH_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function hofYM(period) { var p = String(period || "").split("-"); return { y: p[0], m: Number(p[1]) }; }
+  function hofLabel(kind, period) {
+    if (kind === "ever") return "🏆 최초 금메달";
+    if (kind === "year") return "📅 " + period + "년 첫 금메달";
+    var ym = hofYM(period);
+    return "🗓️ " + ym.y + "년 " + ym.m + "월 첫 금메달";
+  }
+  function hofDate(s) { var d = new Date(s); return d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + "."; }
+  function hofNow() { var d = new Date(); return { year: String(d.getFullYear()), month: d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") }; }
+  function openHofCert(b, r) {
+    var ym = hofYM(r.period);
+    var when = r.kind === "ever" ? "최초로" : r.kind === "year" ? r.period + "년에 처음으로" : ym.y + "년 " + ym.m + "월에 처음으로";
+    var whenEn = r.kind === "ever" ? "the very first reader" : r.kind === "year" ? "the first reader of " + r.period : "the first reader of " + MONTH_EN[ym.m - 1] + " " + ym.y;
+    showCert({
+      a: "#8a6d1a", b: "#fbf3dc", kind: "HALL OF FAME · 명예의 전당 인증서", em: "🏛️", title: b.title, sub: b.titleKo + " · " + hofLabel(r.kind, r.period).replace(/^\S+\s/, ""),
+      en: "This certifies that the reader above was <b>" + whenEn + "</b> to earn a gold medal (100 points) <br>for <b>" + esc(b.title) + "</b> in MY Reading Passport.",
+      ko: "위 독서가는 『" + esc(b.titleKo) + "』에서 <b>" + when + "</b> 금메달(100점)을 받아 <br>명예의 전당에 올랐습니다.",
+      date: r.achieved_at, seal: "🏛️"
+    });
+  }
+  function loadHof(b, cb, fresh) {
+    var c = HOF[b.id];
+    if (c && !fresh && Date.now() - c.t < 60000) return cb(c.rows);
+    sb.rpc("book_hall_of_fame", { p_book_id: b.id }).then(function (r) {
+      if (r.error) return cb(null, r.error);
+      HOF[b.id] = { t: Date.now(), rows: r.data || [] };
+      cb(HOF[b.id].rows);
+    });
+  }
+  function hofCardHtml(rows) {
+    var now = hofNow();
+    var want = [["ever", null], ["year", now.year], ["month", now.month]];
+    var body = rows ? want.map(function (w) {
+      var r = rows.filter(function (x) { return x.kind === w[0]; })[0];
+      return '<div class="hof-row' + (r && r.is_me ? " me" : "") + '"><span class="hof-k">' + hofLabel(w[0], r ? r.period : w[1]) + "</span>" +
+        (r ? '<span class="hof-n">' + esc(r.nickname) + (r.is_me ? " (나)" : "") + '</span><span class="hof-d">' + hofDate(r.achieved_at) + "</span>" +
+          (r.is_me ? '<button class="btn gold small hof-cert" data-k="' + w[0] + '">🎓 인증서</button>' : "<span></span>")
+          : '<span class="hof-n muted">아직 없어요 · 첫 주인공이 되어 보세요!</span><span></span><span></span>') + "</div>";
+    }).join("") : '<p class="muted">불러오는 중…</p>';
+    return '<h2>🏛️ 명예의 전당<span class="sub">이 책에서 처음 금메달(100점)을 받은 독서가</span></h2>' + body;
+  }
+  function fillHof(b) {
+    if (!document.getElementById("hof")) return;
+    loadHof(b, function (rows, err) {
+      var box = document.getElementById("hof");
+      if (!box) return;
+      if (err) { box.hidden = true; return; }
+      box.innerHTML = hofCardHtml(rows);
+      each(".hof-cert", function (el) {
+        el.onclick = function () { var r = rows.filter(function (x) { return x.kind === el.getAttribute("data-k"); })[0]; if (r) openHofCert(b, r); };
+      }, box);
+    });
+  }
+  function fillMyHof() {
+    if (!document.getElementById("myhof")) return;
+    sb.rpc("my_hall_of_fame").then(function (r) {
+      var box = document.getElementById("myhof");
+      if (!box || r.error) return;
+      var rows = (r.data || []).filter(function (x) { return findBook(x.book_id); });
+      box.hidden = false;
+      if (!rows.length) {
+        box.innerHTML = '<h2>🏛️ 내 명예의 전당</h2><p class="muted" style="margin-top:-6px">책에서 <b>처음으로 금메달(100점)</b>을 받으면 그 책의 명예의 전당에 올라요. 최초, 올해, 이번 달 기록이 따로 있어서 누구나 도전할 수 있어요!</p>';
+        return;
+      }
+      var cnt = { ever: 0, year: 0, month: 0 };
+      rows.forEach(function (x) { cnt[x.kind] = (cnt[x.kind] || 0) + 1; });
+      var show = state.hofAll ? rows : rows.slice(0, 6);
+      box.innerHTML = '<h2>🏛️ 내 명예의 전당<span class="sub">기록 ' + rows.length + "개</span></h2>" +
+        '<div class="hof-sum"><span>🏆 최초 ' + cnt.ever + "</span><span>📅 한 해 첫 금메달 " + cnt.year + "</span><span>🗓️ 한 달 첫 금메달 " + cnt.month + "</span></div>" +
+        show.map(function (x, i) {
+          var b = findBook(x.book_id);
+          return '<div class="hof-row me"><button class="linkbtn hof-k hof-book" data-id="' + esc(b.id) + '">' + esc(b.emoji) + " " + esc(b.titleKo) + '</button><span class="hof-n">' + hofLabel(x.kind, x.period) +
+            '</span><span class="hof-d">' + hofDate(x.achieved_at) + '</span><button class="btn gold small myhof-cert" data-i="' + i + '" title="인증서">🎓</button></div>';
+        }).join("") +
+        (rows.length > 6 ? '<p style="margin:8px 0 0"><button class="btn ghost small" id="hofmore">' + (state.hofAll ? "접기" : "모두 보기 (" + rows.length + "개)") + "</button></p>" : "");
+      each(".myhof-cert", function (el) { el.onclick = function () { var x = show[+el.getAttribute("data-i")]; openHofCert(findBook(x.book_id), x); }; }, box);
+      each(".hof-book", function (el) { el.onclick = function () { state.bookTab = "story"; location.hash = "#/book/" + encodeURIComponent(el.getAttribute("data-id")); }; }, box);
+      var more = document.getElementById("hofmore");
+      if (more) more.onclick = function () { state.hofAll = !state.hofAll; fillMyHof(); };
+    });
   }
   var WEEK_GOAL = 1; // 주간 목표: 한 주에 메달 받은 작품 수
   // 책의 country 값 → 지도 이름(world-atlas), 한국어, 국기, 핀 위치(경도, 위도)
@@ -746,6 +839,7 @@
       "</div>" +
       (unknownCount() ? '<div class="card"><h2>🃏 단어 복습<span class="sub">헷갈린 단어 ' + unknownCount() + '개</span></h2><p class="muted" style="margin-top:-6px">책의 단어장에서 “카드로 외우기”를 하며 🤔로 표시한 단어예요.</p><button class="btn gold" id="gowords">복습하기</button></div>' : "") +
 
+      '<div class="card" id="myhof" hidden></div>' +
       '<div class="card"><h2>🏅 독서 칭호<span class="sub">메달 받은 책 권수로 올라가요</span></h2>' +
       '<div class="rt-now"><div class="rt-em">' + (rt.cur ? rt.cur.em : "🛫") + '</div><div><b>' + (rt.cur ? esc(rt.cur.en) + " · " + esc(rt.cur.ko) : "아직 칭호가 없어요") + "</b>" +
       '<div class="muted">메달 ' + done + "권 · 다음 칭호 " + rt.next.em + " " + esc(rt.next.en) + "까지 " + (rt.next.n - done) + "권</div></div>" +
@@ -962,6 +1056,7 @@
       var bar = document.getElementById("bar"); if (bar) bar.style.width = pct + "%";
       var rb = document.getElementById("rtbar"); if (rb) { var lo = rt.cur ? rt.cur.n : 0; rb.style.width = Math.round(((done - lo) / Math.max(1, rt.next.n - lo)) * 100) + "%"; }
       var lb = document.getElementById("lvupbar"); if (lb) lb.style.width = Math.min(100, Math.round(Math.min(1, lvDoneList.length / LEVEL_UP_BOOKS) * 100)) + "%";
+      fillMyHof();
       var cb = document.getElementById("clsbar"); if (cb && cls) cb.style.width = Math.min(100, Math.round((cls.words || 0) / Math.max(1, cls.goal || 1) * 100)) + "%";
     }, 80);
     async function setMyLevel(lv) {
@@ -1130,8 +1225,10 @@
         return chips.length ? '<div class="tags theme-tags">' + chips.join("") + "</div>" : "";
       })() + stampBoxHtml(b, myRecord(b.id)) + "</div>" +
       '<div class="card" id="bookbody"><div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.bookTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + "</div>" + body +
-      '<div class="quiz-cta"><button class="btn gold big" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>';
+      '<div class="quiz-cta"><button class="btn gold big" id="goquiz">다 읽었어요 · 퀴즈 풀기 ✏️</button></div></div>' +
+      '<div class="card hof" id="hof">' + hofCardHtml(HOF[id] ? HOF[id].rows : null) + "</div>";
     window.scrollTo(0, scrollY);
+    fillHof(b);
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("goquiz").onclick = function () { location.hash = "#/quiz/" + encodeURIComponent(b.id); };
     bindStampBox(b, function () { renderBook(id).catch(showError); });
@@ -1262,13 +1359,23 @@
       '<div class="stamp ' + (medal || "none") + '"><span class="em">' + (medal ? MEDALS[medal].em : "📘") + "</span><span>" + (medal ? MEDALS[medal].name : "도전 중") + "</span></div>" +
       '<div class="score-big">' + r.score + " / " + r.total + (r.star ? " ⭐" : "") + "</div>" +
       "<p><b>" + msg + "</b></p>" + starMsg +
-      '<div id="resstreak"></div><div id="resstamp"></div>' +
+      '<div id="resstreak"></div><div id="reshof"></div><div id="resstamp"></div>' +
       '<p class="muted">' + r.attempt + "번째 도전 · 내 최고 점수 " + r.best + "/" + r.total + (better ? " (" + MEDALS[r.best_medal].name + " 유지)" : "") + " · 같은 책은 10분 뒤 다시 도전할 수 있어요.</p>" +
       '<div style="margin-top:14px"><button class="btn" id="tohome">책장으로</button> <button class="btn ghost" id="reread">다시 읽기</button></div></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("reread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(b.id); };
     if (medal === "gold") confetti(70); else if (medal) confetti(30);
     if (r.star) setTimeout(function () { confetti(40); }, 600);
+    if (medal === "gold") loadHof(b, function (rows) {
+      var box = document.getElementById("reshof");
+      var mine = (rows || []).filter(function (x) { return x.is_me; });
+      if (!box || !mine.length) return;
+      var isNew = mine.some(function (x) { return Date.now() - new Date(x.achieved_at).getTime() < 15 * 60000; });
+      box.innerHTML = '<div class="res-hof"><b>🏛️ ' + (isNew ? "명예의 전당에 올랐어요!" : "명예의 전당 기록을 지키고 있어요") + "</b><div>" +
+        mine.map(function (x, i) { return '<button class="btn gold small reshof-cert" data-i="' + i + '">🎓 ' + hofLabel(x.kind, x.period).replace(/^\S+\s/, "") + " 인증서</button>"; }).join(" ") + "</div></div>";
+      if (isNew) setTimeout(function () { confetti(50); }, 900);
+      each(".reshof-cert", function (el) { el.onclick = function () { openHofCert(b, mine[+el.getAttribute("data-i")]); }; }, box);
+    }, true);
     sb.rpc("my_days").then(function (d) {
       var box = document.getElementById("resstreak");
       if (d.error || !box) return;

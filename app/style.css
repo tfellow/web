@@ -477,3 +477,19 @@ button.rt:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(30,55
 
 /* v46 exam practice: keep line breaks for (A)(B)(C) parts */
 .para .body > div { white-space: pre-line; }
+
+/* v60 명예의 전당 */
+.hof .hof-row, #myhof .hof-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 8px 10px; border-top: 1px solid var(--line); }
+.hof .hof-row:first-of-type, #myhof .hof-row:first-of-type { border-top: 0; }
+.hof-row.me { background: var(--gold-soft); border-radius: 10px; border-top-color: transparent; }
+.hof-k { font-weight: 700; text-align: left; }
+.hof-n { min-width: 0; overflow-wrap: anywhere; }
+.hof-d { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+.hof-sum { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 8px; }
+.hof-sum span { border: 1px solid var(--gold-2); background: var(--gold-soft); border-radius: 999px; padding: 2px 10px; font-size: .85rem; }
+.res-hof { margin: 12px auto; padding: 10px 12px; border-radius: 12px; background: var(--gold-soft); border: 1px solid var(--gold-2); max-width: 520px; display: grid; gap: 8px; }
+@media (max-width: 560px) {
+  .hof .hof-row, #myhof .hof-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .hof .hof-row .hof-n, #myhof .hof-row .hof-n { grid-column: 1; }
+  .hof .hof-row .hof-d, #myhof .hof-row .hof-d { grid-column: 2; grid-row: 1; }
+}
