@@ -1,6 +1,6 @@
 import { gate, db, $, $$, esc, toast, copyText, playUrl, uniqueCode, toDate, toLocalInput } from "./common.js";
 import { doc, getDoc, addDoc, updateDoc, collection, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, isWord, autoBlanks, splitSentences, remapBlanks, contextOf, shuffle, shuffledPerm, splitChunks, fitsChunks, wordKey, wordPrimary } from "./core.js";
+import { tokenize, isWord, autoBlanks, splitSentences, remapBlanks, contextOf, shuffle, shuffledPerm, splitChunks, fitsChunks, wordKey, wordPrimary, autoChunks, autoKeepCap, chipText } from "./core.js";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
@@ -8,8 +8,10 @@ const P = new URLSearchParams(location.search);
 const DEFAULT_SETTINGS = {
   answerMode: "bank", hintFirst: false, hintLen: false, caseSensitive: false,
   timeLimitMin: 0, maxAttempts: 0, showAnswers: true, showBoard: true,
-  open: true, deadline: null, tts: true, wordIgnorePunct: true
+  open: true, deadline: null, tts: true, wordIgnorePunct: true,
+  wordInput: "both", wordChunk: "word", wordChunkN: 2
 };
+const CHUNK_MODES = { word: "단어 하나씩", n: "몇 단어씩", phrase: "의미 단위 (끊어 읽기)", count: "문장마다 몇 묶음" };
 let id = P.get("id");
 let code = null;
 let T = {
@@ -260,21 +262,36 @@ function renderOrder() {
 }
 
 // ---------- 어순 배열 ----------
-// T.words: [{ s: 교사가 적은 문장, chunks: [단어 조각], end: 끝 문장부호, alts: [다른 정답] }]
+// T.words: [{ s: 교사가 적은 문장, chunks: [단어 조각], end: 끝 문장부호, alts: [다른 정답], cap: 첫 단어 대문자 유지 (없으면 자동) }]
+function chunkWith(chunks) {
+  return autoChunks(chunks, T.settings.wordChunk || "word", T.settings.wordChunkN || 2);
+}
+function newWord(s) {
+  const r = splitChunks(s);
+  return { s, chunks: chunkWith(r.chunks), end: r.end, alts: [] };
+}
 function syncWords(lines) {
   const old = new Map();
   T.words.forEach(w => { if (!old.has(w.s)) old.set(w.s, []); old.get(w.s).push(w); });
-  T.words = lines.map(s => old.get(s)?.shift() || { s, ...splitChunks(s), alts: [] });
+  T.words = lines.map(s => old.get(s)?.shift() || newWord(s));
 }
+function keepCap(w) { return w.cap != null ? w.cap : autoKeepCap(w.chunks); }
 function renderWords() {
   const el = $("#wordsPanel");
   if (!el) return;
   const main = T.mode === "words";
   el.innerHTML = `
     <h3>${main ? "2. 어순 배열 문제" : "4. 어순 배열 문제 (선택)"}</h3>
-    <p class="muted small">한 줄에 한 문장씩 적으면 <b>한 문장이 한 문제</b>가 됩니다. 띄어쓰기로 단어를 나누고, 학생에게는 단어가 섞여 나옵니다. 끝의 마침표·물음표는 답 칸 끝에 고정해서 보여 줍니다.${main ? "" : " 비워 두면 빈칸 문제만 나갑니다. 문제 번호는 빈칸 다음부터 이어집니다."}</p>
+    <p class="muted small">한 줄에 한 문장씩 <b>문장만</b> 적으면 단어 조각은 자동으로 만들어지고, <b>한 문장이 한 문제</b>가 됩니다. 학생에게는 조각이 섞여 나옵니다. 끝의 마침표·물음표는 답 칸 끝에 고정되고, 첫 단어의 대문자는 소문자로 바꿔 보여 주어 (I·고유명사 제외) 첫 단어가 드러나지 않습니다. 학생이 답 칸 맨 앞에 놓은 조각은 자동으로 대문자로 시작합니다.${main ? "" : " 비워 두면 빈칸 문제만 나갑니다. 문제 번호는 빈칸 다음부터 이어집니다."}</p>
     ${T.text.trim() ? `<div class="row"><button class="btn" id="wFromText">본문에서 문장 가져오기</button></div>` : ""}
     <textarea id="wLines" rows="6" placeholder="예: I went to New York with my family last summer.">${esc(T.words.map(w => w.s).join("\n"))}</textarea>
+    <div class="wtools row wrap">
+      <b>자동 묶기</b>
+      <select id="wcMode">${Object.entries(CHUNK_MODES).map(([k, v]) => `<option value="${k}" ${(T.settings.wordChunk || "word") === k ? "selected" : ""}>${v}</option>`).join("")}</select>
+      <span id="wcNBox" class="${["n", "count"].includes(T.settings.wordChunk) ? "" : "hidden"}"><input type="number" id="wcN" min="2" max="10" value="${T.settings.wordChunkN || 2}" style="width:4.5em"> <span id="wcUnit">${T.settings.wordChunk === "count" ? "묶음" : "단어씩"}</span></span>
+      <button class="btn small" id="wcApply">모든 문장에 적용</button>
+    </div>
+    <p class="muted small">의미 단위는 관사+명사 (the big tree), 전치사구 (with my family), 조동사+동사 (is going to visit), 자주 쓰는 표현 (a lot of), 고유명사 (New York)를 규칙으로 묶습니다. 완벽하지 않으니 아래에서 손으로 고치세요. 새로 적는 문장도 이 방식으로 나뉩니다.</p>
     <p class="muted small">아래에서 단어 사이의 <b>＋</b>를 누르면 두 단어가 한 덩어리로 묶이고 (예: New York), 묶인 덩어리를 누르면 다시 나뉩니다. 어순이 여러 가지로 맞을 수 있으면 <b>다른 정답 추가</b>에 적으세요.</p>
     <div id="wItems"></div>`;
   const ta = $("#wLines");
@@ -286,6 +303,20 @@ function renderWords() {
       markDirty();
       renderWordItems();
     }, 300);
+  };
+  const syncN = () => {
+    const m = $("#wcMode").value;
+    $("#wcNBox").classList.toggle("hidden", !["n", "count"].includes(m));
+    $("#wcUnit").textContent = m === "count" ? "묶음" : "단어씩";
+  };
+  $("#wcMode").onchange = () => { T.settings.wordChunk = $("#wcMode").value; syncN(); markDirty(); };
+  $("#wcN").oninput = () => { T.settings.wordChunkN = Math.max(2, Math.min(10, parseInt($("#wcN").value) || 2)); markDirty(); };
+  $("#wcApply").onclick = () => {
+    if (!T.words.length) return;
+    if (!confirm(`모든 문장을 '${CHUNK_MODES[T.settings.wordChunk || "word"]}'(으)로 다시 나눕니다. 손으로 묶은 것은 없어집니다. 계속할까요?`)) return;
+    T.words.forEach(w => { w.chunks = chunkWith(w.chunks); });
+    markDirty();
+    renderWordItems();
   };
   const ft = $("#wFromText");
   if (ft) ft.onclick = () => {
@@ -300,7 +331,12 @@ function renderWords() {
     if (!box) return;
     const w = T.words[+box.dataset.w];
     const j = e.target.closest("[data-join]"), sp = e.target.closest("[data-split]"), rm = e.target.closest("[data-rmalt]"), add = e.target.closest("[data-addalt]");
-    if (j) {
+    const rc = e.target.closest("[data-rechunk]"), cp = e.target.closest("[data-cap]");
+    if (cp) {
+      w.cap = cp.checked;
+    } else if (rc) {
+      w.chunks = chunkWith(w.chunks);
+    } else if (j) {
       const i = +j.dataset.join;
       w.chunks.splice(i, 2, w.chunks[i] + " " + w.chunks[i + 1]);
     } else if (sp) {
@@ -337,7 +373,10 @@ function renderWordItems() {
     <div class="row wrap"><b class="wnum">${base + k + 1}.</b>
       <div class="wchunks">${w.chunks.map((c, i) => `${i ? `<button class="wjoin" data-join="${i - 1}" title="앞 단어와 묶기">＋</button>` : ""}<span class="wchunk ${c.includes(" ") ? "grp" : ""}" ${c.includes(" ") ? `data-split="${i}" title="눌러서 나누기"` : ""}>${esc(c)}</span>`).join("")}${w.end ? `<span class="wend">${esc(w.end)}</span>` : ""}</div>
     </div>
-    ${w.chunks.length < 2 ? `<p class="alert warn small">단어가 2개 이상이어야 합니다.</p>` : ""}
+    ${w.chunks.length < 2 ? `<p class="alert warn small">조각이 2개 이상이어야 합니다.</p>` : ""}
+    <div class="row wrap small wprev"><span class="muted">학생 화면:</span> ${w.chunks.map((c, i) => `<span class="wpchip">${esc(chipText(w, i, { hidePunct: T.settings.wordIgnorePunct !== false }))}</span>`).join("")}
+      <label class="check"><input type="checkbox" data-cap="1" ${keepCap(w) ? "checked" : ""}> 첫 단어 대문자 그대로 (I·고유명사)</label>
+      <button class="btn small ghost" data-rechunk="1">이 문장만 다시 묶기</button></div>
     <div class="walts">
       <div class="small"><span class="badge green">정답</span> ${esc(wordPrimary(w))}${esc(w.end)}</div>
       ${w.alts.map((a, i) => `<div class="small"><span class="badge blue">다른 정답</span> ${esc(a)}${esc(w.end)}${fitsChunks(a, w.chunks) ? "" : ` <span class="badge amber">단어 조각과 안 맞음</span>`} <button class="btn small ghost danger" data-rmalt="${i}">삭제</button></div>`).join("")}
@@ -382,12 +421,17 @@ function renderSettings() {
       ${T.mode !== "order" ? `<div>
         <div class="lbl">어순 배열 채점</div>
         <label class="check"><input type="checkbox" data-s="wordIgnorePunct" ${S.wordIgnorePunct !== false ? "checked" : ""}> 쉼표 등 문장부호는 무시하고 단어 순서만 채점</label>
-        <p class="muted small">대소문자는 항상 무시합니다. 끄면 쉼표 위치까지 정답과 같아야 맞습니다.</p>
+        <p class="muted small">대소문자는 항상 무시합니다. 켜 두면 학생 단어 조각에서도 쉼표를 감춥니다. 끄면 쉼표가 조각에 붙어 나오고, 쉼표 위치까지 정답과 같아야 맞습니다.</p>
+        <div class="lbl">학생이 조각을 놓는 방법</div>
+        <label class="radio"><input type="radio" name="wi" value="both" ${(S.wordInput || "both") === "both" ? "checked" : ""}> 누르기 + 끌어 놓기 둘 다</label>
+        <label class="radio"><input type="radio" name="wi" value="tap" ${S.wordInput === "tap" ? "checked" : ""}> 차례로 누르기만 (휴대폰 추천: 화면을 밀어도 조각이 안 움직임)</label>
+        <label class="radio"><input type="radio" name="wi" value="drag" ${S.wordInput === "drag" ? "checked" : ""}> 끌어 놓기만</label>
       </div>` : ""}
     </div>`;
   const panel = $("#settingsPanel");
-  $$("[data-s]", panel).forEach(c => { c.onchange = () => { S[c.dataset.s] = c.checked; markDirty(); }; });
+  $$("[data-s]", panel).forEach(c => { c.onchange = () => { S[c.dataset.s] = c.checked; markDirty(); if (c.dataset.s === "wordIgnorePunct") renderWordItems(); }; });
   $$("[data-n]", panel).forEach(c => { c.oninput = () => { S[c.dataset.n] = Math.max(0, parseFloat(c.value) || 0); markDirty(); }; });
+  $$("input[name=wi]", panel).forEach(r => { r.onchange = () => { S.wordInput = r.value; markDirty(); }; });
   $$("input[name=am]", panel).forEach(r => {
     r.onchange = () => {
       S.answerMode = r.value;
@@ -415,7 +459,7 @@ async function save() {
   const data = {
     title: T.title, folder: T.folder, mode: T.mode, text: T.text,
     blanks: T.mode === "words" ? [] : T.blanks, accepted: T.mode === "words" ? {} : accepted, distractors: T.distractors || [], sentences: T.sentences || [],
-    words: T.mode === "order" ? [] : T.words.map(w => ({ s: w.s, chunks: w.chunks, end: w.end || "", alts: w.alts || [] })),
+    words: T.mode === "order" ? [] : T.words.map(w => ({ s: w.s, chunks: w.chunks, end: w.end || "", alts: w.alts || [], ...(w.cap != null ? { cap: w.cap } : {}) })),
     settings: { ...T.settings }, updatedAt: serverTimestamp()
   };
   const btn = $("#saveBtn");
@@ -468,7 +512,7 @@ function printWorksheet() {
     const key = T.blanks.map(b => `<li>${esc(tokens[b])}${(T.accepted[b] || []).length ? ` <small>(${esc(T.accepted[b].join(", "))})</small>` : ""}</li>`).join("");
     const base = total;
     total += T.words.length;
-    const wq = T.words.map((w, k) => `<li value="${base + k + 1}"><div class="bank">${shuffle(w.chunks).map(esc).join(" &nbsp;/&nbsp; ")}</div>______________________________________________${esc(w.end)}</li>`).join("");
+    const wq = T.words.map((w, k) => `<li value="${base + k + 1}"><div class="bank">${shuffle(w.chunks.map((_, i) => chipText(w, i, { hidePunct: T.settings.wordIgnorePunct !== false }))).map(esc).join(" &nbsp;/&nbsp; ")}</div>______________________________________________${esc(w.end)}</li>`).join("");
     const wkey = T.words.map((w, k) => `<li value="${base + k + 1}">${esc(wordPrimary(w) + w.end)}${w.alts.length ? ` <small>(${w.alts.map(a => esc(a + w.end)).join(" / ")})</small>` : ""}</li>`).join("");
     body = T.mode === "words" ? "" : `${T.settings.answerMode !== "type" ? `<div class="bank">${bank.map(esc).join(" &nbsp;/&nbsp; ")}</div>` : ""}<div class="txt">${textHtml}</div>`;
     if (T.words.length) body += `<h3>${T.mode === "words" ? "" : "어순 배열 — "}단어를 바르게 배열하여 문장을 완성하세요.</h3><ol>${wq}</ol>`;
