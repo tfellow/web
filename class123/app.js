@@ -3,7 +3,7 @@
    현재 버전: v2.1.1 (다중 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.1.3';
+const APP_VERSION = 'v2.1.4';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -3553,7 +3553,13 @@ function stepTimerProgress() {
 
 function startTimer() {
   if (smartTimer.remainingSec <= 0) {
-    smartTimer.remainingSec = smartTimer.durationSec || 180;
+    if (!smartTimer.durationSec) {
+      // 0분 상태: 시간을 먼저 더해야 시작 가능
+      alert('먼저 +10초, +30초, +1분 등으로 시간을 추가해 주세요!');
+      updateTimerControlButtons();
+      return;
+    }
+    smartTimer.remainingSec = smartTimer.durationSec;
   }
   smartTimer.isRunning = true;
   smartTimer.endTimestamp = performance.now() + (smartTimer.remainingSec * 1000);
@@ -3583,7 +3589,7 @@ function resetTimer() {
     return;
   }
   pauseTimer();
-  smartTimer.remainingSec = smartTimer.durationSec || 180;
+  smartTimer.remainingSec = smartTimer.durationSec ?? 180;
   const banner = document.getElementById('timer-finished-banner');
   if (banner) banner.style.display = 'none';
 
