@@ -3,7 +3,7 @@
    현재 버전: v2.1.1 (다중 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.1.2';
+const APP_VERSION = 'v2.1.3';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -1452,15 +1452,18 @@ function giveRecentCardToSelectedStudents() {
     alert('먼저 카드를 부여할 학생을 클릭해 선택해 주세요!');
     return;
   }
-  const cls = getCurrentClass();
-  const ids = Array.from(selectedStudentIds);
-  const recentHistory = cls?.history?.[0];
-  const recentType = recentHistory ? recentHistory.type : 'eussuk';
-
-  giveQuickRecentCards(ids, recentType);
+  giveRecentCardToTargets(Array.from(selectedStudentIds));
   selectedStudentIds.clear();
   updateFloatingSelectionBar();
   renderStudentsGrid();
+}
+
+// 대상 학생들에게 가장 최근에 사용한 카드(으쓱/머쓱 무관)로 즉시 부여 — 우리반·뽑기·뒤집기 공통
+function giveRecentCardToTargets(ids) {
+  const cls = getCurrentClass();
+  const recentHistory = cls?.history?.[0];
+  const recentType = recentHistory ? recentHistory.type : 'eussuk';
+  giveQuickRecentCards(ids, recentType);
 }
 
 function changeScoreDisplayMode(mode) {
@@ -2057,14 +2060,14 @@ function renderPickedWinners(winners) {
     </div>
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; align-items:center;">
-      <button class="btn btn-gold" style="font-size:1rem; padding:11px 20px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'eussuk')" title="뽑힌 학생 전원에게 최근 으쓱 즉시 부여">
-        ⭐ 최근 으쓱
+      <button class="btn btn-gold" style="font-size:1rem; padding:11px 20px;" onclick="giveRecentCardToTargets(lastPickedStudents.map(s => s.id))" title="뽑힌 학생 전원에게 가장 최근에 사용한 카드 즉시 부여">
+        ⚡ 최근카드
       </button>
-      <button class="btn btn-meossuk" style="font-size:1rem; padding:11px 20px;" onclick="giveQuickRecentCards(lastPickedStudents.map(s => s.id), 'meossuk')" title="뽑힌 학생 전원에게 최근 머쓱 즉시 부여">
-        🌧️ 최근 머쓱
+      <button class="btn btn-eussuk" style="font-size:1rem; padding:11px 20px;" onclick="openGiveCardModalWithTargets(lastPickedStudents.map(s => s.id), 'eussuk')" title="뽑힌 학생 전원에게 으쓱카드 선택 부여">
+        ⭐ 으쓱카드
       </button>
-      <button class="btn btn-green" style="font-size:1rem; padding:11px 20px;" onclick="openGiveCardModalWithTargets(lastPickedStudents.map(s => s.id), 'eussuk')" title="뽑힌 학생 전원에게 쑥쑥카드 목록에서 선택하여 부여">
-        🌱 카드 선택
+      <button class="btn btn-meossuk" style="font-size:1rem; padding:11px 20px;" onclick="openGiveCardModalWithTargets(lastPickedStudents.map(s => s.id), 'meossuk')" title="뽑힌 학생 전원에게 머쓱카드 선택 부여">
+        🌧️ 머쓱카드
       </button>
       <button class="btn btn-secondary" style="font-size:1rem; padding:11px 20px;" onclick="startRandomPick(${winners.length})" title="같은 인원수만큼 다시 뽑기">
         🎲 다시 뽑기
@@ -2153,23 +2156,24 @@ function flipAllCards(flippedState) {
   renderFlipCardsGrid();
 }
 
-function giveCardToFlippedStudents(mode = 'eussuk') {
+// 뒤집힌 학생 전원에게 가장 최근에 사용한 카드 즉시 부여
+function giveRecentCardToFlippedStudents() {
   const flippedIds = flipCardOrder.filter(slot => slot.flipped).map(slot => slot.studentId);
   if (flippedIds.length === 0) {
     alert('먼저 카드를 한 장 이상 클릭해 뒤집어 주세요!');
     return;
   }
-  giveQuickRecentCards(flippedIds, mode);
+  giveRecentCardToTargets(flippedIds);
 }
 
-// 뒤집힌 학생 전원에게 카드 선택 모달을 띄워 부여
-function openGiveCardModalToFlipped() {
+// 뒤집힌 학생 전원에게 으쓱/머쓱 카드 선택 모달을 띄워 부여
+function openGiveCardModalToFlipped(mode = 'eussuk') {
   const flippedIds = flipCardOrder.filter(slot => slot.flipped).map(slot => slot.studentId);
   if (flippedIds.length === 0) {
     alert('먼저 카드를 한 장 이상 클릭해 뒤집어 주세요!');
     return;
   }
-  openGiveCardModalWithTargets(flippedIds, 'eussuk');
+  openGiveCardModalWithTargets(flippedIds, mode);
 }
 
 // ==========================================================================

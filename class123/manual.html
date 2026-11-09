@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.1.2)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.1.3)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.1.2 최신</span>
+          <span class="version-pill">v2.1.3 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.1.2</div>
+          <div class="num">v2.1.3</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -711,7 +711,11 @@
             </li>
             <li>
               <span class="step-badge">원클릭 부여</span>
-              <div>학생 카드 하단의 <strong><code>[⭐ 으쓱]</code> / <code>[🌧️ 머쓱]</code></strong> 버튼을 누르면 <strong>창을 띄우지 않고 가장 최근에 주었던 항목으로 즉시 1장</strong>이 부여됩니다!</div>
+                <div>학생 카드 하단의 <strong><code>[⭐ 으쓱]</code> / <code>[🌧️ 머쓱]</code></strong> 버튼을 누르면 <strong>창을 띄우지 않고 가장 최근에 주었던 항목으로 즉시 1장</strong>이 부여됩니다!</div>
+            </li>
+            <li>
+              <span class="step-badge">여러 명 부여</span>
+              <div>학생 카드를 여러 명 클릭해 선택하면 하단 바에 <strong><code>[⚡ 최근카드]</code> → <code>[⭐ 으쓱카드]</code> → <code>[🌧️ 머쓱카드]</code></strong> 순서로 버튼이 나타납니다. <strong>최근카드</strong>는 마지막에 준 카드(으쓱/머쓱 무관)를 창 없이 즉시 주고, <strong>으쓱카드·머쓱카드</strong>는 카드 목록 창을 열어 골라서 줍니다. (뽑기·뒤집기 화면도 같은 순서·같은 기능)</div>
             </li>
             <li>
               <span class="step-badge">기본 카드</span>
@@ -732,11 +736,11 @@
           <ul class="step-list">
             <li>
               <span class="step-badge">랜덤 뽑기</span>
-              <div>상단 <strong><code>[🎲 랜덤 뽑기]</code></strong>를 누르면 <strong>1. 학생 랜덤 뽑기(1~9명)</strong>가 바로 열립니다. 한 번 뽑힌 학생은 전원이 다 뽑힐 때까지 중복 제외되며, 결과 화면에서 <strong>모달 창 없이 최근 주었던 항목으로 으쓱/머쓱을 즉시 1장 부여</strong>할 수 있습니다. (전원 일괄 부여 버튼 포함)</div>
+              <div>상단 <strong><code>[🎲 랜덤 뽑기]</code></strong>를 누르면 <strong>1. 학생 랜덤 뽑기(1~9명)</strong>가 바로 열립니다. 한 번 뽑힌 학생은 전원이 다 뽑힐 때까지 중복 제외되며, 결과 화면에서 <strong>모달 창 없이 최근 주었던 항목으로 으쓱/머쓱을 즉시 1장 부여</strong>할 수 있습니다. 결과 아래의 <strong><code>[⚡ 최근카드]</code> · <code>[⭐ 으쓱카드]</code> · <code>[🌧️ 머쓱카드]</code></strong>로 뽑힌 학생 전원에게 한 번에 줄 수 있습니다. (우리반 다중 선택 바와 같은 순서·기능)</div>
             </li>
             <li>
               <span class="step-badge">행운의 뽑기</span>
-              <div>상단 <strong><code>[🍀 행운의 뽑기]</code></strong>를 누르면 <strong>2. 학생 섞기(카드 뒤집기)</strong>가 바로 열립니다. 카드를 한 장씩 뒤집어 순서를 정하고, <strong>뒤집힌 카드 안에서 모달 창 없이 최근 으쓱/머쓱 항목으로 즉시 부여</strong>할 수 있습니다. (상단 전체 뒤집힌 학생 일괄 부여 지원)</div>
+              <div>상단 <strong><code>[🍀 행운의 뽑기]</code></strong>를 누르면 <strong>2. 학생 섞기(카드 뒤집기)</strong>가 바로 열립니다. 카드를 한 장씩 뒤집어 순서를 정하고, <strong>뒤집힌 카드 안에서 모달 창 없이 최근 으쓱/머쓱 항목으로 즉시 부여</strong>할 수 있습니다. 상단 툴바의 <strong><code>[⚡ 최근카드]</code> · <code>[⭐ 으쓱카드]</code> · <code>[🌧️ 머쓱카드]</code></strong>로 뒤집힌 학생 전원에게 한 번에 줄 수 있습니다.</div>
             </li>
           </ul>
         </article>
@@ -1096,11 +1100,26 @@
           </div>
         </div>
 
+        <!-- 26차 프롬프트 (v2.1.3) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[26차 프롬프트] 우리반·뽑기·뒤집기 일괄 부여 버튼 순서·기능 통일 (최근카드 → 으쓱카드 → 머쓱카드)</strong>
+            <span class="version-pill">v2.1.3 최신</span>
+          </div>
+          <div class="prompt-quote">"우리반과 뽑기, 뒤집기에서 카드 순서가 달라. 순서와 기능을 최근카드, 으쓱카드, 머쓱카드로 통일했으면 좋겠어."</div>
+          <div class="impl-tags">
+            <span class="impl-tag">⚡ 세 화면 모두 [⚡ 최근카드] → [⭐ 으쓱카드] → [🌧️ 머쓱카드] 순서</span>
+            <span class="impl-tag">⚡ 최근카드 = 마지막에 준 카드(으쓱/머쓱 무관) 창 없이 즉시 부여</span>
+            <span class="impl-tag">⭐🌧️ 으쓱카드·머쓱카드 = 카드 목록 창을 열어 골라서 부여</span>
+            <span class="impl-tag">🔁 뽑기·뒤집기의 [최근 으쓱]/[최근 머쓱]/[카드 선택] 버튼 대체</span>
+          </div>
+        </div>
+
         <!-- 25차 프롬프트 (v2.1.2) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[25차 프롬프트] 클라우드 데이터 내려받기 완벽 정상화 및 실시간 동기화 데이터 안전 보호 강화</strong>
-            <span class="version-pill">v2.1.2 최신</span>
+            <span class="version-pill">v2.1.2</span>
           </div>
           <div class="prompt-quote">"클라우드에서 내려받기 기능이 안 되는 거 같은데 확인해 줄래?"</div>
           <div class="impl-tags">
@@ -1217,7 +1236,17 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.2 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.3 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-09</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>일괄 부여 버튼 순서·기능 통일</strong>: 우리반 다중 선택 바, 뽑기 결과 하단, 뒤집기 상단 툴바 모두 <code>[⚡ 최근카드]</code> → <code>[⭐ 으쓱카드]</code> → <code>[🌧️ 머쓱카드]</code><br/>
+                  • <strong>최근카드</strong>: 마지막에 준 카드(으쓱/머쓱 무관)를 창 없이 즉시 부여 / <strong>으쓱카드·머쓱카드</strong>: 카드 목록 창에서 골라 부여<br/>
+                  • 뽑기·뒤집기의 <code>[최근 으쓱]</code>, <code>[최근 머쓱]</code>, <code>[카드 선택]</code> 버튼은 위 3개로 대체 (학생 개별 카드의 [⭐ 으쓱]/[🌧️ 머쓱] 원클릭 버튼은 그대로)
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>app.js</code>, <code>index.html</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.2</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-04</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>클라우드 데이터 내려받기 완벽 정상화</strong>: 클라우드 데이터 불러오기 시 전체 UI와 상단 학급 선택 드롭다운(<code>renderClassSelector()</code>), 온도계 사이드바를 즉각 실시간 재렌더링<br/>
