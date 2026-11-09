@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="../app/emblem.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="hub.css?v=2">
+<link rel="stylesheet" href="hub.css?v=3">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 </head>
@@ -26,6 +26,24 @@
     <button id="btnCsv" class="btn gold">⬇️ CSV</button>
   </div>
 </header>
+
+<details class="card launcher" id="launcher" open>
+  <summary>🔗 앱 바로가기 <span class="small muted">(새 탭으로 열려요)</span></summary>
+  <div class="links">
+    <div class="lk"><a href="../app/" target="_blank" rel="noopener">📖 독서 여권</a><span class="small muted">교사 화면은 앱 안 [교사]</span></div>
+    <div class="lk"><a href="../grammar/" target="_blank" rel="noopener">✏️ 문법</a><a class="sub" href="../grammar/admin.html" target="_blank" rel="noopener">교사</a></div>
+    <div class="lk"><a href="../quiz/" target="_blank" rel="noopener">👑 Quiz Queens</a></div>
+    <div class="lk"><a href="../danuhsup/" target="_blank" rel="noopener">🌳 단어숲</a></div>
+    <div class="lk"><a href="../cloze/" target="_blank" rel="noopener">🧩 Cloze</a></div>
+    <div class="lk"><a href="../writing1/" target="_blank" rel="noopener">✍️ 영작문</a></div>
+    <div class="lk"><a href="../speaking/" target="_blank" rel="noopener">🎤 말하기</a><a class="sub" href="../speaking/#/teacher" target="_blank" rel="noopener">교사</a></div>
+    <div class="lk"><a href="../kahoot/" target="_blank" rel="noopener">⚡ Kahoot (교사)</a><a class="sub" href="../kahoot/student.html" target="_blank" rel="noopener">학생</a></div>
+    <div class="lk"><a href="../class123/" target="_blank" rel="noopener">⭐ Class123</a></div>
+    <div class="lk"><a href="../quizshow/" target="_blank" rel="noopener">🎬 퀴즈쇼</a></div>
+    <div class="lk"><a href="../me/" target="_blank" rel="noopener">🧭 학생 페이지</a><span class="small muted">MY English Journey</span></div>
+    <div class="lk"><a href="../" target="_blank" rel="noopener">🏠 첫 화면</a></div>
+  </div>
+</details>
 
 <section id="conn" class="conn"></section>
 
@@ -73,6 +91,6 @@
 </div>
 <div id="toast" class="toast hidden"></div>
 
-<script type="module" src="hub.js?v=8"></script>
+<script type="module" src="hub.js?v=9"></script>
 </body>
 </html>

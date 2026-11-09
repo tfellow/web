@@ -1197,3 +1197,5 @@ else {
   fbStart("fc", false);
   fbStart("fk", false);
 }
+// 앱 바로가기 상자: 접고 펼친 상태를 기억해요
+{ const l = document.getElementById("launcher"); if (l) { l.open = load("hub.launcher", true); l.addEventListener("toggle", () => save("hub.launcher", l.open)); } }

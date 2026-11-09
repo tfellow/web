@@ -162,3 +162,13 @@ tr.off td:first-child { opacity: 1; }
 .pend-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
 .feed .who { all: unset; cursor: pointer; font-weight: 600; color: var(--navy); }
 details.note summary { cursor: pointer; }
+
+/* 앱 바로가기 */
+.launcher { padding: 10px 14px; margin-bottom: 12px; }
+.launcher summary { cursor: pointer; font-weight: 700; color: var(--navy); }
+.launcher .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 10px; }
+.launcher .lk { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; background: var(--paper); }
+.launcher .lk a { font-weight: 700; color: var(--navy); text-decoration: none; }
+.launcher .lk a:hover { text-decoration: underline; }
+.launcher .lk a.sub { font-size: 12px; font-weight: 700; color: var(--navy-2); background: var(--navy-soft); border-radius: 999px; padding: 1px 8px; }
+.launcher .lk .small { flex-basis: 100%; }
