@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.1.4)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.2.0)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.1.4 최신</span>
+          <span class="version-pill">v2.2.0 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.1.4</div>
+          <div class="num">v2.2.0</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -775,14 +775,22 @@
           <div class="guide-card-header">
             <div class="guide-icon">📚</div>
             <div>
-              <h3>5. 학급별 통합 진도표</h3>
+              <h3>5. 학년별 진도표</h3>
               <span style="font-size:0.8rem; color:var(--text-secondary);">상단 [📚 진도표]</span>
             </div>
           </div>
           <ul class="step-list">
             <li>
+              <span class="step-badge">학년 선택</span>
+              <div>진도표 위의 <strong><code>[1학년]</code> · <code>[2학년]</code> · <code>[기타]</code></strong> 버튼으로 학년을 고릅니다. 학년은 학급 이름에서 자동으로 찾습니다. (예: <code>2026-2-3</code> → 2학년, <code>1학년 3반</code> → 1학년, 그 밖의 이름 → 기타)</div>
+            </li>
+            <li>
+              <span class="step-badge">학년별 차시</span>
+              <div><strong><code>[➕ 단원/차시 목록 편집]</code></strong>은 <strong>지금 고른 학년의 목록만</strong> 바꿉니다. 1학년과 2학년이 서로 다른 단원·차시를 가질 수 있습니다.</div>
+            </li>
+            <li>
               <span class="step-badge">진도 비교</span>
-              <div>표시 중인 모든 학급의 <strong>진도율(%) 프로그레스 바</strong>와 최근 완료 차시를 상단 카드와 비교 표(Matrix)로 한눈에 비교합니다.</div>
+              <div>같은 학년 학급의 <strong>진도율(%) 프로그레스 바</strong>와 최근 완료 차시를 상단 카드와 비교 표(Matrix)로 한눈에 비교합니다.</div>
             </li>
             <li>
               <span class="step-badge">수업 기록</span>
@@ -1129,11 +1137,27 @@
           </div>
         </div>
 
+        <!-- 28차 프롬프트 (v2.2.0) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[28차 프롬프트] 학급별 통합 진도표를 학년별로 분리</strong>
+            <span class="version-pill">v2.2.0 최신</span>
+          </div>
+          <div class="prompt-quote">"학급별 통합 진도표를 학년별로 나누어 줘. 학년마다 단원 차시가 다르거든."</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🏫 진도표 상단 학년 선택 버튼 ([1학년] · [2학년] · [기타])</span>
+            <span class="impl-tag">📚 학년마다 단원/차시 목록 따로 저장 (편집·1줄 추가 모두 해당 학년만)</span>
+            <span class="impl-tag">📊 진도율 카드·비교 표는 같은 학년 반끼리만</span>
+            <span class="impl-tag">🔁 기존 공통 목록과 체크 기록은 각 학년 목록으로 그대로 이어짐</span>
+            <span class="impl-tag">📥 진도표 CSV에 '학년' 열 추가</span>
+          </div>
+        </div>
+
         <!-- 27차 프롬프트 (v2.1.4) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[27차 프롬프트] 타이머 시간설정 [0분] · [+10초] 추가</strong>
-            <span class="version-pill">v2.1.4 최신</span>
+            <span class="version-pill">v2.1.4</span>
           </div>
           <div class="prompt-quote">"타이머는 시간설정에 0분, +10초도 추가해 줘"</div>
           <div class="impl-tags">
@@ -1280,7 +1304,17 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.4 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.2.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-09</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>진도표 학년별 분리</strong>: 상단 학년 선택 버튼, 학년마다 단원/차시 목록 따로 저장 (학급 이름 <code>2026-학년-반</code>에서 학년 자동 인식)<br/>
+                  • 진도율 카드와 비교 표는 같은 학년 반끼리만 표시, 목록 편집·1줄 추가는 현재 학년에만 적용<br/>
+                  • 기존 공통 목록과 체크 기록은 각 학년으로 그대로 이어짐, CSV에 '학년' 열 추가
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>app.js</code>, <code>index.html</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.1.4</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-09</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>타이머 시간설정 [0분] 추가</strong>: 00:00으로 비운 뒤 더하기 버튼으로 원하는 시간 조합 (0분 상태 Start 시 시간 추가 안내)<br/>

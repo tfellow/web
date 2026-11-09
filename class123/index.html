@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.1.4" />
+  <link rel="stylesheet" href="styles.css?v=2.2.0" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -124,7 +124,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.1.4 (클릭 시 사용 설명서 열기)">v2.1.4</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.2.0 (클릭 시 사용 설명서 열기)">v2.2.0</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -442,7 +442,7 @@
           <div>
             <h2 class="font-display" style="font-size:1.6rem;">📚 학급별 통합 진도표 & 수업 기록장</h2>
             <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:4px;">
-              공통 단원/차시 목록을 기준으로 각 반의 수업 완료 여부(✔), 수업 날짜, 진도 메모, 다음 시간 할 일을 한눈에 관리하세요.
+              학년마다 따로 만든 단원/차시 목록을 기준으로 각 반의 수업 완료 여부(✔), 수업 날짜, 진도 메모, 다음 시간 할 일을 관리하세요.
             </p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -457,6 +457,9 @@
             </button>
           </div>
         </div>
+
+        <!-- 학년 선택 탭 (학년마다 단원/차시 목록이 따로 있음) -->
+        <div id="progress-grade-tabs" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;"></div>
 
         <!-- 전 학급 진도율 요약 카드 -->
         <div id="progress-overview-cards" class="progress-overview-cards"></div>
@@ -811,14 +814,14 @@
   <div id="modal-syllabus-manage" class="modal-backdrop">
     <div class="modal-dialog" style="max-width: 680px;">
       <div class="modal-header">
-        <div class="modal-title">📚 단원 / 차시 커리큘럼 목록 편집</div>
+        <div class="modal-title" id="syllabus-modal-title">📚 단원 / 차시 커리큘럼 목록 편집</div>
         <button class="btn-icon-pill" onclick="closeModal('modal-syllabus-manage')">✖ 닫기</button>
       </div>
 
       <div class="modal-body">
         <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:12px;">
           수업할 단원이나 차시 주제를 한 줄에 하나씩 입력하거나 붙여넣으세요.<br/>
-          한 번 등록해 두면 모든 학급에서 공통 체크리스트로 편리하게 사용할 수 있습니다.
+          여기서 저장한 목록은 <strong>이 학년의 반들에만</strong> 적용됩니다. (다른 학년 목록은 그대로)
         </p>
         <textarea id="syllabus-bulk-textarea" class="inline-input" rows="12" placeholder="예)&#10;1차시 | 오리엔테이션 및 수업 규칙 안내&#10;2차시 | I-1. 인권의 의미와 변화&#10;3차시 | I-2. 기본권의 종류와 제한&#10;4차시 | I-3. 인권 침해 구제 방법"></textarea>
       </div>
@@ -1123,6 +1126,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=2.1.4"></script>
+  <script src="app.js?v=2.2.0"></script>
 </body>
 </html>

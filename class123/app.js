@@ -3,7 +3,7 @@
    현재 버전: v2.1.1 (다중 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.1.4';
+const APP_VERSION = 'v2.2.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -2179,20 +2179,66 @@ function openGiveCardModalToFlipped(mode = 'eussuk') {
 // ==========================================================================
 // 뷰 4: 학급별 진도표 (체크리스트 + 진도 기록장 통합형)
 // ==========================================================================
+// ---- 학년별 단원/차시 목록 (v2.2.0) ----
+// 학급 이름(예: 2026-2-3 → 2학년, '1학년 3반' → 1학년) 또는 학년 표시 칸에서 학년을 찾고, 없으면 '기타'
+function getClassGradeKey(cls) {
+  const name = String(cls?.name || '');
+  const m = name.match(/^\d{4}\s*-\s*(\d)\s*-/) || name.match(/(\d)\s*학년/) || String(cls?.grade || '').match(/(\d)\s*학년/);
+  return m ? `${m[1]}학년` : '기타';
+}
+
+function getGradeKeys(classes) {
+  const keys = [...new Set(classes.map(getClassGradeKey))];
+  return keys.sort((a, b) => (a === '기타') - (b === '기타') || a.localeCompare(b, 'ko'));
+}
+
+// 학년별 목록이 아직 없으면 기존 공통 목록을 복사해서 시작 (기존 체크 기록 그대로 유지)
+function getSyllabusForGrade(gradeKey) {
+  if (!state.syllabusByGrade) state.syllabusByGrade = {};
+  if (!Array.isArray(state.syllabusByGrade[gradeKey])) {
+    state.syllabusByGrade[gradeKey] = JSON.parse(JSON.stringify(state.syllabus || getDefaultSyllabus()));
+  }
+  return state.syllabusByGrade[gradeKey];
+}
+
+function getClassSyllabus(cls) {
+  return getSyllabusForGrade(getClassGradeKey(cls));
+}
+
+function switchProgressGrade(gradeKey) {
+  const first = getVisibleClasses().find(c => getClassGradeKey(c) === gradeKey);
+  if (first) handleClassChange(first.id);
+}
+
 function renderProgressView() {
   const currentCls = getCurrentClass();
-  const visibleClasses = getVisibleClasses();
-  const totalSyllabus = state.syllabus.length;
+  const gradeKey = getClassGradeKey(currentCls);
+  const allVisible = getVisibleClasses();
+  const visibleClasses = allVisible.filter(c => getClassGradeKey(c) === gradeKey);
+  const syllabus = getSyllabusForGrade(gradeKey);
+  const totalSyllabus = syllabus.length;
+
+  // 0. 학년 선택 탭
+  const tabsEl = document.getElementById('progress-grade-tabs');
+  if (tabsEl) {
+    tabsEl.innerHTML = `<span style="font-weight:800; color:var(--text-secondary); margin-right:4px;">학년:</span>` +
+      getGradeKeys(allVisible)
+        .map(k => {
+          const n = allVisible.filter(c => getClassGradeKey(c) === k).length;
+          return `<button class="btn ${k === gradeKey ? 'btn-gold' : 'btn-secondary'}" style="padding:8px 16px;" onclick="switchProgressGrade('${k}')">${k} <span style="opacity:0.7; font-size:0.85em;">(${n}개 반)</span></button>`;
+        })
+        .join('');
+  }
 
   // 1. 전 학급 진도율 요약 카드 렌더링 (숨김 처리되지 않은 학급만 표시)
   const overviewEl = document.getElementById('progress-overview-cards');
   overviewEl.innerHTML = visibleClasses
     .map(cls => {
-      const completedCount = state.syllabus.filter(s => cls.progressRecords?.[s.id]?.completed).length;
+      const completedCount = syllabus.filter(s => cls.progressRecords?.[s.id]?.completed).length;
       const percent = totalSyllabus > 0 ? Math.round((completedCount / totalSyllabus) * 100) : 0;
 
       // 가장 최근 완료한 차시 찾기
-      const lastCompleted = [...state.syllabus].reverse().find(s => cls.progressRecords?.[s.id]?.completed);
+      const lastCompleted = [...syllabus].reverse().find(s => cls.progressRecords?.[s.id]?.completed);
 
       return `
         <div class="class-progress-card ${cls.id === currentCls.id ? 'active-class' : ''}" onclick="handleClassChange('${cls.id}')">
@@ -2217,7 +2263,7 @@ function renderProgressView() {
   if (state.showProgressMatrix) {
     matrixEl.innerHTML = `
       <div style="padding:14px 20px; border-bottom:1px solid var(--border-color); font-weight:800;">
-        📊 전 학급 단원/차시 완료 한눈에 비교 표 (칸을 클릭하면 즉시 완료 체크/해제됩니다)
+        📊 ${escapeHtml(gradeKey)} 단원/차시 완료 한눈에 비교 표 (칸을 클릭하면 즉시 완료 체크/해제됩니다)
       </div>
       <table class="syllabus-table">
         <thead>
@@ -2228,7 +2274,7 @@ function renderProgressView() {
           </tr>
         </thead>
         <tbody>
-          ${state.syllabus
+          ${syllabus
             .map(
               syl => `
             <tr>
@@ -2257,12 +2303,12 @@ function renderProgressView() {
   }
 
   // 3. 현재 선택 학급 상세 진도 기록장 테이블 렌더링
-  document.getElementById('progress-current-class-heading').textContent = `📝 [${currentCls.name}] 차시별 진도 체크 & 수업 기록장`;
+  document.getElementById('progress-current-class-heading').textContent = `📝 [${currentCls.name}] ${gradeKey} 차시별 진도 체크 & 수업 기록장`;
   const tbody = document.getElementById('syllabus-table-body');
 
   if (!currentCls.progressRecords) currentCls.progressRecords = {};
 
-  tbody.innerHTML = state.syllabus
+  tbody.innerHTML = syllabus
     .map(syl => {
       const rec = currentCls.progressRecords[syl.id] || { completed: false, date: '', note: '', nextTodo: '' };
       return `
@@ -2325,10 +2371,12 @@ function updateProgressField(syllabusId, field, value) {
 }
 
 function addSingleSyllabusItemQuick() {
-  const nextNum = state.syllabus.length + 1;
-  const title = prompt(`${nextNum}차시 수업 단원/주제를 입력해 주세요:`, '');
+  const gradeKey = getClassGradeKey(getCurrentClass());
+  const syllabus = getSyllabusForGrade(gradeKey);
+  const nextNum = syllabus.length + 1;
+  const title = prompt(`[${gradeKey}] ${nextNum}차시 수업 단원/주제를 입력해 주세요:`, '');
   if (!title || !title.trim()) return;
-  state.syllabus.push({
+  syllabus.push({
     id: `syl_${Date.now()}`,
     order: `${nextNum}차시`,
     title: title.trim()
@@ -2338,8 +2386,11 @@ function addSingleSyllabusItemQuick() {
 }
 
 function openSyllabusManageModal() {
-  const text = state.syllabus.map(s => `${s.order} | ${s.title}`).join('\n');
+  const gradeKey = getClassGradeKey(getCurrentClass());
+  const text = getSyllabusForGrade(gradeKey).map(s => `${s.order} | ${s.title}`).join('\n');
   document.getElementById('syllabus-bulk-textarea').value = text;
+  const titleEl = document.getElementById('syllabus-modal-title');
+  if (titleEl) titleEl.textContent = `📚 ${gradeKey} 단원 / 차시 목록 편집`;
   openModal('modal-syllabus-manage');
 }
 
@@ -2351,8 +2402,10 @@ function saveSyllabusBulk() {
     return;
   }
 
-  state.syllabus = lines.map((line, idx) => {
-    const existing = state.syllabus[idx];
+  const gradeKey = getClassGradeKey(getCurrentClass());
+  const prevList = getSyllabusForGrade(gradeKey);
+  state.syllabusByGrade[gradeKey] = lines.map((line, idx) => {
+    const existing = prevList[idx];
     const id = existing ? existing.id : `syl_${Date.now()}_${idx}`;
     if (line.includes('|')) {
       const parts = line.split('|');
@@ -3309,12 +3362,13 @@ function exportFullHistoryCSV() {
 }
 
 function exportProgressCSV() {
-  const rows = [['학급명', '차시', '단원/수업주제', '완료여부', '수업날짜', '진도내용 및 특이사항 메모', '다음 시간 할 일']];
+  const rows = [['학년', '학급명', '차시', '단원/수업주제', '완료여부', '수업날짜', '진도내용 및 특이사항 메모', '다음 시간 할 일']];
 
-  state.classes.forEach(cls => {
-    state.syllabus.forEach(syl => {
+  [...state.classes].sort((a, b) => getClassGradeKey(a).localeCompare(getClassGradeKey(b), 'ko')).forEach(cls => {
+    getClassSyllabus(cls).forEach(syl => {
       const rec = cls.progressRecords?.[syl.id] || {};
       rows.push([
+        getClassGradeKey(cls),
         cls.name,
         syl.order,
         syl.title,
