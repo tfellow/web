@@ -3,11 +3,21 @@ import g2park from './g2-park.json';
 
 // 압축 형식 {l,n,w,p,k,e,x,xk} → 단어 객체
 export function normalizeBook(meta, rows) {
-  const words = rows.map(r => ({
-    id: `${meta.id}:${r.l}:${r.n}`,
+  // 같은 단원에 같은 번호가 두 번 나오면(번호 열이 비었거나 겹친 엑셀) 두 단어가 한 id를 나눠 써서
+  // 빈칸 예문·정답 판정·학습 기록이 서로 섞였다. 처음 나온 단어는 원래 id를 그대로 두고(기존 기록 유지),
+  // 뒤에 나온 단어에만 꼬리표(-2, -3…)를 붙여 id가 겹치지 않게 한다.
+  const used = new Set();
+  const words = rows.map(r => {
+    const base = `${meta.id}:${r.l}:${r.n}`;
+    let id = base;
+    for (let k = 2; used.has(id); k++) id = `${base}-${k}`;
+    used.add(id);
+    return {
+    id,
     bookId: meta.id, lesson: r.l, no: r.n,
     word: r.w, pos: r.p || '', ko: r.k, en: r.e || '', ex: r.x || '', exKo: r.xk || '',
-  }));
+    };
+  });
   const lessonNums = [...new Set(words.map(w => w.lesson))].sort((a, b) => a - b);
   const lessons = lessonNums.map(n => ({ n, title: (meta.lessonTitles || {})[n] || `Lesson ${n}`, count: words.filter(w => w.lesson === n).length }));
   return { ...meta, words, lessons };
