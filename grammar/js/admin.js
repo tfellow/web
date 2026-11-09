@@ -550,9 +550,14 @@
       '<textarea id="bulk" placeholder="여기에 붙여넣기 (또는 아래에서 CSV/TSV 파일 선택)"></textarea>' +
       '<div class="row gap wrap mt"><input type="file" id="bulkfile" accept=".csv,.tsv,.txt" style="width:auto"><button class="btn" id="bulkcheck">🔎 확인하기</button><button class="btn primary" id="bulkgo" disabled>등록하기</button></div><div id="bulkres" class="mt"></div></div>' +
       '<div class="card"><h2>🤖 AI로 문제 만들기 <span class="sub">Gemini · Claude</span></h2>' +
-      '<p class="small">아래에서 단원과 개수를 고르고 <b>프롬프트 복사</b> → Gemini 또는 Claude에 붙여넣기 → 나온 표를 위의 일괄 등록 칸에 붙여넣고 <b>확인하기</b>를 누르세요. 문제집·참고서 사진이나 PDF를 함께 올리면 그 내용을 바탕으로 만들어 줘요. <b>등록 전에 꼭 정답을 검토해 주세요.</b></p>' +
-      '<div class="grid g3"><div><label>단원</label><select id="ai_t">' + D.topics.map(function (t) { return '<option value="' + esc(t.code) + '">' + esc(t.code + " " + t.title) + "</option>"; }).join("") + "</select></div>" +
-      '<div><label>문제 수</label><input id="ai_n" type="number" value="15" min="5" max="50"></div><div><label>난이도</label><select id="ai_d"><option value="섞어서">섞어서</option><option value="쉬움(1)">쉬움</option><option value="보통(2)">보통</option><option value="어려움(3)">어려움</option></select></div></div>' +
+      '<p class="small">아래에서 단원과 개수를 고르고 <b>프롬프트 복사</b> → Gemini 또는 Claude에 붙여넣기 → 나온 표를 위의 일괄 등록 칸에 붙여넣고 <b>확인하기</b>를 누르세요. 문제집·참고서 사진이나 PDF를 함께 올리면 그 내용을 바탕으로 만들어 줘요. <b>여러 단원 한꺼번에</b>를 고르면 체크한 단원마다 같은 개수씩 만드는 프롬프트 하나가 나와요. <b>등록 전에 꼭 정답을 검토해 주세요.</b></p>' +
+      '<div class="tabs" id="ai_mode"><button class="on" data-m="one">한 단원</button><button data-m="multi">📚 여러 단원 한꺼번에</button></div>' +
+      '<div id="ai_one"><label>단원</label><select id="ai_t">' + D.topics.map(function (t) { return '<option value="' + esc(t.code) + '">' + esc(t.code + " " + t.title) + "</option>"; }).join("") + "</select></div>" +
+      '<div id="ai_multi" hidden><div class="grid g3"><div><label>학년</label><select id="ai_g">' + Object.keys(MG.GRADES).map(function (g) { return '<option value="' + g + '">' + esc(MG.GRADES[g]) + "</option>"; }).join("") + "</select></div>" +
+      '<div><label>대단원</label><select id="ai_u"></select></div><div><label>빠른 선택</label><div class="row gap wrap"><button class="btn" id="ai_all" type="button">모두</button><button class="btn" id="ai_none" type="button">해제</button><button class="btn" id="ai_few" type="button">문제 적은 단원</button></div></div></div>' +
+      '<div id="ai_list" class="mt" style="max-height:260px;overflow:auto;border:1.5px solid var(--line);border-radius:12px;padding:6px 12px"></div>' +
+      '<div id="ai_warn" class="small mt"></div></div>' +
+      '<div class="grid g3"><div><label id="ai_nl">문제 수</label><input id="ai_n" type="number" value="15" min="5" max="50"></div><div><label>난이도</label><select id="ai_d"><option value="섞어서">섞어서</option><option value="쉬움(1)">쉬움</option><option value="보통(2)">보통</option><option value="어려움(3)">어려움</option></select></div></div>' +
       '<label>추가 요청 (선택)</label><input id="ai_x" placeholder="예: 교과서 3과 본문 표현을 활용해 줘 / 서술형 대비 배열 문제를 많이">' +
       '<div class="row gap wrap mt"><button class="btn primary" id="ai_copy">📋 프롬프트 복사</button><a class="btn" href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini 열기</a><a class="btn" href="https://claude.ai/new" target="_blank" rel="noopener">Claude 열기</a></div>' +
       '<textarea id="ai_p" class="mt" readonly style="min-height:120px"></textarea></div>');
@@ -589,9 +594,55 @@
         $("#bulk").value = "";
       } catch (e) { $("#bulkres").insertAdjacentHTML("afterbegin", '<p class="err">' + esc(e.message) + "</p>"); this.disabled = false; }
     };
-    var mk = function () { $("#ai_p").value = aiPrompt($("#ai_t").value, +$("#ai_n").value || 15, $("#ai_d").value, $("#ai_x").value); };
+    // 여러 단원 한꺼번에: 학년 → 대단원 → 소단원 체크
+    var aiMode = "one", qCount = {};
+    D.questions.forEach(function (q) { if (q.active !== false) qCount[q.topic_code] = (qCount[q.topic_code] || 0) + 1; });
+    var unitKey = function (t) { return t.unit_no != null ? String(t.unit_no) : (t.unit_title || t.category || ""); };
+    var gradeTopics = function () { var g = +$("#ai_g").value; return D.topics.filter(function (t) { return +t.grade === g; }); };
+    var picked = function () { return $$(".ai_c").filter(function (c) { return c.checked; }).map(function (c) { return c.value; }); };
+    var mk = function () {
+      var n = +$("#ai_n").value || 15;
+      if (aiMode === "one") { $("#ai_p").value = aiPrompt($("#ai_t").value, n, $("#ai_d").value, $("#ai_x").value); return; }
+      var codes = picked();
+      $("#ai_warn").innerHTML = !codes.length ? '<span class="err">단원을 하나 이상 골라 주세요.</span>' :
+        "선택 <b>" + codes.length + "개 단원</b> × " + n + "문제 = 모두 <b>" + codes.length * n + "문제</b>" +
+        (codes.length > 5 || codes.length * n > 150 ? ' <span class="tag bad">너무 많아요</span> AI가 뒤쪽 단원을 대충 만들거나 중간에 끊을 수 있어요. 한 번에 <b>3~5개 단원</b>(모두 150문제 이하)씩 나눠서 요청하는 걸 추천해요.' : "");
+      $("#ai_p").value = codes.length ? aiPromptMulti(codes, n, $("#ai_d").value, $("#ai_x").value) : "";
+    };
+    var fillList = function () {
+      var u = $("#ai_u").value, list = gradeTopics().filter(function (t) { return !u || unitKey(t) === u; });
+      $("#ai_list").innerHTML = list.length ? list.map(function (t) {
+        var c = qCount[t.code] || 0;
+        return '<label class="row gap" style="font-weight:500;margin:6px 0;cursor:pointer"><input type="checkbox" class="ai_c" value="' + esc(t.code) + '" checked style="width:auto">' +
+          '<span class="grow"><b>' + esc(t.code) + "</b> " + esc(t.title) + '</span><span class="tag' + (c < 3 ? " bad" : "") + '">' + c + "문제</span></label>";
+      }).join("") : '<p class="muted small">이 학년에 등록된 단원이 없어요.</p>';
+      $$(".ai_c").forEach(function (c) { c.onchange = mk; });
+      mk();
+    };
+    var fillUnits = function () {
+      var seen = {}, opts = '<option value="">전체 (' + esc(MG.GRADES[$("#ai_g").value]) + ")</option>";
+      gradeTopics().forEach(function (t) { var k = unitKey(t); if (seen[k]) return; seen[k] = 1; opts += '<option value="' + esc(k) + '">' + esc((t.unit_no != null ? t.unit_no + ". " : "") + (t.unit_title || t.category || "")) + "</option>"; });
+      $("#ai_u").innerHTML = opts;
+      if ($("#ai_u").options.length > 1) $("#ai_u").selectedIndex = 1;
+      fillList();
+    };
+    $$("#ai_mode button").forEach(function (b) {
+      b.onclick = function () {
+        aiMode = b.dataset.m;
+        $$("#ai_mode button").forEach(function (x) { x.classList.toggle("on", x === b); });
+        $("#ai_one").hidden = aiMode !== "one"; $("#ai_multi").hidden = aiMode === "one";
+        $("#ai_nl").textContent = aiMode === "one" ? "문제 수" : "단원마다 문제 수";
+        if (aiMode === "multi" && +$("#ai_n").value > 30) $("#ai_n").value = 20;
+        mk();
+      };
+    });
+    $("#ai_g").onchange = fillUnits;
+    $("#ai_u").onchange = fillList;
+    $("#ai_all").onclick = function () { $$(".ai_c").forEach(function (c) { c.checked = true; }); mk(); };
+    $("#ai_none").onclick = function () { $$(".ai_c").forEach(function (c) { c.checked = false; }); mk(); };
+    $("#ai_few").onclick = function () { $$(".ai_c").forEach(function (c) { c.checked = (qCount[c.value] || 0) < 10; }); mk(); };
     ["ai_t", "ai_n", "ai_d", "ai_x"].forEach(function (id) { $("#" + id).oninput = mk; $("#" + id).onchange = mk; });
-    mk();
+    fillUnits();
     $("#ai_copy").onclick = function () {
       var t = $("#ai_p"); t.select();
       (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(function () { MG.toast("복사했어요! AI 채팅창에 붙여넣으세요."); }, function () { document.execCommand("copy"); MG.toast("복사했어요!"); });
@@ -612,6 +663,25 @@
       "- answer: mc는 보기와 똑같은 글자, ox는 O 또는 X, blank는 정답 단어(여러 개 허용 시 | 로 구분), order는 완성 문장, error는 대괄호 안의 틀린 부분 그대로\n" +
       "- difficulty: 1(쉬움) 2(보통) 3(어려움)\n- source: AI 생성\n" +
       "칸 안에서는 줄바꿈과 탭을 쓰지 마. 정답이 하나뿐인지 두 번 검토해 줘.";
+  }
+  function aiPromptMulti(codes, n, diff, extra) {
+    var ts = codes.map(function (c) { return D.topicBy[c] || { code: c }; }), high = ts.some(function (t) { return +t.grade === 4; }), mid = ts.some(function (t) { return +t.grade !== 4; });
+    return "너는 한국 중학교 영어 교사를 돕는 문법 문제 출제 전문가야.\n" +
+      "아래 " + codes.length + "개 단원 각각에 대해 문제를 " + n + "개씩, 모두 " + codes.length * n + "개 만들어 줘. 난이도: " + diff + ".\n\n" +
+      ts.map(function (t, i) {
+        return (i + 1) + ") " + t.code + " " + (t.unit_title ? "[대단원 " + (t.unit_no || "") + " " + t.unit_title + "] " : "") + (t.title || "") + " (" + (MG.GRADES[t.grade] || "") + ")\n" +
+          "   핵심: " + String(t.summary || "").replace(/\*\*/g, "").replace(/\n/g, " / ");
+      }).join("\n") + "\n\n" +
+      "규칙:\n- 단원마다 정확히 " + n + "개씩. 뒤쪽 단원도 앞쪽 단원과 같은 품질로, 그 단원의 핵심 문법만 묻게 해 줘.\n" +
+      "- 단원마다 유형을 골고루 섞어 줘: mc(4지선다), ox(참/거짓), blank(빈칸, 문제에 ___ 표시), order(우리말 뜻을 주고 영어 문장 배열), error(틀린 곳 찾기: 고를 부분 4개를 [대괄호]로 감싸고 그중 하나만 틀리게).\n" +
+      "- " + (high && mid ? "고등·수능 단원은 모의고사·수능 어법 스타일과 고1 수준 어휘로, 중학 단원은 한국 중학생 수준의 쉬운 어휘로" : high ? "고등학교 모의고사·수능 어법 문제 스타일로, 고1 수준 어휘" : "한국 중학생 수준의 쉬운 어휘") + "와 자연스러운 상황을 쓰고, 해설은 한국어로 짧게(왜 그 답인지).\n" +
+      (extra ? "- 추가 요청: " + extra + "\n" : "") +
+      "\n출력 형식(아주 중요): 아래 8개 열의 탭(Tab)으로 구분된 표 하나만 코드 블록 하나에 출력해. 단원별로 표를 나누지 말고, 제목 줄은 맨 위에 한 번만.\n" +
+      COLS.join("\t") + "\n" +
+      "- topic_code: 그 문제가 속한 단원 코드 (" + codes.join(", ") + " 중 하나, 글자 그대로)\n- qtype: mc / ox / blank / order / error 중 하나\n- choices: mc 일 때만 보기 4개를 | 로 구분 (예: am|is|are|be), 나머지는 비워 둠\n" +
+      "- answer: mc는 보기와 똑같은 글자, ox는 O 또는 X, blank는 정답 단어(여러 개 허용 시 | 로 구분), order는 완성 문장, error는 대괄호 안의 틀린 부분 그대로\n" +
+      "- difficulty: 1(쉬움) 2(보통) 3(어려움)\n- source: AI 생성\n" +
+      "칸 안에서는 줄바꿈과 탭을 쓰지 마. 정답이 하나뿐인지 두 번 검토해 줘. 답이 길어서 끊기면 내가 \"계속\"이라고 할게. 그때는 제목 줄 없이 바로 다음 줄부터 이어서 출력해 줘.";
   }
   // 따옴표를 지원하는 TSV/CSV 해석
   function parseDelimited(text) {
