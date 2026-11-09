@@ -11,9 +11,11 @@ export const QTYPES = {
 };
 
 // 예문 속 표제어 위치 찾기 (변화형 포함)
-const cache = new Map();
+// 단어 객체 자체를 열쇠로 기억한다. id로 기억하면 id가 겹치거나 단어장을 다시 불러왔을 때
+// 다른 단어의 예문이 나온다 (예: cheer 문제에 diary 예문).
+const cache = new WeakMap();
 export function clozeOf(w) {
-  if (cache.has(w.id)) return cache.get(w.id);
+  if (cache.has(w)) return cache.get(w);
   let res = null;
   if (w.ex) {
     for (const alt of w.word.split(/[,/]/).map(x => x.trim()).filter(Boolean)) {
@@ -32,7 +34,7 @@ export function clozeOf(w) {
     } catch { }
     }
   }
-  cache.set(w.id, res); return res;
+  cache.set(w, res); return res;
 }
 
 function distractors(w, pool, n, key) {
