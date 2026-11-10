@@ -3,7 +3,7 @@
 여러 앱의 학생 기록을 한 화면에서 보는 교사용 페이지예요. 각 앱의 저장소를 선생님 계정으로 **읽기만** 해요. 어떤 앱의 기록도 바꾸지 않아요.
 
 - 주소: https://tfellow.github.io/web/teacher/
-- 체험 모드 (가상 학생 기록): https://tfellow.github.io/web/teacher/?demo=1
+- 체험 모드 (가상 학생 기록): 지금 꺼 둠 (hub.js 의 DEMO_ENABLED)
 - 교사 계정: tfellow@gmail.com, tfellow@smy.ms.kr
 
 ## 연결하는 저장소 (처음 한 번씩 Google 로그인)
@@ -46,7 +46,7 @@
 
 ## 📤 학생 페이지 MY English Journey (3단계)
 
-- 주소: https://tfellow.github.io/web/me/ (체험: `?demo=1`)
+- 주소: https://tfellow.github.io/web/me/ (체험 모드 `?demo=1` 은 지금 꺼 둠, DEMO_ENABLED)
 - 학생은 학교 계정 한 번 로그인(독서 여권과 같은 로그인)으로 자기 기록만 봐요: 이번 주 공부한 앱, 받은 으쓱, 다음 으쓱까지 남은 양, 앱별 기록, 최근 기록.
 - 선생님이 Teacher Hub에서 세 저장소를 모두 연결하면 학생별 요약을 Supabase `hub_summary` 표에 자동으로 올려요(10분에 한 번, [지금 올리기]도 있어요).
 - **처음 한 번**: Supabase SQL Editor에서 `teacher/supabase_hub_summary.sql`을 실행해 표를 만들어요. 학생은 자기 줄만 읽고, 쓰기는 교사만 할 수 있어요.

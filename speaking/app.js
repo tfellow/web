@@ -5,7 +5,9 @@
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키
-  var DEMO = new URLSearchParams(location.search).has("demo");
+  // 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로
+  var DEMO_ENABLED = false;
+  var DEMO = DEMO_ENABLED && new URLSearchParams(location.search).has("demo");
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   var KST = 9 * 3600e3, DAY = 864e5;
 

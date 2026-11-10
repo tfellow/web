@@ -87,7 +87,9 @@ ul.tl .v { font-weight: 700; color: var(--navy-2); white-space: nowrap; }
 const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
 const SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
 const SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF";
-const DEMO = new URLSearchParams(location.search).has("demo");
+// 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로
+const DEMO_ENABLED = false;
+const DEMO = DEMO_ENABLED && new URLSearchParams(location.search).has("demo");
 const APPS = [
   { id: "passport", name: "독서 여권", icon: "📖", url: "../app/" },
   { id: "grammar", name: "문법", icon: "✏️", url: "../grammar/" },

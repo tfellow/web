@@ -67,7 +67,9 @@ const DEFAULT_RULES = [
   { metric: "kahoot_hw", min: 80, every: 3, give: 1, label: "Kahoot 과제 80점 3회" },
 ];
 
-const DEMO = new URLSearchParams(location.search).has("demo");
+// 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로
+const DEMO_ENABLED = false;
+const DEMO = DEMO_ENABLED && new URLSearchParams(location.search).has("demo");
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const low = s => String(s || "").toLowerCase().trim();

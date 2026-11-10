@@ -2,7 +2,7 @@
 
 교과서 대화문을 원어민 목소리(TTS)로 듣고 따라 말하면, 음성 인식 결과를 원래 문장과 **단어 단위로 비교**해 점수를 보여 주는 앱이에요.
 
-- 주소: https://tfellow.github.io/web/speaking/ (체험: `?demo=1`)
+- 주소: https://tfellow.github.io/web/speaking/ (체험 모드 `?demo=1` 은 지금 꺼 둠, DEMO_ENABLED)
 - 로그인: 독서 여권과 같은 Supabase + 학교 구글 계정(@smy.ms.kr). 교사(is_admin)는 상단 [👩‍🏫 교사].
 - 녹음은 **저장하지 않아요**. 크롬 음성 인식(구글 서버에서 글자로 바꿈)의 결과 글자와 점수만 `sp_attempts`에 저장해요.
 - 크롬(PC, 갤럭시 탭)에서 마이크가 돼요. 다른 브라우저는 듣기만 돼요.
