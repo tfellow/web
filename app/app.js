@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "60"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "61"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -2062,5 +2062,38 @@
     if (evt === "SIGNED_IN" && session && (!state.user || state.user.id !== session.user.id)) setTimeout(boot, 0);
     if (evt === "SIGNED_OUT") setTimeout(boot, 0);
   });
+  /* ---------- PWA: 서비스 워커 + 앱 설치 안내 ---------- */
+  (function setupPwa() {
+    // 미리보기(_preview.html 등 BASE 사용)에서는 등록하지 않아요
+    if ("serviceWorker" in navigator && !BASE) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js?v=" + ASSET_V).catch(function () {});
+      });
+    }
+    var bar = document.getElementById("installbar");
+    if (!bar) return;
+    var deferred = null;
+    var KEY = "myrp_install_dismissed";
+    function standalone() {
+      return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+    }
+    function dismissed() { try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; } }
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferred = e;
+      if (!standalone() && !dismissed()) bar.classList.remove("hidden");
+    });
+    window.addEventListener("appinstalled", function () { deferred = null; bar.classList.add("hidden"); });
+    document.getElementById("installgo").onclick = function () {
+      if (!deferred) { bar.classList.add("hidden"); return; }
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; bar.classList.add("hidden"); });
+    };
+    document.getElementById("installno").onclick = function () {
+      bar.classList.add("hidden");
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
+    };
+  })();
+
   boot();
 })();

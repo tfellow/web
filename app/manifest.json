@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "MY Reading Passport · 문영 독서 여권",
+  "short_name": "독서 여권",
+  "description": "세계문학을 영어로 읽고 퀴즈를 풀며 메달과 스탬프를 모으는 서울문영여자중학교 독서 앱",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1e3768",
+  "theme_color": "#1e3768",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
