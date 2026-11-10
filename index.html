@@ -22,18 +22,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490;
+    --c-passport: #1e3768; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db;
+    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db;
+    --c-passport: #8fb0ef; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -103,7 +103,7 @@
   [data-app="cloze"] { --c: var(--c-cloze); } [data-app="forest"] { --c: var(--c-forest); }
   [data-app="show"] { --c: var(--c-show); } [data-app="grammar"] { --c: var(--c-grammar); }
   [data-app="class123"] { --c: var(--c-class); } [data-app="writing"] { --c: var(--c-writing); }
-  [data-app="level"] { --c: var(--c-level); }
+  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); }
 
   .show { padding-block: 34px; }
   .show + .show { border-top: 1px dashed var(--line); }
@@ -228,7 +228,7 @@
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
         <p class="lede">영어 레벨 테스트와 세계문학 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
+          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
         </nav>
       </div>
 
@@ -247,7 +247,7 @@
         <ul class="links" aria-label="앱별 로그인 상태">
           <li>MY Level Test · 독서 여권 <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>MY Brain Up · Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>단어숲 · 영작문 튜터 <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
           <li>MY Cloze · Class123 <span class="pill off" id="teacherPill">교사 전용</span></li>
@@ -427,6 +427,35 @@
           <img src="assets/shots/forest-home.webp" width="1280" height="800" loading="lazy" alt="단어숲 홈 화면: 연속 학습일, 오늘의 목표, 오늘의 단어">
         </button>
         <figcaption>홈 화면 (체험 모드)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="brainup" id="brainup">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg></div>
+          <div class="tags"><span class="tag">상식 퀴즈</span><span class="tag">쉬운 영어</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Brain Up<small>풀수록 똑똑해지는 랜덤 상식 퀴즈</small></h3>
+        <p>START를 누르면 국어·영어·수학·사회·과학·예체능·경제·IT 8개 분야에서 랜덤으로 문제가 나와요. 객관식과 단답형, 쉬운 영어 문제로 점수를 모아 이번 주 상식 퀸에 도전해요.</p>
+        <ul class="feats">
+          <li>오늘의 10문제와 오답 다시 풀기</li>
+          <li>영어 문제 보너스와 English Day</li>
+          <li>분야 배지 · 주간 순위 · 반 대항전</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="brainup/">시작하기 →</a>
+          <a class="sub-link" href="brainup/guide.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/brainup-home.webp" data-cap="MY Brain Up 시작 화면">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/brainup</span></span>
+          <img src="assets/shots/brainup-home.webp" width="1280" height="800" loading="lazy" alt="MY Brain Up 시작 화면: START 버튼, 오늘의 10문제, 오답 다시 풀기, 분야 배지">
+        </button>
+        <figcaption>시작 화면</figcaption>
       </figure>
     </div>
   </article>
