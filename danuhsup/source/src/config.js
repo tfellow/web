@@ -14,7 +14,7 @@ export const APP = {
   schoolName: '서울문영여자중학교',
   appName: '단어숲',
   // 교사 계정 이메일 (구글 로그인). firestore.rules 의 목록과 똑같이 맞춰 주세요.
-  teacherEmails: ['tfellow@gmail.com', 'tfellow@smy.ms.kr'],
+  teacherEmails: ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr'],
   // 학번+비밀번호 로그인 사용 여부 (기본: 구글 로그인만 사용)
   studentIdLogin: false,
   // 학번 로그인용 내부 이메일 도메인 (실제 메일이 오가지 않습니다)

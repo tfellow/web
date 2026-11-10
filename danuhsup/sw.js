@@ -2,7 +2,7 @@
 // - 앱 파일(같은 주소): 인터넷 먼저, 안 되면 저장해 둔 것
 // - 글꼴·Firebase 프로그램(버전이 고정된 주소): 저장해 둔 것 먼저
 // - 학습 기록(Firestore)은 건드리지 않음: Firebase 가 스스로 기기에 보관했다가 보냅니다.
-const CACHE = 'danuhsup-13f6700c9b';
+const CACHE = 'danuhsup-13f6700c9b-a1';
 const CORE = ['./', 'index.html', 'app.js', 'app.css', 'icon.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {

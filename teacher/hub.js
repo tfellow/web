@@ -7,7 +7,7 @@
 //   Firebase cloze-a8e6c          : 단어숲, MY Cloze, AI 영작문(writing1)
 //   Firebase my-kahoot-smy (RTDB) : MY Kahoot, Class123 Plus, 보상 규칙·지급 기록
 const FB_VER = "10.12.2";
-const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr"];
+const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@smy.ms.kr"];
 const SCHOOL = "@smy.ms.kr";
 const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
 const SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";

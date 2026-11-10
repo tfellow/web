@@ -2,18 +2,18 @@
   "rules": {
     "class123_plus": {
       "$workspace": {
-        ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+        ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
       }
     },
     "activePin": {
       ".read": true,
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
     },
     "rooms": {
       ".read": "auth != null && auth.token.email_verified == true && (auth.token.email.toLowerCase().endsWith('@smy.ms.kr') || auth.token.email == 'tfellow@gmail.com')",
       "$pin": {
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
         "players": {
           "$player": {
             ".write": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().endsWith('@smy.ms.kr') && auth.token.email.toLowerCase().replace('.', '_') == $player"
@@ -22,23 +22,23 @@
       }
     },
     "schoolRoster": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
     },
     "rosterByEmail": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
       "$key": {
         ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $key"
       }
     },
     "homework": {
       ".read": "auth != null && auth.token.email_verified == true && (auth.token.email.toLowerCase().endsWith('@smy.ms.kr') || auth.token.email == 'tfellow@gmail.com')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
     },
     "homeworkResults": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
       "$hwId": {
         "$player": {
           ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $player",
@@ -47,8 +47,8 @@
       }
     },
     "teacherData": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr')"
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
     }
   }
 }

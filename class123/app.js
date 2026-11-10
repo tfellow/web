@@ -32,7 +32,7 @@ let lastActionBatchId = null;
 let undoToastTimer = null;
 
 // 관리자 인증 설정
-const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr'];
 const AUTH_STORAGE_KEY = 'CLASS123_AUTH_USER_V1';
 const ADMIN_PW_STORAGE_KEY = 'CLASS123_ADMIN_PW_V1';
 

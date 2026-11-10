@@ -53,7 +53,7 @@ const MYKahoot = (() => {
   };
 
   // 교사 계정 (이 계정으로 Google 로그인해야 교사 페이지·전자칠판·명단을 쓸 수 있어요)
-  const TEACHER_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+  const TEACHER_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr'];
   // 예전 주소(Firebase Hosting)와 새 주소(GitHub Pages)
   const OLD_HOST = 'my-kahoot-smy.web.app';
   const NEW_BASE_URL = 'https://tfellow.github.io/web/kahoot/';

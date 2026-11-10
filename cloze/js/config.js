@@ -17,7 +17,8 @@ export const SCHOOL_DOMAIN = "smy.ms.kr";
 // 학교 계정이 아닌 주소(예: gmail)를 적어도 교사로 로그인할 수 있습니다.
 export const TEACHER_EMAILS = [
   "tfellow@gmail.com",
-  "tfellow@smy.ms.kr"
+  "tfellow@smy.ms.kr",
+  "engwords@smy.ms.kr"
 ];
 
 export const APP_NAME = "MY Cloze";

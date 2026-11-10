@@ -51,7 +51,8 @@ const ALLOWED_DOMAIN = "smy.ms.kr";
 const TEACHER_EMAILS = [
   "tfellow@smy.ms.kr",
   "tfellow@gmail.com",
-  "engwords@gmail.com"
+  "engwords@gmail.com",
+  "engwords@smy.ms.kr"
 ];
 
 // ★ 보안: Gemini API 키는 학생 브라우저에 절대 보내지 않아요.
