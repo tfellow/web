@@ -31,7 +31,7 @@ create table if not exists public.lt_settings (
   value jsonb not null
 );
 insert into public.lt_settings (key, value) values
-  ('open', 'true'), ('retake_days', '14'), ('allow_external', 'false'), ('item_b', '{}')
+  ('open', 'true'), ('retake_days', '14'), ('allow_external', 'false'), ('item_b', '{}'), ('unlock', '{}')
 on conflict (key) do nothing;
 
 -- 응시 가능: 교사, 학교 계정(@smy.ms.kr), 또는 외부 허용이 켜져 있을 때
@@ -45,13 +45,16 @@ $$;
 -- 재응시 간격·응시 열림을 서버에서도 지켜요 (교사는 예외)
 create or replace function public.lt_before_insert() returns trigger
 language plpgsql security definer set search_path = public as $$
-declare d int; o boolean; last timestamptz;
+declare d int; o boolean; last timestamptz; un timestamptz;
 begin
   if public.is_admin() then return new; end if;
   select (value #>> '{}')::boolean into o from public.lt_settings where key = 'open';
   if coalesce(o, true) = false then raise exception 'LT_CLOSED'; end if;
   select (value #>> '{}')::int into d from public.lt_settings where key = 'retake_days';
   select max(finished_at) into last from public.lt_attempts where user_id = new.user_id;
+  -- 교사가 이 학생에게 "지금 재응시 허용"을 눌렀다면(마지막 응시 뒤) 간격을 건너뛰어요
+  select (value ->> lower(new.email))::timestamptz into un from public.lt_settings where key = 'unlock';
+  if un is not null and last is not null and un > last then new.finished_at := now(); return new; end if;
   if last is not null and coalesce(d, 0) > 0 and last > now() - make_interval(days => d) then
     raise exception 'LT_COOLDOWN';
   end if;

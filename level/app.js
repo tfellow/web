@@ -54,7 +54,7 @@
     }
     return page(0);
   }
-  var DEF_SET = { open: true, retake_days: 14, allow_external: false, item_b: {} };
+  var DEF_SET = { open: true, retake_days: 14, allow_external: false, item_b: {}, unlock: {} };
   var COLS = "id,email,started_at,finished_at,duration_sec,overall_cefr,overall_sub,overall_theta,vocab_size,vocab_cefr,lang_cefr,read_cefr,lexile,ar,flags,result";
   var real = {
     settings: function () {
@@ -211,15 +211,21 @@
 
   // ---------- 학생 홈 ----------
   function sessKey() { return "lt.session." + state.email; }
+  // 다음 응시 가능 시각 (ms). 0 = 지금 가능. 교사가 학생별로 "재응시 허용"을 누르면 그 뒤로는 바로 가능해요
+  function nextAllowedAt(email, lastIso) {
+    var days = +state.settings.retake_days || 0;
+    if (!lastIso || days <= 0) return 0;
+    var un = (state.settings.unlock || {})[low(email)];
+    if (un && Date.parse(un) > Date.parse(lastIso)) return 0;
+    var next = Date.parse(lastIso) + days * DAY;
+    return next > Date.now() ? next : 0;
+  }
   function canStart() {
     if (state.admin) return { ok: true };
     var s = state.settings;
     if (s.open === false || s.open === "false") return { ok: false, msg: "지금은 레벨 테스트가 닫혀 있어요. 선생님이 열어 주시면 볼 수 있어요." };
-    var days = +s.retake_days || 0, last = state.mine[0];
-    if (days > 0 && last) {
-      var next = Date.parse(last.finished_at) + days * DAY;
-      if (next > Date.now()) return { ok: false, msg: "다음 응시는 " + kday(next).replace(/-/g, ".") + "부터 할 수 있어요. (재응시 간격 " + days + "일)" };
-    }
+    var last = state.mine[0], next = last ? nextAllowedAt(state.email, last.finished_at) : 0;
+    if (next) return { ok: false, msg: "다음 응시는 " + kday(next).replace(/-/g, ".") + "부터 할 수 있어요. (재응시 간격 " + s.retake_days + "일)" };
     return { ok: true };
   }
   function viewHome() {
@@ -580,22 +586,50 @@
     list.sort(function (a, b) { return a.p.grade - b.p.grade || a.p.class_no - b.p.class_no || a.p.student_no - b.p.student_no; });
     return list;
   }
+  var PRESETS = [[0, "제한 없음"], [7, "1주"], [14, "2주"], [30, "1달"], [60, "2달"], [90, "3달"], [120, "한 학기"], [180, "6달"]];
+  function daysTxt(d) { d = +d || 0; var p = PRESETS.filter(function (x) { return x[0] === d; })[0]; return d === 0 ? "제한 없음" : d + "일" + (p ? " (" + p[1] + ")" : ""); }
+  function saveDays(days, after) {
+    days = Math.max(0, Math.min(365, parseInt(days, 10) || 0));
+    return store.setSetting("retake_days", days).then(function () { state.settings.retake_days = days; toast("재응시 간격을 " + daysTxt(days) + "로 정했어요"); if (after) after(); }).catch(function (e) { toast("저장 실패: " + e.message); });
+  }
+  function unlockEmails(emails, after) {
+    var u = Object.assign({}, state.settings.unlock || {}), now = new Date().toISOString();
+    emails.forEach(function (e) { u[low(e)] = now; });
+    return store.setSetting("unlock", u).then(function () { state.settings.unlock = u; toast(emails.length + "명이 지금 바로 다시 볼 수 있어요"); if (after) after(); }).catch(function (e) { toast("저장 실패: " + e.message); });
+  }
+  function nextCell(email, a) {
+    var n = nextAllowedAt(email, a.finished_at);
+    return n ? '<span class="small">' + kday(n).slice(5).replace("-", "/") + "</span>" : '<span class="pill ok">가능</span>';
+  }
+  function daysOptions() {
+    var cur = +state.settings.retake_days || 0, list = PRESETS.slice();
+    if (!list.some(function (x) { return x[0] === cur; })) list.push([cur, cur + "일"]);
+    return list.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === cur ? " selected" : "") + ">" + x[1] + (x[0] && x[1].indexOf("일") < 0 ? " · " + x[0] + "일" : "") + "</option>"; }).join("");
+  }
   var FLAG_KO = { rapid: "빠른 찍기", vocab_overclaim: "단어 과다 체크", vocab_check_low: "뜻 확인 낮음" };
   function tResults() {
     var list = people(), took = list.filter(function (r) { return r.x; });
     var html = '<div class="t-head"><h2>학생별 최근 결과</h2><div class="row-btns">' + classSel() + '<button class="btn sm" id="csv">⬇️ CSV</button></div></div>' +
+      '<div class="retake-bar"><span>🔁 재응시 간격</span><select id="rDays">' + daysOptions() + "</select>" +
+      '<span class="small muted">첫 응시 후 이 기간이 지나야 다시 볼 수 있어요.</span><button class="btn sm" id="unlockAll">' + (state.tClass ? state.tClass.replace("-", "학년 ") + "반" : "전체") + " 지금 재응시 허용</button></div>" +
       '<p class="small muted">응시 ' + took.length + "명 / " + list.length + "명 · 이름을 누르면 상세 보고서와 지난 기록을 볼 수 있어요.</p>" +
-      '<div class="tbl-wrap"><table><thead><tr><th>반-번호</th><th>이름</th><th>응시일</th><th>종합</th><th>어휘</th><th>문법</th><th>읽기</th><th>Lexile</th><th>AR</th><th>소요</th><th>횟수</th><th>주의</th></tr></thead><tbody>' +
+      '<div class="tbl-wrap"><table><thead><tr><th>반-번호</th><th>이름</th><th>응시일</th><th>종합</th><th>어휘</th><th>문법</th><th>읽기</th><th>Lexile</th><th>AR</th><th>소요</th><th>횟수</th><th>다음 응시</th><th>주의</th></tr></thead><tbody>' +
       list.map(function (r) {
         var p = r.p, a = r.x && r.x.last;
         var cn = p.grade === 9 ? "-" : p.grade + "-" + p.class_no + "-" + p.student_no;
-        if (!a) return '<tr class="dim"><td>' + cn + "</td><td>" + esc(p.name) + '</td><td colspan="10" class="small muted">아직 응시하지 않았어요</td></tr>';
+        if (!a) return '<tr class="dim"><td>' + cn + "</td><td>" + esc(p.name) + '</td><td colspan="11" class="small muted">아직 응시하지 않았어요</td></tr>';
         return "<tr><td>" + cn + '</td><td><a href="#/teacher/student/' + encodeURIComponent(p.email) + '">' + esc(p.name) + "</a></td><td>" + fmtDate(a.finished_at).slice(5, 16) + "</td><td>" + lvPill(a.overall_cefr, lvName(a.overall_cefr) + " " + (a.overall_sub || "")) +
-          '</td><td class="num">' + num(a.vocab_size) + "</td><td>" + esc(lvName(a.lang_cefr)) + "</td><td>" + esc(lvName(a.read_cefr)) + '</td><td class="num">' + LT.lexLabel(a.lexile) + '</td><td class="num">' + (+a.ar).toFixed(1) + '</td><td class="num">' + Math.round((a.duration_sec || 0) / 60) + "분</td><td class=\"num\">" + r.x.n +
+          '</td><td class="num">' + num(a.vocab_size) + "</td><td>" + esc(lvName(a.lang_cefr)) + "</td><td>" + esc(lvName(a.read_cefr)) + '</td><td class="num">' + LT.lexLabel(a.lexile) + '</td><td class="num">' + (+a.ar).toFixed(1) + '</td><td class="num">' + Math.round((a.duration_sec || 0) / 60) + "분</td><td class=\"num\">" + r.x.n + "</td><td>" + nextCell(p.email, a) +
           "</td><td>" + (a.flags || []).map(function (f) { return '<span class="pill off">' + (FLAG_KO[f] || f) + "</span>"; }).join(" ") + "</td></tr>";
       }).join("") + "</tbody></table></div>";
     $("#tBody").className = "card"; $("#tBody").innerHTML = html;
     bindClass(tResults);
+    $("#rDays").onchange = function () { saveDays(this.value, tResults); };
+    $("#unlockAll").onclick = function () {
+      var em = took.filter(function (r) { return nextAllowedAt(r.p.email, r.x.last.finished_at); }).map(function (r) { return r.p.email; });
+      if (!em.length) return toast("기다리는 학생이 없어요. 모두 지금 응시할 수 있어요.");
+      if (confirm(em.length + "명이 재응시 간격과 관계없이 지금 바로 다시 볼 수 있게 할까요?")) unlockEmails(em, tResults);
+    };
     $("#csv").onclick = function () {
       var rows = [["학년", "반", "번호", "이름", "이메일", "응시일", "종합CEFR", "세부", "theta", "어휘크기", "어휘CEFR", "문법CEFR", "읽기CEFR", "Lexile", "AR", "ZPD", "소요(분)", "응시횟수", "주의"]];
       list.forEach(function (r) {
@@ -653,10 +687,13 @@
     $("#tBody").className = "card";
     $("#tBody").innerHTML = '<h2>설정</h2><div class="form">' +
       '<label class="chk"><input type="checkbox" id="sOpen"' + (on(s.open) ? " checked" : "") + "> 학생 응시 열기</label>" +
-      '<label>재응시 간격 (일, 0 = 제한 없음)<input type="number" id="sDays" min="0" max="365" value="' + (+s.retake_days || 0) + '"></label>' +
+      '<label>재응시 간격 — 처음 응시한 뒤 다음 응시까지 기다리는 기간 (일, 0 = 제한 없음)<input type="number" id="sDays" min="0" max="365" value="' + (+s.retake_days || 0) + '"></label>' +
+      '<div class="presets">' + PRESETS.map(function (x) { return '<button type="button" class="btn sm' + (x[0] === +s.retake_days ? " navy" : "") + '" data-d="' + x[0] + '">' + x[1] + "</button>"; }).join("") + "</div>" +
+      '<p class="small muted" style="margin:0">지금: <b>' + daysTxt(s.retake_days) + '</b>. 바꾸면 이미 응시한 학생에게도 바로 적용돼요. 특정 학생만 먼저 다시 보게 하려면 결과 탭이나 학생 상세 화면의 <b>재응시 허용</b>을 누르세요.</p>' +
       '<label class="chk"><input type="checkbox" id="sExt"' + (on(s.allow_external) ? " checked" : "") + "> 학교 밖 계정(@smy.ms.kr 아닌 계정)도 응시 허용</label>" +
       '<div class="row-btns"><button class="btn navy" id="sSave">저장</button></div></div>' +
       '<p class="small muted">교사 계정은 설정과 관계없이 언제든 볼 수 있어요(시험 체험용). 교사 계정 관리는 독서 여권 교사 화면의 ⚙️ 설정에서 해요.</p>';
+    $$(".presets [data-d]").forEach(function (b) { b.onclick = function () { $("#sDays").value = b.getAttribute("data-d"); $$(".presets .btn").forEach(function (x) { x.classList.toggle("navy", x === b); }); }; });
     $("#sSave").onclick = function () {
       var days = Math.max(0, Math.min(365, parseInt($("#sDays").value, 10) || 0));
       Promise.all([store.setSetting("open", $("#sOpen").checked), store.setSetting("retake_days", days), store.setSetting("allow_external", $("#sExt").checked)])
@@ -676,9 +713,11 @@
         var box = document.createElement("div"); box.className = "card no-print";
         box.innerHTML = "<h2>응시 기록 (" + list.length + "회)</h2>" + growth(list) +
           '<div class="row-btns">' + list.map(function (a, i) { return '<button class="btn sm' + (a === sel ? " navy" : "") + '" data-i="' + i + '">' + fmtDate(a.finished_at).slice(0, 10) + "</button>"; }).join("") + '<button class="btn sm red" id="del">이 기록 삭제</button></div>' +
-          '<p class="small muted">삭제하면 학생이 바로 다시 응시할 수 있어요 (재응시 간격 초기화).</p>';
+          '<p class="small">🔁 다음 응시: ' + (function () { var n = nextAllowedAt(email, list[0].finished_at); return n ? "<b>" + kday(n).replace(/-/g, ".") + "</b>부터 (간격 " + daysTxt(state.settings.retake_days) + ') <button class="btn sm gold" id="unlock1">지금 재응시 허용</button>' : "<b>지금 가능</b>"; })() + "</p>" +
+          '<p class="small muted">재응시 허용은 기록을 지우지 않고 바로 한 번 더 볼 수 있게 해요.</p>';
         $(".report").insertBefore(box, $(".report").children[1]);
         $$("[data-i]", box).forEach(function (b) { b.onclick = function () { sel = list[+b.getAttribute("data-i")]; draw(); }; });
+        if ($("#unlock1")) $("#unlock1").onclick = function () { unlockEmails([email], draw); };
         $("#del").onclick = function () {
           if (!confirm(fmtDate(sel.finished_at) + " 기록을 삭제할까요? 되돌릴 수 없어요.")) return;
           store.del(sel.id).then(function () { T.att = T.att.filter(function (a) { return a.id !== sel.id; }); toast("삭제했어요"); location.hash = "#/teacher"; }).catch(function (e) { toast("삭제 실패: " + e.message); });
