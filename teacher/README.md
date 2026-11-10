@@ -13,6 +13,7 @@
 | Supabase `tfellow-web` | 독서 여권 | `roster` 명단, `admin_attempts()` 퀴즈 기록, `books` 제목 |
 | | MY Grammar | `mg_players`, `mg_stamps`, `mg_admin_by_student(기간)` |
 | | Quiz Queens | Apps Script `getInitialData` (Supabase 토큰으로 교사 확인) |
+| | MY Brain Up | `bu_daily` 학생×날짜 합계 (하루 1줄 = 기록 1개: 푼 문제·맞힌 문제·점수·영어·오늘의 10문제). 보상 기준: 맞힌 문제, 10문제 완주, 도전한 날 |
 | Firebase `cloze-a8e6c` | 단어숲 | `vocab_users`(누적 통계), `vocab_results`(단원 테스트) |
 | | 영작문 writing1 | `vocab_results` 중 `appTag = writing1_submission` |
 | | MY Cloze | `users`, `submissions` (**로그인한 계정이 만든 테스트만**: 보안 규칙) |
