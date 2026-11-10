@@ -5,7 +5,9 @@
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키
-  var DEMO = new URLSearchParams(location.search).has("demo");
+  // 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로 바꾸고 첫 화면(index.html)의 체험 링크 주석도 풀어요
+  var DEMO_ENABLED = false;
+  var DEMO = DEMO_ENABLED && new URLSearchParams(location.search).has("demo");
   var BANK = window.LT_BANK, LT = window.LT;
   var DAY = 864e5, KST = 9 * 3600e3;
   var VOCAB_PAGE = 15;
@@ -135,7 +137,7 @@
       '<div class="chips"><span>CEFR</span><span>Lexile</span><span>AR</span><span>어휘 크기</span></div>' +
       (msg ? '<p class="err">' + esc(msg) + "</p>" : "") +
       '<div id="gsi" style="display:flex;justify-content:center;margin-top:12px"></div>' +
-      '<p class="small muted" style="margin-top:14px">학교 구글 계정(@smy.ms.kr)으로 로그인하세요. · <a href="?demo=1">체험해 보기</a></p></div>';
+      '<p class="small muted" style="margin-top:14px">학교 구글 계정(@smy.ms.kr)으로 로그인하세요.' + (DEMO_ENABLED ? ' · <a href="?demo=1">체험해 보기</a>' : "") + "</p></div>";
     (function draw() {
       if (!window.google || !google.accounts || !google.accounts.id) return setTimeout(draw, 300);
       google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: function (r) {
@@ -671,7 +673,7 @@
       '<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>레벨</th><th>문항</th><th>응답</th><th>정답률</th><th>기대</th><th>b</th><th>추정 b</th><th>평균 시간</th></tr></thead><tbody>' +
       cal.sort(function (x, y) { return x.b - y.b; }).map(function (c) {
         var diff = c.bNew != null ? c.bNew - c.b : 0, hot = c.n >= MIN && Math.abs(diff) >= GAP;
-        return "<tr" + (c.n ? "" : ' class="dim"') + "><td>" + c.id + "</td><td>" + lvPill(lvOf(c.b)) + '</td><td class="q-cell">' + esc(c.q) + '</td><td class="num">' + c.n + '</td><td class="num">' + (c.p == null ? "-" : Math.round(c.p * 100) + "%") + '</td><td class="num">' + (c.expP == null ? "-" : Math.round(c.expP * 100) + "%") + '</td><td class="num">' + (cur[c.id] != null ? "<b>" + cur[c.id] + "</b> <s class=\"small muted\">" + c.b + "</s>" : c.b) + '</td><td class="num' + (hot ? (diff > 0 ? " up" : " down") : "") + '">' + (c.bNew == null ? "-" : c.bNew + (hot ? (diff > 0 ? " ▲" : " ▼") : "")) + '</td><td class="num">' + (c.avgMs ? (c.avgMs / 1000).toFixed(1) + "초" : "-") + "</td></tr>";
+        return "<tr" + (c.n ? "" : ' class="dim"') + "><td>" + c.id + "</td><td>" + lvPill(lvOf(c.b)) + '</td><td class="q-cell">' + (DEMO ? '<span class="muted">(체험 모드에서는 숨김)</span>' : esc(c.q)) + '</td><td class="num">' + c.n + '</td><td class="num">' + (c.p == null ? "-" : Math.round(c.p * 100) + "%") + '</td><td class="num">' + (c.expP == null ? "-" : Math.round(c.expP * 100) + "%") + '</td><td class="num">' + (cur[c.id] != null ? "<b>" + cur[c.id] + "</b> <s class=\"small muted\">" + c.b + "</s>" : c.b) + '</td><td class="num' + (hot ? (diff > 0 ? " up" : " down") : "") + '">' + (c.bNew == null ? "-" : c.bNew + (hot ? (diff > 0 ? " ▲" : " ▼") : "")) + '</td><td class="num">' + (c.avgMs ? (c.avgMs / 1000).toFixed(1) + "초" : "-") + "</td></tr>";
       }).join("") + "</tbody></table></div>" +
       '<p class="small muted">정답률이 기대보다 낮으면(▲) 실제로 더 어려운 문제, 높으면(▼) 더 쉬운 문제예요. 보정 후 새로 보는 시험부터 반영돼요.</p>';
     $("#tBody").className = "card"; $("#tBody").innerHTML = html;
