@@ -59,6 +59,8 @@ const METRICS = {
   brainup_correct: { app: "brainup", name: "Brain Up 맞힌 문제", unit: "개" },
   brainup_d10: { app: "brainup", name: "Brain Up 오늘의 10문제 완주", unit: "회", min: 0, minUnit: "개 이상 맞힘" },
   brainup_days: { app: "brainup", name: "Brain Up 도전한 날", unit: "일" },
+  brainup_tier: { app: "brainup", name: "Brain Up 배지 단계 (8분야 합, 최대 32)", unit: "단계" },
+  brainup_queen: { app: "brainup", name: "Brain Up Brain Queen 등급 (최대 4)", unit: "등급" },
 };
 const DEFAULT_RULES = [
   { metric: "passport_medal", every: 5, give: 1, label: "독서 여권 메달 5권" },
@@ -284,6 +286,14 @@ async function sbLoad() {
         d10: d10.length >= 10 ? d10.filter(x => x === 1).length : null });
     });
   } catch (e) { if (!/bu_daily|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("Brain Up", e); }
+  try { // Brain Up 분야 배지 단계 · Brain Queen 등급 (SQL을 다시 실행하기 전이면 조용히 넘어가요)
+    const CATS8 = ["kor", "eng", "math", "soc", "sci", "art", "eco", "it"];
+    const prof = await sbAll(() => c.from("bu_profile").select("email,tiers"));
+    prof.forEach(p => {
+      const t = CATS8.map(k => num((p.tiers || {})[k]));
+      if (person(p.email)) state.snap.brainup.set(low(p.email), { tiers: t.reduce((a, b) => a + b, 0), queen: Math.min(...t) });
+    });
+  } catch (e) { if (!/tiers|bu_profile|schema cache|does not exist|42703|42P01|PGRST20[45]/i.test((e.message || "") + (e.code || ""))) warn("Brain Up 배지", e); }
 
   try { // Quiz Queens (구글 시트) — Supabase 로그인 토큰으로 선생님임을 확인해요
     const { data } = await c.auth.getSession();
@@ -635,8 +645,9 @@ function cell(id, email, x) {
     }
     case "brainup": {
       if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
-      const b = buStats(s.items);
-      return { main: b.pts, on, html: `<span class="m">${b.pts}점 · ${b.n}문제${b.n ? " · " + b.acc + "%" : ""}</span><span class="sub">${b.days}일${b.enN ? " · 영어 " + b.en + "/" + b.enN : ""}${b.d10 ? " · 10문제 완주 " + b.d10 : ""}</span>`, csv: `${b.pts}점 / ${b.n}문제 ${b.acc}% / ${b.days}일 / 영어 ${b.en}/${b.enN} / 10문제 완주 ${b.d10}` };
+      const b = buStats(s.items), bq = state.snap.brainup.get(email), QN = ["", "🥉 브론즈 퀸", "🥈 실버 퀸", "🥇 골드 퀸", "👑 그랜드 브레인 퀸"];
+      const qt = bq ? (bq.queen ? " · " + QN[bq.queen] : "") + " · 배지 " + bq.tiers + "/32" : "";
+      return { main: b.pts, on, html: `<span class="m">${b.pts}점 · ${b.n}문제${b.n ? " · " + b.acc + "%" : ""}</span><span class="sub">${b.days}일${b.enN ? " · 영어 " + b.en + "/" + b.enN : ""}${b.d10 ? " · 10문제 완주 " + b.d10 : ""}${qt}</span>`, csv: `${b.pts}점 / ${b.n}문제 ${b.acc}% / ${b.days}일 / 영어 ${b.en}/${b.enN} / 10문제 완주 ${b.d10}${qt.replace(/ · /g, " / ")}` };
     }
     case "speaking": {
       if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
@@ -699,6 +710,8 @@ function ruleCount(rule, email) {
     case "brainup_correct": return evs.filter(e => e.a === "brainup" && e.t >= since).reduce((t, e) => t + num(e.s), 0);
     case "brainup_d10": return evs.filter(e => e.a === "brainup" && e.t >= since && e.d10 != null && e.d10 >= min).length;
     case "brainup_days": return evs.filter(e => e.a === "brainup" && e.t >= since).length;
+    case "brainup_tier": return num(state.snap.brainup.get(email)?.tiers); // 지금까지 쌓인 값 (기간과 상관없음)
+    case "brainup_queen": return num(state.snap.brainup.get(email)?.queen);
   }
   return 0;
 }
@@ -798,6 +811,7 @@ function studentSummary(p, Mall, Mweek) {
   const cz = items("cloze"); if (cz.length) apps.cloze = { n: cz.length, avg: Math.round(avg(cz.map(e => num(e.p)))), perfect: cz.filter(e => e.n && e.s === e.n).length, last: last("cloze") };
   const wr = items("writing"); if (wr.length) apps.writing = { n: wr.length, avg: Math.round(avg(wr.map(e => num(e.s)))), cefr: wr.slice().sort((a, b) => b.t - a.t)[0]?.cefr || "", last: last("writing") };
   const bu = items("brainup"); if (bu.length) { const b = buStats(bu); apps.brainup = { pts: b.pts, n: b.n, acc: b.acc, days: b.days, en: b.en, enN: b.enN, d10: b.d10, last: last("brainup") }; }
+  const bq = state.snap.brainup.get(p.email); if (bq && apps.brainup) { apps.brainup.tiers = bq.tiers; apps.brainup.queen = bq.queen; }
   const spk = items("speaking"); if (spk.length) apps.speaking = { n: spk.length, avg: Math.round(avg(spk.map(e => num(e.s)))), lines: new Set(spk.map(e => e.set + ":" + e.line)).size, last: last("speaking") };
   const lt = items("level").slice().sort((a, b) => b.t - a.t); if (lt.length) apps.level = { n: lt.length, cefr: lt[0].cefr, sub: lt[0].sub, lex: lt[0].lex, ar: lt[0].ar, vsize: lt[0].vsize, last: lt[0].t };
   const kh = items("kahoot"); if (kh.length) { const k = kahootStats(kh); apps.kahoot = { live: k.live, hw: k.hw, acc: k.acc != null ? Math.round(k.acc) : null, top3: k.top3, top10: k.top10, best: k.best, last: last("kahoot") }; }

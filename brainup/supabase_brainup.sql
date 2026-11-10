@@ -37,6 +37,10 @@ create table if not exists public.bu_profile (
   items      jsonb not null default '{}',                     -- {"day":"2026-11-10","fifty":1,"skip":0}
   created_at timestamptz not null default now()
 );
+-- 분야 배지 단계 {"sci":2,...} (0 없음 · 1 브론즈 25% · 2 실버 50% · 3 골드 75% · 4 퀸 100%, 내려가지 않아요)
+alter table public.bu_profile add column if not exists tiers jsonb not null default '{}';
+-- 👑 왕관 찬스: 다음 문제 점수 2배
+alter table public.bu_profile add column if not exists double_next boolean not null default false;
 
 create table if not exists public.bu_daily (
   user_id uuid not null,
@@ -131,7 +135,7 @@ create or replace function public.bu_grade(p_uid uuid, t public.bu_ticket, p_giv
 language plpgsql security definer set search_path = public as $$
 declare
   q public.bu_questions; d date := public.bu_today(); okb boolean := false; oki int; v_pts int := 0;
-  em text := lower(coalesce(auth.jwt() ->> 'email', '')); cat_ok int; nb text := null; d10len int := 0;
+  em text := lower(coalesce(auth.jwt() ->> 'email', '')); d10len int := 0; dbl boolean := false;
 begin
   select * into q from public.bu_questions where id = t.qid;
   if q.id is null then
@@ -150,6 +154,10 @@ begin
   if okb then
     v_pts := case when q.qtype = 'sa' then 2 else 1 end + case when q.lang = 'en' and not t.hint then 1 else 0 end;
   end if;
+  -- 👑 왕관 찬스를 받았으면 이번 문제 점수 2배 (맞혀도 틀려도 한 번 쓰면 끝)
+  update public.bu_profile set double_next = false where user_id = p_uid and double_next returning true into dbl;
+  dbl := coalesce(dbl, false);
+  if dbl then v_pts := v_pts * 2; end if;
 
   insert into public.bu_qstate as s (user_id, qid, tries, correct, last_ok, last_at)
   values (p_uid, q.id, 1, oki, okb, now())
@@ -175,21 +183,11 @@ begin
     update public.bu_daily b set pts = b.pts + v_pts where b.user_id = p_uid and b.day = d;
   end if;
 
-  -- 분야 배지: 그 분야를 10번 맞히면
-  if okb then
-    select coalesce(sum((cats -> q.category ->> 1)::int), 0) into cat_ok from public.bu_daily where user_id = p_uid;
-    if cat_ok >= 10 then
-      update public.bu_profile set badges = array_append(badges, q.category)
-      where user_id = p_uid and not (q.category = any(badges))
-      returning q.category into nb;
-    end if;
-  end if;
-
   delete from public.bu_ticket where user_id = p_uid;
   return jsonb_build_object(
     'ok', okb, 'timeout', p_timeout, 'points', v_pts, 'qid', q.id, 'qtype', q.qtype, 'lang', q.lang,
     'category', q.category, 'answer', q.answer, 'choices', to_jsonb(q.choices),
-    'explain', q.explain, 'ko', q.ko, 'new_badge', nb, 'mode', t.mode, 'd10len', d10len);
+    'explain', q.explain, 'ko', q.ko, 'double', dbl, 'mode', t.mode, 'd10len', d10len);
 end $$;
 
 revoke execute on function public.bu_set(text), public.bu_qjson(public.bu_questions, public.bu_ticket),
@@ -278,8 +276,8 @@ begin
 
   else
     mode_ := 'random';
-    -- 👑 왕관 찬스: 하루 1번, 배지를 다 모으지 않았을 때
-    if coalesce(array_length(prof.badges, 1), 0) < 8 and prof.crown_day is distinct from d
+    -- 👑 왕관 찬스: 하루 1번, 다음 문제 점수 2배
+    if prof.crown_day is distinct from d and not prof.double_next
        and random() < coalesce((public.bu_set('crown_rate') #>> '{}')::real, 0.05) then
       insert into public.bu_ticket (user_id, qid, mode, crown, issued_at, limit_sec, hint, fifty_rm)
       values (uid, null, 'random', true, now(), 0, false, null)
@@ -391,17 +389,15 @@ begin
 end $$;
 
 -- 👑 왕관 찬스로 배지 고르기
-create or replace function public.bu_claim_crown(p_cat text) returns jsonb
+create or replace function public.bu_claim_crown(p_cat text default null) returns jsonb
 language plpgsql security definer set search_path = public as $$
 declare uid uuid := auth.uid(); t public.bu_ticket;
 begin
   select * into t from public.bu_ticket where user_id = uid for update;
   if t.user_id is null or not t.crown then raise exception 'BU_NO_TICKET'; end if;
-  if p_cat not in ('kor','eng','math','soc','sci','art','eco','it') then raise exception 'BU_CAT'; end if;
-  update public.bu_profile set badges = case when p_cat = any(badges) then badges else array_append(badges, p_cat) end,
-    crown_day = public.bu_today() where user_id = uid;
+  update public.bu_profile set double_next = true, crown_day = public.bu_today() where user_id = uid;
   delete from public.bu_ticket where user_id = uid;
-  return jsonb_build_object('badge', p_cat);
+  return jsonb_build_object('double', true);
 end $$;
 
 -- 오답 노트 (틀린 뒤 아직 다시 맞히지 못한 문제)
@@ -438,7 +434,7 @@ begin
     select user_id, sum(pts) pts, sum(n) n, sum(ok) ok from public.bu_daily
     where (p_scope = 'all' or p_scope = 'acc' or day >= ws) group by user_id),
   f as (
-    select b.*, p.nickname, p.email, p.badges, r.grade, r.class_no, r.name,
+    select b.*, p.nickname, p.email, p.tiers, r.grade, r.class_no, r.name,
            case when b.n > 0 then round(100.0 * b.ok / b.n, 1) else 0 end acc
     from b join public.bu_profile p using (user_id)
     left join public.roster r on lower(r.email) = lower(p.email)
@@ -448,7 +444,9 @@ begin
                      else rank() over (order by f.pts desc, f.ok desc) end as rank from f)
   select coalesce(jsonb_agg(jsonb_build_object(
       'rank', rank, 'nickname', nickname, 'grade', grade, 'class_no', class_no, 'pts', pts, 'n', n, 'ok', ok, 'acc', acc,
-      'badges', coalesce(array_length(badges, 1), 0), 'me', user_id = auth.uid(),
+      'queen', (select coalesce(min(coalesce((tiers ->> c)::int, 0)), 0) from unnest(array['kor','eng','math','soc','sci','art','eco','it']) c),
+      'tiers', (select coalesce(sum(coalesce((tiers ->> c)::int, 0)), 0) from unnest(array['kor','eng','math','soc','sci','art','eco','it']) c),
+      'me', user_id = auth.uid(),
       'name', case when adm then name end, 'email', case when adm then email end) order by rank), '[]'::jsonb) into res
   from rk where rank <= case when adm then 100000 else 50 end or user_id = auth.uid();
   return res;
@@ -462,15 +460,38 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 -- 문제 은행 크기 (켜진 문제 수만, 문제 내용·정답은 안 보여요) + 내가 맞힌 문제 수
+-- 분야별로 "몇 문제 중 몇 문제 정복(한 번이라도 맞힘)"을 세고, 배지 단계를 올려요 (내려가지 않아요)
 create or replace function public.bu_counts() returns jsonb
-language sql stable security definer set search_path = public as $$
-  select jsonb_build_object(
-    'total', count(*), 'en', count(*) filter (where lang = 'en'),
-    'mc', count(*) filter (where qtype = 'mc'), 'sa', count(*) filter (where qtype = 'sa'),
-    'cats', coalesce((select jsonb_object_agg(category, c) from (select category, count(*) c from public.bu_questions where active group by 1) z), '{}'::jsonb),
-    'mine', (select count(*) from public.bu_qstate s join public.bu_questions q on q.id = s.qid and q.active where s.user_id = auth.uid() and s.correct > 0))
-  from public.bu_questions where active
-$$;
+language plpgsql security definer set search_path = public as $$
+declare
+  uid uuid := auth.uid(); res jsonb; v_cats jsonb; v_mine jsonb; v_old jsonb; v_new jsonb := '{}';
+  c text; qn int; mn int; tr int; v_queen int := 4; v_name text;
+begin
+  select coalesce(jsonb_object_agg(category, k), '{}'::jsonb) into v_cats
+  from (select category, count(*) k from public.bu_questions where active group by 1) z;
+  select coalesce(jsonb_object_agg(category, k), '{}'::jsonb) into v_mine
+  from (select q.category, count(*) k from public.bu_qstate s join public.bu_questions q on q.id = s.qid and q.active
+        where s.user_id = uid and s.correct > 0 group by 1) z;
+  select tiers into v_old from public.bu_profile where user_id = uid;
+  foreach c in array array['kor','eng','math','soc','sci','art','eco','it'] loop
+    qn := coalesce((v_cats ->> c)::int, 0); mn := coalesce((v_mine ->> c)::int, 0);
+    tr := case when qn = 0 then 0 when mn >= qn then 4 when mn * 4 >= qn * 3 then 3 when mn * 2 >= qn then 2 when mn * 4 >= qn then 1 else 0 end;
+    tr := greatest(tr, coalesce((v_old ->> c)::int, 0));
+    v_new := v_new || jsonb_build_object(c, tr);
+    v_queen := least(v_queen, tr);
+  end loop;
+  if v_old is not null and v_old is distinct from v_new then
+    update public.bu_profile set tiers = v_new where user_id = uid;
+  end if;
+  select r.name into v_name from public.roster r where lower(r.email) = lower(coalesce(auth.jwt() ->> 'email', '')) limit 1;
+  select jsonb_build_object('total', count(*), 'en', count(*) filter (where lang = 'en'),
+    'mc', count(*) filter (where qtype = 'mc'), 'sa', count(*) filter (where qtype = 'sa')) into res
+  from public.bu_questions where active;
+  return res || jsonb_build_object('cats', v_cats, 'mine_cats', v_mine,
+    'mine', (select coalesce(sum(value::int), 0) from jsonb_each_text(v_mine)),
+    'tiers', case when v_old is null then '{}'::jsonb else v_new end,
+    'queen', case when v_old is null then 0 else v_queen end, 'name', v_name);
+end $$;
 revoke execute on function public.bu_counts() from public, anon;
 grant execute on function public.bu_counts() to authenticated;
 

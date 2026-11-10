@@ -181,7 +181,7 @@ function show(d, email, updated) {
     appCard("passport", p ? `🏅 ${p.medals}권` : "", [p && `금메달 ${p.gold}권 · 퀴즈 ${p.tries}번`]),
     appCard("grammar", g ? `XP ${g.xp}` : "", [g && `단원 스탬프 ${g.stamps}개`, g && g.streak ? `🔥 연속 ${g.streak}일` : ""]),
     appCard("quiz", q ? `XP ${q.xp}` : "", [q && `레벨 ${q.level} · ${q.answered}문제`, q && q.acc != null ? `정답률 ${q.acc}%` : ""]),
-    appCard("brainup", A.brainup ? `${A.brainup.pts}점` : "", [A.brainup && `${A.brainup.n}문제 · 정답률 ${A.brainup.acc}%`, A.brainup && A.brainup.enN ? `영어 문제 ${A.brainup.en}/${A.brainup.enN} 맞힘` : "", A.brainup && A.brainup.d10 ? `오늘의 10문제 완주 ${A.brainup.d10}번` : ""]),
+    appCard("brainup", A.brainup ? `${A.brainup.pts}점` : "", [A.brainup && `${A.brainup.n}문제 · 정답률 ${A.brainup.acc}%`, A.brainup && A.brainup.enN ? `영어 문제 ${A.brainup.en}/${A.brainup.enN} 맞힘` : "", A.brainup && A.brainup.d10 ? `오늘의 10문제 완주 ${A.brainup.d10}번` : "", A.brainup && A.brainup.tiers != null ? `${A.brainup.queen ? ["", "🥉 브론즈 퀸", "🥈 실버 퀸", "🥇 골드 퀸", "👑 그랜드 브레인 퀸"][A.brainup.queen] + " · " : ""}배지 단계 ${A.brainup.tiers}/32` : ""]),
     appCard("vocab", v ? `단어 ${v.learned}개` : "", [v && `XP ${v.xp} · 🔥 ${v.streak}일`, v && v.tests ? `단원 테스트 ${v.tests}번 · 평균 ${v.avg}%` : ""]),
     appCard("cloze", c ? `${c.n}번 · 평균 ${c.avg}%` : "", [c && c.perfect ? `💯 만점 ${c.perfect}번` : ""]),
     appCard("writing", w ? `${w.n}편 · 평균 ${w.avg}점` : "", [w && w.cefr ? `최근 수준 ${w.cefr}` : ""]),
@@ -208,7 +208,7 @@ function demoData() {
   const now = Date.now(), h = 3600e3;
   return { name: "김문영", grade: 1, cls: 3, no: 7,
     apps: { passport: { tries: 14, medals: 9, gold: 3, last: now - 5 * h }, grammar: { xp: 820, stamps: 7, streak: 4, last: now - 26 * h },
-      quiz: { xp: 2400, level: 5, answered: 210, acc: 81, last: now - 50 * h }, brainup: { pts: 186, n: 142, acc: 78, days: 9, en: 31, enN: 40, d10: 4, last: now - 3 * h }, vocab: { xp: 640, streak: 6, learned: 280, mastered: 120, tests: 5, avg: 88, last: now - 2 * h },
+      quiz: { xp: 2400, level: 5, answered: 210, acc: 81, last: now - 50 * h }, brainup: { pts: 186, n: 142, acc: 78, days: 9, en: 31, enN: 40, d10: 4, tiers: 14, queen: 1, last: now - 3 * h }, vocab: { xp: 640, streak: 6, learned: 280, mastered: 120, tests: 5, avg: 88, last: now - 2 * h },
       cloze: { n: 3, avg: 79, perfect: 1, last: now - 72 * h }, speaking: { n: 12, avg: 84, lines: 9, last: now - 4 * h }, level: { n: 1, cefr: "A2", sub: "상", lex: 640, ar: 3.9, vsize: 2300, last: now - 50 * h }, kahoot: { live: 6, hw: 2, acc: 75, top3: 1, top10: 4, best: 2, last: now - 30 * h }, c123: { e: 12, m: 1 } },
     week: { passport: 3, grammar: 42, brainup: 35, vocab: 2, speaking: 6 },
     next: [{ label: "독서 여권 메달 5권", have: 4, need: 5, give: 1, app: "passport" }, { label: "문법 스탬프 3개", have: 1, need: 3, give: 1, app: "grammar" }, { label: "Kahoot 3등 안", have: 0, need: 1, give: 1, app: "kahoot" }],

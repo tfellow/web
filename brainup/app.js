@@ -198,7 +198,7 @@
     if (englishDay()) html += '<div class="card eday">🌏 오늘은 <b>English Day</b>! 모든 문제가 쉬운 영어로 나오고, 맞히면 <b>+1점 보너스</b>예요.</div>';
     html += '<div class="card hero"><h2>' + esc(p.nickname) + "님, 오늘도 Brain Up! 🧠</h2>" +
       '<p>' + (m.streak.today ? "오늘 " + m.today.n + "문제 풀었어요. 계속 가 볼까요?" : m.streak.cur ? "🔥 " + m.streak.cur + "일 연속 도전 중! 오늘도 이어 가요." : "시작 버튼을 누르면 바로 문제가 나와요.") + "</p>" +
-      '<div class="stats"><span>🔥 연속 ' + m.streak.cur + "일</span><span>⭐ 이번 주 " + num(m.week.pts) + "점</span><span>✅ 정답률 " + pct(m.total.ok, m.total.n) + "%</span><span>🏅 배지 " + (p.badges || []).length + "/8</span></div>" +
+      '<div class="stats"><span>🔥 연속 ' + m.streak.cur + "일</span><span>⭐ 이번 주 " + num(m.week.pts) + "점</span><span>✅ 정답률 " + pct(m.total.ok, m.total.n) + "%</span><span>" + queenChip() + "</span></div>" +
       '<div class="seg" id="seg">' + [["", "🎲 랜덤"], ["mc", "✅ 객관식"], ["sa", "✏️ 단답형"]].map(function (x) { return '<button type="button" data-t="' + x[0] + '" class="' + (state.qtype === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
       '<div class="seg" id="seg2">' + [[10, "10문제"], [20, "20문제"], [30, "30문제"], [0, "∞ 무제한"]].map(function (x) { return '<button type="button" data-n="' + x[0] + '" class="' + (state.round === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
       '<button class="start" id="go">▶ START</button>' +
@@ -215,10 +215,11 @@
       '<div class="row-btns">' + (state.wrongN ? '<a class="btn navy" href="#/review">▶ 다시 풀기</a>' : "") + '<a class="btn" href="#/me">📊 오답 노트 보기</a></div></div>';
     html += "</div>";
 
-    html += '<div class="card" style="margin-top:12px"><h2>🏅 분야 배지 <span class="small muted">그 분야를 10번 맞히면 받아요</span></h2>' + badgeGrid(m.total) + "</div>";
+    html += queenCard(true) + badgeCard();
     $("#main").innerHTML = html;
     $$("#seg button").forEach(function (b) { b.onclick = function () { state.qtype = b.dataset.t; lset("bu.qtype", state.qtype); $$("#seg button").forEach(function (x) { x.classList.toggle("on", x === b); }); }; });
     $$("#seg2 button").forEach(function (b) { b.onclick = function () { state.round = +b.dataset.n; lset("bu.round", state.round); $$("#seg2 button").forEach(function (x) { x.classList.toggle("on", x === b); }); }; });
+    if ($("#cert")) $("#cert").onclick = function () { downloadCert(queenLevel()); };
     $("#go").onclick = function () { location.hash = "#/play/" + (state.qtype || "any"); };
     if ($("#share")) $("#share").onclick = function () { shareDaily(d10); };
   }
@@ -229,12 +230,52 @@
     return '<div class="bank"><div class="bank-t"><span>📚 문제 은행 <b>' + num(c.total) + "문제</b></span><span>영어 " + num(c.en) + " · 객관식 " + num(c.mc) + " · 단답형 " + num(c.sa) + "</span></div>" +
       '<div class="bank-bar"><i style="width:' + pr + '%"></i></div><div class="bank-m">내가 맞힌 문제 <b>' + num(mine) + "</b> / " + num(c.total) + " (" + pr + "%)" + (pr === 100 ? " 👑 전부 정복!" : "") + "</div></div>";
   }
-  function badgeGrid(total) {
-    var owned = (state.profile && state.profile.badges) || [];
-    return '<div class="badges">' + CATS.map(function (c) {
-      var have = owned.indexOf(c.id) >= 0, ok = (total.cats[c.id] || [0, 0])[1];
-      return '<div class="badge ' + (have ? "" : "lock") + '" title="' + esc(c.name) + '"><div class="ic">' + c.bicon + "</div><b>" + esc(c.badge) + "</b><small>" + (have ? c.icon + " " + esc(c.short) : esc(c.short) + " " + Math.min(ok, 10) + "/10") + "</small>" +
-        (state.counts && state.counts.cats ? '<small style="display:block">문제 ' + num(state.counts.cats[c.id] || 0) + "개</small>" : "") + "</div>";
+  // 분야 배지 단계: 그 분야 문제 중 정복(한 번이라도 맞힘)한 비율. 한 번 받은 단계는 내려가지 않아요
+  var TIERS = [
+    { name: "도전 중", icon: "⚪", at: 0 }, { name: "브론즈", icon: "🥉", at: 0.25 }, { name: "실버", icon: "🥈", at: 0.5 },
+    { name: "골드", icon: "🥇", at: 0.75 }, { name: "퀸", icon: "👑", at: 1 }
+  ];
+  // Brain Queen 등급: 8개 분야가 모두 그 단계 이상이면
+  var QUEENS = [
+    null,
+    { name: "브론즈 퀸", en: "Bronze Brain Queen", icon: "🥉", color: "#a0663a", rule: "8개 분야 모두 🥉 브론즈 (25% 정복)" },
+    { name: "실버 퀸", en: "Silver Brain Queen", icon: "🥈", color: "#6b7a90", rule: "8개 분야 모두 🥈 실버 (50% 정복)" },
+    { name: "골드 퀸", en: "Gold Brain Queen", icon: "🥇", color: "#b8860b", rule: "8개 분야 모두 🥇 골드 (75% 정복)" },
+    { name: "그랜드 브레인 퀸", en: "Grand Brain Queen", icon: "👑", color: "#7a2e8e", rule: "8개 분야 모두 👑 100% 정복" }
+  ];
+  function tierOf(cat) { return +(((state.counts || {}).tiers || {})[cat] || 0); }
+  function queenLevel() { return +((state.counts || {}).queen || 0); }
+  function queenChip() {
+    var q = queenLevel();
+    if (q) return QUEENS[q].icon + " " + QUEENS[q].name;
+    var sum = CATS.reduce(function (t, c) { return t + tierOf(c.id); }, 0);
+    return "🏅 배지 단계 " + sum + "/32";
+  }
+  function queenCard(withCert) {
+    var c = state.counts; if (!c || !c.total) return "";
+    var q = queenLevel(), next = Math.min(q + 1, 4);
+    var have = CATS.filter(function (x) { return tierOf(x.id) >= next; }).length;
+    var steps = QUEENS.slice(1).map(function (Q, i) {
+      var on = q >= i + 1;
+      return '<div class="qstep' + (on ? " on" : "") + (q + 1 === i + 1 ? " next" : "") + '" style="--qc:' + Q.color + '"><span class="ic">' + Q.icon + "</span><b>" + Q.name + "</b><small>" + Q.rule.replace("8개 분야 모두 ", "모든 분야 ") + "</small></div>";
+    }).join("");
+    return '<div class="card queen"><div class="queen-top"><div><h2>👑 Brain Queen ' + (q ? '<span class="pill gold">' + QUEENS[q].icon + " " + QUEENS[q].name + "</span>" : '<span class="small muted">아직 도전 중</span>') + "</h2>" +
+      '<p class="small muted" style="margin:0">' + (q >= 4 ? "모든 분야를 100% 정복했어요. 최고 등급이에요! 🎉" : "다음 등급 <b>" + QUEENS[next].icon + " " + QUEENS[next].name + "</b>까지: " + TIERS[next].icon + " " + TIERS[next].name + " 이상인 분야 <b>" + have + " / 8</b>") + "</p></div>" +
+      (withCert && q ? '<button class="btn gold" id="cert">📜 인증서 받기</button>' : "") + "</div>" +
+      '<div class="qsteps">' + steps + "</div></div>";
+  }
+  function badgeCard() {
+    return '<div class="card"><h2>🏅 분야 배지 <span class="small muted">그 분야 문제를 정복할수록 🥉 → 🥈 → 🥇 → 👑</span></h2>' + badgeGrid() + "</div>";
+  }
+  function badgeGrid() {
+    var c = state.counts || {}, cats = c.cats || {}, mine = c.mine_cats || {};
+    return '<div class="badges">' + CATS.map(function (x) {
+      var t = tierOf(x.id), n = +(cats[x.id] || 0), m = Math.min(+(mine[x.id] || 0), n), T = TIERS[t];
+      var need = t < 4 && n ? Math.max(0, Math.ceil(n * TIERS[t + 1].at) - m) : 0;
+      return '<div class="badge t' + t + '" title="' + esc(x.name) + '"><div class="ic">' + x.bicon + '<span class="tier">' + (t ? T.icon : "") + "</span></div><b>" + esc(x.badge) + "</b>" +
+        "<small>" + x.icon + " " + esc(x.short) + " · " + (t ? T.name : "도전 중") + "</small>" +
+        (c.cats ? '<div class="bbar"><i style="width:' + pct(m, n) + '%;background:' + x.color + '"></i></div><small><b>' + num(m) + "</b> / " + num(n) + " 정복</small>" +
+          '<small class="muted">' + (!n ? "문제 준비 중" : t >= 4 ? "완전 정복! 👑" : "다음 " + TIERS[t + 1].icon + "까지 " + need + "문제") + "</small>" : "") + "</div>";
     }).join("") + "</div>";
   }
   function shareDaily(d10) {
@@ -288,6 +329,7 @@
     var q = play.q, c = CAT[q.category] || {}, en = q.lang === "en";
     var html = '<div class="play-top"><span class="pill">' + modeLabel() + (q.idx ? " " + q.idx + "/10" : play.total ? " " + (play.sess.n + 1) + "/" + play.total : "") + "</span>" + catPill(q.category) + langPill(q.lang) +
       '<span class="pill ' + (q.qtype === "sa" ? "gold" : "") + '">' + (q.qtype === "sa" ? "✏️ 단답형 2점" : "✅ 객관식 1점") + (en ? " +1" : "") + "</span>" +
+      (state.profile && state.profile.double_next ? '<span class="pill gold">👑 점수 2배</span>' : "") +
       '<span class="sp"></span><span class="small muted">이번 판 ' + play.sess.ok + "/" + play.sess.n + " · +" + play.sess.pts + "점</span></div>";
     html += '<div class="timer" id="tm"><i style="width:100%"></i></div>';
     html += '<div class="card qcard" style="border-top:5px solid ' + (c.color || "#888") + '">';
@@ -352,7 +394,7 @@
     }
     var ansText = r.qtype === "mc" ? (r.choices || [])[+r.answer - 1] : String(r.answer || "").split("|").join(" / ");
     h += '<div class="result ' + (r.ok ? "ok" : "no") + '">';
-    h += r.ok ? '<h3>⭕ 정답! <span class="pop">+' + r.points + "점</span></h3>" : "<h3>" + (timeUp || r.timeout ? "⏰ 시간이 끝났어요" : "❌ 아쉬워요!") + "</h3>";
+    h += r.ok ? '<h3>⭕ 정답! <span class="pop">+' + r.points + "점</span>" + (r.double ? ' <span class="pill gold">👑 2배!</span>' : "") + "</h3>" : "<h3>" + (timeUp || r.timeout ? "⏰ 시간이 끝났어요" : "❌ 아쉬워요!") + "</h3>";
     if (!r.ok || r.qtype === "sa") h += "<p>정답: <b>" + esc(ansText) + "</b>" + (r.qtype === "sa" && !r.ok && play.given ? ' <span class="small muted">(내 답: ' + esc(play.given) + ")</span>" : "") + "</p>";
     if (r.explain) h += "<p>💡 " + esc(r.explain) + "</p>";
     if (en && r.ko) h += '<p class="small">💬 ' + esc(r.ko) + "</p>";
@@ -366,7 +408,13 @@
     $("#quit2").onclick = quit;
     $("#nx").focus();
     // 내 기록(홈 화면용)은 조용히 새로 불러와요
-    loadMine().then(function () { if (r.new_badge) showBadge(r.new_badge); }).catch(function () {});
+    if (r.double && state.profile) state.profile.double_next = false;
+    var before = Object.assign({}, (state.counts || {}).tiers || {}), qBefore = queenLevel(), had = !!(state.counts && state.counts.tiers);
+    loadMine().then(function () {
+      if (!had || !r.ok) return;
+      var ups = CATS.filter(function (c) { return tierOf(c.id) > (+before[c.id] || 0); });
+      if (ups.length || queenLevel() > qBefore) showTierUp(ups, queenLevel() > qBefore ? queenLevel() : 0);
+    }).catch(function () {});
   }
   // 그만하기: 푼 문제가 있으면 이번 판 결과를 보여 줘요 (오늘의 10문제는 홈에서 이어 풀기)
   function quit() {
@@ -403,11 +451,48 @@
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast("복사했어요! 친구에게 붙여 넣어 보세요."); }, function () { prompt("복사해서 쓰세요", txt); });
     };
   }
-  function showBadge(id) {
-    var c = CAT[id]; if (!c) return;
-    var o = overlay('<div class="big pop">' + c.bicon + "</div><h2>새 배지: " + esc(c.badge) + "!</h2><p>" + c.icon + " " + esc(c.name) + " 분야를 10번 맞혔어요. 대단해요!</p>" +
-      '<div class="row-btns" style="justify-content:center"><button class="btn navy" id="ok">좋아요!</button></div>');
+  function showTierUp(ups, queen) {
+    var h = "";
+    if (queen) {
+      var Q = QUEENS[queen];
+      h += '<div class="big pop">' + Q.icon + "</div><h2>" + Q.name + " 등급 달성!</h2><p>" + Q.rule + "을 해냈어요. 정말 대단해요!</p>";
+    } else {
+      var c = ups[0], T = TIERS[tierOf(c.id)];
+      h += '<div class="big pop">' + c.bicon + "</div><h2>" + T.icon + " " + esc(c.name) + " " + T.name + " 달성!</h2><p>" + esc(c.badge) + " 배지가 " + T.name + " 단계가 되었어요." + (ups.length > 1 ? " (그 밖에 " + (ups.length - 1) + "개 분야도 올랐어요)" : "") + "</p>";
+    }
+    h += '<div class="row-btns" style="justify-content:center">' + (queen ? '<button class="btn gold" id="cert2">📜 인증서 받기</button>' : "") + '<button class="btn navy" id="ok">좋아요!</button></div>';
+    var o = overlay(h);
     $("#ok", o).onclick = closeOverlay;
+    if (queen) $("#cert2", o).onclick = function () { downloadCert(queen); };
+  }
+  // 📜 Brain Queen 인증서 (PNG)
+  function downloadCert(level) {
+    var Q = QUEENS[level]; if (!Q) return;
+    var W = 1600, H = 1130, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    var g = cv.getContext("2d"), F = '"Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif';
+    function txt(t, x, y, size, color, weight, font) { g.font = (weight || 400) + " " + size + "px " + (font || F); g.fillStyle = color; g.textAlign = "center"; g.fillText(t, x, y); }
+    function draw(img) {
+      g.fillStyle = "#fffcf6"; g.fillRect(0, 0, W, H);
+      g.strokeStyle = "#1e3768"; g.lineWidth = 18; g.strokeRect(30, 30, W - 60, H - 60);
+      g.strokeStyle = "#c8962a"; g.lineWidth = 4; g.strokeRect(62, 62, W - 124, H - 124);
+      if (img) g.drawImage(img, W / 2 - 55, 100, 110, 99);
+      txt("CERTIFICATE OF ACHIEVEMENT", W / 2, 250, 34, "#c8962a", 700, "Georgia, serif");
+      txt("MY Brain Up · 풀수록 똑똑해지는 랜덤 상식 퀴즈", W / 2, 300, 26, "#6a6f80", 500);
+      txt(Q.icon + " " + Q.en, W / 2, 410, 72, Q.color, 800, "Georgia, serif");
+      txt(Q.name, W / 2, 470, 34, Q.color, 700);
+      var who = (state.counts && state.counts.name) || (state.profile && state.profile.nickname) || "";
+      txt(who, W / 2, 590, 64, "#1c2233", 800);
+      g.strokeStyle = "#e6ddcb"; g.lineWidth = 2; g.beginPath(); g.moveTo(W / 2 - 260, 615); g.lineTo(W / 2 + 260, 615); g.stroke();
+      txt("국어·문학, 영어, 수학, 사회·역사, 과학, 예술·체육, 경제·시사, IT·미래기술", W / 2, 690, 28, "#1c2233", 500);
+      txt("8개 분야의 문제를 모두 " + Math.round(TIERS[level].at * 100) + "% 이상 정복하여 이 인증서를 드립니다.", W / 2, 740, 30, "#1c2233", 600);
+      txt(kday().replace(/-/g, ". ") + ".", W / 2, 840, 28, "#6a6f80", 500);
+      txt("Seoul MOONYOUNG Girls' Middle School", W / 2, 950, 30, "#1e3768", 700, "Georgia, serif");
+      txt("서울문영여자중학교", W / 2, 995, 26, "#1e3768", 600);
+      var a = document.createElement("a");
+      a.href = cv.toDataURL("image/png"); a.download = "BrainUp_" + Q.en.replace(/ /g, "_") + "_" + kday() + ".png"; a.click();
+      toast("📜 인증서를 내려받았어요!");
+    }
+    var img = new Image(); img.onload = function () { draw(img); }; img.onerror = function () { draw(null); }; img.src = "../app/emblem.png";
   }
   function useFifty() {
     rpc("bu_fifty").then(function (r) {
@@ -431,20 +516,14 @@
     }).catch(function (e) { toast(errMsg(e)); });
   }
   function showCrown() {
-    var owned = (state.profile && state.profile.badges) || [];
-    var left = CATS.filter(function (c) { return owned.indexOf(c.id) < 0; });
     $("#main").innerHTML = '<div class="card center muted">👑</div>';
-    var o = overlay('<div class="big pop">👑</div><h2>왕관 찬스!</h2><p>축하해요! 문제 없이 <b>배지 하나</b>를 바로 가질 수 있어요.<br>갖고 싶은 분야를 골라 보세요.</p>' +
-      '<div class="crown-grid">' + left.map(function (c) { return '<button data-c="' + c.id + '"><span class="ic">' + c.bicon + "</span>" + esc(c.badge) + '<br><span class="small muted">' + c.icon + " " + esc(c.short) + "</span></button>"; }).join("") + "</div>");
-    $$(".crown-grid button", o).forEach(function (b) {
-      b.onclick = function () {
-        rpc("bu_claim_crown", { p_cat: b.dataset.c }).then(function () { return loadMine(); }).then(function () {
-          var c = CAT[b.dataset.c];
-          o.innerHTML = '<div class="modal"><div class="big pop">' + c.bicon + "</div><h2>" + esc(c.badge) + ' 배지를 받았어요!</h2><div class="row-btns" style="justify-content:center"><button class="btn navy" id="ok">계속 풀기 ▶</button></div></div>';
-          $("#ok", o).onclick = function () { closeOverlay(); nextQ(); };
-        }).catch(function (e) { toast(errMsg(e)); closeOverlay(); nextQ(); });
-      };
-    });
+    var o = overlay('<div class="big pop">👑</div><h2>왕관 찬스!</h2><p>축하해요! <b>다음 문제 점수가 2배</b>예요.<br>(맞히면 단답형 4점, 영어 문제는 보너스까지 2배!)</p>' +
+      '<div class="row-btns" style="justify-content:center"><button class="btn gold big" id="ok">좋아요, 다음 문제 ▶</button></div>');
+    $("#ok", o).onclick = function () {
+      $("#ok", o).disabled = true;
+      rpc("bu_claim_crown", {}).then(function () { if (state.profile) state.profile.double_next = true; closeOverlay(); nextQ(); })
+        .catch(function (e) { toast(errMsg(e)); closeOverlay(); nextQ(); });
+    };
   }
   function viewDailyDone() {
     var d10 = my().today.d10 || [], okN = d10.filter(function (x) { return x === 1; }).length;
@@ -473,10 +552,10 @@
         h += '<div class="tbl-wrap"><table><tr><th>순위</th><th>반</th><th class="num">1인당 평균</th><th class="num">참여</th><th class="num">반 점수</th><th class="num">정답률</th></tr>' +
           rows.map(function (r) { return "<tr><td class='medal'>" + medal(r.rank) + "</td><td><b>" + className(r.grade, r.class_no) + "</b></td><td class='num'><b>" + r.avg_pts + "</b>점</td><td class='num'>" + r.players + "/" + r.size + "명</td><td class='num'>" + num(r.pts) + "</td><td class='num'>" + pct(r.ok, r.n) + "%</td></tr>"; }).join("") + "</table></div>";
       } else {
-        h += '<div class="tbl-wrap"><table><tr><th>순위</th><th>닉네임</th>' + (state.admin ? "<th>이름</th>" : "") + '<th>반</th><th class="num">' + (tab === "acc" ? "정답률" : "점수") + '</th><th class="num">' + (tab === "acc" ? "점수" : "정답률") + '</th><th class="num">푼 문제</th><th class="num">🏅</th></tr>' +
+        h += '<div class="tbl-wrap"><table><tr><th>순위</th><th>닉네임</th>' + (state.admin ? "<th>이름</th>" : "") + '<th>반</th><th class="num">' + (tab === "acc" ? "정답률" : "점수") + '</th><th class="num">' + (tab === "acc" ? "점수" : "정답률") + '</th><th class="num">푼 문제</th><th class="num">배지</th></tr>' +
           rows.map(function (r) {
             return "<tr class='" + (r.me ? "me" : "") + "'><td class='medal'>" + medal(r.rank) + "</td><td>" + esc(r.nickname) + (r.me ? " (나)" : "") + "</td>" + (state.admin ? "<td>" + esc(r.name || r.email || "") + "</td>" : "") +
-              "<td>" + className(r.grade, r.class_no) + "</td><td class='num'><b>" + (tab === "acc" ? r.acc + "%" : num(r.pts)) + "</b></td><td class='num'>" + (tab === "acc" ? num(r.pts) : r.acc + "%") + "</td><td class='num'>" + num(r.n) + "</td><td class='num'>" + r.badges + "</td></tr>";
+              "<td>" + className(r.grade, r.class_no) + "</td><td class='num'><b>" + (tab === "acc" ? r.acc + "%" : num(r.pts)) + "</b></td><td class='num'>" + (tab === "acc" ? num(r.pts) : r.acc + "%") + "</td><td class='num'>" + num(r.n) + "</td><td class='num'>" + (r.queen ? '<span title="' + QUEENS[r.queen].name + '">' + QUEENS[r.queen].icon + "👑</span> " : "") + (r.tiers || 0) + "</td></tr>";
           }).join("") + "</table></div>";
       }
       $("#board").innerHTML = h;
@@ -507,9 +586,10 @@
       return '<div title="' + d + " · " + r.n + '문제"><span>' + (r.n || "") + '</span><i style="height:' + Math.round(70 * r.n / mx) + 'px"></i><span>' + d.slice(8) + "</span></div>";
     }).join("") + "</div></div>";
 
-    h += '<div class="card"><h2>🏅 분야 배지</h2>' + badgeGrid(t) + "</div>";
+    h += queenCard(true) + badgeCard();
     h += '<div class="card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0;flex:1">📝 오답 노트</h2>' + (state.wrongN ? '<a class="btn navy sm" href="#/review">▶ 오답 다시 풀기</a>' : "") + '</div><div id="wrong" style="margin-top:10px"><p class="muted">불러오는 중…</p></div></div>';
     $("#main").innerHTML = h;
+    if ($("#cert")) $("#cert").onclick = function () { downloadCert(queenLevel()); };
     rpc("bu_wrong_list").then(function (list) {
       if (!list.length) { $("#wrong").innerHTML = '<p class="muted">틀린 문제가 없어요. 🎉</p>'; return; }
       $("#wrong").innerHTML = list.map(function (w) {
@@ -707,7 +787,7 @@
     $("#tbody").innerHTML = '<div class="card muted">불러오는 중…</div>';
     Promise.all([
       all(function () { return client().from("bu_daily").select("email,day,n,ok,pts,mc_n,mc_ok,sa_n,sa_ok,en_n,en_ok,cats,d10"); }),
-      all(function () { return client().from("bu_profile").select("email,nickname,badges"); }),
+      all(function () { return client().from("bu_profile").select("email,nickname,tiers"); }),
       T.roster ? Promise.resolve(T.roster) : sel(client().from("roster").select("email,name,grade,class_no,student_no").range(0, 4999))
     ]).then(function (r) { T.daily = r[0]; T.profiles = r[1]; T.roster = r[2]; renderStudents(); })
       .catch(function (e) { $("#tbody").innerHTML = '<div class="card err">' + esc(errMsg(e)) + "</div>"; });
@@ -729,7 +809,7 @@
     if (SF.cls) emails = Object.keys(Object.assign({}, ros, byE)).filter(function (e) { var x = ros[e]; return x && x.grade + "-" + x.class_no === SF.cls; });
     return emails.map(function (e) {
       var rows = byE[e] || [], inP = rows.filter(function (d) { return d.day >= rg[0] && d.day <= rg[1]; }), s = sumRows(inP), all_ = sumRows(rows), x = ros[e] || {}, p = prof[e] || {};
-      return { email: e, name: x.name || "", grade: x.grade, cls: x.class_no, no: x.student_no, nick: p.nickname || "", badges: (p.badges || []).length,
+      return { email: e, name: x.name || "", grade: x.grade, cls: x.class_no, no: x.student_no, nick: p.nickname || "", badges: CATS.reduce(function (t, c) { return t + (+((p.tiers || {})[c.id]) || 0); }, 0), queen: Math.min.apply(null, CATS.map(function (c) { return +((p.tiers || {})[c.id]) || 0; })),
         s: s, all: all_, streak: streakOf(rows.filter(function (d) { return d.n > 0; }).map(function (d) { return d.day; })),
         last: rows.reduce(function (m, d) { return d.day > m ? d.day : m; }, ""), d10: inP.filter(function (d) { return (d.d10 || []).length >= 10; }).length };
     }).sort(function (a, b) { return (a.grade || 9) - (b.grade || 9) || (a.cls || 99) - (b.cls || 99) || (a.no || 999) - (b.no || 999) || b.s.pts - a.s.pts; });
@@ -745,11 +825,11 @@
       '<select class="fsel" id="sC"><option value="">참여한 학생 모두</option>' + classes.map(function (c) { return '<option' + (SF.cls === c ? " selected" : "") + ">" + c + "</option>"; }).join("") + "</select>" +
       '<button class="btn sm" id="csv">📥 CSV 받기</button></div>' +
       '<div class="kpis">' + kpi(active.length + "명", "참여 학생") + kpi(num(tot.n), "푼 문제") + kpi(pct(tot.ok, tot.n) + "%", "정답률") + kpi(pct(tot.en_ok, tot.en_n) + "%", "🌏 영어 정답률 (" + num(tot.en_n) + ")") + "</div>" +
-      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">연속</th><th class="num">🏅</th><th>최근</th></tr>' +
+      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">연속</th><th class="num">배지 단계</th><th>최근</th></tr>' +
       rows.map(function (r) {
         var s = r.s;
         return "<tr><td>" + className(r.grade, r.cls) + "</td><td>" + (r.no || "") + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td><td class='num'><b>" + num(s.pts) + "</b></td><td class='num'>" + num(s.n) + "</td><td class='num'>" + (s.n ? pct(s.ok, s.n) + "%" : "-") + "</td>" +
-          "<td class='num'>" + (s.sa_n ? s.sa_ok + "/" + s.sa_n : "-") + "</td><td class='num'>" + (s.en_n ? s.en_ok + "/" + s.en_n : "-") + "</td><td class='num'>" + (r.d10 || "") + "</td><td class='num'>" + (r.streak.cur ? "🔥" + r.streak.cur : "") + "</td><td class='num'>" + r.badges + "</td><td class='small'>" + (r.last ? r.last.slice(5).replace("-", ".") : "") + "</td></tr>";
+          "<td class='num'>" + (s.sa_n ? s.sa_ok + "/" + s.sa_n : "-") + "</td><td class='num'>" + (s.en_n ? s.en_ok + "/" + s.en_n : "-") + "</td><td class='num'>" + (r.d10 || "") + "</td><td class='num'>" + (r.streak.cur ? "🔥" + r.streak.cur : "") + "</td><td class='num'>" + (r.queen ? QUEENS[r.queen].icon + "👑 " : "") + r.badges + "</td><td class='small'>" + (r.last ? r.last.slice(5).replace("-", ".") : "") + "</td></tr>";
       }).join("") + "</table></div>" + (rows.length ? "" : '<p class="muted center">아직 기록이 없어요.</p>') + "</div>";
 
     // 분야별 정답률 (전체 학생)
@@ -764,8 +844,8 @@
     if ($("#sF")) { $("#sF").onchange = function () { SF.from = this.value; renderStudents(); }; $("#sT").onchange = function () { SF.to = this.value; renderStudents(); }; }
     $("#csv").onclick = function () {
       var rg = periodRange();
-      var head = ["반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "연속 도전(일)", "최고 연속(일)", "배지", "최근 날짜", "누적 점수"];
-      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.streak.cur, r.streak.best, r.badges, r.last, r.all.pts]; }));
+      var head = ["반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "연속 도전(일)", "최고 연속(일)", "배지 단계 합(32)", "Brain Queen", "최근 날짜", "누적 점수"];
+      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.streak.cur, r.streak.best, r.badges, r.queen ? QUEENS[r.queen].name : "", r.last, r.all.pts]; }));
       var csv = "﻿" + lines.map(function (l) { return l.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
       var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
       a.download = "BrainUp_학생기록_" + (SF.period === "all" ? "전체" : rg[0] + "_" + rg[1]) + (SF.cls ? "_" + SF.cls : "") + ".csv"; a.click();
@@ -795,7 +875,7 @@
     $("#reset").onclick = function () {
       if (prompt("모든 학생의 점수·기록·오답 노트를 지워요. 되돌릴 수 없어요.\n계속하려면 '지우기'라고 입력하세요.") !== "지우기") return;
       Promise.all([sel(client().from("bu_daily").delete().gte("day", "2000-01-01")), sel(client().from("bu_qstate").delete().gte("qid", 0))])
-        .then(function () { return sel(client().from("bu_profile").update({ badges: [], crown_day: null }).neq("email", "")); })
+        .then(function () { return sel(client().from("bu_profile").update({ tiers: {}, crown_day: null, double_next: false }).neq("email", "")); })
         .then(function () { toast("기록을 지웠어요"); return loadMine(); }).catch(function (e) { toast(errMsg(e)); });
     };
   }

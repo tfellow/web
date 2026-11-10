@@ -72,8 +72,25 @@ h3 { margin: 0 0 6px; font-size: 16px; color: var(--navy); }
 .badge .ic { font-size: 30px; line-height: 1.2; }
 .badge b { display: block; font-size: 12px; }
 .badge small { font-size: 11px; color: var(--muted); }
-.badge.lock .ic { filter: grayscale(1); opacity: .35; }
-.badge.lock b { color: var(--muted); }
+.badge.lock .ic, .badge.t0 .ic { filter: grayscale(1); opacity: .35; }
+.badge.lock b, .badge.t0 b { color: var(--muted); }
+.badge small { display: block; }
+.badge .ic { position: relative; display: inline-block; }
+.badge .tier { position: absolute; right: -14px; bottom: -4px; font-size: 18px; filter: none; }
+.badge.t1 { border-color: #d9a77a; } .badge.t2 { border-color: #aab4c3; background: #f6f8fb; }
+.badge.t3 { border-color: var(--gold-2); background: var(--gold-soft); } .badge.t4 { border-color: #b07cc6; background: #f6eefa; box-shadow: 0 0 0 2px #e6d3f0; }
+.bbar { height: 6px; background: #ece6d8; border-radius: 99px; overflow: hidden; margin: 6px 6px 2px; }
+.bbar i { display: block; height: 100%; border-radius: 99px; }
+.queen-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.qsteps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+@media (max-width: 560px) { .qsteps { grid-template-columns: repeat(2, 1fr); } }
+.qstep { border: 2px solid var(--line); border-radius: 14px; padding: 10px 8px; text-align: center; background: var(--paper); opacity: .55; }
+.qstep .ic { font-size: 28px; display: block; }
+.qstep b { display: block; font-size: 14px; }
+.qstep small { font-size: 11px; color: var(--muted); }
+.qstep.on { opacity: 1; border-color: var(--qc); background: #fff; }
+.qstep.on b { color: var(--qc); }
+.qstep.next { opacity: 1; border-style: dashed; }
 
 /* ---------- 문제 화면 ---------- */
 .play-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
