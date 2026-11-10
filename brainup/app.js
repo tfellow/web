@@ -51,7 +51,7 @@
   // ======================================================================
   var DEF_SET = { open: true, english_ratio: 0.2, english_day: "", allow_external: false, timer: true, crown_rate: 0.05 };
   var state = { email: "", uid: "", admin: false, settings: DEF_SET, profile: null, daily: [], wrongN: 0, ready: false,
-    qtype: lget("bu.qtype", ""), boardTab: "week", tTab: lget("bu.tTab", "upload") };
+    qtype: lget("bu.qtype", ""), round: +lget("bu.round", 10) || 0, boardTab: "week", tTab: lget("bu.tTab", "upload") };
 
   function showLogin(msg) {
     $("#nav").classList.add("hidden");
@@ -198,6 +198,7 @@
       '<p>' + (m.streak.today ? "오늘 " + m.today.n + "문제 풀었어요. 계속 가 볼까요?" : m.streak.cur ? "🔥 " + m.streak.cur + "일 연속 도전 중! 오늘도 이어 가요." : "시작 버튼을 누르면 바로 문제가 나와요.") + "</p>" +
       '<div class="stats"><span>🔥 연속 ' + m.streak.cur + "일</span><span>⭐ 이번 주 " + num(m.week.pts) + "점</span><span>✅ 정답률 " + pct(m.total.ok, m.total.n) + "%</span><span>🏅 배지 " + (p.badges || []).length + "/8</span></div>" +
       '<div class="seg" id="seg">' + [["", "🎲 랜덤"], ["mc", "✅ 객관식"], ["sa", "✏️ 단답형"]].map(function (x) { return '<button type="button" data-t="' + x[0] + '" class="' + (state.qtype === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
+      '<div class="seg" id="seg2">' + [[10, "10문제"], [20, "20문제"], [30, "30문제"], [0, "∞ 무제한"]].map(function (x) { return '<button type="button" data-n="' + x[0] + '" class="' + (state.round === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
       '<button class="start" id="go">▶ START</button>' +
       '<p class="small" style="margin:14px 0 0;opacity:.8">객관식 1점 · 단답형 2점 · 영어 문제 +1점 · 가끔 👑 왕관 찬스!</p></div>';
 
@@ -214,6 +215,7 @@
     html += '<div class="card" style="margin-top:12px"><h2>🏅 분야 배지 <span class="small muted">그 분야를 10번 맞히면 받아요</span></h2>' + badgeGrid(m.total) + "</div>";
     $("#main").innerHTML = html;
     $$("#seg button").forEach(function (b) { b.onclick = function () { state.qtype = b.dataset.t; lset("bu.qtype", state.qtype); $$("#seg button").forEach(function (x) { x.classList.toggle("on", x === b); }); }; });
+    $$("#seg2 button").forEach(function (b) { b.onclick = function () { state.round = +b.dataset.n; lset("bu.round", state.round); $$("#seg2 button").forEach(function (x) { x.classList.toggle("on", x === b); }); }; });
     $("#go").onclick = function () { location.hash = "#/play/" + (state.qtype || "any"); };
     if ($("#share")) $("#share").onclick = function () { shareDaily(d10); };
   }
@@ -239,7 +241,8 @@
   function overlay(html) { var o = $("#overlay"); o.innerHTML = '<div class="modal">' + html + "</div>"; o.classList.remove("hidden"); return o; }
 
   function startPlay(mode, qtype) {
-    play = { mode: mode, qtype: qtype === "mc" || qtype === "sa" ? qtype : null, q: null, res: null, sess: { n: 0, ok: 0, pts: 0 }, busy: false };
+    play = { mode: mode, qtype: qtype === "mc" || qtype === "sa" ? qtype : null, q: null, res: null, sess: { n: 0, ok: 0, pts: 0 }, busy: false,
+      total: mode === "random" ? state.round : 0, log: [] };
     nextQ();
   }
   // 라벨은 "지금 이 문제"의 모드로 보여 줘요 (풀던 다른 모드 문제가 먼저 나올 수 있어서)
@@ -272,7 +275,7 @@
 
   function renderQ() {
     var q = play.q, c = CAT[q.category] || {}, en = q.lang === "en";
-    var html = '<div class="play-top"><span class="pill">' + modeLabel() + (q.idx ? " " + q.idx + "/10" : "") + "</span>" + catPill(q.category) + langPill(q.lang) +
+    var html = '<div class="play-top"><span class="pill">' + modeLabel() + (q.idx ? " " + q.idx + "/10" : play.total ? " " + (play.sess.n + 1) + "/" + play.total : "") + "</span>" + catPill(q.category) + langPill(q.lang) +
       '<span class="pill ' + (q.qtype === "sa" ? "gold" : "") + '">' + (q.qtype === "sa" ? "✏️ 단답형 2점" : "✅ 객관식 1점") + (en ? " +1" : "") + "</span>" +
       '<span class="sp"></span><span class="small muted">이번 판 ' + play.sess.ok + "/" + play.sess.n + " · +" + play.sess.pts + "점</span></div>";
     html += '<div class="timer" id="tm"><i style="width:100%"></i></div>';
@@ -291,7 +294,7 @@
       (q.qtype === "mc" ? '<button class="btn sm" id="i50"' + (play.removed.length || itemsLeft("fifty") <= 0 ? " disabled" : "") + ">✂️ 50:50 (" + itemsLeft("fifty") + ")</button>" : "") +
       (play.mode !== "daily" ? '<button class="btn sm" id="iSkip"' + (itemsLeft("skip") <= 0 ? " disabled" : "") + ">⏭️ 건너뛰기 (" + itemsLeft("skip") + ")</button>" : "") +
       (en && q.has_ko && !play.hint ? '<button class="btn sm" id="iKo">💬 한국어 보기 <span class="small muted">(보너스 −1)</span></button>' : "") +
-      '<span class="sp" style="flex:1"></span><a class="btn sm" href="#/">그만하기</a></div>';
+      '<span class="sp" style="flex:1"></span><button class="btn sm" id="quit">그만하기</button></div>';
     html += '<div id="res"></div></div>';
     $("#main").innerHTML = html;
 
@@ -300,6 +303,7 @@
     if ($("#i50")) $("#i50").onclick = useFifty;
     if ($("#iSkip")) $("#iSkip").onclick = useSkip;
     if ($("#iKo")) $("#iKo").onclick = useHint;
+    $("#quit").onclick = quit;
     tick(); timerT = setInterval(tick, 250);
   }
   function tick() {
@@ -318,6 +322,7 @@
     rpc("bu_answer", { p_given: String(given) }).then(function (r) {
       play.busy = false; play.res = r; play.given = given;
       play.sess.n++; if (r.ok) play.sess.ok++; play.sess.pts += r.points || 0;
+      if (!r.gone) play.log.push({ q: play.q, r: r, given: given });
       showResult(r, timeUp);
     }).catch(function (e) {
       play.busy = false;
@@ -340,15 +345,52 @@
     if (!r.ok || r.qtype === "sa") h += "<p>정답: <b>" + esc(ansText) + "</b>" + (r.qtype === "sa" && !r.ok && play.given ? ' <span class="small muted">(내 답: ' + esc(play.given) + ")</span>" : "") + "</p>";
     if (r.explain) h += "<p>💡 " + esc(r.explain) + "</p>";
     if (en && r.ko) h += '<p class="small">💬 ' + esc(r.ko) + "</p>";
-    if (r.mode === "daily" && r.d10len >= 10) h += "<p>🎉 오늘의 10문제 완주! <b>+3점</b> 보너스가 들어 있어요.</p>";
-    h += '<div class="row-btns"><button class="btn navy big" id="nx">' + (r.mode === "daily" && r.d10len >= 10 ? "결과 보기 ▶" : "다음 문제 ▶") + '</button><a class="btn" href="#/">홈으로</a></div></div>';
+    var roundEnd = play.total && play.sess.n >= play.total, dailyEnd = r.mode === "daily" && r.d10len >= 10;
+    if (dailyEnd) h += "<p>🎉 오늘의 10문제 완주! <b>+3점</b> 보너스가 들어 있어요.</p>";
+    h += '<div class="row-btns"><button class="btn navy big" id="nx">' + (roundEnd || dailyEnd ? "결과 보기 ▶" : "다음 문제 ▶") + '</button><button class="btn" id="quit2">그만하기</button></div></div>';
     $("#res").innerHTML = h;
     $("#items").classList.add("hidden");
     var top = $(".play-top .small"); if (top) top.textContent = "이번 판 " + play.sess.ok + "/" + play.sess.n + " · +" + play.sess.pts + "점";
-    $("#nx").onclick = r.mode === "daily" && r.d10len >= 10 ? function () { loadMine().then(viewDailyDone); } : nextQ;
+    $("#nx").onclick = roundEnd ? viewRoundDone : dailyEnd ? function () { loadMine().then(viewDailyDone); } : nextQ;
+    $("#quit2").onclick = quit;
     $("#nx").focus();
     // 내 기록(홈 화면용)은 조용히 새로 불러와요
     loadMine().then(function () { if (r.new_badge) showBadge(r.new_badge); }).catch(function () {});
+  }
+  // 그만하기: 푼 문제가 있으면 이번 판 결과를 보여 줘요 (오늘의 10문제는 홈에서 이어 풀기)
+  function quit() {
+    stopTimer();
+    if (play && play.sess.n > 0 && play.mode !== "daily") return viewRoundDone();
+    location.hash = "#/"; route();
+  }
+  function viewRoundDone() {
+    stopTimer();
+    var s = play.sess, L = play.log, rate = pct(s.ok, s.n), wrong = L.filter(function (x) { return !x.r.ok; });
+    var en = L.filter(function (x) { return x.r.lang === "en"; }), enOk = en.filter(function (x) { return x.r.ok; }).length;
+    var label = play.mode === "review" ? "오답 다시 풀기" : (play.qtype === "mc" ? "객관식" : play.qtype === "sa" ? "단답형" : "랜덤") + " " + (play.total ? play.total + "문제" : "무제한");
+    var row = L.map(function (x) { return x.r.ok ? "🟩" : "🟥"; }).join("");
+    var h = '<div class="card center"><div style="font-size:60px" class="pop">' + (rate === 100 ? "👑" : rate >= 80 ? "🏆" : rate >= 50 ? "👍" : "💪") + "</div>" +
+      "<h2>" + esc(label) + " 끝! " + s.n + "문제 중 " + s.ok + "개 맞혔어요</h2>" +
+      '<div class="kpis" style="max-width:560px;margin:12px auto">' + kpi(rate + "%", "정답률") + kpi("+" + s.pts + "점", "이번 판 점수") + (en.length ? kpi(enOk + "/" + en.length, "🌏 영어 문제") : "") + "</div>" +
+      '<div class="dots" style="justify-content:center">' + L.map(function (x) { return "<i class='" + (x.r.ok ? "o" : "x") + "'></i>"; }).join("") + "</div>" +
+      '<p class="muted">' + (rate === 100 ? "완벽해요! 오늘의 상식 퀸!" : rate >= 80 ? "대단해요! 조금만 더 하면 만점이에요." : rate >= 50 ? "좋아요! 틀린 문제를 확인하고 한 판 더?" : "괜찮아요. 풀수록 똑똑해져요! 🧠") + "</p>" +
+      '<div class="row-btns" style="justify-content:center"><button class="btn navy big" id="again">🔁 한 판 더</button><button class="btn gold" id="share">📋 결과 복사</button><a class="btn" href="#/">🏠 홈으로</a></div></div>';
+    if (wrong.length) {
+      h += '<div class="card"><h2>📝 이번 판에서 틀린 문제 <span class="small muted">' + wrong.length + "개 · 오답 노트에도 들어가요</span></h2>" + wrong.map(function (x) {
+        var r = x.r, ans = r.qtype === "mc" ? (r.choices || [])[+r.answer - 1] : String(r.answer || "").split("|").join(" / ");
+        var mine = r.qtype === "mc" ? (x.given ? (r.choices || [])[+x.given - 1] : "") : x.given;
+        return '<div class="wrong-item"><b>' + ((CAT[r.category] || {}).icon || "") + " " + esc(x.q.question) + "</b>" +
+          "<p>정답: <b>" + esc(ans) + "</b>" + (mine ? ' <span class="small muted">(내 답: ' + esc(mine) + ")</span>" : r.timeout ? ' <span class="small muted">(시간 초과)</span>' : "") + "</p>" +
+          (r.explain ? "<p>💡 " + esc(r.explain) + "</p>" : "") + (r.lang === "en" && r.ko ? '<p class="small">💬 ' + esc(r.ko) + "</p>" : "") + "</div>";
+      }).join("") + "</div>";
+    }
+    $("#main").innerHTML = h;
+    window.scrollTo(0, 0);
+    $("#again").onclick = function () { startPlay(play.mode, play.qtype); };
+    $("#share").onclick = function () {
+      var txt = "🧠 MY Brain Up " + label + " " + s.ok + "/" + s.n + " (" + rate + "%)\n" + row + "\n#BrainUp #MOONYOUNG";
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast("복사했어요! 친구에게 붙여 넣어 보세요."); }, function () { prompt("복사해서 쓰세요", txt); });
+    };
   }
   function showBadge(id) {
     var c = CAT[id]; if (!c) return;
