@@ -96,9 +96,11 @@
     return Promise.all([
       sel(client().from("bu_profile").select("*").eq("user_id", state.uid)),
       sel(client().from("bu_daily").select("day,n,ok,pts,mc_n,mc_ok,sa_n,sa_ok,en_n,en_ok,cats,d10").eq("user_id", state.uid).order("day", { ascending: true }).range(0, 4999)),
-      client().from("bu_qstate").select("qid", { count: "exact", head: true }).eq("user_id", state.uid).eq("last_ok", false)
+      client().from("bu_qstate").select("qid", { count: "exact", head: true }).eq("user_id", state.uid).eq("last_ok", false),
+      // 문제 은행 크기 (SQL을 다시 실행하기 전이면 조용히 숨겨요)
+      rpc("bu_counts").catch(function () { return null; })
     ]).then(function (r) {
-      state.profile = r[0][0] || null; state.daily = r[1]; state.wrongN = r[2].count || 0;
+      state.profile = r[0][0] || null; state.daily = r[1]; state.wrongN = r[2].count || 0; state.counts = r[3];
     });
   }
   function loadAll() {
@@ -200,7 +202,8 @@
       '<div class="seg" id="seg">' + [["", "🎲 랜덤"], ["mc", "✅ 객관식"], ["sa", "✏️ 단답형"]].map(function (x) { return '<button type="button" data-t="' + x[0] + '" class="' + (state.qtype === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
       '<div class="seg" id="seg2">' + [[10, "10문제"], [20, "20문제"], [30, "30문제"], [0, "∞ 무제한"]].map(function (x) { return '<button type="button" data-n="' + x[0] + '" class="' + (state.round === x[0] ? "on" : "") + '">' + x[1] + "</button>"; }).join("") + "</div><br>" +
       '<button class="start" id="go">▶ START</button>' +
-      '<p class="small" style="margin:14px 0 0;opacity:.8">객관식 1점 · 단답형 2점 · 영어 문제 +1점 · 가끔 👑 왕관 찬스!</p></div>';
+      bankLine() +
+      '<p class="small" style="margin:10px 0 0;opacity:.8">객관식 1점 · 단답형 2점 · 영어 문제 +1점 · 가끔 👑 왕관 찬스!</p></div>';
 
     html += '<div class="grid2">';
     html += '<div class="card"><h2>📅 오늘의 10문제</h2><p class="muted small">전교생이 오늘 같은 10문제를 풀어요. 하루 한 번, 끝까지 풀면 +3점!</p>' +
@@ -219,11 +222,19 @@
     $("#go").onclick = function () { location.hash = "#/play/" + (state.qtype || "any"); };
     if ($("#share")) $("#share").onclick = function () { shareDaily(d10); };
   }
+  // 📚 문제 은행: 전체 · 영어 · 단답형 + 내가 맞힌 문제 (진행 막대)
+  function bankLine() {
+    var c = state.counts; if (!c || !c.total) return "";
+    var mine = Math.min(+c.mine || 0, c.total), pr = pct(mine, c.total);
+    return '<div class="bank"><div class="bank-t"><span>📚 문제 은행 <b>' + num(c.total) + "문제</b></span><span>영어 " + num(c.en) + " · 객관식 " + num(c.mc) + " · 단답형 " + num(c.sa) + "</span></div>" +
+      '<div class="bank-bar"><i style="width:' + pr + '%"></i></div><div class="bank-m">내가 맞힌 문제 <b>' + num(mine) + "</b> / " + num(c.total) + " (" + pr + "%)" + (pr === 100 ? " 👑 전부 정복!" : "") + "</div></div>";
+  }
   function badgeGrid(total) {
     var owned = (state.profile && state.profile.badges) || [];
     return '<div class="badges">' + CATS.map(function (c) {
       var have = owned.indexOf(c.id) >= 0, ok = (total.cats[c.id] || [0, 0])[1];
-      return '<div class="badge ' + (have ? "" : "lock") + '" title="' + esc(c.name) + '"><div class="ic">' + c.bicon + "</div><b>" + esc(c.badge) + "</b><small>" + (have ? c.icon + " " + esc(c.short) : esc(c.short) + " " + Math.min(ok, 10) + "/10") + "</small></div>";
+      return '<div class="badge ' + (have ? "" : "lock") + '" title="' + esc(c.name) + '"><div class="ic">' + c.bicon + "</div><b>" + esc(c.badge) + "</b><small>" + (have ? c.icon + " " + esc(c.short) : esc(c.short) + " " + Math.min(ok, 10) + "/10") + "</small>" +
+        (state.counts && state.counts.cats ? '<small style="display:block">문제 ' + num(state.counts.cats[c.id] || 0) + "개</small>" : "") + "</div>";
     }).join("") + "</div>";
   }
   function shareDaily(d10) {

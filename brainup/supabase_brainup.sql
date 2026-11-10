@@ -461,6 +461,19 @@ language sql stable security definer set search_path = public as $$
   from (select qid, count(*) p, sum(tries) t, sum(correct) c from public.bu_qstate group by qid) z
 $$;
 
+-- 문제 은행 크기 (켜진 문제 수만, 문제 내용·정답은 안 보여요) + 내가 맞힌 문제 수
+create or replace function public.bu_counts() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select jsonb_build_object(
+    'total', count(*), 'en', count(*) filter (where lang = 'en'),
+    'mc', count(*) filter (where qtype = 'mc'), 'sa', count(*) filter (where qtype = 'sa'),
+    'cats', coalesce((select jsonb_object_agg(category, c) from (select category, count(*) c from public.bu_questions where active group by 1) z), '{}'::jsonb),
+    'mine', (select count(*) from public.bu_qstate s join public.bu_questions q on q.id = s.qid and q.active where s.user_id = auth.uid() and s.correct > 0))
+  from public.bu_questions where active
+$$;
+revoke execute on function public.bu_counts() from public, anon;
+grant execute on function public.bu_counts() to authenticated;
+
 -- 자동 접속(무료 프로젝트 일시 정지 방지)용. 로그인 없이 부를 수 있어요
 create or replace function public.bu_ping() returns int language sql stable as $$ select 1 $$;
 
