@@ -48,7 +48,7 @@
         : '<div id="gbtn"></div><p class="small">학교 구글 계정(<b>@' + esc(C.SCHOOL_DOMAIN) + "</b>)으로 로그인하세요.</p>") +
       '<div class="err" id="lerr">' + esc(msg || "") + "</div>" +
       '<div class="row gap wrap" style="justify-content:center"><a class="btn sm" href="guide.html" target="_blank" rel="noopener">📘 사용 설명서</a>' +
-      (MG.DEMO ? "" : '<a class="btn sm ghost" href="?demo=1">🎮 로그인 없이 체험하기</a>') + "</div>" +
+      (MG.DEMO || !MG.DEMO_ENABLED ? "" : '<a class="btn sm ghost" href="?demo=1">🎮 로그인 없이 체험하기</a>') + "</div>" +
       '<div class="features"><div><span class="em">📖</span><b>개념 + 예문</b><br><span class="muted">듣기까지 한 번에</span></div><div><span class="em">🔁</span><b>똑똑한 복습</b><br><span class="muted">잊을 때쯤 다시</span></div><div><span class="em">🏆</span><b>스탬프 · 레벨</b><br><span class="muted">인증서 자동 발급</span></div></div></div>';
     if (MG.DEMO) $("#demo-in").onclick = async function () { await api.signInDemo(); location.reload(); };
     else MG.renderGoogleButton($("#gbtn"), function (m) { $("#lerr").textContent = m; });

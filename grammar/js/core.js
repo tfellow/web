@@ -153,7 +153,9 @@
 
   /* ---------- 데이터 연결 ---------- */
   var params = new URLSearchParams(location.search);
-  MG.DEMO = params.has("demo") || !window.supabase;
+  // 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로 바꾸고 첫 화면(index.html)의 체험 링크 주석도 풀어요
+  MG.DEMO_ENABLED = false;
+  MG.DEMO = MG.DEMO_ENABLED && (params.has("demo") || !window.supabase);
 
   function rpcErr(r) {
     if (r.error) {
@@ -240,7 +242,7 @@
     function seed() {
       var S = window.MG_SAMPLE, d = {
         settings: { allow_external: "false", school_domain: C.SCHOOL_DOMAIN, daily_goal: "20", notice: "체험 모드예요. 기록은 이 기기에만 저장돼요." },
-        admins: [{ email: "tfellow@gmail.com" }, { email: "tfellow@smy.ms.kr" }, { email: "demo@smy.ms.kr" }],
+        admins: [{ email: "demo@smy.ms.kr" }],
         players: [], attempts: [], progress: [], stamps: [], badges: [], certs: [], seq: { q: 0, a: 0, c: 0 }, loggedIn: false
       };
       d.topics = S.topics.map(function (t, i) { return Object.assign({ id: i + 1, active: true, created_at: new Date().toISOString() }, t); });
