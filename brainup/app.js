@@ -242,7 +242,8 @@
     play = { mode: mode, qtype: qtype === "mc" || qtype === "sa" ? qtype : null, q: null, res: null, sess: { n: 0, ok: 0, pts: 0 }, busy: false };
     nextQ();
   }
-  function modeLabel() { return play.mode === "daily" ? "📅 오늘의 10문제" : play.mode === "review" ? "📝 오답 다시 풀기" : play.qtype === "mc" ? "✅ 객관식" : play.qtype === "sa" ? "✏️ 단답형" : "🎲 랜덤"; }
+  // 라벨은 "지금 이 문제"의 모드로 보여 줘요 (풀던 다른 모드 문제가 먼저 나올 수 있어서)
+  function modeLabel() { var m = (play.q && play.q.mode) || play.mode; return m === "daily" ? "📅 오늘의 10문제" : m === "review" ? "📝 오답 다시 풀기" : play.qtype === "mc" ? "✅ 객관식" : play.qtype === "sa" ? "✏️ 단답형" : "🎲 랜덤"; }
   function nextQ() {
     stopTimer();
     $("#main").innerHTML = '<div class="card center muted">문제를 고르는 중… 🎲</div>';
@@ -250,7 +251,8 @@
       if (q.crown) return showCrown();
       if (q.daily_done) return loadMine().then(function () { viewDailyDone(); });
       if (q.empty) return viewEmpty();
-      if (q.mode && q.mode !== play.mode) play.mode = q.mode;
+      // 다른 모드에서 풀다 만 문제가 있으면 그 문제만 먼저 풀고, 다음부터는 고른 모드로 돌아가요
+      if (q.resumed && q.mode && q.mode !== play.mode) toast("풀다 만 문제가 있어서 그 문제부터 마무리할게요.");
       play.q = q; play.res = null; play.hint = q.hint || null; play.removed = q.fifty || [];
       play.order = shuffle([0, 1, 2, 3].slice(0, (q.choices || []).length));
       play.deadline = Date.now() + (q.left == null ? q.limit : q.left) * 1000;
@@ -343,7 +345,8 @@
     $("#res").innerHTML = h;
     $("#items").classList.add("hidden");
     var top = $(".play-top .small"); if (top) top.textContent = "이번 판 " + play.sess.ok + "/" + play.sess.n + " · +" + play.sess.pts + "점";
-    $("#nx").onclick = nextQ; $("#nx").focus();
+    $("#nx").onclick = r.mode === "daily" && r.d10len >= 10 ? function () { loadMine().then(viewDailyDone); } : nextQ;
+    $("#nx").focus();
     // 내 기록(홈 화면용)은 조용히 새로 불러와요
     loadMine().then(function () { if (r.new_badge) showBadge(r.new_badge); }).catch(function () {});
   }

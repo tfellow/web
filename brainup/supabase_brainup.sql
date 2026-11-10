@@ -232,7 +232,10 @@ begin
     if t.crown then return jsonb_build_object('crown', true); end if;
     if now() - t.issued_at <= make_interval(secs => t.limit_sec + 5) then
       select * into q from public.bu_questions where id = t.qid;
-      if q.id is not null then return public.bu_qjson(q, t) || jsonb_build_object('resumed', true); end if;
+      if q.id is not null then
+        return public.bu_qjson(q, t) || jsonb_build_object('resumed', true, 'idx', case when t.mode = 'daily' then
+          coalesce((select jsonb_array_length(b.d10) from public.bu_daily b where b.user_id = uid and b.day = d), 0) + 1 end);
+      end if;
     end if;
     perform public.bu_grade(uid, t, null, true);
   end if;
@@ -261,6 +264,12 @@ begin
     done10 := coalesce(done10, 0);
     if done10 >= array_length(set10, 1) then return jsonb_build_object('daily_done', true); end if;
     qid_ := set10[done10 + 1];
+    -- 그 문제가 지워졌거나 꺼졌으면 다른 문제로 바꿔 끼워요 (모두에게 같은 자리, 같은 문제)
+    if not exists (select 1 from public.bu_questions where id = qid_ and active) then
+      select id into qid_ from public.bu_questions where active and id <> all(set10) order by md5(id::text || d::text) limit 1;
+      if qid_ is null then return jsonb_build_object('daily_done', true); end if;
+      update public.bu_d10 set qids[done10 + 1] = qid_ where day = d;
+    end if;
 
   elsif mode_ = 'review' then
     select s.qid into qid_ from public.bu_qstate s join public.bu_questions bq on bq.id = s.qid and bq.active
