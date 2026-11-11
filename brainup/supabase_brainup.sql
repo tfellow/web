@@ -95,7 +95,7 @@ create table if not exists public.bu_settings (
 insert into public.bu_settings (key, value) values
   ('open', 'true'), ('english_ratio', '0.2'), ('english_day', '""'),
   ('allow_external', 'false'), ('timer', 'true'), ('crown_rate', '0.05'),
-  ('morning', '{"on": true, "from": "07:00", "to": "08:40", "pts": 3, "weekdays": true}')
+  ('morning', '{"on": true, "from": "06:00", "to": "08:55", "pts": 3, "weekdays": true}')
 on conflict (key) do nothing;
 
 -- ======================================================================
@@ -189,8 +189,8 @@ begin
     mset := public.bu_set('morning');
     if coalesce((mset ->> 'on')::boolean, false)
        and (not coalesce((mset ->> 'weekdays')::boolean, true) or extract(isodow from kst) <= 5)
-       and kst::time >= coalesce(mset ->> 'from', '07:00')::time
-       and kst::time < coalesce(mset ->> 'to', '08:40')::time + interval '1 minute' then
+       and kst::time >= coalesce(mset ->> 'from', '06:00')::time
+       and kst::time < coalesce(mset ->> 'to', '08:55')::time + interval '1 minute' then
       mon := true; mpts := greatest(0, least(10, coalesce((mset ->> 'pts')::int, 3)));
       v_pts := v_pts + mpts;
     end if;

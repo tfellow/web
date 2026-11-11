@@ -52,7 +52,7 @@
   // ======================================================================
   //  상태 · 로그인
   // ======================================================================
-  var DEF_MORNING = { on: false, from: "07:00", to: "08:40", pts: 3, weekdays: true };
+  var DEF_MORNING = { on: false, from: "06:00", to: "08:55", pts: 3, weekdays: true };
   var DEF_SET = { open: true, english_ratio: 0.2, english_day: "", allow_external: false, timer: true, crown_rate: 0.05, morning: DEF_MORNING };
   var state = { email: "", uid: "", admin: false, settings: DEF_SET, profile: null, daily: [], wrongN: 0, ready: false,
     qtype: lget("bu.qtype", ""), round: +lget("bu.round", 10) || 0, boardTab: "week", tTab: lget("bu.tTab", "upload") };
@@ -930,7 +930,7 @@
   var PZ = null;
   function tPoster() {
     var M = morning();
-    PZ = PZ || Object.assign({ size: "A4", title: "오늘의 퀴즈 10", sub: "매일 아침 새로운 10문제! 전교생이 같은 문제에 도전해요", morning: true, theme: "basic" }, lget("bu.poster", {}));
+    PZ = PZ || Object.assign({ size: "A4", title: "오늘의 퀴즈 10", sub: "매일 아침 새로운 10문제! 전교생이 같은 문제에 도전해요", maker: "퀴즈반에서 만들었어요", morning: true, theme: "basic" }, lget("bu.poster", {}));
     var bg = null; try { bg = localStorage.getItem("bu.posterBg"); } catch (e) {}
     if (PZ.bgMem) bg = PZ.bgMem;
     var h = '<div class="card"><h2>🖨️ 오늘의 퀴즈 QR 포스터</h2>' +
@@ -939,6 +939,7 @@
       '<label>용지<select id="zSize"><option' + (PZ.size === "A4" ? " selected" : "") + '>A4</option><option' + (PZ.size === "A3" ? " selected" : "") + ">A3</option></select></label>" +
       '<label>큰 제목<input id="zTitle" maxlength="16" value="' + esc(PZ.title) + '"></label></div>' +
       '<label>한 줄 문구<input id="zSub" maxlength="40" value="' + esc(PZ.sub) + '"></label>' +
+      '<label>만든 곳 문구 <span class="small muted">(포스터 아래쪽에 들어가요. 비우면 빠져요)</span><input id="zMaker" maxlength="30" value="' + esc(PZ.maker == null ? "퀴즈반에서 만들었어요" : PZ.maker) + '"></label>' +
       '<label class="inline"><input type="checkbox" id="zMorning"' + (PZ.morning ? " checked" : "") + (M.on ? "" : " disabled") + "> 🌅 아침 보너스 안내 넣기 " +
         (M.on ? '<span class="small muted">(' + esc(morningText(M)) + " · +" + M.pts + "점, ⚙️ 설정에서 바꿔요)</span>" : '<span class="small muted">(⚙️ 설정에서 아침 보너스를 켜면 넣을 수 있어요)</span>') + "</label></div>" +
       '<div class="row-btns"><button class="btn navy big" id="zPrint">🖨️ 인쇄하기</button><button class="btn" id="zQr">📥 QR 이미지만 받기</button><button class="btn" id="zCopyUrl">🔗 주소 복사</button></div>' +
@@ -956,9 +957,9 @@
     $("#tbody").innerHTML = h;
 
     function save() { var o = Object.assign({}, PZ); delete o.bgMem; lset("bu.poster", o); }
-    function re() { PZ.size = $("#zSize").value; PZ.title = $("#zTitle").value.trim() || "오늘의 퀴즈 10"; PZ.sub = $("#zSub").value.trim(); PZ.morning = $("#zMorning").checked; PZ.theme = $("#zTheme").value; save(); drawPreview(); }
+    function re() { PZ.size = $("#zSize").value; PZ.title = $("#zTitle").value.trim() || "오늘의 퀴즈 10"; PZ.sub = $("#zSub").value.trim(); PZ.maker = $("#zMaker").value.trim(); PZ.morning = $("#zMorning").checked; PZ.theme = $("#zTheme").value; save(); drawPreview(); }
     ["#zSize", "#zMorning", "#zTheme"].forEach(function (s) { $(s).onchange = function () { re(); if (s === "#zSize") tPoster(); }; });
-    ["#zTitle", "#zSub"].forEach(function (s) { $(s).oninput = re; });
+    ["#zTitle", "#zSub", "#zMaker"].forEach(function (s) { $(s).oninput = re; });
     $("#zPrompt").onclick = function () { var t = bgPrompt(PZ.theme, PZ.size); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast("프롬프트를 복사했어요. 그림 AI에게 붙여 넣으세요!"); }, function () { $("#zPBox").textContent = t; $("#zPBox").classList.remove("hidden"); }); };
     $("#zPShow").onclick = function () { $("#zPBox").textContent = bgPrompt(PZ.theme, PZ.size); $("#zPBox").classList.toggle("hidden"); };
     $("#zCopyUrl").onclick = function () { var u = dailyUrl(); (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { toast("주소를 복사했어요: " + u); }, function () { prompt("복사해서 쓰세요", u); }); };
@@ -1008,7 +1009,7 @@
       '<div class="pz-steps"><div><i>1</i>QR 찍기</div><div><i>2</i>학교 계정<br>로그인</div><div><i>3</i>10문제<br>도전!</div></div>' +
       '<div class="pz-rules">끝까지 풀면 <b>+3점</b> · 객관식 1점 · 단답형 2점 · 영어 문제 +1점</div>' +
       '<div class="pz-cats">' + CATS.map(function (c) { return "<span>" + c.icon + "<small>" + esc(c.short) + "</small></span>"; }).join("") + "</div>" +
-      '<div class="pz-foot">' + esc(dailyUrl().replace(/^https?:\/\//, "")) + "</div></div>";
+      '<div class="pz-foot">' + (PZ.maker ? '<b>✨ ' + esc(PZ.maker) + "</b>" : "") + "<span>" + esc(dailyUrl().replace(/^https?:\/\//, "")) + "</span></div></div>";
   }
   function printPoster() {
     loadScript(QR_URL, "qrcode").then(function () {

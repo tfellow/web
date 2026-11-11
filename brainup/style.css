@@ -210,7 +210,7 @@ tr.err-row td { background: #fff6f5; }
   -webkit-print-color-adjust: exact; print-color-adjust: exact; word-break: keep-all; }
 .pz.has-bg { background-color: #fff; }
 .pz-top { align-self: stretch; display: flex; align-items: center; gap: 3mm; color: #fff; }
-.pz-top img { width: 13mm; height: auto; background: #fff; border-radius: 50%; padding: 1.2mm; }
+.pz-top img { width: 15mm; height: auto; filter: drop-shadow(0 0 .5mm #fff) drop-shadow(0 0 .5mm #fff); }
 .pz-top b { display: block; font-size: 5.2mm; letter-spacing: .6mm; }
 .pz-top span { font-size: 4mm; opacity: .9; }
 .pz-head { text-align: center; color: #fff; }
@@ -221,7 +221,7 @@ tr.err-row td { background: #fff6f5; }
 .pz.has-bg .pz-top, .pz.has-bg .pz-head { background: rgba(255,255,255,.9); color: var(--navy); border-radius: 6mm; padding: 1.6mm 5mm; }
 .pz.has-bg .pz-head h1 { color: var(--navy); text-shadow: none; }
 .pz-qrcard { background: #fff; border-radius: 8mm; padding: 6mm 6mm 4mm; box-shadow: 0 2mm 6mm rgba(28,34,51,.18); border: 1.2mm solid var(--gold); text-align: center; }
-.pz-qr svg { display: block; width: 84mm; height: 84mm; }
+.pz-qr svg { display: block; width: 80mm; height: 80mm; }
 .pz-scan { margin-top: 2.5mm; font-size: 6.4mm; font-weight: 800; color: var(--navy); }
 .pz-bonus { background: linear-gradient(90deg, #ffd27a, #ffb38a); color: #5a2e00; font-size: 6.2mm; font-weight: 600; padding: 2.6mm 7mm; border-radius: 99mm; }
 .pz-bonus small { font-size: 4.2mm; font-weight: 500; }
@@ -232,7 +232,8 @@ tr.err-row td { background: #fff6f5; }
 .pz-cats { display: flex; gap: 2.4mm; }
 .pz-cats span { display: flex; flex-direction: column; align-items: center; font-size: 7.5mm; background: rgba(255,255,255,.92); border-radius: 4mm; padding: 1.5mm 1.8mm; min-width: 18mm; }
 .pz-cats small { font-size: 3.4mm; color: var(--muted); font-weight: 600; }
-.pz-foot { margin-top: auto; font-size: 3.6mm; color: var(--muted); background: rgba(255,255,255,.85); padding: .8mm 4mm; border-radius: 99mm; }
+.pz-foot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: .6mm; font-size: 3.4mm; color: var(--muted); background: rgba(255,255,255,.88); padding: 1.2mm 6mm; border-radius: 4mm; text-align: center; }
+.pz-foot b { font-size: 4.8mm; color: var(--navy); }
 #pzPrint { display: none; }
 @media print {
   body.pz-printing { margin: 0 !important; padding: 0 !important; max-width: none !important; background: #fff !important; }
