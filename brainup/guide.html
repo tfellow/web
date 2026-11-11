@@ -6,7 +6,7 @@
 <title>MY Brain Up 설명서</title>
 <link rel="icon" href="../app/emblem.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=4">
 <style>
   .g h2 { margin-top: 4px; }
   .g ul, .g ol { margin: 6px 0; padding-left: 22px; }
@@ -24,7 +24,7 @@
   </a>
   <div class="top-actions"><a class="btn sm" href="./">▶ 퀴즈로 가기</a></div>
 </header>
-<nav class="toc" style="margin-bottom:12px"><a href="#student">👩‍🎓 학생</a><a href="#score">⭐ 점수</a><a href="#teacher">👩‍🏫 선생님</a><a href="#make">🤖 문제 만들기</a><a href="#setup">🛠️ 처음 설정</a></nav>
+<nav class="toc" style="margin-bottom:12px"><a href="#student">👩‍🎓 학생</a><a href="#score">⭐ 점수</a><a href="#poster">🖨️ QR 포스터</a><a href="#teacher">👩‍🏫 선생님</a><a href="#make">🤖 문제 만들기</a><a href="#setup">🛠️ 처음 설정</a></nav>
 
 <div class="card" id="student">
   <h2>👩‍🎓 학생: 이렇게 풀어요</h2>
@@ -38,7 +38,8 @@
   </ol>
   <table>
     <tr><th>기능</th><th>설명</th></tr>
-    <tr><td>📅 오늘의 10문제</td><td>전교생이 같은 10문제를 하루 한 번 풀어요. 끝까지 풀면 +3점, 결과를 🟩🟥 모양으로 복사해 자랑할 수 있어요.</td></tr>
+    <tr><td>📅 오늘의 10문제</td><td>전교생이 같은 10문제를 하루 한 번 풀어요. 끝까지 풀면 +3점, 결과를 🟩🟥 모양으로 복사해 자랑할 수 있어요. 게시판 포스터의 <b>QR을 찍으면</b> 로그인한 뒤 바로 시작돼요.</td></tr>
+    <tr><td>🌅 아침 보너스</td><td>선생님이 정한 아침 시간(예: 평일 07:00~08:40) 안에 오늘의 10문제를 끝내면 보너스 점수(기본 +3점)를 더 받아요. 시간은 서버가 한국 시간으로 재요. 지금이 보너스 시간이면 홈 화면에 반짝이는 안내가 떠요.</td></tr>
     <tr><td>📝 오답 다시 풀기</td><td>틀린 문제만 다시 나와요. 맞히면 오답 노트에서 빠져요.</td></tr>
     <tr><td>✂️ 50:50</td><td>객관식 오답 2개를 지워요. 하루 3번.</td></tr>
     <tr><td>⏭️ 건너뛰기</td><td>기록 없이 다음 문제로 가요. 하루 3번. (오늘의 10문제에서는 못 써요)</td></tr>
@@ -68,6 +69,7 @@
     <tr><td>단답형</td><td class="num">2점</td></tr>
     <tr><td>영어 문제 보너스 (한국어 보기를 안 썼을 때)</td><td class="num">+1점</td></tr>
     <tr><td>오늘의 10문제 완주</td><td class="num">+3점</td></tr>
+    <tr><td>🌅 아침 시간 안에 10문제 완주 (선생님 설정)</td><td class="num">+1~5점 (기본 3)</td></tr>
     <tr><td>👑 왕관 찬스 다음 문제</td><td class="num">×2</td></tr>
   </table>
   <ul>
@@ -87,10 +89,27 @@
         <li>⚠️ 확인 필요: 정답 보기만 길 때, 영어 문장이 15단어를 넘거나 어려운 단어가 있을 때, 단답형 정답이 길 때, 영어 문제에 한국어 번역이 없을 때.</li>
       </ul></li>
     <li><b>📚 문제 목록</b>: 분야·형식·언어·묶음으로 찾고, 문제별 정답률을 봐요. 스위치로 끄면 학생에게 나오지 않아요. 묶음째 지울 수도 있어요.</li>
-    <li><b>👩‍🎓 학생 기록</b>: 오늘·이번 주·이번 달·전체·기간 선택, 반별로 보고 CSV로 받아요.</li>
-    <li><b>⚙️ 설정</b>: 퀴즈 열기, <b>🌏 English Day</b>(오늘만 모든 문제를 영어로), 영어 문제 비율, 시간 제한, 학교 밖 계정 허용, 왕관 찬스 확률, 기록 지우기.</li>
+    <li><b>👩‍🎓 학생 기록</b>: 오늘·이번 주·이번 달·전체·기간 선택, 반별로 보고 CSV로 받아요. <b>🌅 아침</b> 칸은 아침 보너스를 받은 날 수예요.</li>
+    <li><b>🖨️ QR 포스터</b>: 게시판에 붙일 오늘의 퀴즈 포스터를 인쇄해요. (아래 설명)</li>
+    <li><b>⚙️ 설정</b>: 퀴즈 열기, <b>🌏 English Day</b>(오늘만 모든 문제를 영어로), 영어 문제 비율, 시간 제한, 학교 밖 계정 허용, 왕관 찬스 확률, <b>🌅 아침 보너스</b>(켜기·시작/끝 시간·점수 1~5·평일만/매일), 기록 지우기.</li>
   </ul>
   <p class="small muted">관리자 계정: tfellow@gmail.com, tfellow@smy.ms.kr, engwords@smy.ms.kr (독서 여권과 같은 관리자 목록)</p>
+</div>
+
+<div class="card" id="poster">
+  <h2>🖨️ 오늘의 퀴즈 QR 포스터</h2>
+  <p>포스터의 QR은 <b>항상 같은 주소</b>(오늘의 10문제)로 가고, 문제는 서버가 <b>매일 새로</b> 골라요. 그래서 포스터는 <b>한 번만 인쇄해서</b> 게시판에 붙여 두면 돼요. 코팅하면 오래 써요.</p>
+  <ol>
+    <li>교사 화면 → <b>🖨️ QR 포스터</b>에서 용지(A4/A3), 큰 제목, 한 줄 문구, 🌅 아침 보너스 안내를 정해요.</li>
+    <li>(선택) <b>📋 배경 그림 프롬프트 복사</b> → 제미나이·챗지피티 그림 만들기에 붙여 넣기 → 받은 그림을 <b>🖼️ 배경 그림 넣기</b>로 골라요. 분위기(가을·겨울·시험 기간·크리스마스 등)를 바꿔 계절마다 새 포스터를 만들 수 있어요.</li>
+    <li>미리보기를 보고 <b>🖨️ 인쇄하기</b>. 인쇄 창에서 <b>배경 그래픽 켜기 · 여백 없음 · 배율 100%</b>.</li>
+  </ol>
+  <ul>
+    <li>AI 그림에는 <b>글자와 QR을 넣지 않게</b> 프롬프트에 적혀 있어요. AI가 그린 QR은 찍어도 열리지 않기 때문에, QR과 글자는 앱이 직접 그림 위에 올려요.</li>
+    <li><b>📥 QR 이미지만 받기</b>: 캔바 같은 다른 도구로 포스터를 만들 때 이 QR 그림을 넣으면 돼요. <b>🔗 주소 복사</b>로 링크만 받을 수도 있어요.</li>
+    <li>학생이 처음 찍으면 학교 계정 로그인 → 닉네임 정하기 → 바로 오늘의 10문제. 다음 날부터는 로그인이 기억돼서 찍자마자 시작돼요.</li>
+    <li>보상: 학생 기록의 <b>10문제 완주 · 🌅 아침</b> 칸, 또는 Teacher Hub 보상 규칙의 <b>"Brain Up 오늘의 10문제 완주"</b>·<b>"Brain Up 아침 보너스"</b>를 Class123 으쓱과 연결하세요.</li>
+  </ul>
 </div>
 
 <div class="card" id="make">
@@ -115,7 +134,7 @@
 <div class="card" id="setup">
   <h2>🛠️ 처음 한 번 설정</h2>
   <ol>
-    <li>Supabase 대시보드 → <b>SQL Editor</b> → <code>brainup/supabase_brainup.sql</code> 전체를 붙여 넣고 <b>Run</b>. (독서 여권과 같은 프로젝트예요)</li>
+    <li>Supabase 대시보드 → <b>SQL Editor</b> → <code>brainup/supabase_brainup.sql</code> 전체를 붙여 넣고 <b>Run</b>. (독서 여권과 같은 프로젝트예요. 새 기능이 생기면 다시 실행해요 — 🌅 아침 보너스도 이때 켜져요)</li>
     <li>교사 화면에서 문제를 올리면 바로 시작할 수 있어요.</li>
     <li>방학 중 Supabase가 멈추지 않도록 GitHub Actions의 <b>Supabase keep-alive</b>가 매일 아침 한 번 접속해요. (GitHub → Actions 탭에서 확인)</li>
   </ol>

@@ -55,6 +55,9 @@ create table if not exists public.bu_daily (
   primary key (user_id, day)
 );
 create index if not exists bu_daily_day_idx on public.bu_daily (day);
+-- 🌅 아침 보너스: 오늘의 10문제를 다 푼 시각 + 아침 시간 안에 끝냈는지
+alter table public.bu_daily add column if not exists d10_at  timestamptz;
+alter table public.bu_daily add column if not exists morning boolean not null default false;
 
 create table if not exists public.bu_qstate (
   user_id uuid not null,
@@ -91,7 +94,8 @@ create table if not exists public.bu_settings (
 );
 insert into public.bu_settings (key, value) values
   ('open', 'true'), ('english_ratio', '0.2'), ('english_day', '""'),
-  ('allow_external', 'false'), ('timer', 'true'), ('crown_rate', '0.05')
+  ('allow_external', 'false'), ('timer', 'true'), ('crown_rate', '0.05'),
+  ('morning', '{"on": true, "from": "07:00", "to": "08:40", "pts": 3, "weekdays": true}')
 on conflict (key) do nothing;
 
 -- ======================================================================
@@ -136,6 +140,7 @@ language plpgsql security definer set search_path = public as $$
 declare
   q public.bu_questions; d date := public.bu_today(); okb boolean := false; oki int; v_pts int := 0;
   em text := lower(coalesce(auth.jwt() ->> 'email', '')); d10len int := 0; dbl boolean := false;
+  mset jsonb; mon boolean := false; mpts int := 0; kst timestamp := now() at time zone 'Asia/Seoul';
 begin
   select * into q from public.bu_questions where id = t.qid;
   if q.id is null then
@@ -178,7 +183,19 @@ begin
   returning jsonb_array_length(b.d10) into d10len;
 
   -- 오늘의 10문제를 다 풀면 +3
-  if t.mode = 'daily' and d10len = 10 then v_pts := v_pts + 3; end if;
+  if t.mode = 'daily' and d10len = 10 then
+    v_pts := v_pts + 3;
+    -- 🌅 아침 보너스: 선생님이 정한 시간(한국 시간) 안에 10문제를 끝내면 + 보너스
+    mset := public.bu_set('morning');
+    if coalesce((mset ->> 'on')::boolean, false)
+       and (not coalesce((mset ->> 'weekdays')::boolean, true) or extract(isodow from kst) <= 5)
+       and kst::time >= coalesce(mset ->> 'from', '07:00')::time
+       and kst::time < coalesce(mset ->> 'to', '08:40')::time + interval '1 minute' then
+      mon := true; mpts := greatest(0, least(10, coalesce((mset ->> 'pts')::int, 3)));
+      v_pts := v_pts + mpts;
+    end if;
+    update public.bu_daily b set d10_at = now(), morning = mon where b.user_id = p_uid and b.day = d;
+  end if;
   if v_pts > 0 then
     update public.bu_daily b set pts = b.pts + v_pts where b.user_id = p_uid and b.day = d;
   end if;
@@ -187,7 +204,8 @@ begin
   return jsonb_build_object(
     'ok', okb, 'timeout', p_timeout, 'points', v_pts, 'qid', q.id, 'qtype', q.qtype, 'lang', q.lang,
     'category', q.category, 'answer', q.answer, 'choices', to_jsonb(q.choices),
-    'explain', q.explain, 'ko', q.ko, 'double', dbl, 'mode', t.mode, 'd10len', d10len);
+    'explain', q.explain, 'ko', q.ko, 'double', dbl, 'mode', t.mode, 'd10len', d10len,
+    'morning', mon, 'morning_pts', mpts);
 end $$;
 
 revoke execute on function public.bu_set(text), public.bu_qjson(public.bu_questions, public.bu_ticket),

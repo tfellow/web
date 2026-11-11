@@ -59,6 +59,7 @@ const METRICS = {
   brainup_correct: { app: "brainup", name: "Brain Up 맞힌 문제", unit: "개" },
   brainup_d10: { app: "brainup", name: "Brain Up 오늘의 10문제 완주", unit: "회", min: 0, minUnit: "개 이상 맞힘" },
   brainup_days: { app: "brainup", name: "Brain Up 도전한 날", unit: "일" },
+  brainup_morning: { app: "brainup", name: "Brain Up 아침 보너스 (아침 시간에 10문제 완주)", unit: "회" },
   brainup_tier: { app: "brainup", name: "Brain Up 배지 단계 (8분야 합, 최대 32)", unit: "단계" },
   brainup_queen: { app: "brainup", name: "Brain Up Brain Queen 등급 (최대 4)", unit: "등급" },
 };
@@ -277,13 +278,13 @@ async function sbLoad() {
   } catch (e) { if (!/lt_attempts|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("레벨 테스트", e); }
 
   try { // MY Brain Up (랜덤 상식 퀴즈) — 학생×날짜 합계 1줄 = 이벤트 1개 (그날 정오, 한국 시간)
-    const rows = await sbAll(() => c.from("bu_daily").select("email,day,n,ok,pts,sa_n,sa_ok,en_n,en_ok,d10"));
+    const rows = await sbAll(() => c.from("bu_daily").select("*"));
     rows.forEach(r => {
       if (!num(r.n)) return;
       const d10 = Array.isArray(r.d10) ? r.d10 : [];
       addEvent({ e: r.email, a: "brainup", t: Date.parse(r.day + "T12:00:00+09:00"), k: "day", title: `Brain Up ${r.n}문제`,
         s: num(r.ok), n: num(r.n), p: pct(r.ok, r.n), pts: num(r.pts), sa: num(r.sa_ok), en: num(r.en_ok), enN: num(r.en_n),
-        d10: d10.length >= 10 ? d10.filter(x => x === 1).length : null });
+        d10: d10.length >= 10 ? d10.filter(x => x === 1).length : null, morning: !!r.morning });
     });
   } catch (e) { if (!/bu_daily|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("Brain Up", e); }
   try { // Brain Up 분야 배지 단계 · Brain Queen 등급 (SQL을 다시 실행하기 전이면 조용히 넘어가요)
@@ -710,6 +711,7 @@ function ruleCount(rule, email) {
     case "brainup_correct": return evs.filter(e => e.a === "brainup" && e.t >= since).reduce((t, e) => t + num(e.s), 0);
     case "brainup_d10": return evs.filter(e => e.a === "brainup" && e.t >= since && e.d10 != null && e.d10 >= min).length;
     case "brainup_days": return evs.filter(e => e.a === "brainup" && e.t >= since).length;
+    case "brainup_morning": return evs.filter(e => e.a === "brainup" && e.t >= since && e.morning).length;
     case "brainup_tier": return num(state.snap.brainup.get(email)?.tiers); // 지금까지 쌓인 값 (기간과 상관없음)
     case "brainup_queen": return num(state.snap.brainup.get(email)?.queen);
   }

@@ -192,3 +192,51 @@ tr.err-row td { background: #fff6f5; }
 .prompt-box { white-space: pre-wrap; font-family: ui-monospace, Consolas, "Malgun Gothic", monospace; font-size: 13px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px; max-height: 240px; overflow: auto; }
 .drop { border: 2px dashed var(--line); border-radius: 14px; padding: 16px; text-align: center; background: var(--paper); }
 .drop.over { border-color: var(--navy-2); background: var(--navy-soft); }
+.form label.inline { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--ink); }
+.form label.inline input { min-height: 0; width: 18px; height: 18px; }
+
+/* 🌅 아침 보너스 */
+.morning { margin: 8px 0 0; padding: 8px 12px; border-radius: 12px; background: #fff4e0; color: #8a5a00; font-size: 14px; }
+.morning.now { background: linear-gradient(90deg, #ffe3a3, #ffd0b0); color: #6b3d00; font-weight: 600; animation: mglow 1.6s ease-in-out infinite alternate; }
+.morning.got { background: var(--ok-soft); color: var(--ok); }
+@keyframes mglow { from { box-shadow: 0 0 0 0 rgba(255,170,60,.0); } to { box-shadow: 0 0 0 4px rgba(255,170,60,.35); } }
+
+/* 🖨️ QR 포스터 (A4 세로 210×297mm 기준, A3는 확대) */
+.pz-wrap { position: relative; overflow: hidden; background: #ece6da; border-radius: 12px; display: flex; justify-content: center; padding-top: 0; }
+.pz-wrap .pz { flex: none; transform-origin: top center; box-shadow: 0 4px 20px rgba(0,0,0,.15); }
+.pz { width: 210mm; height: 296mm; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 4mm; padding: 11mm 14mm 9mm;
+  background: radial-gradient(circle at 85% 8%, #ffe9a8 0 22mm, transparent 23mm), linear-gradient(180deg, var(--navy) 0 80mm, #fffaf0 80mm);
+  background-size: cover; background-position: center; color: var(--ink); font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; word-break: keep-all; }
+.pz.has-bg { background-color: #fff; }
+.pz-top { align-self: stretch; display: flex; align-items: center; gap: 3mm; color: #fff; }
+.pz-top img { width: 13mm; height: auto; background: #fff; border-radius: 50%; padding: 1.2mm; }
+.pz-top b { display: block; font-size: 5.2mm; letter-spacing: .6mm; }
+.pz-top span { font-size: 4mm; opacity: .9; }
+.pz-head { text-align: center; color: #fff; }
+.pz-head h1 { margin: 1mm 0 0; font-size: 17mm; line-height: 1.1; color: #fff; font-weight: 900; letter-spacing: -.3mm; text-shadow: 0 1mm 0 rgba(0,0,0,.18); }
+.pz-kicker { display: inline-block; background: var(--gold); color: #fff; font-weight: 800; font-size: 5.2mm; padding: 1.6mm 5mm; border-radius: 99mm; }
+.pz-en { margin-top: 1.5mm; font-size: 5mm; font-family: Georgia, serif; opacity: .92; }
+.pz.has-bg { gap: 3mm; }
+.pz.has-bg .pz-top, .pz.has-bg .pz-head { background: rgba(255,255,255,.9); color: var(--navy); border-radius: 6mm; padding: 1.6mm 5mm; }
+.pz.has-bg .pz-head h1 { color: var(--navy); text-shadow: none; }
+.pz-qrcard { background: #fff; border-radius: 8mm; padding: 6mm 6mm 4mm; box-shadow: 0 2mm 6mm rgba(28,34,51,.18); border: 1.2mm solid var(--gold); text-align: center; }
+.pz-qr svg { display: block; width: 84mm; height: 84mm; }
+.pz-scan { margin-top: 2.5mm; font-size: 6.4mm; font-weight: 800; color: var(--navy); }
+.pz-bonus { background: linear-gradient(90deg, #ffd27a, #ffb38a); color: #5a2e00; font-size: 6.2mm; font-weight: 600; padding: 2.6mm 7mm; border-radius: 99mm; }
+.pz-bonus small { font-size: 4.2mm; font-weight: 500; }
+.pz-steps { display: flex; gap: 4mm; }
+.pz-steps div { background: #fff; border: .5mm solid var(--line); border-radius: 5mm; width: 46mm; padding: 3mm 2mm; text-align: center; font-size: 5mm; font-weight: 700; color: var(--navy); line-height: 1.25; }
+.pz-steps i { display: block; margin: 0 auto 1.4mm; width: 8mm; height: 8mm; line-height: 8mm; border-radius: 50%; background: var(--navy); color: #fff; font-style: normal; font-size: 4.6mm; }
+.pz-rules { font-size: 4.4mm; color: var(--ink); background: rgba(255,255,255,.88); padding: 1.6mm 5mm; border-radius: 99mm; }
+.pz-cats { display: flex; gap: 2.4mm; }
+.pz-cats span { display: flex; flex-direction: column; align-items: center; font-size: 7.5mm; background: rgba(255,255,255,.92); border-radius: 4mm; padding: 1.5mm 1.8mm; min-width: 18mm; }
+.pz-cats small { font-size: 3.4mm; color: var(--muted); font-weight: 600; }
+.pz-foot { margin-top: auto; font-size: 3.6mm; color: var(--muted); background: rgba(255,255,255,.85); padding: .8mm 4mm; border-radius: 99mm; }
+#pzPrint { display: none; }
+@media print {
+  body.pz-printing { margin: 0 !important; padding: 0 !important; max-width: none !important; background: #fff !important; }
+  body.pz-printing > :not(#pzPrint) { display: none !important; }
+  body.pz-printing #pzPrint { display: block; }
+  #pzPrint.a3 .pz { zoom: 1.41421; }
+}

@@ -6,6 +6,9 @@
   var SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키
   var XLSX_URL = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+  var QR_URL = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js";
+  var LIVE_URL = "https://tfellow.github.io/web/brainup/";
+  var START_HASH = location.hash; // QR로 #/daily 에 들어왔으면 닉네임을 정한 뒤에도 바로 오늘의 10문제로
   var BU = window.BU, CATS = BU.CATS, CAT = BU.CAT;
   var DAY = 864e5, KST = 9 * 3600e3;
 
@@ -49,7 +52,8 @@
   // ======================================================================
   //  상태 · 로그인
   // ======================================================================
-  var DEF_SET = { open: true, english_ratio: 0.2, english_day: "", allow_external: false, timer: true, crown_rate: 0.05 };
+  var DEF_MORNING = { on: false, from: "07:00", to: "08:40", pts: 3, weekdays: true };
+  var DEF_SET = { open: true, english_ratio: 0.2, english_day: "", allow_external: false, timer: true, crown_rate: 0.05, morning: DEF_MORNING };
   var state = { email: "", uid: "", admin: false, settings: DEF_SET, profile: null, daily: [], wrongN: 0, ready: false,
     qtype: lget("bu.qtype", ""), round: +lget("bu.round", 10) || 0, boardTab: "week", tTab: lget("bu.tTab", "upload") };
 
@@ -95,7 +99,7 @@
   function loadMine() {
     return Promise.all([
       sel(client().from("bu_profile").select("*").eq("user_id", state.uid)),
-      sel(client().from("bu_daily").select("day,n,ok,pts,mc_n,mc_ok,sa_n,sa_ok,en_n,en_ok,cats,d10").eq("user_id", state.uid).order("day", { ascending: true }).range(0, 4999)),
+      sel(client().from("bu_daily").select("*").eq("user_id", state.uid).order("day", { ascending: true }).range(0, 4999)),
       client().from("bu_qstate").select("qid", { count: "exact", head: true }).eq("user_id", state.uid).eq("last_ok", false),
       // 문제 은행 크기 (SQL을 다시 실행하기 전이면 조용히 숨겨요)
       rpc("bu_counts").catch(function () { return null; })
@@ -153,7 +157,7 @@
       ev.preventDefault();
       var v = $("#nickI").value.trim();
       if (!v) return;
-      rpc("bu_set_nick", { p_nick: v }).then(loadMine).then(function () { toast("닉네임: " + state.profile.nickname); location.hash = "#/"; route(); })
+      rpc("bu_set_nick", { p_nick: v }).then(loadMine).then(function () { toast("닉네임: " + state.profile.nickname); location.hash = first && /^#\/?daily/.test(START_HASH) ? "#/daily" : "#/"; route(); })
         .catch(function (e) { toast(errMsg(e)); });
     };
   }
@@ -188,6 +192,19 @@
     return it.day === kday() ? 3 - (+it[k] || 0) : 3;
   }
   function englishDay() { var v = state.settings.english_day; return v && v === kday(); }
+  // 🌅 아침 보너스 설정 (서버가 채점할 때 시간을 확인해요. 화면은 안내만 해요)
+  function morning() {
+    var m = state.settings.morning;
+    if (typeof m === "string") { try { m = JSON.parse(m); } catch (e) { m = null; } }
+    return Object.assign({}, DEF_MORNING, m || {});
+  }
+  function morningText(m) { return m.from + "~" + m.to + (m.weekdays ? " (평일)" : ""); }
+  function morningNow() {
+    var m = morning(); if (!m.on) return false;
+    var d = new Date(Date.now() + KST), dow = d.getUTCDay(), hm = d.toISOString().slice(11, 16);
+    if (m.weekdays && (dow === 0 || dow === 6)) return false;
+    return hm >= m.from && hm <= m.to;
+  }
 
   // ======================================================================
   //  홈
@@ -206,7 +223,12 @@
       '<p class="small" style="margin:10px 0 0;opacity:.8">객관식 1점 · 단답형 2점 · 영어 문제 +1점 · 가끔 👑 왕관 찬스!</p></div>';
 
     html += '<div class="grid2">';
+    var M = morning(), todayRow = m.today;
     html += '<div class="card"><h2>📅 오늘의 10문제</h2><p class="muted small">전교생이 오늘 같은 10문제를 풀어요. 하루 한 번, 끝까지 풀면 +3점!</p>' +
+      (M.on ? '<p class="morning' + (todayRow.morning ? " got" : morningNow() && d10.length < 10 ? " now" : "") + '">' +
+        (todayRow.morning ? "🌅 오늘 아침 보너스 <b>+" + M.pts + "점</b>을 받았어요!"
+          : morningNow() && d10.length < 10 ? "🌅 지금은 <b>아침 보너스 시간</b>! " + esc(M.to) + "까지 끝내면 +" + M.pts + "점"
+          : "🌅 아침 보너스: " + esc(morningText(M)) + "에 10문제를 끝내면 +" + M.pts + "점") + "</p>" : "") +
       '<div class="dots">' + Array.apply(null, Array(10)).map(function (_, i) { return "<i class='" + (d10[i] === 1 ? "o" : d10[i] === 0 ? "x" : "") + "'></i>"; }).join("") + "</div>" +
       (d10.length >= 10 ? '<p><b>' + d10.filter(function (x) { return x === 1; }).length + ' / 10</b> 맞혔어요!</p><div class="row-btns"><button class="btn gold" id="share">📋 결과 복사해서 자랑하기</button></div>'
         : '<div class="row-btns"><a class="btn navy" href="#/daily">' + (d10.length ? "▶ 이어서 풀기 (" + d10.length + "/10)" : "▶ 도전하기") + "</a></div>") + "</div>";
@@ -399,7 +421,7 @@
     if (r.explain) h += "<p>💡 " + esc(r.explain) + "</p>";
     if (en && r.ko) h += '<p class="small">💬 ' + esc(r.ko) + "</p>";
     var roundEnd = play.total && play.sess.n >= play.total, dailyEnd = r.mode === "daily" && r.d10len >= 10;
-    if (dailyEnd) h += "<p>🎉 오늘의 10문제 완주! <b>+3점</b> 보너스가 들어 있어요.</p>";
+    if (dailyEnd) h += "<p>🎉 오늘의 10문제 완주! <b>+3점</b> 보너스가 들어 있어요." + (r.morning ? " 🌅 <b>아침 보너스 +" + r.morning_pts + "점</b>도 받았어요!" : "") + "</p>";
     h += '<div class="row-btns"><button class="btn navy big" id="nx">' + (roundEnd || dailyEnd ? "결과 보기 ▶" : "다음 문제 ▶") + '</button><button class="btn" id="quit2">그만하기</button></div></div>';
     $("#res").innerHTML = h;
     $("#items").classList.add("hidden");
@@ -530,6 +552,7 @@
     $("#main").innerHTML = '<div class="card center"><div style="font-size:56px">' + (okN === 10 ? "👑" : okN >= 7 ? "🏆" : "📅") + "</div><h2>오늘의 10문제 " + okN + " / 10</h2>" +
       '<div class="dots" style="justify-content:center">' + d10.map(function (x) { return "<i class='" + (x === 1 ? "o" : "x") + "'></i>"; }).join("") + "</div>" +
       '<p class="muted">' + (okN === 10 ? "만점이에요! 오늘의 상식 퀸!" : "내일 또 새로운 10문제가 나와요.") + "</p>" +
+      (my().today.morning ? '<p class="morning got" style="display:inline-block">🌅 아침 보너스 <b>+' + morning().pts + "점</b> 받았어요!</p>" : "") +
       '<div class="row-btns" style="justify-content:center"><button class="btn gold" id="share">📋 결과 복사</button><a class="btn navy" href="#/play/any">🎲 랜덤 문제 더 풀기</a><a class="btn" href="#/">홈으로</a></div></div>';
     $("#share").onclick = function () { shareDaily(d10); };
   }
@@ -606,10 +629,10 @@
   // ======================================================================
   var T = { questions: null, qstats: null, roster: null, upload: null };
   function viewTeacher() {
-    var tabs = [["upload", "📤 문제 올리기"], ["questions", "📚 문제 목록"], ["students", "👩‍🎓 학생 기록"], ["settings", "⚙️ 설정"]];
+    var tabs = [["upload", "📤 문제 올리기"], ["questions", "📚 문제 목록"], ["students", "👩‍🎓 학생 기록"], ["poster", "🖨️ QR 포스터"], ["settings", "⚙️ 설정"]];
     $("#main").innerHTML = '<div class="tabs" id="ttabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.tTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + '</div><div id="tbody"></div>';
     $$("#ttabs button").forEach(function (b) { b.onclick = function () { state.tTab = b.dataset.t; lset("bu.tTab", state.tTab); viewTeacher(); }; });
-    (({ upload: tUpload, questions: tQuestions, students: tStudents, settings: tSettings })[state.tTab] || tUpload)();
+    (({ upload: tUpload, questions: tQuestions, students: tStudents, poster: tPoster, settings: tSettings })[state.tTab] || tUpload)();
   }
   function loadQuestions(force) {
     if (T.questions && !force) return Promise.resolve(T.questions);
@@ -786,7 +809,7 @@
   function tStudents() {
     $("#tbody").innerHTML = '<div class="card muted">불러오는 중…</div>';
     Promise.all([
-      all(function () { return client().from("bu_daily").select("email,day,n,ok,pts,mc_n,mc_ok,sa_n,sa_ok,en_n,en_ok,cats,d10"); }),
+      all(function () { return client().from("bu_daily").select("*"); }),
       all(function () { return client().from("bu_profile").select("email,nickname,tiers"); }),
       T.roster ? Promise.resolve(T.roster) : sel(client().from("roster").select("email,name,grade,class_no,student_no").range(0, 4999))
     ]).then(function (r) { T.daily = r[0]; T.profiles = r[1]; T.roster = r[2]; renderStudents(); })
@@ -811,7 +834,8 @@
       var rows = byE[e] || [], inP = rows.filter(function (d) { return d.day >= rg[0] && d.day <= rg[1]; }), s = sumRows(inP), all_ = sumRows(rows), x = ros[e] || {}, p = prof[e] || {};
       return { email: e, name: x.name || "", grade: x.grade, cls: x.class_no, no: x.student_no, nick: p.nickname || "", badges: CATS.reduce(function (t, c) { return t + (+((p.tiers || {})[c.id]) || 0); }, 0), queen: Math.min.apply(null, CATS.map(function (c) { return +((p.tiers || {})[c.id]) || 0; })),
         s: s, all: all_, streak: streakOf(rows.filter(function (d) { return d.n > 0; }).map(function (d) { return d.day; })),
-        last: rows.reduce(function (m, d) { return d.day > m ? d.day : m; }, ""), d10: inP.filter(function (d) { return (d.d10 || []).length >= 10; }).length };
+        last: rows.reduce(function (m, d) { return d.day > m ? d.day : m; }, ""), d10: inP.filter(function (d) { return (d.d10 || []).length >= 10; }).length,
+        morning: inP.filter(function (d) { return d.morning; }).length };
     }).sort(function (a, b) { return (a.grade || 9) - (b.grade || 9) || (a.cls || 99) - (b.cls || 99) || (a.no || 999) - (b.no || 999) || b.s.pts - a.s.pts; });
   }
   function renderStudents() {
@@ -825,11 +849,11 @@
       '<select class="fsel" id="sC"><option value="">참여한 학생 모두</option>' + classes.map(function (c) { return '<option' + (SF.cls === c ? " selected" : "") + ">" + c + "</option>"; }).join("") + "</select>" +
       '<button class="btn sm" id="csv">📥 CSV 받기</button></div>' +
       '<div class="kpis">' + kpi(active.length + "명", "참여 학생") + kpi(num(tot.n), "푼 문제") + kpi(pct(tot.ok, tot.n) + "%", "정답률") + kpi(pct(tot.en_ok, tot.en_n) + "%", "🌏 영어 정답률 (" + num(tot.en_n) + ")") + "</div>" +
-      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">연속</th><th class="num">배지 단계</th><th>최근</th></tr>' +
+      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">🌅 아침</th><th class="num">연속</th><th class="num">배지 단계</th><th>최근</th></tr>' +
       rows.map(function (r) {
         var s = r.s;
         return "<tr><td>" + className(r.grade, r.cls) + "</td><td>" + (r.no || "") + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td><td class='num'><b>" + num(s.pts) + "</b></td><td class='num'>" + num(s.n) + "</td><td class='num'>" + (s.n ? pct(s.ok, s.n) + "%" : "-") + "</td>" +
-          "<td class='num'>" + (s.sa_n ? s.sa_ok + "/" + s.sa_n : "-") + "</td><td class='num'>" + (s.en_n ? s.en_ok + "/" + s.en_n : "-") + "</td><td class='num'>" + (r.d10 || "") + "</td><td class='num'>" + (r.streak.cur ? "🔥" + r.streak.cur : "") + "</td><td class='num'>" + (r.queen ? QUEENS[r.queen].icon + "👑 " : "") + r.badges + "</td><td class='small'>" + (r.last ? r.last.slice(5).replace("-", ".") : "") + "</td></tr>";
+          "<td class='num'>" + (s.sa_n ? s.sa_ok + "/" + s.sa_n : "-") + "</td><td class='num'>" + (s.en_n ? s.en_ok + "/" + s.en_n : "-") + "</td><td class='num'>" + (r.d10 || "") + "</td><td class='num'>" + (r.morning || "") + "</td><td class='num'>" + (r.streak.cur ? "🔥" + r.streak.cur : "") + "</td><td class='num'>" + (r.queen ? QUEENS[r.queen].icon + "👑 " : "") + r.badges + "</td><td class='small'>" + (r.last ? r.last.slice(5).replace("-", ".") : "") + "</td></tr>";
       }).join("") + "</table></div>" + (rows.length ? "" : '<p class="muted center">아직 기록이 없어요.</p>') + "</div>";
 
     // 분야별 정답률 (전체 학생)
@@ -844,12 +868,163 @@
     if ($("#sF")) { $("#sF").onchange = function () { SF.from = this.value; renderStudents(); }; $("#sT").onchange = function () { SF.to = this.value; renderStudents(); }; }
     $("#csv").onclick = function () {
       var rg = periodRange();
-      var head = ["반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "연속 도전(일)", "최고 연속(일)", "배지 단계 합(32)", "Brain Queen", "최근 날짜", "누적 점수"];
-      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.streak.cur, r.streak.best, r.badges, r.queen ? QUEENS[r.queen].name : "", r.last, r.all.pts]; }));
+      var head = ["반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "아침 보너스(일)", "연속 도전(일)", "최고 연속(일)", "배지 단계 합(32)", "Brain Queen", "최근 날짜", "누적 점수"];
+      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.morning, r.streak.cur, r.streak.best, r.badges, r.queen ? QUEENS[r.queen].name : "", r.last, r.all.pts]; }));
       var csv = "﻿" + lines.map(function (l) { return l.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
       var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
       a.download = "BrainUp_학생기록_" + (SF.period === "all" ? "전체" : rg[0] + "_" + rg[1]) + (SF.cls ? "_" + SF.cls : "") + ".csv"; a.click();
     };
+  }
+
+  // ---------- 🖨️ QR 포스터 ----------
+  // QR은 늘 같은 주소(#/daily)예요. 문제는 서버가 매일 새로 골라서, 포스터는 한 번만 붙이면 돼요.
+  function loadScript(src, name) {
+    if (window[name]) return Promise.resolve(window[name]);
+    return new Promise(function (ok, no) { var s = document.createElement("script"); s.src = src; s.onload = function () { window[name] ? ok(window[name]) : no(new Error("불러오지 못했어요")); }; s.onerror = function () { no(new Error("QR 도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.")); }; document.head.appendChild(s); });
+  }
+  function dailyUrl() { return (location.hostname === "tfellow.github.io" ? location.origin + location.pathname : LIVE_URL) + "#/daily"; }
+  function qrMatrix(text) { var q = window.qrcode(0, "M"); q.addData(text); q.make(); return q; }
+  function qrSvg(text) {
+    var q = qrMatrix(text), n = q.getModuleCount(), m = 2, d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + (n + 2 * m) + " " + (n + 2 * m) + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="' + d + '" fill="#111"/></svg>';
+  }
+  function qrPng(text) {
+    var q = qrMatrix(text), n = q.getModuleCount(), m = 4, s = 24, cv = document.createElement("canvas");
+    cv.width = cv.height = (n + 2 * m) * s;
+    var g = cv.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, cv.width, cv.height); g.fillStyle = "#111";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) g.fillRect((c + m) * s, (r + m) * s, s, s);
+    var a = document.createElement("a"); a.href = cv.toDataURL("image/png"); a.download = "BrainUp_오늘의퀴즈_QR.png"; a.click();
+  }
+  var PZ_THEMES = [
+    ["basic", "기본 (아침 등교)", "a bright fresh school morning: sunrise, a school gate, light clouds"],
+    ["autumn", "가을", "a cozy autumn school morning: falling maple and ginkgo leaves, warm orange and yellow tones"],
+    ["winter", "겨울", "a crisp winter school morning: soft snow, scarves, warm mugs, light blue and white tones"],
+    ["spring", "봄", "a spring school morning: cherry blossoms, green leaves, soft pink tones"],
+    ["summer", "여름", "a sunny summer school morning: blue sky, sunflowers, fresh mint tones"],
+    ["newterm", "새 학기", "a new school year: new notebooks, pencils, a fresh start, cheerful tones"],
+    ["exam", "시험 기간", "calm study time: books, a desk lamp, a cup of cocoa, calm and focused tones"],
+    ["xmas", "크리스마스", "a cheerful Christmas morning at school: a small tree, gifts, snowflakes, red and green with gold"]
+  ];
+  function bgPrompt(themeId, size) {
+    var th = PZ_THEMES.filter(function (t) { return t[0] === themeId; })[0] || PZ_THEMES[0];
+    return [
+      "학교 게시판에 붙일 " + size + " 세로 포스터의 **배경 그림만** 만들어 주세요. (Make only the BACKGROUND illustration.)",
+      "",
+      "[가장 중요한 규칙]",
+      "- 글자, 숫자, 알파벳, 로고, QR 코드, 워터마크를 하나도 넣지 마세요. (No text, letters, numbers, logos, QR codes or watermarks at all.)",
+      "- 세로 비율 1:1.414 (A용지), 인쇄용 고해상도 (예: 2480×3508 px).",
+      "- 가운데 넓은 부분(세로로 위에서 25%~85%)은 아주 단순하고 밝게 비워 두세요. 그 위에 흰 카드와 큰 QR 코드를 올릴 거예요.",
+      "- 그림 요소는 맨 위 띠와 맨 아래 띠, 양쪽 가장자리에만 작게 두세요.",
+      "",
+      "[분위기]",
+      "- 주제: " + th[2] + ".",
+      "- 퀴즈·두뇌 느낌의 작은 아이콘을 곳곳에: 뇌, 전구, 물음표, 책, 연필, 별, 지구본, 돋보기.",
+      "- 중학생(여학교)이 좋아할 밝고 귀여운 플랫 일러스트, 부드러운 파스텔.",
+      "- 포인트 색: 남색 #1E3768, 금색 #C8962A. 너무 어둡거나 복잡하지 않게.",
+      "- 사람 얼굴을 크게 그리지 마세요.",
+      "",
+      "완성되면 그림 파일(PNG 또는 JPG)로 주세요."
+    ].join("\n");
+  }
+  var PZ = null;
+  function tPoster() {
+    var M = morning();
+    PZ = PZ || Object.assign({ size: "A4", title: "오늘의 퀴즈 10", sub: "매일 아침 새로운 10문제! 전교생이 같은 문제에 도전해요", morning: true, theme: "basic" }, lget("bu.poster", {}));
+    var bg = null; try { bg = localStorage.getItem("bu.posterBg"); } catch (e) {}
+    if (PZ.bgMem) bg = PZ.bgMem;
+    var h = '<div class="card"><h2>🖨️ 오늘의 퀴즈 QR 포스터</h2>' +
+      '<p class="small muted">QR은 <b>매일 같은 주소</b>(오늘의 10문제)로 가고, 문제는 서버가 <b>매일 새로</b> 골라요. 그래서 포스터는 <b>한 번만</b> 인쇄해서(코팅하면 더 좋아요) 게시판에 붙여 두면 돼요. 학생이 QR을 찍으면 학교 계정으로 로그인한 뒤 바로 오늘의 10문제가 시작돼요.</p>' +
+      '<div class="form"><div class="row">' +
+      '<label>용지<select id="zSize"><option' + (PZ.size === "A4" ? " selected" : "") + '>A4</option><option' + (PZ.size === "A3" ? " selected" : "") + ">A3</option></select></label>" +
+      '<label>큰 제목<input id="zTitle" maxlength="16" value="' + esc(PZ.title) + '"></label></div>' +
+      '<label>한 줄 문구<input id="zSub" maxlength="40" value="' + esc(PZ.sub) + '"></label>' +
+      '<label class="inline"><input type="checkbox" id="zMorning"' + (PZ.morning ? " checked" : "") + (M.on ? "" : " disabled") + "> 🌅 아침 보너스 안내 넣기 " +
+        (M.on ? '<span class="small muted">(' + esc(morningText(M)) + " · +" + M.pts + "점, ⚙️ 설정에서 바꿔요)</span>" : '<span class="small muted">(⚙️ 설정에서 아침 보너스를 켜면 넣을 수 있어요)</span>') + "</label></div>" +
+      '<div class="row-btns"><button class="btn navy big" id="zPrint">🖨️ 인쇄하기</button><button class="btn" id="zQr">📥 QR 이미지만 받기</button><button class="btn" id="zCopyUrl">🔗 주소 복사</button></div>' +
+      '<p class="small muted" style="margin-bottom:0">인쇄 창에서 <b>배경 그래픽</b>을 켜고, 여백은 <b>없음</b>, 배율은 <b>100%</b>로 해 주세요. PDF로 저장해서 컬러 프린터로 보내도 돼요.</p></div>';
+
+    h += '<div class="card"><h2>🎨 배경 그림 꾸미기 (선택)</h2>' +
+      '<p class="small muted">AI 그림은 QR과 한글 글자를 잘 못 만들어서, <b>배경 그림만</b> AI에게 받고 QR과 글자는 이 화면이 그 위에 올려요. 그래서 찍으면 꼭 열리는 포스터가 돼요.</p>' +
+      '<div class="form"><div class="row"><label>분위기<select id="zTheme">' + PZ_THEMES.map(function (t) { return '<option value="' + t[0] + '"' + (PZ.theme === t[0] ? " selected" : "") + ">" + t[1] + "</option>"; }).join("") + "</select></label></div></div>" +
+      '<ol class="small" style="margin:8px 0;padding-left:20px"><li><b>📋 배경 그림 프롬프트 복사</b> → 제미나이·챗지피티(그림 만들기)에 붙여 넣기</li><li>받은 그림을 저장하고 <b>🖼️ 배경 그림 넣기</b>로 고르기</li><li>아래 미리보기를 보고 <b>🖨️ 인쇄하기</b></li></ol>' +
+      '<div class="row-btns"><button class="btn gold" id="zPrompt">📋 배경 그림 프롬프트 복사</button><button class="btn" id="zPShow">👀 프롬프트 보기</button>' +
+      '<label class="btn"><input type="file" id="zBg" accept="image/*" hidden>🖼️ 배경 그림 넣기</label>' + (bg ? '<button class="btn" id="zBgOff">기본 배경으로</button>' : "") + "</div>" +
+      '<div id="zPBox" class="prompt-box hidden" style="margin-top:10px"></div></div>';
+
+    h += '<div class="card"><h2>👀 미리보기 <span class="small muted">' + esc(PZ.size) + " 세로</span></h2><div class=\"pz-wrap\" id=\"pzWrap\"><div class=\"muted\">QR을 만드는 중…</div></div></div>";
+    $("#tbody").innerHTML = h;
+
+    function save() { var o = Object.assign({}, PZ); delete o.bgMem; lset("bu.poster", o); }
+    function re() { PZ.size = $("#zSize").value; PZ.title = $("#zTitle").value.trim() || "오늘의 퀴즈 10"; PZ.sub = $("#zSub").value.trim(); PZ.morning = $("#zMorning").checked; PZ.theme = $("#zTheme").value; save(); drawPreview(); }
+    ["#zSize", "#zMorning", "#zTheme"].forEach(function (s) { $(s).onchange = function () { re(); if (s === "#zSize") tPoster(); }; });
+    ["#zTitle", "#zSub"].forEach(function (s) { $(s).oninput = re; });
+    $("#zPrompt").onclick = function () { var t = bgPrompt(PZ.theme, PZ.size); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast("프롬프트를 복사했어요. 그림 AI에게 붙여 넣으세요!"); }, function () { $("#zPBox").textContent = t; $("#zPBox").classList.remove("hidden"); }); };
+    $("#zPShow").onclick = function () { $("#zPBox").textContent = bgPrompt(PZ.theme, PZ.size); $("#zPBox").classList.toggle("hidden"); };
+    $("#zCopyUrl").onclick = function () { var u = dailyUrl(); (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { toast("주소를 복사했어요: " + u); }, function () { prompt("복사해서 쓰세요", u); }); };
+    $("#zQr").onclick = function () { loadScript(QR_URL, "qrcode").then(function () { qrPng(dailyUrl()); toast("QR 이미지를 내려받았어요"); }).catch(function (e) { toast(e.message); }); };
+    $("#zBg").onchange = function () {
+      var f = this.files[0]; if (!f) return;
+      var img = new Image(), url = URL.createObjectURL(f);
+      img.onload = function () {
+        // 인쇄에 충분한 크기로 줄여서 저장해요 (A3도 선명하게 1800px)
+        var W = Math.min(1800, img.naturalWidth), H = Math.round(img.naturalHeight * W / img.naturalWidth), cv = document.createElement("canvas");
+        cv.width = W; cv.height = H; cv.getContext("2d").drawImage(img, 0, 0, W, H); URL.revokeObjectURL(url);
+        var data = cv.toDataURL("image/jpeg", 0.88);
+        PZ.bgMem = data;
+        try { localStorage.setItem("bu.posterBg", data); } catch (e) { /* 너무 크면 이번에만 써요 */ }
+        if (Math.abs(H / W - 1.414) > 0.12) toast("그림 비율이 A용지 세로와 달라서 가장자리가 조금 잘릴 수 있어요.");
+        tPoster();
+      };
+      img.onerror = function () { toast("그림을 읽지 못했어요"); };
+      img.src = url;
+    };
+    if ($("#zBgOff")) $("#zBgOff").onclick = function () { PZ.bgMem = null; try { localStorage.removeItem("bu.posterBg"); } catch (e) {} tPoster(); };
+    $("#zPrint").onclick = printPoster;
+
+    function drawPreview() {
+      loadScript(QR_URL, "qrcode").then(function () {
+        var wrap = $("#pzWrap"); if (!wrap) return;
+        wrap.innerHTML = posterHtml(bg);
+        fitPreview();
+      }).catch(function (e) { $("#pzWrap").innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
+    }
+    drawPreview();
+    window.onresize = function () { if ($("#pzWrap")) fitPreview(); };
+  }
+  function fitPreview() {
+    var wrap = $("#pzWrap"), pz = wrap && $(".pz", wrap); if (!pz) return;
+    var s = Math.min(1, wrap.clientWidth / pz.offsetWidth);
+    pz.style.transform = "scale(" + s + ")";
+    wrap.style.height = Math.ceil(pz.offsetHeight * s) + "px";
+  }
+  function posterHtml(bg) {
+    var M = morning(), showM = PZ.morning && M.on;
+    return '<div class="pz' + (bg ? " has-bg" : "") + '"' + (bg ? ' style="background-image:url(' + bg + ')"' : "") + ">" +
+      '<div class="pz-top"><img src="../app/emblem.png" alt=""><div><b>MOONYOUNG</b><span>MY Brain Up 🧠</span></div></div>' +
+      '<div class="pz-head"><div class="pz-kicker">' + esc(PZ.sub) + "</div><h1>🧠 " + esc(PZ.title) + '</h1><div class="pz-en">Today\'s Brain Up · 10 Questions a Day</div></div>' +
+      '<div class="pz-qrcard"><div class="pz-qr">' + qrSvg(dailyUrl()) + '</div><div class="pz-scan">📱 카메라로 찍고 바로 도전!</div></div>' +
+      (showM ? '<div class="pz-bonus">🌅 아침 <b>' + esc(M.from) + "~" + esc(M.to) + "</b>에 끝내면 <b>+" + M.pts + "점</b> 보너스!" + (M.weekdays ? " <small>(평일)</small>" : "") + "</div>" : "") +
+      '<div class="pz-steps"><div><i>1</i>QR 찍기</div><div><i>2</i>학교 계정<br>로그인</div><div><i>3</i>10문제<br>도전!</div></div>' +
+      '<div class="pz-rules">끝까지 풀면 <b>+3점</b> · 객관식 1점 · 단답형 2점 · 영어 문제 +1점</div>' +
+      '<div class="pz-cats">' + CATS.map(function (c) { return "<span>" + c.icon + "<small>" + esc(c.short) + "</small></span>"; }).join("") + "</div>" +
+      '<div class="pz-foot">' + esc(dailyUrl().replace(/^https?:\/\//, "")) + "</div></div>";
+  }
+  function printPoster() {
+    loadScript(QR_URL, "qrcode").then(function () {
+      var bg = PZ.bgMem; if (!bg) { try { bg = localStorage.getItem("bu.posterBg"); } catch (e) {} }
+      var old = $("#pzPrint"); if (old) old.remove();
+      var box = document.createElement("div"); box.id = "pzPrint"; box.className = PZ.size === "A3" ? "a3" : "a4";
+      box.innerHTML = posterHtml(bg); document.body.appendChild(box);
+      var st = document.createElement("style"); st.id = "pzPage"; st.textContent = "@page { size: " + PZ.size + " portrait; margin: 0; }"; document.head.appendChild(st);
+      document.body.classList.add("pz-printing");
+      var done = function () { document.body.classList.remove("pz-printing"); box.remove(); st.remove(); window.removeEventListener("afterprint", done); };
+      window.addEventListener("afterprint", done);
+      // 엠블럼 그림이 다 그려진 뒤 인쇄
+      var img = $("img", box);
+      var go = function () { setTimeout(function () { window.print(); }, 150); };
+      if (img && !img.complete) { img.onload = go; img.onerror = go; } else go();
+    }).catch(function (e) { toast(e.message); });
   }
 
   // ---------- ⚙️ 설정 ----------
@@ -864,6 +1039,16 @@
       sw("allow_external", "학교 밖 계정 허용", "켜면 @smy.ms.kr 이 아닌 구글 계정도 풀 수 있어요. (기본: 끔)", on(s.allow_external)) +
       '<div class="chk"><div><b>👑 왕관 찬스 확률 <span id="crv">' + Math.round((+s.crown_rate || 0) * 100) + '%</span></b><span class="small muted">랜덤 문제를 받을 때 이 확률로 왕관 찬스가 나와요. (한 사람당 하루 1번까지)</span><input type="range" id="cr" min="0" max="20" step="1" value="' + Math.round((+s.crown_rate || 0) * 100) + '" style="width:100%;margin-top:6px"></div></div>' +
       "</div>";
+    var M = morning();
+    h += '<div class="card"><h2>🌅 아침 보너스</h2><p class="small muted">이 시간 안에 <b>오늘의 10문제</b>를 끝까지 풀면 완주 +3점에 더해 보너스를 줘요. 시간은 서버가 한국 시간으로 확인해서 휴대폰 시계를 바꿔도 소용없어요.</p>' +
+      '<div class="chk"><div><b>아침 보너스 켜기</b><span class="small muted">끄면 홈 화면 안내도 사라져요.</span></div><label class="switch"><input type="checkbox" id="mOn"' + (M.on ? " checked" : "") + "><span></span></label></div>" +
+      '<div class="form"><div class="row">' +
+      '<label>시작<input type="time" id="mFrom" value="' + esc(M.from) + '"></label>' +
+      '<label>끝<input type="time" id="mTo" value="' + esc(M.to) + '"></label>' +
+      '<label>보너스 점수<select id="mPts">' + [1, 2, 3, 4, 5].map(function (v) { return '<option' + (+M.pts === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select></label>" +
+      '<label>요일<select id="mWd"><option value="1"' + (M.weekdays ? " selected" : "") + '>평일만 (월~금)</option><option value="0"' + (M.weekdays ? "" : " selected") + ">매일</option></select></label>" +
+      '</div></div><div class="row-btns"><button class="btn navy" id="mSave">💾 아침 보너스 저장</button></div>' +
+      '<p class="small muted">학생 기록 표와 CSV의 <b>🌅 아침</b> 칸, Teacher Hub 보상 기준 <b>"Brain Up 아침 보너스"</b>로 보상할 수 있어요.</p></div>';
     h += '<div class="card"><h2>🧹 기록 정리</h2><p class="small muted">새 학기에 순위를 처음부터 다시 시작하고 싶을 때 써요. 문제는 지워지지 않아요.</p><div class="row-btns"><button class="btn red" id="reset">모든 학생 기록 지우기</button></div></div>';
     $("#tbody").innerHTML = h;
     $$("[data-sw]").forEach(function (c) { c.onchange = function () { setSetting(c.dataset.sw, c.checked); }; });
@@ -872,6 +1057,13 @@
     $("#er").onchange = function () { setSetting("english_ratio", +this.value / 100); };
     $("#cr").oninput = function () { $("#crv").textContent = this.value + "%"; };
     $("#cr").onchange = function () { setSetting("crown_rate", +this.value / 100); };
+    function saveMorning() {
+      var v = { on: $("#mOn").checked, from: $("#mFrom").value || "07:00", to: $("#mTo").value || "08:40", pts: +$("#mPts").value || 3, weekdays: $("#mWd").value === "1" };
+      if (v.from >= v.to) return toast("끝 시간이 시작 시간보다 늦어야 해요.");
+      setSetting("morning", v);
+    }
+    $("#mSave").onclick = saveMorning;
+    $("#mOn").onchange = saveMorning;
     $("#reset").onclick = function () {
       if (prompt("모든 학생의 점수·기록·오답 노트를 지워요. 되돌릴 수 없어요.\n계속하려면 '지우기'라고 입력하세요.") !== "지우기") return;
       Promise.all([sel(client().from("bu_daily").delete().gte("day", "2000-01-01")), sel(client().from("bu_qstate").delete().gte("qid", 0))])
