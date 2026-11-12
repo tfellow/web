@@ -1463,6 +1463,9 @@ function setupSheets() {
     ]);
     masterSheet.getRange(1, 1, 1, 12).setFontWeight('bold').setBackground('#FEF3C7');
   }
+  // 질문·보기(C~G)는 글자 그대로, 정답번호(H)는 숫자로 고정 → '1/6' 같은 보기가 날짜로 바뀌지 않아요.
+  masterSheet.getRange('C:G').setNumberFormat('@');
+  masterSheet.getRange('H:H').setNumberFormat('0');
 
   // 3. 학생 출제 검토 탭
   let subSheet = ss.getSheetByName(SHEET_NAMES.STUDENT_SUBMISSIONS);
@@ -1485,6 +1488,8 @@ function setupSheets() {
       ]);
       catSheet.getRange(1, 1, 1, 7).setFontWeight('bold').setBackground('#E0F2FE');
     }
+    catSheet.getRange('B:F').setNumberFormat('@');
+    catSheet.getRange('G:G').setNumberFormat('0');
   });
 
   // 5. 풀이로그 시트
@@ -1659,6 +1664,8 @@ function syncCategoryTabsToQuestionBank() {
     masterSheet.getRange(2, 1, masterSheet.getLastRow() - 1, 12).clearContent();
   }
   if (allCompiledRows.length > 0) {
+    masterSheet.getRange('C:G').setNumberFormat('@');
+    masterSheet.getRange('H:H').setNumberFormat('0');
     masterSheet.getRange(2, 1, allCompiledRows.length, 12).setValues(allCompiledRows);
   }
 

@@ -48,7 +48,7 @@ function safeText(v) {
   if (v === null || v === undefined) return v;
   return String(v)
     .replace(/</g, '＜').replace(/>/g, '＞')
-    .replace(/"/g, '＂').replace(/'/g, '＇').replace(/`/g, '｀');
+    .replace(/"/g, '”').replace(/'/g, '’').replace(/`/g, '｀');
 }
 function sanitizeUser(u) {
   if (!u || typeof u !== 'object') return u;
@@ -3304,8 +3304,34 @@ async function fetchInitialData() {
   return fetch(`${state.gasUrl}?action=getInitialData`);
 }
 
+// 구글 시트가 값을 날짜/숫자로 바꿔 깨뜨린 문항인지 확인합니다.
+function isBrokenSheetQuestion(q) {
+  if (!q || !q.question || !Array.isArray(q.options)) return true;
+  const opts = q.options.filter(o => String(o || '').trim() !== '');
+  if (opts.length < 2) return true;
+  const ans = Number(q.answer);
+  if (!Number.isInteger(ans) || ans < 1 || ans > q.options.length) return true;
+  const dateLike = /GMT[+-]\d{4}|^\w{3} \w{3} \d{2} \d{4} \d{2}:\d{2}/;
+  return q.options.some(o => dateLike.test(String(o || '')));
+}
+
+// 시트는 맨 앞 작은따옴표(')를 "텍스트 표시"로 먹어 버립니다. 기본 문항과 같으면 원문을 되살립니다.
+function repairSheetQuoteLoss(q, base) {
+  const bq = sanitizeQuestion({ question: base.question }).question;
+  if (bq && bq !== q.question && bq.slice(1) === q.question) q.question = bq;
+  if (Array.isArray(base.options) && Array.isArray(q.options)) {
+    q.options = q.options.map((o, i) => {
+      const bo = base.options[i] != null ? safeText(base.options[i]) : null;
+      return (bo && bo !== o && bo.slice(1) === o) ? bo : o;
+    });
+  }
+}
+
 function normalizeCategoryId(raw) {
   const s = String(raw || '').toLowerCase().trim();
+  if (CATEGORIES.some(c => c.id === s)) return s;
+  if (s.includes('english') || s.includes('영어')) return 'english';
+  if (s.includes('literature') || s.includes('문학')) return 'literature';
   if (s.includes('school') || s.includes('학교') || s.includes('문영')) return 'school';
   if (s.includes('curriculum') || s.includes('교과') || s.includes('융합')) return 'curriculum';
   if (s.includes('economy') || s.includes('시사') || s.includes('경제')) return 'economy';
@@ -3510,6 +3536,12 @@ async function syncWithGoogleSheets(showNotification = true) {
             ...rawQ,
             category: normalizeCategoryId(rawQ.category)
           });
+          const base = DEFAULT_QUESTIONS.find(item => String(item.id) === String(q.id));
+          if (isBrokenSheetQuestion(q)) {
+            // 시트가 '1/6' 같은 보기를 날짜로 바꿔 버린 행 등 → 기본 문항을 그대로 씁니다.
+            return;
+          }
+          if (base) repairSheetQuoteLoss(q, base);
           const idx = state.questions.findIndex(item => String(item.id) === String(q.id));
           if (idx !== -1) {
             state.questions[idx] = q;
