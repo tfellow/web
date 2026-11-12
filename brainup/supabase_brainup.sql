@@ -41,6 +41,8 @@ create table if not exists public.bu_profile (
 alter table public.bu_profile add column if not exists tiers jsonb not null default '{}';
 -- 👑 왕관 찬스: 다음 문제 점수 2배
 alter table public.bu_profile add column if not exists double_next boolean not null default false;
+-- 🙈 순위표에서 내 이름(닉네임) 빼기 (선생님 화면에는 그대로 보여요)
+alter table public.bu_profile add column if not exists hide_rank boolean not null default false;
 
 create table if not exists public.bu_daily (
   user_id uuid not null,
@@ -58,6 +60,9 @@ create index if not exists bu_daily_day_idx on public.bu_daily (day);
 -- 🌅 아침 보너스: 오늘의 10문제를 다 푼 시각 + 아침 시간 안에 끝냈는지
 alter table public.bu_daily add column if not exists d10_at  timestamptz;
 alter table public.bu_daily add column if not exists morning boolean not null default false;
+-- 📅 오늘의 10문제 통계: 첫 문제를 받은 시각 + 10문제에서 얻은 점수(보너스 포함)
+alter table public.bu_daily add column if not exists d10_start timestamptz;
+alter table public.bu_daily add column if not exists d10_pts   int not null default 0;
 
 create table if not exists public.bu_qstate (
   user_id uuid not null,
@@ -197,7 +202,9 @@ begin
     update public.bu_daily b set d10_at = now(), morning = mon where b.user_id = p_uid and b.day = d;
   end if;
   if v_pts > 0 then
-    update public.bu_daily b set pts = b.pts + v_pts where b.user_id = p_uid and b.day = d;
+    update public.bu_daily b set pts = b.pts + v_pts,
+      d10_pts = b.d10_pts + case when t.mode = 'daily' then v_pts else 0 end
+    where b.user_id = p_uid and b.day = d;
   end if;
 
   delete from public.bu_ticket where user_id = p_uid;
@@ -286,6 +293,11 @@ begin
       if qid_ is null then return jsonb_build_object('daily_done', true); end if;
       update public.bu_d10 set qids[done10 + 1] = qid_ where day = d;
     end if;
+    -- 첫 문제를 받은 시각 (걸린 시간 계산용, 처음 한 번만)
+    if done10 = 0 then
+      insert into public.bu_daily (user_id, email, day) values (uid, lower(coalesce(auth.jwt() ->> 'email', '')), d) on conflict do nothing;
+      update public.bu_daily set d10_start = coalesce(d10_start, now()) where user_id = uid and day = d;
+    end if;
 
   elsif mode_ = 'review' then
     select s.qid into qid_ from public.bu_qstate s join public.bu_questions bq on bq.id = s.qid and bq.active
@@ -345,6 +357,15 @@ begin
   select * into t from public.bu_ticket where user_id = uid for update;
   if t.user_id is null or t.crown then raise exception 'BU_NO_TICKET'; end if;
   return public.bu_grade(uid, t, p_given, now() - t.issued_at > make_interval(secs => t.limit_sec + 5));
+end $$;
+
+-- 🙈 순위표에서 나 빼기 / 다시 넣기
+create or replace function public.bu_set_hide(p_hide boolean) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null or not public.bu_can() then raise exception 'BU_DENIED'; end if;
+  update public.bu_profile set hide_rank = coalesce(p_hide, false) where user_id = auth.uid();
+  return coalesce(p_hide, false);
 end $$;
 
 -- 아이템 사용 횟수 (하루 3번씩)
@@ -452,11 +473,12 @@ begin
     select user_id, sum(pts) pts, sum(n) n, sum(ok) ok from public.bu_daily
     where (p_scope = 'all' or p_scope = 'acc' or day >= ws) group by user_id),
   f as (
-    select b.*, p.nickname, p.email, p.tiers, r.grade, r.class_no, r.name,
+    select b.*, p.nickname, p.email, p.tiers, p.hide_rank, r.grade, r.class_no, r.name,
            case when b.n > 0 then round(100.0 * b.ok / b.n, 1) else 0 end acc
     from b join public.bu_profile p using (user_id)
     left join public.roster r on lower(r.email) = lower(p.email)
-    where p_scope <> 'acc' or b.n >= 20),
+    where (p_scope <> 'acc' or b.n >= 20)
+      and (not p.hide_rank or p.user_id = auth.uid() or adm)),
   rk as (
     select f.*, case when p_scope = 'acc' then rank() over (order by f.acc desc, f.n desc)
                      else rank() over (order by f.pts desc, f.ok desc) end as rank from f)
@@ -464,7 +486,7 @@ begin
       'rank', rank, 'nickname', nickname, 'grade', grade, 'class_no', class_no, 'pts', pts, 'n', n, 'ok', ok, 'acc', acc,
       'queen', (select coalesce(min(coalesce((tiers ->> c)::int, 0)), 0) from unnest(array['kor','eng','math','soc','sci','art','eco','it']) c),
       'tiers', (select coalesce(sum(coalesce((tiers ->> c)::int, 0)), 0) from unnest(array['kor','eng','math','soc','sci','art','eco','it']) c),
-      'me', user_id = auth.uid(),
+      'me', user_id = auth.uid(), 'hidden', hide_rank,
       'name', case when adm then name end, 'email', case when adm then email end) order by rank), '[]'::jsonb) into res
   from rk where rank <= case when adm then 100000 else 50 end or user_id = auth.uid();
   return res;
