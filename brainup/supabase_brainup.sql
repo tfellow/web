@@ -535,6 +535,42 @@ end $$;
 revoke execute on function public.bu_counts() from public, anon;
 grant execute on function public.bu_counts() to authenticated;
 
+-- 🖨️ QR 포스터 만들기 권한: 선생님 + 선생님이 고른 학생(bu_settings 'poster_editors' = 이메일 목록)
+create or replace function public.bu_poster_can() returns boolean
+language sql stable security definer set search_path = public as $$
+  select auth.uid() is not null and (public.is_admin() or exists (
+    select 1 from jsonb_array_elements_text(coalesce(public.bu_set('poster_editors'), '[]'::jsonb)) e
+    where lower(trim(e)) = lower(coalesce(auth.jwt() ->> 'email', ''))))
+$$;
+
+-- 포스터 문구 · 배경 그림 저장 (권한 있는 사람만). p_bg_set = true 일 때만 배경 그림을 바꿔요 ('' = 기본 배경)
+create or replace function public.bu_save_poster(p_cfg jsonb default null, p_bg text default null, p_bg_set boolean default false) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.bu_poster_can() then raise exception 'BU_DENIED'; end if;
+  if p_cfg is not null then
+    insert into public.bu_settings (key, value) values ('poster', jsonb_build_object(
+      'title',   left(coalesce(p_cfg ->> 'title', ''), 16),
+      'sub',     left(coalesce(p_cfg ->> 'sub', ''), 40),
+      'maker',   left(coalesce(p_cfg ->> 'maker', ''), 30),
+      'morning', coalesce((p_cfg ->> 'morning')::boolean, true),
+      'theme',   left(coalesce(p_cfg ->> 'theme', 'basic'), 20),
+      'by',      lower(coalesce(auth.jwt() ->> 'email', '')),
+      'at',      now()))
+    on conflict (key) do update set value = excluded.value;
+  end if;
+  if p_bg_set then
+    if coalesce(p_bg, '') <> '' and (p_bg not like 'data:image/jpeg;base64,%' or length(p_bg) > 2500000) then
+      raise exception 'BU_BAD_IMAGE';
+    end if;
+    insert into public.bu_settings (key, value) values ('poster_bg', to_jsonb(coalesce(p_bg, '')))
+    on conflict (key) do update set value = excluded.value;
+  end if;
+  return true;
+end $$;
+revoke execute on function public.bu_poster_can(), public.bu_save_poster(jsonb, text, boolean) from public, anon;
+grant execute on function public.bu_poster_can(), public.bu_save_poster(jsonb, text, boolean) to authenticated;
+
 -- 자동 접속(무료 프로젝트 일시 정지 방지)용. 로그인 없이 부를 수 있어요
 create or replace function public.bu_ping() returns int language sql stable as $$ select 1 $$;
 
@@ -569,7 +605,8 @@ drop policy if exists bu_qs_del on public.bu_qstate;
 create policy bu_qs_del on public.bu_qstate for delete to authenticated using (public.is_admin());
 
 drop policy if exists bu_set_read on public.bu_settings;
-create policy bu_set_read on public.bu_settings for select to authenticated using (true);
+-- 포스터 권한 학생 목록(이메일)은 선생님만 읽어요
+create policy bu_set_read on public.bu_settings for select to authenticated using (key <> 'poster_editors' or public.is_admin());
 drop policy if exists bu_set_write on public.bu_settings;
 create policy bu_set_write on public.bu_settings for all to authenticated using (public.is_admin()) with check (public.is_admin());
 

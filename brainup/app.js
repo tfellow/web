@@ -30,7 +30,7 @@
   function errMsg(e) {
     var m = (e && (e.message || e.details)) || String(e);
     var map = { BU_CLOSED: "지금은 퀴즈가 닫혀 있어요. 선생님이 열어 주시면 풀 수 있어요.", BU_DENIED: "학교 계정으로 로그인해 주세요.", BU_LIMIT: "오늘은 다 썼어요. 내일 다시 3번씩 생겨요.",
-      BU_NO_TICKET: "문제를 다시 불러올게요.", BU_NO_SKIP: "오늘의 10문제에서는 건너뛸 수 없어요.", BU_NO_PROFILE: "닉네임을 먼저 정해 주세요." };
+      BU_NO_TICKET: "문제를 다시 불러올게요.", BU_NO_SKIP: "오늘의 10문제에서는 건너뛸 수 없어요.", BU_NO_PROFILE: "닉네임을 먼저 정해 주세요.", BU_BAD_IMAGE: "그림이 너무 크거나 형식이 맞지 않아요." };
     for (var k in map) if (m.indexOf(k) >= 0) return map[k];
     return m;
   }
@@ -135,7 +135,7 @@
     if (h[0] === "review") return startPlay("review", "");
     if (h[0] === "board") return viewBoard();
     if (h[0] === "me") return viewMe();
-    if (h[0] === "qr") return viewQr();
+    if (h[0] === "poster") return viewPosterPage();
     if (h[0] === "nick") return viewNick(false);
     if (h[0] === "teacher" && state.admin) return viewTeacher();
     viewHome();
@@ -964,7 +964,7 @@
     clearTimeout(pzSaveT);
     pzSaveT = setTimeout(function () {
       var o = { title: PZ.title, sub: PZ.sub, maker: PZ.maker, morning: PZ.morning, theme: PZ.theme };
-      sel(client().from("bu_settings").upsert({ key: "poster", value: o })).then(function () { state.settings.poster = o; })
+      savePoster({ p_cfg: o }).then(function () { state.settings.poster = o; })
         .catch(function (e) { toast("포스터 문구를 저장하지 못했어요: " + errMsg(e)); });
     }, 700);
   }
@@ -991,27 +991,77 @@
     }).catch(function (e) { var w = $("#pzWrap"); if (w) w.innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
   }
 
-  // 📱 학생도 볼 수 있는 QR 포스터 (보기 · 인쇄 · QR 받기만)
-  function viewQr() {
-    PZ = posterCfg();
-    var h = '<div class="card"><h2>📱 오늘의 퀴즈 QR</h2>' +
-      '<p class="small muted">게시판에 붙은 포스터와 같은 QR이에요. 문제는 <b>매일 새로</b> 바뀌어요. 친구에게 QR 이미지나 주소를 보내 주면 바로 <b>오늘의 10문제</b>에 도전할 수 있어요.</p>' +
-      '<div class="form"><div class="row">' + sizeSelect() + "</div></div>" + posterButtons() + "</div>" + previewCard();
-    $("#main").innerHTML = h;
-    bindPosterButtons();
-    drawPreview();
+  // 🔗 포스터 담당 학생 페이지 (#/poster): 메뉴에는 없고, 선생님이 권한을 준 학생만 쓸 수 있어요
+  function posterLink() { return (location.hostname === "tfellow.github.io" ? location.origin + location.pathname : LIVE_URL) + "#/poster"; }
+  function viewPosterPage() {
+    $("#main").innerHTML = '<div class="card center muted">확인하는 중…</div>';
+    (state.admin ? Promise.resolve(true) : rpc("bu_poster_can")).then(function (ok) {
+      if (!ok) {
+        $("#main").innerHTML = '<div class="card center"><div style="font-size:48px">🔒</div><h2>포스터 만들기 권한이 없어요</h2><p class="muted">선생님이 권한을 준 포스터 담당 학생만 쓸 수 있어요.</p><div class="row-btns" style="justify-content:center"><a class="btn navy" href="#/">홈으로</a></div></div>';
+        return;
+      }
+      $("#main").innerHTML = '<div class="card"><h2>🎨 오늘의 퀴즈 포스터 만들기</h2><p class="small muted" style="margin:0">포스터 담당 학생 화면이에요. 여기서 바꾼 문구와 배경 그림은 <b>학교 포스터 하나</b>에 저장돼요(선생님 화면에도 같이 바뀌어요). 예쁘게 꾸며서 인쇄해 주세요!</p></div><div id="tbody"></div>';
+      tPoster();
+    }).catch(function (e) { $("#main").innerHTML = '<div class="card center err">' + esc(/BU_DENIED/.test(e.message || "") ? "포스터 만들기 권한이 없어요." : /bu_poster_can|PGRST202/.test(e.message || "") ? "선생님이 앱을 업데이트하면 쓸 수 있어요." : errMsg(e)) + "</div>"; });
+  }
+  // 저장은 bu_save_poster(권한 확인)로. SQL을 다시 실행하기 전이면 선생님은 예전 방식으로 저장해요
+  function savePoster(args) {
+    return rpc("bu_save_poster", args).catch(function (e) {
+      if (!state.admin || !/bu_save_poster|PGRST202/.test(e.message || "")) throw e;
+      var jobs = [];
+      if (args.p_cfg) jobs.push(sel(client().from("bu_settings").upsert({ key: "poster", value: args.p_cfg })));
+      if (args.p_bg_set) jobs.push(sel(client().from("bu_settings").upsert({ key: "poster_bg", value: args.p_bg || "" })));
+      return Promise.all(jobs);
+    });
+  }
+  // 👩‍🏫 포스터 담당 학생 고르기 (학번 5자리 또는 이메일)
+  function editorsCard() {
+    var list = Array.isArray(state.settings.poster_editors) ? state.settings.poster_editors : [];
+    var bySid = {}; (T.roster || []).forEach(function (x) { bySid[low(x.email)] = x; });
+    var label = function (e) { var x = bySid[low(e)]; return x && x.student_no ? sid(x.grade, x.class_no, x.student_no) : e; };
+    return '<div class="card"><h2>👩‍🎓 포스터 담당 학생 (만들기 권한)</h2>' +
+      '<p class="small muted">여기 적은 학생은 <b>포스터 링크</b>로 들어와서 선생님처럼 용지·제목·문구·만든 곳·배경 그림·프롬프트를 쓰고 인쇄할 수 있어요. 링크는 메뉴에 나오지 않고, 목록에 없는 학생이 열면 "권한이 없어요"가 나와요. (학교 계정으로 로그인해야 해요)</p>' +
+      '<div class="form"><label>학번 5자리(예: 10118) 또는 학교 이메일, 한 줄에 한 명<textarea id="edT" style="min-height:90px" placeholder="10118&#10;20305">' + esc(list.map(label).join("\n")) + "</textarea></label></div>" +
+      '<div id="edNames" class="small" style="margin-top:6px"></div>' +
+      '<div class="row-btns"><button class="btn navy" id="edSave">💾 권한 저장</button><button class="btn gold" id="edLink">🔗 포스터 링크 복사</button></div>' +
+      '<p class="small muted" style="margin-bottom:0">포스터 링크: <code>' + esc(posterLink()) + "</code></p></div>";
+  }
+  function resolveEditors(text) {
+    var ros = T.roster || [], ok = [], bad = [];
+    text.split(/[\n,]+/).map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) {
+      var x = /^\d{5}$/.test(t) ? ros.filter(function (r) { return sid(r.grade, r.class_no, r.student_no) === t; })[0]
+        : /@/.test(t) ? (ros.filter(function (r) { return low(r.email) === low(t); })[0] || { email: low(t), name: "" }) : null;
+      if (x && ok.every(function (o) { return low(o.email) !== low(x.email); })) ok.push(x); else if (!x) bad.push(t);
+    });
+    return { ok: ok, bad: bad };
+  }
+  function bindEditors() {
+    var show = function () {
+      var r = resolveEditors($("#edT").value);
+      $("#edNames").innerHTML = (r.ok.length ? "✅ " + r.ok.map(function (x) { return esc((x.student_no ? sid(x.grade, x.class_no, x.student_no) + " " : "") + (x.name || x.email)); }).join(" · ") : '<span class="muted">아직 아무도 없어요</span>') +
+        (r.bad.length ? '<br><span class="err">❓ 명단에서 못 찾았어요: ' + esc(r.bad.join(", ")) + "</span>" : "");
+    };
+    $("#edT").oninput = show; show();
+    $("#edSave").onclick = function () {
+      var r = resolveEditors($("#edT").value);
+      if (r.bad.length) return toast("못 찾은 학번이 있어요. 고친 뒤 저장해 주세요.");
+      var emails = r.ok.map(function (x) { return low(x.email); });
+      sel(client().from("bu_settings").upsert({ key: "poster_editors", value: emails })).then(function () { state.settings.poster_editors = emails; toast("포스터 담당 학생 " + emails.length + "명을 저장했어요"); })
+        .catch(function (e) { toast(errMsg(e)); });
+    };
+    $("#edLink").onclick = function () { var u = posterLink(); (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { toast("포스터 링크를 복사했어요. 담당 학생에게 보내 주세요!"); }, function () { prompt("복사해서 쓰세요", u); }); };
   }
 
   // 👩‍🏫 교사: 문구 · 배경 그림 정하기
   function tPoster() {
     PZ = posterCfg();
     $("#tbody").innerHTML = '<div class="card muted">불러오는 중…</div>';
-    loadPosterBg().then(renderTPoster);
+    Promise.all([loadPosterBg(), state.admin && !T.roster ? sel(client().from("roster").select("email,name,grade,class_no,student_no").range(0, 4999)).then(function (r) { T.roster = r; }).catch(function () {}) : null]).then(renderTPoster);
   }
   function renderTPoster() {
     var M = morning();
     var h = '<div class="card"><h2>🖨️ 오늘의 퀴즈 QR 포스터</h2>' +
-      '<p class="small muted">QR은 <b>매일 같은 주소</b>(오늘의 10문제)로 가고, 문제는 서버가 <b>매일 새로</b> 골라요. 그래서 포스터는 <b>한 번만</b> 인쇄해서(코팅하면 더 좋아요) 게시판에 붙여 두면 돼요. 여기서 바꾼 문구와 배경 그림은 <b>학생 📱 QR 메뉴에도 똑같이</b> 보여요.</p>' +
+      '<p class="small muted">QR은 <b>매일 같은 주소</b>(오늘의 10문제)로 가고, 문제는 서버가 <b>매일 새로</b> 골라요. 그래서 포스터는 <b>한 번만</b> 인쇄해서(코팅하면 더 좋아요) 게시판에 붙여 두면 돼요. 문구와 배경 그림은 <b>학교 포스터 하나</b>로 저장돼요.' + (state.admin ? " 포스터 담당 학생에게 맡기려면 아래 <b>👩‍🎓 포스터 담당 학생</b>에서 권한을 주세요." : "") + "</p>" +
       '<div class="form"><div class="row">' + sizeSelect() +
       '<label>큰 제목<input id="zTitle" maxlength="16" value="' + esc(PZ.title) + '"></label></div>' +
       '<label>한 줄 문구<input id="zSub" maxlength="40" value="' + esc(PZ.sub) + '"></label>' +
@@ -1028,8 +1078,10 @@
       '<label class="btn"><input type="file" id="zBg" accept="image/*" hidden>🖼️ 배경 그림 넣기</label>' + (PZ_BG ? '<button class="btn" id="zBgOff">기본 배경으로</button>' : "") + "</div>" +
       '<div id="zPBox" class="prompt-box hidden" style="margin-top:10px"></div></div>';
     h += previewCard();
+    if (state.admin && state.tTab === "poster" && /^#\/?teacher/.test(location.hash)) h += editorsCard();
     $("#tbody").innerHTML = h;
     bindPosterButtons();
+    if ($("#edT")) bindEditors();
 
     function re() { PZ.title = $("#zTitle").value.trim() || PZ_DEF.title; PZ.sub = $("#zSub").value.trim(); PZ.maker = $("#zMaker").value.trim(); PZ.morning = $("#zMorning").checked; PZ.theme = $("#zTheme").value; savePosterCfg(); drawPreview(); }
     ["#zMorning", "#zTheme"].forEach(function (s) { $(s).onchange = re; });
@@ -1045,9 +1097,9 @@
         cv.width = W; cv.height = H; cv.getContext("2d").drawImage(img, 0, 0, W, H); URL.revokeObjectURL(url);
         var data = cv.toDataURL("image/jpeg", 0.85);
         toast("배경 그림을 저장하는 중…");
-        sel(client().from("bu_settings").upsert({ key: "poster_bg", value: data })).then(function () {
+        savePoster({ p_bg: data, p_bg_set: true }).then(function () {
           PZ_BG = data;
-          toast(Math.abs(H / W - 1.414) > 0.12 ? "저장했어요. 그림 비율이 A용지와 달라서 가장자리가 조금 잘릴 수 있어요." : "배경 그림을 저장했어요. 학생 QR 화면에도 보여요!");
+          toast(Math.abs(H / W - 1.414) > 0.12 ? "저장했어요. 그림 비율이 A용지와 달라서 가장자리가 조금 잘릴 수 있어요." : "배경 그림을 저장했어요!");
           renderTPoster();
         }).catch(function (e) { toast("배경 그림을 저장하지 못했어요: " + errMsg(e)); });
       };
@@ -1055,7 +1107,7 @@
       img.src = url;
     };
     if ($("#zBgOff")) $("#zBgOff").onclick = function () {
-      sel(client().from("bu_settings").upsert({ key: "poster_bg", value: "" })).then(function () { PZ_BG = null; renderTPoster(); toast("기본 배경으로 바꿨어요"); }).catch(function (e) { toast(errMsg(e)); });
+      savePoster({ p_bg: "", p_bg_set: true }).then(function () { PZ_BG = null; renderTPoster(); toast("기본 배경으로 바꿨어요"); }).catch(function (e) { toast(errMsg(e)); });
     };
     drawPreview();
   }
