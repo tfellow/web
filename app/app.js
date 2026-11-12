@@ -1278,12 +1278,14 @@
     if (qz.error) throw qz.error;
     var qs = qz.data || [];
     if (!qs.length) return showError("이 책의 퀴즈가 아직 없어요.");
+    var prevMedal = (myRecord(id) || {}).medal || null;
 
     $app.innerHTML =
       '<div class="book-hero" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="toread">← 읽기로</button>' +
       "<h2 style=\"margin-top:12px\">✏️ " + esc(b.title) + " 퀴즈</h2>" +
       '<div class="by">총 ' + qs.length + "문항 · 문제와 보기 순서는 매번 달라져요 · 제출 후 10분 뒤 재도전" +
       (info.best != null ? " · 내 최고 " + info.best + "/" + info.total : "") + "</div></div>" +
+      (prevMedal === "gold" ? '<div class="hintnote">🥇 <b>이미 금메달을 받은 책이에요.</b> 다시 풀면 복습이 되지만 메달 수는 늘지 않아요. 새 메달을 받고 싶다면 다른 책에 도전해 봐요! <button class="btn ghost small" id="pickother">📚 다른 책 고르기</button></div>' : "") +
       '<div class="hintnote">' + (hintCount === 0 ? "지금까지 번역을 보지 않았어요. 이대로 통과하면 <b>⭐ 무힌트 보너스</b>!" : "번역을 본 단락: <b>" + hintCount + "</b>개 (이 책에서는 ⭐ 무힌트 보너스를 받을 수 없어요)") + "</div>" +
       qs.map(function (q, i) {
         return '<div class="q" id="q' + q.no + '"><div class="qt"><span class="qn">' + (i + 1) + "</span>" + esc(q.question) + "</div>" +
@@ -1294,6 +1296,8 @@
       '<div class="submitbar"><span class="answered-count" id="answered">0 / ' + qs.length + '</span><button class="btn gold big" id="submit">제출하기</button></div><div class="err center" id="qerr"></div>';
 
     document.getElementById("toread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(id); };
+    var pickOther = document.getElementById("pickother");
+    if (pickOther) pickOther.onclick = function () { location.hash = "#/"; };
     function countAnswered() {
       var n = qs.filter(function (q) { return document.querySelector('input[name="q' + q.no + '"]:checked'); }).length;
       document.getElementById("answered").textContent = n + " / " + qs.length;
@@ -1325,7 +1329,7 @@
         if (/cooldown/.test(r.error.message)) { toast("아직 대기 시간이에요"); return renderQuiz(id); }
         err.textContent = "제출하지 못했어요: " + cleanMsg(r.error.message); return;
       }
-      renderResult(b, r.data);
+      renderResult(b, r.data, prevMedal);
     };
   }
   function renderWait(b, info) {
@@ -1347,9 +1351,16 @@
     }
     tick(); clearTimer(); timer = setInterval(tick, 1000);
   }
-  function renderResult(b, r) {
+  function renderResult(b, r, prevMedal) {
     var medal = r.medal;
+    var RANK = { gold: 3, silver: 2, bronze: 1 };
+    // 이미 같은 메달이나 더 좋은 메달이 있으면 메달 수가 늘지 않아요 (책마다 최고 메달 1개만 세요)
+    var noNew = !!(medal && prevMedal && RANK[medal] <= RANK[prevMedal]);
+    var upgraded = !!(medal && prevMedal && RANK[medal] > RANK[prevMedal]);
     var msg = medal === "gold" ? "만점! 금메달이에요 🎉" : medal === "silver" ? "훌륭해요! 은메달이에요" : medal === "bronze" ? "잘했어요! 동메달이에요" : "아쉬워요. 60점부터 메달을 받아요. 다시 도전해 봐요!";
+    if (noNew && medal === "gold") msg = "복습 완료! 이번에도 만점이에요 🎉";
+    else if (upgraded) msg = MEDALS[prevMedal].name + "에서 " + MEDALS[medal].name + "로 올라갔어요! 🎉";
+    var noNewMsg = noNew ? '<p class="muted">이 책은 이미 ' + MEDALS[prevMedal].em + " " + MEDALS[prevMedal].name + "을 받았어요. 메달은 책마다 하나만 세서, 이번에는 메달 수가 늘지 않아요. 새 메달을 받으려면 다른 책에 도전해 봐요!</p>" : "";
     var better = r.best_medal && r.best_medal !== medal;
     var c = countryOf(b);
     var starMsg = r.star ? '<p><b>⭐ 무힌트 보너스를 받았어요!</b></p>'
@@ -1358,13 +1369,13 @@
       '<div class="card result"><h2 style="justify-content:center">' + esc(b.title) + "</h2>" +
       '<div class="stamp ' + (medal || "none") + '"><span class="em">' + (medal ? MEDALS[medal].em : "📘") + "</span><span>" + (medal ? MEDALS[medal].name : "도전 중") + "</span></div>" +
       '<div class="score-big">' + r.score + " / " + r.total + (r.star ? " ⭐" : "") + "</div>" +
-      "<p><b>" + msg + "</b></p>" + starMsg +
+      "<p><b>" + msg + "</b></p>" + noNewMsg + starMsg +
       '<div id="resstreak"></div><div id="reshof"></div><div id="resstamp"></div>' +
       '<p class="muted">' + r.attempt + "번째 도전 · 내 최고 점수 " + r.best + "/" + r.total + (better ? " (" + MEDALS[r.best_medal].name + " 유지)" : "") + " · 같은 책은 10분 뒤 다시 도전할 수 있어요.</p>" +
-      '<div style="margin-top:14px"><button class="btn" id="tohome">책장으로</button> <button class="btn ghost" id="reread">다시 읽기</button></div></div>';
+      '<div style="margin-top:14px"><button class="btn" id="tohome">' + (noNew ? "📚 다른 책 고르기" : "책장으로") + '</button> <button class="btn ghost" id="reread">다시 읽기</button></div></div>';
     document.getElementById("tohome").onclick = function () { location.hash = "#/"; };
     document.getElementById("reread").onclick = function () { location.hash = "#/book/" + encodeURIComponent(b.id); };
-    if (medal === "gold") confetti(70); else if (medal) confetti(30);
+    if (noNew) confetti(15); else if (medal === "gold") confetti(70); else if (medal) confetti(30);
     if (r.star) setTimeout(function () { confetti(40); }, 600);
     if (medal === "gold") loadHof(b, function (rows) {
       var box = document.getElementById("reshof");
@@ -1425,13 +1436,28 @@
     a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" }));
     a.download = name; a.click();
   }
+  // Supabase는 한 번에 최대 1000줄만 돌려줘요. 1000줄씩 끝까지 읽어서 { data, error } 모양으로 돌려줘요.
+  async function rpcAll(name, orderCols) {
+    var out = [];
+    for (var from = 0; ; from += 1000) {
+      var q = sb.rpc(name);
+      (orderCols || []).forEach(function (c) { q = q.order(c, { ascending: true }); });
+      var r = await q.range(from, from + 999);
+      if (r.error) return { data: null, error: r.error };
+      var d = r.data || [];
+      out = out.concat(d);
+      if (d.length < 1000) break;
+    }
+    return { data: out, error: null };
+  }
+
   // 교사 화면: 반별 현황 · 학생 · 작품 · TOP 10 · 문항/힌트 · 설정 탭
   async function renderTeacher() {
     if (!state.isAdmin) { location.hash = "#/"; return; }
     loading();
     state.tAtt = null;
-    var res = await Promise.all([sb.rpc("admin_overview"), sb.rpc("admin_scores"), sb.rpc("admin_hint_stats"), sb.from("books").select("id,featured"),
-      sb.rpc("admin_question_stats"), sb.rpc("admin_extras"), sb.rpc("leaderboard"), sb.from("profiles").select("email,reading_level")]);
+    var res = await Promise.all([sb.rpc("admin_overview"), rpcAll("admin_scores", ["email", "book_id"]), rpcAll("admin_hint_stats"), sb.from("books").select("id,featured"),
+      rpcAll("admin_question_stats"),sb.rpc("admin_extras"), sb.rpc("leaderboard"), sb.from("profiles").select("email,reading_level")]);
     var lvByEmail = {};
     ((res[7] && !res[7].error && res[7].data) || []).forEach(function (p) { if (p.reading_level) lvByEmail[String(p.email || "").toLowerCase()] = p.reading_level; });
     for (var k = 0; k < 3; k++) if (res[k].error) throw res[k].error;
@@ -1576,7 +1602,7 @@
       var body = document.getElementById("tbody");
       if (!state.tAtt || Date.now() - state.tAttAt > 60000) {
         body.innerHTML = '<p class="muted center" style="padding:20px 0">불러오는 중...</p>';
-        var ar = await sb.rpc("admin_attempts");
+        var ar = await rpcAll("admin_attempts", ["attempt_at", "email", "book_id"]);
         if (state.tTab !== "range") return;
         if (ar.error) {
           body.innerHTML = '<div class="card"><h2>📅 기간별</h2><p class="muted">기록을 불러오지 못했어요: ' + esc(cleanMsg(ar.error.message)) + '</p><p class="muted">서버에 admin_attempts 함수를 한 번 만들어야 해요 (admin_attempts.sql 참고).</p></div>';
@@ -1955,7 +1981,7 @@
       var body = document.getElementById("tbody");
       if (!state.tAtt || Date.now() - state.tAttAt > 60000) {
         body.innerHTML = '<p class="muted center" style="padding:20px 0">불러오는 중...</p>';
-        var ar = await sb.rpc("admin_attempts");
+        var ar = await rpcAll("admin_attempts", ["attempt_at", "email", "book_id"]);
         if (state.tTab !== "weekly") return;
         if (ar.error) { body.innerHTML = '<div class="card"><h2>📰 주간 리포트</h2><p class="muted">기록을 불러오지 못했어요: ' + esc(cleanMsg(ar.error.message)) + "</p></div>"; return; }
         state.tAtt = (ar.data || []).map(function (a) { a.date = kstDate(a.attempt_at); return a; });
