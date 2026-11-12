@@ -562,6 +562,8 @@
   //  순위
   // ======================================================================
   function className(g, c) { return g && c ? g + "-" + c : "-"; }
+  // 학번 5자리: 학년 1 + 반 2 + 번호 2 (예: 1학년 1반 18번 → 10118)
+  function sid(g, c, n) { var p2 = function (v) { return ("0" + v).slice(-2); }; return g && c && n ? g + p2(c) + p2(n) : g && c ? g + "-" + c : "-"; }
   function viewBoard() {
     var tabs = [["week", "⭐ 이번 주"], ["all", "🏆 전체"], ["acc", "🎯 정답률"], ["class", "🏫 반 대항전"]];
     $("#main").innerHTML = '<div class="tabs" id="btabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '" class="' + (state.boardTab === t[0] ? "on" : "") + '">' + t[1] + "</button>"; }).join("") + '</div><div id="board" class="card"><p class="muted">불러오는 중…</p></div>';
@@ -864,10 +866,10 @@
       '<select class="fsel" id="sC"><option value="">참여한 학생 모두</option>' + classes.map(function (c) { return '<option' + (SF.cls === c ? " selected" : "") + ">" + c + "</option>"; }).join("") + "</select>" +
       '<button class="btn sm" id="csv">📥 CSV 받기</button></div>' +
       '<div class="kpis">' + kpi(active.length + "명", "참여 학생") + kpi(num(tot.n), "푼 문제") + kpi(pct(tot.ok, tot.n) + "%", "정답률") + kpi(pct(tot.en_ok, tot.en_n) + "%", "🌏 영어 정답률 (" + num(tot.en_n) + ")") + "</div>" +
-      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">🌅 아침</th><th class="num">연속</th><th class="num">배지 단계</th><th>최근</th></tr>' +
+      '<div class="tbl-wrap" style="margin-top:12px"><table class="nowrap-t"><tr><th>학번</th><th>이름</th><th>닉네임</th><th class="num">점수</th><th class="num">푼 문제</th><th class="num">정답률</th><th class="num">단답형</th><th class="num">영어</th><th class="num">10문제 완주</th><th class="num">🌅 아침</th><th class="num">연속</th><th class="num">배지 단계</th><th>최근</th></tr>' +
       rows.map(function (r) {
         var s = r.s;
-        return "<tr><td>" + className(r.grade, r.cls) + "</td><td>" + (r.no || "") + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td><td class='num'><b>" + num(s.pts) + "</b></td><td class='num'>" + num(s.n) + "</td><td class='num'>" + (s.n ? pct(s.ok, s.n) + "%" : "-") + "</td>" +
+        return "<tr><td>" + sid(r.grade, r.cls, r.no) + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td><td class='num'><b>" + num(s.pts) + "</b></td><td class='num'>" + num(s.n) + "</td><td class='num'>" + (s.n ? pct(s.ok, s.n) + "%" : "-") + "</td>" +
           "<td class='num'>" + (s.sa_n ? s.sa_ok + "/" + s.sa_n : "-") + "</td><td class='num'>" + (s.en_n ? s.en_ok + "/" + s.en_n : "-") + "</td><td class='num'>" + (r.d10 || "") + "</td><td class='num'>" + (r.morning || "") + "</td><td class='num'>" + (r.streak.cur ? "🔥" + r.streak.cur : "") + "</td><td class='num'>" + (r.queen ? QUEENS[r.queen].icon + "👑 " : "") + r.badges + "</td><td class='small'>" + (r.last ? r.last.slice(5).replace("-", ".") : "") + "</td></tr>";
       }).join("") + "</table></div>" + (rows.length ? "" : '<p class="muted center">아직 기록이 없어요.</p>') + "</div>";
 
@@ -883,8 +885,8 @@
     if ($("#sF")) { $("#sF").onchange = function () { SF.from = this.value; renderStudents(); }; $("#sT").onchange = function () { SF.to = this.value; renderStudents(); }; }
     $("#csv").onclick = function () {
       var rg = periodRange();
-      var head = ["반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "아침 보너스(일)", "연속 도전(일)", "최고 연속(일)", "배지 단계 합(32)", "Brain Queen", "최근 날짜", "누적 점수"];
-      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.morning, r.streak.cur, r.streak.best, r.badges, r.queen ? QUEENS[r.queen].name : "", r.last, r.all.pts]; }));
+      var head = ["학번", "반", "번호", "이름", "이메일", "닉네임", "점수", "푼 문제", "맞힌 문제", "정답률(%)", "객관식 정답", "객관식", "단답형 정답", "단답형", "영어 정답", "영어", "10문제 완주(일)", "아침 보너스(일)", "연속 도전(일)", "최고 연속(일)", "배지 단계 합(32)", "Brain Queen", "최근 날짜", "누적 점수"];
+      var lines = [head].concat(rows.map(function (r) { var s = r.s; return [sid(r.grade, r.cls, r.no), className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, s.pts, s.n, s.ok, pct(s.ok, s.n), s.mc_ok, s.mc_n, s.sa_ok, s.sa_n, s.en_ok, s.en_n, r.d10, r.morning, r.streak.cur, r.streak.best, r.badges, r.queen ? QUEENS[r.queen].name : "", r.last, r.all.pts]; }));
       var csv = "﻿" + lines.map(function (l) { return l.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
       var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
       a.download = "BrainUp_학생기록_" + (SF.period === "all" ? "전체" : rg[0] + "_" + rg[1]) + (SF.cls ? "_" + SF.cls : "") + ".csv"; a.click();
@@ -1137,13 +1139,13 @@
       '<div class="filters"><input type="date" class="fsel" id="dF" value="' + DF.from + '"><span class="muted" style="align-self:center">~</span><input type="date" class="fsel" id="dT" value="' + DF.to + '">' +
       '<button class="btn sm" data-q="today">오늘</button><button class="btn sm" data-q="yday">어제</button><button class="btn sm" data-q="week">이번 주</button>' +
       '<select class="fsel" id="dC"><option value="">모든 반</option>' + classes.map(function (c) { return "<option" + (DF.cls === c ? " selected" : "") + ">" + c + "</option>"; }).join("") + "</select>" +
-      '<select class="fsel" id="dS">' + [["time", "⏱️ 빨리 끝낸 순"], ["score", "🏆 정답 많은 순"], ["class", "🏫 반·번호 순"]].map(function (s) { return '<option value="' + s[0] + '"' + (DF.sort === s[0] ? " selected" : "") + ">" + s[1] + "</option>"; }).join("") + "</select>" +
+      '<select class="fsel" id="dS">' + [["time", "⏱️ 빨리 끝낸 순"], ["score", "🏆 정답 많은 순"], ["class", "🏫 학번 순"]].map(function (s) { return '<option value="' + s[0] + '"' + (DF.sort === s[0] ? " selected" : "") + ">" + s[1] + "</option>"; }).join("") + "</select>" +
       '<button class="btn sm" id="dCsv">📥 CSV 받기</button></div>' +
       '<div class="kpis">' + kpi(rows.length + "명", "도전") + kpi(done.length + "명", "완주") + kpi(done.filter(function (r) { return r.ok === 10; }).length + "명", "👑 만점") +
         kpi(avgOk + " / 10", "평균 정답 (완주)") + kpi(avgDur, "평균 걸린 시간") + kpi(rows.filter(function (r) { return r.morning; }).length + "명", "🌅 아침 보너스") + "</div>" +
-      '<div class="tbl-wrap" style="margin-top:12px"><table><tr><th>날짜</th><th>반</th><th>번호</th><th>이름</th><th>닉네임</th><th>결과</th><th class="num">정답</th><th class="num">점수</th><th>시작</th><th>완주 시각</th><th class="num">걸린 시간</th><th>🌅</th></tr>' +
+      '<div class="tbl-wrap" style="margin-top:12px"><table class="nowrap-t"><tr><th>날짜</th><th>학번</th><th>이름</th><th>닉네임</th><th>결과</th><th class="num">정답</th><th class="num">점수</th><th>시작</th><th>완주 시각</th><th class="num">걸린 시간</th><th>🌅</th></tr>' +
       rows.map(function (r) {
-        return "<tr><td class='small'>" + r.day.slice(5).replace("-", ".") + "</td><td>" + className(r.grade, r.cls) + "</td><td>" + (r.no || "") + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td>" +
+        return "<tr><td class='small'>" + r.day.slice(5).replace("-", ".") + "</td><td>" + sid(r.grade, r.cls, r.no) + "</td><td>" + esc(r.name || r.email) + "</td><td>" + esc(r.nick) + "</td>" +
           "<td>" + d10Dots(r.d10) + "</td><td class='num'><b>" + r.ok + "</b>/" + (r.done ? 10 : r.d10.length + " <span class='small muted'>(진행 중)</span>") + "</td>" +
           "<td class='num'>" + (r.pts == null ? "-" : "<b>" + r.pts + "</b>") + "</td><td class='small'>" + fmtTime(r.start) + "</td><td><b>" + fmtTime(r.end) + "</b></td><td class='num'>" + fmtDur(r.dur) + "</td><td>" + (r.morning ? "🌅" : "") + "</td></tr>";
       }).join("") + "</table></div>" + (rows.length ? "" : '<p class="muted center">이 기간에 오늘의 10문제 기록이 없어요.</p>') +
@@ -1172,8 +1174,8 @@
     $("#dC").onchange = function () { DF.cls = this.value; renderDaily(daily, profiles, qids, questions); };
     $("#dS").onchange = function () { DF.sort = this.value; renderDaily(daily, profiles, qids, questions); };
     $("#dCsv").onclick = function () {
-      var head = ["날짜", "반", "번호", "이름", "이메일", "닉네임", "정답", "푼 문제", "점수", "시작 시각", "완주 시각", "걸린 시간(초)", "아침 보너스", "결과(1=정답)"];
-      var lines = [head].concat(rows.map(function (r) { return [r.day, className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, r.ok, r.d10.length, r.pts == null ? "" : r.pts, fmtTime(r.start), fmtTime(r.end), r.dur == null ? "" : r.dur, r.morning ? "O" : "", r.d10.join("")]; }));
+      var head = ["날짜", "학번", "반", "번호", "이름", "이메일", "닉네임", "정답", "푼 문제", "점수", "시작 시각", "완주 시각", "걸린 시간(초)", "아침 보너스", "결과(1=정답)"];
+      var lines = [head].concat(rows.map(function (r) { return [r.day, sid(r.grade, r.cls, r.no), className(r.grade, r.cls), r.no || "", r.name, r.email, r.nick, r.ok, r.d10.length, r.pts == null ? "" : r.pts, fmtTime(r.start), fmtTime(r.end), r.dur == null ? "" : r.dur, r.morning ? "O" : "", r.d10.join("")]; }));
       var csv = "﻿" + lines.map(function (l) { return l.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
       var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
       a.download = "BrainUp_오늘의10문제_" + (DF.from === DF.to ? DF.from : DF.from + "_" + DF.to) + (DF.cls ? "_" + DF.cls : "") + ".csv"; a.click();

@@ -253,3 +253,7 @@ tr.err-row td { background: #fff6f5; }
 .mini-dots { display: inline-flex; gap: 2px; vertical-align: middle; }
 .mini-dots i { width: 9px; height: 9px; border-radius: 2px; background: var(--line); }
 .mini-dots i.o { background: var(--ok); } .mini-dots i.x { background: var(--warn); }
+
+/* 교사 표: 학번·숫자·연속(🔥) 칸이 두 줄로 꺾이지 않게 (넓으면 표가 옆으로 스크롤돼요) */
+table.nowrap-t td, table.nowrap-t th { white-space: nowrap; }
+table.nowrap-t td.q { white-space: normal; }
