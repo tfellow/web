@@ -2242,9 +2242,9 @@ function renderProgressView() {
 
       return `
         <div class="class-progress-card ${cls.id === currentCls.id ? 'active-class' : ''}" onclick="handleClassChange('${cls.id}')">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong class="font-display" style="font-size:1.25rem;">🏫 ${escapeHtml(cls.name)}</strong>
-            <span style="font-weight:900; color:var(--eussuk-blue);">${percent}% (${completedCount}/${totalSyllabus})</span>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;">
+            <strong class="font-display" style="font-size:1.2rem; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(cls.name)}">🏫 ${escapeHtml(cls.name)}</strong>
+            <span style="flex-shrink:0; white-space:nowrap; font-weight:900; color:var(--eussuk-blue);">${percent}% <span style="font-size:0.8em; font-weight:700; opacity:0.75;">(${completedCount}/${totalSyllabus})</span></span>
           </div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" style="width:${percent}%;"></div>
