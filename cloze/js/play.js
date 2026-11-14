@@ -372,9 +372,10 @@ function dropTarget(drag, j, src, ev) {
 function setupOrder(saved) {
   R.order = saved?.order || shuffledPerm(test.sentences.length);
   R.sel = null;
-  shell(`<p class="muted small center">문장을 올바른 순서로 배열하세요. 문장 두 개를 차례로 누르면 자리가 바뀝니다. 화살표나 끌어다 놓기로도 옮길 수 있습니다.</p><ol class="olist" id="olist"></ol>`);
+  shell(`<p class="muted small center">문장 카드를 끌어다 놓아 올바른 순서로 배열하세요. 휴대폰에서는 왼쪽 ⠿ 손잡이를 끌거나 카드를 길게 눌러 옮깁니다. 문장 두 개를 차례로 눌러 자리를 바꾸거나 화살표로도 옮길 수 있습니다.</p><ol class="olist" id="olist"></ol>`);
   const L = $("#olist");
   L.onclick = e => {
+    if (D.dropped) { D.dropped = false; return; } // 끌기 직후 생기는 클릭 무시
     const li = e.target.closest(".ocard");
     if (!li) return;
     const pos = +li.dataset.p;
@@ -385,20 +386,116 @@ function setupOrder(saved) {
     else { swap(R.sel, pos); R.sel = null; }
     refreshOrder();
   };
-  L.ondragstart = e => { const li = e.target.closest(".ocard"); if (li) e.dataTransfer.setData("text/plain", li.dataset.p); };
-  L.ondragover = e => { if (e.target.closest(".ocard")) e.preventDefault(); };
-  L.ondrop = e => {
-    const li = e.target.closest(".ocard");
-    if (!li) return;
-    e.preventDefault();
-    const from = parseInt(e.dataTransfer.getData("text/plain"), 10), to = +li.dataset.p;
-    if (isNaN(from) || from === to) return;
-    const [x] = R.order.splice(from, 1);
-    R.order.splice(to, 0, x);
-    R.sel = null;
-    refreshOrder();
-  };
+  setupOrderDrag(L);
   refreshOrder();
+}
+
+// 끌어다 놓기: 마우스는 카드 아무 곳, 터치는 손잡이(즉시) 또는 카드 길게 누르기
+const D = { dropped: false };
+function setupOrderDrag(L) {
+  let st = null; // { li, id, x0, y0, dy, ghost, timer, active, from, raf, lastY }
+  const HOLD_MS = 280, SLOP = 8;
+  const cleanup = () => {
+    if (!st) return;
+    clearTimeout(st.timer); cancelAnimationFrame(st.raf);
+    st.ghost?.remove();
+    st.li.classList.remove("dragging", "pressing");
+    L.classList.remove("drag-on");
+    document.removeEventListener("pointermove", onMove);
+    document.removeEventListener("pointerup", onUp);
+    document.removeEventListener("pointercancel", onCancel);
+    st = null;
+  };
+  const begin = () => {
+    const li = st.li, r = li.getBoundingClientRect();
+    st.active = true;
+    st.from = +li.dataset.p;
+    st.dy = st.y0 - r.top;
+    const g = li.cloneNode(true);
+    g.classList.remove("sel", "pressing");
+    g.classList.add("ghost");
+    Object.assign(g.style, { left: r.left + "px", top: r.top + "px", width: r.width + "px" });
+    document.body.appendChild(g);
+    st.ghost = g;
+    li.classList.remove("pressing");
+    li.classList.add("dragging");
+    L.classList.add("drag-on");
+    if (navigator.vibrate) try { navigator.vibrate(15); } catch {}
+    autoScroll();
+  };
+  const place = y => {
+    st.ghost.style.top = (y - st.dy) + "px";
+    const cards = [...L.children].filter(c => c !== st.li);
+    let before = null;
+    for (const c of cards) {
+      const r = c.getBoundingClientRect();
+      if (y < r.top + r.height / 2) { before = c; break; }
+    }
+    if (before) { if (st.li.nextElementSibling !== before) L.insertBefore(st.li, before); }
+    else if (L.lastElementChild !== st.li) L.appendChild(st.li);
+  };
+  const autoScroll = () => {
+    if (!st?.active) return;
+    const y = st.lastY ?? st.y0, h = window.innerHeight, edge = 70;
+    let v = 0;
+    if (y < edge) v = -Math.ceil((edge - y) / 5);
+    else if (y > h - edge) v = Math.ceil((y - (h - edge)) / 5);
+    if (v) { window.scrollBy(0, v); place(y); }
+    st.raf = requestAnimationFrame(autoScroll);
+  };
+  const onMove = e => {
+    if (!st || e.pointerId !== st.id) return;
+    st.lastY = e.clientY;
+    if (!st.active) {
+      const moved = Math.hypot(e.clientX - st.x0, e.clientY - st.y0) > SLOP;
+      if (!moved) return;
+      if (st.immediate) begin();
+      else { cleanup(); return; } // 길게 누르기 전에 움직이면 스크롤로 간주
+    }
+    e.preventDefault();
+    place(e.clientY);
+  };
+  const onUp = e => {
+    if (!st || e.pointerId !== st.id) return;
+    if (st.active) {
+      const to = [...L.children].indexOf(st.li);
+      const from = st.from;
+      D.dropped = true;
+      cleanup();
+      if (to !== from && to >= 0) {
+        const [x] = R.order.splice(from, 1);
+        R.order.splice(to, 0, x);
+      }
+      R.sel = null;
+      refreshOrder();
+    } else cleanup();
+  };
+  const onCancel = e => {
+    if (!st || e.pointerId !== st.id) return;
+    const wasActive = st.active;
+    cleanup();
+    if (wasActive) refreshOrder(); // 원래 순서로 되돌림
+  };
+  L.addEventListener("pointerdown", e => {
+    D.dropped = false;
+    if (st || (e.pointerType === "mouse" && e.button !== 0)) return;
+    const li = e.target.closest(".ocard");
+    if (!li || e.target.closest("button")) return;
+    const handle = !!e.target.closest(".ograb");
+    st = { li, id: e.pointerId, x0: e.clientX, y0: e.clientY, active: false, immediate: e.pointerType === "mouse" || handle };
+    if (e.pointerType === "mouse") e.preventDefault(); // 글자 선택 방지
+    if (!st.immediate) {
+      li.classList.add("pressing");
+      st.timer = setTimeout(() => { if (st && !st.active) begin(); }, HOLD_MS);
+    }
+    document.addEventListener("pointermove", onMove, { passive: false });
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onCancel);
+  });
+  // 끄는 동안 화면이 스크롤되지 않게
+  L.addEventListener("touchmove", e => { if (st?.active) e.preventDefault(); }, { passive: false });
+  L.addEventListener("contextmenu", e => { if (st) e.preventDefault(); });
+  L.addEventListener("dragstart", e => e.preventDefault());
 }
 function swap(a, b) {
   if (b < 0 || b >= R.order.length) return;
@@ -406,8 +503,8 @@ function swap(a, b) {
 }
 function refreshOrder() {
   const n = R.order.length;
-  $("#olist").innerHTML = R.order.map((si, pos) => `<li class="ocard ${R.sel === pos ? "sel" : ""}" draggable="true" data-p="${pos}">
-    <span class="onum">${pos + 1}</span><span class="otext">${esc(test.sentences[si])}</span>
+  $("#olist").innerHTML = R.order.map((si, pos) => `<li class="ocard ${R.sel === pos ? "sel" : ""}" data-p="${pos}">
+    <span class="ograb" aria-hidden="true">⠿</span><span class="onum">${pos + 1}</span><span class="otext">${esc(test.sentences[si])}</span>
     <span class="obtns"><button class="btn small ghost" data-mv="-1" ${pos === 0 ? "disabled" : ""}>▲</button><button class="btn small ghost" data-mv="1" ${pos === n - 1 ? "disabled" : ""}>▼</button></span></li>`).join("");
   saveProgress();
   updateProgress();
