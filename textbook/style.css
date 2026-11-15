@@ -12,3 +12,26 @@
 
 .reading-break { opacity: .22; font-size: .76em; font-weight: 400; white-space: nowrap; }
 #reading-breaks[aria-pressed="true"] { color: var(--a); background: var(--wash); border-color: var(--a); }
+
+.summary-passage {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.52;
+  letter-spacing: -.016em;
+}
+.summary-box {
+  display: inline-block;
+  vertical-align: baseline;
+  min-width: 2.5em;
+  padding: 0 .25em;
+  border: 2px solid var(--a);
+  border-radius: .18em;
+  background: var(--wash);
+  color: var(--a);
+  font: inherit;
+  line-height: 1.18;
+}
+.summary-box[aria-disabled="false"] span { visibility: hidden; }
+.summary-box[aria-disabled="true"] { cursor: default; }
+.step-translation { font-size: 26px; line-height: 1.5; color: var(--mut); }
+@media (max-width: 600px) { .summary-passage { font-size: 32px; } }
