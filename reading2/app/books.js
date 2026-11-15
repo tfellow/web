@@ -342,11 +342,14 @@ window.BOOKS = [
   "id": "dubai",
   "title": "Dubai",
   "titleKo": "두바이",
+  "country": "United Arab Emirates",
   "emoji": "🏙️",
   "color": "#8a6a2a",
   "cefr": "A0",
   "words": 88,
-  "places": []
+  "places": [
+   "United Arab Emirates"
+  ]
  },
  {
   "id": "hello-around-the-world",
@@ -2587,11 +2590,14 @@ window.BOOKS = [
   "id": "bhutan-and-gross-national-happiness",
   "title": "Bhutan and Gross National Happiness",
   "titleKo": "부탄과 국민총행복",
+  "country": "Bhutan",
   "emoji": "🏔️",
   "color": "#2a5a4a",
   "cefr": "B1",
   "words": 243,
-  "places": []
+  "places": [
+   "Bhutan"
+  ]
  },
  {
   "id": "british-vs-american-english",
@@ -2625,12 +2631,13 @@ window.BOOKS = [
   "id": "el-sistema",
   "title": "El Sistema",
   "titleKo": "엘 시스테마",
-  "country": "United States",
+  "country": "Venezuela",
   "emoji": "🎻",
   "color": "#7a3a2a",
   "cefr": "B1",
   "words": 233,
   "places": [
+   "Venezuela",
    "United States",
    "South Korea"
   ]
