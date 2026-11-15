@@ -16,6 +16,26 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "many-jobs",
+  "title": "Many Jobs",
+  "titleKo": "여러 가지 직업",
+  "emoji": "👩‍🚒",
+  "color": "#a3431f",
+  "cefr": "A0",
+  "words": 80,
+  "places": []
+ },
+ {
+  "id": "about-insects",
+  "title": "About Insects",
+  "titleKo": "곤충에 대해",
+  "emoji": "🐞",
+  "color": "#8a3a2a",
+  "cefr": "A0",
+  "words": 71,
+  "places": []
+ },
+ {
   "id": "animals-and-their-babies",
   "title": "Animals and Their Babies",
   "titleKo": "동물과 아기",
@@ -29,6 +49,109 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "butterflies",
+  "title": "Butterflies",
+  "titleKo": "나비",
+  "emoji": "🦋",
+  "color": "#7a3a6a",
+  "cefr": "A0",
+  "words": 81,
+  "places": []
+ },
+ {
+  "id": "cactuses",
+  "title": "Cactuses",
+  "titleKo": "선인장",
+  "emoji": "🌵",
+  "color": "#5a6a2a",
+  "cefr": "A0",
+  "words": 86,
+  "places": []
+ },
+ {
+  "id": "color-mixing",
+  "title": "Color Mixing",
+  "titleKo": "색 섞기",
+  "emoji": "🎨",
+  "color": "#6a3a6a",
+  "cefr": "A0",
+  "words": 84,
+  "places": []
+ },
+ {
+  "id": "gravity",
+  "title": "Gravity",
+  "titleKo": "중력",
+  "emoji": "🍎",
+  "color": "#7a2a2a",
+  "cefr": "A0",
+  "words": 80,
+  "places": []
+ },
+ {
+  "id": "jungle",
+  "title": "Jungle",
+  "titleKo": "정글",
+  "emoji": "🐒",
+  "color": "#2f6b3a",
+  "cefr": "A0",
+  "words": 69,
+  "places": []
+ },
+ {
+  "id": "some-kinds-of-dinosaurs",
+  "title": "Some Kinds of Dinosaurs",
+  "titleKo": "공룡의 몇 가지 종류",
+  "emoji": "🦖",
+  "color": "#4a6a2a",
+  "cefr": "A0",
+  "words": 73,
+  "places": []
+ },
+ {
+  "id": "the-water-cycle-a0",
+  "title": "The Water Cycle",
+  "titleKo": "물의 순환",
+  "emoji": "💧",
+  "color": "#1f5f8b",
+  "cefr": "A0",
+  "words": 71,
+  "places": []
+ },
+ {
+  "id": "weather",
+  "title": "Weather",
+  "titleKo": "날씨",
+  "country": "South Korea",
+  "emoji": "☀️",
+  "color": "#2a5a8a",
+  "cefr": "A0",
+  "words": 79,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "whales",
+  "title": "Whales",
+  "titleKo": "고래",
+  "emoji": "🐳",
+  "color": "#1f4f7a",
+  "cefr": "A0",
+  "words": 84,
+  "places": []
+ },
+ {
+  "id": "your-body",
+  "title": "Your Body",
+  "titleKo": "여러분의 몸",
+  "emoji": "🧍",
+  "color": "#8a2a3a",
+  "cefr": "A0",
+  "words": 89,
+  "places": []
+ },
+ {
   "id": "the-moon",
   "title": "The Moon",
   "titleKo": "달",
@@ -37,6 +160,29 @@ window.BOOKS = [
   "cefr": "A0",
   "words": 89,
   "places": []
+ },
+ {
+  "id": "what-can-you-see-in-the-sky",
+  "title": "What Can You See in the Sky?",
+  "titleKo": "하늘에서 무엇을 볼 수 있을까요?",
+  "emoji": "🌤️",
+  "color": "#2c3470",
+  "cefr": "A0",
+  "words": 74,
+  "places": []
+ },
+ {
+  "id": "american-indians",
+  "title": "American Indians",
+  "titleKo": "아메리카 원주민",
+  "country": "United States",
+  "emoji": "🪶",
+  "color": "#7a4a2a",
+  "cefr": "A0",
+  "words": 83,
+  "places": [
+   "United States"
+  ]
  },
  {
   "id": "the-pyramids-of-egypt",
@@ -66,6 +212,30 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "holidays",
+  "title": "Holidays",
+  "titleKo": "명절과 기념일",
+  "country": "South Korea",
+  "emoji": "🎉",
+  "color": "#a3334a",
+  "cefr": "A0",
+  "words": 78,
+  "places": [
+   "South Korea",
+   "United States"
+  ]
+ },
+ {
+  "id": "flour",
+  "title": "Flour",
+  "titleKo": "밀가루",
+  "emoji": "🌾",
+  "color": "#8a6a1a",
+  "cefr": "A0",
+  "words": 85,
+  "places": []
+ },
+ {
   "id": "pizza",
   "title": "Pizza from Italy",
   "titleKo": "이탈리아에서 온 피자",
@@ -78,6 +248,30 @@ window.BOOKS = [
    "Italy",
    "United States"
   ]
+ },
+ {
+  "id": "railroads",
+  "title": "Railroads",
+  "titleKo": "철도",
+  "country": "United Kingdom",
+  "emoji": "🚂",
+  "color": "#3a4a5a",
+  "cefr": "A0",
+  "words": 92,
+  "places": [
+   "United Kingdom",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "technology",
+  "title": "Technology",
+  "titleKo": "기술",
+  "emoji": "💻",
+  "color": "#2a3a5a",
+  "cefr": "A0",
+  "words": 85,
+  "places": []
  },
  {
   "id": "the-pencil",
@@ -94,6 +288,44 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-wheel",
+  "title": "The Wheel",
+  "titleKo": "바퀴",
+  "emoji": "🛞",
+  "color": "#5a4a3a",
+  "cefr": "A0",
+  "words": 84,
+  "places": []
+ },
+ {
+  "id": "christopher-columbus",
+  "title": "Christopher Columbus",
+  "titleKo": "크리스토퍼 콜럼버스",
+  "country": "Italy",
+  "emoji": "⛵",
+  "color": "#2a4a6a",
+  "cefr": "A0",
+  "words": 84,
+  "places": [
+   "Italy",
+   "Spain"
+  ]
+ },
+ {
+  "id": "george-washington",
+  "title": "George Washington",
+  "titleKo": "조지 워싱턴",
+  "country": "United States",
+  "emoji": "🎩",
+  "color": "#3a3a4a",
+  "cefr": "A0",
+  "words": 91,
+  "places": [
+   "United States",
+   "United Kingdom"
+  ]
+ },
+ {
   "id": "king-sejong-and-hangeul",
   "title": "King Sejong and Hangeul",
   "titleKo": "세종대왕과 한글",
@@ -105,6 +337,16 @@ window.BOOKS = [
   "places": [
    "South Korea"
   ]
+ },
+ {
+  "id": "dubai",
+  "title": "Dubai",
+  "titleKo": "두바이",
+  "emoji": "🏙️",
+  "color": "#8a6a2a",
+  "cefr": "A0",
+  "words": 88,
+  "places": []
  },
  {
   "id": "hello-around-the-world",
@@ -120,6 +362,29 @@ window.BOOKS = [
    "Spain",
    "Japan",
    "China",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "kinds-of-paintings",
+  "title": "Kinds of Paintings",
+  "titleKo": "그림의 종류",
+  "emoji": "🖼️",
+  "color": "#3a5a7a",
+  "cefr": "A0",
+  "words": 95,
+  "places": []
+ },
+ {
+  "id": "musical-instruments",
+  "title": "Musical Instruments",
+  "titleKo": "악기",
+  "country": "South Korea",
+  "emoji": "🥁",
+  "color": "#7a3a2a",
+  "cefr": "A0",
+  "words": 93,
+  "places": [
    "South Korea"
   ]
  },
