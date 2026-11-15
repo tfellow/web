@@ -589,6 +589,34 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "crop-circles",
+  "title": "Crop Circles",
+  "titleKo": "미스터리 서클",
+  "country": "United Kingdom",
+  "emoji": "🌾",
+  "color": "#6a6a2a",
+  "cefr": "B2",
+  "words": 379,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "figure-skating-scoring",
+  "title": "Figure Skating Scoring",
+  "titleKo": "피겨 스케이팅 채점",
+  "country": "South Korea",
+  "emoji": "⛸️",
+  "color": "#2a5a7a",
+  "cefr": "B2",
+  "words": 367,
+  "places": [
+   "South Korea",
+   "United States",
+   "Canada"
+  ]
+ },
+ {
   "id": "the-story-of-the-calendar",
   "title": "The Missing Ten Days: The Story of Our Calendar",
   "titleKo": "사라진 열흘: 달력 이야기",
@@ -605,6 +633,66 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "diseases-and-the-immune-system",
+  "title": "Diseases and the Immune System",
+  "titleKo": "질병과 면역 체계",
+  "emoji": "🛡️",
+  "color": "#8a2a4a",
+  "cefr": "B2",
+  "words": 377,
+  "places": []
+ },
+ {
+  "id": "do-animals-dream",
+  "title": "Do Animals Dream?",
+  "titleKo": "동물도 꿈을 꿀까요?",
+  "country": "France",
+  "emoji": "💤",
+  "color": "#4a3a7a",
+  "cefr": "B2",
+  "words": 388,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "fresh-water-a-growing-crisis",
+  "title": "Fresh Water: A Growing Crisis",
+  "titleKo": "민물: 커져 가는 위기",
+  "country": "South Africa",
+  "emoji": "💧",
+  "color": "#1f5f8b",
+  "cefr": "B2",
+  "words": 361,
+  "places": [
+   "South Africa",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "going-carbon-neutral",
+  "title": "Going Carbon Neutral",
+  "titleKo": "탄소 중립을 향해",
+  "country": "South Korea",
+  "emoji": "🌍",
+  "color": "#2f7a5b",
+  "cefr": "B2",
+  "words": 374,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "heat-islands",
+  "title": "Heat Islands",
+  "titleKo": "열섬",
+  "emoji": "🏙️",
+  "color": "#9a4a1f",
+  "cefr": "B2",
+  "words": 365,
+  "places": []
+ },
+ {
   "id": "how-vaccines-work",
   "title": "Training the Body's Army: How Vaccines Work",
   "titleKo": "몸의 군대를 훈련하다: 백신의 원리",
@@ -619,6 +707,106 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "newtons-laws-of-motion",
+  "title": "Newton's Laws of Motion",
+  "titleKo": "뉴턴의 운동 법칙",
+  "country": "United Kingdom",
+  "emoji": "🚀",
+  "color": "#2a4a7a",
+  "cefr": "B2",
+  "words": 372,
+  "places": [
+   "United Kingdom",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "replanting-the-worlds-forests",
+  "title": "Replanting the World's Forests",
+  "titleKo": "세계의 숲 되살리기",
+  "country": "China",
+  "emoji": "🌳",
+  "color": "#2f6b3a",
+  "cefr": "B2",
+  "words": 376,
+  "places": [
+   "China",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "survival-of-the-fittest",
+  "title": "Survival of the Fittest",
+  "titleKo": "적자생존",
+  "country": "United Kingdom",
+  "emoji": "🦎",
+  "color": "#4a6a2a",
+  "cefr": "B2",
+  "words": 374,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-placebo-effect",
+  "title": "The Placebo Effect",
+  "titleKo": "플라세보 효과",
+  "emoji": "💊",
+  "color": "#5a3a7a",
+  "cefr": "B2",
+  "words": 373,
+  "places": []
+ },
+ {
+  "id": "the-power-of-instinct",
+  "title": "The Power of Instinct",
+  "titleKo": "본능의 힘",
+  "emoji": "🐾",
+  "color": "#6a4a2a",
+  "cefr": "B2",
+  "words": 385,
+  "places": []
+ },
+ {
+  "id": "the-power-of-music",
+  "title": "The Power of Music",
+  "titleKo": "음악의 힘",
+  "country": "South Korea",
+  "emoji": "🎵",
+  "color": "#6a2a6a",
+  "cefr": "B2",
+  "words": 379,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "vision-and-color",
+  "title": "Vision and Color",
+  "titleKo": "시각과 색",
+  "emoji": "👁️",
+  "color": "#3a5a8a",
+  "cefr": "B2",
+  "words": 382,
+  "places": []
+ },
+ {
+  "id": "yellow-dust-storms",
+  "title": "Yellow Dust Storms",
+  "titleKo": "황사",
+  "country": "South Korea",
+  "emoji": "🌪️",
+  "color": "#8a6a1f",
+  "cefr": "B2",
+  "words": 390,
+  "places": [
+   "South Korea",
+   "Mongolia",
+   "China",
+   "Japan"
+  ]
+ },
+ {
   "id": "black-holes",
   "title": "Black Holes: Where Light Cannot Escape",
   "titleKo": "블랙홀: 빛도 빠져나올 수 없는 곳",
@@ -627,6 +815,125 @@ window.BOOKS = [
   "cefr": "B2",
   "words": 379,
   "places": []
+ },
+ {
+  "id": "space-colonies",
+  "title": "Space Colonies",
+  "titleKo": "우주 식민지",
+  "emoji": "🪐",
+  "color": "#2c3470",
+  "cefr": "B2",
+  "words": 361,
+  "places": []
+ },
+ {
+  "id": "conquistadors",
+  "title": "Conquistadors",
+  "titleKo": "콘키스타도르",
+  "country": "Spain",
+  "emoji": "⚔️",
+  "color": "#6a3a1a",
+  "cefr": "B2",
+  "words": 366,
+  "places": [
+   "Spain",
+   "Mexico",
+   "Peru"
+  ]
+ },
+ {
+  "id": "derinkuyu-underground-city",
+  "title": "Derinkuyu Underground City",
+  "titleKo": "데린쿠유 지하 도시",
+  "country": "Turkey",
+  "emoji": "🕳️",
+  "color": "#5a4a3a",
+  "cefr": "B2",
+  "words": 363,
+  "places": [
+   "Turkey"
+  ]
+ },
+ {
+  "id": "egypts-golden-age",
+  "title": "Egypt's Golden Age",
+  "titleKo": "이집트의 황금기",
+  "country": "Egypt",
+  "emoji": "🏺",
+  "color": "#8a6a1a",
+  "cefr": "B2",
+  "words": 380,
+  "places": [
+   "Egypt"
+  ]
+ },
+ {
+  "id": "fighting-for-womens-rights",
+  "title": "Fighting for Women's Rights",
+  "titleKo": "여성의 권리를 위한 투쟁",
+  "country": "United Kingdom",
+  "emoji": "✊",
+  "color": "#7a2a5a",
+  "cefr": "B2",
+  "words": 369,
+  "places": [
+   "United Kingdom",
+   "New Zealand",
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "pompeii",
+  "title": "Pompeii",
+  "titleKo": "폼페이",
+  "country": "Italy",
+  "emoji": "🌋",
+  "color": "#8a3b2a",
+  "cefr": "B2",
+  "words": 378,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "roman-citizenship",
+  "title": "Roman Citizenship",
+  "titleKo": "로마 시민권",
+  "country": "Italy",
+  "emoji": "🏛️",
+  "color": "#7a2a2a",
+  "cefr": "B2",
+  "words": 368,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "saving-the-last-supper",
+  "title": "Saving The Last Supper",
+  "titleKo": "「최후의 만찬」 구하기",
+  "country": "Italy",
+  "emoji": "🖌️",
+  "color": "#6a4a3a",
+  "cefr": "B2",
+  "words": 359,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-battle-of-gettysburg",
+  "title": "The Battle of Gettysburg",
+  "titleKo": "게티즈버그 전투",
+  "country": "United States",
+  "emoji": "🎖️",
+  "color": "#3a3a5a",
+  "cefr": "B2",
+  "words": 371,
+  "places": [
+   "United States"
+  ]
  },
  {
   "id": "the-fall-of-the-berlin-wall",
@@ -642,6 +949,32 @@ window.BOOKS = [
    "Russia",
    "United States",
    "South Korea"
+  ]
+ },
+ {
+  "id": "the-plight-of-the-bison",
+  "title": "The Plight of the Bison",
+  "titleKo": "위기에 처한 들소",
+  "country": "United States",
+  "emoji": "🦬",
+  "color": "#6b4423",
+  "cefr": "B2",
+  "words": 355,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-true-story-of-dracula",
+  "title": "The True Story of Dracula",
+  "titleKo": "드라큘라의 진짜 이야기",
+  "country": "Romania",
+  "emoji": "🧛",
+  "color": "#4a1a2a",
+  "cefr": "B2",
+  "words": 362,
+  "places": [
+   "Romania"
   ]
  },
  {
@@ -677,6 +1010,34 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "artificial-intelligence",
+  "title": "Artificial Intelligence",
+  "titleKo": "인공 지능",
+  "country": "South Korea",
+  "emoji": "🤖",
+  "color": "#2a3a5a",
+  "cefr": "B2",
+  "words": 367,
+  "places": [
+   "South Korea",
+   "United States"
+  ]
+ },
+ {
+  "id": "chocolate-may-power-cars",
+  "title": "Chocolate May Power Cars",
+  "titleKo": "초콜릿이 자동차를 움직일 수도 있어요",
+  "country": "United Kingdom",
+  "emoji": "🍫",
+  "color": "#5a3a22",
+  "cefr": "B2",
+  "words": 383,
+  "places": [
+   "United Kingdom",
+   "Brazil"
+  ]
+ },
+ {
   "id": "the-internet",
   "title": "A Web Around the World: The Story of the Internet",
   "titleKo": "세계를 잇는 그물: 인터넷 이야기",
@@ -690,6 +1051,46 @@ window.BOOKS = [
    "Switzerland",
    "United Kingdom",
    "South Korea"
+  ]
+ },
+ {
+  "id": "the-rotating-skyscraper",
+  "title": "The Rotating Skyscraper",
+  "titleKo": "회전하는 고층 빌딩",
+  "country": "Brazil",
+  "emoji": "🏢",
+  "color": "#3a4a5a",
+  "cefr": "B2",
+  "words": 370,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "the-war-of-currents",
+  "title": "The War of Currents",
+  "titleKo": "전류 전쟁",
+  "country": "United States",
+  "emoji": "⚡",
+  "color": "#6a5a1a",
+  "cefr": "B2",
+  "words": 364,
+  "places": [
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "ernest-shackleton",
+  "title": "Ernest Shackleton",
+  "titleKo": "어니스트 섀클턴",
+  "country": "United Kingdom",
+  "emoji": "🧭",
+  "color": "#2a4a6a",
+  "cefr": "B2",
+  "words": 382,
+  "places": [
+   "United Kingdom"
   ]
  },
  {
@@ -719,6 +1120,91 @@ window.BOOKS = [
    "United States",
    "India",
    "South Korea"
+  ]
+ },
+ {
+  "id": "from-baroque-to-pop-art",
+  "title": "From Baroque to Pop Art",
+  "titleKo": "바로크에서 팝 아트까지",
+  "country": "France",
+  "emoji": "🖼️",
+  "color": "#7a3a5a",
+  "cefr": "B2",
+  "words": 375,
+  "places": [
+   "France",
+   "United Kingdom",
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "greek-myths-in-english-words",
+  "title": "Greek Myths in English Words",
+  "titleKo": "영어 단어 속 그리스 신화",
+  "country": "Greece",
+  "emoji": "📜",
+  "color": "#3a4a8a",
+  "cefr": "B2",
+  "words": 380,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "hanji-and-ikebana",
+  "title": "Hanji and Ikebana",
+  "titleKo": "한지와 이케바나",
+  "country": "South Korea",
+  "emoji": "🌸",
+  "color": "#8a3a4a",
+  "cefr": "B2",
+  "words": 382,
+  "places": [
+   "South Korea",
+   "Japan"
+  ]
+ },
+ {
+  "id": "language-change",
+  "title": "Language Change",
+  "titleKo": "언어의 변화",
+  "country": "United Kingdom",
+  "emoji": "🗣️",
+  "color": "#4a5a2a",
+  "cefr": "B2",
+  "words": 376,
+  "places": [
+   "United Kingdom",
+   "France",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "native-american-art",
+  "title": "Native American Art",
+  "titleKo": "아메리카 원주민의 예술",
+  "country": "United States",
+  "emoji": "🎨",
+  "color": "#8a4a2a",
+  "cefr": "B2",
+  "words": 362,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-indigenous-peoples-games",
+  "title": "The Indigenous People's Games",
+  "titleKo": "세계 원주민 경기 대회",
+  "country": "Brazil",
+  "emoji": "🏹",
+  "color": "#7a4a2a",
+  "cefr": "B2",
+  "words": 372,
+  "places": [
+   "Brazil",
+   "Canada"
   ]
  },
  {
