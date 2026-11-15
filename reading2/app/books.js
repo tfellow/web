@@ -280,6 +280,157 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "animal-defense",
+  "title": "Animal Defense",
+  "titleKo": "동물의 방어법",
+  "emoji": "🦔",
+  "color": "#6a4a2a",
+  "cefr": "A2",
+  "words": 150,
+  "places": []
+ },
+ {
+  "id": "botos-in-the-amazon-river",
+  "title": "Botos in the Amazon River",
+  "titleKo": "아마존강의 보토",
+  "country": "Brazil",
+  "emoji": "🐬",
+  "color": "#a3435a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "building-a-volcano",
+  "title": "Building a Volcano",
+  "titleKo": "화산 만들기",
+  "country": "South Korea",
+  "emoji": "🌋",
+  "color": "#8a3b2a",
+  "cefr": "A2",
+  "words": 168,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "disappearing-honeybees",
+  "title": "Disappearing Honeybees",
+  "titleKo": "사라지는 꿀벌",
+  "country": "South Korea",
+  "emoji": "🐝",
+  "color": "#8a6a1a",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "emperor-penguins",
+  "title": "Emperor Penguins",
+  "titleKo": "황제펭귄",
+  "country": "South Korea",
+  "emoji": "🐧",
+  "color": "#2a3a5a",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "gliding-dinosaur",
+  "title": "Gliding Dinosaur",
+  "titleKo": "활공하는 공룡",
+  "country": "China",
+  "emoji": "🦖",
+  "color": "#4a6a2a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "hiccups",
+  "title": "Hiccups",
+  "titleKo": "딸꾹질",
+  "emoji": "😮",
+  "color": "#6a3a7a",
+  "cefr": "A2",
+  "words": 159,
+  "places": []
+ },
+ {
+  "id": "how-dolphins-sleep",
+  "title": "How Dolphins Sleep",
+  "titleKo": "돌고래는 어떻게 잘까요?",
+  "emoji": "💤",
+  "color": "#1f4f7a",
+  "cefr": "A2",
+  "words": 159,
+  "places": []
+ },
+ {
+  "id": "left-handedness",
+  "title": "Left-Handedness",
+  "titleKo": "왼손잡이",
+  "emoji": "✋",
+  "color": "#4a4a7a",
+  "cefr": "A2",
+  "words": 170,
+  "places": []
+ },
+ {
+  "id": "lets-save-manatees",
+  "title": "Let's Save Manatees!",
+  "titleKo": "매너티를 구해요!",
+  "country": "United States",
+  "emoji": "🦭",
+  "color": "#2a5a7a",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "preparing-for-a-hurricane",
+  "title": "Preparing for a Hurricane",
+  "titleKo": "허리케인에 대비하기",
+  "country": "South Korea",
+  "emoji": "🌀",
+  "color": "#2a4a6a",
+  "cefr": "A2",
+  "words": 165,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "simple-machines",
+  "title": "Simple Machines",
+  "titleKo": "단순 기계",
+  "emoji": "⚙️",
+  "color": "#5a5a4a",
+  "cefr": "A2",
+  "words": 161,
+  "places": []
+ },
+ {
+  "id": "talking-birds",
+  "title": "Talking Birds",
+  "titleKo": "말하는 새",
+  "emoji": "🦜",
+  "color": "#2f7a5b",
+  "cefr": "A2",
+  "words": 160,
+  "places": []
+ },
+ {
   "id": "the-water-cycle",
   "title": "The Water Cycle",
   "titleKo": "물의 순환",
@@ -287,6 +438,56 @@ window.BOOKS = [
   "color": "#2f8a6b",
   "cefr": "A2",
   "words": 154,
+  "places": []
+ },
+ {
+  "id": "understanding-the-heart",
+  "title": "Understanding the Heart",
+  "titleKo": "심장 이해하기",
+  "emoji": "❤️",
+  "color": "#a3333a",
+  "cefr": "A2",
+  "words": 159,
+  "places": []
+ },
+ {
+  "id": "water-pollution",
+  "title": "Water Pollution",
+  "titleKo": "수질 오염",
+  "emoji": "🚱",
+  "color": "#1f5f8b",
+  "cefr": "A2",
+  "words": 159,
+  "places": []
+ },
+ {
+  "id": "what-is-global-warming",
+  "title": "What Is Global Warming?",
+  "titleKo": "지구 온난화란 무엇일까요?",
+  "emoji": "🌡️",
+  "color": "#9a4a1f",
+  "cefr": "A2",
+  "words": 153,
+  "places": []
+ },
+ {
+  "id": "what-is-metamorphosis",
+  "title": "What Is Metamorphosis?",
+  "titleKo": "탈바꿈이란 무엇일까요?",
+  "emoji": "🐛",
+  "color": "#4a6a2a",
+  "cefr": "A2",
+  "words": 158,
+  "places": []
+ },
+ {
+  "id": "why-is-the-sky-blue-a2",
+  "title": "Why Is the Sky Blue?",
+  "titleKo": "하늘은 왜 파랄까요?",
+  "emoji": "🌤️",
+  "color": "#2a5a8a",
+  "cefr": "A2",
+  "words": 168,
   "places": []
  },
  {
@@ -300,6 +501,138 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "the-eye-of-jupiter",
+  "title": "The 'Eye' of Jupiter",
+  "titleKo": "목성의 '눈'",
+  "emoji": "🪐",
+  "color": "#8a4a2a",
+  "cefr": "A2",
+  "words": 166,
+  "places": []
+ },
+ {
+  "id": "the-first-man-on-the-moon",
+  "title": "The First Man on the Moon",
+  "titleKo": "달에 간 최초의 사람",
+  "country": "United States",
+  "emoji": "🌕",
+  "color": "#2c3470",
+  "cefr": "A2",
+  "words": 156,
+  "places": [
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "ancient-rome",
+  "title": "Ancient Rome",
+  "titleKo": "고대 로마",
+  "country": "Italy",
+  "emoji": "🏛️",
+  "color": "#7a2a2a",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "early-travelers-to-america",
+  "title": "Early Travelers to America",
+  "titleKo": "아메리카에 온 초기 여행자들",
+  "country": "Canada",
+  "emoji": "🛶",
+  "color": "#2a4a6a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "Canada",
+   "Spain"
+  ]
+ },
+ {
+  "id": "easter-island",
+  "title": "Easter Island",
+  "titleKo": "이스터섬",
+  "country": "Chile",
+  "emoji": "🗿",
+  "color": "#5a5a4a",
+  "cefr": "A2",
+  "words": 166,
+  "places": [
+   "Chile"
+  ]
+ },
+ {
+  "id": "machu-picchu",
+  "title": "Machu Picchu",
+  "titleKo": "마추픽추",
+  "country": "Peru",
+  "emoji": "⛰️",
+  "color": "#3a5a3a",
+  "cefr": "A2",
+  "words": 170,
+  "places": [
+   "Peru"
+  ]
+ },
+ {
+  "id": "the-ancient-olympics",
+  "title": "The Ancient Olympics",
+  "titleKo": "고대 올림픽",
+  "country": "Greece",
+  "emoji": "🏃",
+  "color": "#7a5a1a",
+  "cefr": "A2",
+  "words": 158,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-beginning-of-the-alphabet",
+  "title": "The Beginning of the Alphabet",
+  "titleKo": "알파벳의 시작",
+  "country": "Egypt",
+  "emoji": "🔤",
+  "color": "#5a3a2a",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "Egypt",
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-california-gold-rush",
+  "title": "The California Gold Rush",
+  "titleKo": "캘리포니아 골드러시",
+  "country": "United States",
+  "emoji": "⛏️",
+  "color": "#8a6a1a",
+  "cefr": "A2",
+  "words": 159,
+  "places": [
+   "United States",
+   "China"
+  ]
+ },
+ {
+  "id": "the-gift-of-the-nile",
+  "title": "The Gift of the Nile",
+  "titleKo": "나일강의 선물",
+  "country": "Egypt",
+  "emoji": "🏺",
+  "color": "#8a6a1a",
+  "cefr": "A2",
+  "words": 165,
+  "places": [
+   "Egypt",
+   "Greece"
+  ]
+ },
+ {
   "id": "the-titanic",
   "title": "The Titanic",
   "titleKo": "타이태닉호",
@@ -311,6 +644,49 @@ window.BOOKS = [
   "places": [
    "United Kingdom",
    "United States"
+  ]
+ },
+ {
+  "id": "boxing-day",
+  "title": "Boxing Day",
+  "titleKo": "박싱 데이",
+  "country": "United Kingdom",
+  "emoji": "🎁",
+  "color": "#3a5a3a",
+  "cefr": "A2",
+  "words": 158,
+  "places": [
+   "United Kingdom",
+   "Canada",
+   "Australia",
+   "New Zealand"
+  ]
+ },
+ {
+  "id": "la-tomatina",
+  "title": "La Tomatina",
+  "titleKo": "라 토마티나",
+  "country": "Spain",
+  "emoji": "🍅",
+  "color": "#a3332a",
+  "cefr": "A2",
+  "words": 162,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "new-years-eve-in-times-square",
+  "title": "New Year's Eve in Times Square",
+  "titleKo": "타임스스퀘어의 새해 전야",
+  "country": "United States",
+  "emoji": "🎆",
+  "color": "#2a2a5a",
+  "cefr": "A2",
+  "words": 152,
+  "places": [
+   "United States",
+   "South Korea"
   ]
  },
  {
@@ -341,6 +717,46 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-croissant",
+  "title": "The Croissant",
+  "titleKo": "크루아상",
+  "country": "France",
+  "emoji": "🥐",
+  "color": "#a3631f",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "France",
+   "Austria",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-history-of-pizza",
+  "title": "The History of Pizza",
+  "titleKo": "피자의 역사",
+  "country": "Italy",
+  "emoji": "🍕",
+  "color": "#c9722f",
+  "cefr": "A2",
+  "words": 150,
+  "places": [
+   "Italy",
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-secret-of-dark-chocolate",
+  "title": "The Secret of Dark Chocolate",
+  "titleKo": "다크 초콜릿의 비밀",
+  "emoji": "🍫",
+  "color": "#5a3a22",
+  "cefr": "A2",
+  "words": 156,
+  "places": []
+ },
+ {
   "id": "the-story-of-chocolate",
   "title": "The Story of Chocolate",
   "titleKo": "초콜릿 이야기",
@@ -353,6 +769,34 @@ window.BOOKS = [
    "Mexico",
    "Spain",
    "Switzerland"
+  ]
+ },
+ {
+  "id": "shinkansen",
+  "title": "Shinkansen",
+  "titleKo": "신칸센",
+  "country": "Japan",
+  "emoji": "🚅",
+  "color": "#3a4a5a",
+  "cefr": "A2",
+  "words": 168,
+  "places": [
+   "Japan",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "text-messaging",
+  "title": "Text Messaging",
+  "titleKo": "문자 메시지",
+  "country": "United Kingdom",
+  "emoji": "💬",
+  "color": "#2a4a6a",
+  "cefr": "A2",
+  "words": 159,
+  "places": [
+   "United Kingdom",
+   "Japan"
   ]
  },
  {
@@ -371,6 +815,46 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-wright-brothers",
+  "title": "The Wright Brothers",
+  "titleKo": "라이트 형제",
+  "country": "United States",
+  "emoji": "✈️",
+  "color": "#2a4a7a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "americas-first-female-doctor",
+  "title": "America's First Female Doctor",
+  "titleKo": "미국 최초의 여성 의사",
+  "country": "United States",
+  "emoji": "🩺",
+  "color": "#3a5a6a",
+  "cefr": "A2",
+  "words": 152,
+  "places": [
+   "United States",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "jackie-robinson",
+  "title": "Jackie Robinson",
+  "titleKo": "재키 로빈슨",
+  "country": "United States",
+  "emoji": "⚾",
+  "color": "#2a3a6a",
+  "cefr": "A2",
+  "words": 153,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "marie-curie",
   "title": "Marie Curie",
   "titleKo": "마리 퀴리",
@@ -381,6 +865,158 @@ window.BOOKS = [
   "words": 151,
   "places": [
    "Poland",
+   "France"
+  ]
+ },
+ {
+  "id": "mozart-and-beethoven",
+  "title": "Mozart and Beethoven",
+  "titleKo": "모차르트와 베토벤",
+  "country": "Austria",
+  "emoji": "🎹",
+  "color": "#3a3a4a",
+  "cefr": "A2",
+  "words": 163,
+  "places": [
+   "Austria",
+   "Germany"
+  ]
+ },
+ {
+  "id": "picasso",
+  "title": "Picasso",
+  "titleKo": "피카소",
+  "country": "Spain",
+  "emoji": "🎨",
+  "color": "#6a3a6a",
+  "cefr": "A2",
+  "words": 158,
+  "places": [
+   "Spain"
+  ]
+ },
+ {
+  "id": "dragons-east-and-west",
+  "title": "Dragons: East and West",
+  "titleKo": "동양과 서양의 용",
+  "country": "China",
+  "emoji": "🐉",
+  "color": "#7a2a2a",
+  "cefr": "A2",
+  "words": 165,
+  "places": [
+   "China",
+   "South Korea",
+   "Japan"
+  ]
+ },
+ {
+  "id": "loki-the-trickster",
+  "title": "Loki the Trickster",
+  "titleKo": "장난꾸러기 신 로키",
+  "country": "Norway",
+  "emoji": "🦊",
+  "color": "#4a3a5a",
+  "cefr": "A2",
+  "words": 157,
+  "places": [
+   "Norway",
+   "Sweden",
+   "Denmark"
+  ]
+ },
+ {
+  "id": "lucky-charms",
+  "title": "Lucky Charms",
+  "titleKo": "행운의 부적",
+  "country": "Ireland",
+  "emoji": "🍀",
+  "color": "#2a6a3a",
+  "cefr": "A2",
+  "words": 163,
+  "places": [
+   "Ireland",
+   "Japan",
+   "Turkey",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "prometheus-brings-fire",
+  "title": "Prometheus Brings Fire",
+  "titleKo": "불을 가져온 프로메테우스",
+  "country": "Greece",
+  "emoji": "🔥",
+  "color": "#a3431f",
+  "cefr": "A2",
+  "words": 157,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "taekwondo-belts-and-uniforms",
+  "title": "Taekwondo Belts and Uniforms",
+  "titleKo": "태권도 띠와 도복",
+  "country": "South Korea",
+  "emoji": "🥋",
+  "color": "#3a3a3a",
+  "cefr": "A2",
+  "words": 168,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-changgo",
+  "title": "The Changgo",
+  "titleKo": "장구",
+  "country": "South Korea",
+  "emoji": "🥁",
+  "color": "#8a3a2a",
+  "cefr": "A2",
+  "words": 166,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-eiffel-tower",
+  "title": "The Eiffel Tower",
+  "titleKo": "에펠탑",
+  "country": "France",
+  "emoji": "🗼",
+  "color": "#5a4a3a",
+  "cefr": "A2",
+  "words": 162,
+  "places": [
+   "France"
+  ]
+ },
+ {
+  "id": "the-korean-tea-ceremony",
+  "title": "The Korean Tea Ceremony",
+  "titleKo": "한국의 다도",
+  "country": "South Korea",
+  "emoji": "🍵",
+  "color": "#4a6a3a",
+  "cefr": "A2",
+  "words": 163,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-mona-lisa",
+  "title": "The Mona Lisa",
+  "titleKo": "모나리자",
+  "country": "Italy",
+  "emoji": "🖼️",
+  "color": "#6a4a2a",
+  "cefr": "A2",
+  "words": 167,
+  "places": [
+   "Italy",
    "France"
   ]
  },
@@ -400,6 +1036,60 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-pueblo",
+  "title": "The Pueblo",
+  "titleKo": "푸에블로",
+  "country": "United States",
+  "emoji": "🏜️",
+  "color": "#8a5a2a",
+  "cefr": "A2",
+  "words": 159,
+  "places": [
+   "United States",
+   "Mexico",
+   "Spain"
+  ]
+ },
+ {
+  "id": "the-taj-mahal",
+  "title": "The Taj Mahal",
+  "titleKo": "타지마할",
+  "country": "India",
+  "emoji": "🕌",
+  "color": "#7a6a5a",
+  "cefr": "A2",
+  "words": 164,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "the-vegetable-orchestra",
+  "title": "The Vegetable Orchestra",
+  "titleKo": "채소 오케스트라",
+  "country": "Austria",
+  "emoji": "🥕",
+  "color": "#a3531f",
+  "cefr": "A2",
+  "words": 152,
+  "places": [
+   "Austria"
+  ]
+ },
+ {
+  "id": "animal-doctors",
+  "title": "Animal Doctors",
+  "titleKo": "동물 의사",
+  "country": "South Korea",
+  "emoji": "🐾",
+  "color": "#2a6a5a",
+  "cefr": "A2",
+  "words": 164,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "saving-energy-at-home",
   "title": "Be an Energy Hero",
   "titleKo": "에너지 지킴이가 되어요",
@@ -408,6 +1098,19 @@ window.BOOKS = [
   "cefr": "A2",
   "words": 156,
   "places": []
+ },
+ {
+  "id": "the-garbage-problem",
+  "title": "The Garbage Problem",
+  "titleKo": "쓰레기 문제",
+  "country": "South Korea",
+  "emoji": "🗑️",
+  "color": "#4a5a3a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "South Korea"
+  ]
  },
  {
   "id": "antarctica",
