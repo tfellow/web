@@ -88,7 +88,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     items = []
     for f in sorted(src.glob("*.json")):
-        d = json.loads(f.read_text())
+        d = json.loads(f.read_text(encoding="utf-8-sig"))
         check(d, f.name)
         items.append(d)
     ids = [d["id"] for d in items]
