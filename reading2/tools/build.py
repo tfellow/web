@@ -33,6 +33,16 @@ def check(d, f):
     for i, q in enumerate(d["quiz"], 1):
         if len(q["choices"]) != 4 or q["answer"] not in q["choices"] or len(set(q["choices"])) != 4:
             raise SystemExit(f"{f}: {i}번 문항 보기 4개/정답 확인")
+    # 정답이 오답보다 눈에 띄게 길면 안 돼요 (가장 긴 오답의 1.3배까지)
+    longest = 0
+    for i, q in enumerate(d["quiz"], 1):
+        others = [len(c) for c in q["choices"] if c != q["answer"]]
+        if len(q["answer"]) > 1.3 * max(others):
+            raise SystemExit(f"{f}: {i}번 문항 정답이 오답보다 너무 길어요 → {q['answer']}")
+        if len(q["answer"]) > max(others) + 2:
+            longest += 1
+    if longest > 4:
+        raise SystemExit(f"{f}: 정답이 가장 긴 보기인 문항이 {longest}개예요 (4개 이하로 맞춰 주세요)")
     for p in d["story"]:
         if not p.get("en") or not p.get("ko"):
             raise SystemExit(f"{f}: 본문 단락에 en/ko 가 모두 있어야 해요")
@@ -54,10 +64,18 @@ def seed_sql(quiz):
                    " on conflict (id) do update set title = excluded.title, cefr = excluded.cefr, word_count = excluded.word_count, places = excluded.places;")
         out.append(f"delete from public.r2_quiz_questions where book_id = {sq(bid)};")
         rnd = random.Random(bid)
+        # 정답 위치를 1~4번에 고르게(3·3·2·2) 나눠요
+        n = len(q["questions"])
+        extra = [1, 2, 3, 4]
+        rnd.shuffle(extra)
+        slots = [k for k in range(4)] * (n // 4) + [extra[k] - 1 for k in range(n % 4)]
+        rnd.shuffle(slots)
         rows = []
         for i, item in enumerate(q["questions"], 1):
-            ch = list(item["choices"])
-            rnd.shuffle(ch)
+            wrong = [c for c in item["choices"] if c != item["answer"]]
+            rnd.shuffle(wrong)
+            ch = wrong[:]
+            ch.insert(slots[i - 1], item["answer"])
             rows.append(f"({sq(bid)}, {i}, {sq(item['q'])}, {sq(json.dumps(ch, ensure_ascii=False))}::jsonb, {ch.index(item['answer']) + 1})")
         out.append("insert into public.r2_quiz_questions (book_id, no, question, choices, answer) values\n  " + ",\n  ".join(rows) + ";")
     out.append("commit;")
