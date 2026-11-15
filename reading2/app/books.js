@@ -328,6 +328,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "kimchi-food-and-sharing",
+  "title": "Kimchi: Food and Sharing",
+  "titleKo": "김치: 음식과 나눔",
+  "country": "South Korea",
+  "emoji": "🥬",
+  "color": "#A83232",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "the-story-of-chocolate",
   "title": "The Story of Chocolate",
   "titleKo": "초콜릿 이야기",
@@ -413,6 +426,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "how-volcanoes-work",
+  "title": "How Volcanoes Work",
+  "titleKo": "화산의 원리",
+  "country": "South Korea",
+  "emoji": "🌋",
+  "color": "#B71C1C",
+  "cefr": "B1",
+  "words": 207,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "why-is-the-sky-blue",
   "title": "Why Is the Sky Blue?",
   "titleKo": "하늘은 왜 파랄까?",
@@ -440,6 +466,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "eiffel-tower",
+  "title": "The Eiffel Tower",
+  "titleKo": "에펠탑",
+  "country": "France",
+  "emoji": "🗼",
+  "color": "#3E2723",
+  "cefr": "B1",
+  "words": 199,
+  "places": [
+   "France",
+   "South Korea"
+  ]
+ },
+ {
   "id": "the-silk-road",
   "title": "The Silk Road",
   "titleKo": "실크로드",
@@ -453,6 +493,19 @@ window.BOOKS = [
    "Iran",
    "Turkey",
    "Italy"
+  ]
+ },
+ {
+  "id": "chuseok-korean-harvest-festival",
+  "title": "Chuseok: Korea's Harvest Festival",
+  "titleKo": "추석: 한국의 수확 명절",
+  "country": "South Korea",
+  "emoji": "🌕",
+  "color": "#1A237E",
+  "cefr": "B1",
+  "words": 209,
+  "places": [
+   "South Korea"
   ]
  },
  {
