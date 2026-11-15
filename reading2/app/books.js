@@ -134,6 +134,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "strange-jobs",
+  "title": "Strange Jobs",
+  "titleKo": "특이한 직업",
+  "emoji": "🧑‍🔧",
+  "color": "#5a4a3a",
+  "cefr": "A1",
+  "words": 127,
+  "places": []
+ },
+ {
   "id": "the-seven-continents",
   "title": "The Seven Continents",
   "titleKo": "일곱 대륙",
@@ -150,6 +160,68 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "a-world-of-colors",
+  "title": "A World of Colors",
+  "titleKo": "색깔의 세계",
+  "country": "South Korea",
+  "emoji": "🎨",
+  "color": "#6a3a6a",
+  "cefr": "A1",
+  "words": 124,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "earthquakes-and-volcanoes",
+  "title": "Earthquakes and Volcanoes",
+  "titleKo": "지진과 화산",
+  "country": "South Korea",
+  "emoji": "🌋",
+  "color": "#8a3b2a",
+  "cefr": "A1",
+  "words": 126,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "endangered-animals",
+  "title": "Endangered Animals",
+  "titleKo": "멸종 위기 동물",
+  "country": "South Korea",
+  "emoji": "🐯",
+  "color": "#a3531f",
+  "cefr": "A1",
+  "words": 132,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "falling-rain",
+  "title": "Falling Rain",
+  "titleKo": "떨어지는 비",
+  "country": "South Korea",
+  "emoji": "🌧️",
+  "color": "#1f5f8b",
+  "cefr": "A1",
+  "words": 131,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "how-much-can-an-ant-carry",
+  "title": "How Much Can an Ant Carry?",
+  "titleKo": "개미는 얼마나 많이 옮길 수 있을까요?",
+  "emoji": "🐜",
+  "color": "#6a4a2a",
+  "cefr": "A1",
+  "words": 128,
+  "places": []
+ },
+ {
   "id": "how-plants-grow",
   "title": "How Plants Grow",
   "titleKo": "식물은 어떻게 자랄까",
@@ -157,6 +229,120 @@ window.BOOKS = [
   "color": "#2f8a6b",
   "cefr": "A1",
   "words": 106,
+  "places": []
+ },
+ {
+  "id": "magnets",
+  "title": "Magnets",
+  "titleKo": "자석",
+  "emoji": "🧲",
+  "color": "#7a2a2a",
+  "cefr": "A1",
+  "words": 129,
+  "places": []
+ },
+ {
+  "id": "plants-in-the-desert",
+  "title": "Plants in the Desert",
+  "titleKo": "사막의 식물",
+  "emoji": "🌵",
+  "color": "#5a6a2a",
+  "cefr": "A1",
+  "words": 134,
+  "places": []
+ },
+ {
+  "id": "the-amazon-rainforest",
+  "title": "The Amazon Rainforest",
+  "titleKo": "아마존 열대 우림",
+  "country": "Brazil",
+  "emoji": "🌴",
+  "color": "#2f6b3a",
+  "cefr": "A1",
+  "words": 129,
+  "places": [
+   "Brazil"
+  ]
+ },
+ {
+  "id": "the-biggest-and-smallest-dinosaurs",
+  "title": "The Biggest and Smallest Dinosaurs",
+  "titleKo": "가장 큰 공룡과 가장 작은 공룡",
+  "country": "Argentina",
+  "emoji": "🦕",
+  "color": "#4a6a2a",
+  "cefr": "A1",
+  "words": 132,
+  "places": [
+   "Argentina",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-five-senses",
+  "title": "The Five Senses",
+  "titleKo": "다섯 가지 감각",
+  "emoji": "👃",
+  "color": "#6a3a5a",
+  "cefr": "A1",
+  "words": 130,
+  "places": []
+ },
+ {
+  "id": "the-hottest-and-coldest-weather",
+  "title": "The Hottest and Coldest Weather",
+  "titleKo": "가장 더운 날씨와 가장 추운 날씨",
+  "country": "United States",
+  "emoji": "🌡️",
+  "color": "#9a4a1f",
+  "cefr": "A1",
+  "words": 131,
+  "places": [
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-hungry-blue-whale",
+  "title": "The Hungry Blue Whale",
+  "titleKo": "배고픈 대왕고래",
+  "emoji": "🐋",
+  "color": "#1f4f7a",
+  "cefr": "A1",
+  "words": 133,
+  "places": []
+ },
+ {
+  "id": "the-life-cycle-of-a-frog",
+  "title": "The Life Cycle of a Frog",
+  "titleKo": "개구리의 한살이",
+  "country": "South Korea",
+  "emoji": "🐸",
+  "color": "#3a6a2a",
+  "cefr": "A1",
+  "words": 133,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-world-of-penguins",
+  "title": "The World of Penguins",
+  "titleKo": "펭귄의 세계",
+  "emoji": "🐧",
+  "color": "#2a3a5a",
+  "cefr": "A1",
+  "words": 128,
+  "places": []
+ },
+ {
+  "id": "yawning",
+  "title": "Yawning",
+  "titleKo": "하품",
+  "emoji": "🥱",
+  "color": "#4a3a7a",
+  "cefr": "A1",
+  "words": 116,
   "places": []
  },
  {
@@ -170,6 +356,42 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "what-is-the-solar-system",
+  "title": "What Is the Solar System?",
+  "titleKo": "태양계란 무엇일까요?",
+  "emoji": "🪐",
+  "color": "#2c3470",
+  "cefr": "A1",
+  "words": 131,
+  "places": []
+ },
+ {
+  "id": "why-does-the-moon-seem-to-change",
+  "title": "Why Does the Moon Seem to Change?",
+  "titleKo": "달은 왜 모양이 바뀌는 것처럼 보일까요?",
+  "country": "South Korea",
+  "emoji": "🌙",
+  "color": "#2a2f5e",
+  "cefr": "A1",
+  "words": 127,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "mummies",
+  "title": "Mummies",
+  "titleKo": "미라",
+  "country": "Egypt",
+  "emoji": "⚱️",
+  "color": "#8a6a1a",
+  "cefr": "A1",
+  "words": 124,
+  "places": [
+   "Egypt"
+  ]
+ },
+ {
   "id": "the-great-wall-of-china",
   "title": "The Great Wall of China",
   "titleKo": "중국의 만리장성",
@@ -180,6 +402,46 @@ window.BOOKS = [
   "words": 120,
   "places": [
    "China"
+  ]
+ },
+ {
+  "id": "the-leaning-tower-of-pisa",
+  "title": "The Leaning Tower of Pisa",
+  "titleKo": "피사의 사탑",
+  "country": "Italy",
+  "emoji": "🗼",
+  "color": "#6a5a3a",
+  "cefr": "A1",
+  "words": 135,
+  "places": [
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-origin-of-numbers",
+  "title": "The Origin of Numbers",
+  "titleKo": "숫자의 기원",
+  "country": "India",
+  "emoji": "🔢",
+  "color": "#5a3a2a",
+  "cefr": "A1",
+  "words": 130,
+  "places": [
+   "India"
+  ]
+ },
+ {
+  "id": "columbus-day",
+  "title": "Columbus Day",
+  "titleKo": "콜럼버스의 날",
+  "country": "Spain",
+  "emoji": "⛵",
+  "color": "#2a4a6a",
+  "cefr": "A1",
+  "words": 131,
+  "places": [
+   "Spain",
+   "United States"
   ]
  },
  {
@@ -198,6 +460,77 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "happy-new-year",
+  "title": "Happy New Year!",
+  "titleKo": "새해 복 많이 받으세요!",
+  "country": "Spain",
+  "emoji": "🎆",
+  "color": "#2a2a5a",
+  "cefr": "A1",
+  "words": 119,
+  "places": [
+   "Spain",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "presidents-day",
+  "title": "Presidents' Day",
+  "titleKo": "대통령의 날",
+  "country": "United States",
+  "emoji": "🎩",
+  "color": "#3a3a4a",
+  "cefr": "A1",
+  "words": 127,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "thanksgiving-a1",
+  "title": "Thanksgiving",
+  "titleKo": "추수 감사절",
+  "country": "United States",
+  "emoji": "🦃",
+  "color": "#8a4a1f",
+  "cefr": "A1",
+  "words": 130,
+  "places": [
+   "United States",
+   "United Kingdom",
+   "Canada",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "valentines-day",
+  "title": "Valentine's Day",
+  "titleKo": "밸런타인데이",
+  "country": "United States",
+  "emoji": "💝",
+  "color": "#a3334a",
+  "cefr": "A1",
+  "words": 122,
+  "places": [
+   "United States",
+   "South Korea",
+   "Japan"
+  ]
+ },
+ {
+  "id": "bubble-gum",
+  "title": "Bubble Gum",
+  "titleKo": "풍선껌",
+  "country": "United States",
+  "emoji": "🫧",
+  "color": "#a3336a",
+  "cefr": "A1",
+  "words": 133,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "kimchi",
   "title": "The Story of Kimchi",
   "titleKo": "김치 이야기",
@@ -209,6 +542,61 @@ window.BOOKS = [
   "places": [
    "South Korea",
    "Mexico"
+  ]
+ },
+ {
+  "id": "the-story-of-ice-cream",
+  "title": "The Story of Ice Cream",
+  "titleKo": "아이스크림 이야기",
+  "country": "China",
+  "emoji": "🍦",
+  "color": "#a3435a",
+  "cefr": "A1",
+  "words": 127,
+  "places": [
+   "China",
+   "United States"
+  ]
+ },
+ {
+  "id": "cool-cellphones",
+  "title": "Cool Cellphones",
+  "titleKo": "멋진 휴대폰",
+  "country": "United States",
+  "emoji": "📱",
+  "color": "#2a3a5a",
+  "cefr": "A1",
+  "words": 114,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "early-traffic-lights",
+  "title": "Early Traffic Lights",
+  "titleKo": "초기의 신호등",
+  "country": "United Kingdom",
+  "emoji": "🚦",
+  "color": "#3a5a3a",
+  "cefr": "A1",
+  "words": 128,
+  "places": [
+   "United Kingdom",
+   "United States"
+  ]
+ },
+ {
+  "id": "how-transportation-has-changed",
+  "title": "How Transportation Has Changed",
+  "titleKo": "교통수단은 어떻게 바뀌었을까요?",
+  "country": "Germany",
+  "emoji": "🚂",
+  "color": "#3a4a5a",
+  "cefr": "A1",
+  "words": 126,
+  "places": [
+   "Germany",
+   "United States"
   ]
  },
  {
@@ -240,6 +628,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "martin-luther-king-jr-a1",
+  "title": "Martin Luther King, Jr.",
+  "titleKo": "마틴 루서 킹 주니어",
+  "country": "United States",
+  "emoji": "✊",
+  "color": "#5a2a4a",
+  "cefr": "A1",
+  "words": 125,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "cherry-blossoms-in-japan",
   "title": "Cherry Blossoms in Japan",
   "titleKo": "일본의 벚꽃",
@@ -255,6 +656,127 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "kyoto",
+  "title": "Kyoto",
+  "titleKo": "교토",
+  "country": "Japan",
+  "emoji": "⛩️",
+  "color": "#a3333a",
+  "cefr": "A1",
+  "words": 124,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "olympic-sports",
+  "title": "Olympic Sports",
+  "titleKo": "올림픽 종목",
+  "country": "Greece",
+  "emoji": "🏅",
+  "color": "#7a5a1a",
+  "cefr": "A1",
+  "words": 129,
+  "places": [
+   "Greece",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "realistic-and-abstract-art",
+  "title": "Realistic and Abstract Art",
+  "titleKo": "사실적인 미술과 추상 미술",
+  "country": "South Korea",
+  "emoji": "🖼️",
+  "color": "#3a5a7a",
+  "cefr": "A1",
+  "words": 128,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "seoul",
+  "title": "Seoul",
+  "titleKo": "서울",
+  "country": "South Korea",
+  "emoji": "🏯",
+  "color": "#3a4a6a",
+  "cefr": "A1",
+  "words": 125,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "tepees",
+  "title": "Tepees",
+  "titleKo": "티피",
+  "country": "United States",
+  "emoji": "⛺",
+  "color": "#7a4a2a",
+  "cefr": "A1",
+  "words": 127,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "the-orchestra",
+  "title": "The Orchestra",
+  "titleKo": "오케스트라",
+  "emoji": "🎻",
+  "color": "#7a3a2a",
+  "cefr": "A1",
+  "words": 118,
+  "places": []
+ },
+ {
+  "id": "the-world-cup",
+  "title": "The World Cup",
+  "titleKo": "월드컵",
+  "country": "Uruguay",
+  "emoji": "⚽",
+  "color": "#2a5a3a",
+  "cefr": "A1",
+  "words": 128,
+  "places": [
+   "Uruguay",
+   "Brazil",
+   "South Korea",
+   "Japan"
+  ]
+ },
+ {
+  "id": "unlucky-numbers",
+  "title": "Unlucky Numbers",
+  "titleKo": "불길한 숫자",
+  "country": "South Korea",
+  "emoji": "🔢",
+  "color": "#4a4a6a",
+  "cefr": "A1",
+  "words": 126,
+  "places": [
+   "South Korea",
+   "China",
+   "Japan"
+  ]
+ },
+ {
+  "id": "what-are-myths",
+  "title": "What Are Myths?",
+  "titleKo": "신화란 무엇일까요?",
+  "country": "Greece",
+  "emoji": "📜",
+  "color": "#3a4a8a",
+  "cefr": "A1",
+  "words": 131,
+  "places": [
+   "Greece",
+   "South Korea"
+  ]
+ },
+ {
   "id": "a-healthy-plate",
   "title": "A Healthy Plate",
   "titleKo": "건강한 한 접시",
@@ -262,6 +784,16 @@ window.BOOKS = [
   "color": "#4f8a3c",
   "cefr": "A1",
   "words": 117,
+  "places": []
+ },
+ {
+  "id": "protecting-the-earth",
+  "title": "Protecting the Earth",
+  "titleKo": "지구 지키기",
+  "emoji": "🌍",
+  "color": "#2f7a5b",
+  "cefr": "A1",
+  "words": 126,
   "places": []
  },
  {
