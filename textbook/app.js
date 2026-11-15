@@ -20,6 +20,33 @@ case 'quiz':return d.questions.map(q=>({...slide(q.q,'이해 확인',['정답',(
 case 'verbs':return d.irregulars.map(v=>slide(v[0],'동사 변화',['과거형',v[1]],['과거분사',v[2]],['뜻',v[3]]));
 case 'studio':return [slide(d.studio.titleKo,'표현 활동',['생각 열기',d.studio.questionKo],['핵심 질문',join(d.studio.questionEn)],['문장 틀',join(d.studio.frames)],['표현 예시',d.studio.placeholder])];default:return []}}
 function fit(){const f=$('.frame'),c=$('.canvas');if(f&&c){const s=Math.min((f.clientWidth-4)/c.offsetWidth,(f.clientHeight-4)/c.offsetHeight);c.style.transform='translateX(-50%) scale('+s+')'}}
+let showReadingBreaks = localStorage.getItem('textbook.readingBreaks') === 'on';
+
+function readingBreakControl(activity) {
+  if (activity !== 'reading') return '';
+  return '<button id="reading-breaks" aria-label="끊어 읽기" aria-pressed="' + showReadingBreaks +
+    '">끊어 읽기 ' + (showReadingBreaks ? '켬' : '끔') + '</button> ';
+}
+
+function promptText(slide) {
+  if (state.k !== 'reading' || !showReadingBreaks) return E(slide.en);
+  const sentence = cache[state.g + '-' + state.n].sentences[state.i - 1];
+  const phrases = (sentence.chunk || sentence.en).split(/\s+\/\s+/);
+  if (phrases.length === 1) return E(slide.en);
+  return phrases.map(E).join('<span class="reading-break" aria-hidden="true"> /</span> ');
+}
+
+function bindReadingBreakControl() {
+  const button = $('#reading-breaks');
+  if (!button) return;
+  button.onclick = () => {
+    showReadingBreaks = !showReadingBreaks;
+    localStorage.setItem('textbook.readingBreaks', showReadingBreaks ? 'on' : 'off');
+    show();
+    $('#reading-breaks').focus({preventScroll: true});
+  };
+}
+
 function answerCards(items) {
   const cards = items.map(([label, value], index) => {
     const text = E(join(value));
@@ -42,7 +69,7 @@ function advance() {
   $('#next').focus({preventScroll: true});
 }
 
-function show(){const {g,n,k,i,rows}=state,s=rows[i-1];app.innerHTML='<section class="stage"><div class="bar"><a href="'+link(g,n)+'">← '+g+'학년 '+n+'과 · 활동 목록</a><div><select aria-label="수업 활동" id="part">'+Object.entries(sections).filter(([id])=>deck(cache[g+'-'+n],id).length).map(([id,[name]])=>'<option value="'+id+'" '+(id===k?'selected':'')+'>'+name+'</option>').join('')+'</select> <select id="page" aria-label="페이지 이동">'+rows.map((_,j)=>'<option '+(j===i-1?'selected':'')+' value="'+(j+1)+'">'+(j+1)+' / '+rows.length+'</option>').join('')+'</select></div></div><div class="frame"><article class="canvas"><div class="kicker">'+E(sections[k][1])+' &nbsp; / &nbsp; '+pad(i)+' &nbsp; · &nbsp; '+E(s.tag)+'</div><h1>'+E(s.en)+'</h1>'+(s.options?'<div>'+s.options.map((o,j)=>'<p class="option">'+(j+1)+'. '+E(o)+'</p>').join('')+'</div>':'')+answerCards(s.items)+'</article></div><div class="progress"><i style="width:'+100*i/rows.length+'%"></i></div><nav><div class="navleft"><button id="prev" '+(i===1?'disabled':'')+'>← 이전</button><button id="next">'+(revealed&&i===rows.length?'활동 마치기':'다음 →')+'</button></div><small>Space · → 공개 / 다음　← 이전　F 전체 화면</small><button class="primary" id="reveal" aria-pressed="'+revealed+'">'+(revealed?'설명 가리기':'모두 공개')+'</button></nav></section>';$('#reveal').onclick=()=>{revealed=!revealed;show();$('#reveal').focus({preventScroll:true})};$('#prev').onclick=()=>step(-1);$('#next').onclick=advance;$('#page').onchange=e=>location.hash=link(g,n,k,+e.target.value);$('#part').onchange=e=>location.hash=link(g,n,e.target.value,1);fit()}
+function show(){const {g,n,k,i,rows}=state,s=rows[i-1];app.innerHTML='<section class="stage"><div class="bar"><a href="'+link(g,n)+'">← '+g+'학년 '+n+'과 · 활동 목록</a><div>'+readingBreakControl(k)+'<select aria-label="수업 활동" id="part">'+Object.entries(sections).filter(([id])=>deck(cache[g+'-'+n],id).length).map(([id,[name]])=>'<option value="'+id+'" '+(id===k?'selected':'')+'>'+name+'</option>').join('')+'</select> <select id="page" aria-label="페이지 이동">'+rows.map((_,j)=>'<option '+(j===i-1?'selected':'')+' value="'+(j+1)+'">'+(j+1)+' / '+rows.length+'</option>').join('')+'</select></div></div><div class="frame"><article class="canvas"><div class="kicker">'+E(sections[k][1])+' &nbsp; / &nbsp; '+pad(i)+' &nbsp; · &nbsp; '+E(s.tag)+'</div><h1>'+promptText(s)+'</h1>'+(s.options?'<div>'+s.options.map((o,j)=>'<p class="option">'+(j+1)+'. '+E(o)+'</p>').join('')+'</div>':'')+answerCards(s.items)+'</article></div><div class="progress"><i style="width:'+100*i/rows.length+'%"></i></div><nav><div class="navleft"><button id="prev" '+(i===1?'disabled':'')+'>← 이전</button><button id="next">'+(revealed&&i===rows.length?'활동 마치기':'다음 →')+'</button></div><small>Space · → 공개 / 다음　← 이전　F 전체 화면</small><button class="primary" id="reveal" aria-pressed="'+revealed+'">'+(revealed?'설명 가리기':'모두 공개')+'</button></nav></section>';$('#reveal').onclick=()=>{revealed=!revealed;show();$('#reveal').focus({preventScroll:true})};bindReadingBreakControl();$('#prev').onclick=()=>step(-1);$('#next').onclick=advance;$('#page').onchange=e=>location.hash=link(g,n,k,+e.target.value);$('#part').onchange=e=>location.hash=link(g,n,e.target.value,1);fit()}
 function step(dir){const {g,n,k,i,rows}=state;if(i+dir<1)return;location.hash=i+dir>rows.length?link(g,n):link(g,n,k,i+dir)}
 async function route(){let hash=location.hash,[g,n,k,pos]=hash.replace(/^#\/?/,'').split('/');g=Number(g);n=Number(n);if(!catalog[g]?.length)g=1;state=null;revealed=false;if(!catalog[g].some(l=>l.number===n)){home(g);return}try{const d=await load(g,n);if(hash!==location.hash)return;if(!Object.hasOwn(sections,k)){unit(g,n,d);return}const rows=deck(d,k);if(!rows.length){unit(g,n,d);return}const i=Math.min(rows.length,Math.max(1,parseInt(pos)||1));state={g,n,k,i,rows};localStorage.setItem('textbook.last',link(g,n,k,i));show()}catch(err){console.error(err);app.innerHTML='<div class="wrap panel">단원을 열지 못했습니다. <a href="#">단원 서가로 돌아가기</a></div>'}}
 $('#theme').value=document.documentElement.dataset.theme;$('#theme').onchange=e=>{document.documentElement.dataset.theme=e.target.value;localStorage.setItem('textbook.theme',e.target.value)};$('#full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{alert('브라우저에서 F11을 눌러 전체 화면으로 전환하세요.')}};document.onfullscreenchange=()=>{$('#full').textContent=document.fullscreenElement?'전체 화면 종료':'전체 화면';fit()};window.onresize=fit;window.onhashchange=route;document.onkeydown=e=>{if(!state||e.ctrlKey||e.altKey||e.metaKey||e.target.matches('select,input,textarea'))return;const k=e.key;if(![' ','ArrowRight','ArrowLeft','ArrowDown','ArrowUp','PageDown','PageUp','f','F','Escape'].includes(k))return;if(k===' '&&e.target.matches('button')&&e.target.id!=='reveal')return;e.preventDefault();if(k==='f'||k==='F')$('#full').click();else if(k==='Escape'){if(!document.fullscreenElement)location.hash=link(state.g,state.n)}else if(['ArrowLeft','ArrowUp','PageUp'].includes(k))step(-1);else if(!e.repeat)advance()};route();

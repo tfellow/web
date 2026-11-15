@@ -9,3 +9,6 @@
   width: min(78%, 16em);
   border-bottom: 2px dashed var(--mut);
 }
+
+.reading-break { opacity: .22; font-size: .76em; font-weight: 400; white-space: nowrap; }
+#reading-breaks[aria-pressed="true"] { color: var(--a); background: var(--wash); border-color: var(--a); }
