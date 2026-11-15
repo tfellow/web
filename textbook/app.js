@@ -19,12 +19,14 @@ case 'summary':return [...d.summaries.steps.map(s=>slide(s.en.replace(/\[[^\]]+\
 case 'quiz':return d.questions.map(q=>({...slide(q.q,'이해 확인',['정답',(q.answer+1)+'. '+q.options[q.answer]],['근거',q.why]),options:q.options}));
 case 'verbs':return d.irregulars.map(v=>slide(v[0],'동사 변화',['과거형',v[1]],['과거분사',v[2]],['뜻',v[3]]));
 case 'studio':return [slide(d.studio.titleKo,'표현 활동',['생각 열기',d.studio.questionKo],['핵심 질문',join(d.studio.questionEn)],['문장 틀',join(d.studio.frames)],['표현 예시',d.studio.placeholder])];default:return []}}
-function fit(){const f=$('.frame'),c=$('.canvas');if(f&&c){const s=Math.min((f.clientWidth-4)/c.offsetWidth,(f.clientHeight-4)/c.offsetHeight);c.style.transform='translate(-50%,-50%) scale('+s+')'}}
+function fit(){const f=$('.frame'),c=$('.canvas');if(f&&c){const s=Math.min((f.clientWidth-4)/c.offsetWidth,(f.clientHeight-4)/c.offsetHeight);c.style.transform='translateX(-50%) scale('+s+')'}}
 function answerCards(items) {
   const cards = items.map(([label, value], index) => {
+    const text = E(join(value));
     const answer = revealed
-      ? E(join(value))
-      : '<span class="answer-blank" role="img" aria-label="빈칸"></span>';
+      ? '<div class="answer-body">' + text + '</div>'
+      : '<div class="answer-body"><span class="reserved-answer" aria-hidden="true">' + text +
+        '</span><span class="answer-blank" role="img" aria-label="빈칸"></span></div>';
     return '<div class="answer"><em>' + pad(index + 1) + ' &nbsp; ' + E(label) + '</em>' + answer + '</div>';
   });
   return '<div class="answers">' + cards.join('') + '</div>';
