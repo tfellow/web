@@ -92,6 +92,7 @@ const DEMO_ENABLED = false;
 const DEMO = DEMO_ENABLED && new URLSearchParams(location.search).has("demo");
 const APPS = [
   { id: "passport", name: "독서 여권", icon: "📖", url: "../app/" },
+  { id: "knowledge", name: "지식 여권", icon: "🔭", url: "../reading2/app/" },
   { id: "grammar", name: "문법", icon: "✏️", url: "../grammar/" },
   { id: "quiz", name: "Quiz Queens", icon: "👑", url: "../quiz/" },
   { id: "brainup", name: "Brain Up", icon: "🧠", url: "../brainup/" },
@@ -179,6 +180,7 @@ function show(d, email, updated) {
   const p = A.passport, g = A.grammar, q = A.quiz, v = A.vocab, c = A.cloze, w = A.writing, k = A.kahoot;
   const cards = [
     appCard("passport", p ? `🏅 ${p.medals}권` : "", [p && `금메달 ${p.gold}권 · 퀴즈 ${p.tries}번`]),
+    appCard("knowledge", A.knowledge ? `🏅 ${A.knowledge.medals}편` : "", [A.knowledge && `금메달 ${A.knowledge.gold}편 · 퀴즈 ${A.knowledge.tries}번`]),
     appCard("grammar", g ? `XP ${g.xp}` : "", [g && `단원 스탬프 ${g.stamps}개`, g && g.streak ? `🔥 연속 ${g.streak}일` : ""]),
     appCard("quiz", q ? `XP ${q.xp}` : "", [q && `레벨 ${q.level} · ${q.answered}문제`, q && q.acc != null ? `정답률 ${q.acc}%` : ""]),
     appCard("brainup", A.brainup ? `${A.brainup.pts}점` : "", [A.brainup && `${A.brainup.n}문제 · 정답률 ${A.brainup.acc}%`, A.brainup && A.brainup.enN ? `영어 문제 ${A.brainup.en}/${A.brainup.enN} 맞힘` : "", A.brainup && A.brainup.d10 ? `오늘의 10문제 완주 ${A.brainup.d10}번` : "", A.brainup && A.brainup.tiers != null ? `${A.brainup.queen ? ["", "🥉 브론즈 퀸", "🥈 실버 퀸", "🥇 골드 퀸", "👑 그랜드 브레인 퀸"][A.brainup.queen] + " · " : ""}배지 단계 ${A.brainup.tiers}/32` : ""]),

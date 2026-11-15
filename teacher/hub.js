@@ -27,6 +27,7 @@ const HUB_PATH = "class123_plus/hub_rewards"; // 보상 규칙·지급 기록 (C
 
 const APPS = [
   { id: "passport", name: "독서 여권", icon: "📖", src: "sb", url: "../app/" },
+  { id: "knowledge", name: "지식 여권", icon: "🔭", src: "sb", url: "../reading2/app/" },
   { id: "grammar", name: "문법", icon: "✏️", src: "sb", url: "../grammar/" },
   { id: "quiz", name: "Quiz Queens", icon: "👑", src: "sb", url: "../quiz/", cumulative: true },
   { id: "brainup", name: "Brain Up", icon: "🧠", src: "sb", url: "../brainup/" },
@@ -40,7 +41,7 @@ const APPS = [
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 문법 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 문법 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
   fc: { name: "Firebase (Cloze)", desc: "단어숲 · Cloze · 영작문" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
@@ -49,6 +50,8 @@ const SOURCES = {
 const METRICS = {
   passport_medal: { app: "passport", name: "독서 여권 메달 받은 책", unit: "권" },
   passport_gold: { app: "passport", name: "독서 여권 금메달 받은 책", unit: "권" },
+  knowledge_medal: { app: "knowledge", name: "지식 여권 메달 받은 글", unit: "편" },
+  knowledge_gold: { app: "knowledge", name: "지식 여권 금메달 받은 글", unit: "편" },
   grammar_stamp: { app: "grammar", name: "문법 단원 스탬프", unit: "개" },
   vocab_test: { app: "vocab", name: "단어숲 단원 테스트", unit: "회", min: 90, minUnit: "% 이상" },
   cloze_test: { app: "cloze", name: "Cloze 테스트", unit: "회", min: 100, minUnit: "% 이상" },
@@ -72,6 +75,7 @@ const DEFAULT_RULES = [
   { metric: "writing_submit", min: 0, every: 3, give: 1, label: "영작문 3편 제출" },
   { metric: "kahoot_top3", every: 1, give: 1, label: "Kahoot 3등 안" },
   { metric: "kahoot_hw", min: 80, every: 3, give: 1, label: "Kahoot 과제 80점 3회" },
+  { metric: "knowledge_medal", every: 5, give: 1, label: "지식 여권 메달 5편" },
 ];
 
 // 로그인 없는 체험 모드(?demo=1). 지금은 꺼 둠 — 다시 켜려면 true 로
@@ -232,7 +236,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "grammar", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "grammar", "quiz", "brainup", "speaking", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -249,6 +253,13 @@ async function sbLoad() {
     const rows = await sbAll(() => c.rpc("admin_attempts"));
     rows.forEach(a => addEvent({ e: a.email, a: "passport", t: toMs(a.attempt_at), k: "quiz", title: titles[a.book_id] || a.book_id, s: a.score, n: a.total, p: pct(a.score, a.total), medal: a.medal, book: a.book_id }));
   } catch (e) { warn("독서 여권", e); }
+
+  try { // 지식 여권(reading2) 퀴즈 기록
+    const titles = {};
+    try { const b = await c.from("r2_books").select("id,title").range(0, 4999); (b.data || []).forEach(x => titles[x.id] = x.title); } catch {}
+    const rows = await sbAll(() => c.rpc("r2_admin_attempts"));
+    rows.forEach(a => addEvent({ e: a.email, a: "knowledge", t: toMs(a.attempt_at), k: "quiz", title: titles[a.book_id] || a.book_id, s: a.score, n: a.total, p: pct(a.score, a.total), medal: a.medal, book: a.book_id }));
+  } catch (e) { warn("지식 여권", e); }
 
   try { // MY Grammar
     const players = await sbAll(() => c.from("mg_players").select("id,email,real_name,grade,class_no,student_no,xp,streak,best_streak,last_at"));
@@ -572,6 +583,7 @@ function aggregate(range = periodRange()) {
     if (ev.t > x.last) x.last = ev.t;
     if (ev.t > (x.lastApp[ev.a] || 0)) x.lastApp[ev.a] = ev.t;
     if (ev.a === "passport" && isMedal(ev.medal)) (x.allMedals ||= new Set()).add(ev.book);
+    if (ev.a === "knowledge" && isMedal(ev.medal)) (x.allMedalsK ||= new Set()).add(ev.book);
     if (!inP(ev.t)) continue;
     const s = slot(x, ev.a);
     s.n++; if (ev.p != null) s.ps.push(ev.p); s.items.push(ev);
@@ -611,10 +623,10 @@ function cell(id, email, x) {
   const s = x?.apps[id], on = isActive(x, id);
   const none = { main: -1, html: "—", csv: "", on: false };
   switch (id) {
-    case "passport": {
+    case "passport": case "knowledge": {
       const medals = new Set((s?.items || []).filter(e => isMedal(e.medal)).map(e => e.book)).size;
       const gold = new Set((s?.items || []).filter(e => e.medal === "gold").map(e => e.book)).size;
-      const all = x?.allMedals?.size || 0;
+      const all = (id === "knowledge" ? x?.allMedalsK : x?.allMedals)?.size || 0;
       if (!s && !all) return none;
       return { main: medals, on, html: `<span class="m">🏅${medals}</span><span class="sub">${s ? s.n + "회" : "0회"}${gold ? " · 금" + gold : ""} · 누적 ${all}</span>`, csv: `메달 ${medals} / 시도 ${s?.n || 0} / 누적 ${all}` };
     }
@@ -696,9 +708,9 @@ function ruleCount(rule, email) {
   const since = rule.since ? kstart(rule.since) : 0, min = num(rule.min);
   const evs = evsOf(email);
   switch (rule.metric) {
-    case "passport_medal": case "passport_gold": {
-      const first = new Map();
-      evs.forEach(e => { if (e.a !== "passport") return; if (rule.metric === "passport_gold" ? e.medal !== "gold" : !isMedal(e.medal)) return; if (!first.has(e.book) || e.t < first.get(e.book)) first.set(e.book, e.t); });
+    case "passport_medal": case "passport_gold": case "knowledge_medal": case "knowledge_gold": {
+      const first = new Map(), app = METRICS[rule.metric].app, goldOnly = rule.metric.endsWith("_gold");
+      evs.forEach(e => { if (e.a !== app) return; if (goldOnly ? e.medal !== "gold" : !isMedal(e.medal)) return; if (!first.has(e.book) || e.t < first.get(e.book)) first.set(e.book, e.t); });
       return [...first.values()].filter(t => t >= since).length;
     }
     case "grammar_stamp": return evs.filter(e => e.a === "grammar" && e.k === "stamp" && e.t >= since).length;
@@ -806,6 +818,8 @@ function studentSummary(p, Mall, Mweek) {
   const last = id => x?.lastApp[id] || 0;
   const pass = items("passport");
   if (pass.length) apps.passport = { tries: pass.length, medals: new Set(pass.filter(e => isMedal(e.medal)).map(e => e.book)).size, gold: new Set(pass.filter(e => e.medal === "gold").map(e => e.book)).size, last: last("passport") };
+  const kn = items("knowledge");
+  if (kn.length) apps.knowledge = { tries: kn.length, medals: new Set(kn.filter(e => isMedal(e.medal)).map(e => e.book)).size, gold: new Set(kn.filter(e => e.medal === "gold").map(e => e.book)).size, last: last("knowledge") };
   const g = state.snap.grammar.get(p.email); if (g) apps.grammar = { xp: g.xp, stamps: g.stamps, streak: g.streak, last: last("grammar") };
   const q = state.snap.quiz.get(p.email); if (q) apps.quiz = { xp: q.xp, level: q.level, answered: q.answered, acc: q.acc, last: q.last };
   const v = state.snap.vocab.get(p.email), vt = items("vocab");
@@ -895,7 +909,7 @@ function renderConn() {
   box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "grammar", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "grammar", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -1024,7 +1038,7 @@ function viewIdle(people, M) {
 const lvTxt = l => (l.cefr === "A0" ? "Pre-A1" : l.cefr || "") + (l.sub ? " " + l.sub : "");
 const lexTxt = x => x == null ? "" : (x < 0 ? "BR" + Math.abs(x) : x) + "L";
 function evValue(ev) {
-  if (ev.a === "passport") return (isMedal(ev.medal) ? { gold: "🥇", silver: "🥈", bronze: "🥉" }[ev.medal] + " " : "") + `${ev.s}/${ev.n}`;
+  if (ev.a === "passport" || ev.a === "knowledge") return (isMedal(ev.medal) ? { gold: "🥇", silver: "🥈", bronze: "🥉" }[ev.medal] + " " : "") + `${ev.s}/${ev.n}`;
   if (ev.k === "stamp") return "🏷️ 스탬프";
   if (ev.a === "speaking") return `🎤 ${ev.s}점`;
   if (ev.a === "brainup") return `🧠 ${ev.s}/${ev.n} · +${ev.pts}점`;
