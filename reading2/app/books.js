@@ -500,6 +500,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "lightning-and-thunder",
+  "title": "Lightning and Thunder",
+  "titleKo": "번개와 천둥",
+  "emoji": "⚡",
+  "color": "#2a3a6a",
+  "cefr": "A1",
+  "words": 130,
+  "places": []
+ },
+ {
   "id": "magnets",
   "title": "Magnets",
   "titleKo": "자석",
@@ -642,6 +652,19 @@ window.BOOKS = [
   "color": "#2a2f5e",
   "cefr": "A1",
   "words": 127,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "cheomseongdae",
+  "title": "Cheomseongdae",
+  "titleKo": "첨성대",
+  "country": "South Korea",
+  "emoji": "🔭",
+  "color": "#5a4a2a",
+  "cefr": "A1",
+  "words": 134,
   "places": [
    "South Korea"
   ]
@@ -924,6 +947,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "hanok-koreas-traditional-house",
+  "title": "Hanok: Korea's Traditional House",
+  "titleKo": "한옥: 한국의 전통 집",
+  "country": "South Korea",
+  "emoji": "🏠",
+  "color": "#6a4a2a",
+  "cefr": "A1",
+  "words": 120,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "kyoto",
   "title": "Kyoto",
   "titleKo": "교토",
@@ -1080,6 +1116,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "why-do-we-use-money",
+  "title": "Why Do We Use Money?",
+  "titleKo": "우리는 왜 돈을 쓸까요?",
+  "country": "China",
+  "emoji": "🪙",
+  "color": "#8a6a1a",
+  "cefr": "A2",
+  "words": 152,
+  "places": [
+   "China",
+   "South Korea"
+  ]
+ },
+ {
   "id": "animal-defense",
   "title": "Animal Defense",
   "titleKo": "동물의 방어법",
@@ -1113,6 +1163,19 @@ window.BOOKS = [
   "words": 168,
   "places": [
    "South Korea"
+  ]
+ },
+ {
+  "id": "coral-reefs-in-danger",
+  "title": "Coral Reefs in Danger",
+  "titleKo": "위험에 처한 산호초",
+  "country": "Australia",
+  "emoji": "🪸",
+  "color": "#1f5f8b",
+  "cefr": "A2",
+  "words": 150,
+  "places": [
+   "Australia"
   ]
  },
  {
@@ -1172,6 +1235,16 @@ window.BOOKS = [
   "color": "#1f4f7a",
   "cefr": "A2",
   "words": 159,
+  "places": []
+ },
+ {
+  "id": "how-plants-make-food-photosynthesis",
+  "title": "How Plants Make Food: Photosynthesis",
+  "titleKo": "식물은 어떻게 양분을 만들까요: 광합성",
+  "emoji": "🌿",
+  "color": "#2f6b3a",
+  "cefr": "A2",
+  "words": 158,
   "places": []
  },
  {
@@ -1291,6 +1364,35 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "korea-goes-to-the-moon-danuri",
+  "title": "Korea Goes to the Moon: Danuri",
+  "titleKo": "한국, 달에 가다: 다누리",
+  "country": "South Korea",
+  "emoji": "🌕",
+  "color": "#2a2f5e",
+  "cefr": "A2",
+  "words": 156,
+  "places": [
+   "South Korea",
+   "United States"
+  ]
+ },
+ {
+  "id": "life-on-the-space-station",
+  "title": "Life on the Space Station",
+  "titleKo": "우주 정거장에서의 생활",
+  "country": "United States",
+  "emoji": "🛰️",
+  "color": "#2c3470",
+  "cefr": "A2",
+  "words": 159,
+  "places": [
+   "United States",
+   "Russia",
+   "South Korea"
+  ]
+ },
+ {
   "id": "our-solar-system",
   "title": "Our Solar System",
   "titleKo": "우리 태양계",
@@ -1321,6 +1423,19 @@ window.BOOKS = [
   "words": 156,
   "places": [
    "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "admiral-yi-sun-sin-and-the-turtle-ship",
+  "title": "Admiral Yi Sun-sin and the Turtle Ship",
+  "titleKo": "이순신 장군과 거북선",
+  "country": "South Korea",
+  "emoji": "🐢",
+  "color": "#7a2a2a",
+  "cefr": "A2",
+  "words": 149,
+  "places": [
    "South Korea"
   ]
  },
@@ -1572,6 +1687,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "four-great-inventions-of-ancient-china",
+  "title": "Four Great Inventions of Ancient China",
+  "titleKo": "고대 중국의 4대 발명품",
+  "country": "China",
+  "emoji": "🧭",
+  "color": "#8a3b2a",
+  "cefr": "A2",
+  "words": 154,
+  "places": [
+   "China",
+   "South Korea"
+  ]
+ },
+ {
   "id": "shinkansen",
   "title": "Shinkansen",
   "titleKo": "신칸센",
@@ -1642,6 +1771,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "florence-nightingale",
+  "title": "Florence Nightingale",
+  "titleKo": "플로렌스 나이팅게일",
+  "country": "United Kingdom",
+  "emoji": "🏮",
+  "color": "#6a3a5a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "United Kingdom",
+   "Italy"
+  ]
+ },
+ {
   "id": "jackie-robinson",
   "title": "Jackie Robinson",
   "titleKo": "재키 로빈슨",
@@ -1652,6 +1795,20 @@ window.BOOKS = [
   "words": 153,
   "places": [
    "United States"
+  ]
+ },
+ {
+  "id": "louis-braille",
+  "title": "Louis Braille",
+  "titleKo": "루이 브라유",
+  "country": "France",
+  "emoji": "👆",
+  "color": "#3a4a6a",
+  "cefr": "A2",
+  "words": 160,
+  "places": [
+   "France",
+   "South Korea"
   ]
  },
  {
@@ -1708,6 +1865,19 @@ window.BOOKS = [
    "China",
    "South Korea",
    "Japan"
+  ]
+ },
+ {
+  "id": "kimjang-making-kimchi-together",
+  "title": "Kimjang: Making Kimchi Together",
+  "titleKo": "김장: 함께 김치 담그기",
+  "country": "South Korea",
+  "emoji": "🥬",
+  "color": "#a3332a",
+  "cefr": "A2",
+  "words": 152,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -1836,6 +2006,21 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-paralympic-games",
+  "title": "The Paralympic Games",
+  "titleKo": "패럴림픽",
+  "country": "United Kingdom",
+  "emoji": "♿",
+  "color": "#2a5a7a",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "United Kingdom",
+   "Italy",
+   "South Korea"
+  ]
+ },
+ {
   "id": "the-pueblo",
   "title": "The Pueblo",
   "titleKo": "푸에블로",
@@ -1900,6 +2085,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "staying-safe-online",
+  "title": "Staying Safe Online",
+  "titleKo": "온라인에서 안전하게 지내기",
+  "emoji": "🔒",
+  "color": "#2a4a5a",
+  "cefr": "A2",
+  "words": 156,
+  "places": []
+ },
+ {
   "id": "the-garbage-problem",
   "title": "The Garbage Problem",
   "titleKo": "쓰레기 문제",
@@ -1952,6 +2147,20 @@ window.BOOKS = [
   "words": 253,
   "places": [
    "United Kingdom"
+  ]
+ },
+ {
+  "id": "alexander-fleming-and-penicillin",
+  "title": "Alexander Fleming and Penicillin",
+  "titleKo": "알렉산더 플레밍과 페니실린",
+  "country": "United Kingdom",
+  "emoji": "💊",
+  "color": "#2a6a5a",
+  "cefr": "B1",
+  "words": 227,
+  "places": [
+   "United Kingdom",
+   "United States"
   ]
  },
  {
@@ -2014,6 +2223,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "how-bats-see-with-sound",
+  "title": "How Bats See with Sound",
+  "titleKo": "박쥐는 소리로 어떻게 볼까요",
+  "emoji": "🦇",
+  "color": "#3a3a5a",
+  "cefr": "B1",
+  "words": 231,
+  "places": []
+ },
+ {
   "id": "how-tsunamis-are-made",
   "title": "How Tsunamis Are Made",
   "titleKo": "쓰나미는 어떻게 만들어질까요?",
@@ -2048,6 +2267,19 @@ window.BOOKS = [
   "cefr": "B1",
   "words": 226,
   "places": []
+ },
+ {
+  "id": "microplastics",
+  "title": "Microplastics",
+  "titleKo": "미세 플라스틱",
+  "country": "South Korea",
+  "emoji": "🧴",
+  "color": "#1f4f7a",
+  "cefr": "B1",
+  "words": 240,
+  "places": [
+   "South Korea"
+  ]
  },
  {
   "id": "muscles-in-our-body",
@@ -2136,6 +2368,16 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "your-amazing-brain",
+  "title": "Your Amazing Brain",
+  "titleKo": "놀라운 우리의 뇌",
+  "emoji": "🧠",
+  "color": "#8a2a4a",
+  "cefr": "B1",
+  "words": 223,
+  "places": []
+ },
+ {
   "id": "body-changes-in-space",
   "title": "Body Changes in Space",
   "titleKo": "우주에서의 몸의 변화",
@@ -2194,6 +2436,21 @@ window.BOOKS = [
   "places": [
    "France",
    "South Korea"
+  ]
+ },
+ {
+  "id": "jikji-the-oldest-metal-type-book",
+  "title": "Jikji: The Oldest Metal Type Book",
+  "titleKo": "직지: 가장 오래된 금속 활자본",
+  "country": "South Korea",
+  "emoji": "📜",
+  "color": "#6a4a2a",
+  "cefr": "B1",
+  "words": 227,
+  "places": [
+   "South Korea",
+   "France",
+   "Germany"
   ]
  },
  {
@@ -2453,6 +2710,21 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "design-for-everyone-universal-design",
+  "title": "Design for Everyone: Universal Design",
+  "titleKo": "모두를 위한 디자인: 유니버설 디자인",
+  "country": "United States",
+  "emoji": "🚪",
+  "color": "#2a5a6a",
+  "cefr": "B1",
+  "words": 237,
+  "places": [
+   "United States",
+   "Japan",
+   "South Korea"
+  ]
+ },
+ {
   "id": "edisons-invention-factory",
   "title": "Edison's Invention Factory",
   "titleKo": "에디슨의 발명 공장",
@@ -2549,6 +2821,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "malala-yousafzai",
+  "title": "Malala Yousafzai",
+  "titleKo": "말랄라 유사프자이",
+  "country": "Pakistan",
+  "emoji": "📚",
+  "color": "#7a2a5a",
+  "cefr": "B1",
+  "words": 217,
+  "places": [
+   "Pakistan",
+   "United Kingdom"
+  ]
+ },
+ {
   "id": "marie-curie-b1",
   "title": "Marie Curie",
   "titleKo": "마리 퀴리",
@@ -2586,6 +2872,19 @@ window.BOOKS = [
   "words": 236,
   "places": [
    "United States",
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "stephen-hawking",
+  "title": "Stephen Hawking",
+  "titleKo": "스티븐 호킹",
+  "country": "United Kingdom",
+  "emoji": "🌌",
+  "color": "#2a2f5e",
+  "cefr": "B1",
+  "words": 223,
+  "places": [
    "United Kingdom"
   ]
  },
@@ -2715,6 +3014,22 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "sign-languages-around-the-world",
+  "title": "Sign Languages Around the World",
+  "titleKo": "세계의 수어",
+  "country": "United States",
+  "emoji": "🤟",
+  "color": "#4a3a7a",
+  "cefr": "B1",
+  "words": 223,
+  "places": [
+   "United States",
+   "United Kingdom",
+   "France",
+   "South Korea"
+  ]
+ },
+ {
   "id": "superstitions-in-various-cultures",
   "title": "Superstitions in Various Cultures",
   "titleKo": "여러 문화의 미신",
@@ -2781,6 +3096,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "stop-cyberbullying",
+  "title": "Stop Cyberbullying",
+  "titleKo": "사이버 폭력을 멈춰요",
+  "country": "South Korea",
+  "emoji": "🛡️",
+  "color": "#5a2a4a",
+  "cefr": "B1",
+  "words": 237,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "crop-circles",
   "title": "Crop Circles",
   "titleKo": "미스터리 서클",
@@ -2833,6 +3161,20 @@ window.BOOKS = [
   "cefr": "B2",
   "words": 377,
   "places": []
+ },
+ {
+  "id": "dna-the-code-of-life",
+  "title": "DNA: The Code of Life",
+  "titleKo": "DNA: 생명의 암호",
+  "country": "United Kingdom",
+  "emoji": "🧬",
+  "color": "#2a4a6a",
+  "cefr": "B2",
+  "words": 377,
+  "places": [
+   "United Kingdom",
+   "South Korea"
+  ]
  },
  {
   "id": "do-animals-dream",
@@ -3140,6 +3482,20 @@ window.BOOKS = [
    "Germany",
    "Russia",
    "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-industrial-revolution",
+  "title": "The Industrial Revolution",
+  "titleKo": "산업 혁명",
+  "country": "United Kingdom",
+  "emoji": "🏭",
+  "color": "#4a3a2a",
+  "cefr": "B2",
+  "words": 368,
+  "places": [
+   "United Kingdom",
    "South Korea"
   ]
  },
