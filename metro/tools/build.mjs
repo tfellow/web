@@ -1,5 +1,6 @@
 // MY Reading Metro · 데이터 빌드
-// 사용법: node metro/tools/build.mjs <출력 폴더> [퀴즈 폴더]
+// 사용법: node metro/tools/build.mjs <출력 폴더> [퀴즈 폴더] [원본 폴더]
+//   원본 폴더(비공개): 교과서 본문 <역 id>.s.json(문장·해설) + <역 id>.q.json(줄거리·퀴즈)
 //   퀴즈 폴더(비공개)의 *.json: { "m1-01": [{ q, o: [정답, 오답, 오답, 오답], why, ids }] } — 정답을 맨 앞에 써요.
 //   빌드할 때 정답 위치가 1·2·3·4로 고르게 섞이고, 문항 수·선택지 수·정답 길이를 검사해요.
 //   - 저장소에 쓰는 것: metro/catalog.js (노선도·분석 수치만, 본문 없음)
@@ -15,6 +16,7 @@ const ROOT = path.resolve(HERE, "..", "..");
 const SRC = path.join(ROOT, "textbook", "data");
 const OUT = process.argv[2];
 const QUIZ_DIR = process.argv[3];
+const SRC_DIR = process.argv[4];
 if (!OUT) { console.error("출력 폴더를 지정하세요: node metro/tools/build.mjs <출력 폴더>"); process.exit(1); }
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -23,7 +25,9 @@ const LINES = [
   { id: "m1", school: "중", grade: 1, publisher: "YBM", author: "박준언", course: "중학교 영어 1", color: "#2FA84F", status: "open" },
   { id: "m2", school: "중", grade: 2, publisher: "YBM", author: "박준언", course: "중학교 영어 2", color: "#2563C9", status: "open" },
   { id: "m3", school: "중", grade: 3, publisher: "YBM", author: "박준언", course: "중학교 영어 3", color: "#E07A1F", status: "planned", note: "2027년 3월 개통 예정 (2022 개정 중3 교과서 적용 연도)" },
-  { id: "h1", school: "고", grade: 1, publisher: "", author: "", course: "공통영어 1·2", color: "#8B3FC1", status: "planned", note: "본문을 받으면 개통해요" }
+  // 아래 노선은 비공개 원본 폴더(<srcDir>/<역 id>.s.json, .q.json)에 본문이 있을 때만 열려요
+  { id: "n1", label: "공1", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 1", color: "#8B3FC1", status: "src" },
+  { id: "n2", label: "공2", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 2", color: "#D23F7A", status: "src" }
 ];
 
 /* ---------- CEFR 단어 목록 (CEFR-J Wordlist 1.5 + Octanove C1/C2) ---------- */
@@ -210,23 +214,19 @@ const preview = { units: {}, quiz: {} }; // 화면 미리보기용 (비공개 �
 const q = (v) => (v == null ? "null" : "'" + String(v).replace(/'/g, "''") + "'");
 const j = (v) => q(JSON.stringify(v)) + "::jsonb";
 
-for (const f of files) {
-  const { grade, unit, data } = loadLesson(path.join(SRC, f));
-  const line = catalog.lines.find((l) => l.school === "중" && l.grade === grade);
-  if (!line) continue;
-  const id = line.id + "-" + String(unit).padStart(2, "0");
+function emit(line, id, unit, data, quizList, extra) {
   const stats = analyse(data);
   const vocab = vocabOf(data);
   const m = data.meta;
-  const quiz = QUIZ[id] ? arrangeQuiz(id, QUIZ[id]) : (data.questions || []).map((qq, i) => ({ no: i + 1, question: qq.q, choices: qq.options, answer: qq.answer + 1, why: qq.why, ids: qq.ids || [] }));
-  if (QUIZ_DIR && !QUIZ[id]) problems.push(`${id}: 새 퀴즈가 없어요`);
-  line.stations.push({
+  const quiz = quizList ? arrangeQuiz(id, quizList) : (data.questions || []).map((qq, i) => ({ no: i + 1, question: qq.q, choices: qq.options, answer: qq.answer + 1, why: qq.why, ids: qq.ids || [] }));
+  if ((QUIZ_DIR || SRC_DIR) && !quizList) problems.push(`${id}: 새 퀴즈가 없어요`);
+  line.stations.push(Object.assign({
     id, unit, unitTitle: m.unitTitle, readingTitle: m.readingTitle, subtitleKo: m.subtitleKo,
     coreGrammar: m.coreGrammar, pageRange: m.pageRange, vocabCount: vocab.length, quizCount: quiz.length,
     stats: { words: stats.words, titleWords: stats.titleWords, sentences: stats.sentences, msl: stats.msl, cefr: stats.cefr, cefrDist: stats.cefrDist, lexile: stats.lexile, lexileOfficial: null }
-  });
+  }, extra || {}));
   const content = {
-    id, grade, unit, publisher: line.publisher, author: line.author, meta: m, chapters: data.chapters,
+    id, grade: line.grade, unit, publisher: line.publisher, author: line.author, meta: m, chapters: data.chapters,
     sentences: data.sentences.map((s) => ({ id: s.id, chapter: s.chapter, page: s.page, tag: s.tag, en: s.en, chunk: s.chunk, ko: s.ko, vocab: s.vocab, grammar: s.grammar, meaning: s.meaning })),
     overview: data.overview, characters: data.characters, grammarCards: data.grammarCards,
     summaries: data.summaries, summaryWords: data.summaryWords, vocab
@@ -243,6 +243,37 @@ for (const f of files) {
   quizSql.push(...qs);
   console.log(id, m.readingTitle, "| 단어", stats.words, "(제목", stats.titleWords + ") | CEFR", stats.cefr, "| Lexile 추정", stats.lexile + "L | 단어장", vocab.length, "| 목록 외:", stats.offList.join(" "));
 }
+
+for (const f of files) {
+  const { grade, unit, data } = loadLesson(path.join(SRC, f));
+  const line = catalog.lines.find((l) => l.school === "중" && l.grade === grade);
+  if (!line) continue;
+  const id = line.id + "-" + String(unit).padStart(2, "0");
+  emit(line, id, unit, data, QUIZ[id]);
+}
+
+/* ---------- 비공개 원본(새 교과서) ---------- */
+// <id>.s.json: { line, unit, no?, lesson?, meta, overview, chapters: [[이름, 쪽]], s: [[장, 태그, "끊어 / 읽기", 해석, 어휘, 문법, 의미]] }
+// <id>.q.json: { summaries, summaryWords, quiz: [{ q, o: [정답, 오답, 오답, 오답], why, ids }] }
+if (SRC_DIR) {
+  const ids = fs.readdirSync(SRC_DIR).filter((x) => x.endsWith(".s.json")).map((x) => x.slice(0, -7)).sort();
+  for (const id of ids) {
+    const S = JSON.parse(fs.readFileSync(path.join(SRC_DIR, id + ".s.json"), "utf8"));
+    const qf = path.join(SRC_DIR, id + ".q.json");
+    const Q = fs.existsSync(qf) ? JSON.parse(fs.readFileSync(qf, "utf8")) : {};
+    const line = catalog.lines.find((l) => l.id === S.line);
+    if (!line) { problems.push(`${id}: 노선 ${S.line}이 없어요`); continue; }
+    const sentences = S.s.map((r, i) => {
+      const [chapter, tag, chunk, ko, vocab, grammar, meaning] = r;
+      if (r.length !== 7) problems.push(`${id} 문장 ${i + 1}: 칸이 ${r.length}개 (7개여야 해요)`);
+      return { id: i + 1, chapter, page: (S.chapters[chapter - 1] || [])[1] || null, tag, en: chunk.replace(/\s*\/\s*/g, " ").trim(), chunk, ko, vocab, grammar, meaning };
+    });
+    (Q.quiz || []).concat((Q.summaries && Q.summaries.steps) || []).forEach((x) => (x.ids || []).forEach((n) => { if (!sentences[n - 1]) problems.push(`${id}: 없는 문장 번호 ${n}`); }));
+    const data = { meta: S.meta, chapters: S.chapters.map((c) => c[0]), sentences, overview: S.overview, summaries: Q.summaries, summaryWords: Q.summaryWords };
+    emit(line, id, S.unit, data, Q.quiz, S.no ? { no: S.no, lesson: S.lesson } : null);
+  }
+}
+catalog.lines = catalog.lines.filter((l) => l.status !== "src" || l.stations.length).map((l) => (l.status === "src" ? Object.assign(l, { status: "open" }) : l));
 
 if (problems.length) { console.error("퀴즈 검사에서 고칠 곳이 있어요:\n" + problems.join("\n")); process.exit(1); }
 const pos = [0, 0, 0, 0];
