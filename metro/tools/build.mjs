@@ -28,6 +28,8 @@ const LINES = [
   // 아래 노선은 비공개 원본 폴더(<srcDir>/<역 id>.s.json, .q.json)에 본문이 있을 때만 열려요
   { id: "k1", label: "김1", school: "중", grade: 1, publisher: "NE능률", author: "김기택", course: "중학교 영어 1", color: "#C62E2E", status: "src" },
   { id: "k2", label: "김2", school: "중", grade: 2, publisher: "NE능률", author: "김기택", course: "중학교 영어 2", color: "#5B7A1F", status: "src" },
+  { id: "s1", label: "소1", school: "중", grade: 1, publisher: "천재교육", author: "소영순", course: "중학교 영어 1", color: "#D4A017", status: "src" },
+  { id: "s2", label: "소2", school: "중", grade: 2, publisher: "천재교육", author: "소영순", course: "중학교 영어 2", color: "#4A5D8C", status: "src" },
   { id: "n1", label: "민1", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 1", color: "#8B3FC1", status: "src" },
   { id: "n2", label: "민2", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 2", color: "#D23F7A", status: "src" },
   { id: "o1", label: "오1", school: "고", grade: 1, publisher: "NE능률", author: "오", course: "공통영어 1", color: "#0F9D94", status: "src" },
