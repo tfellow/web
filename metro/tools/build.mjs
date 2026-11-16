@@ -26,6 +26,8 @@ const LINES = [
   { id: "m2", school: "중", grade: 2, publisher: "YBM", author: "박준언", course: "중학교 영어 2", color: "#2563C9", status: "open" },
   { id: "m3", school: "중", grade: 3, publisher: "YBM", author: "박준언", course: "중학교 영어 3", color: "#E07A1F", status: "planned", note: "2027년 3월 개통 예정 (2022 개정 중3 교과서 적용 연도)" },
   // 아래 노선은 비공개 원본 폴더(<srcDir>/<역 id>.s.json, .q.json)에 본문이 있을 때만 열려요
+  { id: "k1", label: "김1", school: "중", grade: 1, publisher: "NE능률", author: "김기택", course: "중학교 영어 1", color: "#C62E2E", status: "src" },
+  { id: "k2", label: "김2", school: "중", grade: 2, publisher: "NE능률", author: "김기택", course: "중학교 영어 2", color: "#5B7A1F", status: "src" },
   { id: "n1", label: "민1", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 1", color: "#8B3FC1", status: "src" },
   { id: "n2", label: "민2", school: "고", grade: 1, publisher: "NE능률", author: "민", course: "공통영어 2", color: "#D23F7A", status: "src" },
   { id: "o1", label: "오1", school: "고", grade: 1, publisher: "NE능률", author: "오", course: "공통영어 1", color: "#0F9D94", status: "src" },
