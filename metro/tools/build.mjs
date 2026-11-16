@@ -1,5 +1,7 @@
 // MY Reading Metro · 데이터 빌드
-// 사용법: node metro/tools/build.mjs <출력 폴더>
+// 사용법: node metro/tools/build.mjs <출력 폴더> [퀴즈 폴더]
+//   퀴즈 폴더(비공개)의 *.json: { "m1-01": [{ q, o: [정답, 오답, 오답, 오답], why, ids }] } — 정답을 맨 앞에 써요.
+//   빌드할 때 정답 위치가 1·2·3·4로 고르게 섞이고, 문항 수·선택지 수·정답 길이를 검사해요.
 //   - 저장소에 쓰는 것: metro/catalog.js (노선도·분석 수치만, 본문 없음)
 //   - 출력 폴더에만 쓰는 것(비공개): metro_seed.sql (본문·퀴즈 정답을 Supabase에 등록)
 // 원본: textbook/data/<학년>-<단원>.js (YBM(박) 중1·중2)
@@ -12,6 +14,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const SRC = path.join(ROOT, "textbook", "data");
 const OUT = process.argv[2];
+const QUIZ_DIR = process.argv[3];
 if (!OUT) { console.error("출력 폴더를 지정하세요: node metro/tools/build.mjs <출력 폴더>"); process.exit(1); }
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -163,6 +166,31 @@ function phraseLevel(p) {
   return worst >= 0 ? LV[worst] : "";
 }
 
+/* ---------- 퀴즈 (10문항 4지선다, 정답 위치 고르게) ---------- */
+const QUIZ = {};
+if (QUIZ_DIR) for (const f of fs.readdirSync(QUIZ_DIR).filter((x) => x.endsWith(".json")).sort()) Object.assign(QUIZ, JSON.parse(fs.readFileSync(path.join(QUIZ_DIR, f), "utf8")));
+function rng(seed) { let x = 0; for (const c of seed) x = (x * 31 + c.charCodeAt(0)) >>> 0; return () => { x = (x * 1103515245 + 12345) >>> 0; return x / 4294967296; }; }
+function shuffleR(a, r) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const k = Math.floor(r() * (i + 1)); [a[i], a[k]] = [a[k], a[i]]; } return a; }
+let unitNo = 0;
+const problems = [];
+function arrangeQuiz(id, list) {
+  if (list.length !== 10) problems.push(`${id}: 문항 ${list.length}개 (10개여야 해요)`);
+  const r = rng(id);
+  const base = [0, 0, 0, 1, 1, 1, 2, 2, 3, 3].map((x) => (x + unitNo) % 4); // 단원마다 3·3·2·2를 돌려 전체가 고르게
+  const pos = shuffleR(base.slice(0, list.length), r);
+  unitNo++;
+  return list.map((qq, i) => {
+    const [ans, ...wrong] = qq.o;
+    if (qq.o.length !== 4) problems.push(`${id} ${i + 1}번: 선택지 ${qq.o.length}개`);
+    if (new Set(qq.o).size !== qq.o.length) problems.push(`${id} ${i + 1}번: 같은 선택지`);
+    if (ans.length > Math.max(...wrong.map((w) => w.length))) problems.push(`${id} ${i + 1}번: 정답이 가장 길어요 (${ans})`);
+    if (/sentence \d|last sentence|line \d/i.test(qq.q)) problems.push(`${id} ${i + 1}번: 문장 번호 대신 문장을 보여 주세요`);
+    const opts = shuffleR(wrong, r);
+    opts.splice(pos[i], 0, ans);
+    return { no: i + 1, question: qq.q, choices: opts, answer: pos[i] + 1, why: qq.why, ids: qq.ids || [] };
+  });
+}
+
 /* ---------- 읽기 ---------- */
 function loadLesson(file) {
   let got = null;
@@ -177,6 +205,7 @@ const files = fs.readdirSync(SRC).filter((f) => /^\d-\d+\.js$/.test(f)).sort((a,
 
 const catalog = { lines: LINES.map((l) => Object.assign({}, l, { stations: [] })), built: new Date().toISOString().slice(0, 10) };
 const seed = [];
+const quizSql = [];
 const preview = { units: {}, quiz: {} }; // 화면 미리보기용 (비공개 출력 폴더에만)
 const q = (v) => (v == null ? "null" : "'" + String(v).replace(/'/g, "''") + "'");
 const j = (v) => q(JSON.stringify(v)) + "::jsonb";
@@ -189,9 +218,11 @@ for (const f of files) {
   const stats = analyse(data);
   const vocab = vocabOf(data);
   const m = data.meta;
+  const quiz = QUIZ[id] ? arrangeQuiz(id, QUIZ[id]) : (data.questions || []).map((qq, i) => ({ no: i + 1, question: qq.q, choices: qq.options, answer: qq.answer + 1, why: qq.why, ids: qq.ids || [] }));
+  if (QUIZ_DIR && !QUIZ[id]) problems.push(`${id}: 새 퀴즈가 없어요`);
   line.stations.push({
     id, unit, unitTitle: m.unitTitle, readingTitle: m.readingTitle, subtitleKo: m.subtitleKo,
-    coreGrammar: m.coreGrammar, pageRange: m.pageRange, vocabCount: vocab.length, quizCount: (data.questions || []).length,
+    coreGrammar: m.coreGrammar, pageRange: m.pageRange, vocabCount: vocab.length, quizCount: quiz.length,
     stats: { words: stats.words, titleWords: stats.titleWords, sentences: stats.sentences, msl: stats.msl, cefr: stats.cefr, cefrDist: stats.cefrDist, lexile: stats.lexile, lexileOfficial: null }
   });
   const content = {
@@ -203,17 +234,27 @@ for (const f of files) {
   seed.push(`insert into public.tm_units (id, line_id, unit, title, content, published) values (${q(id)}, ${q(line.id)}, ${unit}, ${q(m.readingTitle)}, ${j(content)}, true)
   on conflict (id) do update set line_id = excluded.line_id, unit = excluded.unit, title = excluded.title, content = excluded.content;`);
   preview.units[id] = content;
-  preview.quiz[id] = (data.questions || []).map((qq, i) => ({ no: i + 1, question: qq.q, choices: qq.options, answer: qq.answer + 1, why: qq.why, ids: qq.ids || [] }));
-  seed.push(`delete from public.tm_quiz where unit_id = ${q(id)};`);
-  (data.questions || []).forEach((qq, i) => {
-    seed.push(`insert into public.tm_quiz (unit_id, no, question, choices, answer, why, ids) values (${q(id)}, ${i + 1}, ${q(qq.q)}, ${j(qq.options)}, ${qq.answer + 1}, ${q(qq.why)}, ${j(qq.ids || [])});`);
+  preview.quiz[id] = quiz;
+  const qs = [`delete from public.tm_quiz where unit_id = ${q(id)};`];
+  quiz.forEach((qq) => {
+    qs.push(`insert into public.tm_quiz (unit_id, no, question, choices, answer, why, ids) values (${q(id)}, ${qq.no}, ${q(qq.question)}, ${j(qq.choices)}, ${qq.answer}, ${q(qq.why)}, ${j(qq.ids)});`);
   });
+  seed.push(...qs);
+  quizSql.push(...qs);
   console.log(id, m.readingTitle, "| 단어", stats.words, "(제목", stats.titleWords + ") | CEFR", stats.cefr, "| Lexile 추정", stats.lexile + "L | 단어장", vocab.length, "| 목록 외:", stats.offList.join(" "));
 }
 
+if (problems.length) { console.error("퀴즈 검사에서 고칠 곳이 있어요:\n" + problems.join("\n")); process.exit(1); }
+const pos = [0, 0, 0, 0];
+Object.values(preview.quiz).forEach((l) => l.forEach((x) => { pos[x.answer - 1]++; }));
+console.log("정답 위치 1·2·3·4:", pos.join(" · "));
 fs.writeFileSync(path.join(ROOT, "metro", "catalog.js"),
   "// node metro/tools/build.mjs 로 만들어요. 본문은 없고 노선도·분석 수치만 있어요.\nwindow.METRO=" + JSON.stringify(catalog) + ";\n");
 fs.writeFileSync(path.join(OUT, "metro_seed.sql"),
   "-- MY Reading Metro 본문·퀴즈 등록 (비공개 파일, 저장소에 올리지 않아요)\n-- metro/setup.sql 을 먼저 한 번 실행한 뒤, 이 파일을 Supabase SQL Editor에서 실행하세요. 여러 번 실행해도 괜찮아요.\nbegin;\n" + seed.join("\n") + "\ncommit;\n");
 fs.writeFileSync(path.join(OUT, "metro_preview.js"), "window.METRO_PREVIEW=Object.assign(" + JSON.stringify(preview) + ", window.METRO_PREVIEW || {});\n");
+fs.writeFileSync(path.join(OUT, "metro_quiz.sql"),
+  "-- MY Reading Metro 퀴즈만 다시 등록 (비공개 파일). 본문(tm_units)이 들어간 뒤 실행하세요.\nbegin;\n" +
+  fs.readFileSync(path.join(HERE, "..", "setup.sql"), "utf8").match(/create or replace function public\.tm_get_quiz[\s\S]*?\$\$;\n/)[0] +
+  quizSql.join("\n") + "\ncommit;\n");
 console.log("완료:", path.join(OUT, "metro_seed.sql"));

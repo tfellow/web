@@ -78,7 +78,7 @@
       return p.then(function (c) { if (c) state.units[id] = c; return c; });
     },
     quiz: function (id) {
-      if (PREVIEW) return Promise.resolve((PREVIEW.quiz[id] || []).map(function (q) { return { no: q.no, question: q.question, choices: shuffle(q.choices) }; }));
+      if (PREVIEW) return Promise.resolve((PREVIEW.quiz[id] || []).map(function (q) { return { no: q.no, question: q.question, choices: q.choices.slice() }; }));
       return rpc("tm_get_quiz", { p_id: id });
     },
     submitQuiz: function (id, answers) {
@@ -741,7 +741,7 @@
       var ans = {};
       var html = '<div class="panel"><h2>Ticket Check · 퀴즈 ' + qs.length + "문항</h2>" + qs.map(function (q) {
         return '<div class="qcard" data-no="' + q.no + '"><h3><span class="n">' + q.no + "</span>" + esc(q.question) + '</h3><div class="choices">' +
-          q.choices.map(function (o) { return '<button class="choice" data-v="' + esc(o) + '">' + esc(o) + "</button>"; }).join("") + "</div></div>";
+          q.choices.map(function (o, k) { return '<button class="choice" data-v="' + esc(o) + '"><b class="cn">' + (k + 1) + "</b>" + esc(o) + "</button>"; }).join("") + "</div></div>";
       }).join("") + '<div class="actions"><button class="btn line" id="submit" disabled>제출하기</button><span class="muted" id="left"></span></div></div>';
       body.innerHTML = html;
       function upd() { var n = qs.length - Object.keys(ans).length; byId("left").textContent = n ? n + "문항 남았어요" : "모두 골랐어요"; byId("submit").disabled = n > 0; }
@@ -763,7 +763,7 @@
             var rv = byNo[q.no] || {};
             var ev = (rv.ids || []).map(function (sid) { var x = c.sentences.filter(function (s) { return s.id === sid; })[0]; return x ? '<a href="#/s/' + id + "/read?s=" + sid + '">' + sid + ". " + esc(x.en) + "</a>" : ""; }).join("<br>");
             return '<div class="qcard"><h3><span class="n">' + q.no + "</span>" + esc(q.question) + "</h3>" +
-              '<div class="choices">' + q.choices.map(function (o) { return '<div class="choice' + (o === rv.answer ? " ok" : (o === ans[q.no] ? " no" : "")) + '">' + esc(o) + "</div>"; }).join("") + "</div>" +
+              '<div class="choices">' + q.choices.map(function (o, k) { return '<div class="choice' + (o === rv.answer ? " ok" : (o === ans[q.no] ? " no" : "")) + '"><b class="cn">' + (k + 1) + "</b>" + esc(o) + "</div>"; }).join("") + "</div>" +
               '<div class="why">' + (rv.correct ? "✅ " : "❌ ") + esc(rv.why || "") + (ev ? '<span class="ev">' + ev + "</span>" : "") + "</div></div>";
           }).join("");
           body.innerHTML = top + '<div class="panel">' + list + '<div class="actions"><button class="btn line" id="retry">다시 풀기</button><a class="btn ghost" href="#/s/' + id + '/story">줄거리 출구로</a></div></div>';
