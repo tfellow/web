@@ -327,3 +327,5 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 .grid2 > .panel { margin-top: 0; }
 .grid2 + .panel, .dep + .panel { margin-top: 16px; }
+.choice .cn { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 10px; border-radius: 50%; border: 2px solid var(--line); font-family: var(--mono); font-size: .78rem; }
+.choice.ok .cn { border-color: var(--ok); }

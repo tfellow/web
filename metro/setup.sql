@@ -79,9 +79,9 @@ $$;
 
 create or replace function public.tm_get_quiz(p_id text) returns jsonb
 language sql security definer set search_path to 'public' as $$
+  -- 선택지는 저장한 순서 그대로 보여 줘요 (정답 위치가 1·2·3·4로 고르게 섞여 있어요)
   select coalesce(jsonb_agg(s.x order by s.no), '[]'::jsonb) from (
-    select q.no, jsonb_build_object('no', q.no, 'question', q.question,
-      'choices', (select jsonb_agg(c order by random()) from jsonb_array_elements_text(q.choices) c)) as x
+    select q.no, jsonb_build_object('no', q.no, 'question', q.question, 'choices', q.choices) as x
     from public.tm_quiz q join public.tm_units u on u.id = q.unit_id
     where q.unit_id = p_id and u.published and auth.uid() is not null and (public.can_use_quiz() or public.is_admin())
   ) s;
