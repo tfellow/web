@@ -89,6 +89,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "healthy-teeth",
+  "title": "Healthy Teeth",
+  "titleKo": "건강한 치아",
+  "emoji": "🦷",
+  "color": "#2a6a7a",
+  "cefr": "A0",
+  "words": 94,
+  "places": []
+ },
+ {
   "id": "jungle",
   "title": "Jungle",
   "titleKo": "정글",
@@ -96,6 +106,16 @@ window.BOOKS = [
   "color": "#2f6b3a",
   "cefr": "A0",
   "words": 69,
+  "places": []
+ },
+ {
+  "id": "rainbows",
+  "title": "Rainbows",
+  "titleKo": "무지개",
+  "emoji": "🌈",
+  "color": "#2a5a8a",
+  "cefr": "A0",
+  "words": 89,
   "places": []
  },
  {
@@ -116,6 +136,16 @@ window.BOOKS = [
   "color": "#1f5f8b",
   "cefr": "A0",
   "words": 71,
+  "places": []
+ },
+ {
+  "id": "wash-your-hands",
+  "title": "Wash Your Hands!",
+  "titleKo": "손을 씻어요!",
+  "emoji": "🧼",
+  "color": "#2f7a5b",
+  "cefr": "A0",
+  "words": 90,
   "places": []
  },
  {
@@ -614,6 +644,20 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "why-do-we-have-seasons",
+  "title": "Why Do We Have Seasons?",
+  "titleKo": "왜 계절이 있을까요?",
+  "country": "South Korea",
+  "emoji": "🌏",
+  "color": "#2f6b3a",
+  "cefr": "A1",
+  "words": 129,
+  "places": [
+   "South Korea",
+   "Australia"
+  ]
+ },
+ {
   "id": "yawning",
   "title": "Yawning",
   "titleKo": "하품",
@@ -1008,6 +1052,19 @@ window.BOOKS = [
   "color": "#3a4a6a",
   "cefr": "A1",
   "words": 125,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "taegeukgi-the-korean-flag",
+  "title": "Taegeukgi: The Korean Flag",
+  "titleKo": "태극기: 대한민국의 국기",
+  "country": "South Korea",
+  "emoji": "☯️",
+  "color": "#2a3a6a",
+  "cefr": "A1",
+  "words": 115,
   "places": [
    "South Korea"
   ]
@@ -3109,6 +3166,21 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "why-do-we-vote",
+  "title": "Why Do We Vote?",
+  "titleKo": "우리는 왜 투표할까요?",
+  "country": "Greece",
+  "emoji": "🗳️",
+  "color": "#5a2a4a",
+  "cefr": "B1",
+  "words": 231,
+  "places": [
+   "Greece",
+   "South Korea",
+   "Australia"
+  ]
+ },
+ {
   "id": "crop-circles",
   "title": "Crop Circles",
   "titleKo": "미스터리 서클",
@@ -3526,6 +3598,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-united-nations",
+  "title": "The United Nations",
+  "titleKo": "국제 연합",
+  "country": "United States",
+  "emoji": "🕊️",
+  "color": "#1f5f8b",
+  "cefr": "B2",
+  "words": 374,
+  "places": [
+   "United States",
+   "South Korea"
+  ]
+ },
+ {
   "id": "remembrance-day",
   "title": "Red Poppies: Remembrance Day",
   "titleKo": "붉은 양귀비: 영령 기념일",
@@ -3753,6 +3839,22 @@ window.BOOKS = [
   "places": [
    "Brazil",
    "Canada"
+  ]
+ },
+ {
+  "id": "the-korean-wave-hallyu",
+  "title": "The Korean Wave: Hallyu",
+  "titleKo": "한류",
+  "country": "South Korea",
+  "emoji": "🎤",
+  "color": "#7a2a5a",
+  "cefr": "B2",
+  "words": 366,
+  "places": [
+   "South Korea",
+   "China",
+   "Japan",
+   "United States"
   ]
  },
  {
