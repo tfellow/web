@@ -2485,11 +2485,14 @@ window.BOOKS = [
   "id": "taipei-101",
   "title": "Taipei 101",
   "titleKo": "타이베이 101",
+  "country": "Taiwan",
   "emoji": "🏙️",
   "color": "#3a4a5a",
   "cefr": "B1",
   "words": 230,
-  "places": []
+  "places": [
+   "Taiwan"
+  ]
  },
  {
   "id": "the-printing-press",

@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "68"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "69"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -259,7 +259,8 @@
     "Bulgaria": { map: "Bulgaria", ko: "불가리아", iso: "BG", at: [25.5, 42.7] },
     "United Arab Emirates": { map: "United Arab Emirates", ko: "아랍에미리트", iso: "AE", at: [54.3, 24] },
     "Bhutan": { map: "Bhutan", ko: "부탄", iso: "BT", at: [90.4, 27.5] },
-    "Venezuela": { map: "Venezuela", ko: "베네수엘라", iso: "VE", at: [-66.6, 7.1] }
+    "Venezuela": { map: "Venezuela", ko: "베네수엘라", iso: "VE", at: [-66.6, 7.1] },
+    "Taiwan": { map: "Taiwan", ko: "대만", iso: "TW", at: [121, 23.7] }
   };
   // 대륙 배지: 각 대륙에 첫 여권 도장을 찍으면 받아요 (지도 이름 → 대륙)
   var CONTINENTS = [
@@ -277,7 +278,7 @@
     "Peru": "SA", "Iraq": "AS", "Mongolia": "AS", "Vietnam": "AS", "Philippines": "AS", "Australia": "OC", "New Zealand": "OC",
     "Mali": "AF", "Kenya": "AF", "Hungary": "EU", "Uruguay": "SA", "Lebanon": "AS", "Panama": "NA",
     "Indonesia": "AS", "Guatemala": "NA", "Bulgaria": "EU",
-    "United Arab Emirates": "AS", "Bhutan": "AS", "Venezuela": "SA"
+    "United Arab Emirates": "AS", "Bhutan": "AS", "Venezuela": "SA", "Taiwan": "AS"
   };
 
   var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
