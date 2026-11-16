@@ -38,7 +38,8 @@
     setTimeout(function () { t.remove(); }, 2200);
   }
   function lvTag(lv) { return '<span class="lv lv-' + (lv || "none") + '">' + (lv || "—") + "</span>"; }
-  function lineLabel(l) { return l.school + l.grade; }
+  function lineLabel(l) { return l.label || (l.school + l.grade); }
+  function stNo(s) { return s.no || String(s.unit); }
   function findStation(id) {
     for (var i = 0; i < METRO.lines.length; i++) {
       var l = METRO.lines[i];
@@ -232,7 +233,7 @@
           return;
         }
         html += '<a class="st ' + stationClass(s.id) + '" href="#/s/' + s.id + '/read" title="' + esc(s.unitTitle) + '">' +
-          '<span class="dot"></span><span class="no">' + esc(lineLabel(l)) + "-" + s.unit + "</span>" +
+          '<span class="dot"></span><span class="no">' + esc(lineLabel(l)) + "-" + stNo(s) + "</span>" +
           '<span class="txt"><span class="nm">' + esc(s.readingTitle) + '</span><span class="meta">' + s.stats.words + "w " + lvTag(s.stats.cefr) + "</span></span></a>";
       });
       html += "</div></div>";
@@ -242,7 +243,7 @@
     html += '<section class="board"><h3>Departures · 본문 분석표</h3><table><thead><tr><th>노선</th><th>본문</th><th>단어 수</th><th>CEFR</th><th class="hide-sm">Lexile</th></tr></thead><tbody>';
     METRO.lines.forEach(function (l) {
       l.stations.forEach(function (s) {
-        html += '<tr data-go="#/s/' + s.id + '/stats" style="--c:' + l.color + '"><td><span class="pill">' + l.grade + "</span>" + s.unit + '</td><td class="t">' + esc(s.readingTitle) +
+        html += '<tr data-go="#/s/' + s.id + '/stats" style="--c:' + l.color + '"><td><span class="pill">' + esc(lineLabel(l)) + "</span>" + stNo(s) + '</td><td class="t">' + esc(s.readingTitle) +
           "</td><td>" + s.stats.words + "</td><td>" + lvTag(s.stats.cefr) + '</td><td class="hide-sm">' + (s.stats.lexileOfficial ? s.stats.lexileOfficial + "L" : "≈" + s.stats.lexile + "L") + "</td></tr>";
       });
     });
@@ -259,10 +260,10 @@
     var ex = EXITS.filter(function (e) { return e.id === exit; })[0] || EXITS[0];
     var html = '<div style="--c:' + l.color + '">' +
       '<section class="sign"><div class="sign-top"><span class="badge-line">' + esc(lineLabel(l)) + '</span><div class="sign-name"><small>' +
-      esc(l.publisher + " · " + l.course + " · Lesson " + s.unit + " " + s.unitTitle + " · p." + s.pageRange) + "</small><h1>" + esc(s.readingTitle) + "</h1><p>" + esc(s.subtitleKo) + "</p></div></div>" +
+      esc(l.publisher + " · " + l.course + " · " + (s.lesson || "Lesson " + s.unit) + " " + s.unitTitle + (s.pageRange ? " · p." + s.pageRange : "")) + "</small><h1>" + esc(s.readingTitle) + "</h1><p>" + esc(s.subtitleKo) + "</p></div></div>" +
       '<div class="sign-bar">' +
       (prev ? '<a href="#/s/' + prev.id + "/" + ex.id + '">← ' + esc(prev.readingTitle) + "</a>" : '<span class="off">← 출발역</span>') +
-      '<span class="here">' + esc(lineLabel(l)) + "-" + s.unit + "</span>" +
+      '<span class="here">' + esc(lineLabel(l)) + "-" + stNo(s) + "</span>" +
       (next ? '<a class="next" href="#/s/' + next.id + "/" + ex.id + '">' + esc(next.readingTitle) + " →</a>" : '<span class="off next" style="text-align:right">종착역 →</span>') +
       "</div></section>" +
       '<nav class="exits">' + EXITS.map(function (e) {
@@ -350,7 +351,7 @@
     var leg = LV.map(function (k) { return dist[k] ? "<span><i style=\"background:" + LV_COLOR[k] + '"></i>' + k + " " + Math.round(dist[k] / leveled * 100) + "%</span>" : ""; }).join("") +
       (dist.none ? '<span><i style="background:' + LV_COLOR.none + '"></i>목록 외 ' + dist.none + "개</span>" : "");
     var lex = st.lexileOfficial ? st.lexileOfficial + "<small>L</small>" : "≈" + st.lexile + "<small>L</small>";
-    var html = '<section class="dep"><div class="dep-head"><h2>Text Analysis · 본문 분석</h2><small>' + esc(l.publisher + " " + lineLabel(l) + "-" + s.unit) + "</small></div>" +
+    var html = '<section class="dep"><div class="dep-head"><h2>Text Analysis · 본문 분석</h2><small>' + esc(l.publisher + " " + lineLabel(l) + "-" + stNo(s)) + "</small></div>" +
       '<div class="tiles">' +
       '<div class="tile"><div class="k">단어 수 (제목 포함)</div><div class="v">' + st.words + '</div><div class="s">제목 ' + st.titleWords + "단어 포함</div></div>" +
       '<div class="tile"><div class="k">문장 수</div><div class="v">' + st.sentences + '</div><div class="s">제목·소제목 제외</div></div>' +
@@ -809,7 +810,7 @@
         var cv = byId("cls") ? byId("cls").value : "";
         var keys = order.filter(function (k) { var r = stu[k].r; return !cv || (r.grade + "-" + r.class_no) === cv; });
         var h = '<div class="actions" style="margin:0 0 12px">' + sel + '<button class="btn small ghost" id="csv">CSV 내려받기</button><span class="muted" style="font-size:.84rem">원 안 숫자 = 퀴즈 최고점, 채운 원 = 만점</span></div>' +
-          '<div class="scroll"><table class="tbl"><thead><tr><th>번호</th><th>이름</th>' + stations.map(function (x) { return '<th title="' + esc(x.s.readingTitle) + '">' + lineLabel(x.l) + "-" + x.s.unit + "</th>"; }).join("") + "</tr></thead><tbody>" +
+          '<div class="scroll"><table class="tbl"><thead><tr><th>번호</th><th>이름</th>' + stations.map(function (x) { return '<th title="' + esc(x.s.readingTitle) + '">' + lineLabel(x.l) + "-" + stNo(x.s) + "</th>"; }).join("") + "</tr></thead><tbody>" +
           keys.map(function (k) {
             var r = stu[k].r;
             return "<tr><td>" + (r.grade ? r.grade + "-" + r.class_no + "-" + r.student_no : "-") + "</td><td>" + esc(r.name || r.email) + "</td>" +

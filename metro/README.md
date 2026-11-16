@@ -13,11 +13,15 @@
 
 ## 본문을 바꾸거나 늘릴 때
 ```
-node metro/tools/build.mjs <비공개 출력 폴더>/
+node metro/tools/build.mjs <비공개 출력 폴더>/ <비공개 퀴즈 폴더>/ <비공개 원본 폴더>/
 ```
 - 저장소에 쓰는 것: `metro/catalog.js` (노선도·분석 수치, 본문 없음)
-- 출력 폴더에만 쓰는 것: `metro_seed.sql` (Supabase 등록용), `metro_preview.js` (화면 미리보기용)
-- 원본은 지금 `textbook/data/<학년>-<단원>.js` 형식이에요. 다른 교과서도 같은 형식으로 만들고 `build.mjs`의 `LINES`에 노선을 더하면 돼요.
+- 출력 폴더에만 쓰는 것: `metro_seed.sql` (Supabase 등록용), `metro_quiz.sql`, `metro_preview.js` (화면 미리보기용)
+- YBM 중1·2 원본은 `textbook/data/<학년>-<단원>.js`에 있어요.
+- 다른 교과서 본문은 저작권 때문에 저장소에 올리지 않고, 비공개 원본 폴더에 역마다 두 파일을 둬요.
+  - `<역 id>.s.json`: `line`, `unit`, (스페셜 레슨이면 `no`: "S1", `lesson`), `meta`, `overview`, `chapters: [[이름, 쪽]]`, `s: [[장, 태그, "끊어 / 읽기 문장", 해석, 어휘, 문법, 의미]]`
+  - `<역 id>.q.json`: `summaries`(6장면 + 50·100단어 요약), `summaryWords`, `quiz`(10문항, 정답을 `o`의 맨 앞에)
+  - 노선은 `build.mjs`의 `LINES`에 `status: "src"`로 더하면, 원본이 있을 때만 노선도에 나타나요.
 
 ## 분석 수치
 - 단어 수: 제목·소제목을 포함한 영어 낱말 수 (I’m = 1단어, 숫자도 1단어)
