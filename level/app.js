@@ -564,11 +564,12 @@
   function rosterMap() { var m = {}; (T.roster || []).forEach(function (p) { m[low(p.email)] = p; }); return m; }
   function classKey(p) { return p ? p.grade + "-" + p.class_no : "기타"; }
   function viewTeacher() {
-    var tabs = [["results", "📋 결과"], ["dist", "📊 분포"], ["items", "🧪 문항 분석"], ["settings", "⚙️ 설정"]];
+    var tabs = [["results", "📋 결과"], ["groups", "🗂️ 레벨별 명단"], ["dist", "📊 분포"], ["items", "🧪 문항 분석"], ["settings", "⚙️ 설정"]];
     $("#main").innerHTML = '<div class="tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '"' + (state.tTab === t[0] ? ' class="on"' : "") + ">" + t[1] + "</button>"; }).join("") + '</div><div id="tBody" class="card muted">불러오는 중…</div>';
     $$(".tabs button").forEach(function (b) { b.onclick = function () { state.tTab = b.getAttribute("data-t"); lset("lt.tTab", state.tTab); viewTeacher(); }; });
     var need = state.tTab === "items";
     loadTeacher(need).then(function () {
+      if (state.tTab === "groups") return tGroups();
       if (state.tTab === "dist") return tDist();
       if (state.tTab === "items") return tItems();
       if (state.tTab === "settings") return tSettings();
@@ -644,6 +645,57 @@
   function download(name, rows) {
     var csv = "﻿" + rows.map(function (r) { return r.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
     var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = name; a.click();
+  }
+  // ---------- 레벨별 명단: 레벨마다 학생을 학번과 함께 묶어 보여 줘요 ----------
+  function hakbun(p) { return p.grade === 9 || !p.student_no ? "" : String(p.grade) + String(p.class_no).padStart(2, "0") + String(p.student_no).padStart(2, "0"); }
+  var BASES = [["overall_cefr", "종합 레벨"], ["read_cefr", "읽기"], ["lang_cefr", "문법·어휘"], ["vocab_cefr", "어휘 크기"]];
+  function tGroups() {
+    var base = lget("lt.gBase", "overall_cefr"); if (!BASES.some(function (b) { return b[0] === base; })) base = "overall_cefr";
+    var baseName = BASES.filter(function (b) { return b[0] === base; })[0][1];
+    var list = people(), LVS = ["C1", "B2", "B1", "A2", "A1", "A0"], g = {}, none = [];
+    LVS.forEach(function (l) { g[l] = []; });
+    list.forEach(function (r) {
+      if (!r.x) { none.push(r); return; }
+      var lv = r.x.last[base]; if (lv === "C2") lv = "C1";
+      (g[lv] || (g[lv] = [])).push(r);
+    });
+    var took = list.length - none.length;
+    function chip(r, lv) {
+      var p = r.p, a = r.x && r.x.last, sub = a && base === "overall_cefr" && a.overall_sub ? '<i>' + esc(a.overall_sub) + "</i>" : "";
+      var inner = '<b>' + esc(hakbun(p) || "-") + "</b> " + esc(p.name) + sub;
+      return a ? '<a class="stu" href="#/teacher/student/' + encodeURIComponent(p.email) + '">' + inner + "</a>" : '<span class="stu off">' + inner + "</span>";
+    }
+    function block(lv, arr, title, color) {
+      return '<section class="grp" style="--c:' + color + '"><div class="grp-h"><span class="lv" style="--c:' + color + '">' + esc(title) + '</span><b>' + arr.length + "명</b>" +
+        (took && lv ? '<span class="small muted">' + Math.round(arr.length / took * 100) + "%</span>" : "") +
+        (arr.length ? '<button class="btn sm no-print" data-copy="' + (lv || "none") + '">📋 복사</button>' : "") + "</div>" +
+        (arr.length ? '<div class="stus">' + arr.map(function (r) { return chip(r, lv); }).join("") + "</div>" : '<p class="small muted" style="margin:6px 0 0">해당 학생이 없어요.</p>') + "</section>";
+    }
+    var html = '<div class="t-head"><h2>레벨별 학생 명단</h2><div class="row-btns no-print">' + classSel() +
+      '<select id="gBase">' + BASES.map(function (b) { return '<option value="' + b[0] + '"' + (b[0] === base ? " selected" : "") + ">" + b[1] + " 기준</option>"; }).join("") + "</select>" +
+      '<button class="btn sm" id="gCsv">⬇️ CSV</button><button class="btn sm" onclick="window.print()">🖨️ 인쇄</button></div></div>' +
+      '<p class="small muted">' + (state.tClass ? state.tClass.replace("-", "학년 ") + "반" : "전체") + " · " + esc(baseName) + " 기준 · 응시 " + took + "명 / " + list.length + "명 · 가장 최근 결과로 묶었어요. 학번은 학년·반·번호 순이에요 (예: 1학년 1반 5번 = 10105). 이름을 누르면 상세 보고서가 열려요.</p>" +
+      LVS.map(function (l) { return block(l, g[l], lvName(l) + " · " + LVINFO[l].name, lvColor(l)); }).join("") +
+      block("", none, "아직 응시하지 않음", "#9aa0ad");
+    $("#tBody").className = "card"; $("#tBody").innerHTML = html;
+    bindClass(tGroups);
+    $("#gBase").onchange = function () { lset("lt.gBase", this.value); tGroups(); };
+    function lines(arr) { return arr.map(function (r) { return (hakbun(r.p) ? hakbun(r.p) + " " : "") + r.p.name; }).join("\n"); }
+    $$("[data-copy]").forEach(function (b) {
+      b.onclick = function () {
+        var k = b.getAttribute("data-copy"), arr = k === "none" ? none : g[k];
+        var text = (k === "none" ? "미응시" : lvName(k)) + " (" + arr.length + "명)\n" + lines(arr);
+        (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { toast("명단을 복사했어요. 붙여 넣기 하면 돼요."); }).catch(function () { window.prompt("아래 내용을 복사하세요", text); });
+      };
+    });
+    $("#gCsv").onclick = function () {
+      var rows = [["레벨(" + baseName + ")", "세부", "학번", "학년", "반", "번호", "이름", "종합", "읽기", "문법", "어휘크기", "Lexile", "AR", "응시일"]];
+      LVS.forEach(function (l) {
+        g[l].forEach(function (r) { var p = r.p, a = r.x.last; rows.push([lvName(l), base === "overall_cefr" ? a.overall_sub : "", hakbun(p), p.grade === 9 ? "" : p.grade, p.grade === 9 ? "" : p.class_no, p.student_no || "", p.name, lvName(a.overall_cefr) + " " + (a.overall_sub || ""), lvName(a.read_cefr), lvName(a.lang_cefr), a.vocab_size, LT.lexLabel(a.lexile), a.ar, fmtDate(a.finished_at)]); });
+      });
+      none.forEach(function (r) { var p = r.p; rows.push(["미응시", "", hakbun(p), p.grade, p.class_no, p.student_no, p.name]); });
+      download("레벨별명단_" + (state.tClass || "전체") + "_" + kday(Date.now()) + ".csv", rows);
+    };
   }
   function tDist() {
     var lb = latestBy(), rm = rosterMap(), groups = {};

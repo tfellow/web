@@ -161,6 +161,17 @@ td.num { text-align: right; }
 .t-head h2 { margin: 0; }
 .t-head .row-btns { margin-top: 0; }
 tr.dim td { color: #aaa; }
+.grp { border: 1px solid var(--line); border-left: 6px solid var(--c); border-radius: 14px; padding: 10px 12px; margin-top: 10px; background: var(--paper); break-inside: avoid; }
+.grp-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.grp-h .lv { font-size: 15px; padding: 3px 12px; }
+.grp-h .btn { margin-left: auto; }
+.stus { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; margin-top: 8px; }
+.stu { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; min-height: 40px; text-decoration: none; color: var(--ink); font-size: 15px; }
+a.stu:hover { border-color: var(--navy-2); }
+.stu b { font-variant-numeric: tabular-nums; color: var(--navy-2); font-weight: 700; }
+.stu i { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 800; color: var(--muted); }
+.stu.off { color: var(--muted); } .stu.off b { color: var(--muted); }
+.t-head select, #gBase { border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; background: var(--paper); min-height: 36px; }
 td.q-cell { max-width: 360px; font-size: 13px; }
 td.up { color: var(--warn); font-weight: 700; }
 td.down { color: var(--ok); font-weight: 700; }
