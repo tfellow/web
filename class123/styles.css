@@ -63,6 +63,170 @@ body.theme-dark {
   --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.65);
 }
 
+/* ==========================================================================
+   추가 테마 (v2.3.0) — body에 theme-<이름> 클래스가 붙어요.
+   어두운 테마는 theme-dark 클래스도 함께 붙어서 기존 다크 전용 규칙을 그대로 써요.
+   ========================================================================== */
+body.theme-sakura {
+  --bg-main: linear-gradient(135deg, #ffe4e6 0%, #fdf2f8 50%, #fef3c7 100%);
+  --bg-thermometer: linear-gradient(180deg, #f9a8d4 0%, #f472b6 60%, #c084fc 100%);
+  --surface-glass: rgba(255, 250, 252, 0.9);
+  --surface-card: #ffffff;
+  --surface-card-hover: #fff1f5;
+  --surface-subtle: #fdf2f6;
+  --border-color: rgba(219, 39, 119, 0.16);
+  --text-primary: #3b0a22;
+  --text-secondary: #6b3a50;
+  --text-muted: #a8879a;
+}
+
+body.theme-mint {
+  --bg-main: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 50%, #e0f2fe 100%);
+  --bg-thermometer: linear-gradient(180deg, #34d399 0%, #10b981 60%, #0d9488 100%);
+  --surface-glass: rgba(250, 255, 252, 0.9);
+  --surface-card: #ffffff;
+  --surface-card-hover: #f0fdf7;
+  --surface-subtle: #ecfaf3;
+  --border-color: rgba(5, 150, 105, 0.18);
+  --text-primary: #052e21;
+  --text-secondary: #3a5a4d;
+  --text-muted: #86a096;
+}
+
+body.theme-sunset {
+  --bg-main: linear-gradient(135deg, #ffedd5 0%, #fff7ed 45%, #fce7f3 100%);
+  --bg-thermometer: linear-gradient(180deg, #fbbf24 0%, #fb923c 60%, #f43f5e 100%);
+  --surface-glass: rgba(255, 252, 248, 0.9);
+  --surface-card: #ffffff;
+  --surface-card-hover: #fff7ed;
+  --surface-subtle: #fdf3e7;
+  --border-color: rgba(234, 88, 12, 0.17);
+  --text-primary: #3a1505;
+  --text-secondary: #6b4a3a;
+  --text-muted: #a8948a;
+}
+
+body.theme-lavender {
+  --bg-main: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 50%, #e0e7ff 100%);
+  --bg-thermometer: linear-gradient(180deg, #a78bfa 0%, #8b5cf6 60%, #6366f1 100%);
+  --surface-glass: rgba(252, 251, 255, 0.9);
+  --surface-card: #ffffff;
+  --surface-card-hover: #f7f5ff;
+  --surface-subtle: #f3f0fd;
+  --border-color: rgba(124, 58, 237, 0.16);
+  --text-primary: #1e1038;
+  --text-secondary: #4d4368;
+  --text-muted: #9790ad;
+}
+
+/* 크림 종이: 눈부심이 적은 단색 배경 (전자칠판·장시간 사용용) */
+body.theme-cream {
+  --bg-main: #f6f0e1;
+  --bg-thermometer: linear-gradient(180deg, #d6b98c 0%, #b9925c 60%, #8f6b3e 100%);
+  --surface-glass: rgba(253, 250, 242, 0.94);
+  --surface-card: #fffdf7;
+  --surface-card-hover: #f9f3e4;
+  --surface-subtle: #f1e9d6;
+  --border-color: rgba(120, 90, 40, 0.2);
+  --text-primary: #2b2114;
+  --text-secondary: #5c4e3a;
+  --text-muted: #9a8c76;
+  --shadow-sm: 0 2px 8px rgba(70, 50, 20, 0.07);
+  --shadow-md: 0 8px 24px rgba(70, 50, 20, 0.11);
+  --shadow-lg: 0 16px 40px rgba(70, 50, 20, 0.16);
+}
+
+body.theme-dark.theme-ocean {
+  --bg-main: linear-gradient(135deg, #031525 0%, #06283d 50%, #020b14 100%);
+  --bg-thermometer: linear-gradient(180deg, #031525 0%, #0b3a55 60%, #0e5066 100%);
+  --surface-glass: rgba(8, 38, 58, 0.86);
+  --surface-card: #0c3048;
+  --surface-card-hover: #14425f;
+  --surface-subtle: #061d2e;
+  --border-color: rgba(125, 211, 252, 0.2);
+  --text-primary: #f0f9ff;
+  --text-secondary: #bfe0f2;
+  --text-muted: #6d95ab;
+}
+
+body.theme-dark.theme-forest {
+  --bg-main: linear-gradient(135deg, #07170f 0%, #0f2a1c 50%, #050d09 100%);
+  --bg-thermometer: linear-gradient(180deg, #07170f 0%, #14402a 60%, #1c5a3a 100%);
+  --surface-glass: rgba(16, 42, 29, 0.86);
+  --surface-card: #143524;
+  --surface-card-hover: #1e4a33;
+  --surface-subtle: #0a2015;
+  --border-color: rgba(134, 239, 172, 0.2);
+  --text-primary: #f0fdf4;
+  --text-secondary: #c3e6cf;
+  --text-muted: #7a9d87;
+}
+
+/* 테마 선택 창 */
+.theme-picker-group-title {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 4px 0 10px;
+}
+
+.theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.theme-swatch {
+  border: 2px solid var(--border-color);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  border-radius: 18px;
+  padding: 8px 8px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theme-swatch:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-swatch:focus-visible {
+  outline: 3px solid var(--eussuk-blue);
+  outline-offset: 2px;
+}
+
+.theme-swatch.selected {
+  border-color: var(--eussuk-blue);
+  box-shadow: var(--shadow-blue);
+}
+
+.theme-swatch-preview {
+  width: 100%;
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-swatch-preview span {
+  padding: 5px 12px;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -398,13 +562,13 @@ body.theme-dark .nav-tab:hover {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
-body.dark-mode .sidebar-version-badge {
+body.theme-dark .sidebar-version-badge {
   background: rgba(52, 211, 153, 0.16);
   color: #34d399;
   border-color: rgba(52, 211, 153, 0.35);
 }
 
-body.dark-mode .sidebar-version-badge:hover {
+body.theme-dark .sidebar-version-badge:hover {
   background: rgba(52, 211, 153, 0.26);
   box-shadow: 0 4px 12px rgba(52, 211, 153, 0.25);
 }

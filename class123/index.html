@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>클래스123 - 스마트 학급 경영 & 수업 도구</title>
-  <link rel="stylesheet" href="styles.css?v=2.2.0" />
+  <link rel="stylesheet" href="styles.css?v=2.3.0" />
   <!-- Firebase SDK (v10 compat: 실시간 클라우드 동기화) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -113,9 +113,9 @@
         <span id="toolbar-timer-badge" class="toolbar-timer-badge" style="display:none;">03:00</span>
       </button>
 
-      <button class="tool-btn" id="left-btn-theme" onclick="toggleTheme()" title="밝은/어두운 화면 테마 전환">
-        <div class="tool-icon" id="btn-theme-toggle">🌙</div>
-        <span class="tool-label" id="label-theme-toggle">다크테마</span>
+      <button class="tool-btn" id="left-btn-theme" onclick="openThemePicker()" title="화면 테마 고르기 (밝은 테마 6개 · 어두운 테마 3개)">
+        <div class="tool-icon" id="btn-theme-toggle">🎨</div>
+        <span class="tool-label" id="label-theme-toggle">테마</span>
       </button>
 
       <button class="tool-btn" onclick="window.open('manual.html', '_blank')" title="동적 사용 설명서 및 버전 기록 새 창 열기">
@@ -124,7 +124,7 @@
       </button>
 
       <!-- 설명서 아래 버전 표시 배지 -->
-      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.2.0 (클릭 시 사용 설명서 열기)">v2.2.0</div>
+      <div id="app-version-badge" class="sidebar-version-badge" onclick="window.open('manual.html', '_blank')" title="클래스123 버전 v2.3.0 (클릭 시 사용 설명서 열기)">v2.3.0</div>
     </aside>
 
     <!-- 우측 메인 컨텐츠 영역 -->
@@ -705,6 +705,24 @@
   </div>
 
   <!-- ======================================================================
+       모달: 테마 선택 (v2.3.0)
+       ====================================================================== -->
+  <div id="modal-theme" class="modal-backdrop" onclick="if (event.target === this) closeModal('modal-theme')">
+    <div class="modal-dialog" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title">🎨 화면 테마 고르기</div>
+        <button class="btn-icon-pill" onclick="closeModal('modal-theme')">✖ 닫기</button>
+      </div>
+      <div class="modal-body">
+        <div class="theme-picker-group-title">☀️ 밝은 테마</div>
+        <div id="theme-picker-light" class="theme-picker-grid"></div>
+        <div class="theme-picker-group-title">🌙 어두운 테마</div>
+        <div id="theme-picker-dark" class="theme-picker-grid" style="margin-bottom:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
        모달 4: 맞춤형 설정 (나만의 으쓱/머쓱 카드 관리 & 효과 설정)
        ====================================================================== -->
   <div id="modal-settings" class="modal-backdrop">
@@ -1126,6 +1144,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=2.2.0"></script>
+  <script src="app.js?v=2.3.0"></script>
 </body>
 </html>

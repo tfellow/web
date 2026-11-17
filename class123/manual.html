@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.2.0)</title>
+  <title>Class123 Plus 동적 사용 설명서 & 버전/프롬프트 관리 시스템 (v2.3.0)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
   <style>
@@ -533,7 +533,7 @@
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <strong class="font-display" style="font-size:1.35rem;">Class123 Plus 사용 설명서</strong>
-          <span class="version-pill">v2.2.0 최신</span>
+          <span class="version-pill">v2.3.0 최신</span>
         </div>
         <div style="font-size:0.78rem; color:var(--text-secondary);">동적 가이드 · 프롬프트 아카이브 · 버전 히스토리</div>
       </div>
@@ -573,7 +573,7 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <div class="num">v2.2.0</div>
+          <div class="num">v2.3.0</div>
           <div class="label">현재 버전</div>
         </div>
         <div class="stat-card">
@@ -656,7 +656,7 @@
             </li>
             <li>
               <span class="step-badge" style="background:#d97706;">좌측 도구</span>
-              <div><strong>🌱 카드부여 · 🥚 학급온도계 · 📊 리포트 · 🔄 점수초기화 · 🙈 깜깜이 · 🌙 테마 · 📖 설명서</strong><br/>수업 중 어느 화면에서나 즉시 실행하는 액션 도구함</div>
+              <div><strong>🌱 카드부여 · 🥚 학급온도계 · 📊 리포트 · 🔄 점수초기화 · 🙈 깜깜이 · 🎨 테마 · 📖 설명서</strong><br/>수업 중 어느 화면에서나 즉시 실행하는 액션 도구함. <strong>🎨 테마</strong>를 누르면 밝은 테마 6개(스카이 · 벚꽃 · 민트 숲 · 노을 · 라벤더 · 크림 종이)와 어두운 테마 3개(다크 네온 · 깊은 바다 · 밤의 숲) 중에서 고를 수 있어요.</div>
             </li>
           </ul>
         </div>
@@ -1137,11 +1137,27 @@
           </div>
         </div>
 
+        <!-- 29차 프롬프트 (v2.3.0) -->
+        <div class="timeline-item searchable-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="font-size:1.15rem; color:var(--blue);">[29차 프롬프트] 테마 9개 중에서 고르기</strong>
+            <span class="version-pill">v2.3.0 최신</span>
+          </div>
+          <div class="prompt-quote">"class123의 테마를 여러 개 만들어서 선택할 수 있게 해 줘. 지금은 다크 테마와 밝은 테마만 있어"</div>
+          <div class="impl-tags">
+            <span class="impl-tag">🎨 왼쪽 도구 [테마] 버튼 → 테마 선택 창</span>
+            <span class="impl-tag">☀️ 밝은 테마 6개 (스카이 · 벚꽃 · 민트 숲 · 노을 · 라벤더 · 크림 종이)</span>
+            <span class="impl-tag">🌙 어두운 테마 3개 (다크 네온 · 깊은 바다 · 밤의 숲)</span>
+            <span class="impl-tag">💾 선택한 테마 저장, 다른 기기에서도 같은 테마</span>
+            <span class="impl-tag">📚 진도표 학급 카드의 이름·진도율 한 줄 정렬</span>
+          </div>
+        </div>
+
         <!-- 28차 프롬프트 (v2.2.0) -->
         <div class="timeline-item searchable-item">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <strong style="font-size:1.15rem; color:var(--blue);">[28차 프롬프트] 학급별 통합 진도표를 학년별로 분리</strong>
-            <span class="version-pill">v2.2.0 최신</span>
+            <span class="version-pill">v2.2.0</span>
           </div>
           <div class="prompt-quote">"학급별 통합 진도표를 학년별로 나누어 줘. 학년마다 단원 차시가 다르거든."</div>
           <div class="impl-tags">
@@ -1304,7 +1320,17 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.2.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.3.0 (현재)</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-17</td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
+                  • <strong>테마 9개 중에서 고르기</strong>: 왼쪽 도구 <code>[🎨 테마]</code> 버튼으로 선택 창 열기 — 밝은 테마 6개, 어두운 테마 3개<br/>
+                  • 선택한 테마는 저장되어 다른 기기에서도 같은 테마로 열림 (기존 다크 테마는 '다크 네온'으로 이어짐)<br/>
+                  • <strong>진도표 학급 카드 정렬 수정</strong>: 학급 이름과 진도율을 한 줄로 정렬
+                </td>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);"><code>app.js</code>, <code>index.html</code>, <code>styles.css</code>, <code>manual.html</code>, <code>CHANGELOG.md</code></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px; border-bottom:1px solid var(--border-color); font-weight:900; color:var(--green);">v2.2.0</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">2026-11-09</td>
                 <td style="padding:12px 14px; border-bottom:1px solid var(--border-color);">
                   • <strong>진도표 학년별 분리</strong>: 상단 학년 선택 버튼, 학년마다 단원/차시 목록 따로 저장 (학급 이름 <code>2026-학년-반</code>에서 학년 자동 인식)<br/>

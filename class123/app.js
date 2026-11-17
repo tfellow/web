@@ -3,7 +3,7 @@
    현재 버전: v2.1.1 (다중 선택 플로팅 바 줄바꿈 방지 및 가변 너비 최적화)
    ========================================================================== */
 
-const APP_VERSION = 'v2.2.0';
+const APP_VERSION = 'v2.3.0';
 const STORAGE_KEY = 'CLASS123_PLUS_STATE_V1';
 
 // Firebase 기본 클라우드 설정 (my-kahoot-smy 프로젝트 자동 연결)
@@ -327,6 +327,7 @@ function applyCloudStateToApp(val, alertMessage) {
   }
 
   // 전체 앱 뷰 및 UI 컴포넌트 완전 동기화 재렌더링
+  applyTheme();
   updateTopControlsUI();
   renderClassSelector();
   updateUndoButtonUI();
@@ -1005,9 +1006,7 @@ function initApp() {
   // Firebase 실시간 클라우드 연결 시작
   initFirebaseCloud();
 
-  if (state.darkMode) {
-    document.body.classList.add('theme-dark');
-  }
+  applyTheme();
   updateTopControlsUI();
   renderClassSelector();
   switchView(state.currentView || 'students');
@@ -1023,9 +1022,7 @@ function updateTopControlsUI() {
   }
 
   const themeIcon = document.getElementById('btn-theme-toggle');
-  const themeLabel = document.getElementById('label-theme-toggle');
-  if (themeIcon) themeIcon.textContent = state.darkMode ? '☀️' : '🌙';
-  if (themeLabel) themeLabel.textContent = state.darkMode ? '밝은테마' : '다크테마';
+  if (themeIcon) themeIcon.textContent = getCurrentTheme().icon;
 
   const scoreSelect = document.getElementById('score-display-mode');
   if (scoreSelect) scoreSelect.value = state.scoreDisplayMode;
@@ -3432,11 +3429,63 @@ function toggleSound() {
   if (state.soundEnabled) playSound('eussuk');
 }
 
-function toggleTheme() {
-  state.darkMode = !state.darkMode;
-  document.body.classList.toggle('theme-dark', state.darkMode);
+// ---- 테마 (v2.3.0) ----
+// 색상 값은 styles.css의 body.theme-<id> 에 있어요. 여기 bg/card/text 색은 선택 창의 미리보기용이에요.
+const THEMES = [
+  { id: 'sky', name: '스카이', icon: '🌤️', dark: false, bg: 'linear-gradient(135deg, #e0f2fe, #f0fdf4, #fef9c3)', card: '#ffffff', text: '#0f172a' },
+  { id: 'sakura', name: '벚꽃', icon: '🌸', dark: false, bg: 'linear-gradient(135deg, #ffe4e6, #fdf2f8, #fef3c7)', card: '#ffffff', text: '#3b0a22' },
+  { id: 'mint', name: '민트 숲', icon: '🌿', dark: false, bg: 'linear-gradient(135deg, #d1fae5, #ecfdf5, #e0f2fe)', card: '#ffffff', text: '#052e21' },
+  { id: 'sunset', name: '노을', icon: '🌇', dark: false, bg: 'linear-gradient(135deg, #ffedd5, #fff7ed, #fce7f3)', card: '#ffffff', text: '#3a1505' },
+  { id: 'lavender', name: '라벤더', icon: '💜', dark: false, bg: 'linear-gradient(135deg, #ede9fe, #f5f3ff, #e0e7ff)', card: '#ffffff', text: '#1e1038' },
+  { id: 'cream', name: '크림 종이', icon: '📜', dark: false, bg: '#f6f0e1', card: '#fffdf7', text: '#2b2114' },
+  { id: 'dark', name: '다크 네온', icon: '🌙', dark: true, bg: 'linear-gradient(135deg, #0f172a, #1e1b4b, #090d16)', card: '#1e293b', text: '#f8fafc' },
+  { id: 'ocean', name: '깊은 바다', icon: '🌊', dark: true, bg: 'linear-gradient(135deg, #031525, #06283d, #020b14)', card: '#0c3048', text: '#f0f9ff' },
+  { id: 'forest', name: '밤의 숲', icon: '🌲', dark: true, bg: 'linear-gradient(135deg, #07170f, #0f2a1c, #050d09)', card: '#143524', text: '#f0fdf4' }
+];
+
+function getCurrentTheme() {
+  // 예전 저장 데이터에는 theme 없이 darkMode만 있어요.
+  const id = state.theme || (state.darkMode ? 'dark' : 'sky');
+  return THEMES.find(t => t.id === id) || THEMES[0];
+}
+
+function applyTheme() {
+  const theme = getCurrentTheme();
+  const body = document.body;
+  THEMES.forEach(t => body.classList.remove('theme-' + t.id));
+  body.classList.add('theme-' + theme.id);
+  body.classList.toggle('theme-dark', theme.dark);
+}
+
+function setTheme(id) {
+  const theme = THEMES.find(t => t.id === id);
+  if (!theme) return;
+  state.theme = theme.id;
+  state.darkMode = theme.dark; // 예전 버전과의 호환용
+  applyTheme();
   saveState();
   updateTopControlsUI();
+  renderThemePicker();
+}
+
+function renderThemePicker() {
+  const current = getCurrentTheme().id;
+  const swatch = t => `
+    <button type="button" class="theme-swatch ${t.id === current ? 'selected' : ''}" onclick="setTheme('${t.id}')" aria-pressed="${t.id === current}">
+      <div class="theme-swatch-preview" style="background:${t.bg};">
+        <span style="background:${t.card}; color:${t.text};">가나다 Abc</span>
+      </div>
+      <div>${t.icon} ${t.name}${t.id === current ? ' ✓' : ''}</div>
+    </button>`;
+  const light = document.getElementById('theme-picker-light');
+  const dark = document.getElementById('theme-picker-dark');
+  if (light) light.innerHTML = THEMES.filter(t => !t.dark).map(swatch).join('');
+  if (dark) dark.innerHTML = THEMES.filter(t => t.dark).map(swatch).join('');
+}
+
+function openThemePicker() {
+  renderThemePicker();
+  openModal('modal-theme');
 }
 
 function toggleBlackout(active) {
