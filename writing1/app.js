@@ -158,6 +158,12 @@ const ALL_STUDENT_NAMES = Array.from(
 /**
  * [보안] 클라이언트 측 학생 개인정보(PII) 자동 마스킹 함수
  */
+// ★ 보안: 학생이 쓴 글·이름·코멘트를 화면에 넣기 전에 반드시 이 함수를 거쳐요.
+// (글 안에 <img onerror=...> 같은 태그를 넣어도 교사 화면에서 실행되지 않게 해요)
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+}
+
 function maskPersonalInfoClient(text, studentName = "") {
   if (!text) return "";
   let masked = text;
@@ -908,7 +914,7 @@ function buildWordByWordDiffHtml(studentText, bestCandidate, chunkAnalysis = [],
     const passChunksHtml = (chunkAnalysis || [])
       .map(
         (c) =>
-          `<span class="chunk-slot-pill pass">✅ ${c.index}구간: ${c.chunk}</span>`
+          `<span class="chunk-slot-pill pass">✅ ${escapeHtml(c.index)}구간: ${escapeHtml(c.chunk)}</span>`
       )
       .join("");
     return `
@@ -958,19 +964,19 @@ function buildWordByWordDiffHtml(studentText, bestCandidate, chunkAnalysis = [],
   const tokensHtml = diffOps
     .map((op) => {
       if (op.type === "match") {
-        return `<span class="diff-token diff-match">${op.text}</span>`;
+        return `<span class="diff-token diff-match">${escapeHtml(op.text)}</span>`;
       }
       if (op.type === "del") {
-        return `<span class="diff-token diff-del" title="학생 답안 내 오류 또는 어순 불일치 단어">${op.text}</span>`;
+        return `<span class="diff-token diff-del" title="학생 답안 내 오류 또는 어순 불일치 단어">${escapeHtml(op.text)}</span>`;
       }
-      return `<span class="diff-token diff-ins" title="모범 답안의 올바른 위치·표현">+${op.text}</span>`;
+      return `<span class="diff-token diff-ins" title="모범 답안의 올바른 위치·표현">+${escapeHtml(op.text)}</span>`;
     })
     .join("");
 
   const chunksHtml = (chunkAnalysis || [])
     .map((c) => {
       const icon = c.status === "pass" ? "✅" : c.status === "warn" ? "⚠️" : "❌";
-      return `<span class="chunk-slot-pill ${c.status}" title="${c.detail}">${icon} ${c.index}구간: ${c.chunk} <small>(${c.detail})</small></span>`;
+      return `<span class="chunk-slot-pill ${escapeHtml(c.status)}" title="${escapeHtml(c.detail)}">${icon} ${escapeHtml(c.index)}구간: ${escapeHtml(c.chunk)} <small>(${escapeHtml(c.detail)})</small></span>`;
     })
     .join("");
 
@@ -3945,7 +3951,7 @@ function renderEvaluationResult(evalResult, mode, targetGrammar) {
   grammarList.innerHTML = (evalResult.grammarFeedback || [])
     .map(
       (item) =>
-        `<li><strong>${item.original} → ${item.corrected}</strong><br/><span>${item.explanation}</span></li>`
+        `<li><strong>${escapeHtml(item.original)} → ${escapeHtml(item.corrected)}</strong><br/><span>${escapeHtml(item.explanation)}</span></li>`
     )
     .join("");
 
@@ -3954,7 +3960,7 @@ function renderEvaluationResult(evalResult, mode, targetGrammar) {
     vocabList.innerHTML = (evalResult.vocabularySuggestions || [])
       .map(
         (v) =>
-          `<li><strong>${v.word}</strong> (${v.meaning})<br/><em>예: ${v.example}</em></li>`
+          `<li><strong>${escapeHtml(v.word)}</strong> (${escapeHtml(v.meaning)})<br/><em>예: ${escapeHtml(v.example)}</em></li>`
       )
       .join("");
   }
@@ -3974,17 +3980,17 @@ function renderLocalStudentHistory(records) {
         ? `<br/><span style="display:inline-block;margin-top:3px;background:#fee2e2;color:#b91c1c;font-weight:700;padding:2px 6px;border-radius:4px;font-size:0.74rem;">🚨 ⏰ 시간초과 강제발송</span>`
         : `<br/><span style="display:inline-block;margin-top:3px;background:#dcfce7;color:#15803d;font-weight:600;padding:2px 6px;border-radius:4px;font-size:0.74rem;">✅ 정상제출</span>`;
       const promptDisplay = d.koreanPrompt
-        ? `<strong>${d.topic}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${d.koreanPrompt}"</span>`
-        : `<strong>${d.topic}</strong>`;
+        ? `<strong>${escapeHtml(d.topic)}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${escapeHtml(d.koreanPrompt)}"</span>`
+        : `<strong>${escapeHtml(d.topic)}</strong>`;
       return `
       <tr style="${isForced ? "background:#fff5f5;" : ""}">
-        <td>${d.submittedTimeStr || d.dateString || "-"}</td>
+        <td>${escapeHtml(d.submittedTimeStr || d.dateString || "-")}</td>
         <td>${modeBadge}${forcedTag}</td>
         <td>${promptDisplay}</td>
-        <td>${d.originalContent || "-"}</td>
-        <td>${d.cefrLevel}</td>
-        <td><strong>${d.score}점</strong></td>
-        <td>${d.overallComment}</td>
+        <td>${escapeHtml(d.originalContent || "-")}</td>
+        <td>${escapeHtml(d.cefrLevel)}</td>
+        <td><strong>${escapeHtml(d.score)}점</strong></td>
+        <td>${escapeHtml(d.overallComment)}</td>
       </tr>
     `;
     })
@@ -4085,7 +4091,7 @@ function populateRosterDropdown() {
     matchingRoster
       .map(
         (s) =>
-          `<option value="${s.studentId}">[${s.studentId}] ${s.grade}-${s.classNum} ${s.number}번 ${s.name}</option>`
+          `<option value="${escapeHtml(s.studentId)}">[${escapeHtml(s.studentId)}] ${escapeHtml(s.grade)}-${escapeHtml(s.classNum)} ${escapeHtml(s.number)}번 ${escapeHtml(s.name)}</option>`
       )
       .join("");
 }
@@ -4218,27 +4224,27 @@ function renderTeacherTable(submissions) {
 
   tbody.innerHTML = submissions
     .map((d) => {
-      const classLabel = d.classNum ? `${d.classNum}반` : d.className;
+      const classLabel = escapeHtml(d.classNum ? `${d.classNum}반` : d.className);
       const modeBadge = d.mode === "korean_prompt" ? "🇰🇷제시문" : "📝자유";
       const isForced = isForcedSubmissionRecord(d);
       const statusBadge = isForced
         ? `<span style="display:inline-block;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;font-weight:800;padding:4px 8px;border-radius:6px;font-size:0.78rem;white-space:nowrap;">🚨 ⏰ 시간초과 강제발송</span>`
         : `<span style="display:inline-block;background:#dcfce7;color:#15803d;border:1px solid #86efac;font-weight:700;padding:4px 8px;border-radius:6px;font-size:0.78rem;white-space:nowrap;">✅ 시간 내 정상제출</span>`;
       const promptInfo = d.koreanPrompt
-        ? `<strong>${d.topic}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${d.koreanPrompt}"</span>`
-        : `<strong>${d.topic}</strong>`;
+        ? `<strong>${escapeHtml(d.topic)}</strong><br/><span style="font-size:0.82rem;color:#475569;">"${escapeHtml(d.koreanPrompt)}"</span>`
+        : `<strong>${escapeHtml(d.topic)}</strong>`;
       return `
       <tr style="${isForced ? "background-color: #fff5f5;" : ""}">
-        <td style="white-space:nowrap;">${d.submittedTimeStr || d.dateString || "-"}</td>
+        <td style="white-space:nowrap;">${escapeHtml(d.submittedTimeStr || d.dateString || "-")}</td>
         <td>${statusBadge}</td>
-        <td><strong>${d.studentId || "-"}</strong></td>
-        <td>${d.grade}학년 ${classLabel} ${d.studentNumber}번</td>
-        <td><strong>${d.studentName}</strong></td>
+        <td><strong>${escapeHtml(d.studentId || "-")}</strong></td>
+        <td>${escapeHtml(d.grade)}학년 ${classLabel} ${escapeHtml(d.studentNumber)}번</td>
+        <td><strong>${escapeHtml(d.studentName)}</strong></td>
         <td>${modeBadge}</td>
         <td>${promptInfo}</td>
-        <td>${d.originalContent || "-"}</td>
-        <td><strong>${d.score}점</strong><br/><span style="font-size:0.8rem;color:#2563eb;">(의미 ${d.meaningAccuracy ?? d.score}%)</span></td>
-        <td>${d.overallComment}</td>
+        <td>${escapeHtml(d.originalContent || "-")}</td>
+        <td><strong>${escapeHtml(d.score)}점</strong><br/><span style="font-size:0.8rem;color:#2563eb;">(의미 ${escapeHtml(d.meaningAccuracy ?? d.score)}%)</span></td>
+        <td>${escapeHtml(d.overallComment)}</td>
       </tr>
     `;
     })
