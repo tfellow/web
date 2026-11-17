@@ -28,6 +28,7 @@ const HUB_PATH = "class123_plus/hub_rewards"; // 보상 규칙·지급 기록 (C
 const APPS = [
   { id: "passport", name: "독서 여권", icon: "📖", src: "sb", url: "../app/" },
   { id: "knowledge", name: "지식 여권", icon: "🔭", src: "sb", url: "../reading2/app/" },
+  { id: "metro", name: "리딩 메트로", icon: "🚇", src: "sb", url: "../metro/" },
   { id: "grammar", name: "문법", icon: "✏️", src: "sb", url: "../grammar/" },
   { id: "quiz", name: "Quiz Queens", icon: "👑", src: "sb", url: "../quiz/", cumulative: true },
   { id: "brainup", name: "Brain Up", icon: "🧠", src: "sb", url: "../brainup/" },
@@ -41,7 +42,7 @@ const APPS = [
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 문법 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
   fc: { name: "Firebase (Cloze)", desc: "단어숲 · Cloze · 영작문" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
@@ -236,7 +237,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "grammar", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "quiz", "brainup", "speaking", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -260,6 +261,21 @@ async function sbLoad() {
     const rows = await sbAll(() => c.rpc("r2_admin_attempts"));
     rows.forEach(a => addEvent({ e: a.email, a: "knowledge", t: toMs(a.attempt_at), k: "quiz", title: titles[a.book_id] || a.book_id, s: a.score, n: a.total, p: pct(a.score, a.total), medal: a.medal, book: a.book_id }));
   } catch (e) { warn("지식 여권", e); }
+
+  try { // 리딩 메트로(교과서 읽기) 퀴즈·줄거리 기록 — 표가 아직 없으면(SQL 실행 전) 조용히 넘어가요
+    const titles = {}, mail = {};
+    try { const u = await sbAll(() => c.from("tm_units").select("id,title")); u.forEach(x => titles[x.id] = x.title); } catch {}
+    const prof = await sbAll(() => c.from("profiles").select("id,email"));
+    prof.forEach(x => mail[x.id] = x.email);
+    const rows = await sbAll(() => c.from("tm_attempts").select("user_id,unit_id,kind,stage,score,total,submitted_at"));
+    const STAGE = ["", "빈칸", "순서", "50단어", "100단어"];
+    rows.forEach(a => {
+      const e = mail[a.user_id]; if (!e) return;
+      const t = titles[a.unit_id] || a.unit_id;
+      if (a.kind === "quiz") addEvent({ e, a: "metro", t: toMs(a.submitted_at), k: "quiz", title: `${a.unit_id.toUpperCase()} ${t}`, s: a.score, n: a.total, p: pct(a.score, a.total), unit: a.unit_id });
+      else if (a.score === a.total) addEvent({ e, a: "metro", t: toMs(a.submitted_at), k: "summary", title: `${a.unit_id.toUpperCase()} ${t} · 줄거리 ${STAGE[a.stage] || a.stage + "단계"}`, unit: a.unit_id, stage: a.stage });
+    });
+  } catch (e) { if (!/tm_attempts|tm_units|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("리딩 메트로", e); }
 
   try { // MY Grammar
     const players = await sbAll(() => c.from("mg_players").select("id,email,real_name,grade,class_no,student_no,xp,streak,best_streak,last_at"));
@@ -630,6 +646,12 @@ function cell(id, email, x) {
       if (!s && !all) return none;
       return { main: medals, on, html: `<span class="m">🏅${medals}</span><span class="sub">${s ? s.n + "회" : "0회"}${gold ? " · 금" + gold : ""} · 누적 ${all}</span>`, csv: `메달 ${medals} / 시도 ${s?.n || 0} / 누적 ${all}` };
     }
+    case "metro": {
+      if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
+      const qz = s.items.filter(e => e.k === "quiz"), a = avg(qz.map(e => e.p));
+      const st = new Set(s.items.map(e => e.unit)).size, sum = s.items.filter(e => e.k === "summary").length;
+      return { main: st, on, html: `<span class="m">🚇${st}역${a != null ? " · " + Math.round(a) + "%" : ""}</span><span class="sub">퀴즈 ${qz.length}회${sum ? " · 줄거리 " + sum : ""}</span>`, csv: `역 ${st} / 퀴즈 ${qz.length} / ${a != null ? Math.round(a) : ""}% / 줄거리 ${sum}` };
+    }
     case "grammar": {
       const g = state.snap.grammar.get(email);
       const att = s?.attempts || 0, acc = att ? pct(s.correct, att) : null, stamps = s?.n || 0;
@@ -820,6 +842,8 @@ function studentSummary(p, Mall, Mweek) {
   if (pass.length) apps.passport = { tries: pass.length, medals: new Set(pass.filter(e => isMedal(e.medal)).map(e => e.book)).size, gold: new Set(pass.filter(e => e.medal === "gold").map(e => e.book)).size, last: last("passport") };
   const kn = items("knowledge");
   if (kn.length) apps.knowledge = { tries: kn.length, medals: new Set(kn.filter(e => isMedal(e.medal)).map(e => e.book)).size, gold: new Set(kn.filter(e => e.medal === "gold").map(e => e.book)).size, last: last("knowledge") };
+  const mt = items("metro"), mq = mt.filter(e => e.k === "quiz");
+  if (mt.length) apps.metro = { stations: new Set(mt.map(e => e.unit)).size, tries: mq.length, avg: mq.length ? Math.round(avg(mq.map(e => num(e.p)))) : null, perfect: new Set(mq.filter(e => e.n && e.s === e.n).map(e => e.unit)).size, summary: mt.length - mq.length, last: last("metro") };
   const g = state.snap.grammar.get(p.email); if (g) apps.grammar = { xp: g.xp, stamps: g.stamps, streak: g.streak, last: last("grammar") };
   const q = state.snap.quiz.get(p.email); if (q) apps.quiz = { xp: q.xp, level: q.level, answered: q.answered, acc: q.acc, last: q.last };
   const v = state.snap.vocab.get(p.email), vt = items("vocab");
@@ -909,7 +933,7 @@ function renderConn() {
   box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "grammar", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -1041,6 +1065,7 @@ function evValue(ev) {
   if (ev.a === "passport" || ev.a === "knowledge") return (isMedal(ev.medal) ? { gold: "🥇", silver: "🥈", bronze: "🥉" }[ev.medal] + " " : "") + `${ev.s}/${ev.n}`;
   if (ev.k === "stamp") return "🏷️ 스탬프";
   if (ev.a === "speaking") return `🎤 ${ev.s}점`;
+  if (ev.a === "metro") return ev.k === "summary" ? "🧩 완성" : `🚇 ${ev.s}/${ev.n}`;
   if (ev.a === "brainup") return `🧠 ${ev.s}/${ev.n} · +${ev.pts}점`;
   if (ev.a === "level") return `🧭 ${lvTxt(ev)} · ${lexTxt(ev.lex)}`;
   if (ev.a === "writing") return `${ev.s}점${ev.cefr ? " · " + ev.cefr : ""}`;
