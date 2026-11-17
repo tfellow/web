@@ -22,18 +22,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -103,7 +103,7 @@
   [data-app="cloze"] { --c: var(--c-cloze); } [data-app="forest"] { --c: var(--c-forest); }
   [data-app="show"] { --c: var(--c-show); } [data-app="grammar"] { --c: var(--c-grammar); }
   [data-app="class123"] { --c: var(--c-class); } [data-app="writing"] { --c: var(--c-writing); }
-  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); }
+  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); }
 
   .show { padding-block: 34px; }
   .show + .show { border-top: 1px dashed var(--line); }
@@ -226,9 +226,9 @@
       <div>
         <div class="kicker">Moonyoung · English Apps</div>
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
-        <p class="lede">영어 레벨 테스트와 세계문학·지식 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
+        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
+          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
         </nav>
       </div>
 
@@ -371,6 +371,39 @@
           <img src="assets/shots/knowledge-cover.webp" width="1280" height="800" loading="lazy" alt="MY Knowledge Passport 사용 설명서 표지: 레벨별 글 수와 지식 여권">
         </button>
         <figcaption>300편 서재 · 사용 설명서</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="metro" id="metro">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18M3 16h18"/><circle cx="7" cy="8" r="2"/><circle cx="17" cy="8" r="2"/><circle cx="12" cy="16" r="2"/></svg></div>
+          <div class="tags"><span class="tag">영어 교과서 읽기</span><span class="tag">중1·중2·고1</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Reading Metro<small>문영 교과서 메트로</small></h3>
+        <p>2022 개정 영어 교과서 본문을 지하철 노선도처럼 한 역씩 따라가며 읽어요. 학년과 교과서는 노선, 단원은 역이에요. 역마다 읽기, 분석, 단어, 줄거리, 퀴즈 다섯 개의 출구가 있어요.</p>
+        <ul class="feats">
+          <li>12개 노선 91개 역: YBM, NE능률, 천재교육 중1·중2와 공통영어 1·2</li>
+          <li>문장별 해석·어휘·문법 해설과 원어민 음성</li>
+          <li>단어 플래시카드·짝 맞추기·철자 연습과 복습 일정</li>
+          <li>줄거리 빈칸·순서 드래그 앤 드롭, 10문항 퀴즈</li>
+          <li>단어 수, CEFR, Lexile 추정치 분석은 로그인 없이도 공개</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="metro/">메트로 타기 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/metro-map.webp" data-cap="노선도: 교과서는 노선, 단원은 역">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/metro</span></span>
+          <img src="assets/shots/metro-map.webp" width="1280" height="800" loading="lazy" alt="리딩 메트로 노선도 화면: 학년별 노선과 단원 역">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/metro-stats.webp" data-cap="역마다 본문 분석: 단어 수, CEFR, Lexile 추정">
+          <img src="assets/shots/metro-stats.webp" width="1280" height="800" loading="lazy" alt="리딩 메트로 본문 분석 화면: 단어 수, 문장 수, CEFR, Lexile 추정치">
+        </button>
+        <figcaption>노선도 · 본문 분석</figcaption>
       </figure>
     </div>
   </article>
@@ -732,6 +765,7 @@
       ["level/#/teacher", "MY Level Test · 교사 화면", "응시 열기, 재응시 간격, 학생 결과, 문항 분석"],
       ["app/#/teacher", "MY Reading Passport · 교사 화면", "학생 기록, 퀴즈 통계, 교사 추가, 반 목표"],
       ["reading2/app/#/teacher", "MY Knowledge Passport · 교사 화면", "반별 현황, 학생·글별 기록, 문항 분석, 반 목표, 추천 글"],
+      ["metro/#/teacher", "MY Reading Metro · 교사 화면", "학생별 퀴즈 기록과 역별 현황"],
       ["grammar/admin.html", "MY Grammar · 교사 화면", "단원·문제 관리, 학생 기록, 공지"],
       ["quiz/", "Quiz Queens · 관리자 모드", "앱 오른쪽 위 관리자 버튼으로 문제·기록 관리"],
       ["cloze/", "MY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
