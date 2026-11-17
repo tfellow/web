@@ -12,6 +12,7 @@
 |---|---|---|
 | Supabase `tfellow-web` | 독서 여권 | `roster` 명단, `admin_attempts()` 퀴즈 기록, `books` 제목 |
 | | 지식 여권 | `r2_admin_attempts()` 퀴즈 기록, `r2_books` 제목 |
+| | 리딩 메트로 | `tm_attempts` 퀴즈·줄거리 기록(교사만 읽기), `tm_units` 제목, `profiles` 이메일 |
 | | MY Grammar | `mg_players`, `mg_stamps`, `mg_admin_by_student(기간)` |
 | | Quiz Queens | Apps Script `getInitialData` (Supabase 토큰으로 교사 확인) |
 | | MY Brain Up | `bu_daily` 학생×날짜 합계 (하루 1줄 = 기록 1개: 푼 문제·맞힌 문제·점수·영어·오늘의 10문제). 보상 기준: 맞힌 문제, 10문제 완주, 🌅 아침 보너스(아침 시간에 10문제 완주), 도전한 날 |
