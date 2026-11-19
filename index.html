@@ -24,18 +24,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -112,7 +112,7 @@
   .tool.slim .tool-body { padding: 0; flex: 1; min-width: 0; }
   .tools.three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
   @media (max-width: 980px) { .tools.three { grid-template-columns: minmax(0, 1fr); } }
-  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); }
+  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); } [data-app="history"] { --c: var(--c-history); }
 
   .show { padding-block: 34px; }
   .show + .show { border-top: 1px dashed var(--line); }
@@ -237,7 +237,7 @@
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
         <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
+          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#history">역사 박물관</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
         </nav>
       </div>
 
@@ -414,6 +414,39 @@
           <img src="assets/shots/metro-stats.webp" width="1280" height="800" loading="lazy" alt="리딩 메트로 본문 분석 화면: 단어 수, 문장 수, CEFR, Lexile 추정치">
         </button>
         <figcaption>노선도 · 본문 분석</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="history" id="history">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></div>
+          <div class="tags"><span class="tag">역사 교과서</span><span class="tag">세계사·한국사</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY History Museum<small>문영 역사 박물관</small></h3>
+        <p>중학교 역사 ①(세계사)과 역사 ②(한국사) 교과서를 한 박물관에서 나란히 관람해요. 대단원은 전시관, 중단원은 전시실이에요. 로비의 두 줄 연표로 같은 시기의 세계와 우리 역사를 한눈에 봐요.</p>
+        <ul class="feats">
+          <li>세계사관 7개·한국사관 6개 전시관, 40개 전시실 (차례로 개관)</li>
+          <li>해설 읽기: 용어·한자 풀이, 필기 노트 빈칸, 생각 질문</li>
+          <li>사료·유물 탐구: 내 답 쓰고 예시 답안과 비교</li>
+          <li>인물·개념 카드 복습, 연표 순서·원인→결과·나란히 짝 퍼즐</li>
+          <li>10문항 확인 퀴즈와 전시실별 관람 도장</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="history/">박물관 입장 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/history-lobby.webp" data-cap="로비: 세계사·한국사 두 줄 연표와 두 전시동">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/history</span></span>
+          <img src="assets/shots/history-lobby.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 로비 화면: 세계사와 한국사 전시관을 나란히 놓은 두 줄 연표">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/history-puzzle.webp" data-cap="연표·인과 코너: 원인 → 사건 → 결과 카드 놓기">
+          <img src="assets/shots/history-puzzle.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 연표·인과 코너 화면: 원인, 사건, 결과 카드를 골라 놓는 퍼즐">
+        </button>
+        <figcaption>두 줄 연표 · 인과 퍼즐</figcaption>
       </figure>
     </div>
   </article>
@@ -847,6 +880,7 @@
       ["app/#/teacher", "MY Reading Passport · 교사 화면", "학생 기록, 퀴즈 통계, 교사 추가, 반 목표"],
       ["reading2/app/#/teacher", "MY Knowledge Passport · 교사 화면", "반별 현황, 학생·글별 기록, 문항 분석, 반 목표, 추천 글"],
       ["metro/#/teacher", "MY Reading Metro · 교사 화면", "학생별 퀴즈 기록과 역별 현황"],
+      ["history/#/teacher", "MY History Museum · 학예실(교사 화면)", "학생별 퀴즈·퍼즐·사료 답, 사료 탐구 답 모아 보기"],
       ["grammar/admin.html", "MY Grammar · 교사 화면", "단원·문제 관리, 학생 기록, 공지"],
       ["brainup/#/teacher", "MY Brain Up · 교사 화면", "문제 올리기, 오늘의 10문제 현황, 아침 보너스, QR 포스터"],
       ["speaking/#/teacher", "MY Speaking · 교사 화면", "대화문 붙여 넣기·공개, 학생별·문장별 결과"],

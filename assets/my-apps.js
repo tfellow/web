@@ -22,6 +22,7 @@
     ["app/", "📖", "MY Reading Passport", "세계문학 읽고 퀴즈"],
     ["reading2/app/", "🌍", "MY Knowledge Passport", "지식 글 읽고 퀴즈"],
     ["metro/", "🚇", "MY Reading Metro", "교과서 본문 읽기"],
+    ["history/", "🏛️", "MY History Museum", "역사 교과서 박물관"],
     ["grammar/", "✏️", "MY Grammar", "문법 배우고 풀기"],
     ["writing1/", "📝", "AI 영작문 튜터", "한국어를 영어로 쓰기"],
     ["speaking/", "🎤", "MY Speaking", "대화문 듣고 말하기"],
@@ -78,10 +79,10 @@
 
   root.innerHTML = "<style>" + css + "</style>" +
     '<div class="wrap">' +
-    '<button class="tab" type="button" aria-label="MY English 다른 앱 열기" aria-expanded="false">MY</button>' +
+    '<button class="tab" type="button" aria-label="MY 다른 앱 열기" aria-expanded="false">MY</button>' +
     '<div class="shade"></div>' +
-    '<nav class="panel" aria-label="MY English 앱 목록" aria-hidden="true">' +
-    '<div class="head"><div><b>MY English</b><span>문영 영어 앱</span></div><button class="x" type="button" aria-label="닫기">×</button></div>' +
+    '<nav class="panel" aria-label="MY 앱 목록" aria-hidden="true">' +
+    '<div class="head"><div><b>MY Apps</b><span>문영 영어·역사 앱</span></div><button class="x" type="button" aria-label="닫기">×</button></div>' +
     '<div class="top"><a href="' + esc(base) + '">🏠 처음 화면</a><a href="' + esc(base + "me/") + '">🗺️ 내 기록</a></div>' +
     '<ul class="list">' + items + "</ul>" +
     '<div class="foot">서울문영여자중학교 영어과 · <a href="' + esc(base + "privacy.html") + '">개인정보처리방침</a></div></nav></div>';
