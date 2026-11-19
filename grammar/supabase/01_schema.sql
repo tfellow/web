@@ -499,6 +499,22 @@ language sql stable security definer set search_path = public as $$
    group by a.topic_code
 $$;
 
+-- 단원별 진도 (05_unit_stats.sql 과 같아요). 학생 × 소단원마다: 푼 문제 수(서로 다른 문제), 맞힌 문제 수(한 번이라도 맞힌 문제),
+-- 시도 횟수, 정답 횟수, 마지막 풀이 시각. 지금 공개 중인 문제만 세요.
+create or replace function public.mg_admin_unit_progress(p_from timestamptz, p_to timestamptz)
+returns table (user_id uuid, topic_code text, solved bigint, correct bigint,
+               attempts bigint, correct_attempts bigint, last_at timestamptz)
+language sql stable security definer set search_path = public as $$
+  select a.user_id, q.topic_code,
+         count(distinct a.question_id),
+         count(distinct a.question_id) filter (where a.is_correct),
+         count(*), count(*) filter (where a.is_correct), max(a.created_at)
+    from public.mg_attempts a
+    join public.mg_questions q on q.id = a.question_id and q.active
+   where public.mg_is_admin() and a.created_at >= p_from and a.created_at < p_to
+   group by a.user_id, q.topic_code
+$$;
+
 -- ---------- 8. 보안 규칙 (Row Level Security) ----------
 alter table public.mg_settings  enable row level security;
 alter table public.mg_admins    enable row level security;
@@ -540,6 +556,6 @@ grant usage, select on all sequences in schema public to authenticated;
 grant execute on function public.mg_me(), public.mg_set_profile(text, int, int, int), public.mg_submit(int, text, text),
   public.mg_leaderboard(text, int), public.mg_class_board(text), public.mg_admin_by_student(timestamptz, timestamptz),
   public.mg_admin_by_question(timestamptz, timestamptz), public.mg_admin_by_day(timestamptz, timestamptz),
-  public.mg_admin_student_topics(uuid), public.mg_is_admin(), public.mg_is_allowed() to authenticated;
+  public.mg_admin_student_topics(uuid), public.mg_admin_unit_progress(timestamptz, timestamptz), public.mg_is_admin(), public.mg_is_allowed() to authenticated;
 
 -- 끝! 이어서 02_sample_data.sql 을 실행하면 샘플 단원·문제가 들어가요.
