@@ -43,7 +43,7 @@
   }
 
   /* ---------- 틀 ---------- */
-  var NAV = [["#/", "📊", "대시보드"], ["#/students", "👩‍🎓", "학생별"], ["#/classes", "🏫", "반별"], ["#/qstats", "🎯", "문제별 통계"],
+  var NAV = [["#/", "📊", "대시보드"], ["#/students", "👩‍🎓", "학생별"], ["#/classes", "🏫", "반별"], ["#/units", "📈", "단원별 진도"], ["#/qstats", "🎯", "문제별 통계"],
     ["#/questions", "🗂️", "문제 관리"], ["#/add", "➕", "문제 추가"], ["#/topics", "📖", "단원 관리"], ["#/certs", "🎓", "인증서"], ["#/settings", "⚙️", "설정"]];
   function renderChrome() {
     $("#sidenav").innerHTML = NAV.map(function (n) { return '<a href="' + n[0] + '" data-nav="' + n[0] + '"><span class="em">' + n[1] + "</span>" + n[2] + "</a>"; }).join("") +
@@ -52,7 +52,7 @@
     $("#chips").innerHTML = '<span class="chip hide-sm">👩‍🏫 ' + esc(D.me.email) + "</span>";
     if (MG.DEMO) document.body.insertAdjacentHTML("beforeend", '<div class="demo-flag">체험 모드</div>');
     var st = document.createElement("style");
-    st.textContent = "@media (max-width:820px){.shell{padding-bottom:40px}}.adm-tabs{display:none;gap:6px;overflow-x:auto;margin:-4px 0 14px;padding-bottom:4px}.adm-tabs a{flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);text-decoration:none;color:var(--ink);font-weight:700;font-size:.88rem}.adm-tabs a.on{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}@media (max-width:820px){.adm-tabs{display:flex}}";
+    st.textContent = "@media (max-width:820px){.shell{padding-bottom:40px}}.ufilters{display:flex;flex-wrap:wrap;gap:8px}.ufilters select{width:100%;min-width:0;flex:1 1 180px;max-width:360px}@media (max-width:600px){.ufilters select{max-width:none;flex-basis:100%}}.ufrac{min-width:84px;white-space:nowrap}.ufrac .bar{height:6px;margin-top:3px}.adm-tabs{display:none;gap:6px;overflow-x:auto;margin:-4px 0 14px;padding-bottom:4px}.adm-tabs a{flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);text-decoration:none;color:var(--ink);font-weight:700;font-size:.88rem}.adm-tabs a.on{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}@media (max-width:820px){.adm-tabs{display:flex}}";
     document.head.appendChild(st);
   }
   function route() {
@@ -61,7 +61,7 @@
     window.scrollTo(0, 0);
     $$(".overlay").forEach(function (o) { o.remove(); });
     var arg = decodeURIComponent(h.slice(2).split("/")[1] || "");
-    var f = { "#/": dash, "#/students": students, "#/classes": classes, "#/qstats": qstats, "#/questions": questions, "#/add": addPage, "#/topics": topics, "#/certs": certs, "#/settings": settings }[base] || dash;
+    var f = { "#/": dash, "#/students": students, "#/classes": classes, "#/units": units, "#/qstats": qstats, "#/questions": questions, "#/add": addPage, "#/topics": topics, "#/certs": certs, "#/settings": settings }[base] || dash;
     $app.innerHTML = '<nav class="adm-tabs">' + NAV.map(function (n) { return '<a href="' + n[0] + '" class="' + (n[0] === base ? "on" : "") + '">' + n[1] + " " + n[2] + "</a>"; }).join("") + '<a href="./' + (MG.DEMO ? "?demo=1" : "") + '">🎒 학생 화면</a></nav><div id="page"><div class="loading">불러오는 중…</div></div>';
     Promise.resolve(f(arg)).catch(function (e) { $("#page").innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
   }
@@ -297,6 +297,155 @@
     $("#clscsv").onclick = function () {
       MG.download("MY_Grammar_반별_" + MG.kstDate() + ".csv", MG.csv([["반", "학생수", "활동학생", "푼문제", "정답률", "1인당기간XP", "누적XP합", "1인당스탬프"]].concat(rows.map(function (c) { return [c.key, c.members, c.active, c.a, c.a ? MG.pct(c.c, c.a) + "%" : "", c.avg, c.xp, c.stAvg]; }))), "text/csv");
     };
+  }
+
+  /* ---------- 단원별 진도: 단원 문제 중 몇 문제를 풀고 맞혔는지 (반별 · 학생별) ---------- */
+  var uf = { grade: "", unit: "", cls: "", first: true };   // unit: "" (단원 목록) | "T:소단원코드" | "U:대단원코드"
+  function unitKey(code) { return String(code).split("-").slice(0, -1).join("-"); }
+  function frac(a, n, dec) {
+    var v = dec ? Math.round(a * 10) / 10 : a, p = n ? Math.min(100, Math.round((a / n) * 100)) : 0;
+    return '<div class="ufrac"><b>' + v + '</b><span class="muted">/' + (dec ? Math.round(n * 10) / 10 : n) + '</span><div class="bar ' + (p >= 100 ? "ok" : "") + '"><i style="width:' + p + '%"></i></div></div>';
+  }
+  function clsName(k) { return k === "미지정" ? "미지정" : k.replace("-", "학년 ") + "반"; }
+  async function units() {
+    if (uf.first) { uf.first = false; if (P.key === "7") setPeriod("all"); }   // 진도는 처음엔 전체 기간으로
+    var up = await A.unitProgress(F(), T(), D.qBy);
+    // 단원별 공개 문제 수
+    var qN = {};
+    D.questions.forEach(function (q) { if (q.active && D.topicBy[q.topic_code] && D.topicBy[q.topic_code].active) qN[q.topic_code] = (qN[q.topic_code] || 0) + 1; });
+    var tlist = D.topics.filter(function (t) { return t.active && qN[t.code]; });
+    var groups = {}, gorder = [];
+    tlist.forEach(function (t) {
+      var k = unitKey(t.code);
+      if (!groups[k]) { groups[k] = { key: k, grade: t.grade, unit_no: t.unit_no, title: t.unit_title || t.category || k, codes: [] }; gorder.push(k); }
+      groups[k].codes.push(t.code);
+    });
+    var prog = {};
+    up.forEach(function (r) { (prog[r.user_id] = prog[r.user_id] || {})[r.topic_code] = r; });
+    var stu = students_().map(function (p) { return Object.assign({}, p, { sid: sid(p), cls: p.grade ? p.grade + "-" + p.class_no : "미지정", sortSid: (p.grade || 9) * 10000 + (p.class_no || 99) * 100 + (p.student_no || 99) }); });
+    var classes = {}; stu.forEach(function (p) { classes[p.cls] = 1; });
+    var clsKeys = Object.keys(classes).sort();
+    if (uf.cls && !classes[uf.cls]) uf.cls = "";
+    if (uf.unit && !sel(uf.unit)) uf.unit = "";
+
+    function sel(u) {
+      if (!u) return null;
+      if (u.slice(0, 2) === "T:") { var t = D.topicBy[u.slice(2)]; return t && qN[t.code] ? { codes: [t.code], label: t.code + " " + t.title, sub: (t.unit_title ? "대단원 " + (t.unit_no || "") + " " + t.unit_title : "") } : null; }
+      var g = groups[u.slice(2)]; return g ? { codes: g.codes, label: g.key + " " + g.title + " (대단원 전체)", sub: "소단원 " + g.codes.length + "개" } : null;
+    }
+    // 학생 한 명의 진도 (단원 여러 개면 합쳐서)
+    function stat(p, codes) {
+      var o = { solved: 0, correct: 0, attempts: 0, ca: 0, last_at: null }, m = prog[p.id] || {};
+      codes.forEach(function (c) { var r = m[c]; if (!r) return; o.solved += +r.solved; o.correct += +r.correct; o.attempts += +r.attempts; o.ca += +r.correct_attempts; if (!o.last_at || r.last_at > o.last_at) o.last_at = r.last_at; });
+      return o;
+    }
+    function nOf(codes) { return codes.reduce(function (n, c) { return n + (qN[c] || 0); }, 0); }
+    function summarize(list, codes) {
+      var N = nOf(codes), c = { members: list.length, active: 0, solved: 0, correct: 0, attempts: 0, ca: 0, done: 0, N: N };
+      list.forEach(function (p) { var s = stat(p, codes); if (s.solved) c.active++; c.solved += s.solved; c.correct += s.correct; c.attempts += s.attempts; c.ca += s.ca; if (N && s.solved >= N) c.done++; });
+      c.avgS = c.members ? c.solved / c.members : 0; c.avgC = c.members ? c.correct / c.members : 0;
+      c.acc = c.attempts ? c.ca / c.attempts : null; c.part = c.members ? c.active / c.members : 0;
+      return c;
+    }
+    function inCls(p) { return !uf.cls || p.cls === uf.cls; }
+
+    function draw() {
+      var s = sel(uf.unit), list = stu.filter(inCls), html = "";
+      if (!s) {
+        // 단원 목록 (한눈에 보기)
+        var rows = tlist.filter(function (t) { return !uf.grade || String(t.grade) === uf.grade; }).map(function (t) {
+          return Object.assign(summarize(list, [t.code]), { code: t.code, title: t.title, unit: t.unit_title || "", grade: t.grade, so: D.topics.indexOf(t) });
+        });
+        if (!sortState.uall) rows.sort(function (a, b) { return a.so - b.so; });
+        html = '<div class="card"><h2>📈 단원 한눈에 보기 <span class="sub">' + esc(uf.cls ? clsName(uf.cls) : "전체 학생") + " " + list.length + "명 기준 · 단원을 누르면 반별·학생별로 자세히</span></h2>" + table("uall", [
+          { k: "so", label: "단원", wrap: true, f: function (r) { return "<b>" + esc(r.title) + '</b><br><span class="small muted">' + esc(r.code) + (r.unit ? " · " + esc(r.unit) : "") + "</span>"; } },
+          { k: "avgS", label: "1인당 풀이", num: true, f: function (r) { return frac(r.avgS, r.N, true); } },
+          { k: "avgC", label: "1인당 정답", num: true, f: function (r) { return frac(r.avgC, r.N, true); } },
+          { k: "part", label: "참여 학생", num: true, f: function (r) { return r.active + '<span class="muted">/' + r.members + "</span>"; } },
+          { k: "N", label: "문제 수", num: true },
+          { k: "done", label: "다 푼 학생", num: true },
+          { k: "acc", label: "정답률", num: true, f: function (r) { return accTag(r.ca, r.attempts); } }
+        ], rows, { click: true, key: "code" }) + '<p class="small muted">풀이 = 서로 다른 문제를 몇 개 풀었는지 · 정답 = 그중 한 번이라도 맞힌 문제 · 정답률 = 모든 시도 중 맞힌 비율. 1인당 값은 참여하지 않은 학생도 0으로 넣어 평균 낸 값이에요.</p>' +
+          '<button class="btn sm" id="ucsv">⬇️ CSV (엑셀)</button></div>';
+        $("#uwrap").innerHTML = html;
+        bindTable("uall", draw, function (code) { uf.unit = "T:" + code; syncSel(); draw(); });
+        $("#ucsv").onclick = function () {
+          MG.download("MY_Grammar_단원진도_" + (uf.cls || "전체") + "_" + MG.kstDate() + ".csv", MG.csv([["코드", "대단원", "단원", "문제수", "학생수", "참여학생", "1인당풀이", "1인당정답", "다푼학생", "정답률"]].concat(rows.map(function (r) {
+            return [r.code, r.unit, r.title, r.N, r.members, r.active, Math.round(r.avgS * 10) / 10, Math.round(r.avgC * 10) / 10, r.done, r.attempts ? MG.pct(r.ca, r.attempts) + "%" : ""];
+          }))), "text/csv;charset=utf-8");
+        };
+        return;
+      }
+      var N = nOf(s.codes);
+      // 반별
+      var crow = clsKeys.map(function (k) { return Object.assign(summarize(stu.filter(function (p) { return p.cls === k; }), s.codes), { key: k }); });
+      var all = summarize(stu, s.codes);
+      // 학생별
+      var srow = list.map(function (p) { var x = stat(p, s.codes); return Object.assign({}, p, x, { N: N, acc: x.attempts ? x.ca / x.attempts : null, sacc: x.solved ? x.correct / x.solved : null }); });
+      if (!sortState.ustu) srow.sort(function (a, b) { return a.sortSid - b.sortSid; });
+      html = '<div class="card"><div class="row between wrap gap"><div><h2 style="margin:0">📘 ' + esc(s.label) + "</h2>" + (s.sub ? '<p class="small muted" style="margin:2px 0 0">' + esc(s.sub) + "</p>" : "") + '</div><button class="btn sm" id="uback">← 단원 목록</button></div>' +
+        '<div class="kpis mt"><div class="kpi"><b>' + N + '</b><span>공개 문제 수</span></div><div class="kpi"><b>' + all.active + "/" + all.members + '</b><span>참여 학생</span></div><div class="kpi"><b>' + all.done + '</b><span>다 푼 학생</span></div><div class="kpi"><b>' + (all.attempts ? MG.pct(all.ca, all.attempts) + "%" : "-") + "</b><span>정답률</span></div></div></div>" +
+        '<div class="card"><h2>🏫 반별 <span class="sub">반을 누르면 그 반 학생만 보여요</span></h2>' + table("ucls", [
+          { k: "key", label: "반", f: function (c) { return "<b>" + esc(clsName(c.key)) + "</b>" + (uf.cls === c.key ? ' <span class="tag brand">선택</span>' : ""); } },
+          { k: "avgS", label: "1인당 풀이", num: true, f: function (c) { return frac(c.avgS, N, true); } },
+          { k: "avgC", label: "1인당 정답", num: true, f: function (c) { return frac(c.avgC, c.avgS, true); } },
+          { k: "part", label: "참여", num: true, f: function (c) { return c.active + "/" + c.members + ' <span class="muted small">(' + Math.round(c.part * 100) + "%)</span>"; } },
+          { k: "done", label: "다 푼 학생", num: true },
+          { k: "acc", label: "정답률", num: true, f: function (c) { return accTag(c.ca, c.attempts); } }
+        ], crow, { click: true, key: "key", h: "45vh" }) + '<button class="btn sm mt" id="uccsv">⬇️ 반별 CSV</button></div>' +
+        '<div class="card"><h2>👩‍🎓 학생별 <span class="sub">' + esc(uf.cls ? clsName(uf.cls) : "전체 반") + " " + srow.length + "명 · 풀이 " + N + "문제 중 · 정답은 푼 문제 중</span></h2>" + table("ustu", [
+          { k: "sortSid", label: "학생", f: function (r) { return "<b>" + esc(r.real_name || "-") + '</b><br><span class="small muted">' + esc(r.sid) + "</span>"; } },
+          { k: "solved", label: "풀이", num: true, f: function (r) { return frac(r.solved, N); } },
+          { k: "sacc", label: "정답", num: true, f: function (r) { return r.solved ? frac(r.correct, r.solved) : '<span class="muted">-</span>'; } },
+          { k: "acc", label: "정답률", num: true, f: function (r) { return accTag(r.ca, r.attempts); } },
+          { k: "attempts", label: "시도", num: true },
+          { k: "nickname", label: "닉네임" },
+          { k: "last_at", label: "마지막 풀이", f: function (r) { return r.last_at ? MG.kstTime(r.last_at) : "-"; } }
+        ], srow, { click: true, key: "id" }) + '<p class="small muted">풀이 = 서로 다른 문제를 몇 개 풀었는지 · 정답 = 그중 한 번이라도 맞힌 문제 · 정답률 = 모든 시도 중 맞힌 비율 · 학생을 누르면 자세한 기록이 열려요.</p>' +
+        '<button class="btn sm" id="uscsv">⬇️ 학생별 CSV</button></div>';
+      $("#uwrap").innerHTML = html;
+      $("#uback").onclick = function () { uf.unit = ""; syncSel(); draw(); };
+      bindTable("ucls", draw, function (k) { uf.cls = uf.cls === k ? "" : k; syncSel(); draw(); });
+      bindTable("ustu", draw, function (id) { studentModal(id); });
+      var fname = function (kind) { return "MY_Grammar_" + kind + "_" + s.codes[0].replace(/-\d+$/, s.codes.length > 1 ? "" : "$&") + "_" + MG.kstDate() + ".csv"; };
+      $("#uccsv").onclick = function () {
+        MG.download(fname("단원진도_반별"), MG.csv([["단원", "반", "학생수", "참여학생", "문제수", "1인당풀이", "1인당정답", "다푼학생", "정답률"]].concat(crow.map(function (c) {
+          return [s.label, clsName(c.key), c.members, c.active, N, Math.round(c.avgS * 10) / 10, Math.round(c.avgC * 10) / 10, c.done, c.attempts ? MG.pct(c.ca, c.attempts) + "%" : ""];
+        }))), "text/csv;charset=utf-8");
+      };
+      $("#uscsv").onclick = function () {
+        MG.download(fname("단원진도_학생별"), MG.csv([["단원", "학년", "반", "번호", "실명", "닉네임", "문제수", "푼문제", "맞힌문제", "시도", "정답률", "마지막풀이"]].concat(srow.map(function (r) {
+          return [s.label, r.grade, r.class_no, r.student_no, r.real_name, r.nickname, N, r.solved, r.correct, r.attempts, r.attempts ? MG.pct(r.ca, r.attempts) + "%" : "", r.last_at ? MG.kstTime(r.last_at) : ""];
+        }))), "text/csv;charset=utf-8");
+      };
+    }
+    function unitOptions() {
+      var o = '<option value="">📋 단원 목록 (한눈에 보기)</option>', last = null;
+      gorder.forEach(function (k) {
+        var g = groups[k];
+        if (uf.grade && String(g.grade) !== uf.grade) return;
+        if (g.grade !== last) { if (last !== null) o += "</optgroup>"; o += '<optgroup label="' + esc(MG.GRADES[g.grade] || "기타") + '">'; last = g.grade; }
+        o += '<option value="U:' + esc(k) + '">📚 ' + esc(k + " " + g.title) + " · 전체 (" + nOf(g.codes) + "문제)</option>";
+        g.codes.forEach(function (c) { o += '<option value="T:' + esc(c) + '">　' + esc(c + " " + D.topicBy[c].title) + " (" + qN[c] + "문제)</option>"; });
+      });
+      return o + (last !== null ? "</optgroup>" : "");
+    }
+    function syncSel() {
+      $("#uunit").innerHTML = unitOptions(); $("#uunit").value = uf.unit;
+      if ($("#uunit").value !== uf.unit) { uf.unit = ""; $("#uunit").value = ""; }
+      $("#uclsSel").value = uf.cls;
+    }
+    page(periodBar(units) + '<div class="card" style="padding:12px 16px"><div class="ufilters">' +
+      '<select id="ugrade"><option value="">전체 학년 단원</option>' + Object.keys(MG.GRADES).map(function (g) { return '<option value="' + g + '"' + (uf.grade === g ? " selected" : "") + ">" + esc(MG.GRADES[g]) + " 단원</option>"; }).join("") + "</select>" +
+      '<select id="uunit"></select>' +
+      '<select id="uclsSel"><option value="">전체 반</option>' + clsKeys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(clsName(k)) + "</option>"; }).join("") + "</select></div>" +
+      (up.fallback ? '<p class="small muted" style="margin:8px 0 0">💡 Supabase에서 <b>grammar/supabase/05_unit_stats.sql</b> 을 한 번 실행하면 이 화면이 더 빨라져요.</p>' : "") +
+      (tlist.length ? "" : '<p class="small muted" style="margin:8px 0 0">아직 문제가 들어 있는 단원이 없어요.</p>') + '</div><div id="uwrap"></div>');
+    syncSel();
+    $("#ugrade").onchange = function () { uf.grade = this.value; if (uf.unit && sel(uf.unit) && uf.grade && String(D.topicBy[sel(uf.unit).codes[0]].grade) !== uf.grade) uf.unit = ""; syncSel(); draw(); };
+    $("#uunit").onchange = function () { uf.unit = this.value; draw(); };
+    $("#uclsSel").onchange = function () { uf.cls = this.value; draw(); };
+    draw();
   }
 
   /* ---------- 문제별 통계 ---------- */

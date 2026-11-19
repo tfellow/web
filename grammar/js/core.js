@@ -176,6 +176,23 @@
     }
   }
 
+  // 학생 × 소단원 진도 계산 (원본 풀이 기록 → 푼 문제 · 맞힌 문제). qBy: 문제 id → 문제
+  MG.aggUnitProgress = function (attempts, qBy) {
+    var g = {};
+    attempts.forEach(function (a) {
+      var q = qBy[a.question_id]; if (!q || q.active === false) return;
+      var k = a.user_id + "|" + q.topic_code;
+      var r = g[k] = g[k] || { user_id: a.user_id, topic_code: q.topic_code, s: {}, c: {}, attempts: 0, correct_attempts: 0, last_at: null };
+      r.s[a.question_id] = 1; if (a.is_correct) r.c[a.question_id] = 1;
+      r.attempts++; if (a.is_correct) r.correct_attempts++;
+      if (!r.last_at || a.created_at > r.last_at) r.last_at = a.created_at;
+    });
+    return Object.keys(g).map(function (k) {
+      var r = g[k];
+      return { user_id: r.user_id, topic_code: r.topic_code, solved: Object.keys(r.s).length, correct: Object.keys(r.c).length, attempts: r.attempts, correct_attempts: r.correct_attempts, last_at: r.last_at };
+    });
+  };
+
   function SupaApi() {
     var sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_KEY);
     this.sb = sb;
@@ -210,6 +227,16 @@
       byQuestion: async function (f, t) { return rpcErr(await sb.rpc("mg_admin_by_question", { p_from: f, p_to: t })); },
       byDay: async function (f, t) { return rpcErr(await sb.rpc("mg_admin_by_day", { p_from: f, p_to: t })); },
       studentTopics: async function (uid) { return rpcErr(await sb.rpc("mg_admin_student_topics", { p_user: uid })); },
+      // 단원별 진도: 05_unit_stats.sql 의 함수를 쓰고, 아직 실행 전이면 풀이 기록을 직접 모아 계산해요
+      unitProgress: async function (f, t, qBy) {
+        try {
+          return await fetchAll(function () { return sb.rpc("mg_admin_unit_progress", { p_from: f, p_to: t }).order("user_id").order("topic_code"); });
+        } catch (e) {
+          if (!/mg_admin_unit_progress|PGRST202|function/i.test(e.message || "")) throw e;
+          var raw = await fetchAll(function () { return sb.from("mg_attempts").select("user_id,question_id,is_correct,created_at").gte("created_at", f).lt("created_at", t).order("id"); });
+          var rows = MG.aggUnitProgress(raw, qBy || {}); rows.fallback = true; return rows;
+        }
+      },
       recentAttempts: async function (uid) { return rpcErr(await sb.from("mg_attempts").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(40)); },
       table: function (name, order) { return fetchAll(function () { var q = sb.from(name).select("*"); return order ? q.order(order) : q; }); },
       topics: function () { return fetchAll(function () { return sb.from("mg_topics").select("*").order("grade").order("sort_order").order("code"); }); },
@@ -443,6 +470,10 @@
       studentTopics: function (uid) {
         var g = group(db.attempts.filter(function (a) { return a.user_id === uid; }), function (a) { return a.topic_code; });
         return wait(Object.keys(g).map(function (k) { var a = g[k]; return { topic_code: k, attempts: a.length, correct: a.filter(function (x) { return x.is_correct; }).length, last_at: a[a.length - 1].created_at }; }));
+      },
+      unitProgress: function (f, t) {
+        var qBy = {}; db.questions.forEach(function (q) { qBy[q.id] = q; });
+        return wait(MG.aggUnitProgress(db.attempts.filter(function (a) { return inRange(a, f, t); }), qBy));
       },
       recentAttempts: function (uid) { return wait(db.attempts.filter(function (a) { return a.user_id === uid; }).slice(-40).reverse()); },
       table: function (name) { return wait(db[name.replace(/^mg_/, "")] || []); },
