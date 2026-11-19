@@ -20,7 +20,7 @@ on conflict (key) do nothing;
 create table if not exists public.mg_admins (
   email text primary key
 );
-insert into public.mg_admins (email) values ('tfellow@gmail.com'), ('tfellow@smy.ms.kr')
+insert into public.mg_admins (email) values ('tfellow@gmail.com'), ('tfellow@smy.ms.kr'), ('engwords@smy.ms.kr'), ('hist1026@gmail.com')
 on conflict (email) do nothing;
 
 -- ---------- 2. 학생 ----------

@@ -18,7 +18,8 @@ export const SCHOOL_DOMAIN = "smy.ms.kr";
 export const TEACHER_EMAILS = [
   "tfellow@gmail.com",
   "tfellow@smy.ms.kr",
-  "engwords@smy.ms.kr"
+  "engwords@smy.ms.kr",
+  "hist1026@gmail.com"
 ];
 
 export const APP_NAME = "MY Cloze";

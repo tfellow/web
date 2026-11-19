@@ -9,7 +9,7 @@ import { createRemoteJWKSet, jwtVerify } from "https://deno.land/x/jose@v5.9.6/i
 
 const FIREBASE_PROJECT = "cloze-a8e6c";
 const ALLOWED_ORIGINS = ["https://tfellow.github.io"];
-const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@gmail.com"];
+const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@gmail.com", "engwords@smy.ms.kr", "hist1026@gmail.com"];
 const MODEL = "gemini-2.5-flash";
 const MAX_BODY = 20_000;
 

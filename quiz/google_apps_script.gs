@@ -1685,7 +1685,7 @@ function syncCategoryTabsToQuestionBank() {
 // - 다른 학생의 실명·이메일·번호는 교사에게만 보내요. 학생에게는 닉네임 랭킹만 보내요.
 // - 문제 상태 변경, 교사 목록 변경은 교사만 할 수 있어요.
 // ============================================================================
-const QQ_ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+const QQ_ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr', 'hist1026@gmail.com'];
 const QQ_SCHOOL_DOMAIN = '@smy.ms.kr';
 const QQ_SUPABASE_URL = 'https://jkxdhyvnrvsiokbbbjtu.supabase.co';
 const QQ_SUPABASE_KEY = 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF';

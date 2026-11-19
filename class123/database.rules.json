@@ -2,18 +2,18 @@
   "rules": {
     "class123_plus": {
       "$workspace": {
-        ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
+        ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')"
       }
     },
     "activePin": {
       ".read": true,
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')"
     },
     "rooms": {
       ".read": "auth != null && auth.token.email_verified == true && (auth.token.email.toLowerCase().endsWith('@smy.ms.kr') || auth.token.email == 'tfellow@gmail.com')",
       "$pin": {
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
         "players": {
           "$player": {
             ".write": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().endsWith('@smy.ms.kr') && auth.token.email.toLowerCase().replace('.', '_') == $player"
@@ -22,23 +22,23 @@
       }
     },
     "schoolRoster": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')"
     },
     "rosterByEmail": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
       "$key": {
         ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $key"
       }
     },
     "homework": {
       ".read": "auth != null && auth.token.email_verified == true && (auth.token.email.toLowerCase().endsWith('@smy.ms.kr') || auth.token.email == 'tfellow@gmail.com')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')"
     },
     "homeworkResults": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
       "$hwId": {
         "$player": {
           ".read": "auth != null && auth.token.email_verified == true && auth.token.email.toLowerCase().replace('.', '_') == $player",
@@ -47,8 +47,8 @@
       }
     },
     "teacherData": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr')"
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == 'tfellow@gmail.com' || auth.token.email == 'tfellow@smy.ms.kr' || auth.token.email == 'engwords@smy.ms.kr' || auth.token.email == 'hist1026@gmail.com')"
     }
   }
 }

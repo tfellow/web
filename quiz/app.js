@@ -30,7 +30,7 @@ function getForsythiaSvgHtml(size = 38) {
 // Main Application Logic (app.js v1.1.0)
 // ============================================================================
 
-const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr'];
+const ADMIN_EMAILS = ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr', 'hist1026@gmail.com'];
 const ALLOWED_SCHOOL_DOMAIN = '@smy.ms.kr';
 const GOOGLE_CLIENT_ID = '359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com';
 const SUPABASE_URL = 'https://jkxdhyvnrvsiokbbbjtu.supabase.co';

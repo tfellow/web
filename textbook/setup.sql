@@ -17,8 +17,8 @@ grant select on public.textbook_sentence_notes to anon,authenticated;
 grant insert,update on public.textbook_sentence_notes to authenticated;
 create policy textbook_read on public.textbook_sentence_notes for select to anon,authenticated using(true);
 create policy textbook_insert on public.textbook_sentence_notes for insert to authenticated with check(
- lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr') and (auth.jwt()->'app_metadata'->>'provider')='google');
+ lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr','engwords@smy.ms.kr','hist1026@gmail.com') and (auth.jwt()->'app_metadata'->>'provider')='google');
 create policy textbook_update on public.textbook_sentence_notes for update to authenticated using(
- lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr') and (auth.jwt()->'app_metadata'->>'provider')='google') with check(
- lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr') and (auth.jwt()->'app_metadata'->>'provider')='google');
+ lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr','engwords@smy.ms.kr','hist1026@gmail.com') and (auth.jwt()->'app_metadata'->>'provider')='google') with check(
+ lower(auth.jwt()->>'email') in ('tfellow@gmail.com','tfellow@smy.ms.kr','engwords@smy.ms.kr','hist1026@gmail.com') and (auth.jwt()->'app_metadata'->>'provider')='google');
 commit;

@@ -52,7 +52,8 @@ const TEACHER_EMAILS = [
   "tfellow@smy.ms.kr",
   "tfellow@gmail.com",
   "engwords@gmail.com",
-  "engwords@smy.ms.kr"
+  "engwords@smy.ms.kr",
+  "hist1026@gmail.com"
 ];
 
 // ★ 보안: Gemini API 키는 학생 브라우저에 절대 보내지 않아요.
