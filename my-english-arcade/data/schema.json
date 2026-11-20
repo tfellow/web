@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MY English Arcade question bank",
+  "type": "object",
+  "required": ["version", "items"],
+  "properties": {
+    "version": {"const": 1},
+    "title": {"type": "string", "maxLength": 100},
+    "items": {
+      "type": "array", "minItems": 1, "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "required": ["id", "grade", "unit", "word", "meaning"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1, "maxLength": 500, "description": "전체 자료 내 유일하고 변경되지 않는 문항 ID"},
+          "grade": {"type": "integer", "enum": [1, 2, 3]},
+          "unit": {"type": "string", "minLength": 1, "maxLength": 50},
+          "word": {"type": "string", "minLength": 1, "maxLength": 500},
+          "meaning": {"type": "string", "minLength": 1, "maxLength": 500},
+          "definition": {"type": "string", "maxLength": 2000},
+          "sentence": {"type": "string", "maxLength": 2000},
+          "translation": {"type": "string", "maxLength": 2000},
+          "acceptedAnswers": {"type": "array", "maxItems": 20, "items": {"type": "string", "maxLength": 500}},
+          "source": {"type": "object", "description": "원본 파일명, 시트명, 행 번호"}
+        }
+      }
+    }
+  }
+}

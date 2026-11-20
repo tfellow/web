@@ -1,0 +1,10790 @@
+window.MY_BANK = {
+  "version": 1,
+  "title": "문영 중학교 영어 단어",
+  "items": [
+    {
+      "id": "g1-u1-r2",
+      "grade": 1,
+      "unit": "1",
+      "word": "active",
+      "meaning": "a. 활동적인",
+      "definition": "a. doing things that require physical movement and energy",
+      "sentence": "She is very active and friendly.",
+      "translation": "그녀는 매우 활동적이며 다정하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 2
+      }
+    },
+    {
+      "id": "g1-u1-r3",
+      "grade": 1,
+      "unit": "1",
+      "word": "app",
+      "meaning": "n. 앱, 애플리케이션",
+      "definition": "n. a computer program that performs a special function",
+      "sentence": "I use an app to learn English on my phone.",
+      "translation": "나는 전화로 영어를 배우기 위해 앱을 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 3
+      }
+    },
+    {
+      "id": "g1-u1-r4",
+      "grade": 1,
+      "unit": "1",
+      "word": "comment",
+      "meaning": "n. 댓글",
+      "definition": "n. Words on a post to share ideas or thoughts",
+      "sentence": "Some people leave bad comments online.",
+      "translation": "어떤 사람들은 온라인에 나쁜 댓글을 남기기도 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 4
+      }
+    },
+    {
+      "id": "g1-u1-r5",
+      "grade": 1,
+      "unit": "1",
+      "word": "cute",
+      "meaning": "a. 귀여운",
+      "definition": "a. attractive in a pretty or endearing way",
+      "sentence": "The puppy is so cute.",
+      "translation": "그 강아지는 너무 귀엽다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 5
+      }
+    },
+    {
+      "id": "g1-u1-r6",
+      "grade": 1,
+      "unit": "1",
+      "word": "diary",
+      "meaning": "n. 일기",
+      "definition": "n. a book in which you write down your personal experiences and thoughts each day",
+      "sentence": "She writes in her diary every night.",
+      "translation": "그녀는 매일 밤 일기를 쓴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 6
+      }
+    },
+    {
+      "id": "g1-u1-r7",
+      "grade": 1,
+      "unit": "1",
+      "word": "email",
+      "meaning": "n. 이메일",
+      "definition": "n. a way to send messages using the internet",
+      "sentence": "I got an email from my friend.",
+      "translation": "나는 친구에게서 이메일을 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 7
+      }
+    },
+    {
+      "id": "g1-u1-r8",
+      "grade": 1,
+      "unit": "1",
+      "word": "enjoy",
+      "meaning": "v. 즐기다",
+      "definition": "v. to take pleasure in something",
+      "sentence": "I enjoy reading books.",
+      "translation": "나는 책 읽는 것을 즐긴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 8
+      }
+    },
+    {
+      "id": "g1-u1-r9",
+      "grade": 1,
+      "unit": "1",
+      "word": "fashion",
+      "meaning": "n. 패션",
+      "definition": "n. a popular way of dressing during a particular time or among a particular group of people.",
+      "sentence": "The magazine is full of the latest fashion trends.",
+      "translation": "그 잡지는 최신 패션 트렌드로 가득하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 9
+      }
+    },
+    {
+      "id": "g1-u1-r10",
+      "grade": 1,
+      "unit": "1",
+      "word": "follower",
+      "meaning": "n. 팔로워",
+      "definition": "n. someone who subscribes to receive updates from another person's social media account",
+      "sentence": "I am a follower of cool art pages.",
+      "translation": "나는 멋진 예술 웹사이트의 팔로워이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 10
+      }
+    },
+    {
+      "id": "g1-u1-r11",
+      "grade": 1,
+      "unit": "1",
+      "word": "grade",
+      "meaning": "n. 성적",
+      "definition": "n. a number or letter that indicates how a student performed in a class or on a test",
+      "sentence": "The teacher records the students' grades.",
+      "translation": "선생님은 학생들의 성적을 기록한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 11
+      }
+    },
+    {
+      "id": "g1-u1-r12",
+      "grade": 1,
+      "unit": "1",
+      "word": "leave",
+      "meaning": "v. 남기고(전하고) 가다",
+      "definition": "v. to deliver, write or record something to be seen or heard later",
+      "sentence": "He left a message on my phone.",
+      "translation": "그는 내 전화기에 메시지를 남겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 12
+      }
+    },
+    {
+      "id": "g1-u1-r13",
+      "grade": 1,
+      "unit": "1",
+      "word": "lifelogging",
+      "meaning": "n. 라이프로깅",
+      "definition": "n. the act of recording and sharing your daily life using technology",
+      "sentence": "Lifelogging shows my personal growth.",
+      "translation": "라이프로깅은 나의 성장을 보여준다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 13
+      }
+    },
+    {
+      "id": "g1-u1-r14",
+      "grade": 1,
+      "unit": "1",
+      "word": "mark",
+      "meaning": "v. 표시하다",
+      "definition": "v. to make or leave a visible mark on (something)",
+      "sentence": "She marked her friend's birthday on the calendar.",
+      "translation": "그녀는 친구의 생일을 달력에 표시했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 14
+      }
+    },
+    {
+      "id": "g1-u1-r15",
+      "grade": 1,
+      "unit": "1",
+      "word": "nervous",
+      "meaning": "a. 불안해 하는",
+      "definition": "a. feeling worried or scared about something.",
+      "sentence": "He felt nervous before the test.",
+      "translation": "그는 시험 전에 불안해했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 15
+      }
+    },
+    {
+      "id": "g1-u1-r16",
+      "grade": 1,
+      "unit": "1",
+      "word": "nickname",
+      "meaning": "n. 별명",
+      "definition": "n. a name that is different from your real name but is what your friends and family call you",
+      "sentence": "Her nickname is Liz.",
+      "translation": "그녀의 별명은 리즈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 16
+      }
+    },
+    {
+      "id": "g1-u1-r17",
+      "grade": 1,
+      "unit": "1",
+      "word": "person",
+      "meaning": "n. 사람",
+      "definition": "n. a human being",
+      "sentence": "He is a kind person.",
+      "translation": "그는 친절한 사람이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 17
+      }
+    },
+    {
+      "id": "g1-u1-r18",
+      "grade": 1,
+      "unit": "1",
+      "word": "pet",
+      "meaning": "n. 반려동물",
+      "definition": "n. an animal that you keep at home for companionship",
+      "sentence": "She has a pet cat named Snowball.",
+      "translation": "그녀는 스노우볼이라는 이름을 가진 반려 고양이가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 18
+      }
+    },
+    {
+      "id": "g1-u1-r19",
+      "grade": 1,
+      "unit": "1",
+      "word": "polar bear",
+      "meaning": "n. 북극곰",
+      "definition": "n. a large white bear that lives in the Arctic",
+      "sentence": "Polar bears live in cold places.",
+      "translation": "북극곰은 추운 곳에 산다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 19
+      }
+    },
+    {
+      "id": "g1-u1-r20",
+      "grade": 1,
+      "unit": "1",
+      "word": "pop music",
+      "meaning": "n. 팝 음악",
+      "definition": "n. a genre of popular music with strong rhythms and simple tunes",
+      "sentence": "She loves listening to pop music.",
+      "translation": "그녀는 팝 음악 듣는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 20
+      }
+    },
+    {
+      "id": "g1-u1-r21",
+      "grade": 1,
+      "unit": "1",
+      "word": "post",
+      "meaning": "n./ v. 게시글, 게시하다",
+      "definition": "n./ v. to publish content on a website or social media platform",
+      "sentence": "He posts pictures on the school website for his science project.",
+      "translation": "그는 과학 과제를 위해 학교 홈페이지에 사진을 게시한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 21
+      }
+    },
+    {
+      "id": "g1-u1-r22",
+      "grade": 1,
+      "unit": "1",
+      "word": "practice",
+      "meaning": "v. 연습하다",
+      "definition": "v. to do something repeatedly to improve your skill",
+      "sentence": "I practice the piano every day.",
+      "translation": "나는 매일 피아노를 연습한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 22
+      }
+    },
+    {
+      "id": "g1-u1-r23",
+      "grade": 1,
+      "unit": "1",
+      "word": "puzzle",
+      "meaning": "n. 퍼즐",
+      "definition": "n. a game or problem that tests your knowledge or skills",
+      "sentence": "He enjoys solving puzzles in his free time.",
+      "translation": "그는 여가 시간에 퍼즐 푸는 것을 즐긴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 23
+      }
+    },
+    {
+      "id": "g1-u1-r24",
+      "grade": 1,
+      "unit": "1",
+      "word": "rainbow",
+      "meaning": "n. 무지개",
+      "definition": "n. a curved line of different colors that sometimes appears in the sky when the sun shines through rain",
+      "sentence": "We saw a beautiful rainbow after the rain.",
+      "translation": "우리는 비온 뒤 아름다운 무지개를 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 24
+      }
+    },
+    {
+      "id": "g1-u1-r25",
+      "grade": 1,
+      "unit": "1",
+      "word": "record",
+      "meaning": "v. 기록하다",
+      "definition": "v. to write down or keep information for future use",
+      "sentence": "He records his daily activities in a journal.",
+      "translation": "그는 일지에 자신의 일과를 기록한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 25
+      }
+    },
+    {
+      "id": "g1-u1-r26",
+      "grade": 1,
+      "unit": "1",
+      "word": "ride",
+      "meaning": "v. ~을 타다",
+      "definition": "v. to travel on or in a vehicle or animal",
+      "sentence": "They ride their bikes to school every day.",
+      "translation": "그들은 매일 자전거를 타고 학교에 간다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 26
+      }
+    },
+    {
+      "id": "g1-u1-r27",
+      "grade": 1,
+      "unit": "1",
+      "word": "snack",
+      "meaning": "n. 간식",
+      "definition": "n. a small amount of food eaten between meals",
+      "sentence": "She had a healthy snack of fruits and nuts.",
+      "translation": "그녀는 과일과 견과류 같은 건강한 간식을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 27
+      }
+    },
+    {
+      "id": "g1-u1-r28",
+      "grade": 1,
+      "unit": "1",
+      "word": "social media",
+      "meaning": "n. 소셜 미디어",
+      "definition": "n. websites and apps where people interact and share content",
+      "sentence": "My friends share funny jokes on social media.",
+      "translation": "내 친구들은 소셜 미디어에 재미있는 농담을 공유한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 28
+      }
+    },
+    {
+      "id": "g1-u1-r29",
+      "grade": 1,
+      "unit": "1",
+      "word": "step",
+      "meaning": "n. 걸음",
+      "definition": "n. a movement made by lifting your foot and putting it down in a different place",
+      "sentence": "The cat takes little steps in the garden.",
+      "translation": "고양이가 정원에서 작은 걸음을 내디딘다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 29
+      }
+    },
+    {
+      "id": "g1-u1-r30",
+      "grade": 1,
+      "unit": "1",
+      "word": "subject",
+      "meaning": "n. 과목",
+      "definition": "n. an area of knowledge studied in school",
+      "sentence": "My favorite subject in school is science.",
+      "translation": "학교에서 내가 가장 좋아하는 과목은 과학이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 30
+      }
+    },
+    {
+      "id": "g1-u1-r31",
+      "grade": 1,
+      "unit": "1",
+      "word": "then",
+      "meaning": "ad. 그 다음에",
+      "definition": "ad. at that time; next in order",
+      "sentence": "Finish your homework, then you can play video games.",
+      "translation": "너의 숙제를 다 해라, 그 다음에 게임을 할 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 31
+      }
+    },
+    {
+      "id": "g1-u1-r32",
+      "grade": 1,
+      "unit": "1",
+      "word": "uniform",
+      "meaning": "n. 유니폼, 교복",
+      "definition": "n. a special set of clothes worn by members of the same organization",
+      "sentence": "All students must wear a uniform at school.",
+      "translation": "모든 학생들은 학교에서 교복을 입어야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 32
+      }
+    },
+    {
+      "id": "g1-u1-r33",
+      "grade": 1,
+      "unit": "1",
+      "word": "a lot",
+      "meaning": "많이",
+      "definition": "a large number or amount",
+      "sentence": "She has a lot of books in her room.",
+      "translation": "그녀는 방에 책이 많다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 33
+      }
+    },
+    {
+      "id": "g1-u1-r34",
+      "grade": 1,
+      "unit": "1",
+      "word": "be interested in",
+      "meaning": "~에 관심이 있다",
+      "definition": "to want to learn more about something",
+      "sentence": "My brother is interested in sea animals.",
+      "translation": "내 남동생은 해양 동물에 관심이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 34
+      }
+    },
+    {
+      "id": "g1-u1-r35",
+      "grade": 1,
+      "unit": "1",
+      "word": "be into",
+      "meaning": "~을 좋아하다",
+      "definition": "to like and be very enthusiastic about something",
+      "sentence": "I’m into adventure books.",
+      "translation": "나는 모험소설을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 35
+      }
+    },
+    {
+      "id": "g1-u1-r36",
+      "grade": 1,
+      "unit": "1",
+      "word": "each other",
+      "meaning": "서로",
+      "definition": "each of two or more people, animals, etc., who are doing something together or in relationship to the other or others in the group",
+      "sentence": "They help each other with their homework.",
+      "translation": "그들은 서로 숙제를 도와준다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 36
+      }
+    },
+    {
+      "id": "g1-u1-r37",
+      "grade": 1,
+      "unit": "1",
+      "word": "take a picture of",
+      "meaning": "~의 사진을 찍다",
+      "definition": "to capture an image using a camera",
+      "sentence": "Mom sometimes takes a picture of the sunset.",
+      "translation": "엄마는 가끔 저녁노을을 사진 찍으신다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 37
+      }
+    },
+    {
+      "id": "g1-u1-r38",
+      "grade": 1,
+      "unit": "1",
+      "word": "these days",
+      "meaning": "요즈음에는",
+      "definition": "in the present time; nowadays",
+      "sentence": "Apples are expensive these days.",
+      "translation": "요즈음에는 사과가 비싸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 38
+      }
+    },
+    {
+      "id": "g1-u2-r39",
+      "grade": 1,
+      "unit": "2",
+      "word": "band",
+      "meaning": "n. 밴드, 악단",
+      "definition": "n. a group of musicians who play music together",
+      "sentence": "The band played at the school concert.",
+      "translation": "그 밴드는 학교 연주회에서 연주했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 39
+      }
+    },
+    {
+      "id": "g1-u2-r40",
+      "grade": 1,
+      "unit": "2",
+      "word": "beat",
+      "meaning": "v. 이기다",
+      "definition": "v. to win against someone in a game or competition",
+      "sentence": "Our team beat their team in the final game.",
+      "translation": "우리 팀은 결승전에서 그들의 팀을 이겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 40
+      }
+    },
+    {
+      "id": "g1-u2-r41",
+      "grade": 1,
+      "unit": "2",
+      "word": "campus",
+      "meaning": "n. 캠퍼스, 교정",
+      "definition": "n. the area and buildings of a university, college, or school.",
+      "sentence": "They walked around the campus after class.",
+      "translation": "그들은 수업 후 캠퍼스를 돌아다녔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 41
+      }
+    },
+    {
+      "id": "g1-u2-r42",
+      "grade": 1,
+      "unit": "2",
+      "word": "chess",
+      "meaning": "n. 체스",
+      "definition": "n. a board game for two players involving strategic moves of pieces",
+      "sentence": "She enjoys playing chess with her father.",
+      "translation": "그녀는 아버지와 체스를 두는 것을 즐긴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 42
+      }
+    },
+    {
+      "id": "g1-u2-r43",
+      "grade": 1,
+      "unit": "2",
+      "word": "chorus",
+      "meaning": "n. 합창단, 합창곡",
+      "definition": "n. a group of singers who perform together",
+      "sentence": "I joined the chorus because I like singing songs with others.",
+      "translation": "나는 다른 사람들과 노래 부르는 것을 좋아해서 합창단에 가입했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 43
+      }
+    },
+    {
+      "id": "g1-u2-r44",
+      "grade": 1,
+      "unit": "2",
+      "word": "concert",
+      "meaning": "n. 연주회, 콘서트",
+      "definition": "n. a live music performance in front of an audience",
+      "sentence": "We went to a concert last night.",
+      "translation": "우리는 어젯밤에 콘서트에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 44
+      }
+    },
+    {
+      "id": "g1-u2-r45",
+      "grade": 1,
+      "unit": "2",
+      "word": "contest",
+      "meaning": "n. 대회, 시합",
+      "definition": "n. a competition where people try to win",
+      "sentence": "He won first place in the art contest.",
+      "translation": "그는 미술 대회에서 1등을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 45
+      }
+    },
+    {
+      "id": "g1-u2-r46",
+      "grade": 1,
+      "unit": "2",
+      "word": "digital",
+      "meaning": "a. 디지털의",
+      "definition": "a. involving or related to computer technology",
+      "sentence": "My cousin bought a new digital camera.",
+      "translation": "나의 사촌은 새로운 디지털 카메라를 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 46
+      }
+    },
+    {
+      "id": "g1-u2-r47",
+      "grade": 1,
+      "unit": "2",
+      "word": "drone",
+      "meaning": "n. 드론",
+      "definition": "n. a remote-controlled flying device",
+      "sentence": "He flew his drone over the park.",
+      "translation": "그는 공원 위로 드론을 날렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 47
+      }
+    },
+    {
+      "id": "g1-u2-r48",
+      "grade": 1,
+      "unit": "2",
+      "word": "easy",
+      "meaning": "a. 쉬운",
+      "definition": "a. not difficult to do or understand",
+      "sentence": "The math problem was easy to solve.",
+      "translation": "그 수학 문제는 풀기 쉬웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 48
+      }
+    },
+    {
+      "id": "g1-u2-r49",
+      "grade": 1,
+      "unit": "2",
+      "word": "event",
+      "meaning": "n. 행사",
+      "definition": "n. something important or interesting that happens",
+      "sentence": "The school event starts at 3 o’clock.",
+      "translation": "그 학교 행사는 3시 정각에 시작한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 49
+      }
+    },
+    {
+      "id": "g1-u2-r50",
+      "grade": 1,
+      "unit": "2",
+      "word": "exam",
+      "meaning": "n. 시험",
+      "definition": "n. a formal test of knowledge or skills",
+      "sentence": "She studied hard for the math exam.",
+      "translation": "그녀는 수학 시험을 위해 열심히 공부했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 50
+      }
+    },
+    {
+      "id": "g1-u2-r51",
+      "grade": 1,
+      "unit": "2",
+      "word": "excited",
+      "meaning": "a. 신이 난, 흥분한",
+      "definition": "a. feeling very happy and enthusiastic",
+      "sentence": "The children were excited about the trip.",
+      "translation": "아이들은 여행에 신이 났다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 51
+      }
+    },
+    {
+      "id": "g1-u2-r52",
+      "grade": 1,
+      "unit": "2",
+      "word": "gym",
+      "meaning": "n. 체육관",
+      "definition": "n. a place where people go to exercise",
+      "sentence": "He works out at the gym every morning.",
+      "translation": "그는 매일 아침 체육관에서 운동한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 52
+      }
+    },
+    {
+      "id": "g1-u2-r53",
+      "grade": 1,
+      "unit": "2",
+      "word": "hall",
+      "meaning": "n. 홀[회관]",
+      "definition": "n. a large room or building used for public events",
+      "sentence": "The meeting was held in the main hall.",
+      "translation": "회의는 메인 홀에서 열렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 53
+      }
+    },
+    {
+      "id": "g1-u2-r54",
+      "grade": 1,
+      "unit": "2",
+      "word": "jump rope",
+      "meaning": "v. 줄넘기 하다",
+      "definition": "v. to skip over a rope that is swung under the feet",
+      "sentence": "Many students like to jump rope during lunchtime.",
+      "translation": "많은 학생들이 점심 시간에 줄넘기 하는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 54
+      }
+    },
+    {
+      "id": "g1-u2-r55",
+      "grade": 1,
+      "unit": "2",
+      "word": "language",
+      "meaning": "n. 언어",
+      "definition": "n. a system of words and grammar used by people to communicate",
+      "sentence": "She speaks three languages fluently.",
+      "translation": "그녀는 세 가지 언어를 유창하게 말한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 55
+      }
+    },
+    {
+      "id": "g1-u2-r56",
+      "grade": 1,
+      "unit": "2",
+      "word": "mate",
+      "meaning": "n. 친구, 동료",
+      "definition": "n. a friend or companion",
+      "sentence": "He and his mate went to the movies together.",
+      "translation": "그는 그의 친구와 함께 영화를 보러 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 56
+      }
+    },
+    {
+      "id": "g1-u2-r57",
+      "grade": 1,
+      "unit": "2",
+      "word": "online",
+      "meaning": "a. 온라인의",
+      "definition": "a. connected to another computer, a computer network, or the Internet",
+      "sentence": "He took an online class this semester.",
+      "translation": "그는 이번 학기에 온라인 수업을 들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 57
+      }
+    },
+    {
+      "id": "g1-u2-r58",
+      "grade": 1,
+      "unit": "2",
+      "word": "orchestra",
+      "meaning": "n. 오케스트라",
+      "definition": "n. a large group of musicians playing different instruments together",
+      "sentence": "She plays the violin in the school orchestra.",
+      "translation": "그녀는 학교 오케스트라에서 바이올린을 연주한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 58
+      }
+    },
+    {
+      "id": "g1-u2-r59",
+      "grade": 1,
+      "unit": "2",
+      "word": "plane",
+      "meaning": "n. 비행기",
+      "definition": "n. a vehicle that flies in the air and carries people or goods",
+      "sentence": "They took a plane to Paris.",
+      "translation": "그들은 비행기를 타고 파리에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 59
+      }
+    },
+    {
+      "id": "g1-u2-r60",
+      "grade": 1,
+      "unit": "2",
+      "word": "poem",
+      "meaning": "n. 시",
+      "definition": "n. a piece of writing that expresses emotions, experiences, and ideas, often in short lines",
+      "sentence": "I often write poems about love.",
+      "translation": "나는 종종 사랑에 관한 시를 쓴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 60
+      }
+    },
+    {
+      "id": "g1-u2-r61",
+      "grade": 1,
+      "unit": "2",
+      "word": "race",
+      "meaning": "n. 경주, 레이스, 달리기",
+      "definition": "n. a competition to see who is the fastest",
+      "sentence": "My brother finished the race in second place.",
+      "translation": "나의 남동생은 2등으로 그 경주를 마쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 61
+      }
+    },
+    {
+      "id": "g1-u2-r62",
+      "grade": 1,
+      "unit": "2",
+      "word": "really",
+      "meaning": "ad. 아주, 정말로",
+      "definition": "ad. very; to a great degree",
+      "sentence": "The new student really likes English.",
+      "translation": "그 새로운 학생은 영어를 아주 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 62
+      }
+    },
+    {
+      "id": "g1-u2-r63",
+      "grade": 1,
+      "unit": "2",
+      "word": "reason",
+      "meaning": "n. 이유",
+      "definition": "n. a cause or explanation for something that happened",
+      "sentence": "The reason for the delay was the heavy rain.",
+      "translation": "지연의 이유는 폭우였다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 63
+      }
+    },
+    {
+      "id": "g1-u2-r64",
+      "grade": 1,
+      "unit": "2",
+      "word": "shake",
+      "meaning": "v. 흔들다",
+      "definition": "v. to move something back and forth quickly",
+      "sentence": "The chef shook the bottle of sauce before using it.",
+      "translation": "요리사는 소스를 사용하기 전에 병을 흔들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 64
+      }
+    },
+    {
+      "id": "g1-u2-r65",
+      "grade": 1,
+      "unit": "2",
+      "word": "smartphone",
+      "meaning": "n. 스마트폰",
+      "definition": "n. a mobile phone that can perform many functions like a computer",
+      "sentence": "He uses his smartphone to check emails.",
+      "translation": "그는 이메일을 확인하기 위해 스마트폰을 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 65
+      }
+    },
+    {
+      "id": "g1-u2-r66",
+      "grade": 1,
+      "unit": "2",
+      "word": "soon",
+      "meaning": "ad. 곧",
+      "definition": "ad. in a short time; not long from now",
+      "sentence": "She will come home soon.",
+      "translation": "그녀는 곧 집에 올 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 66
+      }
+    },
+    {
+      "id": "g1-u2-r67",
+      "grade": 1,
+      "unit": "2",
+      "word": "speech",
+      "meaning": "n. 연설",
+      "definition": "n. a formal talk given to an audience",
+      "sentence": "The president gave a short speech at the event.",
+      "translation": "대통령은 그 행사에서 짧은 연설을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 67
+      }
+    },
+    {
+      "id": "g1-u2-r68",
+      "grade": 1,
+      "unit": "2",
+      "word": "T-ball",
+      "meaning": "n. 티볼",
+      "definition": "n. a form of baseball for young children in which the ball is hit off a support (called a tee) rather than pitched",
+      "sentence": "The kids played T-ball at the park.",
+      "translation": "아이들은 공원에서 티볼을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 68
+      }
+    },
+    {
+      "id": "g1-u2-r69",
+      "grade": 1,
+      "unit": "2",
+      "word": "topic",
+      "meaning": "n. 주제",
+      "definition": "n. a subject that people talk or write about",
+      "sentence": "The topic of the discussion was climate change.",
+      "translation": "토론의 주제는 기후 변화였다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 69
+      }
+    },
+    {
+      "id": "g1-u2-r70",
+      "grade": 1,
+      "unit": "2",
+      "word": "yoga",
+      "meaning": "n. 요가",
+      "definition": "n. a series of physical and mental exercises originating from India",
+      "sentence": "My mother practices yoga to stay fit.",
+      "translation": "우리 엄마는 건강을 유지하기 위해 요가를 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 70
+      }
+    },
+    {
+      "id": "g1-u2-r71",
+      "grade": 1,
+      "unit": "2",
+      "word": "be proud of",
+      "meaning": "~을 자랑스럽게 여기다, ~가 자랑스럽다",
+      "definition": "to feel pleased and satisfied about someone or something you are connected to",
+      "sentence": "I’m so proud of him.",
+      "translation": "나는 그가 아주 자랑스럽다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 71
+      }
+    },
+    {
+      "id": "g1-u3-r72",
+      "grade": 1,
+      "unit": "3",
+      "word": "amusement park",
+      "meaning": "n. 놀이공원",
+      "definition": "n. a place with rides and games for fun",
+      "sentence": "We went to the amusement park on Saturday.",
+      "translation": "우리는 토요일에 놀이공원에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 72
+      }
+    },
+    {
+      "id": "g1-u3-r73",
+      "grade": 1,
+      "unit": "3",
+      "word": "blind",
+      "meaning": "n. (창문에 치는) 블라인드",
+      "definition": "n. a covering for a window",
+      "sentence": "Close the blinds to block the sunlight.",
+      "translation": "햇빛을 막기 위해 블라인드를 내려.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 73
+      }
+    },
+    {
+      "id": "g1-u3-r74",
+      "grade": 1,
+      "unit": "3",
+      "word": "breaktime",
+      "meaning": "n. 휴식시간",
+      "definition": "n. time for resting",
+      "sentence": "During breaktime, we played outside.",
+      "translation": "휴식시간 동안 우리는 밖에서 놀았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 74
+      }
+    },
+    {
+      "id": "g1-u3-r75",
+      "grade": 1,
+      "unit": "3",
+      "word": "chat",
+      "meaning": "v. 담소를 나누다, 수다를 떨다",
+      "definition": "v. to talk with someone in a casual way",
+      "sentence": "They chatted late into the night.",
+      "translation": "그들은 밤 늦게까지 수다를 떨었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 75
+      }
+    },
+    {
+      "id": "g1-u3-r76",
+      "grade": 1,
+      "unit": "3",
+      "word": "cheer",
+      "meaning": "v. 응원하다, 힘을 북돋우다",
+      "definition": "v. to shout happily to show support",
+      "sentence": "Let's cheer for our team during the game.",
+      "translation": "경기 중에 우리 팀을 응원하자.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 76
+      }
+    },
+    {
+      "id": "g1-u3-r77",
+      "grade": 1,
+      "unit": "3",
+      "word": "chew",
+      "meaning": "v. (음식을) 씹다",
+      "definition": "v. to bite and grind food with teeth",
+      "sentence": "He always chews his food slowly.",
+      "translation": "그는 항상 음식을 천천히 씹는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 77
+      }
+    },
+    {
+      "id": "g1-u3-r78",
+      "grade": 1,
+      "unit": "3",
+      "word": "cinema",
+      "meaning": "n. 영화관, 극장",
+      "definition": "n. a place where movies are shown",
+      "sentence": "They watched the superhero movie at the cinema.",
+      "translation": "그들은 영화관에서 영웅 영화를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 78
+      }
+    },
+    {
+      "id": "g1-u3-r79",
+      "grade": 1,
+      "unit": "3",
+      "word": "excuse",
+      "meaning": "v. 용서하다[봐주다]",
+      "definition": "v. to forgive someone for making a mistake or doing something wrong",
+      "sentence": "She decided to excuse his mistake.",
+      "translation": "그녀는 그의 실수를 용서하기로 결정했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 79
+      }
+    },
+    {
+      "id": "g1-u3-r80",
+      "grade": 1,
+      "unit": "3",
+      "word": "feed",
+      "meaning": "v. 밥[우유]을 먹이다, 먹이를 주다",
+      "definition": "v. to give food to someone or something",
+      "sentence": "Can you feed the cat?",
+      "translation": "고양이에게 먹이를 줄 수 있니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 80
+      }
+    },
+    {
+      "id": "g1-u3-r81",
+      "grade": 1,
+      "unit": "3",
+      "word": "finally",
+      "meaning": "ad. 마침내",
+      "definition": "ad. at the end of a period of time or series of events",
+      "sentence": "Finally, the bus arrived.",
+      "translation": "마침내 버스가 도착했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 81
+      }
+    },
+    {
+      "id": "g1-u3-r82",
+      "grade": 1,
+      "unit": "3",
+      "word": "gate",
+      "meaning": "n. 문, 정문, 대문",
+      "definition": "n. a door or entrance that can be opened or closed",
+      "sentence": "They opened the gate and walked into the garden.",
+      "translation": "그들은 문을 열고 정원으로 걸어 들어갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 82
+      }
+    },
+    {
+      "id": "g1-u3-r83",
+      "grade": 1,
+      "unit": "3",
+      "word": "gift",
+      "meaning": "n. 선물",
+      "definition": "n. something given to someone as a present",
+      "sentence": "She got a beautiful gift on her birthday.",
+      "translation": "그녀는 그녀의 생일에 아름다운 선물을 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 83
+      }
+    },
+    {
+      "id": "g1-u3-r84",
+      "grade": 1,
+      "unit": "3",
+      "word": "glove",
+      "meaning": "n. 장갑",
+      "definition": "n. a covering for the hand, often with separate parts for each finger and thumb",
+      "sentence": "Wear gloves to keep your hands warm.",
+      "translation": "손을 따뜻하게 유지하기 위해 장갑을 껴봐.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 84
+      }
+    },
+    {
+      "id": "g1-u3-r85",
+      "grade": 1,
+      "unit": "3",
+      "word": "graph",
+      "meaning": "n. 그래프, 도표",
+      "definition": "n. a diagram that shows relationships between numbers or quantities",
+      "sentence": "The graph showed the prices of different toys.",
+      "translation": "그래프는 다양한 장난감의 가격을 보여 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 85
+      }
+    },
+    {
+      "id": "g1-u3-r86",
+      "grade": 1,
+      "unit": "3",
+      "word": "guide",
+      "meaning": "n. 안내(서)[가이드]",
+      "definition": "n. a person who shows the way or gives information to others",
+      "sentence": "The tour guide showed us around the museum.",
+      "translation": "여행 가이드는 우리에게 박물관을 구경 시켜 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 86
+      }
+    },
+    {
+      "id": "g1-u3-r87",
+      "grade": 1,
+      "unit": "3",
+      "word": "hairband",
+      "meaning": "n. 머리띠",
+      "definition": "n. a band worn around the head to hold hair back",
+      "sentence": "She wore a colorful hairband.",
+      "translation": "그녀는 다채로운 머리띠를 썼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 87
+      }
+    },
+    {
+      "id": "g1-u3-r88",
+      "grade": 1,
+      "unit": "3",
+      "word": "happen",
+      "meaning": "v. (어떤 일이) 일어나다, 발생하다",
+      "definition": "v. to take place; to occur",
+      "sentence": "What happened at school today?",
+      "translation": "오늘 학교에서 무슨 일이 있었니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 88
+      }
+    },
+    {
+      "id": "g1-u3-r89",
+      "grade": 1,
+      "unit": "3",
+      "word": "laptop",
+      "meaning": "n. 휴대용 컴퓨터, 노트북",
+      "definition": "n. a small computer that is easy to carry",
+      "sentence": "He only uses his laptop for work",
+      "translation": "그는 오직 일을 위해 노트북을 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 89
+      }
+    },
+    {
+      "id": "g1-u3-r90",
+      "grade": 1,
+      "unit": "3",
+      "word": "laugh",
+      "meaning": "v. (소리 내어) 웃다",
+      "definition": "v. to make sounds with your voice because you think something is funny",
+      "sentence": "We all laughed at his jokes.",
+      "translation": "우리는 그의 농담에 다 함께 웃었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 90
+      }
+    },
+    {
+      "id": "g1-u3-r91",
+      "grade": 1,
+      "unit": "3",
+      "word": "lose",
+      "meaning": "v. 잃어버리다, 분실하다",
+      "definition": "v. to stop having something because you do not know where it is",
+      "sentence": "She always loses her keys.",
+      "translation": "그녀는 항상 열쇠를 잃어버린다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 91
+      }
+    },
+    {
+      "id": "g1-u3-r92",
+      "grade": 1,
+      "unit": "3",
+      "word": "magic",
+      "meaning": "n. 마술",
+      "definition": "n. the power to do impossible things using special words or actions",
+      "sentence": "He showed a magic trick with a coin.",
+      "translation": "그는 동전으로 마술을 보여 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 92
+      }
+    },
+    {
+      "id": "g1-u3-r93",
+      "grade": 1,
+      "unit": "3",
+      "word": "manner",
+      "meaning": "n. 방식, 태도, 예의",
+      "definition": "n. the way something is done; a person's behavior towards others",
+      "sentence": "He greeted everyone in a polite manner.",
+      "translation": "그는 모든 사람들에게 예의 바르게 인사했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 93
+      }
+    },
+    {
+      "id": "g1-u3-r94",
+      "grade": 1,
+      "unit": "3",
+      "word": "noise",
+      "meaning": "n. 소음",
+      "definition": "n. a sound, especially one that is loud, unpleasant, or disturbing",
+      "sentence": "The noise is from the cars outside.",
+      "translation": "그 소음은 밖에 있는 차에서 오는 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 94
+      }
+    },
+    {
+      "id": "g1-u3-r95",
+      "grade": 1,
+      "unit": "3",
+      "word": "noisy",
+      "meaning": "a. 시끄러운",
+      "definition": "a. making a lot of noise; loud",
+      "sentence": "The classroom was too noisy for studying.",
+      "translation": "교실은 공부하기에 너무 시끄러웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 95
+      }
+    },
+    {
+      "id": "g1-u3-r96",
+      "grade": 1,
+      "unit": "3",
+      "word": "real",
+      "meaning": "a. 진짜의, 진정한",
+      "definition": "a. existing and not imaginary; true or genuine",
+      "sentence": "This painting looks like a real person.",
+      "translation": "이 그림은 진짜 사람처럼 보인다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 96
+      }
+    },
+    {
+      "id": "g1-u3-r97",
+      "grade": 1,
+      "unit": "3",
+      "word": "roller coaster",
+      "meaning": "n. 롤러코스터",
+      "definition": "n. a type of ride at an amusement park with sudden drops and turns",
+      "sentence": "The roller coaster was very fast.",
+      "translation": "롤러코스터가 매우 빨랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 97
+      }
+    },
+    {
+      "id": "g1-u3-r98",
+      "grade": 1,
+      "unit": "3",
+      "word": "rude",
+      "meaning": "a. 무례한",
+      "definition": "a. not having or showing concern or respect for the rights and feelings of other people; not polite",
+      "sentence": "Don't be rude to other people.",
+      "translation": "다른 사람들에게 무례하게 굴지 마.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 98
+      }
+    },
+    {
+      "id": "g1-u3-r99",
+      "grade": 1,
+      "unit": "3",
+      "word": "scream",
+      "meaning": "v. 소리치다. 비명을 지르다",
+      "definition": "v. to make a loud, high noise with your voice because you are hurt, frightened, excited, etc.",
+      "sentence": "She screamed when she saw the spider.",
+      "translation": "그녀는 거미를 보고 비명을 질렀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 99
+      }
+    },
+    {
+      "id": "g1-u3-r100",
+      "grade": 1,
+      "unit": "3",
+      "word": "seat",
+      "meaning": "n. 좌석, 자리",
+      "definition": "n. something you sit on, especially a chair, often with a back, and sometimes with arms",
+      "sentence": "Please find a seat and sit down.",
+      "translation": "자리를 찾아 앉으세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 100
+      }
+    },
+    {
+      "id": "g1-u3-r101",
+      "grade": 1,
+      "unit": "3",
+      "word": "server",
+      "meaning": "n. 서빙하는 사람, 웨이터, 웨이터리스",
+      "definition": "n. a person who brings you food and drink at a restaurant",
+      "sentence": "The server brought us our food quickly.",
+      "translation": "서빙하는 사람이 음식을 빨리 가져다 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 101
+      }
+    },
+    {
+      "id": "g1-u3-r102",
+      "grade": 1,
+      "unit": "3",
+      "word": "shout",
+      "meaning": "v. 외치다, 소리 지르다",
+      "definition": "v. to say something very loudly",
+      "sentence": "He shouted for help when he saw the fire.",
+      "translation": "그는 불을 보고 도와달라고 소리쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 102
+      }
+    },
+    {
+      "id": "g1-u3-r103",
+      "grade": 1,
+      "unit": "3",
+      "word": "snore",
+      "meaning": "v. 코를 골다",
+      "definition": "v. to breathe loudly through your nose and mouth while you are asleep",
+      "sentence": "Dad always snores loudly at night.",
+      "translation": "아빠는 밤에 항상 크게 코를 곤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 103
+      }
+    },
+    {
+      "id": "g1-u3-r104",
+      "grade": 1,
+      "unit": "3",
+      "word": "stage",
+      "meaning": "n. 무대",
+      "definition": "n. a raised area in a theater or auditorium where actors perform",
+      "sentence": "The actors stood on the stage and began their play.",
+      "translation": "배우들은 무대에 서서 연극을 시작했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 104
+      }
+    },
+    {
+      "id": "g1-u3-r105",
+      "grade": 1,
+      "unit": "3",
+      "word": "station",
+      "meaning": "n. 역, 정거장",
+      "definition": "n. a place where trains or buses stop so that people can get on or off",
+      "sentence": "They waited for the train at the station.",
+      "translation": "그들은 역에서 기차를 기다렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 105
+      }
+    },
+    {
+      "id": "g1-u3-r106",
+      "grade": 1,
+      "unit": "3",
+      "word": "strawberry",
+      "meaning": "n. 딸기",
+      "definition": "n. a small, juicy red fruit with tiny seeds on its surface",
+      "sentence": "She picked fresh strawberries from the garden.",
+      "translation": "그녀는 정원에서 신선한 딸기를 땄다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 106
+      }
+    },
+    {
+      "id": "g1-u3-r107",
+      "grade": 1,
+      "unit": "3",
+      "word": "suddenly",
+      "meaning": "ad. 갑자기",
+      "definition": "ad. quickly and unexpectedly",
+      "sentence": "Suddenly, the lights went out.",
+      "translation": "갑자기 불이 꺼졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 107
+      }
+    },
+    {
+      "id": "g1-u3-r108",
+      "grade": 1,
+      "unit": "3",
+      "word": "throw",
+      "meaning": "v. 던지다",
+      "definition": "v. to send something through the air with force, especially by hand",
+      "sentence": "He threw the ball to his friend.",
+      "translation": "그는 그의 친구에게 공을 던졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 108
+      }
+    },
+    {
+      "id": "g1-u3-r109",
+      "grade": 1,
+      "unit": "3",
+      "word": "toward",
+      "meaning": "prep. ~쪽으로, ~을 향하여",
+      "definition": "prep. in the direction of",
+      "sentence": "They walked toward the park entrance.",
+      "translation": "그들은 공원 입구로 걸어갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 109
+      }
+    },
+    {
+      "id": "g1-u3-r110",
+      "grade": 1,
+      "unit": "3",
+      "word": "trash",
+      "meaning": "n. 쓰레기",
+      "definition": "n. things that you throw away because you no longer need them",
+      "sentence": "Please put your trash in the bin.",
+      "translation": "쓰레기를 통에 넣어 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 110
+      }
+    },
+    {
+      "id": "g1-u3-r111",
+      "grade": 1,
+      "unit": "3",
+      "word": "upset",
+      "meaning": "a. 속상한, 화가 난, (마음이) 불편한",
+      "definition": "a. unhappy or worried because something bad has happened",
+      "sentence": "She was upset when she heard the news.",
+      "translation": "그녀는 그 소식을 듣고 속상해 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 111
+      }
+    },
+    {
+      "id": "g1-u3-r112",
+      "grade": 1,
+      "unit": "3",
+      "word": "at that time",
+      "meaning": "그때(에), 그 당시에",
+      "definition": "during that period",
+      "sentence": "At that time, there were no cell phones.",
+      "translation": "그 당시에는 휴대폰이 없었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 112
+      }
+    },
+    {
+      "id": "g1-u3-r113",
+      "grade": 1,
+      "unit": "3",
+      "word": "because of",
+      "meaning": "~ 때문에, ~해서",
+      "definition": "for the reason that; due to",
+      "sentence": "They were late because of heavy traffic.",
+      "translation": "그들은 교통 체증 때문에 늦었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 113
+      }
+    },
+    {
+      "id": "g1-u3-r114",
+      "grade": 1,
+      "unit": "3",
+      "word": "cheer up",
+      "meaning": "기운을 내다, ~을 격려하다",
+      "definition": "to become happier or more hopeful",
+      "sentence": "Cheer up! Everything will be okay.",
+      "translation": "기운 내! 모든 것이 잘 될 거야.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 114
+      }
+    },
+    {
+      "id": "g1-u3-r115",
+      "grade": 1,
+      "unit": "3",
+      "word": "cut in line",
+      "meaning": "새치기를 하다",
+      "definition": "to move ahead of others in a queue without waiting your turn",
+      "sentence": "The boys are trying to cut in line.",
+      "translation": "그 소년들은 새치기 하려고 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 115
+      }
+    },
+    {
+      "id": "g1-u3-r116",
+      "grade": 1,
+      "unit": "3",
+      "word": "take off",
+      "meaning": "(옷, 신발 등을) 벗다",
+      "definition": "to remove (clothes, shoes, etc.)",
+      "sentence": "Please take off your shoes before entering.",
+      "translation": "들어가기 전에 신발을 벗어 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 116
+      }
+    },
+    {
+      "id": "g1-u3-r117",
+      "grade": 1,
+      "unit": "3",
+      "word": "turn around",
+      "meaning": "몸을 돌리다, 방향을 바꾸다",
+      "definition": "to change direction to face the opposite way",
+      "sentence": "She turned around to look behind her.",
+      "translation": "그녀는 뒤를 보려고 몸을 돌렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 117
+      }
+    },
+    {
+      "id": "g1-u4-r118",
+      "grade": 1,
+      "unit": "4",
+      "word": "bowl",
+      "meaning": "n. (우묵한) 그릇, 통",
+      "definition": "n. a round container that has tall, curving sides and that is used for preparing or serving foods and liquids",
+      "sentence": "I finished my whole bowl of cereal.",
+      "translation": "나는 시리얼 한 그릇을 다 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 118
+      }
+    },
+    {
+      "id": "g1-u4-r119",
+      "grade": 1,
+      "unit": "4",
+      "word": "chili",
+      "meaning": "n. 고추",
+      "definition": "n. a small pepper with a very hot flavor",
+      "sentence": "The chili was too spicy for him.",
+      "translation": "그 고추는 그에게 너무 매웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 119
+      }
+    },
+    {
+      "id": "g1-u4-r120",
+      "grade": 1,
+      "unit": "4",
+      "word": "comedy",
+      "meaning": "n. 코미디, 희극",
+      "definition": "n. a play, movie, television program, novel, etc., that is meant to make people laugh",
+      "sentence": "We watched a comedy movie last night.",
+      "translation": "우리는 어젯밤에 코미디 영화를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 120
+      }
+    },
+    {
+      "id": "g1-u4-r121",
+      "grade": 1,
+      "unit": "4",
+      "word": "create",
+      "meaning": "v. 만들다, 창조하다",
+      "definition": "v. to make or produce (something); to cause (something new) to exist",
+      "sentence": "We will create a garden in the backyard.",
+      "translation": "우리는 뒷마당에 정원을 만들 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 121
+      }
+    },
+    {
+      "id": "g1-u4-r122",
+      "grade": 1,
+      "unit": "4",
+      "word": "curry",
+      "meaning": "n. 커리",
+      "definition": "n. a food, dish, or sauce in Indian cooking that is seasoned with a mixture of spices",
+      "sentence": "She ordered chicken curry at the restaurant.",
+      "translation": "그녀는 식당에서 치킨 커리를 주문했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 122
+      }
+    },
+    {
+      "id": "g1-u4-r123",
+      "grade": 1,
+      "unit": "4",
+      "word": "dish",
+      "meaning": "n. 요리, 음식, 그릇",
+      "definition": "n. food that is prepared in a particular way; a shallow container that you cook or serve food in",
+      "sentence": "The main dish was fish.",
+      "translation": "주요리는 생선이었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 123
+      }
+    },
+    {
+      "id": "g1-u4-r124",
+      "grade": 1,
+      "unit": "4",
+      "word": "engineer",
+      "meaning": "n. 엔지니어, 기술자",
+      "definition": "n. a person who designs, builds, or fixes machines or structures",
+      "sentence": "The engineer built a strong bridge.",
+      "translation": "기술자는 튼튼한 다리를 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 124
+      }
+    },
+    {
+      "id": "g1-u4-r125",
+      "grade": 1,
+      "unit": "4",
+      "word": "handsome",
+      "meaning": "a. 잘생긴",
+      "definition": "a. good-looking, often used to describe a man",
+      "sentence": "The actor is very handsome.",
+      "translation": "그 배우는 매우 잘생겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 125
+      }
+    },
+    {
+      "id": "g1-u4-r126",
+      "grade": 1,
+      "unit": "4",
+      "word": "honey",
+      "meaning": "n. (좋아하는 사람에 대한 호칭) 여보",
+      "definition": "n. a way of addressing somebody that you like or love",
+      "sentence": "Can you pass me the salt, honey?",
+      "translation": "소금 좀 줄래요, 여보?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 126
+      }
+    },
+    {
+      "id": "g1-u4-r127",
+      "grade": 1,
+      "unit": "4",
+      "word": "knee",
+      "meaning": "n. 무릎",
+      "definition": "n. the joint between the thigh and the lower leg",
+      "sentence": "She hurt her knee while playing soccer.",
+      "translation": "그녀는 축구를 하다가 무릎을 다쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 127
+      }
+    },
+    {
+      "id": "g1-u4-r128",
+      "grade": 1,
+      "unit": "4",
+      "word": "lift",
+      "meaning": "v. 들어올리다",
+      "definition": "v. to raise something to a higher position",
+      "sentence": "Can you lift this box for me?",
+      "translation": "이 상자 좀 들어줄래 수 있니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 128
+      }
+    },
+    {
+      "id": "g1-u4-r129",
+      "grade": 1,
+      "unit": "4",
+      "word": "list",
+      "meaning": "n. 목록",
+      "definition": "n. a series of names, items, or other things written or printed together",
+      "sentence": "I made a list of things to buy at the store.",
+      "translation": "나는 가게에서 살 물건 목록을 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 129
+      }
+    },
+    {
+      "id": "g1-u4-r130",
+      "grade": 1,
+      "unit": "4",
+      "word": "lock",
+      "meaning": "v. 잠그다",
+      "definition": "v. to fasten something with a key",
+      "sentence": "Don't forget to lock the door.",
+      "translation": "문 잠그는 거 잊지 마.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 130
+      }
+    },
+    {
+      "id": "g1-u4-r131",
+      "grade": 1,
+      "unit": "4",
+      "word": "loudly",
+      "meaning": "ad. 큰 소리로, 소리 높게",
+      "definition": "ad. in a way that makes a lot of noise",
+      "sentence": "She laughed loudly at the funny joke.",
+      "translation": "그녀는 재미있는 농담에 크게 웃었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 131
+      }
+    },
+    {
+      "id": "g1-u4-r132",
+      "grade": 1,
+      "unit": "4",
+      "word": "mall",
+      "meaning": "n. 쇼핑몰",
+      "definition": "n. a large building with many stores inside",
+      "sentence": "We went to the mall to buy clothes.",
+      "translation": "우리는 옷을 사러 쇼핑몰에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 132
+      }
+    },
+    {
+      "id": "g1-u4-r133",
+      "grade": 1,
+      "unit": "4",
+      "word": "mirror",
+      "meaning": "n. 거울",
+      "definition": "n. a piece of special flat glass that reflects images, so that you can see yourself when you look at it",
+      "sentence": "Jenny looked at herself in the mirror.",
+      "translation": "Jenny는 거울 속의 자신을 바라보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 133
+      }
+    },
+    {
+      "id": "g1-u4-r134",
+      "grade": 1,
+      "unit": "4",
+      "word": "own",
+      "meaning": "a. 자신의",
+      "definition": "a. belonging to or done by a particular person or thing",
+      "sentence": "She brought her own lunch today.",
+      "translation": "그녀는 오늘 자신의 점심을 가져왔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 134
+      }
+    },
+    {
+      "id": "g1-u4-r135",
+      "grade": 1,
+      "unit": "4",
+      "word": "piece",
+      "meaning": "n. (보드게임, 체스 등의) 말",
+      "definition": "n. one of the small movable objects in a game like chess or checkers",
+      "sentence": "I need to move my piece to capture the king.",
+      "translation": "나는 왕을 잡기 위해 내 말을 옮겨야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 135
+      }
+    },
+    {
+      "id": "g1-u4-r136",
+      "grade": 1,
+      "unit": "4",
+      "word": "polite",
+      "meaning": "a. 예의 바른, 공손한, 정중한",
+      "definition": "a. having good manners and respect for others",
+      "sentence": "It's important to be polite to everyone.",
+      "translation": "모든 사람에게 예의를 지키는 것이 중요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 136
+      }
+    },
+    {
+      "id": "g1-u4-r137",
+      "grade": 1,
+      "unit": "4",
+      "word": "powder",
+      "meaning": "n. 가루",
+      "definition": "n. a dry, fine substance made of small particles",
+      "sentence": "She mixed the sugar and cocoa powder in a bowl.",
+      "translation": "그녀는 그릇에 설탕과 코코아 가루를 섞었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 137
+      }
+    },
+    {
+      "id": "g1-u4-r138",
+      "grade": 1,
+      "unit": "4",
+      "word": "repair",
+      "meaning": "n. 수리, 수선, 보수",
+      "definition": "n. the act of fixing something that is broken or damaged",
+      "sentence": "I took my bike in for repair.",
+      "translation": "나는 자전거를 수리하려고 안에 들여놓았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 138
+      }
+    },
+    {
+      "id": "g1-u4-r139",
+      "grade": 1,
+      "unit": "4",
+      "word": "special",
+      "meaning": "a. 특수한, 특별한",
+      "definition": "a. better or different from what is usual",
+      "sentence": "I have a special plan for the weekend.",
+      "translation": "나는 주말에 특별한 계획이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 139
+      }
+    },
+    {
+      "id": "g1-u4-r140",
+      "grade": 1,
+      "unit": "4",
+      "word": "stretch",
+      "meaning": "v. 늘이다, 늘어나다",
+      "definition": "v. to extend your body, part of your body, a piece of material or an object to its full length or beyond",
+      "sentence": "She likes to stretch before exercising.",
+      "translation": "그녀는 운동하기 전에 스트레칭 하는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 140
+      }
+    },
+    {
+      "id": "g1-u4-r141",
+      "grade": 1,
+      "unit": "4",
+      "word": "sweater",
+      "meaning": "n. 스웨터",
+      "definition": "n. a warm usually knitted piece of clothing for the upper part of your body",
+      "sentence": "She wore a warm sweater on the cold day.",
+      "translation": "그녀는 추운 날 따뜻한 스웨터를 입었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 141
+      }
+    },
+    {
+      "id": "g1-u4-r142",
+      "grade": 1,
+      "unit": "4",
+      "word": "sweet",
+      "meaning": "a. 다정한, 상냥한, 달콤한",
+      "definition": "a. very gentle, kind, or friendly; having a taste like sugar or honey",
+      "sentence": "Jack is very sweet and funny.",
+      "translation": "Jack은 매우 상냥하고 재미있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 142
+      }
+    },
+    {
+      "id": "g1-u4-r143",
+      "grade": 1,
+      "unit": "4",
+      "word": "tip",
+      "meaning": "n. 조언",
+      "definition": "n. a piece of advice or useful information",
+      "sentence": "This book gives useful tips on traveling.",
+      "translation": "이 책은 여행에 대한 유용한 조언을 알려준다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 143
+      }
+    },
+    {
+      "id": "g1-u4-r144",
+      "grade": 1,
+      "unit": "4",
+      "word": "tradition",
+      "meaning": "n. 전통",
+      "definition": "n. a custom or belief passed down through generations",
+      "sentence": "Our family has a tradition of eating dinner together on Sundays.",
+      "translation": "우리 가족은 일요일마다 함께 저녁을 먹는 전통이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 144
+      }
+    },
+    {
+      "id": "g1-u4-r145",
+      "grade": 1,
+      "unit": "4",
+      "word": "traditional",
+      "meaning": "a. 전통적인",
+      "definition": "a. relating to long-established customs or beliefs",
+      "sentence": "I like Korean traditional clothes.",
+      "translation": "나는 한국의 전통 의상을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 145
+      }
+    },
+    {
+      "id": "g1-u4-r146",
+      "grade": 1,
+      "unit": "4",
+      "word": "wonderful",
+      "meaning": "a. 훌륭한, 놀라운",
+      "definition": "a. very good or pleasing",
+      "sentence": "We had a wonderful time at the park.",
+      "translation": "우리는 공원에서 멋진 시간을 보냈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 146
+      }
+    },
+    {
+      "id": "g1-u4-r147",
+      "grade": 1,
+      "unit": "4",
+      "word": "wrap",
+      "meaning": "v. 포장하다, 싸다",
+      "definition": "v. to cover something by folding paper, cloth, etc. around it",
+      "sentence": "I need to wrap the gift before the party.",
+      "translation": "나는 파티 전에 선물을 포장해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 147
+      }
+    },
+    {
+      "id": "g1-u4-r148",
+      "grade": 1,
+      "unit": "4",
+      "word": "yummy",
+      "meaning": "a. 맛있는",
+      "definition": "a. tasting extremely good",
+      "sentence": "The cookies she baked were so yummy!",
+      "translation": "그녀가 구운 쿠키는 정말 맛있었다!",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 148
+      }
+    },
+    {
+      "id": "g1-u4-r149",
+      "grade": 1,
+      "unit": "4",
+      "word": "a lot of",
+      "meaning": "많은",
+      "definition": "many or much of something",
+      "sentence": "There are a lot of stars in the sky tonight.",
+      "translation": "오늘 밤 하늘에는 별이 많다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 149
+      }
+    },
+    {
+      "id": "g1-u4-r150",
+      "grade": 1,
+      "unit": "4",
+      "word": "cheer for",
+      "meaning": "~을 응원하다",
+      "definition": "to support or encourage someone by shouting",
+      "sentence": "The crowd cheered for the team.",
+      "translation": "관중들은 그 팀을 응원했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 150
+      }
+    },
+    {
+      "id": "g1-u4-r151",
+      "grade": 1,
+      "unit": "4",
+      "word": "do the dishes",
+      "meaning": "설거지하다",
+      "definition": "to wash the plates, cups, and other kitchen items after a meal",
+      "sentence": "Danny will do the dishes after he watches the news on TV.",
+      "translation": "Danny는 TV에서 뉴스를 본 후에 설거지를 할 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 151
+      }
+    },
+    {
+      "id": "g1-u4-r152",
+      "grade": 1,
+      "unit": "4",
+      "word": "fall in love",
+      "meaning": "사랑에 빠지다",
+      "definition": "to be very attracted to someone and begin to love them",
+      "sentence": "They fell in love at college.",
+      "translation": "그들은 대학에서 사랑에 빠졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 152
+      }
+    },
+    {
+      "id": "g1-u4-r153",
+      "grade": 1,
+      "unit": "4",
+      "word": "for the first time",
+      "meaning": "처음으로",
+      "definition": "doing something that has never been done before",
+      "sentence": "Sally rode a bike for the first time.",
+      "translation": "Sally는 처음으로 자전거를 탔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 153
+      }
+    },
+    {
+      "id": "g1-u4-r154",
+      "grade": 1,
+      "unit": "4",
+      "word": "set the table",
+      "meaning": "밥상을 차리다",
+      "definition": "to arrange plates, utensils, and glasses on the table for a meal",
+      "sentence": "Dad set the table before dinner.",
+      "translation": "아빠는 저녁 식사 전에 상을 차리셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 154
+      }
+    },
+    {
+      "id": "g1-u4-r155",
+      "grade": 1,
+      "unit": "4",
+      "word": "stop by",
+      "meaning": "~에 들르다",
+      "definition": "to visit a person or place briefly",
+      "sentence": "Can you stop by the store on your way home?",
+      "translation": "집에 가는 길에 가게에 들러 줄 수 있어?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 155
+      }
+    },
+    {
+      "id": "g1-u4-r156",
+      "grade": 1,
+      "unit": "4",
+      "word": "take out",
+      "meaning": "밖으로 가져가다",
+      "definition": "to remove something from inside a place",
+      "sentence": "Did you take out the garbage this morning?",
+      "translation": "너 오늘 아침에 쓰레기를 내다 놨니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 156
+      }
+    },
+    {
+      "id": "g1-u4-r157",
+      "grade": 1,
+      "unit": "4",
+      "word": "turn off",
+      "meaning": "~을 끄다",
+      "definition": "to stop a machine or device from working by switching it off",
+      "sentence": "Don't forget to turn off the lights.",
+      "translation": "불 끄는 거 잊지 마.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 157
+      }
+    },
+    {
+      "id": "g1-u5-r158",
+      "grade": 1,
+      "unit": "5",
+      "word": "appear",
+      "meaning": "v. 나타나다",
+      "definition": "v. to become visible or come into sight",
+      "sentence": "The stars begin to appear in the night sky.",
+      "translation": "별들이 밤하늘에 나타나기 시작한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 158
+      }
+    },
+    {
+      "id": "g1-u5-r159",
+      "grade": 1,
+      "unit": "5",
+      "word": "attention",
+      "meaning": "n. 주의, 주목",
+      "definition": "n. notice taken of someone or something; the regarding of someone or something as interesting or important",
+      "sentence": "The teacher called for the students' attention.",
+      "translation": "선생님이 학생들에게 주의를 집중하라고 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 159
+      }
+    },
+    {
+      "id": "g1-u5-r160",
+      "grade": 1,
+      "unit": "5",
+      "word": "century",
+      "meaning": "n. 세기, 백 년",
+      "definition": "n. a period of one hundred years",
+      "sentence": "The castle has stood for over a century.",
+      "translation": "그 성은 한 세기 넘게 유지되어 왔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 160
+      }
+    },
+    {
+      "id": "g1-u5-r161",
+      "grade": 1,
+      "unit": "5",
+      "word": "chili pepper",
+      "meaning": "n. 고추",
+      "definition": "n. the small green or red fruit of a type of pepper plant that is used in cooking to give a hot taste to food, often dried or made into powder, also called chili or chili powder",
+      "sentence": "She added a chili pepper to the soup.",
+      "translation": "그녀는 수프에 고추를 넣었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 161
+      }
+    },
+    {
+      "id": "g1-u5-r162",
+      "grade": 1,
+      "unit": "5",
+      "word": "chip",
+      "meaning": "n. 감자칩",
+      "definition": "n. a thin slice of food (typically potato) that has been fried or baked until crunchy",
+      "sentence": "I ate some chips with my sandwich for lunch.",
+      "translation": "나는 점심으로 샌드위치와 함께 감자칩을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 162
+      }
+    },
+    {
+      "id": "g1-u5-r163",
+      "grade": 1,
+      "unit": "5",
+      "word": "churro",
+      "meaning": "n. 추로",
+      "definition": "n. a fried-dough pastry, sometimes made from potato dough, originating from Spanish and Portuguese cuisine",
+      "sentence": "We bought a churro from the food truck.",
+      "translation": "우리는 푸드 트럭에서 추로를 하나 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 163
+      }
+    },
+    {
+      "id": "g1-u5-r164",
+      "grade": 1,
+      "unit": "5",
+      "word": "corn",
+      "meaning": "n. 옥수수",
+      "definition": "n. a tall plant grown in many parts of the world for its yellow seeds, which are eaten as food, made into flour, or fed to animals",
+      "sentence": "He planted corn in his garden.",
+      "translation": "그는 정원에 옥수수를 심었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 164
+      }
+    },
+    {
+      "id": "g1-u5-r165",
+      "grade": 1,
+      "unit": "5",
+      "word": "crab",
+      "meaning": "n. 게",
+      "definition": "n. a sea creature with five pairs of legs and a round, flat body covered by a shell, or its flesh eaten as food",
+      "sentence": "The crab walked sideways along the beach.",
+      "translation": "게가 해변을 따라 옆으로 걸었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 165
+      }
+    },
+    {
+      "id": "g1-u5-r166",
+      "grade": 1,
+      "unit": "5",
+      "word": "crispy",
+      "meaning": "a. 바삭한",
+      "definition": "a. pleasantly thin, dry, and easily broken",
+      "sentence": "The bacon was crispy and delicious.",
+      "translation": "베이컨은 바삭하고 맛있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 166
+      }
+    },
+    {
+      "id": "g1-u5-r167",
+      "grade": 1,
+      "unit": "5",
+      "word": "croissant",
+      "meaning": "n. 크루아상",
+      "definition": "n. a piece of light crescent-shaped pastry, usually eaten in the morning",
+      "sentence": "I had a warm croissant for breakfast.",
+      "translation": "나는 아침으로 따뜻한 크루아상을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 167
+      }
+    },
+    {
+      "id": "g1-u5-r168",
+      "grade": 1,
+      "unit": "5",
+      "word": "dessert",
+      "meaning": "n. 디저트, 후식",
+      "definition": "n. sweet food eaten at the end of a meal",
+      "sentence": "We had ice cream for dessert.",
+      "translation": "우리는 후식으로 아이스크림을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 168
+      }
+    },
+    {
+      "id": "g1-u5-r169",
+      "grade": 1,
+      "unit": "5",
+      "word": "different",
+      "meaning": "a. 다른, (각양) 각색의",
+      "definition": "a. not the same as someone or something else",
+      "sentence": "My brother and I have different tastes in music.",
+      "translation": "내 남동생과 나는 음악 취향이 다르다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 169
+      }
+    },
+    {
+      "id": "g1-u5-r170",
+      "grade": 1,
+      "unit": "5",
+      "word": "flavour",
+      "meaning": "n. (독특한) 풍미, 향미",
+      "definition": "n. the particular way a substance, especially food or drink, is recognized from its taste and smell",
+      "sentence": "The soup had a rich, spicy flavor.",
+      "translation": "수프는 풍부하고 매운 맛이 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 170
+      }
+    },
+    {
+      "id": "g1-u5-r171",
+      "grade": 1,
+      "unit": "5",
+      "word": "fondue",
+      "meaning": "n. 퐁뒤",
+      "definition": "n. a hot dish in which small pieces of food are dipped into a hot sauce or a hot mixture of cheese and wine",
+      "sentence": "We enjoyed a cheese fondue for dinner.",
+      "translation": "우리는 저녁으로 치즈 퐁뒤를 즐겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 171
+      }
+    },
+    {
+      "id": "g1-u5-r172",
+      "grade": 1,
+      "unit": "5",
+      "word": "friendly",
+      "meaning": "a. 친절한, 상냥한",
+      "definition": "a. behaving in a pleasant, kind way towards someone",
+      "sentence": "The new neighbor is very friendly.",
+      "translation": "새 이웃은 매우 친절하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 172
+      }
+    },
+    {
+      "id": "g1-u5-r173",
+      "grade": 1,
+      "unit": "5",
+      "word": "gelato",
+      "meaning": "n. 젤라토",
+      "definition": "n. an Italian type of ice cream made from milk and usually containing less fat than other types of ice cream",
+      "sentence": "I had strawberry gelato after lunch.",
+      "translation": "나는 점심 후에 딸기 젤라토를 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 173
+      }
+    },
+    {
+      "id": "g1-u5-r174",
+      "grade": 1,
+      "unit": "5",
+      "word": "guest",
+      "meaning": "n. 손님",
+      "definition": "n. a person who is staying with you, or a person you have invited to a social occasion, such as a party or a meal",
+      "sentence": "The guest arrived late for the party.",
+      "translation": "손님이 파티에 늦게 도착했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 174
+      }
+    },
+    {
+      "id": "g1-u5-r175",
+      "grade": 1,
+      "unit": "5",
+      "word": "half",
+      "meaning": "n. 반, 절반",
+      "definition": "n. either of the two equal or nearly equal parts that together make up a whole",
+      "sentence": "I ate half of the pizza for lunch.",
+      "translation": "나는 점심으로 피자의 절반을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 175
+      }
+    },
+    {
+      "id": "g1-u5-r176",
+      "grade": 1,
+      "unit": "5",
+      "word": "hungry",
+      "meaning": "a. 배고픈, 굶주리는",
+      "definition": "a. wanting or needing food",
+      "sentence": "He was hungry after playing soccer.",
+      "translation": "그는 축구를 한 후 배가 고팠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 176
+      }
+    },
+    {
+      "id": "g1-u5-r177",
+      "grade": 1,
+      "unit": "5",
+      "word": "imagine",
+      "meaning": "v. 상상하다, (마음속으로) 그리다",
+      "definition": "v. to form or have a mental picture or idea of something",
+      "sentence": "Close your eyes and imagine a beautiful beach.",
+      "translation": "눈을 감고 아름다운 해변을 상상해라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 177
+      }
+    },
+    {
+      "id": "g1-u5-r178",
+      "grade": 1,
+      "unit": "5",
+      "word": "kiwi",
+      "meaning": "n. 키위",
+      "definition": "n. a small, oval fruit with brown, hairy skin, green flesh, and black seeds",
+      "sentence": "She sliced a kiwi for the fruit salad.",
+      "translation": "그녀는 과일 샐러드에 넣을 키위를 얇게 잘랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 178
+      }
+    },
+    {
+      "id": "g1-u5-r179",
+      "grade": 1,
+      "unit": "5",
+      "word": "mean",
+      "meaning": "v. ~라는 뜻이다, 의미이다",
+      "definition": "v. to express or represent something such as an idea, thought, or fact",
+      "sentence": "What does this word mean?",
+      "translation": "이 단어는 무엇을 의미하니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 179
+      }
+    },
+    {
+      "id": "g1-u5-r180",
+      "grade": 1,
+      "unit": "5",
+      "word": "melt",
+      "meaning": "v. 녹다",
+      "definition": "v. to turn from a solid state into a soft or liquid state",
+      "sentence": "The snowman melted in the hot sun.",
+      "translation": "눈사람이 뜨거운 태양 아래서 녹았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 180
+      }
+    },
+    {
+      "id": "g1-u5-r181",
+      "grade": 1,
+      "unit": "5",
+      "word": "menu",
+      "meaning": "n. (식당·식사의) 메뉴",
+      "definition": "n. a list of the dishes that you can order in a restaurant",
+      "sentence": "The menu had many delicious options.",
+      "translation": "메뉴에 맛있는 선택지가 많았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 181
+      }
+    },
+    {
+      "id": "g1-u5-r182",
+      "grade": 1,
+      "unit": "5",
+      "word": "mushroom",
+      "meaning": "n. 버섯",
+      "definition": "n. a type of fungus with a short stem and a round top, some types of which can be eaten",
+      "sentence": "He added mushrooms to the pizza.",
+      "translation": "그는 피자에 버섯을 추가했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 182
+      }
+    },
+    {
+      "id": "g1-u5-r183",
+      "grade": 1,
+      "unit": "5",
+      "word": "noodle",
+      "meaning": "n. 국수",
+      "definition": "n. a long, thin piece of food made from a mixture of flour, water, and sometimes egg, cooked in boiling liquid",
+      "sentence": "He cooked spicy noodles for a lunch.",
+      "translation": "그는 점심으로 매운 국수를 요리했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 183
+      }
+    },
+    {
+      "id": "g1-u5-r184",
+      "grade": 1,
+      "unit": "5",
+      "word": "order",
+      "meaning": "n. (식당에서의) 주문[주문한 음식/음료]",
+      "definition": "n. a request to make, supply, or deliver food or goods",
+      "sentence": "She took my order at the restaurant.",
+      "translation": "그녀는 음식점에서 내 주문을 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 184
+      }
+    },
+    {
+      "id": "g1-u5-r185",
+      "grade": 1,
+      "unit": "5",
+      "word": "pie",
+      "meaning": "n. (과일로 만든) 파이",
+      "definition": "n. a type of food made with meat, vegetables, or fruit covered in pastry and baked",
+      "sentence": "We baked an apple pie for dessert.",
+      "translation": "우리는 디저트로 애플 파이를 구웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 185
+      }
+    },
+    {
+      "id": "g1-u5-r186",
+      "grade": 1,
+      "unit": "5",
+      "word": "plate",
+      "meaning": "n. 접시, 그릇",
+      "definition": "n. a flat, usually round dish with a slightly raised edge that you eat from or serve food on",
+      "sentence": "She served the meal on a large plate.",
+      "translation": "그녀는 큰 접시에 음식을 서빙했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 186
+      }
+    },
+    {
+      "id": "g1-u5-r187",
+      "grade": 1,
+      "unit": "5",
+      "word": "popsicle",
+      "meaning": "n. 막대 아이스크림",
+      "definition": "n. sweet, flavored ice on a stick",
+      "sentence": "The kids enjoyed popsicles on the hot day.",
+      "translation": "아이들은 더운 날에 막대 아이스크림을 즐겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 187
+      }
+    },
+    {
+      "id": "g1-u5-r188",
+      "grade": 1,
+      "unit": "5",
+      "word": "popular",
+      "meaning": "a. 인기 있는",
+      "definition": "a. liked, enjoyed, or supported by many people",
+      "sentence": "This song is very popular right now.",
+      "translation": "이 노래는 지금 매우 인기가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 188
+      }
+    },
+    {
+      "id": "g1-u5-r189",
+      "grade": 1,
+      "unit": "5",
+      "word": "prepare",
+      "meaning": "v. 준비하다",
+      "definition": "v. to make or get something or someone ready for something that will happen in the future",
+      "sentence": "I need to prepare for my exam tomorrow.",
+      "translation": "나는 내일 시험을 준비해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 189
+      }
+    },
+    {
+      "id": "g1-u5-r190",
+      "grade": 1,
+      "unit": "5",
+      "word": "pretzel",
+      "meaning": "n. 프레츨",
+      "definition": "n. a hard salty biscuit that has been baked, usually in the shape of a knot or stick",
+      "sentence": "The bakery sells fresh pretzels every morning.",
+      "translation": "그 빵집은 매일 아침 신선한 프레츨을 판다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 190
+      }
+    },
+    {
+      "id": "g1-u5-r191",
+      "grade": 1,
+      "unit": "5",
+      "word": "price",
+      "meaning": "n. 가격",
+      "definition": "n. the amount of money for which something is sold",
+      "sentence": "The price of the shirt is $20.",
+      "translation": "그 셔츠의 가격은 20달러다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 191
+      }
+    },
+    {
+      "id": "g1-u5-r192",
+      "grade": 1,
+      "unit": "5",
+      "word": "risotto",
+      "meaning": "n. 리소토(이탈리아식 볶음밥)",
+      "definition": "n. an Italian dish of rice cooked with meat, fish, or vegetables",
+      "sentence": "She made mushroom risotto for dinner.",
+      "translation": "그녀는 저녁으로 버섯 리소토를 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 192
+      }
+    },
+    {
+      "id": "g1-u5-r193",
+      "grade": 1,
+      "unit": "5",
+      "word": "sauce",
+      "meaning": "n. 소스",
+      "definition": "n. a thick liquid eaten with food to add flavor",
+      "sentence": "Can you pass me the tomato sauce?",
+      "translation": "토마토 소스 좀 건네줄래?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 193
+      }
+    },
+    {
+      "id": "g1-u5-r194",
+      "grade": 1,
+      "unit": "5",
+      "word": "sausage",
+      "meaning": "n. 소시지",
+      "definition": "n. a thin, tube-like case containing meat that has been cut into very small pieces and mixed with spices",
+      "sentence": "He grilled sausages for the barbecue.",
+      "translation": "그는 바비큐를 위해 소시지를 구웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 194
+      }
+    },
+    {
+      "id": "g1-u5-r195",
+      "grade": 1,
+      "unit": "5",
+      "word": "sour",
+      "meaning": "a. (맛이) 신, 시큼한",
+      "definition": "a. having a sharp, sometimes unpleasant, taste or smell, like a lemon, and not sweet",
+      "sentence": "The lemonade tasted very sour.",
+      "translation": "레모네이드는 매우 시큼했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 195
+      }
+    },
+    {
+      "id": "g1-u5-r196",
+      "grade": 1,
+      "unit": "5",
+      "word": "spicy",
+      "meaning": "a. 매운",
+      "definition": "a. containing strong flavors from spices",
+      "sentence": "The soup was too spicy for me.",
+      "translation": "그 수프는 나에게 너무 매웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 196
+      }
+    },
+    {
+      "id": "g1-u5-r197",
+      "grade": 1,
+      "unit": "5",
+      "word": "sticky",
+      "meaning": "a. 쫀득한, 끈적끈적한",
+      "definition": "a. made of or covered with a substance that stays fixed to any surface it touches",
+      "sentence": "The honey made my hands sticky.",
+      "translation": "꿀이 내 손을 끈적이게 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 197
+      }
+    },
+    {
+      "id": "g1-u5-r198",
+      "grade": 1,
+      "unit": "5",
+      "word": "stretchy",
+      "meaning": "a. 늘어나는, 탄력성 있는",
+      "definition": "a. easily made longer or wider without tearing or breaking",
+      "sentence": "These pants are made of stretchy material.",
+      "translation": "이 바지는 신축성 있는 재질로 만들어졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 198
+      }
+    },
+    {
+      "id": "g1-u5-r199",
+      "grade": 1,
+      "unit": "5",
+      "word": "surprise",
+      "meaning": "n. 뜻밖의[놀라운] 일[소식], 놀라움",
+      "definition": "n. an unexpected event",
+      "sentence": "The gift was a nice surprise to me.",
+      "translation": "그 선물은 나에게 멋진 놀라움이었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 199
+      }
+    },
+    {
+      "id": "g1-u5-r200",
+      "grade": 1,
+      "unit": "5",
+      "word": "taco",
+      "meaning": "n. 타코",
+      "definition": "n. a type of food, originally from Mexico, consisting of a flat piece of dough folded around meat, beans, etc.",
+      "sentence": "I had a beef taco for lunch.",
+      "translation": "나는 점심으로 소고기 타코를 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 200
+      }
+    },
+    {
+      "id": "g1-u5-r201",
+      "grade": 1,
+      "unit": "5",
+      "word": "thin",
+      "meaning": "a. 얇은, 가는",
+      "definition": "a. having a small distance between two opposite sides",
+      "sentence": "She sliced the bread into thin pieces.",
+      "translation": "그녀는 빵을 얇게 잘랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 201
+      }
+    },
+    {
+      "id": "g1-u5-r202",
+      "grade": 1,
+      "unit": "5",
+      "word": "turtle",
+      "meaning": "n. 거북",
+      "definition": "n. an animal that lives in or near water and has a thick shell covering its body into which it can move its head and legs for protection",
+      "sentence": "We saw a turtle swimming in the sea.",
+      "translation": "우리는 바다에서 수영하는 거북을 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 202
+      }
+    },
+    {
+      "id": "g1-u5-r203",
+      "grade": 1,
+      "unit": "5",
+      "word": "view",
+      "meaning": "n. 경치",
+      "definition": "n. what you can see from a particular place or position, especially beautiful countryside",
+      "sentence": "We enjoyed the view of the sunset from the beach.",
+      "translation": "우리는 해변에서 석양의 경치를 즐겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 203
+      }
+    },
+    {
+      "id": "g1-u5-r204",
+      "grade": 1,
+      "unit": "5",
+      "word": "vlog",
+      "meaning": "n. 비디오 웹로그",
+      "definition": "n. a blog that contains video material",
+      "sentence": "She started a vlog about her travels.",
+      "translation": "그녀는 여행에 관한 브이로그를 시작했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 204
+      }
+    },
+    {
+      "id": "g1-u5-r205",
+      "grade": 1,
+      "unit": "5",
+      "word": "wing",
+      "meaning": "n. 날개",
+      "definition": "n. one of the parts of the body of a bird, insect, or bat that it uses for flying",
+      "sentence": "The butterfly's wings were colorful.",
+      "translation": "나비의 날개는 색깔이 화려했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 205
+      }
+    },
+    {
+      "id": "g1-u5-r206",
+      "grade": 1,
+      "unit": "5",
+      "word": "at home",
+      "meaning": "집에서",
+      "definition": "in one’s own house",
+      "sentence": "I like to relax at home on weekends.",
+      "translation": "나는 주말에 집에서 쉬는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 206
+      }
+    },
+    {
+      "id": "g1-u5-r207",
+      "grade": 1,
+      "unit": "5",
+      "word": "take back",
+      "meaning": "도로 가져가다",
+      "definition": "to return (something or someone)",
+      "sentence": "I will take back the book to the library.",
+      "translation": "나는 그 책을 도서관에 돌려줄 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 207
+      }
+    },
+    {
+      "id": "g1-u6-r208",
+      "grade": 1,
+      "unit": "6",
+      "word": "account",
+      "meaning": "n. 계정",
+      "definition": "n. a record or profile used for online services",
+      "sentence": "I need an account to log in.",
+      "translation": "나는 로그인하기 위해 계정이 필요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 208
+      }
+    },
+    {
+      "id": "g1-u6-r209",
+      "grade": 1,
+      "unit": "6",
+      "word": "advice",
+      "meaning": "n. 충고, 조언",
+      "definition": "n. suggestions about what you think someone should do",
+      "sentence": "The teacher gave good advice.",
+      "translation": "선생님이 좋은 조언을 주셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 209
+      }
+    },
+    {
+      "id": "g1-u6-r210",
+      "grade": 1,
+      "unit": "6",
+      "word": "angry",
+      "meaning": "a. 화난",
+      "definition": "a. feeling strong displeasure or hostility",
+      "sentence": "Don’t be angry with me.",
+      "translation": "나에게 화내지 마라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 210
+      }
+    },
+    {
+      "id": "g1-u6-r211",
+      "grade": 1,
+      "unit": "6",
+      "word": "bite",
+      "meaning": "v. (이빨로) 물다[베어 물다]",
+      "definition": "v. to cut or hold with teeth",
+      "sentence": "The baby tries to bite the apple.",
+      "translation": "아기가 사과를 물려고 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 211
+      }
+    },
+    {
+      "id": "g1-u6-r212",
+      "grade": 1,
+      "unit": "6",
+      "word": "bored",
+      "meaning": "a. 지루해하는",
+      "definition": "a. tired and impatient because something is not interesting",
+      "sentence": "The students look bored in class.",
+      "translation": "학생들은 수업에서 지루해 보였다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 212
+      }
+    },
+    {
+      "id": "g1-u6-r213",
+      "grade": 1,
+      "unit": "6",
+      "word": "careless",
+      "meaning": "a. 부주의한, 경솔한",
+      "definition": "a. not careful; done, made, or said without enough thought or attention",
+      "sentence": "The boy was careless with his toys.",
+      "translation": "그 소년은 장난감을 부주의하게 다루었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 213
+      }
+    },
+    {
+      "id": "g1-u6-r214",
+      "grade": 1,
+      "unit": "6",
+      "word": "click",
+      "meaning": "v. (마우스를) 클릭하다[누르다]",
+      "definition": "v. to press a button on a computer mouse",
+      "sentence": "She likes to click on funny videos online.",
+      "translation": "그녀는 온라인에서 재미있는 영상을 클릭하는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 214
+      }
+    },
+    {
+      "id": "g1-u6-r215",
+      "grade": 1,
+      "unit": "6",
+      "word": "communicate",
+      "meaning": "v. 연락을 주고받다, 의사소통을 하다",
+      "definition": "v. to share or exchange information or ideas",
+      "sentence": "They use email to communicate.",
+      "translation": "그들은 의사소통을 하기 위해 이메일을 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 215
+      }
+    },
+    {
+      "id": "g1-u6-r216",
+      "grade": 1,
+      "unit": "6",
+      "word": "connect",
+      "meaning": "v. 연결하다, 이어지다",
+      "definition": "v. to join or link together",
+      "sentence": "The phone will connect to the Wi-Fi.",
+      "translation": "전화기가 Wi-Fi에 연결될 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 216
+      }
+    },
+    {
+      "id": "g1-u6-r217",
+      "grade": 1,
+      "unit": "6",
+      "word": "direct",
+      "meaning": "a. 직접적인",
+      "definition": "a. happening or done without involving other people, actions, etc. in between",
+      "sentence": "She gave me a direct answer to my question.",
+      "translation": "그녀는 내 질문에 직접적인 답변을 해 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 217
+      }
+    },
+    {
+      "id": "g1-u6-r218",
+      "grade": 1,
+      "unit": "6",
+      "word": "emoji",
+      "meaning": "n. 이모지",
+      "definition": "n. a small digital image or icon used to express an idea or emotion",
+      "sentence": "She added a smiley emoji at the end of her message.",
+      "translation": "그녀는 메시지 끝에 웃는 이모지를 추가했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 218
+      }
+    },
+    {
+      "id": "g1-u6-r219",
+      "grade": 1,
+      "unit": "6",
+      "word": "even",
+      "meaning": "ad. (예상 밖이나 놀라운 일을 나타내어) ~도[조차]",
+      "definition": "ad. used to emphasize something surprising",
+      "sentence": "Even the teacher laughed at the joke.",
+      "translation": "심지어 선생님도 그 농담에 웃었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 219
+      }
+    },
+    {
+      "id": "g1-u6-r220",
+      "grade": 1,
+      "unit": "6",
+      "word": "fever",
+      "meaning": "n. 열",
+      "definition": "n. a high body temperature",
+      "sentence": "The child has a high fever.",
+      "translation": "아이에게 고열이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 220
+      }
+    },
+    {
+      "id": "g1-u6-r221",
+      "grade": 1,
+      "unit": "6",
+      "word": "gesture",
+      "meaning": "n. 제스처, 몸짓",
+      "definition": "n. a movement of part of the body to express an idea or feeling",
+      "sentence": "He made a friendly gesture.",
+      "translation": "그는 친근한 제스처를 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 221
+      }
+    },
+    {
+      "id": "g1-u6-r222",
+      "grade": 1,
+      "unit": "6",
+      "word": "ghost",
+      "meaning": "n. 유령",
+      "definition": "n. the spirit of a dead person that people think they can see or feel",
+      "sentence": "People say the old house has a ghost.",
+      "translation": "사람들은 그 오래된 집에 유령이 있다고 말한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 222
+      }
+    },
+    {
+      "id": "g1-u6-r223",
+      "grade": 1,
+      "unit": "6",
+      "word": "health",
+      "meaning": "n. 건강",
+      "definition": "n. the condition of the body or mind",
+      "sentence": "Exercise is good for your health.",
+      "translation": "운동은 건강에 좋다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 223
+      }
+    },
+    {
+      "id": "g1-u6-r224",
+      "grade": 1,
+      "unit": "6",
+      "word": "hear",
+      "meaning": "v. 듣다, 들리다",
+      "definition": "v. to be aware of sounds with your ears",
+      "sentence": "We can hear the music from here.",
+      "translation": "우리는 여기서 음악을 들을 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 224
+      }
+    },
+    {
+      "id": "g1-u6-r225",
+      "grade": 1,
+      "unit": "6",
+      "word": "maybe",
+      "meaning": "ad. 어쩌면, 아마",
+      "definition": "ad. possibly but not certainly",
+      "sentence": "Maybe we can go to the park.",
+      "translation": "아마도 우리는 공원에 갈 수 있을 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 225
+      }
+    },
+    {
+      "id": "g1-u6-r226",
+      "grade": 1,
+      "unit": "6",
+      "word": "message",
+      "meaning": "n. 메시지",
+      "definition": "n. a piece of information sent or received in writing, speech, or signals",
+      "sentence": "He left a message on my phone.",
+      "translation": "그는 내 전화기에 메시지를 남겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 226
+      }
+    },
+    {
+      "id": "g1-u6-r227",
+      "grade": 1,
+      "unit": "6",
+      "word": "photo",
+      "meaning": "n. 사진",
+      "definition": "n. a picture taken with a camera",
+      "sentence": "They took a photo at the beach.",
+      "translation": "그들은 해변에서 사진을 찍었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 227
+      }
+    },
+    {
+      "id": "g1-u6-r228",
+      "grade": 1,
+      "unit": "6",
+      "word": "planet",
+      "meaning": "n. 행성",
+      "definition": "n. a large, round object in space that orbits a star",
+      "sentence": "Earth is the third planet from the sun.",
+      "translation": "지구는 태양에서 세 번째 행성이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 228
+      }
+    },
+    {
+      "id": "g1-u6-r229",
+      "grade": 1,
+      "unit": "6",
+      "word": "reply",
+      "meaning": "v. 대답하다, 회신하다",
+      "definition": "v. to respond to a question or message",
+      "sentence": "She will reply to your email soon.",
+      "translation": "그녀는 곧 당신의 이메일에 답장할 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 229
+      }
+    },
+    {
+      "id": "g1-u6-r230",
+      "grade": 1,
+      "unit": "6",
+      "word": "rest",
+      "meaning": "n. 휴식, 수면",
+      "definition": "n. a period of relaxation or sleep",
+      "sentence": "After a long walk, he needed some rest.",
+      "translation": "긴 산책 후에 그는 휴식이 필요했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 230
+      }
+    },
+    {
+      "id": "g1-u6-r231",
+      "grade": 1,
+      "unit": "6",
+      "word": "rude",
+      "meaning": "a. 무례한, 예의 없는",
+      "definition": "a. not having or showing concern for others' feelings",
+      "sentence": "The customer was rude to the waiter.",
+      "translation": "고객은 웨이터에게 무례하게 굴었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 231
+      }
+    },
+    {
+      "id": "g1-u6-r232",
+      "grade": 1,
+      "unit": "6",
+      "word": "scared",
+      "meaning": "a. 무서워하는, 겁먹은",
+      "definition": "a. frightened or worried",
+      "sentence": "The cat is scared of the noise.",
+      "translation": "고양이는 그 소음을 무서워한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 232
+      }
+    },
+    {
+      "id": "g1-u6-r233",
+      "grade": 1,
+      "unit": "6",
+      "word": "share",
+      "meaning": "v. 함께 쓰다, 공유하다",
+      "definition": "v. to have or use something with others",
+      "sentence": "Can we share this book?",
+      "translation": "우리 이 책을 공유할 수 있니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 233
+      }
+    },
+    {
+      "id": "g1-u6-r234",
+      "grade": 1,
+      "unit": "6",
+      "word": "simple",
+      "meaning": "a. 간단한, 단순한",
+      "definition": "a. easy to understand or do",
+      "sentence": "The recipe is very simple.",
+      "translation": "그 요리법은 매우 간단하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 234
+      }
+    },
+    {
+      "id": "g1-u6-r235",
+      "grade": 1,
+      "unit": "6",
+      "word": "situation",
+      "meaning": "n. 상황",
+      "definition": "n. a set of circumstances or conditions",
+      "sentence": "The situation at work is very stressful right now.",
+      "translation": "현재 직장에서의 상황이 매우 스트레스다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 235
+      }
+    },
+    {
+      "id": "g1-u6-r236",
+      "grade": 1,
+      "unit": "6",
+      "word": "smart",
+      "meaning": "a. 영리한, 약삭빠른",
+      "definition": "a. intelligent or clever",
+      "sentence": "The fox is very smart.",
+      "translation": "여우는 매우 영리하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 236
+      }
+    },
+    {
+      "id": "g1-u6-r237",
+      "grade": 1,
+      "unit": "6",
+      "word": "spend",
+      "meaning": "v. 보내다, 소비하다",
+      "definition": "v. to use time or money for a particular purpose",
+      "sentence": "I spend time reading books.",
+      "translation": "나는 책을 읽으며 시간을 보낸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 237
+      }
+    },
+    {
+      "id": "g1-u6-r238",
+      "grade": 1,
+      "unit": "6",
+      "word": "still",
+      "meaning": "ad. 아직도, 여전히",
+      "definition": "ad. continuing until a particular point in time and not finishing",
+      "sentence": "He is still waiting outside.",
+      "translation": "그는 여전히 밖에서 기다리고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 238
+      }
+    },
+    {
+      "id": "g1-u6-r239",
+      "grade": 1,
+      "unit": "6",
+      "word": "strange",
+      "meaning": "a. 이상한, 괴상한",
+      "definition": "a. unusual or not familiar",
+      "sentence": "That noise is very strange.",
+      "translation": "그 소음은 매우 이상하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 239
+      }
+    },
+    {
+      "id": "g1-u6-r240",
+      "grade": 1,
+      "unit": "6",
+      "word": "stressful",
+      "meaning": "a. 스트레스가 많은, 스트레스를 주는",
+      "definition": "a. causing a lot of worry",
+      "sentence": "Moving to a new house is stressful.",
+      "translation": "새 집으로 이사하는 것은 스트레스다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 240
+      }
+    },
+    {
+      "id": "g1-u6-r241",
+      "grade": 1,
+      "unit": "6",
+      "word": "tablet",
+      "meaning": "n. 태블릿",
+      "definition": "n. a small, flat computer that is operated by touching a screen",
+      "sentence": "She uses a tablet for drawing.",
+      "translation": "그녀는 그림 그리기에 태블릿을 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 241
+      }
+    },
+    {
+      "id": "g1-u6-r242",
+      "grade": 1,
+      "unit": "6",
+      "word": "text",
+      "meaning": "n. 문자, v. (휴대전화로) 문자를 보내다",
+      "definition": "n. a written message sent via electronic means; v. to send such a message",
+      "sentence": "He will text his friend later.",
+      "translation": "그는 나중에 친구에게 문자를 보낼 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 242
+      }
+    },
+    {
+      "id": "g1-u6-r243",
+      "grade": 1,
+      "unit": "6",
+      "word": "until",
+      "meaning": "conj. ~할 때까지",
+      "definition": "conj. up to the point in time or event mentioned",
+      "sentence": "We will wait until you come.",
+      "translation": "우리는 당신이 올 때까지 기다릴 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 243
+      }
+    },
+    {
+      "id": "g1-u6-r244",
+      "grade": 1,
+      "unit": "6",
+      "word": "get along with",
+      "meaning": "~와 잘 지내다",
+      "definition": "to have a friendly relationship with someone",
+      "sentence": "They get along with their neighbors well.",
+      "translation": "그들은 이웃들과 잘 지낸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 244
+      }
+    },
+    {
+      "id": "g1-u7-r245",
+      "grade": 1,
+      "unit": "7",
+      "word": "almond",
+      "meaning": "n. 아몬드",
+      "definition": "n. a small nut with a hard shell that can be eaten",
+      "sentence": "He ate an almond for a snack.",
+      "translation": "그는 간식으로 아몬드를 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 245
+      }
+    },
+    {
+      "id": "g1-u7-r246",
+      "grade": 1,
+      "unit": "7",
+      "word": "avoid",
+      "meaning": "v. 피하다",
+      "definition": "v. to keep away from something or someone",
+      "sentence": "The driver avoided the busy road.",
+      "translation": "그 운전자는 붐비는 도로를 피한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 246
+      }
+    },
+    {
+      "id": "g1-u7-r247",
+      "grade": 1,
+      "unit": "7",
+      "word": "bamboo",
+      "meaning": "n. 대나무",
+      "definition": "n. a tall plant with hard, hollow stems that pandas eat",
+      "sentence": "The panda eats bamboo every day.",
+      "translation": "그 판다는 매일 대나무를 먹는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 247
+      }
+    },
+    {
+      "id": "g1-u7-r248",
+      "grade": 1,
+      "unit": "7",
+      "word": "bent",
+      "meaning": "a. 구부러진, 휘어진",
+      "definition": "a. curved or not straight",
+      "sentence": "The stick is bent.",
+      "translation": "그 막대기는 구부러져 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 248
+      }
+    },
+    {
+      "id": "g1-u7-r249",
+      "grade": 1,
+      "unit": "7",
+      "word": "cafeteria",
+      "meaning": "n. 구내식당",
+      "definition": "n. a place in a school or company where people eat",
+      "sentence": "The students ate lunch in the cafeteria.",
+      "translation": "그 학생들은 구내식당에서 점심을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 249
+      }
+    },
+    {
+      "id": "g1-u7-r250",
+      "grade": 1,
+      "unit": "7",
+      "word": "care",
+      "meaning": "v. 상관하다, 관심을 가지다",
+      "definition": "v. to have an interest or worry about something or someone",
+      "sentence": "She cares about her cat.",
+      "translation": "그녀는 그녀의 고양이에게 관심을 가진다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 250
+      }
+    },
+    {
+      "id": "g1-u7-r251",
+      "grade": 1,
+      "unit": "7",
+      "word": "coin",
+      "meaning": "n. 동전",
+      "definition": "n. a small, flat, and usually round piece of metal issued by a government as money",
+      "sentence": "The boy found a coin on the ground.",
+      "translation": "그 소년은 땅에서 동전을 발견했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 251
+      }
+    },
+    {
+      "id": "g1-u7-r252",
+      "grade": 1,
+      "unit": "7",
+      "word": "eggplant",
+      "meaning": "n. 가지",
+      "definition": "n. a somewhat egg-shaped vegetable, usually with purple skin",
+      "sentence": "They cooked an eggplant for dinner.",
+      "translation": "그들은 저녁으로 가지를 요리했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 252
+      }
+    },
+    {
+      "id": "g1-u7-r253",
+      "grade": 1,
+      "unit": "7",
+      "word": "fantastic",
+      "meaning": "a. 기막히게 좋은, 엄청난, 기상천외한",
+      "definition": "a. very good or wonderful",
+      "sentence": "The movie was fantastic.",
+      "translation": "그 영화는 기막히게 좋았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 253
+      }
+    },
+    {
+      "id": "g1-u7-r254",
+      "grade": 1,
+      "unit": "7",
+      "word": "flea market",
+      "meaning": "벼룩시장",
+      "definition": "a market where old or used items are sold",
+      "sentence": "He found a rare book at the flea market.",
+      "translation": "그는 벼룩시장에서 희귀한 책을 발견했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 254
+      }
+    },
+    {
+      "id": "g1-u7-r255",
+      "grade": 1,
+      "unit": "7",
+      "word": "flowerpot",
+      "meaning": "n. 화분",
+      "definition": "n. a container for growing flowers",
+      "sentence": "There is a flowerpot on the table.",
+      "translation": "탁자 위에 화분이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 255
+      }
+    },
+    {
+      "id": "g1-u7-r256",
+      "grade": 1,
+      "unit": "7",
+      "word": "greet",
+      "meaning": "v. ~에게 인사하다; 환영하다",
+      "definition": "v. to say hello to someone",
+      "sentence": "They greet each other in the morning.",
+      "translation": "그들은 아침에 서로 인사한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 256
+      }
+    },
+    {
+      "id": "g1-u7-r257",
+      "grade": 1,
+      "unit": "7",
+      "word": "harmful",
+      "meaning": "a. 해로운",
+      "definition": "a. causing damage or injury",
+      "sentence": "Smoking is harmful.",
+      "translation": "흡연은 해롭다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 257
+      }
+    },
+    {
+      "id": "g1-u7-r258",
+      "grade": 1,
+      "unit": "7",
+      "word": "item",
+      "meaning": "n. 물품, 항목",
+      "definition": "n. a single thing or object",
+      "sentence": "She bought many items at the store.",
+      "translation": "그녀는 가게에서 많은 물품을 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 258
+      }
+    },
+    {
+      "id": "g1-u7-r259",
+      "grade": 1,
+      "unit": "7",
+      "word": "lamp",
+      "meaning": "n. 램프, 등",
+      "definition": "n. a device for producing light",
+      "sentence": "The lamp on the desk is very bright.",
+      "translation": "책상 위의 램프는 매우 밝다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 259
+      }
+    },
+    {
+      "id": "g1-u7-r260",
+      "grade": 1,
+      "unit": "7",
+      "word": "mask",
+      "meaning": "n. 마스크",
+      "definition": "n. a covering for your face or for part of your face",
+      "sentence": "He wears a mask when he is sick.",
+      "translation": "그는 아플 때 마스크를 쓴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 260
+      }
+    },
+    {
+      "id": "g1-u7-r261",
+      "grade": 1,
+      "unit": "7",
+      "word": "pair",
+      "meaning": "n. 한 쌍[켤레, 벌]",
+      "definition": "n. two things that are meant to be used together",
+      "sentence": "I need a new pair of shoes.",
+      "translation": "나는 새 신발 한 켤레가 필요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 261
+      }
+    },
+    {
+      "id": "g1-u7-r262",
+      "grade": 1,
+      "unit": "7",
+      "word": "plant",
+      "meaning": "v. (나무·씨앗 등을) 심다",
+      "definition": "v. to put seeds or plants in the ground to grow",
+      "sentence": "They plant flowers in the garden.",
+      "translation": "그들은 정원에 꽃을 심는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 262
+      }
+    },
+    {
+      "id": "g1-u7-r263",
+      "grade": 1,
+      "unit": "7",
+      "word": "plogging",
+      "meaning": "n. 플로깅",
+      "definition": "n. a combination of jogging and picking up trash",
+      "sentence": "Plogging is good for health and nature.",
+      "translation": "플로깅은 건강과 자연에 좋다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 263
+      }
+    },
+    {
+      "id": "g1-u7-r264",
+      "grade": 1,
+      "unit": "7",
+      "word": "purse",
+      "meaning": "n. 지갑",
+      "definition": "n. a small bag for carrying money and personal items",
+      "sentence": "She puts money in her purse.",
+      "translation": "그녀는 지갑에 돈을 넣는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 264
+      }
+    },
+    {
+      "id": "g1-u7-r265",
+      "grade": 1,
+      "unit": "7",
+      "word": "recycle",
+      "meaning": "v. 재활용하다, 다시 이용하다",
+      "definition": "v. to process used materials so they can be used again",
+      "sentence": "They recycle bottles and cans.",
+      "translation": "그들은 병과 캔을 재활용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 265
+      }
+    },
+    {
+      "id": "g1-u7-r266",
+      "grade": 1,
+      "unit": "7",
+      "word": "reduce",
+      "meaning": "v. 줄이다",
+      "definition": "v. to make something smaller or less",
+      "sentence": "We reduce waste to help the Earth.",
+      "translation": "우리는 지구를 돕기 위해 쓰레기를 줄인다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 266
+      }
+    },
+    {
+      "id": "g1-u7-r267",
+      "grade": 1,
+      "unit": "7",
+      "word": "root",
+      "meaning": "n. 뿌리",
+      "definition": "n. the part of a plant that grows underground",
+      "sentence": "The root of the plant is deep.",
+      "translation": "그 식물의 뿌리는 깊다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 267
+      }
+    },
+    {
+      "id": "g1-u7-r268",
+      "grade": 1,
+      "unit": "7",
+      "word": "round",
+      "meaning": "a. 둥근",
+      "definition": "a. having a shape like a circle or ball",
+      "sentence": "The table in the kitchen is round.",
+      "translation": "주방에 있는 테이블은 둥글다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 268
+      }
+    },
+    {
+      "id": "g1-u7-r269",
+      "grade": 1,
+      "unit": "7",
+      "word": "serious",
+      "meaning": "a. 심각한",
+      "definition": "a. important and needing careful thought",
+      "sentence": "This is a serious problem.",
+      "translation": "이것은 심각한 문제다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 269
+      }
+    },
+    {
+      "id": "g1-u7-r270",
+      "grade": 1,
+      "unit": "7",
+      "word": "shampoo",
+      "meaning": "n. 샴푸",
+      "definition": "n. a liquid used for washing hair",
+      "sentence": "She bought a new bottle of shampoo.",
+      "translation": "그녀는 새 샴푸 한 병을 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 270
+      }
+    },
+    {
+      "id": "g1-u7-r271",
+      "grade": 1,
+      "unit": "7",
+      "word": "shape",
+      "meaning": "n. 모양, 형태",
+      "definition": "n. the form or outline of something",
+      "sentence": "The cookie has a star shape.",
+      "translation": "그 쿠키는 별 모양이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 271
+      }
+    },
+    {
+      "id": "g1-u7-r272",
+      "grade": 1,
+      "unit": "7",
+      "word": "soap",
+      "meaning": "n. 비누",
+      "definition": "n. a substance used for washing and cleaning",
+      "sentence": "He washed his hands with soap and water.",
+      "translation": "그는 비누와 물로 손을 씻었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 272
+      }
+    },
+    {
+      "id": "g1-u7-r273",
+      "grade": 1,
+      "unit": "7",
+      "word": "spot",
+      "meaning": "n. (작은) 점, 반점",
+      "definition": "n. a small mark or area",
+      "sentence": "There are spots on the shirt.",
+      "translation": "셔츠에 점이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 273
+      }
+    },
+    {
+      "id": "g1-u7-r274",
+      "grade": 1,
+      "unit": "7",
+      "word": "straight",
+      "meaning": "a. 곧은, 똑바른",
+      "definition": "a. not curved or bent",
+      "sentence": "The line is straight.",
+      "translation": "그 선은 똑바르다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 274
+      }
+    },
+    {
+      "id": "g1-u7-r275",
+      "grade": 1,
+      "unit": "7",
+      "word": "supermarket",
+      "meaning": "n. 슈퍼마켓",
+      "definition": "n. a large store that sells food and other goods",
+      "sentence": "They went to the supermarket to buy groceries.",
+      "translation": "그들은 식료품을 사기 위해 슈퍼마켓에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 275
+      }
+    },
+    {
+      "id": "g1-u7-r276",
+      "grade": 1,
+      "unit": "7",
+      "word": "tasteless",
+      "meaning": "a. (아무런) 맛이 없는",
+      "definition": "a. having no flavor",
+      "sentence": "The soup was tasteless.",
+      "translation": "그 수프는 맛이 없었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 276
+      }
+    },
+    {
+      "id": "g1-u7-r277",
+      "grade": 1,
+      "unit": "7",
+      "word": "towel",
+      "meaning": "n. 수건",
+      "definition": "n. a piece of cloth used for drying things",
+      "sentence": "She dried her hair with a towel.",
+      "translation": "그녀는 수건으로 머리를 말렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 277
+      }
+    },
+    {
+      "id": "g1-u7-r278",
+      "grade": 1,
+      "unit": "7",
+      "word": "unusual",
+      "meaning": "a. 특이한, 색다른",
+      "definition": "a. not normal or usual",
+      "sentence": "He wore an unusual hat to the party.",
+      "translation": "그는 파티에 특이한 모자를 썼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 278
+      }
+    },
+    {
+      "id": "g1-u7-r279",
+      "grade": 1,
+      "unit": "7",
+      "word": "useless",
+      "meaning": "a. 소용없는, 쓸모없는",
+      "definition": "a. not helpful or effective",
+      "sentence": "The broken pen is useless.",
+      "translation": "그 부러진 펜은 쓸모없다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 279
+      }
+    },
+    {
+      "id": "g1-u7-r280",
+      "grade": 1,
+      "unit": "7",
+      "word": "waste",
+      "meaning": "n. 쓰레기",
+      "definition": "n. unwanted or unusable materials",
+      "sentence": "We should reduce waste to protect the environment.",
+      "translation": "우리는 환경을 보호하기 위해 쓰레기를 줄여야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 280
+      }
+    },
+    {
+      "id": "g1-u7-r281",
+      "grade": 1,
+      "unit": "7",
+      "word": "which",
+      "meaning": "pron./det. 어느[어떤]",
+      "definition": "pron./det. used to ask about a choice between things",
+      "sentence": "Which color do you like?",
+      "translation": "어떤 색깔을 좋아하나요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 281
+      }
+    },
+    {
+      "id": "g1-u7-r282",
+      "grade": 1,
+      "unit": "7",
+      "word": "wolf",
+      "meaning": "n. 늑대",
+      "definition": "n. a wild animal that looks like a large dog and that often hunts in groups",
+      "sentence": "The wolf runs in the forest.",
+      "translation": "그 늑대는 숲에서 달린다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 282
+      }
+    },
+    {
+      "id": "g1-u7-r283",
+      "grade": 1,
+      "unit": "7",
+      "word": "zero",
+      "meaning": "n. 영(0)",
+      "definition": "n. the number 0; nothing",
+      "sentence": "The answer is zero.",
+      "translation": "답은 0이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 283
+      }
+    },
+    {
+      "id": "g1-u8-r284",
+      "grade": 1,
+      "unit": "8",
+      "word": "bakery",
+      "meaning": "n. 빵집, 제과점",
+      "definition": "n. a place where bread and cakes are made and sold",
+      "sentence": "They went to the bakery for bread.",
+      "translation": "그들은 빵을 사러 빵집에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 284
+      }
+    },
+    {
+      "id": "g1-u8-r285",
+      "grade": 1,
+      "unit": "8",
+      "word": "beak",
+      "meaning": "n. (새의) 부리",
+      "definition": "n. the hard usually pointed parts that cover a bird's mouth",
+      "sentence": "The bird had a worm in its beak.",
+      "translation": "새의 부리에 벌레가 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 285
+      }
+    },
+    {
+      "id": "g1-u8-r286",
+      "grade": 1,
+      "unit": "8",
+      "word": "beside",
+      "meaning": "prep. 옆에",
+      "definition": "prep. next to something or someone",
+      "sentence": "The cat is sitting beside the window.",
+      "translation": "그 고양이는 창문 옆에 앉아 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 286
+      }
+    },
+    {
+      "id": "g1-u8-r287",
+      "grade": 1,
+      "unit": "8",
+      "word": "butterfly",
+      "meaning": "n. 나비",
+      "definition": "n. an insect with large, colorful wings",
+      "sentence": "A butterfly landed on the flower.",
+      "translation": "나비가 꽃에 앉았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 287
+      }
+    },
+    {
+      "id": "g1-u8-r288",
+      "grade": 1,
+      "unit": "8",
+      "word": "carpet",
+      "meaning": "n. 카페트",
+      "definition": "n. a thick covering for a floor",
+      "sentence": "The carpet is soft and clean.",
+      "translation": "그 카페트는 부드럽고 깨끗하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 288
+      }
+    },
+    {
+      "id": "g1-u8-r289",
+      "grade": 1,
+      "unit": "8",
+      "word": "center",
+      "meaning": "n. 중앙, 중심",
+      "definition": "n. the middle point or part of something",
+      "sentence": "The tree is in the center of the garden.",
+      "translation": "그 나무는 정원의 중앙에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 289
+      }
+    },
+    {
+      "id": "g1-u8-r290",
+      "grade": 1,
+      "unit": "8",
+      "word": "dot",
+      "meaning": "n. 점",
+      "definition": "n. a small, round mark",
+      "sentence": "There is a dot on the paper.",
+      "translation": "종이에 점이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 290
+      }
+    },
+    {
+      "id": "g1-u8-r291",
+      "grade": 1,
+      "unit": "8",
+      "word": "empty",
+      "meaning": "a. 비어 있는, 빈",
+      "definition": "a. not filled or having nothing inside",
+      "sentence": "The box is empty.",
+      "translation": "그 상자는 비어 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 291
+      }
+    },
+    {
+      "id": "g1-u8-r292",
+      "grade": 1,
+      "unit": "8",
+      "word": "except",
+      "meaning": "prep. (누구·무엇을) 제외하고는[외에는]",
+      "definition": "prep. not including something or someone",
+      "sentence": "Everyone except Tom went to the party.",
+      "translation": "Tom을 제외한 모두가 파티에 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 292
+      }
+    },
+    {
+      "id": "g1-u8-r293",
+      "grade": 1,
+      "unit": "8",
+      "word": "feather",
+      "meaning": "n. (새의) 털, 깃털",
+      "definition": "n. any one of the light growths that make up the outer covering of the body of a bird",
+      "sentence": "Birds of a feather flock together.",
+      "translation": "같은 깃털을 가진 새끼리 모인다.(유유상종)",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 293
+      }
+    },
+    {
+      "id": "g1-u8-r294",
+      "grade": 1,
+      "unit": "8",
+      "word": "frame",
+      "meaning": "n. 액자, 틀",
+      "definition": "n. an open structure that holds something (such as glass or a picture)",
+      "sentence": "He put the picture in a wooden frame.",
+      "translation": "그는 그 그림을 나무 액자에 넣었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 294
+      }
+    },
+    {
+      "id": "g1-u8-r295",
+      "grade": 1,
+      "unit": "8",
+      "word": "hood",
+      "meaning": "n. (외투 등에 달린) 모자",
+      "definition": "n. a part of a coat or other garment that covers the head",
+      "sentence": "She wears a hood in the rain.",
+      "translation": "그녀는 비올 때 모자를 쓴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 295
+      }
+    },
+    {
+      "id": "g1-u8-r296",
+      "grade": 1,
+      "unit": "8",
+      "word": "hurt",
+      "meaning": "v. 다치게[아프게] 하다",
+      "definition": "v. to cause pain or injury",
+      "sentence": "He hurt his teammate.",
+      "translation": "그는 그의 팀 동료를 다치게 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 296
+      }
+    },
+    {
+      "id": "g1-u8-r297",
+      "grade": 1,
+      "unit": "8",
+      "word": "journey",
+      "meaning": "n. 여행",
+      "definition": "n. a trip from one place to another",
+      "sentence": "The journey took three hours.",
+      "translation": "그 여행은 세 시간이 걸렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 297
+      }
+    },
+    {
+      "id": "g1-u8-r298",
+      "grade": 1,
+      "unit": "8",
+      "word": "lively",
+      "meaning": "a. 활기[생기] 넘치는",
+      "definition": "a. very active and energetic",
+      "sentence": "She is a lively child and popular with everyone.",
+      "translation": "그녀는 생기발랄하고 모든 사람들에게 인기가 많다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 298
+      }
+    },
+    {
+      "id": "g1-u8-r299",
+      "grade": 1,
+      "unit": "8",
+      "word": "over",
+      "meaning": "ad. 끝이 난",
+      "definition": "ad. finished or ended",
+      "sentence": "The game is over.",
+      "translation": "게임이 끝났다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 299
+      }
+    },
+    {
+      "id": "g1-u8-r300",
+      "grade": 1,
+      "unit": "8",
+      "word": "peaceful",
+      "meaning": "a. 평화로운",
+      "definition": "a. calm and quiet, without any disturbance",
+      "sentence": "The village was very peaceful.",
+      "translation": "그 마을은 매우 평화로웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 300
+      }
+    },
+    {
+      "id": "g1-u8-r301",
+      "grade": 1,
+      "unit": "8",
+      "word": "peacock",
+      "meaning": "n. (수컷) 공작",
+      "definition": "n. a large male bird that has a very long bright blue and green tail that it can lift up and spread apart like a fan",
+      "sentence": "The peacock displayed its fine tail feathers.",
+      "translation": "공작새는 고운 꼬리 깃을 드러냈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 301
+      }
+    },
+    {
+      "id": "g1-u8-r302",
+      "grade": 1,
+      "unit": "8",
+      "word": "poke",
+      "meaning": "v. 쿡 찌르다",
+      "definition": "v. to push with a finger or a pointed object",
+      "sentence": "He poked the balloon with a pin.",
+      "translation": "그는 핀으로 풍선을 쿡 찔렀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 302
+      }
+    },
+    {
+      "id": "g1-u8-r303",
+      "grade": 1,
+      "unit": "8",
+      "word": "protect",
+      "meaning": "v. 보호하다",
+      "definition": "v. to keep someone or something safe from harm",
+      "sentence": "She protects her eyes with sunglasses.",
+      "translation": "그녀는 선글라스로 눈을 보호한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 303
+      }
+    },
+    {
+      "id": "g1-u8-r304",
+      "grade": 1,
+      "unit": "8",
+      "word": "sign",
+      "meaning": "v. 서명하다",
+      "definition": "v. to write your name on a document",
+      "sentence": "Please sign the form here.",
+      "translation": "여기에 서명해 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 304
+      }
+    },
+    {
+      "id": "g1-u8-r305",
+      "grade": 1,
+      "unit": "8",
+      "word": "snowstorm",
+      "meaning": "n. 눈보라",
+      "definition": "n. a storm with heavy snow and strong winds",
+      "sentence": "The snowstorm blocked the roads.",
+      "translation": "눈보라가 도로를 막았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 305
+      }
+    },
+    {
+      "id": "g1-u8-r306",
+      "grade": 1,
+      "unit": "8",
+      "word": "somewhere",
+      "meaning": "ad. 어딘가에",
+      "definition": "n. in or to a place that is not known or specified",
+      "sentence": "He is somewhere in the park.",
+      "translation": "그는 어딘가 공원에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 306
+      }
+    },
+    {
+      "id": "g1-u8-r307",
+      "grade": 1,
+      "unit": "8",
+      "word": "stormy",
+      "meaning": "a. 폭풍우가 몰아치는",
+      "definition": "a. with strong winds and heavy rain or snow",
+      "sentence": "The weather was stormy last night.",
+      "translation": "어젯밤에 폭풍우가 몰아쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 307
+      }
+    },
+    {
+      "id": "g1-u8-r308",
+      "grade": 1,
+      "unit": "8",
+      "word": "success",
+      "meaning": "n. 성공",
+      "definition": "n. the achievement of a goal or purpose",
+      "sentence": "His project was a success.",
+      "translation": "그의 프로젝트는 성공이었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 308
+      }
+    },
+    {
+      "id": "g1-u8-r309",
+      "grade": 1,
+      "unit": "8",
+      "word": "trick",
+      "meaning": "n. 속임수, 장난",
+      "definition": "n. a clever and skillful action that someone performs to entertain or amuse people",
+      "sentence": "The magician showed a card trick.",
+      "translation": "그 마술사는 카드 속임수를 보여주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 309
+      }
+    },
+    {
+      "id": "g1-u8-r310",
+      "grade": 1,
+      "unit": "8",
+      "word": "trust",
+      "meaning": "v. 믿다, 신뢰하다",
+      "definition": "v. to believe that someone is honest and reliable",
+      "sentence": "They trust their teacher.",
+      "translation": "그들은 그들의 선생님을 믿는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 310
+      }
+    },
+    {
+      "id": "g1-u8-r311",
+      "grade": 1,
+      "unit": "8",
+      "word": "watercolor",
+      "meaning": "n. 수채화 그림물감",
+      "definition": "n. a type of paint that is mixed with water",
+      "sentence": "She paints with watercolors.",
+      "translation": "그녀는 수채화 그림물감으로 그린다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 311
+      }
+    },
+    {
+      "id": "g1-u8-r312",
+      "grade": 1,
+      "unit": "8",
+      "word": "while",
+      "meaning": "conj. ~하는 동안",
+      "definition": "conj. during the time that something is happening",
+      "sentence": "He read a book while waiting.",
+      "translation": "그는 기다리는 동안 책을 읽었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 312
+      }
+    },
+    {
+      "id": "g1-u8-r313",
+      "grade": 1,
+      "unit": "8",
+      "word": "whole",
+      "meaning": "a. 전체의, 모든",
+      "definition": "a. all of something, complete",
+      "sentence": "They ate the whole pizza.",
+      "translation": "그들은 피자를 모두 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 313
+      }
+    },
+    {
+      "id": "g1-u8-r314",
+      "grade": 1,
+      "unit": "8",
+      "word": "without",
+      "meaning": "prep. ~하지 않고",
+      "definition": "prep. not doing the action mentioned",
+      "sentence": "He left without saying goodbye.",
+      "translation": "그는 작별 인사를 하지 않고 떠났다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 314
+      }
+    },
+    {
+      "id": "g1-u8-r315",
+      "grade": 1,
+      "unit": "8",
+      "word": "a few",
+      "meaning": "어느 정도, 조금",
+      "definition": "some, but not many",
+      "sentence": "She has a few friends in the city.",
+      "translation": "그녀는 도시에 몇 명의 친구가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 315
+      }
+    },
+    {
+      "id": "g1-u8-r316",
+      "grade": 1,
+      "unit": "8",
+      "word": "a piece of",
+      "meaning": "한 장(조각)의",
+      "definition": "a single part or portion of something",
+      "sentence": "Can I have a piece of cake?",
+      "translation": "케이크 한 조각을 먹어도 될까요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 316
+      }
+    },
+    {
+      "id": "g1-u8-r317",
+      "grade": 1,
+      "unit": "8",
+      "word": "for a moment",
+      "meaning": "잠시동안",
+      "definition": "for a very short time",
+      "sentence": "He waited for a moment.",
+      "translation": "그는 잠시 동안 기다렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 317
+      }
+    },
+    {
+      "id": "g1-u8-r318",
+      "grade": 1,
+      "unit": "8",
+      "word": "mix A with B",
+      "meaning": "A를 B와 섞다(혼합하다)",
+      "definition": "to combine two different things together",
+      "sentence": "Mix the flour with the water.",
+      "translation": "밀가루를 물과 섞어라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 318
+      }
+    },
+    {
+      "id": "g1-u8-r319",
+      "grade": 1,
+      "unit": "8",
+      "word": "take place",
+      "meaning": "개최하다, 일어나다",
+      "definition": "to happen or occur",
+      "sentence": "The party will take place at 6 PM.",
+      "translation": "그 파티는 오후 6시에 열릴 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G1_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중1_단원별 어휘",
+        "row": 319
+      }
+    },
+    {
+      "id": "g2-u1-r2",
+      "grade": 2,
+      "unit": "1",
+      "word": "aquarium",
+      "meaning": "n. 수족관",
+      "definition": "n. a glass container or building where fish and other water animals are kept",
+      "sentence": "We saw colorful fish swimming in the aquarium.",
+      "translation": "우리는 수족관에서 다채로운 물고기들이 헤엄치는 것을 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 2
+      }
+    },
+    {
+      "id": "g2-u1-r3",
+      "grade": 2,
+      "unit": "1",
+      "word": "audition",
+      "meaning": "n. 오디션, 시험 공연",
+      "definition": "n. a short performance to show your skills in acting, singing, etc.",
+      "sentence": "She practiced her song for the school musical audition.",
+      "translation": "그녀는 학교 뮤지컬 오디션을 위해 노래를 연습했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 3
+      }
+    },
+    {
+      "id": "g2-u1-r4",
+      "grade": 2,
+      "unit": "1",
+      "word": "balloon",
+      "meaning": "n. 풍선",
+      "definition": "n. a small bag that you fill with air or gas",
+      "sentence": "The boy held a red balloon at the party.",
+      "translation": "그 소년은 파티에서 빨간 풍선을 들고 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 4
+      }
+    },
+    {
+      "id": "g2-u1-r5",
+      "grade": 2,
+      "unit": "1",
+      "word": "beehive",
+      "meaning": "n. 벌집",
+      "definition": "n. a structure where bees live and make honey",
+      "sentence": "There were hundreds of bees around the beehive.",
+      "translation": "벌집 주위에 수백 마리의 벌들이 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 5
+      }
+    },
+    {
+      "id": "g2-u1-r6",
+      "grade": 2,
+      "unit": "1",
+      "word": "brain",
+      "meaning": "n. 지능",
+      "definition": "n. the ability to think, learn, and understand things well",
+      "sentence": "She has a good brain for math.",
+      "translation": "그녀는 수학에 대한 지능이 뛰어나다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 6
+      }
+    },
+    {
+      "id": "g2-u1-r7",
+      "grade": 2,
+      "unit": "1",
+      "word": "brave",
+      "meaning": "adj. 용감한",
+      "definition": "adj. not afraid to do something difficult or dangerous",
+      "sentence": "The brave firefighter saved the child from the fire.",
+      "translation": "그 용감한 소방관은 아이를 불 속에서 구했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 7
+      }
+    },
+    {
+      "id": "g2-u1-r8",
+      "grade": 2,
+      "unit": "1",
+      "word": "cafe",
+      "meaning": "n. 카페, 커피숍",
+      "definition": "n. a small restaurant where you can buy drinks and light food",
+      "sentence": "The new cafe near my house sells delicious cakes.",
+      "translation": "우리 집 근처 새 카페에서는 맛있는 케이크를 판다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 8
+      }
+    },
+    {
+      "id": "g2-u1-r9",
+      "grade": 2,
+      "unit": "1",
+      "word": "calm",
+      "meaning": "adj. 침착한",
+      "definition": "adj. not angry, upset, or excited",
+      "sentence": "Please stay calm during the emergency.",
+      "translation": "비상 상황 동안 침착하게 계세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 9
+      }
+    },
+    {
+      "id": "g2-u1-r10",
+      "grade": 2,
+      "unit": "1",
+      "word": "character",
+      "meaning": "n. 성격, 특징; 등장인물",
+      "definition": "n. a person in a book, play, or movie",
+      "sentence": "The main character in the story is very brave.",
+      "translation": "그 이야기의 주인공은 매우 용감하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 10
+      }
+    },
+    {
+      "id": "g2-u1-r11",
+      "grade": 2,
+      "unit": "1",
+      "word": "cheerful",
+      "meaning": "adj. 쾌활한, 명랑한",
+      "definition": "adj. showing happiness",
+      "sentence": "She has a cheerful smile every morning.",
+      "translation": "그녀는 매일 아침 쾌활한 미소를 짓는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 11
+      }
+    },
+    {
+      "id": "g2-u1-r12",
+      "grade": 2,
+      "unit": "1",
+      "word": "coding",
+      "meaning": "n. 코딩",
+      "definition": "n. the process of writing computer programs",
+      "sentence": "I enjoy coding games on my computer.",
+      "translation": "나는 컴퓨터로 게임 코딩하는 것을 즐긴다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 12
+      }
+    },
+    {
+      "id": "g2-u1-r13",
+      "grade": 2,
+      "unit": "1",
+      "word": "courage",
+      "meaning": "n. 용기",
+      "definition": "n. the ability to do something brave",
+      "sentence": "He showed great courage.",
+      "translation": "그는 큰 용기를 보여 주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 13
+      }
+    },
+    {
+      "id": "g2-u1-r14",
+      "grade": 2,
+      "unit": "1",
+      "word": "curious",
+      "meaning": "adj. 호기심 많은, 궁금해 하는",
+      "definition": "adj. wanting to know or learn about something",
+      "sentence": "I am curious to know what is inside the box.",
+      "translation": "나는 그 상자 안에 무엇이 있는지 궁금하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 14
+      }
+    },
+    {
+      "id": "g2-u1-r15",
+      "grade": 2,
+      "unit": "1",
+      "word": "curly",
+      "meaning": "adj. 곱슬곱슬한",
+      "definition": "adj. having curls or a twisted shape",
+      "sentence": "She has long curly hair.",
+      "translation": "그녀는 길고 곱슬곱슬한 머리를 가지고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 15
+      }
+    },
+    {
+      "id": "g2-u1-r16",
+      "grade": 2,
+      "unit": "1",
+      "word": "deep",
+      "meaning": "adj. 깊은",
+      "definition": "adj. going far down from the top or surface",
+      "sentence": "The lake is very deep.",
+      "translation": "그 호수는 매우 깊다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 16
+      }
+    },
+    {
+      "id": "g2-u1-r17",
+      "grade": 2,
+      "unit": "1",
+      "word": "dragon",
+      "meaning": "n. 용",
+      "definition": "n. a large, imaginary creature that breathes fire and has wings",
+      "sentence": "The knight fought a big dragon in the story.",
+      "translation": "기사는 이야기 속에서 큰 용과 싸웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 17
+      }
+    },
+    {
+      "id": "g2-u1-r18",
+      "grade": 2,
+      "unit": "1",
+      "word": "drama",
+      "meaning": "n. 연극, 드라마",
+      "definition": "n. a play or story written to be acted out",
+      "sentence": "We watched a drama about friendship last night.",
+      "translation": "우리는 어젯밤 우정에 관한 드라마를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 18
+      }
+    },
+    {
+      "id": "g2-u1-r19",
+      "grade": 2,
+      "unit": "1",
+      "word": "eagle",
+      "meaning": "n. 독수리",
+      "definition": "n. a large, powerful bird with a sharp beak and strong wings",
+      "sentence": "An eagle flew high in the sky looking for food.",
+      "translation": "독수리가 먹이를 찾으며 하늘 높이 날았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 19
+      }
+    },
+    {
+      "id": "g2-u1-r20",
+      "grade": 2,
+      "unit": "1",
+      "word": "expensive",
+      "meaning": "adj. 비싼",
+      "definition": "adj. costing a lot of money",
+      "sentence": "This watch is too expensive for me.",
+      "translation": "이 시계는 나에게 너무 비싸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 20
+      }
+    },
+    {
+      "id": "g2-u1-r21",
+      "grade": 2,
+      "unit": "1",
+      "word": "famous",
+      "meaning": "adj. 유명한",
+      "definition": "adj. known by many people",
+      "sentence": "Paris is famous for the Eiffel Tower.",
+      "translation": "파리는 에펠탑으로 유명하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 21
+      }
+    },
+    {
+      "id": "g2-u1-r22",
+      "grade": 2,
+      "unit": "1",
+      "word": "fill",
+      "meaning": "v. 채우다",
+      "definition": "v. to make something full",
+      "sentence": "Please fill the glass with water.",
+      "translation": "컵을 물로 채워주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 22
+      }
+    },
+    {
+      "id": "g2-u1-r23",
+      "grade": 2,
+      "unit": "1",
+      "word": "frog",
+      "meaning": "n. 개구리",
+      "definition": "n. a small green animal that jumps",
+      "sentence": "A green frog jumped into the pond.",
+      "translation": "초록색 개구리가 연못으로 뛰어들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 23
+      }
+    },
+    {
+      "id": "g2-u1-r24",
+      "grade": 2,
+      "unit": "1",
+      "word": "gather",
+      "meaning": "v. 모으다",
+      "definition": "v. to bring things or people together",
+      "sentence": "Let’s gather flowers from the garden.",
+      "translation": "정원에서 꽃을 모으자.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 24
+      }
+    },
+    {
+      "id": "g2-u1-r25",
+      "grade": 2,
+      "unit": "1",
+      "word": "giant",
+      "meaning": "n. 거인",
+      "definition": "n. a very large and strong person in stories",
+      "sentence": "The giant lived in the mountains.",
+      "translation": "그 거인은 산속에 살았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 25
+      }
+    },
+    {
+      "id": "g2-u1-r26",
+      "grade": 2,
+      "unit": "1",
+      "word": "helpful",
+      "meaning": "adj. 기꺼이 돕는, 도움이 되는",
+      "definition": "adj. ready to help or making things easier",
+      "sentence": "She is always helpful to her friends.",
+      "translation": "그녀는 항상 친구들을 기꺼이 돕는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 26
+      }
+    },
+    {
+      "id": "g2-u1-r27",
+      "grade": 2,
+      "unit": "1",
+      "word": "hole",
+      "meaning": "n. 구멍",
+      "definition": "n. an opening or empty space",
+      "sentence": "There is a hole in my sock.",
+      "translation": "내 양말에 구멍이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 27
+      }
+    },
+    {
+      "id": "g2-u1-r28",
+      "grade": 2,
+      "unit": "1",
+      "word": "hopeful",
+      "meaning": "adj. 희망에 찬",
+      "definition": "adj. feeling positive about the future",
+      "sentence": "I am hopeful that the weather will be better tomorrow.",
+      "translation": "나는 내일 날씨가 더 좋아질 것 같아 희망적이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 28
+      }
+    },
+    {
+      "id": "g2-u1-r29",
+      "grade": 2,
+      "unit": "1",
+      "word": "important",
+      "meaning": "adj. 중요한",
+      "definition": "adj. having a big effect or meaning",
+      "sentence": "It is important to eat healthy food every day.",
+      "translation": "매일 건강한 음식을 먹는 것은 중요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 29
+      }
+    },
+    {
+      "id": "g2-u1-r30",
+      "grade": 2,
+      "unit": "1",
+      "word": "instead",
+      "meaning": "adv. 대신에",
+      "definition": "adv. in place of something else",
+      "sentence": "I’ll have juice instead of soda.",
+      "translation": "나는 탄산음료 대신 주스를 마실 거야.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 30
+      }
+    },
+    {
+      "id": "g2-u1-r31",
+      "grade": 2,
+      "unit": "1",
+      "word": "invent",
+      "meaning": "v. 발명하다",
+      "definition": "v. to create something for the first time",
+      "sentence": "Thomas Edison invented the light bulb.",
+      "translation": "토머스 에디슨은 전구를 발명했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 31
+      }
+    },
+    {
+      "id": "g2-u1-r32",
+      "grade": 2,
+      "unit": "1",
+      "word": "jar",
+      "meaning": "n. 병",
+      "definition": "n. a container made of glass or clay",
+      "sentence": "I put cookies in a jar.",
+      "translation": "나는 쿠키를 병에 넣었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 32
+      }
+    },
+    {
+      "id": "g2-u1-r33",
+      "grade": 2,
+      "unit": "1",
+      "word": "joke",
+      "meaning": "n. 농담",
+      "definition": "n. something said or done to make people laugh",
+      "sentence": "He told a funny joke that made everyone laugh.",
+      "translation": "그는 모두를 웃게 만든 재미있는 농담을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 33
+      }
+    },
+    {
+      "id": "g2-u1-r34",
+      "grade": 2,
+      "unit": "1",
+      "word": "knowledge",
+      "meaning": "n. 지식",
+      "definition": "n. information and understanding",
+      "sentence": "Reading books gives you a lot of knowledge.",
+      "translation": "책을 읽는 것은 많은 지식을 준다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 34
+      }
+    },
+    {
+      "id": "g2-u1-r35",
+      "grade": 2,
+      "unit": "1",
+      "word": "leader",
+      "meaning": "n. 지도자",
+      "definition": "n. someone who guides others",
+      "sentence": "Our team leader is very kind.",
+      "translation": "우리 팀 리더는 매우 친절하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 35
+      }
+    },
+    {
+      "id": "g2-u1-r36",
+      "grade": 2,
+      "unit": "1",
+      "word": "main",
+      "meaning": "adj. 주요한",
+      "definition": "adj. most important",
+      "sentence": "The main idea of the story is about friendship.",
+      "translation": "이야기의 주된 내용은 우정에 관한 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 36
+      }
+    },
+    {
+      "id": "g2-u1-r37",
+      "grade": 2,
+      "unit": "1",
+      "word": "mud",
+      "meaning": "n. 진흙",
+      "definition": "n. wet, soft earth",
+      "sentence": "The kids played in the mud after the rain.",
+      "translation": "아이들은 비 온 뒤 진흙에서 놀았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 37
+      }
+    },
+    {
+      "id": "g2-u1-r38",
+      "grade": 2,
+      "unit": "1",
+      "word": "outgoing",
+      "meaning": "adj. 외향적인",
+      "definition": "adj. liking to meet and talk to new people",
+      "sentence": "He is outgoing and enjoys making new friends.",
+      "translation": "그는 외향적이며 새로운 친구를 사귀는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 38
+      }
+    },
+    {
+      "id": "g2-u1-r39",
+      "grade": 2,
+      "unit": "1",
+      "word": "owl",
+      "meaning": "n. 부엉이, 올빼미",
+      "definition": "n. a bird with large eyes that is active at night",
+      "sentence": "We heard an owl hooting in the forest at night.",
+      "translation": "우리는 밤에 숲에서 부엉이가 우는 소리를 들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 39
+      }
+    },
+    {
+      "id": "g2-u1-r40",
+      "grade": 2,
+      "unit": "1",
+      "word": "perfect",
+      "meaning": "adj. 완벽한",
+      "definition": "adj. without any mistakes or flaws",
+      "sentence": "Her score was perfect on the test.",
+      "translation": "그녀는 시험에서 만점을 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 40
+      }
+    },
+    {
+      "id": "g2-u1-r41",
+      "grade": 2,
+      "unit": "1",
+      "word": "perform",
+      "meaning": "v. 공연하다",
+      "definition": "v. to act, sing, or entertain",
+      "sentence": "They will perform on stage.",
+      "translation": "그들은 무대에서 공연할 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 41
+      }
+    },
+    {
+      "id": "g2-u1-r42",
+      "grade": 2,
+      "unit": "1",
+      "word": "relaxed",
+      "meaning": "adj. 편안한",
+      "definition": "adj. calm and free from stress",
+      "sentence": "I feel relaxed after the yoga class.",
+      "translation": "요가 수업 후에 나는 편안함을 느낀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 42
+      }
+    },
+    {
+      "id": "g2-u1-r43",
+      "grade": 2,
+      "unit": "1",
+      "word": "rope",
+      "meaning": "n. 밧줄",
+      "definition": "n. a strong, thick line made of twisted fibers",
+      "sentence": "They used a rope to climb the wall.",
+      "translation": "그들은 벽을 오르기 위해 밧줄을 사용했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 43
+      }
+    },
+    {
+      "id": "g2-u1-r44",
+      "grade": 2,
+      "unit": "1",
+      "word": "shoot",
+      "meaning": "v. (총, 화살, 레이저 등을) 쏘다",
+      "definition": "v. to fire a bullet, arrow, or other thing in a certain direction",
+      "sentence": "The toy robot can shoot water.",
+      "translation": "그 장난감 로봇은 물을 쏠 수 있어요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 44
+      }
+    },
+    {
+      "id": "g2-u1-r45",
+      "grade": 2,
+      "unit": "1",
+      "word": "skill",
+      "meaning": "n. 기술",
+      "definition": "n. the ability to do something well",
+      "sentence": "Drawing is an important skill.",
+      "translation": "그림 그리기는 중요한 기술이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 45
+      }
+    },
+    {
+      "id": "g2-u1-r46",
+      "grade": 2,
+      "unit": "1",
+      "word": "solve",
+      "meaning": "v. 해결하다",
+      "definition": "v. to find an answer to a problem",
+      "sentence": "We need to solve this problem.",
+      "translation": "우리는 이 문제를 해결해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 46
+      }
+    },
+    {
+      "id": "g2-u1-r47",
+      "grade": 2,
+      "unit": "1",
+      "word": "soul",
+      "meaning": "n. 영혼",
+      "definition": "n. the spiritual part of a person that is not the body",
+      "sentence": "They believe the soul lives after death.",
+      "translation": "그들은 영혼이 죽음 후에도 산다고 믿는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 47
+      }
+    },
+    {
+      "id": "g2-u1-r48",
+      "grade": 2,
+      "unit": "1",
+      "word": "storybook",
+      "meaning": "n. 이야기책, 동화책",
+      "definition": "n. a book with stories, especially for children",
+      "sentence": "My mom read me a storybook before bed.",
+      "translation": "엄마가 자기 전에 동화책을 읽어주셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 48
+      }
+    },
+    {
+      "id": "g2-u1-r49",
+      "grade": 2,
+      "unit": "1",
+      "word": "thoughtful",
+      "meaning": "adj. 배려심 있는, 친절한",
+      "definition": "adj. kind and thinking of other people’s feelings",
+      "sentence": "He is very thoughtful and helps everyone.",
+      "translation": "그는 매우 배려심이 있고 모두를 돕는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 49
+      }
+    },
+    {
+      "id": "g2-u1-r50",
+      "grade": 2,
+      "unit": "1",
+      "word": "tie",
+      "meaning": "v. 묶다",
+      "definition": "v. to fasten or hold something with a string, rope, or something similar",
+      "sentence": "She tied her shoelaces.",
+      "translation": "그녀는 신발끈을 묶었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 50
+      }
+    },
+    {
+      "id": "g2-u1-r51",
+      "grade": 2,
+      "unit": "1",
+      "word": "tightly",
+      "meaning": "adv. 단단히, 꽉",
+      "definition": "adv. in a firm or secure way",
+      "sentence": "She held the rope tightly.",
+      "translation": "그녀는 줄을 꽉 잡았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 51
+      }
+    },
+    {
+      "id": "g2-u1-r52",
+      "grade": 2,
+      "unit": "1",
+      "word": "tool",
+      "meaning": "n. 도구",
+      "definition": "n. a device used to do a job",
+      "sentence": "This tool helps me fix bikes.",
+      "translation": "이 도구는 자전거를 고치는 데 도움이 된다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 52
+      }
+    },
+    {
+      "id": "g2-u1-r53",
+      "grade": 2,
+      "unit": "1",
+      "word": "trouble",
+      "meaning": "n. 문제, 골칫거리",
+      "definition": "n. problems or difficulties",
+      "sentence": "She is in trouble because she lost her wallet.",
+      "translation": "그녀는 지갑을 잃어버려 곤란에 처했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 53
+      }
+    },
+    {
+      "id": "g2-u1-r54",
+      "grade": 2,
+      "unit": "1",
+      "word": "volunteer",
+      "meaning": "n. 자원봉사자",
+      "definition": "n. a person who works without getting money, usually to help others",
+      "sentence": "She is a volunteer at the hospital.",
+      "translation": "그녀는 병원에서 자원봉사자이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 54
+      }
+    },
+    {
+      "id": "g2-u1-r55",
+      "grade": 2,
+      "unit": "1",
+      "word": "web",
+      "meaning": "n. 거미줄",
+      "definition": "n. a net made by a spider",
+      "sentence": "The spider made a web between the trees.",
+      "translation": "거미가 나무 사이에 거미줄을 쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 55
+      }
+    },
+    {
+      "id": "g2-u1-r56",
+      "grade": 2,
+      "unit": "1",
+      "word": "wise",
+      "meaning": "adj. 현명한",
+      "definition": "adj. showing good judgment or knowledge",
+      "sentence": "My grandfather is a very wise man.",
+      "translation": "우리 할아버지는 매우 지혜로운 분이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 56
+      }
+    },
+    {
+      "id": "g2-u1-r57",
+      "grade": 2,
+      "unit": "1",
+      "word": "take a look",
+      "meaning": "살펴보다",
+      "definition": "to look at something quickly or casually",
+      "sentence": "Let's take a look at the map before we go.",
+      "translation": "가기 전에 지도를 한 번 살펴보자.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 57
+      }
+    },
+    {
+      "id": "g2-u2-r58",
+      "grade": 2,
+      "unit": "2",
+      "word": "alarm",
+      "meaning": "n. 알람",
+      "definition": "n. a sound that warns or wakes you",
+      "sentence": "The alarm woke me up at 7 a.m.",
+      "translation": "알람이 오전 7시에 나를 깨웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 58
+      }
+    },
+    {
+      "id": "g2-u2-r59",
+      "grade": 2,
+      "unit": "2",
+      "word": "angle",
+      "meaning": "n. 각도",
+      "definition": "n. the shape made by two lines meeting",
+      "sentence": "Draw a right angle with your ruler.",
+      "translation": "자로 직각을 그려라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 59
+      }
+    },
+    {
+      "id": "g2-u2-r60",
+      "grade": 2,
+      "unit": "2",
+      "word": "backward",
+      "meaning": "adv. 뒤로",
+      "definition": "adv. moving or facing in the direction behind",
+      "sentence": "He took a step backward and almost fell.",
+      "translation": "그는 뒤로 한 걸음 물러서다가 거의 넘어질 뻔 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 60
+      }
+    },
+    {
+      "id": "g2-u2-r61",
+      "grade": 2,
+      "unit": "2",
+      "word": "bedtime",
+      "meaning": "n. 취침 시간",
+      "definition": "n. the time when someone usually goes to bed",
+      "sentence": "My bedtime is 10 p.m. on school nights.",
+      "translation": "학교 가는 날 밤의 나의 취침시간은 오후 10시이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 61
+      }
+    },
+    {
+      "id": "g2-u2-r62",
+      "grade": 2,
+      "unit": "2",
+      "word": "bend",
+      "meaning": "v. 구부리다; 굽다",
+      "definition": "v. to make something curve",
+      "sentence": "Please bend your knees when you jump.",
+      "translation": "점프할 때 무릎을 좀 굽혀 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 62
+      }
+    },
+    {
+      "id": "g2-u2-r63",
+      "grade": 2,
+      "unit": "2",
+      "word": "caffeine",
+      "meaning": "n. 카페인",
+      "definition": "n. a substance in coffee, tea, and some soda that makes you feel more awake",
+      "sentence": "Too much caffeine can make it hard to sleep.",
+      "translation": "카페인을 너무 많이 섭취하면 잠들기 어려울 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 63
+      }
+    },
+    {
+      "id": "g2-u2-r64",
+      "grade": 2,
+      "unit": "2",
+      "word": "channel",
+      "meaning": "n. 채널",
+      "definition": "n. a TV or radio station",
+      "sentence": "Change the TV channel to watch the news.",
+      "translation": "뉴스를 보려면 TV 채널을 바꿔라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 64
+      }
+    },
+    {
+      "id": "g2-u2-r65",
+      "grade": 2,
+      "unit": "2",
+      "word": "chin",
+      "meaning": "n. 턱",
+      "definition": "n. the bottom part of your face, below your mouth",
+      "sentence": "He rested his chin on his hand.",
+      "translation": "그는 턱을 손에 괴었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 65
+      }
+    },
+    {
+      "id": "g2-u2-r66",
+      "grade": 2,
+      "unit": "2",
+      "word": "coach",
+      "meaning": "n. 코치",
+      "definition": "n. a person who trains athletes",
+      "sentence": "The coach gave us a lot of advice.",
+      "translation": "코치가 우리에게 많은 조언을 해주었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 66
+      }
+    },
+    {
+      "id": "g2-u2-r67",
+      "grade": 2,
+      "unit": "2",
+      "word": "degree",
+      "meaning": "n. 도(온도, 각도)",
+      "definition": "n. a unit for measuring temperature or angles",
+      "sentence": "It is 30 degrees Celsius today.",
+      "translation": "오늘은 섭씨 30도이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 67
+      }
+    },
+    {
+      "id": "g2-u2-r68",
+      "grade": 2,
+      "unit": "2",
+      "word": "dizzy",
+      "meaning": "adj. 어지러운",
+      "definition": "adj. feeling like you are spinning or about to fall",
+      "sentence": "I felt dizzy after spinning too fast.",
+      "translation": "너무 빨리 돌고 나서 어지러웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 68
+      }
+    },
+    {
+      "id": "g2-u2-r69",
+      "grade": 2,
+      "unit": "2",
+      "word": "edge",
+      "meaning": "n. 가장자리",
+      "definition": "n. the border of something",
+      "sentence": "Be careful near the edge of the cliff.",
+      "translation": "절벽 가장자리 근처에서는 조심해라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 69
+      }
+    },
+    {
+      "id": "g2-u2-r70",
+      "grade": 2,
+      "unit": "2",
+      "word": "forward",
+      "meaning": "adv. 앞으로",
+      "definition": "adv. in the direction ahead",
+      "sentence": "Take one step forward.",
+      "translation": "한 걸음 앞으로 나아가라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 70
+      }
+    },
+    {
+      "id": "g2-u2-r71",
+      "grade": 2,
+      "unit": "2",
+      "word": "freeze",
+      "meaning": "v. 얼다",
+      "definition": "v. to become ice because of a low temperature",
+      "sentence": "Water will freeze at 0°C.",
+      "translation": "물은 0도에서 얼 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 71
+      }
+    },
+    {
+      "id": "g2-u2-r72",
+      "grade": 2,
+      "unit": "2",
+      "word": "gently",
+      "meaning": "adv. 부드럽게",
+      "definition": "adv. in a soft and kind way",
+      "sentence": "She gently closed the door.",
+      "translation": "그녀는 문을 부드럽게 닫았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 72
+      }
+    },
+    {
+      "id": "g2-u2-r73",
+      "grade": 2,
+      "unit": "2",
+      "word": "habit",
+      "meaning": "n. 습관",
+      "definition": "n. something you do regularly",
+      "sentence": "Drinking water after waking up is a good habit.",
+      "translation": "일어나서 물을 마시는 것은 좋은 습관이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 73
+      }
+    },
+    {
+      "id": "g2-u2-r74",
+      "grade": 2,
+      "unit": "2",
+      "word": "headache",
+      "meaning": "n. 두통",
+      "definition": "n. pain in your head",
+      "sentence": "I have a bad headache today.",
+      "translation": "나는 오늘 심한 두통이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 74
+      }
+    },
+    {
+      "id": "g2-u2-r75",
+      "grade": 2,
+      "unit": "2",
+      "word": "lean",
+      "meaning": "v. 기대다",
+      "definition": "v. to rest against something",
+      "sentence": "Lean back in your chair and relax.",
+      "translation": "의자에 기대어 편안히 쉬어라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 75
+      }
+    },
+    {
+      "id": "g2-u2-r76",
+      "grade": 2,
+      "unit": "2",
+      "word": "level",
+      "meaning": "n. 높이",
+      "definition": "n. the height of something",
+      "sentence": "The water level in the lake is rising.",
+      "translation": "호수의 수위가 올라가고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 76
+      }
+    },
+    {
+      "id": "g2-u2-r77",
+      "grade": 2,
+      "unit": "2",
+      "word": "lie",
+      "meaning": "v. 눕다",
+      "definition": "v. to rest or be in a flat position",
+      "sentence": "She lies on the bed and reads a book.",
+      "translation": "그녀는 침대에 누워 책을 읽는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 77
+      }
+    },
+    {
+      "id": "g2-u2-r78",
+      "grade": 2,
+      "unit": "2",
+      "word": "lifestyle",
+      "meaning": "n. 생활 방식",
+      "definition": "n. the way a person lives, including habits and choices",
+      "sentence": "Healthy eating is part of a good lifestyle.",
+      "translation": "건강한 식습관은 좋은 생활 방식의 일부다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 78
+      }
+    },
+    {
+      "id": "g2-u2-r79",
+      "grade": 2,
+      "unit": "2",
+      "word": "mat",
+      "meaning": "n. 매트, 깔개",
+      "definition": "n. a flat piece of material used on the floor",
+      "sentence": "We sat on a mat during the picnic.",
+      "translation": "우리는 소풍 중에 매트 위에 앉았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 79
+      }
+    },
+    {
+      "id": "g2-u2-r80",
+      "grade": 2,
+      "unit": "2",
+      "word": "meal",
+      "meaning": "n. 식사",
+      "definition": "n. food eaten at a regular time",
+      "sentence": "We had a big meal this evening.",
+      "translation": "우리는 저녁으로 푸짐한 식사를 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 80
+      }
+    },
+    {
+      "id": "g2-u2-r81",
+      "grade": 2,
+      "unit": "2",
+      "word": "monitor",
+      "meaning": "n. 모니터",
+      "definition": "n. a screen used to show images or data",
+      "sentence": "He looked at the computer monitor.",
+      "translation": "그는 컴퓨터 모니터를 바라보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 81
+      }
+    },
+    {
+      "id": "g2-u2-r82",
+      "grade": 2,
+      "unit": "2",
+      "word": "nap",
+      "meaning": "n. 낮잠",
+      "definition": "n. a short sleep during the day",
+      "sentence": "She took a nap after lunch.",
+      "translation": "그녀는 점심 먹고 낮잠을 잤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 82
+      }
+    },
+    {
+      "id": "g2-u2-r83",
+      "grade": 2,
+      "unit": "2",
+      "word": "once",
+      "meaning": "adv. 한 번",
+      "definition": "adv. one single time",
+      "sentence": "Please read the sentence once more.",
+      "translation": "그 문장을 한 번 더 읽어 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 83
+      }
+    },
+    {
+      "id": "g2-u2-r84",
+      "grade": 2,
+      "unit": "2",
+      "word": "outdoors",
+      "meaning": "adv. 야외에서, 실외에서",
+      "definition": "adv. in or into the open air, not inside a building",
+      "sentence": "The kids played outdoors all day.",
+      "translation": "아이들은 하루 종일 밖에서 놀았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 84
+      }
+    },
+    {
+      "id": "g2-u2-r85",
+      "grade": 2,
+      "unit": "2",
+      "word": "pain",
+      "meaning": "n. 아픔, 고통",
+      "definition": "n. a bad feeling in your body or mind when you are hurt or sad",
+      "sentence": "She felt pain in her leg after running.",
+      "translation": "그녀는 달린 후에 다리에 통증을 느꼈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 85
+      }
+    },
+    {
+      "id": "g2-u2-r86",
+      "grade": 2,
+      "unit": "2",
+      "word": "physical",
+      "meaning": "adj. 신체의",
+      "definition": "adj. relating to the body",
+      "sentence": "Physical exercise is good for your health.",
+      "translation": "육체 운동은 건강에 좋다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 86
+      }
+    },
+    {
+      "id": "g2-u2-r87",
+      "grade": 2,
+      "unit": "2",
+      "word": "press",
+      "meaning": "v. 누르다",
+      "definition": "v. to push something firmly",
+      "sentence": "Press the button to start.",
+      "translation": "시작하려면 버튼을 누르세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 87
+      }
+    },
+    {
+      "id": "g2-u2-r88",
+      "grade": 2,
+      "unit": "2",
+      "word": "repeat",
+      "meaning": "v. 반복하다",
+      "definition": "v. to say or do something again",
+      "sentence": "Please repeat the question.",
+      "translation": "질문을 다시 말해 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 88
+      }
+    },
+    {
+      "id": "g2-u2-r89",
+      "grade": 2,
+      "unit": "2",
+      "word": "schedule",
+      "meaning": "n. 일정",
+      "definition": "n. a plan of things to do and times",
+      "sentence": "Let’s check the class schedule.",
+      "translation": "수업 일정을 확인해 보자.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 89
+      }
+    },
+    {
+      "id": "g2-u2-r90",
+      "grade": 2,
+      "unit": "2",
+      "word": "shoulder",
+      "meaning": "n. 어깨",
+      "definition": "n. the part of your body between your neck and your arm",
+      "sentence": "He carried the bag on his shoulder.",
+      "translation": "그는 어깨에 가방을 멨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 90
+      }
+    },
+    {
+      "id": "g2-u2-r91",
+      "grade": 2,
+      "unit": "2",
+      "word": "skip",
+      "meaning": "v. 건너뛰다, 거르다",
+      "definition": "v. to not do something you usually do",
+      "sentence": "She skipped breakfast this morning.",
+      "translation": "그녀는 오늘 아침을 거르고 왔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 91
+      }
+    },
+    {
+      "id": "g2-u2-r92",
+      "grade": 2,
+      "unit": "2",
+      "word": "soda",
+      "meaning": "n. 탄산음료",
+      "definition": "n. sweet, fizzy drink with bubbles",
+      "sentence": "I drank a cold soda on the hot day.",
+      "translation": "나는 더운 날 차가운 탄산음료를 마셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 92
+      }
+    },
+    {
+      "id": "g2-u2-r93",
+      "grade": 2,
+      "unit": "2",
+      "word": "spread",
+      "meaning": "v. 퍼뜨리다",
+      "definition": "v. to stretch or extend something over an area",
+      "sentence": "Spread your arms wide and take a deep breath.",
+      "translation": "팔을 크게 벌리고 깊게 숨을 쉬어라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 93
+      }
+    },
+    {
+      "id": "g2-u2-r94",
+      "grade": 2,
+      "unit": "2",
+      "word": "stick",
+      "meaning": "v. 내밀다, 나오다",
+      "definition": "v. to put out or come out from something",
+      "sentence": "The boy stuck his tongue out.",
+      "translation": "그 소년은 혀를 내밀었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 94
+      }
+    },
+    {
+      "id": "g2-u2-r95",
+      "grade": 2,
+      "unit": "2",
+      "word": "sweat",
+      "meaning": "v. 땀 흘리다",
+      "definition": "v. to release liquid through the skin",
+      "sentence": "He was sweating after the run.",
+      "translation": "그는 달리기 후에 땀을 흘리고 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 95
+      }
+    },
+    {
+      "id": "g2-u2-r96",
+      "grade": 2,
+      "unit": "2",
+      "word": "thousand",
+      "meaning": "n. 천",
+      "definition": "n. the number 1,000",
+      "sentence": "A thousand people joined the event.",
+      "translation": "천 명이 그 행사에 참여했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 96
+      }
+    },
+    {
+      "id": "g2-u2-r97",
+      "grade": 2,
+      "unit": "2",
+      "word": "thumb",
+      "meaning": "n. 엄지손가락",
+      "definition": "n. the short, thick finger on your hand",
+      "sentence": "He gave a thumbs-up sign.",
+      "translation": "그는 엄지손가락을 치켜세웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 97
+      }
+    },
+    {
+      "id": "g2-u2-r98",
+      "grade": 2,
+      "unit": "2",
+      "word": "hang off",
+      "meaning": "늘어뜨리다",
+      "definition": "to fall or be attached loosely from something",
+      "sentence": "The toy was hanging off the edge of the table.",
+      "translation": "장난감이 책상 끝에서 매달려 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 98
+      }
+    },
+    {
+      "id": "g2-u3-r99",
+      "grade": 2,
+      "unit": "3",
+      "word": "allow",
+      "meaning": "v. 허락하다",
+      "definition": "v. to let someone do something",
+      "sentence": "They won’t allow me to bring my cat.",
+      "translation": "그들은 내가 내 고양이를 데려오는 것을 허락하지 않을 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 99
+      }
+    },
+    {
+      "id": "g2-u3-r100",
+      "grade": 2,
+      "unit": "3",
+      "word": "alone",
+      "meaning": "adj. 혼자인",
+      "definition": "adj. without anyone else",
+      "sentence": "She likes to spend some time alone after school.",
+      "translation": "그녀는 방과 후에 혼자 시간을 보내는 것을 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 100
+      }
+    },
+    {
+      "id": "g2-u3-r101",
+      "grade": 2,
+      "unit": "3",
+      "word": "aurora",
+      "meaning": "n. 오로라",
+      "definition": "n. a natural light display in the sky, especially in polar regions",
+      "sentence": "We saw the aurora in the sky during our trip to Alaska.",
+      "translation": "우리는 알래스카 여행 중 하늘에서 오로라를 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 101
+      }
+    },
+    {
+      "id": "g2-u3-r102",
+      "grade": 2,
+      "unit": "3",
+      "word": "cable",
+      "meaning": "n. 전선",
+      "definition": "n. a thick wire that carries electricity or signals",
+      "sentence": "The internet cable is unplugged.",
+      "translation": "인터넷 전선이 뽑혀 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 102
+      }
+    },
+    {
+      "id": "g2-u3-r103",
+      "grade": 2,
+      "unit": "3",
+      "word": "capital",
+      "meaning": "n. 수도",
+      "definition": "n. the city where a country's government is based",
+      "sentence": "Seoul is the capital of South Korea.",
+      "translation": "서울은 대한민국의 수도이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 103
+      }
+    },
+    {
+      "id": "g2-u3-r104",
+      "grade": 2,
+      "unit": "3",
+      "word": "choice",
+      "meaning": "n. 선택",
+      "definition": "n. the act of picking between two or more things",
+      "sentence": "You have to make a choice.",
+      "translation": "너는 선택을 해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 104
+      }
+    },
+    {
+      "id": "g2-u3-r105",
+      "grade": 2,
+      "unit": "3",
+      "word": "comfortable",
+      "meaning": "adj. 편안한",
+      "definition": "adj. feeling relaxed and without pain or stress",
+      "sentence": "I feel comfortable in these clothes.",
+      "translation": "나는 이 옷을 입으면 편안하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 105
+      }
+    },
+    {
+      "id": "g2-u3-r106",
+      "grade": 2,
+      "unit": "3",
+      "word": "cruise",
+      "meaning": "n. 유람선 여행",
+      "definition": "n. a trip on a ship for pleasure",
+      "sentence": "They went on a cruise to the Caribbean.",
+      "translation": "그들은 카리브해로 크루즈 여행을 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 106
+      }
+    },
+    {
+      "id": "g2-u3-r107",
+      "grade": 2,
+      "unit": "3",
+      "word": "dirty",
+      "meaning": "adj. 더러운",
+      "definition": "adj. not clean",
+      "sentence": "Wash your dirty hands.",
+      "translation": "더러운 손을 씻어라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 107
+      }
+    },
+    {
+      "id": "g2-u3-r108",
+      "grade": 2,
+      "unit": "3",
+      "word": "exhibition",
+      "meaning": "n. 전시회",
+      "definition": "n. a show of art or other items",
+      "sentence": "The art exhibition was amazing.",
+      "translation": "그 미술 전시는 놀라웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 108
+      }
+    },
+    {
+      "id": "g2-u3-r109",
+      "grade": 2,
+      "unit": "3",
+      "word": "fine",
+      "meaning": "n. 벌금",
+      "definition": "n. money you pay when you break a rule or law",
+      "sentence": "He paid a fine for driving too fast.",
+      "translation": "그는 너무 빨리 운전해서 벌금을 냈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 109
+      }
+    },
+    {
+      "id": "g2-u3-r110",
+      "grade": 2,
+      "unit": "3",
+      "word": "float",
+      "meaning": "v. 떠다니다, 뜨다",
+      "definition": "v. to stay on the surface of water or in the air without sinking",
+      "sentence": "The boat can float on the water.",
+      "translation": "그 배는 물 위에 뜰 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 110
+      }
+    },
+    {
+      "id": "g2-u3-r111",
+      "grade": 2,
+      "unit": "3",
+      "word": "foreigner",
+      "meaning": "n. 외국인",
+      "definition": "n. a person from another country",
+      "sentence": "There are many foreigners in Seoul.",
+      "translation": "서울에는 많은 외국인들이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 111
+      }
+    },
+    {
+      "id": "g2-u3-r112",
+      "grade": 2,
+      "unit": "3",
+      "word": "guideline",
+      "meaning": "n. 지침",
+      "definition": "n. rules or advice about how to do something",
+      "sentence": "Follow the safety guidelines.",
+      "translation": "안전 지침을 따르세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 112
+      }
+    },
+    {
+      "id": "g2-u3-r113",
+      "grade": 2,
+      "unit": "3",
+      "word": "hamster",
+      "meaning": "n. 햄스터",
+      "definition": "n. a small rodent often kept as a pet",
+      "sentence": "My little sister has a pet hamster named Coco.",
+      "translation": "내 여동생은 코코라는 이름의 햄스터를 키운다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 113
+      }
+    },
+    {
+      "id": "g2-u3-r114",
+      "grade": 2,
+      "unit": "3",
+      "word": "heel",
+      "meaning": "n. (신발의) 뒤축, 굽",
+      "definition": "n. the back part of a shoe, under the foot",
+      "sentence": "Her high heels are very fashionable.",
+      "translation": "그녀의 하이힐은 매우 멋지다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 114
+      }
+    },
+    {
+      "id": "g2-u3-r115",
+      "grade": 2,
+      "unit": "3",
+      "word": "hide",
+      "meaning": "v. 숨기다",
+      "definition": "v. to put something where no one can see it",
+      "sentence": "Hide the money in a safe place.",
+      "translation": "안전한 곳에 그 돈을 숨겨라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 115
+      }
+    },
+    {
+      "id": "g2-u3-r116",
+      "grade": 2,
+      "unit": "3",
+      "word": "hockey",
+      "meaning": "n. 하키",
+      "definition": "n. a game played on ice or a field with sticks and a puck or ball",
+      "sentence": "He plays ice hockey every winter.",
+      "translation": "그는 매 겨울 아이스하키를 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 116
+      }
+    },
+    {
+      "id": "g2-u3-r117",
+      "grade": 2,
+      "unit": "3",
+      "word": "import",
+      "meaning": "v. 수입하다",
+      "definition": "v. to bring things from another country to sell or use",
+      "sentence": "Korea imports coffee from many countries.",
+      "translation": "한국은 많은 나라에서 커피를 수입한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 117
+      }
+    },
+    {
+      "id": "g2-u3-r118",
+      "grade": 2,
+      "unit": "3",
+      "word": "island",
+      "meaning": "n. 섬",
+      "definition": "n. a piece of land with water all around it",
+      "sentence": "Jeju is a beautiful island.",
+      "translation": "제주는 아름다운 섬이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 118
+      }
+    },
+    {
+      "id": "g2-u3-r119",
+      "grade": 2,
+      "unit": "3",
+      "word": "kangaroo",
+      "meaning": "n. 캥거루",
+      "definition": "n. a large Australian animal that moves by jumping",
+      "sentence": "A kangaroo carries its baby in its pouch.",
+      "translation": "캥거루는 아기를 주머니에 넣어 다닌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 119
+      }
+    },
+    {
+      "id": "g2-u3-r120",
+      "grade": 2,
+      "unit": "3",
+      "word": "ketchup",
+      "meaning": "n. 케첩",
+      "definition": "n. a thick, red sauce made from tomatoes",
+      "sentence": "I like to eat french fries with ketchup.",
+      "translation": "나는 감자튀김을 케첩에 찍어 먹는 걸 좋아한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 120
+      }
+    },
+    {
+      "id": "g2-u3-r121",
+      "grade": 2,
+      "unit": "3",
+      "word": "kiosk",
+      "meaning": "n. 키오스크",
+      "definition": "n. a small stand or structure where items are sold",
+      "sentence": "We bought snacks from the kiosk at the park.",
+      "translation": "우리는 공원의 키오스크에서 간식을 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 121
+      }
+    },
+    {
+      "id": "g2-u3-r122",
+      "grade": 2,
+      "unit": "3",
+      "word": "koala",
+      "meaning": "n. 코알라",
+      "definition": "n. an animal from Australia that lives in trees and eats leaves, especially eucalyptus leaves",
+      "sentence": "The koala is sleeping on the tree branch.",
+      "translation": "코알라는 나무 가지 위에서 자고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 122
+      }
+    },
+    {
+      "id": "g2-u3-r123",
+      "grade": 2,
+      "unit": "3",
+      "word": "landmark",
+      "meaning": "n. 주요 지형지물, 랜드마크",
+      "definition": "n. a famous or easily recognizable building or place",
+      "sentence": "The Eiffel Tower is a famous landmark in Paris.",
+      "translation": "에펠탑은 파리의 유명한 랜드마크이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 123
+      }
+    },
+    {
+      "id": "g2-u3-r124",
+      "grade": 2,
+      "unit": "3",
+      "word": "law",
+      "meaning": "n. 법",
+      "definition": "n. a rule made by a government",
+      "sentence": "The new law protects animals.",
+      "translation": "새 법은 동물을 보호한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 124
+      }
+    },
+    {
+      "id": "g2-u3-r125",
+      "grade": 2,
+      "unit": "3",
+      "word": "liberty",
+      "meaning": "n. 자유",
+      "definition": "n. the state of being free",
+      "sentence": "They fought for liberty.",
+      "translation": "그들은 자유를 위해 싸웠다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 125
+      }
+    },
+    {
+      "id": "g2-u3-r126",
+      "grade": 2,
+      "unit": "3",
+      "word": "location",
+      "meaning": "n. 위치",
+      "definition": "n. the place where something is",
+      "sentence": "What's the location of the restaurant?",
+      "translation": "그 식당의 위치가 어디인가요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 126
+      }
+    },
+    {
+      "id": "g2-u3-r127",
+      "grade": 2,
+      "unit": "3",
+      "word": "lonely",
+      "meaning": "adj. 외로운",
+      "definition": "adj. feeling sad because you are alone",
+      "sentence": "She felt lonely in the new city.",
+      "translation": "그녀는 새로운 도시에서 외로움을 느꼈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 127
+      }
+    },
+    {
+      "id": "g2-u3-r128",
+      "grade": 2,
+      "unit": "3",
+      "word": "maple",
+      "meaning": "n. 단풍나무",
+      "definition": "n. a kind of tree with leaves that turn red or yellow in autumn and that gives sweet sap for syrup",
+      "sentence": "Maple leaves turn red in autumn.",
+      "translation": "단풍나무 잎은 가을에 빨갛게 변한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 128
+      }
+    },
+    {
+      "id": "g2-u3-r129",
+      "grade": 2,
+      "unit": "3",
+      "word": "match",
+      "meaning": "n. 경기",
+      "definition": "n. a game or contest between two teams or people",
+      "sentence": "They watched a soccer match.",
+      "translation": "그들은 축구 경기를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 129
+      }
+    },
+    {
+      "id": "g2-u3-r130",
+      "grade": 2,
+      "unit": "3",
+      "word": "messy",
+      "meaning": "adj. 지저분한",
+      "definition": "adj. not clean or tidy",
+      "sentence": "His room is always messy.",
+      "translation": "그의 방은 항상 지저분하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 130
+      }
+    },
+    {
+      "id": "g2-u3-r131",
+      "grade": 2,
+      "unit": "3",
+      "word": "museum",
+      "meaning": "n. 박물관",
+      "definition": "n. a building where old or interesting things are shown",
+      "sentence": "We visited the history museum.",
+      "translation": "우리는 역사 박물관을 방문했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 131
+      }
+    },
+    {
+      "id": "g2-u3-r132",
+      "grade": 2,
+      "unit": "3",
+      "word": "palace",
+      "meaning": "n. 궁전",
+      "definition": "n. a large home for a king or queen",
+      "sentence": "The palace was built 200 years ago.",
+      "translation": "그 궁전은 200년 전에 지어졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 132
+      }
+    },
+    {
+      "id": "g2-u3-r133",
+      "grade": 2,
+      "unit": "3",
+      "word": "parade",
+      "meaning": "n. 퍼레이드",
+      "definition": "n. a public celebration with people marching",
+      "sentence": "We watched the parade on the street.",
+      "translation": "우리는 거리에서 퍼레이드를 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 133
+      }
+    },
+    {
+      "id": "g2-u3-r134",
+      "grade": 2,
+      "unit": "3",
+      "word": "parrot",
+      "meaning": "n. 앵무새",
+      "definition": "n. a colorful bird that can imitate human speech",
+      "sentence": "The parrot repeated everything I said.",
+      "translation": "그 앵무새는 내가 한 말을 전부 따라했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 134
+      }
+    },
+    {
+      "id": "g2-u3-r135",
+      "grade": 2,
+      "unit": "3",
+      "word": "penguin",
+      "meaning": "n. 펭귄",
+      "definition": "n. a black and white bird that cannot fly but swims well",
+      "sentence": "Penguins live in cold places like Antarctica.",
+      "translation": "펭귄은 남극처럼 추운 곳에 산다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 135
+      }
+    },
+    {
+      "id": "g2-u3-r136",
+      "grade": 2,
+      "unit": "3",
+      "word": "plus",
+      "meaning": "adv. 게다가",
+      "definition": "adv. also, in addition",
+      "sentence": "He is smart, plus he is very kind.",
+      "translation": "그는 똑똑하고, 게다가 매우 친절하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 136
+      }
+    },
+    {
+      "id": "g2-u3-r137",
+      "grade": 2,
+      "unit": "3",
+      "word": "pool",
+      "meaning": "n. 수영장",
+      "definition": "n. a place filled with water for swimming, or a small area of water",
+      "sentence": "We swam in the pool all afternoon.",
+      "translation": "우리는 오후 내내 수영장에서 수영했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 137
+      }
+    },
+    {
+      "id": "g2-u3-r138",
+      "grade": 2,
+      "unit": "3",
+      "word": "pork",
+      "meaning": "n. 돼지고기",
+      "definition": "n. the meat from a pig that people eat",
+      "sentence": "She bought some pork to cook for dinner.",
+      "translation": "그녀는 저녁을 요리하려고 돼지고기를 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 138
+      }
+    },
+    {
+      "id": "g2-u3-r139",
+      "grade": 2,
+      "unit": "3",
+      "word": "pyramid",
+      "meaning": "n. 피라미드",
+      "definition": "n. a structure with a square base and four triangular sides",
+      "sentence": "We visited the Great Pyramid of Giza in Egypt.",
+      "translation": "우리는 이집트 기자의 대피라미드를 방문했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 139
+      }
+    },
+    {
+      "id": "g2-u3-r140",
+      "grade": 2,
+      "unit": "3",
+      "word": "recommend",
+      "meaning": "v. 추천하다",
+      "definition": "v. to say something is good and suggest someone should try it",
+      "sentence": "Can you recommend a good restaurant near here?",
+      "translation": "여기 근처에 좋은 식당을 추천해 줄 수 있나요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 140
+      }
+    },
+    {
+      "id": "g2-u3-r141",
+      "grade": 2,
+      "unit": "3",
+      "word": "remain",
+      "meaning": "v. 남다; 여전히 ~이다",
+      "definition": "v. to continue to be in the same state or condition",
+      "sentence": "He remained calm during the test.",
+      "translation": "그는 시험 동안 침착하게 남아 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 141
+      }
+    },
+    {
+      "id": "g2-u3-r142",
+      "grade": 2,
+      "unit": "3",
+      "word": "rent",
+      "meaning": "v. 빌리다",
+      "definition": "v. to pay to use something for a time",
+      "sentence": "They decided to rent a house.",
+      "translation": "그들은 집을 빌리기로 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 142
+      }
+    },
+    {
+      "id": "g2-u3-r143",
+      "grade": 2,
+      "unit": "3",
+      "word": "rice",
+      "meaning": "n. 쌀, 밥",
+      "definition": "n. a plant seed that is cooked and eaten as food, especially in Asia",
+      "sentence": "There is a bowl of rice on the table.",
+      "translation": "탁자 위에 밥 한 그릇이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 143
+      }
+    },
+    {
+      "id": "g2-u3-r144",
+      "grade": 2,
+      "unit": "3",
+      "word": "rule",
+      "meaning": "n. 규칙",
+      "definition": "n. a guide to the way things should be done",
+      "sentence": "You must follow the school rules.",
+      "translation": "너는 학교 규칙을 따라야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 144
+      }
+    },
+    {
+      "id": "g2-u3-r145",
+      "grade": 2,
+      "unit": "3",
+      "word": "salmon",
+      "meaning": "n. 연어",
+      "definition": "n. a pink fish that lives in the sea and rivers",
+      "sentence": "Grilled salmon is one of my favorite dishes.",
+      "translation": "구운 연어는 내가 가장 좋아하는 음식 중 하나이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 145
+      }
+    },
+    {
+      "id": "g2-u3-r146",
+      "grade": 2,
+      "unit": "3",
+      "word": "scone",
+      "meaning": "n. 스콘",
+      "definition": "n. a small, soft cake often eaten with tea",
+      "sentence": "I had a scone with jam for breakfast.",
+      "translation": "나는 아침으로 잼을 곁들인 스콘을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 146
+      }
+    },
+    {
+      "id": "g2-u3-r147",
+      "grade": 2,
+      "unit": "3",
+      "word": "sights",
+      "meaning": "n. 명소",
+      "definition": "n. an interesting place to see",
+      "sentence": "We saw many sights in Rome.",
+      "translation": "우리는 로마에서 많은 명소를 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 147
+      }
+    },
+    {
+      "id": "g2-u3-r148",
+      "grade": 2,
+      "unit": "3",
+      "word": "soy",
+      "meaning": "n. 콩",
+      "definition": "n. a type of bean used to make soy sauce and tofu",
+      "sentence": "Soy is used in many vegetarian dishes.",
+      "translation": "콩은 많은 채식 요리에 사용된다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 148
+      }
+    },
+    {
+      "id": "g2-u3-r149",
+      "grade": 2,
+      "unit": "3",
+      "word": "statue",
+      "meaning": "n. 동상",
+      "definition": "n. a figure made from stone, metal, or other materials",
+      "sentence": "The Statue of Liberty is in New York.",
+      "translation": "자유의 여신상은 뉴욕에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 149
+      }
+    },
+    {
+      "id": "g2-u3-r150",
+      "grade": 2,
+      "unit": "3",
+      "word": "system",
+      "meaning": "n. 시스템",
+      "definition": "n. a set of connected parts working together",
+      "sentence": "The system crashed again.",
+      "translation": "시스템이 또 고장 났다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 150
+      }
+    },
+    {
+      "id": "g2-u3-r151",
+      "grade": 2,
+      "unit": "3",
+      "word": "tea",
+      "meaning": "n. 차",
+      "definition": "n. a hot drink made by soaking leaves in water",
+      "sentence": "Would you like a cup of tea?",
+      "translation": "차 한 잔 드릴까요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 151
+      }
+    },
+    {
+      "id": "g2-u3-r152",
+      "grade": 2,
+      "unit": "3",
+      "word": "tour",
+      "meaning": "n. 여행",
+      "definition": "n. a trip to visit several places",
+      "sentence": "We went on a city tour.",
+      "translation": "우리는 도시 투어를 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 152
+      }
+    },
+    {
+      "id": "g2-u3-r153",
+      "grade": 2,
+      "unit": "3",
+      "word": "tower",
+      "meaning": "n. 탑",
+      "definition": "n. a tall, narrow building or structure",
+      "sentence": "The Eiffel Tower is in Paris.",
+      "translation": "에펠탑은 파리에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 153
+      }
+    },
+    {
+      "id": "g2-u3-r154",
+      "grade": 2,
+      "unit": "3",
+      "word": "trail",
+      "meaning": "n. 오솔길",
+      "definition": "n. a path through a forest or countryside",
+      "sentence": "We walked on a mountain trail.",
+      "translation": "우리는 산길을 걸었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 154
+      }
+    },
+    {
+      "id": "g2-u3-r155",
+      "grade": 2,
+      "unit": "3",
+      "word": "tulip",
+      "meaning": "n. 튤립",
+      "definition": "n. a colorful spring flower with a cup shape",
+      "sentence": "Tulips bloom in the spring in many colors.",
+      "translation": "튤립은 봄에 여러 색으로 핀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 155
+      }
+    },
+    {
+      "id": "g2-u3-r156",
+      "grade": 2,
+      "unit": "3",
+      "word": "unique",
+      "meaning": "adj. 독특한, 고유한",
+      "definition": "adj. being the only one of its kind",
+      "sentence": "Each fingerprint is unique.",
+      "translation": "각 지문은 고유하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 156
+      }
+    },
+    {
+      "id": "g2-u3-r157",
+      "grade": 2,
+      "unit": "3",
+      "word": "vacation",
+      "meaning": "n. 휴가, 방학",
+      "definition": "n. a time when you don't work or go to school",
+      "sentence": "The school library was closed during the vacation.",
+      "translation": "학교 도서관은 방학 동안 문을 닫았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 157
+      }
+    },
+    {
+      "id": "g2-u3-r158",
+      "grade": 2,
+      "unit": "3",
+      "word": "village",
+      "meaning": "n. 마을",
+      "definition": "n. a small group of houses in the countryside",
+      "sentence": "He grew up in a small village.",
+      "translation": "그는 작은 마을에서 자랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 158
+      }
+    },
+    {
+      "id": "g2-u3-r159",
+      "grade": 2,
+      "unit": "3",
+      "word": "windmill",
+      "meaning": "n. 풍차",
+      "definition": "n. a building or tower with sails or blades that turn in the wind",
+      "sentence": "The windmill was used to grind grain into flour.",
+      "translation": "그 풍차는 곡식을 갈아서 밀가루로 만드는 데 사용되었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 159
+      }
+    },
+    {
+      "id": "g2-u3-r160",
+      "grade": 2,
+      "unit": "3",
+      "word": "at least",
+      "meaning": "최소한, 적어도",
+      "definition": "not less than a certain number or amount",
+      "sentence": "You should drink at least eight cups of water a day.",
+      "translation": "하루에 적어도 물 8컵은 마셔야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 160
+      }
+    },
+    {
+      "id": "g2-u3-r161",
+      "grade": 2,
+      "unit": "3",
+      "word": "be famous for",
+      "meaning": "~로 유명하다",
+      "definition": "to be well known because of something specific",
+      "sentence": "This restaurant is famous for its delicious pizza..",
+      "translation": "이 식당은 맛있는 피자로 유명하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 161
+      }
+    },
+    {
+      "id": "g2-u4-r162",
+      "grade": 2,
+      "unit": "4",
+      "word": "ad, advertisement",
+      "meaning": "n. 광고",
+      "definition": "n. a picture, video, or message that tells people about a product or service",
+      "sentence": "Some ads on social media are really annoying.",
+      "translation": "SNS에 나오는 몇몇 광고는 정말 성가시다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 162
+      }
+    },
+    {
+      "id": "g2-u4-r163",
+      "grade": 2,
+      "unit": "4",
+      "word": "adventure",
+      "meaning": "n. 모험",
+      "definition": "n. an exciting and often risky experience",
+      "sentence": "They went on a jungle adventure.",
+      "translation": "그들은 정글 탐험을 떠났다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 163
+      }
+    },
+    {
+      "id": "g2-u4-r164",
+      "grade": 2,
+      "unit": "4",
+      "word": "amazed",
+      "meaning": "adj. 놀란",
+      "definition": "adj. very surprised",
+      "sentence": "I was amazed by the magic trick.",
+      "translation": "나는 그 마술에 놀랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 164
+      }
+    },
+    {
+      "id": "g2-u4-r165",
+      "grade": 2,
+      "unit": "4",
+      "word": "bark",
+      "meaning": "v. 짖다",
+      "definition": "v. to make a loud sound like a dog",
+      "sentence": "The dog barked loudly at the stranger.",
+      "translation": "그 개는 낯선 사람에게 크게 짖었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 165
+      }
+    },
+    {
+      "id": "g2-u4-r166",
+      "grade": 2,
+      "unit": "4",
+      "word": "battle",
+      "meaning": "n. 전투",
+      "definition": "n. a fight between two armies",
+      "sentence": "The battle lasted for three days.",
+      "translation": "전투는 3일간 계속되었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 166
+      }
+    },
+    {
+      "id": "g2-u4-r167",
+      "grade": 2,
+      "unit": "4",
+      "word": "battlefield",
+      "meaning": "n. 싸움터, 전장",
+      "definition": "n. a place where a battle or war happens",
+      "sentence": "Many heroes died on the battlefield.",
+      "translation": "많은 영웅들이 전장에서 죽었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 167
+      }
+    },
+    {
+      "id": "g2-u4-r168",
+      "grade": 2,
+      "unit": "4",
+      "word": "bug",
+      "meaning": "n. 벌레",
+      "definition": "n. a small insect",
+      "sentence": "There is a bug on the wall.",
+      "translation": "벽에 벌레가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 168
+      }
+    },
+    {
+      "id": "g2-u4-r169",
+      "grade": 2,
+      "unit": "4",
+      "word": "cause",
+      "meaning": "n. 원인",
+      "definition": "n. a reason why something happens",
+      "sentence": "Smoking is one of the causes of cancer.",
+      "translation": "흡연은 암의 원인 중 하나이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 169
+      }
+    },
+    {
+      "id": "g2-u4-r170",
+      "grade": 2,
+      "unit": "4",
+      "word": "champion",
+      "meaning": "n. 챔피언",
+      "definition": "n. a winner of a competition",
+      "sentence": "She became the tennis champion.",
+      "translation": "그녀는 테니스 챔피언이 되었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 170
+      }
+    },
+    {
+      "id": "g2-u4-r171",
+      "grade": 2,
+      "unit": "4",
+      "word": "cheetah",
+      "meaning": "n. 치타",
+      "definition": "n. a big wild cat from Africa that runs very fast",
+      "sentence": "Cheetahs can run up to 100 kilometers per hour.",
+      "translation": "치타는 시속 100km까지 달릴 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 171
+      }
+    },
+    {
+      "id": "g2-u4-r172",
+      "grade": 2,
+      "unit": "4",
+      "word": "chef",
+      "meaning": "n. 요리사",
+      "definition": "n. a person who cooks professionally",
+      "sentence": "The chef cooked a delicious meal.",
+      "translation": "그 요리사는 맛있는 음식을 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 172
+      }
+    },
+    {
+      "id": "g2-u4-r173",
+      "grade": 2,
+      "unit": "4",
+      "word": "clearly",
+      "meaning": "adv. 명백하게, 분명히",
+      "definition": "adv. in a way that is easy to see or understand",
+      "sentence": "She spoke clearly to the class.",
+      "translation": "그녀는 반 친구들에게 분명하게 말했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 173
+      }
+    },
+    {
+      "id": "g2-u4-r174",
+      "grade": 2,
+      "unit": "4",
+      "word": "count",
+      "meaning": "v. 세다",
+      "definition": "v. to say numbers one by one to know how many things there are",
+      "sentence": "She can count to 100.",
+      "translation": "그녀는 100까지 셀 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 174
+      }
+    },
+    {
+      "id": "g2-u4-r175",
+      "grade": 2,
+      "unit": "4",
+      "word": "daily",
+      "meaning": "adj. 매일 일어나는",
+      "definition": "adj. happening or appearing every day",
+      "sentence": "A toothbrush is a daily item we all use.",
+      "translation": "칫솔은 우리 모두가 사용하는 일상 용품이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 175
+      }
+    },
+    {
+      "id": "g2-u4-r176",
+      "grade": 2,
+      "unit": "4",
+      "word": "data",
+      "meaning": "n. 데이터",
+      "definition": "n. information or facts",
+      "sentence": "The scientist collected data.",
+      "translation": "과학자는 데이터를 수집했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 176
+      }
+    },
+    {
+      "id": "g2-u4-r177",
+      "grade": 2,
+      "unit": "4",
+      "word": "dead",
+      "meaning": "adj. 죽은",
+      "definition": "adj. not alive anymore",
+      "sentence": "The plant is dead because of no water.",
+      "translation": "그 식물은 물이 없어 죽었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 177
+      }
+    },
+    {
+      "id": "g2-u4-r178",
+      "grade": 2,
+      "unit": "4",
+      "word": "death",
+      "meaning": "n. 죽음",
+      "definition": "n. the end of life",
+      "sentence": "The death of the king was sad news.",
+      "translation": "그 왕의 죽음은 슬픈 소식이었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 178
+      }
+    },
+    {
+      "id": "g2-u4-r179",
+      "grade": 2,
+      "unit": "4",
+      "word": "diagram",
+      "meaning": "n. 도표, 도식",
+      "definition": "n. a simple drawing that shows how something works or what it looks like",
+      "sentence": "The science book has a diagram of the solar system.",
+      "translation": "과학책에는 태양계의 도표가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 179
+      }
+    },
+    {
+      "id": "g2-u4-r180",
+      "grade": 2,
+      "unit": "4",
+      "word": "die",
+      "meaning": "v. 죽다",
+      "definition": "v. to stop living",
+      "sentence": "Many trees died during the cold winter.",
+      "translation": "많은 나무들이 추운 겨울 동안 죽었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 180
+      }
+    },
+    {
+      "id": "g2-u4-r181",
+      "grade": 2,
+      "unit": "4",
+      "word": "disease",
+      "meaning": "n. 질병",
+      "definition": "n. a sickness that affects the body",
+      "sentence": "The disease spreads quickly.",
+      "translation": "그 병은 빠르게 퍼진다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 181
+      }
+    },
+    {
+      "id": "g2-u4-r182",
+      "grade": 2,
+      "unit": "4",
+      "word": "distance",
+      "meaning": "n. 거리",
+      "definition": "n. how far apart things are",
+      "sentence": "The distance between the two cities is 200 kilometers.",
+      "translation": "두 도시 사이의 거리는 200킬로미터이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 182
+      }
+    },
+    {
+      "id": "g2-u4-r183",
+      "grade": 2,
+      "unit": "4",
+      "word": "finding",
+      "meaning": "n. (조사, 연구 등의) 결과",
+      "definition": "a result or discovery from a study or research",
+      "sentence": "The finding shows that exercise is good for health.",
+      "translation": "그 연구 결과는 운동이 건강에 좋다는 것을 보여준다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 183
+      }
+    },
+    {
+      "id": "g2-u4-r184",
+      "grade": 2,
+      "unit": "4",
+      "word": "height",
+      "meaning": "n. 키",
+      "definition": "n. how tall something or someone is",
+      "sentence": "He is about the same height as me.",
+      "translation": "그는 나와 키가 비슷하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 184
+      }
+    },
+    {
+      "id": "g2-u4-r185",
+      "grade": 2,
+      "unit": "4",
+      "word": "link",
+      "meaning": "n. (웹) 링크",
+      "definition": "n. a word or picture on a website that you click to go to another page",
+      "sentence": "Click the link to open the website.",
+      "translation": "웹사이트를 열려면 링크를 클릭해라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 185
+      }
+    },
+    {
+      "id": "g2-u4-r186",
+      "grade": 2,
+      "unit": "4",
+      "word": "machine",
+      "meaning": "n. 기계",
+      "definition": "n. a piece of equipment that does work",
+      "sentence": "This machine makes juice.",
+      "translation": "이 기계는 주스를 만든다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 186
+      }
+    },
+    {
+      "id": "g2-u4-r187",
+      "grade": 2,
+      "unit": "4",
+      "word": "manage",
+      "meaning": "v. 다루다, 관리하다",
+      "definition": "v. to control or take care of something",
+      "sentence": "She can manage a team well.",
+      "translation": "그녀는 팀을 잘 관리할 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 187
+      }
+    },
+    {
+      "id": "g2-u4-r188",
+      "grade": 2,
+      "unit": "4",
+      "word": "messenger",
+      "meaning": "n. 전달자, 메신저",
+      "definition": "n. a person or app that sends messages or information",
+      "sentence": "They use messenger apps the most.",
+      "translation": "그들은 메신저 앱을 가장 많이 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 188
+      }
+    },
+    {
+      "id": "g2-u4-r189",
+      "grade": 2,
+      "unit": "4",
+      "word": "million",
+      "meaning": "n. 백만",
+      "definition": "n. a very large number",
+      "sentence": "There are millions of stars in the sky.",
+      "translation": "수백만 개의 별이 하늘에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 189
+      }
+    },
+    {
+      "id": "g2-u4-r190",
+      "grade": 2,
+      "unit": "4",
+      "word": "petal",
+      "meaning": "n. 꽃잎",
+      "definition": "n. a colorful part of a flower",
+      "sentence": "The rose petals were soft and red.",
+      "translation": "장미 꽃잎은 부드럽고 붉었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 190
+      }
+    },
+    {
+      "id": "g2-u4-r191",
+      "grade": 2,
+      "unit": "4",
+      "word": "recipe",
+      "meaning": "n. 조리법",
+      "definition": "n. instructions for cooking something",
+      "sentence": "Do you have a recipe for that cake?",
+      "translation": "그 케이크 조리법 있어요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 191
+      }
+    },
+    {
+      "id": "g2-u4-r192",
+      "grade": 2,
+      "unit": "4",
+      "word": "refrigerator",
+      "meaning": "n. 냉장고",
+      "definition": "n. a machine that keeps food cold",
+      "sentence": "The milk is in the refrigerator.",
+      "translation": "우유는 냉장고에 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 192
+      }
+    },
+    {
+      "id": "g2-u4-r193",
+      "grade": 2,
+      "unit": "4",
+      "word": "respect",
+      "meaning": "v. 존경하다, 존중하다",
+      "definition": "v. to think someone is good or important and show polite behavior to them",
+      "sentence": "You should respect your elders.",
+      "translation": "어른을 존중해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 193
+      }
+    },
+    {
+      "id": "g2-u4-r194",
+      "grade": 2,
+      "unit": "4",
+      "word": "result",
+      "meaning": "n. 결과",
+      "definition": "n. what happens after something is done",
+      "sentence": "All this is the result of your hard work.",
+      "translation": "이 모든 것은 네 노력의 결과이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 194
+      }
+    },
+    {
+      "id": "g2-u4-r195",
+      "grade": 2,
+      "unit": "4",
+      "word": "senior",
+      "meaning": "n. 노인, 어르신",
+      "definition": "n. an old person, usually over the age of 60",
+      "sentence": "The park has a special area for seniors.",
+      "translation": "그 공원에는 노인들을 위한 특별 구역이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 195
+      }
+    },
+    {
+      "id": "g2-u4-r196",
+      "grade": 2,
+      "unit": "4",
+      "word": "sofa",
+      "meaning": "n. 소파",
+      "definition": "n. a long, soft seat for two or more people",
+      "sentence": "I sat on the sofa and watched TV.",
+      "translation": "나는 소파에 앉아 TV를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 196
+      }
+    },
+    {
+      "id": "g2-u4-r197",
+      "grade": 2,
+      "unit": "4",
+      "word": "soldier",
+      "meaning": "n. 군인",
+      "definition": "n. a person who serves in an army",
+      "sentence": "The soldiers marched in line.",
+      "translation": "군인들이 줄지어 행진했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 197
+      }
+    },
+    {
+      "id": "g2-u4-r198",
+      "grade": 2,
+      "unit": "4",
+      "word": "suggestion",
+      "meaning": "n. 제안",
+      "definition": "n. an idea about what someone should do",
+      "sentence": "Do you have any suggestions?",
+      "translation": "무슨 제안이 있나요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 198
+      }
+    },
+    {
+      "id": "g2-u4-r199",
+      "grade": 2,
+      "unit": "4",
+      "word": "survey",
+      "meaning": "v. 설문조사하다",
+      "definition": "v. to ask people questions to find out what they think or do",
+      "sentence": "We will survey visitors to find ways to improve the museum.",
+      "translation": "우리는 박물관을 개선하기 위해 방문객들에게 설문조사를 할 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 199
+      }
+    },
+    {
+      "id": "g2-u4-r200",
+      "grade": 2,
+      "unit": "4",
+      "word": "teen",
+      "meaning": "n. 십대",
+      "definition": "n. a teenager; a person between 13 and 19 years old",
+      "sentence": "Many teens enjoy using social media.",
+      "translation": "많은 십대들이 소셜미디어를 즐겨 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 200
+      }
+    },
+    {
+      "id": "g2-u4-r201",
+      "grade": 2,
+      "unit": "4",
+      "word": "webtoon",
+      "meaning": "n. 웹툰, 온라인 만화",
+      "definition": "n. a digital comic published on the internet",
+      "sentence": "She reads a new webtoon every weekend.",
+      "translation": "그녀는 매 주말 새로운 웹툰을 읽는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 201
+      }
+    },
+    {
+      "id": "g2-u4-r202",
+      "grade": 2,
+      "unit": "4",
+      "word": "wound",
+      "meaning": "n. 상처, 부상",
+      "definition": "n. an injury to the body, often with bleeding",
+      "sentence": "He cleaned the wound and put on a bandage.",
+      "translation": "그는 상처를 소독하고 붕대를 감았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 202
+      }
+    },
+    {
+      "id": "g2-u4-r203",
+      "grade": 2,
+      "unit": "4",
+      "word": "wounded",
+      "meaning": "adj. 부상당한",
+      "definition": "adj. hurt or injured",
+      "sentence": "The soldier was badly wounded.",
+      "translation": "그 병사는 심하게 부상을 입었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 203
+      }
+    },
+    {
+      "id": "g2-u4-r204",
+      "grade": 2,
+      "unit": "4",
+      "word": "search for",
+      "meaning": "~을 찾다",
+      "definition": "to try to find something or someone",
+      "sentence": "I am searching for my lost keys.",
+      "translation": "나는 잃어버린 열쇠를 찾고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 204
+      }
+    },
+    {
+      "id": "g2-u4-r205",
+      "grade": 2,
+      "unit": "4",
+      "word": "thanks to",
+      "meaning": "~덕분에",
+      "definition": "because of someone or something in a positive way",
+      "sentence": "Thanks to you, I finished my homework on time.",
+      "translation": "네 덕분에 나는 숙제를 제시간에 끝낼 수 있었어.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 205
+      }
+    },
+    {
+      "id": "g2-u5-r206",
+      "grade": 2,
+      "unit": "5",
+      "word": "ability",
+      "meaning": "n. 능력",
+      "definition": "n. the skill to do something",
+      "sentence": "She has the ability to speak five languages.",
+      "translation": "그녀는 5개 국어를 할 수 있는 능력이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 206
+      }
+    },
+    {
+      "id": "g2-u5-r207",
+      "grade": 2,
+      "unit": "5",
+      "word": "astronaut",
+      "meaning": "n. 우주 비행사",
+      "definition": "n. a person trained to travel in space",
+      "sentence": "The astronaut floated in zero gravity.",
+      "translation": "우주 비행사는 무중력 상태에서 떠 있었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 207
+      }
+    },
+    {
+      "id": "g2-u5-r208",
+      "grade": 2,
+      "unit": "5",
+      "word": "attend",
+      "meaning": "v. 참석하다",
+      "definition": "v. to go to an event, class, or meeting",
+      "sentence": "We attended the wedding last weekend.",
+      "translation": "우리는 지난주에 결혼식에 참석했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 208
+      }
+    },
+    {
+      "id": "g2-u5-r209",
+      "grade": 2,
+      "unit": "5",
+      "word": "basic",
+      "meaning": "adj. 기본의, 기초적인",
+      "definition": "adj. simple and most important",
+      "sentence": "You need basic English skills to travel.",
+      "translation": "여행을 하려면 기본적인 영어 실력이 필요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 209
+      }
+    },
+    {
+      "id": "g2-u5-r210",
+      "grade": 2,
+      "unit": "5",
+      "word": "bubble",
+      "meaning": "n. 거품, 방울",
+      "definition": "n. a ball of air or gas inside liquid",
+      "sentence": "The soda makes bubbles when you open it.",
+      "translation": "탄산음료는 뚜껑을 열면 거품이 난다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 210
+      }
+    },
+    {
+      "id": "g2-u5-r211",
+      "grade": 2,
+      "unit": "5",
+      "word": "cartoon",
+      "meaning": "n. 만화",
+      "definition": "n. a funny drawing or animated show",
+      "sentence": "I watched a cartoon after school.",
+      "translation": "나는 방과 후에 만화를 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 211
+      }
+    },
+    {
+      "id": "g2-u5-r212",
+      "grade": 2,
+      "unit": "5",
+      "word": "content",
+      "meaning": "n. 내용",
+      "definition": "n. the ideas or information in something",
+      "sentence": "She creates video content for kids.",
+      "translation": "그녀는 아이들을 위한 영상 콘텐츠를 만든다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 212
+      }
+    },
+    {
+      "id": "g2-u5-r213",
+      "grade": 2,
+      "unit": "5",
+      "word": "counselor",
+      "meaning": "n. 상담사",
+      "definition": "n. a person who gives advice or help",
+      "sentence": "The school counselor gave me advice.",
+      "translation": "학교 상담 선생님이 조언을 해주셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 213
+      }
+    },
+    {
+      "id": "g2-u5-r214",
+      "grade": 2,
+      "unit": "5",
+      "word": "creator",
+      "meaning": "n. 창조자",
+      "definition": "n. someone who makes or invents something",
+      "sentence": "He is the creator of the comic book.",
+      "translation": "그는 그 만화책의 창작자이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 214
+      }
+    },
+    {
+      "id": "g2-u5-r215",
+      "grade": 2,
+      "unit": "5",
+      "word": "director",
+      "meaning": "n. 감독",
+      "definition": "n. a person who leads a movie or project",
+      "sentence": "The movie director is very famous.",
+      "translation": "그 영화 감독은 매우 유명하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 215
+      }
+    },
+    {
+      "id": "g2-u5-r216",
+      "grade": 2,
+      "unit": "5",
+      "word": "diver",
+      "meaning": "n. 잠수부",
+      "definition": "n. someone who swims underwater using special equipment",
+      "sentence": "The diver explored the coral reef.",
+      "translation": "그 잠수부는 산호초를 탐험했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 216
+      }
+    },
+    {
+      "id": "g2-u5-r217",
+      "grade": 2,
+      "unit": "5",
+      "word": "experience",
+      "meaning": "v. 경험하다 n. 경험",
+      "definition": "n. knowledge gained by doing something",
+      "sentence": "He has a lot of experience in teaching.",
+      "translation": "그는 교육 경험이 풍부하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 217
+      }
+    },
+    {
+      "id": "g2-u5-r218",
+      "grade": 2,
+      "unit": "5",
+      "word": "explore",
+      "meaning": "v. 탐험하다, 탐구하다",
+      "definition": "v. to travel through a place to learn about it",
+      "sentence": "Let’s explore the forest trail.",
+      "translation": "숲길을 탐험하자.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 218
+      }
+    },
+    {
+      "id": "g2-u5-r219",
+      "grade": 2,
+      "unit": "5",
+      "word": "golf",
+      "meaning": "n. 골프",
+      "definition": "n. a game played by hitting a ball into holes",
+      "sentence": "My dad plays golf on weekends.",
+      "translation": "우리 아빠는 주말마다 골프를 치신다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 219
+      }
+    },
+    {
+      "id": "g2-u5-r220",
+      "grade": 2,
+      "unit": "5",
+      "word": "information",
+      "meaning": "n. 정보",
+      "definition": "n. facts or knowledge about something",
+      "sentence": "The website gives information about the museum.",
+      "translation": "그 웹사이트는 박물관에 대한 정보를 제공한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 220
+      }
+    },
+    {
+      "id": "g2-u5-r221",
+      "grade": 2,
+      "unit": "5",
+      "word": "judge",
+      "meaning": "n. 판사",
+      "definition": "n. a person who makes decisions in court",
+      "sentence": "The judge made a fair decision.",
+      "translation": "판사는 공정한 결정을 내렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 221
+      }
+    },
+    {
+      "id": "g2-u5-r222",
+      "grade": 2,
+      "unit": "5",
+      "word": "lawyer",
+      "meaning": "n. 변호사",
+      "definition": "n. someone who helps with legal matters",
+      "sentence": "Her sister is a lawyer.",
+      "translation": "그녀의 언니는 변호사이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 222
+      }
+    },
+    {
+      "id": "g2-u5-r223",
+      "grade": 2,
+      "unit": "5",
+      "word": "librarian",
+      "meaning": "n. 사서",
+      "definition": "n. a person who works in a library",
+      "sentence": "The librarian helped me find a good book.",
+      "translation": "사서가 좋은 책을 찾는 데 도와줬다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 223
+      }
+    },
+    {
+      "id": "g2-u5-r224",
+      "grade": 2,
+      "unit": "5",
+      "word": "lyric",
+      "meaning": "n. 가사",
+      "definition": "n. the words of a song",
+      "sentence": "She wrote the lyrics for her new song.",
+      "translation": "그녀는 새 노래의 가사를 썼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 224
+      }
+    },
+    {
+      "id": "g2-u5-r225",
+      "grade": 2,
+      "unit": "5",
+      "word": "magician",
+      "meaning": "n. 마술사",
+      "definition": "n. a person who does magic tricks",
+      "sentence": "The magician pulled a rabbit from the hat.",
+      "translation": "마술사는 모자에서 토끼를 꺼냈다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 225
+      }
+    },
+    {
+      "id": "g2-u5-r226",
+      "grade": 2,
+      "unit": "5",
+      "word": "marketer",
+      "meaning": "n. 마케팅 전문가",
+      "definition": "n. a person who sells or promotes products",
+      "sentence": "He works as a marketer in a big company.",
+      "translation": "그는 대기업에서 마케팅 전문가로 일한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 226
+      }
+    },
+    {
+      "id": "g2-u5-r227",
+      "grade": 2,
+      "unit": "5",
+      "word": "meaning",
+      "meaning": "n. 의미",
+      "definition": "n. what something means or shows",
+      "sentence": "What is the meaning of this word?",
+      "translation": "이 단어의 의미는 무엇이니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 227
+      }
+    },
+    {
+      "id": "g2-u5-r228",
+      "grade": 2,
+      "unit": "5",
+      "word": "medicine",
+      "meaning": "n. 약",
+      "definition": "n. something used to treat illness",
+      "sentence": "Take your medicine after dinner.",
+      "translation": "저녁 식사 후에 약을 드세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 228
+      }
+    },
+    {
+      "id": "g2-u5-r229",
+      "grade": 2,
+      "unit": "5",
+      "word": "memo",
+      "meaning": "n. 메모",
+      "definition": "n. a short written message or note",
+      "sentence": "He left a memo on her desk.",
+      "translation": "그는 그녀의 책상 위에 메모를 남겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 229
+      }
+    },
+    {
+      "id": "g2-u5-r230",
+      "grade": 2,
+      "unit": "5",
+      "word": "mind",
+      "meaning": "n. 마음, 생각",
+      "definition": "n. the part of a person that thinks, feels, and remembers",
+      "sentence": "His mind was full of ideas.",
+      "translation": "그의 머릿속은 아이디어로 가득했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 230
+      }
+    },
+    {
+      "id": "g2-u5-r231",
+      "grade": 2,
+      "unit": "5",
+      "word": "musician",
+      "meaning": "n. 음악가",
+      "definition": "n. a person who plays or makes music",
+      "sentence": "The musician played the piano beautifully.",
+      "translation": "그 음악가는 아름답게 피아노를 연주했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 231
+      }
+    },
+    {
+      "id": "g2-u5-r232",
+      "grade": 2,
+      "unit": "5",
+      "word": "officer",
+      "meaning": "n. 장교",
+      "definition": "n. a person with authority in the military or police",
+      "sentence": "The police officers helped people in need.",
+      "translation": "경찰관들이 도움이 필요한 사람들을 도왔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 232
+      }
+    },
+    {
+      "id": "g2-u5-r233",
+      "grade": 2,
+      "unit": "5",
+      "word": "path",
+      "meaning": "n. 길",
+      "definition": "n. a track made for walking",
+      "sentence": "We walked along a forest path.",
+      "translation": "우리는 숲길을 따라 걸었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 233
+      }
+    },
+    {
+      "id": "g2-u5-r234",
+      "grade": 2,
+      "unit": "5",
+      "word": "pond",
+      "meaning": "n. 연못",
+      "definition": "n. a small body of still water",
+      "sentence": "There are many frogs in the pond.",
+      "translation": "연못에는 개구리들이 많다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 234
+      }
+    },
+    {
+      "id": "g2-u5-r235",
+      "grade": 2,
+      "unit": "5",
+      "word": "preview",
+      "meaning": "v. 예습하다, 미리보다",
+      "definition": "v. to look at or study something before learning it in class",
+      "sentence": "She previewed the new words at home.",
+      "translation": "그녀는 새 어휘를 집에서 예습했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 235
+      }
+    },
+    {
+      "id": "g2-u5-r236",
+      "grade": 2,
+      "unit": "5",
+      "word": "producer",
+      "meaning": "n. 제작자, 프로듀서",
+      "definition": "n. a person who makes films, music, etc.",
+      "sentence": "The producer worked on a new drama.",
+      "translation": "프로듀서는 새 드라마를 작업했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 236
+      }
+    },
+    {
+      "id": "g2-u5-r237",
+      "grade": 2,
+      "unit": "5",
+      "word": "professional",
+      "meaning": "adj. 전문적인",
+      "definition": "adj. related to a job requiring special training",
+      "sentence": "She is a professional dancer.",
+      "translation": "그녀는 전문 무용가이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 237
+      }
+    },
+    {
+      "id": "g2-u5-r238",
+      "grade": 2,
+      "unit": "5",
+      "word": "rap",
+      "meaning": "n. 랩",
+      "definition": "n. a type of music with spoken words",
+      "sentence": "He performed a fast rap on stage.",
+      "translation": "그는 무대에서 빠른 랩을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 238
+      }
+    },
+    {
+      "id": "g2-u5-r239",
+      "grade": 2,
+      "unit": "5",
+      "word": "rapper",
+      "meaning": "n. 래퍼",
+      "definition": "n. a person who performs rap music",
+      "sentence": "The rapper released a new album.",
+      "translation": "그 래퍼는 새 앨범을 발매했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 239
+      }
+    },
+    {
+      "id": "g2-u5-r240",
+      "grade": 2,
+      "unit": "5",
+      "word": "reporter",
+      "meaning": "n. 기자",
+      "definition": "n. a person who writes news stories",
+      "sentence": "A reporter interviewed the winner.",
+      "translation": "기자가 우승자를 인터뷰했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 240
+      }
+    },
+    {
+      "id": "g2-u5-r241",
+      "grade": 2,
+      "unit": "5",
+      "word": "research",
+      "meaning": "n. 연구",
+      "definition": "n. careful study to discover new facts",
+      "sentence": "They did research on climate change.",
+      "translation": "그들은 기후 변화에 대해 연구했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 241
+      }
+    },
+    {
+      "id": "g2-u5-r242",
+      "grade": 2,
+      "unit": "5",
+      "word": "researcher",
+      "meaning": "n. 연구자",
+      "definition": "n. a person who studies things carefully",
+      "sentence": "The researcher studied ocean life.",
+      "translation": "그 연구자는 해양 생물을 연구했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 242
+      }
+    },
+    {
+      "id": "g2-u5-r243",
+      "grade": 2,
+      "unit": "5",
+      "word": "role",
+      "meaning": "n. 역할",
+      "definition": "n. the part someone plays in a situation",
+      "sentence": "He played the main role in the play.",
+      "translation": "그는 연극에서 주인공 역할을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 243
+      }
+    },
+    {
+      "id": "g2-u5-r244",
+      "grade": 2,
+      "unit": "5",
+      "word": "secretary",
+      "meaning": "n. 비서",
+      "definition": "n. a person who helps with office tasks",
+      "sentence": "The secretary answered the phone.",
+      "translation": "비서가 전화를 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 244
+      }
+    },
+    {
+      "id": "g2-u5-r245",
+      "grade": 2,
+      "unit": "5",
+      "word": "series",
+      "meaning": "n. 시리즈",
+      "definition": "n. a set of related things coming one after another",
+      "sentence": "I watched a whole series in one day.",
+      "translation": "나는 하루 만에 전편을 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 245
+      }
+    },
+    {
+      "id": "g2-u5-r246",
+      "grade": 2,
+      "unit": "5",
+      "word": "society",
+      "meaning": "n. 사회",
+      "definition": "n. people living together in a community",
+      "sentence": "We live in a modern society.",
+      "translation": "우리는 현대 사회에 살고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 246
+      }
+    },
+    {
+      "id": "g2-u5-r247",
+      "grade": 2,
+      "unit": "5",
+      "word": "spacecraft",
+      "meaning": "n. 우주선",
+      "definition": "n. a vehicle used for travel in space",
+      "sentence": "The spacecraft landed on the moon.",
+      "translation": "우주선이 달에 착륙했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 247
+      }
+    },
+    {
+      "id": "g2-u5-r248",
+      "grade": 2,
+      "unit": "5",
+      "word": "vet",
+      "meaning": "n. 수의사",
+      "definition": "n. a doctor for animals",
+      "sentence": "The vet checked my dog’s health.",
+      "translation": "수의사가 내 강아지 건강을 확인했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 248
+      }
+    },
+    {
+      "id": "g2-u5-r249",
+      "grade": 2,
+      "unit": "5",
+      "word": "webtoonist",
+      "meaning": "n. 웹툰 작가",
+      "definition": "n. a person who creates webtoons",
+      "sentence": "My cousin wants to be a webtoonist.",
+      "translation": "내 사촌은 웹툰 작가가 되고 싶어 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 249
+      }
+    },
+    {
+      "id": "g2-u5-r250",
+      "grade": 2,
+      "unit": "5",
+      "word": "yet",
+      "meaning": "adv. 아직",
+      "definition": "adv. until now or up to this time",
+      "sentence": "He hasn’t finished his homework yet.",
+      "translation": "그는 아직 숙제를 끝내지 않았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 250
+      }
+    },
+    {
+      "id": "g2-u5-r251",
+      "grade": 2,
+      "unit": "5",
+      "word": "be different from",
+      "meaning": "~와 다른",
+      "definition": "not be the same as something",
+      "sentence": "My idea is different from yours.",
+      "translation": "내 생각은 너의 것과 다르다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 251
+      }
+    },
+    {
+      "id": "g2-u5-r252",
+      "grade": 2,
+      "unit": "5",
+      "word": "focus on",
+      "meaning": "~에 집중하다",
+      "definition": "to pay close attention to something",
+      "sentence": "Try to focus on your homework.",
+      "translation": "숙제에 집중하려고 노력해라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 252
+      }
+    },
+    {
+      "id": "g2-u5-r253",
+      "grade": 2,
+      "unit": "5",
+      "word": "in the end",
+      "meaning": "결국, 마침내",
+      "definition": "finally or after a long time",
+      "sentence": "In the end, they won the game.",
+      "translation": "결국 그들은 경기에 승리했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 253
+      }
+    },
+    {
+      "id": "g2-u5-r254",
+      "grade": 2,
+      "unit": "5",
+      "word": "make a living",
+      "meaning": "생계를 꾸리다",
+      "definition": "to earn money to support oneself",
+      "sentence": "He makes a living as a baker.",
+      "translation": "그는 제빵사로 생계를 꾸린다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 254
+      }
+    },
+    {
+      "id": "g2-u5-r255",
+      "grade": 2,
+      "unit": "5",
+      "word": "rely on",
+      "meaning": "~에 의지하다",
+      "definition": "to depend on someone or something",
+      "sentence": "We rely on the internet for information.",
+      "translation": "우리는 정보를 얻기 위해 인터넷에 의존한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 255
+      }
+    },
+    {
+      "id": "g2-u5-r256",
+      "grade": 2,
+      "unit": "5",
+      "word": "take care of",
+      "meaning": "~을 돌보다",
+      "definition": "to look after someone or something",
+      "sentence": "She takes care of her little brother.",
+      "translation": "그녀는 남동생을 돌본다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 256
+      }
+    },
+    {
+      "id": "g2-u5-r257",
+      "grade": 2,
+      "unit": "5",
+      "word": "take on",
+      "meaning": "떠맡다, 책임을 지다",
+      "definition": "to accept a task or responsibility",
+      "sentence": "She took on the job of organizing the event.",
+      "translation": "그녀는 그 행사를 준비하는 일을 맡았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 257
+      }
+    },
+    {
+      "id": "g2-u6-r258",
+      "grade": 2,
+      "unit": "6",
+      "word": "although",
+      "meaning": "conj. 비록 ~일지라도",
+      "definition": "conj. even though something is true",
+      "sentence": "Although it was raining, we played outside.",
+      "translation": "비가 왔지만 우리는 밖에서 놀았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 258
+      }
+    },
+    {
+      "id": "g2-u6-r259",
+      "grade": 2,
+      "unit": "6",
+      "word": "bin",
+      "meaning": "n. 통",
+      "definition": "n. a container for storing things or trash",
+      "sentence": "Throw it in the recycling bin.",
+      "translation": "재활용 통에 버려라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 259
+      }
+    },
+    {
+      "id": "g2-u6-r260",
+      "grade": 2,
+      "unit": "6",
+      "word": "carbon",
+      "meaning": "n. 탄소",
+      "definition": "n. a chemical element found in all living things",
+      "sentence": "Carbon is important for life on Earth.",
+      "translation": "탄소는 지구 생명체에 중요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 260
+      }
+    },
+    {
+      "id": "g2-u6-r261",
+      "grade": 2,
+      "unit": "6",
+      "word": "challenge",
+      "meaning": "n. 도전",
+      "definition": "n. something that is difficult to do",
+      "sentence": "This puzzle is a fun challenge.",
+      "translation": "이 퍼즐은 재미있는 도전이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 261
+      }
+    },
+    {
+      "id": "g2-u6-r262",
+      "grade": 2,
+      "unit": "6",
+      "word": "clam",
+      "meaning": "n. 조개",
+      "definition": "n. a shellfish with a soft body and a hard shell",
+      "sentence": "We found a big clam on the beach.",
+      "translation": "우리는 해변에서 큰 조개를 발견했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 262
+      }
+    },
+    {
+      "id": "g2-u6-r263",
+      "grade": 2,
+      "unit": "6",
+      "word": "coast",
+      "meaning": "n. 해안",
+      "definition": "n. land beside the sea",
+      "sentence": "We drove along the coast.",
+      "translation": "우리는 해안을 따라 운전했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 263
+      }
+    },
+    {
+      "id": "g2-u6-r264",
+      "grade": 2,
+      "unit": "6",
+      "word": "coral",
+      "meaning": "n. 산호",
+      "definition": "n. a hard material formed by small sea animals",
+      "sentence": "Colorful fish swim around the coral.",
+      "translation": "형형색색의 물고기들이 산호 주위를 헤엄친다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 264
+      }
+    },
+    {
+      "id": "g2-u6-r265",
+      "grade": 2,
+      "unit": "6",
+      "word": "delete",
+      "meaning": "v. 삭제하다",
+      "definition": "v. to remove something written or stored",
+      "sentence": "Please delete the file.",
+      "translation": "파일을 삭제해 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 265
+      }
+    },
+    {
+      "id": "g2-u6-r266",
+      "grade": 2,
+      "unit": "6",
+      "word": "dolphin",
+      "meaning": "n. 돌고래",
+      "definition": "n. a smart sea animal with fins",
+      "sentence": "Dolphins are very smart animals.",
+      "translation": "돌고래는 매우 똑똑한 동물이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 266
+      }
+    },
+    {
+      "id": "g2-u6-r267",
+      "grade": 2,
+      "unit": "6",
+      "word": "electricity",
+      "meaning": "n. 전기",
+      "definition": "n. power used to give light and energy",
+      "sentence": "Electricity powers our homes.",
+      "translation": "전기는 우리 집에 전력을 공급한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 267
+      }
+    },
+    {
+      "id": "g2-u6-r268",
+      "grade": 2,
+      "unit": "6",
+      "word": "ever",
+      "meaning": "adv. 언제든지, 한때라도",
+      "definition": "adv. at any time",
+      "sentence": "Have you ever been to London?",
+      "translation": "런던에 가본 적 있어요?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 268
+      }
+    },
+    {
+      "id": "g2-u6-r269",
+      "grade": 2,
+      "unit": "6",
+      "word": "form",
+      "meaning": "v. 만들다, 형성하다",
+      "definition": "v. to make or create something",
+      "sentence": "They formed a new club at school.",
+      "translation": "그들은 학교에 새 동아리를 만들었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 269
+      }
+    },
+    {
+      "id": "g2-u6-r270",
+      "grade": 2,
+      "unit": "6",
+      "word": "gasoline",
+      "meaning": "n. 휘발유",
+      "definition": "n. fuel for cars and machines",
+      "sentence": "Gasoline prices are going up.",
+      "translation": "휘발유 가격이 오르고 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 270
+      }
+    },
+    {
+      "id": "g2-u6-r271",
+      "grade": 2,
+      "unit": "6",
+      "word": "global",
+      "meaning": "adj. 지구의, 세계적인",
+      "definition": "adj. relating to the whole world",
+      "sentence": "We face many global problems.",
+      "translation": "우리는 많은 세계적인 문제에 직면해 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 271
+      }
+    },
+    {
+      "id": "g2-u6-r272",
+      "grade": 2,
+      "unit": "6",
+      "word": "greenhouse gas",
+      "meaning": "n. 온실가스",
+      "definition": "n. a gas that traps heat in the atmosphere",
+      "sentence": "Carbon dioxide is a greenhouse gas.",
+      "translation": "이산화탄소는 온실가스이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 272
+      }
+    },
+    {
+      "id": "g2-u6-r273",
+      "grade": 2,
+      "unit": "6",
+      "word": "harm",
+      "meaning": "v. 해를 끼치다",
+      "definition": "to hurt or damage someone or something",
+      "sentence": "Smoking can harm your health.",
+      "translation": "흡연은 건강에 해를 끼칠 수 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 273
+      }
+    },
+    {
+      "id": "g2-u6-r274",
+      "grade": 2,
+      "unit": "6",
+      "word": "heal",
+      "meaning": "v. 치료하다, 치유되다",
+      "definition": "v. to make or become healthy again",
+      "sentence": "The cut will heal in a few days.",
+      "translation": "상처는 며칠 안에 나을 것이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 274
+      }
+    },
+    {
+      "id": "g2-u6-r275",
+      "grade": 2,
+      "unit": "6",
+      "word": "lay",
+      "meaning": "v. (알을) 낳다",
+      "definition": "v. (for a bird, insect, or fish) to produce and put eggs in a place",
+      "sentence": "The hen lays an egg every morning.",
+      "translation": "그 암탉은 매일 아침 알을 낳는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 275
+      }
+    },
+    {
+      "id": "g2-u6-r276",
+      "grade": 2,
+      "unit": "6",
+      "word": "miracle",
+      "meaning": "n. 기적",
+      "definition": "n. something very surprising and good that seems impossible",
+      "sentence": "It’s a miracle that he survived the accident.",
+      "translation": "그가 그 사고에서 살아남은 것은 기적이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 276
+      }
+    },
+    {
+      "id": "g2-u6-r277",
+      "grade": 2,
+      "unit": "6",
+      "word": "ocean",
+      "meaning": "n. 대양, 바다",
+      "definition": "n. a large area of salt water",
+      "sentence": "The ocean is deep and wide.",
+      "translation": "바다는 깊고 넓다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 277
+      }
+    },
+    {
+      "id": "g2-u6-r278",
+      "grade": 2,
+      "unit": "6",
+      "word": "ointment",
+      "meaning": "n. 연고",
+      "definition": "n. a thick cream used on the skin to heal wounds",
+      "sentence": "She put ointment on the cut.",
+      "translation": "그녀는 상처에 연고를 발랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 278
+      }
+    },
+    {
+      "id": "g2-u6-r279",
+      "grade": 2,
+      "unit": "6",
+      "word": "pearl",
+      "meaning": "n. 진주",
+      "definition": "n. a smooth, round object found in some shells",
+      "sentence": "She wore a necklace made of pearls.",
+      "translation": "그녀는 진주로 만든 목걸이를 착용했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 279
+      }
+    },
+    {
+      "id": "g2-u6-r280",
+      "grade": 2,
+      "unit": "6",
+      "word": "scuba diving",
+      "meaning": "n. 스쿠버 다이빙",
+      "definition": "n. swimming underwater using special equipment",
+      "sentence": "He went scuba diving in the ocean.",
+      "translation": "그는 바다에서 스쿠버다이빙을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 280
+      }
+    },
+    {
+      "id": "g2-u6-r281",
+      "grade": 2,
+      "unit": "6",
+      "word": "seawater",
+      "meaning": "n. 해수, 바닷물",
+      "definition": "n. water from the sea",
+      "sentence": "Seawater tastes salty.",
+      "translation": "바닷물은 짠맛이 난다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 281
+      }
+    },
+    {
+      "id": "g2-u6-r282",
+      "grade": 2,
+      "unit": "6",
+      "word": "seaweed",
+      "meaning": "n. 해조, 해초",
+      "definition": "n. a plant that grows in the sea",
+      "sentence": "We ate seaweed soup on her birthday.",
+      "translation": "우리는 그녀의 생일에 미역국을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 282
+      }
+    },
+    {
+      "id": "g2-u6-r283",
+      "grade": 2,
+      "unit": "6",
+      "word": "shocked",
+      "meaning": "a. 충격을 받은",
+      "definition": "adj. very surprised and upset by something bad or unexpected",
+      "sentence": "I was shocked to hear the news.",
+      "translation": "나는 그 소식을 듣고 충격을 받았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 283
+      }
+    },
+    {
+      "id": "g2-u6-r284",
+      "grade": 2,
+      "unit": "6",
+      "word": "shooting star",
+      "meaning": "n. 유성, 별똥별",
+      "definition": "n. a bright light in the sky that you see when a small rock from space falls very fast",
+      "sentence": "I saw a shooting star last night.",
+      "translation": "나는 어제 별똥별을 보았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 284
+      }
+    },
+    {
+      "id": "g2-u6-r285",
+      "grade": 2,
+      "unit": "6",
+      "word": "shower",
+      "meaning": "n. 샤워(물을 뿌리며 간단히 씻는)",
+      "definition": "n. a time when you wash your body under running water",
+      "sentence": "After soccer, I need a cold shower.",
+      "translation": "축구 후에는 찬물 샤워가 필요해.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 285
+      }
+    },
+    {
+      "id": "g2-u6-r286",
+      "grade": 2,
+      "unit": "6",
+      "word": "since",
+      "meaning": "conj. ~이후로",
+      "definition": "conj. from a past time until now",
+      "sentence": "I haven’t seen her since May.",
+      "translation": "나는 5월 이후로 그녀를 못 봤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 286
+      }
+    },
+    {
+      "id": "g2-u6-r287",
+      "grade": 2,
+      "unit": "6",
+      "word": "smoothie",
+      "meaning": "n. 스무디(음료)",
+      "definition": "n. a thick drink made from fruit and milk or yogurt",
+      "sentence": "I drank a banana smoothie.",
+      "translation": "나는 바나나 스무디를 마셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 287
+      }
+    },
+    {
+      "id": "g2-u6-r288",
+      "grade": 2,
+      "unit": "6",
+      "word": "spam",
+      "meaning": "n. 스팸 메일",
+      "definition": "n. unwanted or junk email or text messages, usually sent to many people",
+      "sentence": "I get a lot of spam in my email inbox every day.",
+      "translation": "나는 매일 이메일 받은 편지함에 스팸 메일이 많이 온다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 288
+      }
+    },
+    {
+      "id": "g2-u6-r289",
+      "grade": 2,
+      "unit": "6",
+      "word": "tank",
+      "meaning": "n. 수조, 탱크",
+      "definition": "n. a large container for liquid or gas",
+      "sentence": "The fish tank needs cleaning.",
+      "translation": "어항을 청소해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 289
+      }
+    },
+    {
+      "id": "g2-u6-r290",
+      "grade": 2,
+      "unit": "6",
+      "word": "underwater",
+      "meaning": "adj. 물속의 / adv. 물속으로",
+      "definition": "adj. happening or located below the surface of water",
+      "sentence": "She took amazing underwater photos during her dive.",
+      "translation": "그녀는 잠수 중에 놀라운 수중 사진을 찍었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 290
+      }
+    },
+    {
+      "id": "g2-u6-r291",
+      "grade": 2,
+      "unit": "6",
+      "word": "wave",
+      "meaning": "n. 파도",
+      "definition": "n. a moving ridge on the surface of water",
+      "sentence": "The waves were high at the beach.",
+      "translation": "해변의 파도가 높았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 291
+      }
+    },
+    {
+      "id": "g2-u6-r292",
+      "grade": 2,
+      "unit": "6",
+      "word": "wetland",
+      "meaning": "n. 습지",
+      "definition": "n. land that is always wet and often covered with water",
+      "sentence": "Frogs live in the wetland near the river.",
+      "translation": "개구리는 강 근처 습지에서 산다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 292
+      }
+    },
+    {
+      "id": "g2-u6-r293",
+      "grade": 2,
+      "unit": "6",
+      "word": "worth",
+      "meaning": "adj. ~할 가치가 있는",
+      "definition": "adj. good or important enough for something",
+      "sentence": "The book is worth reading.",
+      "translation": "그 책은 읽을 가치가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 293
+      }
+    },
+    {
+      "id": "g2-u6-r294",
+      "grade": 2,
+      "unit": "6",
+      "word": "in time",
+      "meaning": "시간에 맞춰, 제시간에",
+      "definition": "before the expected or final moment",
+      "sentence": "He arrived just in time for the meeting.",
+      "translation": "그는 회의에 딱 맞춰 도착했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 294
+      }
+    },
+    {
+      "id": "g2-u6-r295",
+      "grade": 2,
+      "unit": "6",
+      "word": "look forward to",
+      "meaning": "~을 기대하다",
+      "definition": "to feel excited about something that is going to happen",
+      "sentence": "I'm looking forward to the summer vacation.",
+      "translation": "나는 여름 방학이 기대된다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 295
+      }
+    },
+    {
+      "id": "g2-u7-r296",
+      "grade": 2,
+      "unit": "7",
+      "word": "advise",
+      "meaning": "v. 조언하다",
+      "definition": "v. give suggestions or recommendations",
+      "sentence": "She advised me to take a break.",
+      "translation": "그녀는 나에게 휴식을 취하라고 조언했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 296
+      }
+    },
+    {
+      "id": "g2-u7-r297",
+      "grade": 2,
+      "unit": "7",
+      "word": "bagel",
+      "meaning": "n. 베이글",
+      "definition": "n. a round bread roll with a hole in the middle",
+      "sentence": "I ate a bagel with cream cheese for breakfast.",
+      "translation": "나는 아침으로 크림치즈를 바른 베이글을 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 297
+      }
+    },
+    {
+      "id": "g2-u7-r298",
+      "grade": 2,
+      "unit": "7",
+      "word": "bar",
+      "meaning": "n. 간이 음식점, 카운터식 가게",
+      "definition": "n. a small place where you can buy food or drinks quickly",
+      "sentence": "We had sandwiches at the snack bar near school.",
+      "translation": "우리는 학교 근처 스낵바에서 샌드위치를 먹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 298
+      }
+    },
+    {
+      "id": "g2-u7-r299",
+      "grade": 2,
+      "unit": "7",
+      "word": "bench",
+      "meaning": "n. 벤치",
+      "definition": "n. a long seat for several people",
+      "sentence": "He sat on a bench in the park.",
+      "translation": "그는 공원의 벤치에 앉았다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 299
+      }
+    },
+    {
+      "id": "g2-u7-r300",
+      "grade": 2,
+      "unit": "7",
+      "word": "buddy",
+      "meaning": "n. 친구, 동료",
+      "definition": "n. a friend or companion",
+      "sentence": "He is my workout buddy.",
+      "translation": "그는 나의 운동 친구다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 300
+      }
+    },
+    {
+      "id": "g2-u7-r301",
+      "grade": 2,
+      "unit": "7",
+      "word": "charge",
+      "meaning": "v. 충전하다",
+      "definition": "v. to put electricity into a battery or device",
+      "sentence": "I need to charge my phone.",
+      "translation": "나는 휴대폰을 충전해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 301
+      }
+    },
+    {
+      "id": "g2-u7-r302",
+      "grade": 2,
+      "unit": "7",
+      "word": "community",
+      "meaning": "n. 지역 사회",
+      "definition": "n. a group of people living or sharing in the same area",
+      "sentence": "Our community is clean and safe.",
+      "translation": "우리 지역 사회는 깨끗하고 안전하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 302
+      }
+    },
+    {
+      "id": "g2-u7-r303",
+      "grade": 2,
+      "unit": "7",
+      "word": "credit card",
+      "meaning": "n. 신용카드",
+      "definition": "n. a small plastic card used to buy things and pay later",
+      "sentence": "She paid for the book with her credit card.",
+      "translation": "그녀는 책값을 신용카드로 지불했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 303
+      }
+    },
+    {
+      "id": "g2-u7-r304",
+      "grade": 2,
+      "unit": "7",
+      "word": "earn",
+      "meaning": "v. 벌다, 얻다",
+      "definition": "v. to get money for work",
+      "sentence": "He works hard to earn money.",
+      "translation": "그는 돈을 벌기 위해 열심히 일한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 304
+      }
+    },
+    {
+      "id": "g2-u7-r305",
+      "grade": 2,
+      "unit": "7",
+      "word": "education",
+      "meaning": "n. 교육",
+      "definition": "n. the process of learning",
+      "sentence": "Education is important for the future.",
+      "translation": "교육은 미래를 위해 중요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 305
+      }
+    },
+    {
+      "id": "g2-u7-r306",
+      "grade": 2,
+      "unit": "7",
+      "word": "environment",
+      "meaning": "n. 환경",
+      "definition": "n. the world around us",
+      "sentence": "We should protect the environment.",
+      "translation": "우리는 환경을 보호해야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 306
+      }
+    },
+    {
+      "id": "g2-u7-r307",
+      "grade": 2,
+      "unit": "7",
+      "word": "income",
+      "meaning": "n. 소득, 수입",
+      "definition": "n. money you get for your work",
+      "sentence": "She has a steady income.",
+      "translation": "그녀는 안정된 수입이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 307
+      }
+    },
+    {
+      "id": "g2-u7-r308",
+      "grade": 2,
+      "unit": "7",
+      "word": "income tax",
+      "meaning": "n. 소득세",
+      "definition": "n. money you must pay to the government from what you earn",
+      "sentence": "Workers pay income tax every year.",
+      "translation": "근로자들은 매년 소득세를 낸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 308
+      }
+    },
+    {
+      "id": "g2-u7-r309",
+      "grade": 2,
+      "unit": "7",
+      "word": "piggy bank",
+      "meaning": "n. 돼지 저금통",
+      "definition": "n. a container, often shaped like a pig, used to save coins",
+      "sentence": "He puts his spare change in a piggy bank.",
+      "translation": "그는 남은 동전을 돼지 저금통에 넣는다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 309
+      }
+    },
+    {
+      "id": "g2-u7-r310",
+      "grade": 2,
+      "unit": "7",
+      "word": "property",
+      "meaning": "n. 재산, 소유물",
+      "definition": "n. something you own, like a house or land",
+      "sentence": "The house is my family’s property.",
+      "translation": "그 집은 우리 가족의 재산이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 310
+      }
+    },
+    {
+      "id": "g2-u7-r311",
+      "grade": 2,
+      "unit": "7",
+      "word": "property tax",
+      "meaning": "n. 재산세",
+      "definition": "n. tax paid by people who own land or buildings",
+      "sentence": "They pay property tax on their house every year.",
+      "translation": "그들은 매년 집에 대한 재산세를 낸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 311
+      }
+    },
+    {
+      "id": "g2-u7-r312",
+      "grade": 2,
+      "unit": "7",
+      "word": "public",
+      "meaning": "a. 공공의, 대중의",
+      "definition": "adj. relating to all people, not private",
+      "sentence": "Public transportation is cheap in this city.",
+      "translation": "이 도시의 대중교통은 저렴하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 312
+      }
+    },
+    {
+      "id": "g2-u7-r313",
+      "grade": 2,
+      "unit": "7",
+      "word": "quantity",
+      "meaning": "n. 양, 수량",
+      "definition": "n. the amount or number of something",
+      "sentence": "The recipe calls for a large quantity of milk.",
+      "translation": "그 조리법에는 많은 양의 우유가 필요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 313
+      }
+    },
+    {
+      "id": "g2-u7-r314",
+      "grade": 2,
+      "unit": "7",
+      "word": "regularly",
+      "meaning": "adv. 규칙적으로",
+      "definition": "adv. happening often or at the same time each time",
+      "sentence": "He exercises regularly.",
+      "translation": "그는 규칙적으로 운동한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 314
+      }
+    },
+    {
+      "id": "g2-u7-r315",
+      "grade": 2,
+      "unit": "7",
+      "word": "run",
+      "meaning": "v. 운영하다",
+      "definition": "v. to manage or operate something",
+      "sentence": "They run a small café near the school.",
+      "translation": "그들은 학교 근처에서 작은 카페를 운영한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 315
+      }
+    },
+    {
+      "id": "g2-u7-r316",
+      "grade": 2,
+      "unit": "7",
+      "word": "safety",
+      "meaning": "n. 안전",
+      "definition": "n. the condition of being protected from danger",
+      "sentence": "Wearing a helmet is important for your safety.",
+      "translation": "헬멧을 착용하는 것은 당신의 안전을 위해 중요하다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 316
+      }
+    },
+    {
+      "id": "g2-u7-r317",
+      "grade": 2,
+      "unit": "7",
+      "word": "sales",
+      "meaning": "adj. 판매의",
+      "definition": "adj. related to selling products",
+      "sentence": "She is a sales manager.",
+      "translation": "그녀는 영업 관리자이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 317
+      }
+    },
+    {
+      "id": "g2-u7-r318",
+      "grade": 2,
+      "unit": "7",
+      "word": "sales tax",
+      "meaning": "n. 판매세, 소비세",
+      "definition": "n. a tax added to the price of things you buy",
+      "sentence": "The price includes sales tax.",
+      "translation": "가격에는 판매세가 포함되어 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 318
+      }
+    },
+    {
+      "id": "g2-u7-r319",
+      "grade": 2,
+      "unit": "7",
+      "word": "secret",
+      "meaning": "n. 비밀",
+      "definition": "n. something that you keep hidden from others",
+      "sentence": "She told me a big secret.",
+      "translation": "그녀는 나에게 큰 비밀을 말했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 319
+      }
+    },
+    {
+      "id": "g2-u7-r320",
+      "grade": 2,
+      "unit": "7",
+      "word": "stair",
+      "meaning": "n. 계단",
+      "definition": "n. a set of steps",
+      "sentence": "I walked up the stairs.",
+      "translation": "나는 계단을 올라갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 320
+      }
+    },
+    {
+      "id": "g2-u7-r321",
+      "grade": 2,
+      "unit": "7",
+      "word": "streetlight",
+      "meaning": "n. 가로등",
+      "definition": "n. a light on a tall post next to a street",
+      "sentence": "The streetlight turned on when it got dark.",
+      "translation": "어두워지자 가로등이 켜졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 321
+      }
+    },
+    {
+      "id": "g2-u7-r322",
+      "grade": 2,
+      "unit": "7",
+      "word": "such",
+      "meaning": "adj. 그런",
+      "definition": "adj. of that kind",
+      "sentence": "Such weather is unusual in July.",
+      "translation": "7월에 이런 날씨는 드물다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 322
+      }
+    },
+    {
+      "id": "g2-u7-r323",
+      "grade": 2,
+      "unit": "7",
+      "word": "tax",
+      "meaning": "n. 세금",
+      "definition": "n. money people must pay to the government",
+      "sentence": "Everyone has to pay taxes.",
+      "translation": "모든 사람은 세금을 내야 한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 323
+      }
+    },
+    {
+      "id": "g2-u7-r324",
+      "grade": 2,
+      "unit": "7",
+      "word": "therefore",
+      "meaning": "adv. 그러므로, 따라서",
+      "definition": "adv. for that reason; so",
+      "sentence": "The road was closed, therefore we took another way.",
+      "translation": "도로가 막혀서 우리는 다른 길을 갔다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 324
+      }
+    },
+    {
+      "id": "g2-u7-r325",
+      "grade": 2,
+      "unit": "7",
+      "word": "totally",
+      "meaning": "adv. 완전히",
+      "definition": "adv. completely",
+      "sentence": "I totally agree with you.",
+      "translation": "나는 당신 말에 전적으로 동의해요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 325
+      }
+    },
+    {
+      "id": "g2-u7-r326",
+      "grade": 2,
+      "unit": "7",
+      "word": "wheelchair",
+      "meaning": "n. 휠체어",
+      "definition": "n. a chair with wheels used by people who cannot walk",
+      "sentence": "He has used a wheelchair since the accident.",
+      "translation": "그는 사고 이후 휠체어를 사용한다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 326
+      }
+    },
+    {
+      "id": "g2-u7-r327",
+      "grade": 2,
+      "unit": "7",
+      "word": "wisely",
+      "meaning": "adv. 현명하게",
+      "definition": "adv. in a smart or careful way",
+      "sentence": "Use your time wisely.",
+      "translation": "시간을 현명하게 사용해라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 327
+      }
+    },
+    {
+      "id": "g2-u8-r328",
+      "grade": 2,
+      "unit": "8",
+      "word": "chest",
+      "meaning": "n. 가슴",
+      "definition": "n. the front part of your body between your neck and stomach",
+      "sentence": "He put his hand on his chest.",
+      "translation": "그는 가슴에 손을 얹었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 328
+      }
+    },
+    {
+      "id": "g2-u8-r329",
+      "grade": 2,
+      "unit": "8",
+      "word": "clear",
+      "meaning": "v. (무엇에 닿지 않고) 뛰어넘다",
+      "definition": "v. to jump over something without touching it",
+      "sentence": "The horse cleared the fence easily.",
+      "translation": "그 말은 울타리를 쉽게 뛰어넘었다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 329
+      }
+    },
+    {
+      "id": "g2-u8-r330",
+      "grade": 2,
+      "unit": "8",
+      "word": "competition",
+      "meaning": "n. 대회, 경쟁",
+      "definition": "n. an event where people try to win",
+      "sentence": "He won first place in the math competition.",
+      "translation": "그는 수학 대회에서 1등을 했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 330
+      }
+    },
+    {
+      "id": "g2-u8-r331",
+      "grade": 2,
+      "unit": "8",
+      "word": "creation",
+      "meaning": "n. 창조, 창작",
+      "definition": "n. something that has been made or invented",
+      "sentence": "This painting is her best creation.",
+      "translation": "이 그림은 그녀의 최고의 작품이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 331
+      }
+    },
+    {
+      "id": "g2-u8-r332",
+      "grade": 2,
+      "unit": "8",
+      "word": "cube",
+      "meaning": "n. 정육면체, 큐브",
+      "definition": "n. a solid shape with six equal square sides",
+      "sentence": "He cut the cheese into small cubes.",
+      "translation": "그는 치즈를 작은 정육면체로 잘랐다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 332
+      }
+    },
+    {
+      "id": "g2-u8-r333",
+      "grade": 2,
+      "unit": "8",
+      "word": "difference",
+      "meaning": "n. 차이, 다름",
+      "definition": "n. the way in which two or more things are not the same",
+      "sentence": "There is a big difference between cats and dogs.",
+      "translation": "고양이와 개 사이에는 큰 차이가 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 333
+      }
+    },
+    {
+      "id": "g2-u8-r334",
+      "grade": 2,
+      "unit": "8",
+      "word": "exact",
+      "meaning": "adj. 정확한",
+      "definition": "adj. fully correct or precise",
+      "sentence": "I don’t know the exact time.",
+      "translation": "나는 정확한 시간을 모른다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 334
+      }
+    },
+    {
+      "id": "g2-u8-r335",
+      "grade": 2,
+      "unit": "8",
+      "word": "final",
+      "meaning": "n. 결승전",
+      "definition": "n. the last game or match in a competition",
+      "sentence": "Our team won the soccer final.",
+      "translation": "우리 팀은 축구 결승전에서 이겼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 335
+      }
+    },
+    {
+      "id": "g2-u8-r336",
+      "grade": 2,
+      "unit": "8",
+      "word": "flop",
+      "meaning": "n. 쿵 하고 떨어지기",
+      "definition": "n. a fall or drop with a heavy sound",
+      "sentence": "The ball fell with a flop.",
+      "translation": "공이 쿵 하고 떨어졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 336
+      }
+    },
+    {
+      "id": "g2-u8-r337",
+      "grade": 2,
+      "unit": "8",
+      "word": "gel",
+      "meaning": "n. 젤, 끈적한 액체",
+      "definition": "n. a thick, soft, jelly-like substance used in products like hair or medicine",
+      "sentence": "The gel feels cool on the skin.",
+      "translation": "그 젤은 피부에 시원하게 느껴진다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 337
+      }
+    },
+    {
+      "id": "g2-u8-r338",
+      "grade": 2,
+      "unit": "8",
+      "word": "improve",
+      "meaning": "v. 나아지다, 향상시키다",
+      "definition": "v. to make better",
+      "sentence": "I want to improve my skills.",
+      "translation": "나는 내 기술을 향상시키고 싶다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 338
+      }
+    },
+    {
+      "id": "g2-u8-r339",
+      "grade": 2,
+      "unit": "8",
+      "word": "mini",
+      "meaning": "adj. 작은",
+      "definition": "adj. very small",
+      "sentence": "She bought a mini camera.",
+      "translation": "그녀는 소형 카메라를 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 339
+      }
+    },
+    {
+      "id": "g2-u8-r340",
+      "grade": 2,
+      "unit": "8",
+      "word": "mug",
+      "meaning": "n. 머그잔",
+      "definition": "n. a large cup with a handle, used for hot drinks",
+      "sentence": "He drank coffee from a blue mug.",
+      "translation": "그는 파란 머그잔으로 커피를 마셨다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 340
+      }
+    },
+    {
+      "id": "g2-u8-r341",
+      "grade": 2,
+      "unit": "8",
+      "word": "object",
+      "meaning": "n. 물건",
+      "definition": "n. a thing you can see or touch",
+      "sentence": "That round object is a ball.",
+      "translation": "저 둥근 물체는 공이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 341
+      }
+    },
+    {
+      "id": "g2-u8-r342",
+      "grade": 2,
+      "unit": "8",
+      "word": "pillow",
+      "meaning": "n. 베개",
+      "definition": "n. a soft object that you rest your head on in bed",
+      "sentence": "She bought a new pillow in order to sleep better.",
+      "translation": "그녀는 숙면을 위해 새 베개를 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 342
+      }
+    },
+    {
+      "id": "g2-u8-r343",
+      "grade": 2,
+      "unit": "8",
+      "word": "port",
+      "meaning": "n. 기기 연결구, 단자",
+      "definition": "n. a place to connect a device",
+      "sentence": "Plug the USB cable into the USB port on your laptop.",
+      "translation": "노트북의 USB 포트에 USB 케이블을 꽂아라.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 343
+      }
+    },
+    {
+      "id": "g2-u8-r344",
+      "grade": 2,
+      "unit": "8",
+      "word": "record",
+      "meaning": "n. 기록",
+      "definition": "n. the best or highest result ever reached",
+      "sentence": "She broke the world record in swimming.",
+      "translation": "그녀는 수영에서 세계 기록을 깼다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 344
+      }
+    },
+    {
+      "id": "g2-u8-r345",
+      "grade": 2,
+      "unit": "8",
+      "word": "remove",
+      "meaning": "v. 제거하다",
+      "definition": "v. to take away or off",
+      "sentence": "Please remove your shoes.",
+      "translation": "신발을 벗어 주세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 345
+      }
+    },
+    {
+      "id": "g2-u8-r346",
+      "grade": 2,
+      "unit": "8",
+      "word": "sharp",
+      "meaning": "adj. 날카로운",
+      "definition": "adj. having a thin edge or point that cuts easily",
+      "sentence": "The knife is very sharp.",
+      "translation": "그 칼은 매우 날카롭다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 346
+      }
+    },
+    {
+      "id": "g2-u8-r347",
+      "grade": 2,
+      "unit": "8",
+      "word": "sliding",
+      "meaning": "adj. 미끄러져 움직이는, 이동하는",
+      "definition": "adj. able to move sideways like a door",
+      "sentence": "We have a sliding door in the kitchen.",
+      "translation": "우리 집 부엌에는 미닫이 문이 있다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 347
+      }
+    },
+    {
+      "id": "g2-u8-r348",
+      "grade": 2,
+      "unit": "8",
+      "word": "spin",
+      "meaning": "v. 회전하다",
+      "definition": "v. to turn around quickly",
+      "sentence": "Spin the wheel to win a prize.",
+      "translation": "바퀴를 돌려서 상품을 받으세요.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 348
+      }
+    },
+    {
+      "id": "g2-u8-r349",
+      "grade": 2,
+      "unit": "8",
+      "word": "stomach",
+      "meaning": "n. 위, 복부",
+      "definition": "n. the front part of the body below the chest",
+      "sentence": "He touched his stomach because he was hungry.",
+      "translation": "그는 배가 고파서 배를 만졌다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 349
+      }
+    },
+    {
+      "id": "g2-u8-r350",
+      "grade": 2,
+      "unit": "8",
+      "word": "theme",
+      "meaning": "n. 주제",
+      "definition": "n. the subject or main idea",
+      "sentence": "The theme of the party is space.",
+      "translation": "파티의 주제는 우주이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 350
+      }
+    },
+    {
+      "id": "g2-u8-r351",
+      "grade": 2,
+      "unit": "8",
+      "word": "title",
+      "meaning": "n. 제목",
+      "definition": "n. the name of a book, movie, etc.",
+      "sentence": "The title of the book is 'Hope'.",
+      "translation": "그 책의 제목은 '희망'이다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 351
+      }
+    },
+    {
+      "id": "g2-u8-r352",
+      "grade": 2,
+      "unit": "8",
+      "word": "toaster",
+      "meaning": "n. 토스터",
+      "definition": "n. a machine for toasting bread",
+      "sentence": "I bought a new toaster.",
+      "translation": "나는 새 토스터를 샀다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 352
+      }
+    },
+    {
+      "id": "g2-u8-r353",
+      "grade": 2,
+      "unit": "8",
+      "word": "toe",
+      "meaning": "n. 발가락",
+      "definition": "n. one of the digits of the foot",
+      "sentence": "I hurt my toe playing soccer.",
+      "translation": "나는 축구를 하다 발가락을 다쳤다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 353
+      }
+    },
+    {
+      "id": "g2-u8-r354",
+      "grade": 2,
+      "unit": "8",
+      "word": "weigh",
+      "meaning": "v. 무게를 재다",
+      "definition": "v. to measure how heavy something is",
+      "sentence": "How much do you weigh?",
+      "translation": "몸무게가 얼마나 나가니?",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 354
+      }
+    },
+    {
+      "id": "g2-u8-r355",
+      "grade": 2,
+      "unit": "8",
+      "word": "come up with",
+      "meaning": "생각해 내다, (생각 등을) 떠올리다",
+      "definition": "to think of a new idea or plan",
+      "sentence": "She came up with a great idea for the project.",
+      "translation": "그녀는 그 프로젝트에 대해 훌륭한 아이디어를 떠올렸다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 355
+      }
+    },
+    {
+      "id": "g2-u8-r356",
+      "grade": 2,
+      "unit": "8",
+      "word": "give up",
+      "meaning": "포기하다",
+      "definition": "to stop trying or doing something",
+      "sentence": "Don't give up even if it's hard.",
+      "translation": "아무리 힘들어도 포기하지 마.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 356
+      }
+    },
+    {
+      "id": "g2-u8-r357",
+      "grade": 2,
+      "unit": "8",
+      "word": "take part in",
+      "meaning": "~에 참가하다",
+      "definition": "to join or be involved in an activity",
+      "sentence": "Many students took part in the school play.",
+      "translation": "많은 학생들이 학교 연극에 참가했다.",
+      "acceptedAnswers": [],
+      "source": {
+        "file": "G2_박_New_Words_영영풀이(출판사 2026-11-01)-내수정.xlsx.xlsx",
+        "sheet": "중2_단원별 어휘",
+        "row": 357
+      }
+    }
+  ]
+};

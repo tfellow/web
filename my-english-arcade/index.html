@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#5944ce">
+  <meta name="description" content="서울문영여자중학교 영어 단어와 문장으로 즐기는 12가지 학습 게임">
+  <title>MY English Arcade · 문영 영어 놀이터</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="config.js"></script><script defer src="data/bank.js"></script>
+  <script defer src="core.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <header class="topbar"><a href="#home" class="brand"><span class="brand-mark">MY<span>✦</span></span><span>ENGLISH ARCADE<small>문영 영어 놀이터</small></span></a><nav aria-label="주 메뉴"><button data-nav="home">게임 라운지</button><button data-nav="records">나의 기록</button><button data-nav="teacher">교사실</button></nav><button id="account" class="account">Google 로그인</button></header>
+  <main id="main" tabindex="-1"></main>
+  <footer><span>SEOUL MOONYOUNG GIRLS’ MIDDLE SCHOOL</span><span>작은 도전, 매일 자라는 영어 실력.</span></footer>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="profile"><form method="dialog" id="profile-form"><span class="eyebrow">READY, PLAYER?</span><h2>오늘의 플레이어</h2><p>이 기기에서 사용할 학번과 별명을 입력하세요.<br>공용 기기에서는 내 프로필을 선택해 주세요.</p><label>학번 <input id="student-number" required maxlength="20" placeholder="예: 10203" autocomplete="off"></label><label>별명 <input id="student-name" required maxlength="30" placeholder="예: 퀴즈퀸" autocomplete="off"></label><div class="actions"><button type="button" id="profile-cancel">취소</button><button class="primary" type="submit">저장하고 계속</button></div></form></dialog>
+</body></html>
