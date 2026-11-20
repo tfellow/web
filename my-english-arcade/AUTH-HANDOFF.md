@@ -52,3 +52,23 @@
 작업 완료 시 이 문서에 실제 사용한 공통 인증 파일·Supabase 프로젝트 식별자(비밀 제외)·테이블·RLS·저장 키·수정 파일·검증 결과·커밋을 기록해 주세요. 이후 Codex가 GitHub 최신 코드를 먼저 가져와 게임을 개선할 예정입니다. 이전 로컬 사본으로 원격 폴더 전체를 덮어쓰면 연동 변경이 사라질 수 있으므로 금지합니다.
 
 현재 스펠링 챌린지는 문제 시작/다음 문제/힌트 후 입력칸에 자동 포커스를 줍니다. 게임 12종과 674개 교재 어휘를 유지해 주세요.
+
+## Claude 연동 기록 (2026-11-21, 로컬 수정 · 아직 미게시 · SQL 미실행)
+
+- 공통 인증 방식: 다른 MY 앱(독서 여권 · Brain Up · Word Arcade · Level · Speaking · Teacher Hub)과 동일.
+  Google Identity Services 버튼 → `supabase.auth.signInWithIdToken`, supabase-js `2.49.4` UMD.
+- Supabase 프로젝트: `tfellow-web` (`https://jkxdhyvnrvsiokbbbjtu.supabase.co`), publishable key (공개용)만 사용.
+- 로그인 저장 키: **Supabase 기본 키 `sb-jkxdhyvnrvsiokbbbjtu-auth-token`** 으로 변경(`myea.auth.v1` 제거).
+  tfellow.github.io 안의 모든 MY 앱이 한 세션을 공유하므로 한 번 로그인하면 됨.
+- 권한 거부 시 `signOut()`을 부르지 않음(전역 로그아웃이 되어 다른 앱까지 끊김). 대신 "다른 계정으로 로그인" 버튼 표시.
+  로그아웃 버튼은 `signOut({scope:'local'})` + "다른 MY 앱도 함께 로그아웃" 확인창.
+- 관리자: 서버 공통 `public.is_admin()`(admins 표) 사용. 화면 표시용 목록은 config.js `adminEmails`(4개 계정).
+  `myea_is_admin()`/`myea_can_access()`도 하드코딩 목록 대신 `public.is_admin()`을 부르도록 SQL 수정.
+- SQL 미실행 상태(myea_ 함수 없음)이면: 학교 계정/관리자는 로그인되고 기록은 기기에 `pending`으로 보관 → SQL 실행 후 자동 전송.
+- 충돌 점검(2026-11-21, 공개 키로 조회): `myea_settings`, `myea_sessions`, `myea_is_admin`, `myea_can_access` 모두 없음.
+  폴더 `my-english-arcade/`는 `wordarcade/`(MY Word Arcade, 표 접두사 `wa_`)와 별개. 로컬 데이터 키 `myEnglishArcade.v1`는 다른 앱과 겹치지 않음.
+- 수정 파일: `config.js`, `index.html`(GIS·supabase 스크립트, `#signin` 대화상자), `app.js`(login/establish/initCloud/계정 버튼/교사실 문구), `backend/supabase.sql`.
+- 검증: 가짜 Supabase로 6가지 경우(학교 학생, 외부 계정 OFF/ON, 관리자, SQL 미실행 외부/학교) 확인. 실제 Google 로그인은 게시 후 확인 필요.
+- 2026-11-21 추가: 소유자 확인 → `engwords@gmail.com`을 **이 앱 전용 관리자**로 추가(공통 admins 표는 변경 안 함).
+  서버: `myea_is_admin()`/`myea_can_access()`에 이메일 조건 추가. 클라이언트: `myea_is_admin` 우선, SQL 실행 전엔 `is_admin` + config `appOnlyAdmins`.
+  가짜 Supabase로 8가지 경우 재검증(engwords@gmail.com SQL 전/후 교사실 진입 확인, 전역 로그아웃 0회).

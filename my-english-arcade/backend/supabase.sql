@@ -1,6 +1,10 @@
--- DRAFT ONLY. Do not run before folder/database coordination with the owner.
--- Dedicated prefix: myea_ (MY English Arcade). No existing app tables are altered.
--- Run once in the selected Supabase project's SQL editor after approval.
+-- MY English Arcade. Reviewed by Claude 2026-11-21. Run ONLY after the owner's final OK.
+-- Project: tfellow-web (https://jkxdhyvnrvsiokbbbjtu.supabase.co), the same project/login as the other MY apps.
+-- Dedicated prefix: myea_ (checked free on 2026-11-21). No existing app tables or functions are altered.
+-- Admins = the shared public.is_admin() (admins table: tfellow@gmail.com, tfellow@smy.ms.kr,
+--   engwords@smy.ms.kr, hist1026@gmail.com), so one admin list for every app,
+--   PLUS engwords@gmail.com as an admin of this app only (owner's request 2026-11-21).
+-- Run once in the Supabase SQL editor. It fails on purpose if any myea_ object already exists.
 begin;
 
 -- Intentionally fail on a name collision instead of reusing unknown tables.
@@ -16,7 +20,9 @@ language sql stable security definer set search_path = '' as $$
     select 1 from auth.users u
     where u.id = auth.uid() and u.email_confirmed_at is not null
       and u.raw_app_meta_data->'providers' ? 'google'
-      and lower(u.email) in ('tfellow@gmail.com','tfellow@smy.ms.kr')
+      and (coalesce(public.is_admin(), false)
+           -- extra admin for THIS app only (owner, 2026-11-21); the shared admins table is not changed
+           or lower(u.email) = 'engwords@gmail.com')
   );
 $$;
 
@@ -27,7 +33,8 @@ language sql stable security definer set search_path = '' as $$
     where u.id = auth.uid() and u.email_confirmed_at is not null
       and u.raw_app_meta_data->'providers' ? 'google'
       and (
-        lower(u.email) in ('tfellow@gmail.com','tfellow@smy.ms.kr')
+        coalesce(public.is_admin(), false)
+        or lower(u.email) = 'engwords@gmail.com'
         or split_part(lower(u.email),'@',2) = 'smy.ms.kr'
         or coalesce((select s.allow_external from public.myea_settings s where s.id=1),false)
       )
