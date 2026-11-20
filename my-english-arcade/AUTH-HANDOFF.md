@@ -72,3 +72,7 @@
 - 2026-11-21 추가: 소유자 확인 → `engwords@gmail.com`을 **이 앱 전용 관리자**로 추가(공통 admins 표는 변경 안 함).
   서버: `myea_is_admin()`/`myea_can_access()`에 이메일 조건 추가. 클라이언트: `myea_is_admin` 우선, SQL 실행 전엔 `is_admin` + config `appOnlyAdmins`.
   가짜 Supabase로 8가지 경우 재검증(engwords@gmail.com SQL 전/후 교사실 진입 확인, 전역 로그아웃 0회).
+- 2026-11-21 게시: 커밋 `e105dee` (로그인 연동) GitHub Pages 반영 확인.
+- 2026-11-21 SQL 실행: 소유자가 Supabase(tfellow-web) SQL 편집기에서 `backend/supabase.sql` 실행 → Success.
+  외부 확인(공개 키, 비로그인): `myea_can_access`/`myea_is_admin` 함수, `myea_sessions`/`myea_settings` 표 모두 존재하며 anon 접근은 42501로 차단됨.
+  남은 확인: 실제 Google 로그인(학교 학생 · 관리자 · 외부 계정 OFF/ON), 기록 서버 전송, 교사실 조회.
