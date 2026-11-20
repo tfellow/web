@@ -1,0 +1,3187 @@
+{
+"id": "g1",
+"name": "1학년 교과서 단어",
+"grade": 1,
+"words": [
+{
+"g": 1,
+"l": 1,
+"n": 1,
+"w": "active",
+"ko": "a. 활동적인",
+"def": "a. doing things that require physical movement and energy",
+"ex": "She is very active and friendly.",
+"exKo": "그녀는 매우 활동적이며 다정하다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 2,
+"w": "app",
+"ko": "n. 앱, 애플리케이션",
+"def": "n. a computer program that performs a special function",
+"ex": "I use an app to learn English on my phone.",
+"exKo": "나는 전화로 영어를 배우기 위해 앱을 사용한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 3,
+"w": "comment",
+"ko": "n. 댓글",
+"def": "n. Words on a post to share ideas or thoughts",
+"ex": "Some people leave bad comments online.",
+"exKo": "어떤 사람들은 온라인에 나쁜 댓글을 남기기도 한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 4,
+"w": "cute",
+"ko": "a. 귀여운",
+"def": "a. attractive in a pretty or endearing way",
+"ex": "The puppy is so cute.",
+"exKo": "그 강아지는 너무 귀엽다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 5,
+"w": "diary",
+"ko": "n. 일기",
+"def": "n. a book in which you write down your personal experiences and thoughts each day",
+"ex": "She writes in her diary every night.",
+"exKo": "그녀는 매일 밤 일기를 쓴다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 6,
+"w": "email",
+"ko": "n. 이메일",
+"def": "n. a way to send messages using the internet",
+"ex": "I got an email from my friend.",
+"exKo": "나는 친구에게서 이메일을 받았다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 7,
+"w": "enjoy",
+"ko": "v. 즐기다",
+"def": "v. to take pleasure in something",
+"ex": "I enjoy reading books.",
+"exKo": "나는 책 읽는 것을 즐긴다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 8,
+"w": "fashion",
+"ko": "n. 패션",
+"def": "n. a popular way of dressing during a particular time or among a particular group of people.",
+"ex": "The magazine is full of the latest fashion trends.",
+"exKo": "그 잡지는 최신 패션 트렌드로 가득하다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 9,
+"w": "follower",
+"ko": "n. 팔로워",
+"def": "n. someone who subscribes to receive updates from another person's social media account",
+"ex": "I am a follower of cool art pages.",
+"exKo": "나는 멋진 예술 웹사이트의 팔로워이다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 10,
+"w": "grade",
+"ko": "n. 성적",
+"def": "n. a number or letter that indicates how a student performed in a class or on a test",
+"ex": "The teacher records the students' grades.",
+"exKo": "선생님은 학생들의 성적을 기록한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 11,
+"w": "leave",
+"ko": "v. 남기고(전하고) 가다",
+"def": "v. to deliver, write or record something to be seen or heard later",
+"ex": "He left a message on my phone.",
+"exKo": "그는 내 전화기에 메시지를 남겼다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 12,
+"w": "lifelogging",
+"ko": "n. 라이프로깅",
+"def": "n. the act of recording and sharing your daily life using technology",
+"ex": "Lifelogging shows my personal growth.",
+"exKo": "라이프로깅은 나의 성장을 보여준다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 13,
+"w": "mark",
+"ko": "v. 표시하다",
+"def": "v. to make or leave a visible mark on (something)",
+"ex": "She marked her friend's birthday on the calendar.",
+"exKo": "그녀는 친구의 생일을 달력에 표시했다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 14,
+"w": "nervous",
+"ko": "a. 불안해 하는",
+"def": "a. feeling worried or scared about something.",
+"ex": "He felt nervous before the test.",
+"exKo": "그는 시험 전에 불안해했다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 15,
+"w": "nickname",
+"ko": "n. 별명",
+"def": "n. a name that is different from your real name but is what your friends and family call you",
+"ex": "Her nickname is Liz.",
+"exKo": "그녀의 별명은 리즈다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 16,
+"w": "person",
+"ko": "n. 사람",
+"def": "n. a human being",
+"ex": "He is a kind person.",
+"exKo": "그는 친절한 사람이다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 17,
+"w": "pet",
+"ko": "n. 반려동물",
+"def": "n. an animal that you keep at home for companionship",
+"ex": "She has a pet cat named Snowball.",
+"exKo": "그녀는 스노우볼이라는 이름을 가진 반려 고양이가 있다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 18,
+"w": "polar bear",
+"ko": "n. 북극곰",
+"def": "n. a large white bear that lives in the Arctic",
+"ex": "Polar bears live in cold places.",
+"exKo": "북극곰은 추운 곳에 산다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 19,
+"w": "pop music",
+"ko": "n. 팝 음악",
+"def": "n. a genre of popular music with strong rhythms and simple tunes",
+"ex": "She loves listening to pop music.",
+"exKo": "그녀는 팝 음악 듣는 것을 좋아한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 20,
+"w": "post",
+"ko": "n./ v. 게시글, 게시하다",
+"def": "n./ v. to publish content on a website or social media platform",
+"ex": "He posts pictures on the school website for his science project.",
+"exKo": "그는 과학 과제를 위해 학교 홈페이지에 사진을 게시한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 21,
+"w": "practice",
+"ko": "v. 연습하다",
+"def": "v. to do something repeatedly to improve your skill",
+"ex": "I practice the piano every day.",
+"exKo": "나는 매일 피아노를 연습한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 22,
+"w": "puzzle",
+"ko": "n. 퍼즐",
+"def": "n. a game or problem that tests your knowledge or skills",
+"ex": "He enjoys solving puzzles in his free time.",
+"exKo": "그는 여가 시간에 퍼즐 푸는 것을 즐긴다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 23,
+"w": "rainbow",
+"ko": "n. 무지개",
+"def": "n. a curved line of different colors that sometimes appears in the sky when the sun shines through rain",
+"ex": "We saw a beautiful rainbow after the rain.",
+"exKo": "우리는 비온 뒤 아름다운 무지개를 보았다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 24,
+"w": "record",
+"ko": "v. 기록하다",
+"def": "v. to write down or keep information for future use",
+"ex": "He records his daily activities in a journal.",
+"exKo": "그는 일지에 자신의 일과를 기록한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 25,
+"w": "ride",
+"ko": "v. ~을 타다",
+"def": "v. to travel on or in a vehicle or animal",
+"ex": "They ride their bikes to school every day.",
+"exKo": "그들은 매일 자전거를 타고 학교에 간다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 26,
+"w": "snack",
+"ko": "n. 간식",
+"def": "n. a small amount of food eaten between meals",
+"ex": "She had a healthy snack of fruits and nuts.",
+"exKo": "그녀는 과일과 견과류 같은 건강한 간식을 먹었다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 27,
+"w": "social media",
+"ko": "n. 소셜 미디어",
+"def": "n. websites and apps where people interact and share content",
+"ex": "My friends share funny jokes on social media.",
+"exKo": "내 친구들은 소셜 미디어에 재미있는 농담을 공유한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 28,
+"w": "step",
+"ko": "n. 걸음",
+"def": "n. a movement made by lifting your foot and putting it down in a different place",
+"ex": "The cat takes little steps in the garden.",
+"exKo": "고양이가 정원에서 작은 걸음을 내디딘다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 29,
+"w": "subject",
+"ko": "n. 과목",
+"def": "n. an area of knowledge studied in school",
+"ex": "My favorite subject in school is science.",
+"exKo": "학교에서 내가 가장 좋아하는 과목은 과학이다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 30,
+"w": "then",
+"ko": "ad. 그 다음에",
+"def": "ad. at that time; next in order",
+"ex": "Finish your homework, then you can play video games.",
+"exKo": "너의 숙제를 다 해라, 그 다음에 게임을 할 수 있다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 31,
+"w": "uniform",
+"ko": "n. 유니폼, 교복",
+"def": "n. a special set of clothes worn by members of the same organization",
+"ex": "All students must wear a uniform at school.",
+"exKo": "모든 학생들은 학교에서 교복을 입어야 한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 32,
+"w": "a lot",
+"ko": "많이",
+"def": "a large number or amount",
+"ex": "She has a lot of books in her room.",
+"exKo": "그녀는 방에 책이 많다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 33,
+"w": "be interested in",
+"ko": "~에 관심이 있다",
+"def": "to want to learn more about something",
+"ex": "My brother is interested in sea animals.",
+"exKo": "내 남동생은 해양 동물에 관심이 있다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 34,
+"w": "be into",
+"ko": "~을 좋아하다",
+"def": "to like and be very enthusiastic about something",
+"ex": "I’m into adventure books.",
+"exKo": "나는 모험소설을 좋아한다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 35,
+"w": "each other",
+"ko": "서로",
+"def": "each of two or more people, animals, etc., who are doing something together or in relationship to the other or others in the group",
+"ex": "They help each other with their homework.",
+"exKo": "그들은 서로 숙제를 도와준다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 36,
+"w": "take a picture of",
+"ko": "~의 사진을 찍다",
+"def": "to capture an image using a camera",
+"ex": "Mom sometimes takes a picture of the sunset.",
+"exKo": "엄마는 가끔 저녁노을을 사진 찍으신다."
+},
+{
+"g": 1,
+"l": 1,
+"n": 37,
+"w": "these days",
+"ko": "요즈음에는",
+"def": "in the present time; nowadays",
+"ex": "Apples are expensive these days.",
+"exKo": "요즈음에는 사과가 비싸다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 1,
+"w": "band",
+"ko": "n. 밴드, 악단",
+"def": "n. a group of musicians who play music together",
+"ex": "The band played at the school concert.",
+"exKo": "그 밴드는 학교 연주회에서 연주했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 2,
+"w": "beat",
+"ko": "v. 이기다",
+"def": "v. to win against someone in a game or competition",
+"ex": "Our team beat their team in the final game.",
+"exKo": "우리 팀은 결승전에서 그들의 팀을 이겼다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 3,
+"w": "campus",
+"ko": "n. 캠퍼스, 교정",
+"def": "n. the area and buildings of a university, college, or school.",
+"ex": "They walked around the campus after class.",
+"exKo": "그들은 수업 후 캠퍼스를 돌아다녔다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 4,
+"w": "chess",
+"ko": "n. 체스",
+"def": "n. a board game for two players involving strategic moves of pieces",
+"ex": "She enjoys playing chess with her father.",
+"exKo": "그녀는 아버지와 체스를 두는 것을 즐긴다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 5,
+"w": "chorus",
+"ko": "n. 합창단, 합창곡",
+"def": "n. a group of singers who perform together",
+"ex": "I joined the chorus because I like singing songs with others.",
+"exKo": "나는 다른 사람들과 노래 부르는 것을 좋아해서 합창단에 가입했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 6,
+"w": "concert",
+"ko": "n. 연주회, 콘서트",
+"def": "n. a live music performance in front of an audience",
+"ex": "We went to a concert last night.",
+"exKo": "우리는 어젯밤에 콘서트에 갔다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 7,
+"w": "contest",
+"ko": "n. 대회, 시합",
+"def": "n. a competition where people try to win",
+"ex": "He won first place in the art contest.",
+"exKo": "그는 미술 대회에서 1등을 했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 8,
+"w": "digital",
+"ko": "a. 디지털의",
+"def": "a. involving or related to computer technology",
+"ex": "My cousin bought a new digital camera.",
+"exKo": "나의 사촌은 새로운 디지털 카메라를 샀다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 9,
+"w": "drone",
+"ko": "n. 드론",
+"def": "n. a remote-controlled flying device",
+"ex": "He flew his drone over the park.",
+"exKo": "그는 공원 위로 드론을 날렸다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 10,
+"w": "easy",
+"ko": "a. 쉬운",
+"def": "a. not difficult to do or understand",
+"ex": "The math problem was easy to solve.",
+"exKo": "그 수학 문제는 풀기 쉬웠다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 11,
+"w": "event",
+"ko": "n. 행사",
+"def": "n. something important or interesting that happens",
+"ex": "The school event starts at 3 o’clock.",
+"exKo": "그 학교 행사는 3시 정각에 시작한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 12,
+"w": "exam",
+"ko": "n. 시험",
+"def": "n. a formal test of knowledge or skills",
+"ex": "She studied hard for the math exam.",
+"exKo": "그녀는 수학 시험을 위해 열심히 공부했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 13,
+"w": "excited",
+"ko": "a. 신이 난, 흥분한",
+"def": "a. feeling very happy and enthusiastic",
+"ex": "The children were excited about the trip.",
+"exKo": "아이들은 여행에 신이 났다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 14,
+"w": "gym",
+"ko": "n. 체육관",
+"def": "n. a place where people go to exercise",
+"ex": "He works out at the gym every morning.",
+"exKo": "그는 매일 아침 체육관에서 운동한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 15,
+"w": "hall",
+"ko": "n. 홀[회관]",
+"def": "n. a large room or building used for public events",
+"ex": "The meeting was held in the main hall.",
+"exKo": "회의는 메인 홀에서 열렸다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 16,
+"w": "jump rope",
+"ko": "v. 줄넘기 하다",
+"def": "v. to skip over a rope that is swung under the feet",
+"ex": "Many students like to jump rope during lunchtime.",
+"exKo": "많은 학생들이 점심 시간에 줄넘기 하는 것을 좋아한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 17,
+"w": "language",
+"ko": "n. 언어",
+"def": "n. a system of words and grammar used by people to communicate",
+"ex": "She speaks three languages fluently.",
+"exKo": "그녀는 세 가지 언어를 유창하게 말한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 18,
+"w": "mate",
+"ko": "n. 친구, 동료",
+"def": "n. a friend or companion",
+"ex": "He and his mate went to the movies together.",
+"exKo": "그는 그의 친구와 함께 영화를 보러 갔다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 19,
+"w": "online",
+"ko": "a. 온라인의",
+"def": "a. connected to another computer, a computer network, or the Internet",
+"ex": "He took an online class this semester.",
+"exKo": "그는 이번 학기에 온라인 수업을 들었다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 20,
+"w": "orchestra",
+"ko": "n. 오케스트라",
+"def": "n. a large group of musicians playing different instruments together",
+"ex": "She plays the violin in the school orchestra.",
+"exKo": "그녀는 학교 오케스트라에서 바이올린을 연주한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 21,
+"w": "plane",
+"ko": "n. 비행기",
+"def": "n. a vehicle that flies in the air and carries people or goods",
+"ex": "They took a plane to Paris.",
+"exKo": "그들은 비행기를 타고 파리에 갔다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 22,
+"w": "poem",
+"ko": "n. 시",
+"def": "n. a piece of writing that expresses emotions, experiences, and ideas, often in short lines",
+"ex": "I often write poems about love.",
+"exKo": "나는 종종 사랑에 관한 시를 쓴다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 23,
+"w": "race",
+"ko": "n. 경주, 레이스, 달리기",
+"def": "n. a competition to see who is the fastest",
+"ex": "My brother finished the race in second place.",
+"exKo": "나의 남동생은 2등으로 그 경주를 마쳤다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 24,
+"w": "really",
+"ko": "ad. 아주, 정말로",
+"def": "ad. very; to a great degree",
+"ex": "The new student really likes English.",
+"exKo": "그 새로운 학생은 영어를 아주 좋아한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 25,
+"w": "reason",
+"ko": "n. 이유",
+"def": "n. a cause or explanation for something that happened",
+"ex": "The reason for the delay was the heavy rain.",
+"exKo": "지연의 이유는 폭우였다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 26,
+"w": "shake",
+"ko": "v. 흔들다",
+"def": "v. to move something back and forth quickly",
+"ex": "The chef shook the bottle of sauce before using it.",
+"exKo": "요리사는 소스를 사용하기 전에 병을 흔들었다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 27,
+"w": "smartphone",
+"ko": "n. 스마트폰",
+"def": "n. a mobile phone that can perform many functions like a computer",
+"ex": "He uses his smartphone to check emails.",
+"exKo": "그는 이메일을 확인하기 위해 스마트폰을 사용한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 28,
+"w": "soon",
+"ko": "ad. 곧",
+"def": "ad. in a short time; not long from now",
+"ex": "She will come home soon.",
+"exKo": "그녀는 곧 집에 올 것이다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 29,
+"w": "speech",
+"ko": "n. 연설",
+"def": "n. a formal talk given to an audience",
+"ex": "The president gave a short speech at the event.",
+"exKo": "대통령은 그 행사에서 짧은 연설을 했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 30,
+"w": "T-ball",
+"ko": "n. 티볼",
+"def": "n. a form of baseball for young children in which the ball is hit off a support (called a tee) rather than pitched",
+"ex": "The kids played T-ball at the park.",
+"exKo": "아이들은 공원에서 티볼을 했다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 31,
+"w": "topic",
+"ko": "n. 주제",
+"def": "n. a subject that people talk or write about",
+"ex": "The topic of the discussion was climate change.",
+"exKo": "토론의 주제는 기후 변화였다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 32,
+"w": "yoga",
+"ko": "n. 요가",
+"def": "n. a series of physical and mental exercises originating from India",
+"ex": "My mother practices yoga to stay fit.",
+"exKo": "우리 엄마는 건강을 유지하기 위해 요가를 한다."
+},
+{
+"g": 1,
+"l": 2,
+"n": 33,
+"w": "be proud of",
+"ko": "~을 자랑스럽게 여기다, ~가 자랑스럽다",
+"def": "to feel pleased and satisfied about someone or something you are connected to",
+"ex": "I’m so proud of him.",
+"exKo": "나는 그가 아주 자랑스럽다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 1,
+"w": "amusement park",
+"ko": "n. 놀이공원",
+"def": "n. a place with rides and games for fun",
+"ex": "We went to the amusement park on Saturday.",
+"exKo": "우리는 토요일에 놀이공원에 갔다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 2,
+"w": "blind",
+"ko": "n. (창문에 치는) 블라인드",
+"def": "n. a covering for a window",
+"ex": "Close the blinds to block the sunlight.",
+"exKo": "햇빛을 막기 위해 블라인드를 내려."
+},
+{
+"g": 1,
+"l": 3,
+"n": 3,
+"w": "breaktime",
+"ko": "n. 휴식시간",
+"def": "n. time for resting",
+"ex": "During breaktime, we played outside.",
+"exKo": "휴식시간 동안 우리는 밖에서 놀았다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 4,
+"w": "chat",
+"ko": "v. 담소를 나누다, 수다를 떨다",
+"def": "v. to talk with someone in a casual way",
+"ex": "They chatted late into the night.",
+"exKo": "그들은 밤 늦게까지 수다를 떨었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 5,
+"w": "cheer",
+"ko": "v. 응원하다, 힘을 북돋우다",
+"def": "v. to shout happily to show support",
+"ex": "Let's cheer for our team during the game.",
+"exKo": "경기 중에 우리 팀을 응원하자."
+},
+{
+"g": 1,
+"l": 3,
+"n": 6,
+"w": "chew",
+"ko": "v. (음식을) 씹다",
+"def": "v. to bite and grind food with teeth",
+"ex": "He always chews his food slowly.",
+"exKo": "그는 항상 음식을 천천히 씹는다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 7,
+"w": "cinema",
+"ko": "n. 영화관, 극장",
+"def": "n. a place where movies are shown",
+"ex": "They watched the superhero movie at the cinema.",
+"exKo": "그들은 영화관에서 영웅 영화를 봤다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 8,
+"w": "excuse",
+"ko": "v. 용서하다[봐주다]",
+"def": "v. to forgive someone for making a mistake or doing something wrong",
+"ex": "She decided to excuse his mistake.",
+"exKo": "그녀는 그의 실수를 용서하기로 결정했다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 9,
+"w": "feed",
+"ko": "v. 밥[우유]을 먹이다, 먹이를 주다",
+"def": "v. to give food to someone or something",
+"ex": "Can you feed the cat?",
+"exKo": "고양이에게 먹이를 줄 수 있니?"
+},
+{
+"g": 1,
+"l": 3,
+"n": 10,
+"w": "finally",
+"ko": "ad. 마침내",
+"def": "ad. at the end of a period of time or series of events",
+"ex": "Finally, the bus arrived.",
+"exKo": "마침내 버스가 도착했다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 11,
+"w": "gate",
+"ko": "n. 문, 정문, 대문",
+"def": "n. a door or entrance that can be opened or closed",
+"ex": "They opened the gate and walked into the garden.",
+"exKo": "그들은 문을 열고 정원으로 걸어 들어갔다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 12,
+"w": "gift",
+"ko": "n. 선물",
+"def": "n. something given to someone as a present",
+"ex": "She got a beautiful gift on her birthday.",
+"exKo": "그녀는 그녀의 생일에 아름다운 선물을 받았다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 13,
+"w": "glove",
+"ko": "n. 장갑",
+"def": "n. a covering for the hand, often with separate parts for each finger and thumb",
+"ex": "Wear gloves to keep your hands warm.",
+"exKo": "손을 따뜻하게 유지하기 위해 장갑을 껴봐."
+},
+{
+"g": 1,
+"l": 3,
+"n": 14,
+"w": "graph",
+"ko": "n. 그래프, 도표",
+"def": "n. a diagram that shows relationships between numbers or quantities",
+"ex": "The graph showed the prices of different toys.",
+"exKo": "그래프는 다양한 장난감의 가격을 보여 주었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 15,
+"w": "guide",
+"ko": "n. 안내(서)[가이드]",
+"def": "n. a person who shows the way or gives information to others",
+"ex": "The tour guide showed us around the museum.",
+"exKo": "여행 가이드는 우리에게 박물관을 구경 시켜 주었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 16,
+"w": "hairband",
+"ko": "n. 머리띠",
+"def": "n. a band worn around the head to hold hair back",
+"ex": "She wore a colorful hairband.",
+"exKo": "그녀는 다채로운 머리띠를 썼다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 17,
+"w": "happen",
+"ko": "v. (어떤 일이) 일어나다, 발생하다",
+"def": "v. to take place; to occur",
+"ex": "What happened at school today?",
+"exKo": "오늘 학교에서 무슨 일이 있었니?"
+},
+{
+"g": 1,
+"l": 3,
+"n": 18,
+"w": "laptop",
+"ko": "n. 휴대용 컴퓨터, 노트북",
+"def": "n. a small computer that is easy to carry",
+"ex": "He only uses his laptop for work",
+"exKo": "그는 오직 일을 위해 노트북을 사용한다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 19,
+"w": "laugh",
+"ko": "v. (소리 내어) 웃다",
+"def": "v. to make sounds with your voice because you think something is funny",
+"ex": "We all laughed at his jokes.",
+"exKo": "우리는 그의 농담에 다 함께 웃었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 20,
+"w": "lose",
+"ko": "v. 잃어버리다, 분실하다",
+"def": "v. to stop having something because you do not know where it is",
+"ex": "She always loses her keys.",
+"exKo": "그녀는 항상 열쇠를 잃어버린다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 21,
+"w": "magic",
+"ko": "n. 마술",
+"def": "n. the power to do impossible things using special words or actions",
+"ex": "He showed a magic trick with a coin.",
+"exKo": "그는 동전으로 마술을 보여 주었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 22,
+"w": "manner",
+"ko": "n. 방식, 태도, 예의",
+"def": "n. the way something is done; a person's behavior towards others",
+"ex": "He greeted everyone in a polite manner.",
+"exKo": "그는 모든 사람들에게 예의 바르게 인사했다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 23,
+"w": "noise",
+"ko": "n. 소음",
+"def": "n. a sound, especially one that is loud, unpleasant, or disturbing",
+"ex": "The noise is from the cars outside.",
+"exKo": "그 소음은 밖에 있는 차에서 오는 것이다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 24,
+"w": "noisy",
+"ko": "a. 시끄러운",
+"def": "a. making a lot of noise; loud",
+"ex": "The classroom was too noisy for studying.",
+"exKo": "교실은 공부하기에 너무 시끄러웠다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 25,
+"w": "real",
+"ko": "a. 진짜의, 진정한",
+"def": "a. existing and not imaginary; true or genuine",
+"ex": "This painting looks like a real person.",
+"exKo": "이 그림은 진짜 사람처럼 보인다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 26,
+"w": "roller coaster",
+"ko": "n. 롤러코스터",
+"def": "n. a type of ride at an amusement park with sudden drops and turns",
+"ex": "The roller coaster was very fast.",
+"exKo": "롤러코스터가 매우 빨랐다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 27,
+"w": "rude",
+"ko": "a. 무례한",
+"def": "a. not having or showing concern or respect for the rights and feelings of other people; not polite",
+"ex": "Don't be rude to other people.",
+"exKo": "다른 사람들에게 무례하게 굴지 마."
+},
+{
+"g": 1,
+"l": 3,
+"n": 28,
+"w": "scream",
+"ko": "v. 소리치다. 비명을 지르다",
+"def": "v. to make a loud, high noise with your voice because you are hurt, frightened, excited, etc.",
+"ex": "She screamed when she saw the spider.",
+"exKo": "그녀는 거미를 보고 비명을 질렀다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 29,
+"w": "seat",
+"ko": "n. 좌석, 자리",
+"def": "n. something you sit on, especially a chair, often with a back, and sometimes with arms",
+"ex": "Please find a seat and sit down.",
+"exKo": "자리를 찾아 앉으세요."
+},
+{
+"g": 1,
+"l": 3,
+"n": 30,
+"w": "server",
+"ko": "n. 서빙하는 사람, 웨이터, 웨이터리스",
+"def": "n. a person who brings you food and drink at a restaurant",
+"ex": "The server brought us our food quickly.",
+"exKo": "서빙하는 사람이 음식을 빨리 가져다 주었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 31,
+"w": "shout",
+"ko": "v. 외치다, 소리 지르다",
+"def": "v. to say something very loudly",
+"ex": "He shouted for help when he saw the fire.",
+"exKo": "그는 불을 보고 도와달라고 소리쳤다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 32,
+"w": "snore",
+"ko": "v. 코를 골다",
+"def": "v. to breathe loudly through your nose and mouth while you are asleep",
+"ex": "Dad always snores loudly at night.",
+"exKo": "아빠는 밤에 항상 크게 코를 곤다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 33,
+"w": "stage",
+"ko": "n. 무대",
+"def": "n. a raised area in a theater or auditorium where actors perform",
+"ex": "The actors stood on the stage and began their play.",
+"exKo": "배우들은 무대에 서서 연극을 시작했다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 34,
+"w": "station",
+"ko": "n. 역, 정거장",
+"def": "n. a place where trains or buses stop so that people can get on or off",
+"ex": "They waited for the train at the station.",
+"exKo": "그들은 역에서 기차를 기다렸다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 35,
+"w": "strawberry",
+"ko": "n. 딸기",
+"def": "n. a small, juicy red fruit with tiny seeds on its surface",
+"ex": "She picked fresh strawberries from the garden.",
+"exKo": "그녀는 정원에서 신선한 딸기를 땄다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 36,
+"w": "suddenly",
+"ko": "ad. 갑자기",
+"def": "ad. quickly and unexpectedly",
+"ex": "Suddenly, the lights went out.",
+"exKo": "갑자기 불이 꺼졌다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 37,
+"w": "throw",
+"ko": "v. 던지다",
+"def": "v. to send something through the air with force, especially by hand",
+"ex": "He threw the ball to his friend.",
+"exKo": "그는 그의 친구에게 공을 던졌다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 38,
+"w": "toward",
+"ko": "prep. ~쪽으로, ~을 향하여",
+"def": "prep. in the direction of",
+"ex": "They walked toward the park entrance.",
+"exKo": "그들은 공원 입구로 걸어갔다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 39,
+"w": "trash",
+"ko": "n. 쓰레기",
+"def": "n. things that you throw away because you no longer need them",
+"ex": "Please put your trash in the bin.",
+"exKo": "쓰레기를 통에 넣어 주세요."
+},
+{
+"g": 1,
+"l": 3,
+"n": 40,
+"w": "upset",
+"ko": "a. 속상한, 화가 난, (마음이) 불편한",
+"def": "a. unhappy or worried because something bad has happened",
+"ex": "She was upset when she heard the news.",
+"exKo": "그녀는 그 소식을 듣고 속상해 했다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 41,
+"w": "at that time",
+"ko": "그때(에), 그 당시에",
+"def": "during that period",
+"ex": "At that time, there were no cell phones.",
+"exKo": "그 당시에는 휴대폰이 없었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 42,
+"w": "because of",
+"ko": "~ 때문에, ~해서",
+"def": "for the reason that; due to",
+"ex": "They were late because of heavy traffic.",
+"exKo": "그들은 교통 체증 때문에 늦었다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 43,
+"w": "cheer up",
+"ko": "기운을 내다, ~을 격려하다",
+"def": "to become happier or more hopeful",
+"ex": "Cheer up! Everything will be okay.",
+"exKo": "기운 내! 모든 것이 잘 될 거야."
+},
+{
+"g": 1,
+"l": 3,
+"n": 44,
+"w": "cut in line",
+"ko": "새치기를 하다",
+"def": "to move ahead of others in a queue without waiting your turn",
+"ex": "The boys are trying to cut in line.",
+"exKo": "그 소년들은 새치기 하려고 한다."
+},
+{
+"g": 1,
+"l": 3,
+"n": 45,
+"w": "take off",
+"ko": "(옷, 신발 등을) 벗다",
+"def": "to remove (clothes, shoes, etc.)",
+"ex": "Please take off your shoes before entering.",
+"exKo": "들어가기 전에 신발을 벗어 주세요."
+},
+{
+"g": 1,
+"l": 3,
+"n": 46,
+"w": "turn around",
+"ko": "몸을 돌리다, 방향을 바꾸다",
+"def": "to change direction to face the opposite way",
+"ex": "She turned around to look behind her.",
+"exKo": "그녀는 뒤를 보려고 몸을 돌렸다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 1,
+"w": "bowl",
+"ko": "n. (우묵한) 그릇, 통",
+"def": "n. a round container that has tall, curving sides and that is used for preparing or serving foods and liquids",
+"ex": "I finished my whole bowl of cereal.",
+"exKo": "나는 시리얼 한 그릇을 다 먹었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 2,
+"w": "chili",
+"ko": "n. 고추",
+"def": "n. a small pepper with a very hot flavor",
+"ex": "The chili was too spicy for him.",
+"exKo": "그 고추는 그에게 너무 매웠다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 3,
+"w": "comedy",
+"ko": "n. 코미디, 희극",
+"def": "n. a play, movie, television program, novel, etc., that is meant to make people laugh",
+"ex": "We watched a comedy movie last night.",
+"exKo": "우리는 어젯밤에 코미디 영화를 봤다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 4,
+"w": "create",
+"ko": "v. 만들다, 창조하다",
+"def": "v. to make or produce (something); to cause (something new) to exist",
+"ex": "We will create a garden in the backyard.",
+"exKo": "우리는 뒷마당에 정원을 만들 것이다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 5,
+"w": "curry",
+"ko": "n. 커리",
+"def": "n. a food, dish, or sauce in Indian cooking that is seasoned with a mixture of spices",
+"ex": "She ordered chicken curry at the restaurant.",
+"exKo": "그녀는 식당에서 치킨 커리를 주문했다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 6,
+"w": "dish",
+"ko": "n. 요리, 음식, 그릇",
+"def": "n. food that is prepared in a particular way; a shallow container that you cook or serve food in",
+"ex": "The main dish was fish.",
+"exKo": "주요리는 생선이었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 7,
+"w": "engineer",
+"ko": "n. 엔지니어, 기술자",
+"def": "n. a person who designs, builds, or fixes machines or structures",
+"ex": "The engineer built a strong bridge.",
+"exKo": "기술자는 튼튼한 다리를 만들었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 8,
+"w": "handsome",
+"ko": "a. 잘생긴",
+"def": "a. good-looking, often used to describe a man",
+"ex": "The actor is very handsome.",
+"exKo": "그 배우는 매우 잘생겼다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 9,
+"w": "honey",
+"ko": "n. (좋아하는 사람에 대한 호칭) 여보",
+"def": "n. a way of addressing somebody that you like or love",
+"ex": "Can you pass me the salt, honey?",
+"exKo": "소금 좀 줄래요, 여보?"
+},
+{
+"g": 1,
+"l": 4,
+"n": 10,
+"w": "knee",
+"ko": "n. 무릎",
+"def": "n. the joint between the thigh and the lower leg",
+"ex": "She hurt her knee while playing soccer.",
+"exKo": "그녀는 축구를 하다가 무릎을 다쳤다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 11,
+"w": "lift",
+"ko": "v. 들어올리다",
+"def": "v. to raise something to a higher position",
+"ex": "Can you lift this box for me?",
+"exKo": "이 상자 좀 들어줄래 수 있니?"
+},
+{
+"g": 1,
+"l": 4,
+"n": 12,
+"w": "list",
+"ko": "n. 목록",
+"def": "n. a series of names, items, or other things written or printed together",
+"ex": "I made a list of things to buy at the store.",
+"exKo": "나는 가게에서 살 물건 목록을 만들었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 13,
+"w": "lock",
+"ko": "v. 잠그다",
+"def": "v. to fasten something with a key",
+"ex": "Don't forget to lock the door.",
+"exKo": "문 잠그는 거 잊지 마."
+},
+{
+"g": 1,
+"l": 4,
+"n": 14,
+"w": "loudly",
+"ko": "ad. 큰 소리로, 소리 높게",
+"def": "ad. in a way that makes a lot of noise",
+"ex": "She laughed loudly at the funny joke.",
+"exKo": "그녀는 재미있는 농담에 크게 웃었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 15,
+"w": "mall",
+"ko": "n. 쇼핑몰",
+"def": "n. a large building with many stores inside",
+"ex": "We went to the mall to buy clothes.",
+"exKo": "우리는 옷을 사러 쇼핑몰에 갔다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 16,
+"w": "mirror",
+"ko": "n. 거울",
+"def": "n. a piece of special flat glass that reflects images, so that you can see yourself when you look at it",
+"ex": "Jenny looked at herself in the mirror.",
+"exKo": "Jenny는 거울 속의 자신을 바라보았다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 17,
+"w": "own",
+"ko": "a. 자신의",
+"def": "a. belonging to or done by a particular person or thing",
+"ex": "She brought her own lunch today.",
+"exKo": "그녀는 오늘 자신의 점심을 가져왔다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 18,
+"w": "piece",
+"ko": "n. (보드게임, 체스 등의) 말",
+"def": "n. one of the small movable objects in a game like chess or checkers",
+"ex": "I need to move my piece to capture the king.",
+"exKo": "나는 왕을 잡기 위해 내 말을 옮겨야 한다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 19,
+"w": "polite",
+"ko": "a. 예의 바른, 공손한, 정중한",
+"def": "a. having good manners and respect for others",
+"ex": "It's important to be polite to everyone.",
+"exKo": "모든 사람에게 예의를 지키는 것이 중요하다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 20,
+"w": "powder",
+"ko": "n. 가루",
+"def": "n. a dry, fine substance made of small particles",
+"ex": "She mixed the sugar and cocoa powder in a bowl.",
+"exKo": "그녀는 그릇에 설탕과 코코아 가루를 섞었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 21,
+"w": "repair",
+"ko": "n. 수리, 수선, 보수",
+"def": "n. the act of fixing something that is broken or damaged",
+"ex": "I took my bike in for repair.",
+"exKo": "나는 자전거를 수리하려고 안에 들여놓았다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 22,
+"w": "special",
+"ko": "a. 특수한, 특별한",
+"def": "a. better or different from what is usual",
+"ex": "I have a special plan for the weekend.",
+"exKo": "나는 주말에 특별한 계획이 있다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 23,
+"w": "stretch",
+"ko": "v. 늘이다, 늘어나다",
+"def": "v. to extend your body, part of your body, a piece of material or an object to its full length or beyond",
+"ex": "She likes to stretch before exercising.",
+"exKo": "그녀는 운동하기 전에 스트레칭 하는 것을 좋아한다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 24,
+"w": "sweater",
+"ko": "n. 스웨터",
+"def": "n. a warm usually knitted piece of clothing for the upper part of your body",
+"ex": "She wore a warm sweater on the cold day.",
+"exKo": "그녀는 추운 날 따뜻한 스웨터를 입었다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 25,
+"w": "sweet",
+"ko": "a. 다정한, 상냥한, 달콤한",
+"def": "a. very gentle, kind, or friendly; having a taste like sugar or honey",
+"ex": "Jack is very sweet and funny.",
+"exKo": "Jack은 매우 상냥하고 재미있다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 26,
+"w": "tip",
+"ko": "n. 조언",
+"def": "n. a piece of advice or useful information",
+"ex": "This book gives useful tips on traveling.",
+"exKo": "이 책은 여행에 대한 유용한 조언을 알려준다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 27,
+"w": "tradition",
+"ko": "n. 전통",
+"def": "n. a custom or belief passed down through generations",
+"ex": "Our family has a tradition of eating dinner together on Sundays.",
+"exKo": "우리 가족은 일요일마다 함께 저녁을 먹는 전통이 있다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 28,
+"w": "traditional",
+"ko": "a. 전통적인",
+"def": "a. relating to long-established customs or beliefs",
+"ex": "I like Korean traditional clothes.",
+"exKo": "나는 한국의 전통 의상을 좋아한다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 29,
+"w": "wonderful",
+"ko": "a. 훌륭한, 놀라운",
+"def": "a. very good or pleasing",
+"ex": "We had a wonderful time at the park.",
+"exKo": "우리는 공원에서 멋진 시간을 보냈다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 30,
+"w": "wrap",
+"ko": "v. 포장하다, 싸다",
+"def": "v. to cover something by folding paper, cloth, etc. around it",
+"ex": "I need to wrap the gift before the party.",
+"exKo": "나는 파티 전에 선물을 포장해야 한다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 31,
+"w": "yummy",
+"ko": "a. 맛있는",
+"def": "a. tasting extremely good",
+"ex": "The cookies she baked were so yummy!",
+"exKo": "그녀가 구운 쿠키는 정말 맛있었다!"
+},
+{
+"g": 1,
+"l": 4,
+"n": 32,
+"w": "a lot of",
+"ko": "많은",
+"def": "many or much of something",
+"ex": "There are a lot of stars in the sky tonight.",
+"exKo": "오늘 밤 하늘에는 별이 많다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 33,
+"w": "cheer for",
+"ko": "~을 응원하다",
+"def": "to support or encourage someone by shouting",
+"ex": "The crowd cheered for the team.",
+"exKo": "관중들은 그 팀을 응원했다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 34,
+"w": "do the dishes",
+"ko": "설거지하다",
+"def": "to wash the plates, cups, and other kitchen items after a meal",
+"ex": "Danny will do the dishes after he watches the news on TV.",
+"exKo": "Danny는 TV에서 뉴스를 본 후에 설거지를 할 것이다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 35,
+"w": "fall in love",
+"ko": "사랑에 빠지다",
+"def": "to be very attracted to someone and begin to love them",
+"ex": "They fell in love at college.",
+"exKo": "그들은 대학에서 사랑에 빠졌다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 36,
+"w": "for the first time",
+"ko": "처음으로",
+"def": "doing something that has never been done before",
+"ex": "Sally rode a bike for the first time.",
+"exKo": "Sally는 처음으로 자전거를 탔다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 37,
+"w": "set the table",
+"ko": "밥상을 차리다",
+"def": "to arrange plates, utensils, and glasses on the table for a meal",
+"ex": "Dad set the table before dinner.",
+"exKo": "아빠는 저녁 식사 전에 상을 차리셨다."
+},
+{
+"g": 1,
+"l": 4,
+"n": 38,
+"w": "stop by",
+"ko": "~에 들르다",
+"def": "to visit a person or place briefly",
+"ex": "Can you stop by the store on your way home?",
+"exKo": "집에 가는 길에 가게에 들러 줄 수 있어?"
+},
+{
+"g": 1,
+"l": 4,
+"n": 39,
+"w": "take out",
+"ko": "밖으로 가져가다",
+"def": "to remove something from inside a place",
+"ex": "Did you take out the garbage this morning?",
+"exKo": "너 오늘 아침에 쓰레기를 내다 놨니?"
+},
+{
+"g": 1,
+"l": 4,
+"n": 40,
+"w": "turn off",
+"ko": "~을 끄다",
+"def": "to stop a machine or device from working by switching it off",
+"ex": "Don't forget to turn off the lights.",
+"exKo": "불 끄는 거 잊지 마."
+},
+{
+"g": 1,
+"l": 5,
+"n": 1,
+"w": "appear",
+"ko": "v. 나타나다",
+"def": "v. to become visible or come into sight",
+"ex": "The stars begin to appear in the night sky.",
+"exKo": "별들이 밤하늘에 나타나기 시작한다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 2,
+"w": "attention",
+"ko": "n. 주의, 주목",
+"def": "n. notice taken of someone or something; the regarding of someone or something as interesting or important",
+"ex": "The teacher called for the students' attention.",
+"exKo": "선생님이 학생들에게 주의를 집중하라고 했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 3,
+"w": "century",
+"ko": "n. 세기, 백 년",
+"def": "n. a period of one hundred years",
+"ex": "The castle has stood for over a century.",
+"exKo": "그 성은 한 세기 넘게 유지되어 왔다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 4,
+"w": "chili pepper",
+"ko": "n. 고추",
+"def": "n. the small green or red fruit of a type of pepper plant that is used in cooking to give a hot taste to food, often dried or made into powder, also called chili or chili powder",
+"ex": "She added a chili pepper to the soup.",
+"exKo": "그녀는 수프에 고추를 넣었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 5,
+"w": "chip",
+"ko": "n. 감자칩",
+"def": "n. a thin slice of food (typically potato) that has been fried or baked until crunchy",
+"ex": "I ate some chips with my sandwich for lunch.",
+"exKo": "나는 점심으로 샌드위치와 함께 감자칩을 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 6,
+"w": "churro",
+"ko": "n. 추로",
+"def": "n. a fried-dough pastry, sometimes made from potato dough, originating from Spanish and Portuguese cuisine",
+"ex": "We bought a churro from the food truck.",
+"exKo": "우리는 푸드 트럭에서 추로를 하나 샀다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 7,
+"w": "corn",
+"ko": "n. 옥수수",
+"def": "n. a tall plant grown in many parts of the world for its yellow seeds, which are eaten as food, made into flour, or fed to animals",
+"ex": "He planted corn in his garden.",
+"exKo": "그는 정원에 옥수수를 심었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 8,
+"w": "crab",
+"ko": "n. 게",
+"def": "n. a sea creature with five pairs of legs and a round, flat body covered by a shell, or its flesh eaten as food",
+"ex": "The crab walked sideways along the beach.",
+"exKo": "게가 해변을 따라 옆으로 걸었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 9,
+"w": "crispy",
+"ko": "a. 바삭한",
+"def": "a. pleasantly thin, dry, and easily broken",
+"ex": "The bacon was crispy and delicious.",
+"exKo": "베이컨은 바삭하고 맛있었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 10,
+"w": "croissant",
+"ko": "n. 크루아상",
+"def": "n. a piece of light crescent-shaped pastry, usually eaten in the morning",
+"ex": "I had a warm croissant for breakfast.",
+"exKo": "나는 아침으로 따뜻한 크루아상을 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 11,
+"w": "dessert",
+"ko": "n. 디저트, 후식",
+"def": "n. sweet food eaten at the end of a meal",
+"ex": "We had ice cream for dessert.",
+"exKo": "우리는 후식으로 아이스크림을 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 12,
+"w": "different",
+"ko": "a. 다른, (각양) 각색의",
+"def": "a. not the same as someone or something else",
+"ex": "My brother and I have different tastes in music.",
+"exKo": "내 남동생과 나는 음악 취향이 다르다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 13,
+"w": "flavour",
+"ko": "n. (독특한) 풍미, 향미",
+"def": "n. the particular way a substance, especially food or drink, is recognized from its taste and smell",
+"ex": "The soup had a rich, spicy flavor.",
+"exKo": "수프는 풍부하고 매운 맛이 있었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 14,
+"w": "fondue",
+"ko": "n. 퐁뒤",
+"def": "n. a hot dish in which small pieces of food are dipped into a hot sauce or a hot mixture of cheese and wine",
+"ex": "We enjoyed a cheese fondue for dinner.",
+"exKo": "우리는 저녁으로 치즈 퐁뒤를 즐겼다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 15,
+"w": "friendly",
+"ko": "a. 친절한, 상냥한",
+"def": "a. behaving in a pleasant, kind way towards someone",
+"ex": "The new neighbor is very friendly.",
+"exKo": "새 이웃은 매우 친절하다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 16,
+"w": "gelato",
+"ko": "n. 젤라토",
+"def": "n. an Italian type of ice cream made from milk and usually containing less fat than other types of ice cream",
+"ex": "I had strawberry gelato after lunch.",
+"exKo": "나는 점심 후에 딸기 젤라토를 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 17,
+"w": "guest",
+"ko": "n. 손님",
+"def": "n. a person who is staying with you, or a person you have invited to a social occasion, such as a party or a meal",
+"ex": "The guest arrived late for the party.",
+"exKo": "손님이 파티에 늦게 도착했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 18,
+"w": "half",
+"ko": "n. 반, 절반",
+"def": "n. either of the two equal or nearly equal parts that together make up a whole",
+"ex": "I ate half of the pizza for lunch.",
+"exKo": "나는 점심으로 피자의 절반을 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 19,
+"w": "hungry",
+"ko": "a. 배고픈, 굶주리는",
+"def": "a. wanting or needing food",
+"ex": "He was hungry after playing soccer.",
+"exKo": "그는 축구를 한 후 배가 고팠다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 20,
+"w": "imagine",
+"ko": "v. 상상하다, (마음속으로) 그리다",
+"def": "v. to form or have a mental picture or idea of something",
+"ex": "Close your eyes and imagine a beautiful beach.",
+"exKo": "눈을 감고 아름다운 해변을 상상해라."
+},
+{
+"g": 1,
+"l": 5,
+"n": 21,
+"w": "kiwi",
+"ko": "n. 키위",
+"def": "n. a small, oval fruit with brown, hairy skin, green flesh, and black seeds",
+"ex": "She sliced a kiwi for the fruit salad.",
+"exKo": "그녀는 과일 샐러드에 넣을 키위를 얇게 잘랐다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 22,
+"w": "mean",
+"ko": "v. ~라는 뜻이다, 의미이다",
+"def": "v. to express or represent something such as an idea, thought, or fact",
+"ex": "What does this word mean?",
+"exKo": "이 단어는 무엇을 의미하니?"
+},
+{
+"g": 1,
+"l": 5,
+"n": 23,
+"w": "melt",
+"ko": "v. 녹다",
+"def": "v. to turn from a solid state into a soft or liquid state",
+"ex": "The snowman melted in the hot sun.",
+"exKo": "눈사람이 뜨거운 태양 아래서 녹았다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 24,
+"w": "menu",
+"ko": "n. (식당·식사의) 메뉴",
+"def": "n. a list of the dishes that you can order in a restaurant",
+"ex": "The menu had many delicious options.",
+"exKo": "메뉴에 맛있는 선택지가 많았다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 25,
+"w": "mushroom",
+"ko": "n. 버섯",
+"def": "n. a type of fungus with a short stem and a round top, some types of which can be eaten",
+"ex": "He added mushrooms to the pizza.",
+"exKo": "그는 피자에 버섯을 추가했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 26,
+"w": "noodle",
+"ko": "n. 국수",
+"def": "n. a long, thin piece of food made from a mixture of flour, water, and sometimes egg, cooked in boiling liquid",
+"ex": "He cooked spicy noodles for a lunch.",
+"exKo": "그는 점심으로 매운 국수를 요리했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 27,
+"w": "order",
+"ko": "n. (식당에서의) 주문[주문한 음식/음료]",
+"def": "n. a request to make, supply, or deliver food or goods",
+"ex": "She took my order at the restaurant.",
+"exKo": "그녀는 음식점에서 내 주문을 받았다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 28,
+"w": "pie",
+"ko": "n. (과일로 만든) 파이",
+"def": "n. a type of food made with meat, vegetables, or fruit covered in pastry and baked",
+"ex": "We baked an apple pie for dessert.",
+"exKo": "우리는 디저트로 애플 파이를 구웠다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 29,
+"w": "plate",
+"ko": "n. 접시, 그릇",
+"def": "n. a flat, usually round dish with a slightly raised edge that you eat from or serve food on",
+"ex": "She served the meal on a large plate.",
+"exKo": "그녀는 큰 접시에 음식을 서빙했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 30,
+"w": "popsicle",
+"ko": "n. 막대 아이스크림",
+"def": "n. sweet, flavored ice on a stick",
+"ex": "The kids enjoyed popsicles on the hot day.",
+"exKo": "아이들은 더운 날에 막대 아이스크림을 즐겼다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 31,
+"w": "popular",
+"ko": "a. 인기 있는",
+"def": "a. liked, enjoyed, or supported by many people",
+"ex": "This song is very popular right now.",
+"exKo": "이 노래는 지금 매우 인기가 있다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 32,
+"w": "prepare",
+"ko": "v. 준비하다",
+"def": "v. to make or get something or someone ready for something that will happen in the future",
+"ex": "I need to prepare for my exam tomorrow.",
+"exKo": "나는 내일 시험을 준비해야 한다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 33,
+"w": "pretzel",
+"ko": "n. 프레츨",
+"def": "n. a hard salty biscuit that has been baked, usually in the shape of a knot or stick",
+"ex": "The bakery sells fresh pretzels every morning.",
+"exKo": "그 빵집은 매일 아침 신선한 프레츨을 판다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 34,
+"w": "price",
+"ko": "n. 가격",
+"def": "n. the amount of money for which something is sold",
+"ex": "The price of the shirt is $20.",
+"exKo": "그 셔츠의 가격은 20달러다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 35,
+"w": "risotto",
+"ko": "n. 리소토(이탈리아식 볶음밥)",
+"def": "n. an Italian dish of rice cooked with meat, fish, or vegetables",
+"ex": "She made mushroom risotto for dinner.",
+"exKo": "그녀는 저녁으로 버섯 리소토를 만들었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 36,
+"w": "sauce",
+"ko": "n. 소스",
+"def": "n. a thick liquid eaten with food to add flavor",
+"ex": "Can you pass me the tomato sauce?",
+"exKo": "토마토 소스 좀 건네줄래?"
+},
+{
+"g": 1,
+"l": 5,
+"n": 37,
+"w": "sausage",
+"ko": "n. 소시지",
+"def": "n. a thin, tube-like case containing meat that has been cut into very small pieces and mixed with spices",
+"ex": "He grilled sausages for the barbecue.",
+"exKo": "그는 바비큐를 위해 소시지를 구웠다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 38,
+"w": "sour",
+"ko": "a. (맛이) 신, 시큼한",
+"def": "a. having a sharp, sometimes unpleasant, taste or smell, like a lemon, and not sweet",
+"ex": "The lemonade tasted very sour.",
+"exKo": "레모네이드는 매우 시큼했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 39,
+"w": "spicy",
+"ko": "a. 매운",
+"def": "a. containing strong flavors from spices",
+"ex": "The soup was too spicy for me.",
+"exKo": "그 수프는 나에게 너무 매웠다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 40,
+"w": "sticky",
+"ko": "a. 쫀득한, 끈적끈적한",
+"def": "a. made of or covered with a substance that stays fixed to any surface it touches",
+"ex": "The honey made my hands sticky.",
+"exKo": "꿀이 내 손을 끈적이게 만들었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 41,
+"w": "stretchy",
+"ko": "a. 늘어나는, 탄력성 있는",
+"def": "a. easily made longer or wider without tearing or breaking",
+"ex": "These pants are made of stretchy material.",
+"exKo": "이 바지는 신축성 있는 재질로 만들어졌다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 42,
+"w": "surprise",
+"ko": "n. 뜻밖의[놀라운] 일[소식], 놀라움",
+"def": "n. an unexpected event",
+"ex": "The gift was a nice surprise to me.",
+"exKo": "그 선물은 나에게 멋진 놀라움이었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 43,
+"w": "taco",
+"ko": "n. 타코",
+"def": "n. a type of food, originally from Mexico, consisting of a flat piece of dough folded around meat, beans, etc.",
+"ex": "I had a beef taco for lunch.",
+"exKo": "나는 점심으로 소고기 타코를 먹었다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 44,
+"w": "thin",
+"ko": "a. 얇은, 가는",
+"def": "a. having a small distance between two opposite sides",
+"ex": "She sliced the bread into thin pieces.",
+"exKo": "그녀는 빵을 얇게 잘랐다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 45,
+"w": "turtle",
+"ko": "n. 거북",
+"def": "n. an animal that lives in or near water and has a thick shell covering its body into which it can move its head and legs for protection",
+"ex": "We saw a turtle swimming in the sea.",
+"exKo": "우리는 바다에서 수영하는 거북을 보았다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 46,
+"w": "view",
+"ko": "n. 경치",
+"def": "n. what you can see from a particular place or position, especially beautiful countryside",
+"ex": "We enjoyed the view of the sunset from the beach.",
+"exKo": "우리는 해변에서 석양의 경치를 즐겼다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 47,
+"w": "vlog",
+"ko": "n. 비디오 웹로그",
+"def": "n. a blog that contains video material",
+"ex": "She started a vlog about her travels.",
+"exKo": "그녀는 여행에 관한 브이로그를 시작했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 48,
+"w": "wing",
+"ko": "n. 날개",
+"def": "n. one of the parts of the body of a bird, insect, or bat that it uses for flying",
+"ex": "The butterfly's wings were colorful.",
+"exKo": "나비의 날개는 색깔이 화려했다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 49,
+"w": "at home",
+"ko": "집에서",
+"def": "in one’s own house",
+"ex": "I like to relax at home on weekends.",
+"exKo": "나는 주말에 집에서 쉬는 것을 좋아한다."
+},
+{
+"g": 1,
+"l": 5,
+"n": 50,
+"w": "take back",
+"ko": "도로 가져가다",
+"def": "to return (something or someone)",
+"ex": "I will take back the book to the library.",
+"exKo": "나는 그 책을 도서관에 돌려줄 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 1,
+"w": "account",
+"ko": "n. 계정",
+"def": "n. a record or profile used for online services",
+"ex": "I need an account to log in.",
+"exKo": "나는 로그인하기 위해 계정이 필요하다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 2,
+"w": "advice",
+"ko": "n. 충고, 조언",
+"def": "n. suggestions about what you think someone should do",
+"ex": "The teacher gave good advice.",
+"exKo": "선생님이 좋은 조언을 주셨다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 3,
+"w": "angry",
+"ko": "a. 화난",
+"def": "a. feeling strong displeasure or hostility",
+"ex": "Don’t be angry with me.",
+"exKo": "나에게 화내지 마라."
+},
+{
+"g": 1,
+"l": 6,
+"n": 4,
+"w": "bite",
+"ko": "v. (이빨로) 물다[베어 물다]",
+"def": "v. to cut or hold with teeth",
+"ex": "The baby tries to bite the apple.",
+"exKo": "아기가 사과를 물려고 한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 5,
+"w": "bored",
+"ko": "a. 지루해하는",
+"def": "a. tired and impatient because something is not interesting",
+"ex": "The students look bored in class.",
+"exKo": "학생들은 수업에서 지루해 보였다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 6,
+"w": "careless",
+"ko": "a. 부주의한, 경솔한",
+"def": "a. not careful; done, made, or said without enough thought or attention",
+"ex": "The boy was careless with his toys.",
+"exKo": "그 소년은 장난감을 부주의하게 다루었다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 7,
+"w": "click",
+"ko": "v. (마우스를) 클릭하다[누르다]",
+"def": "v. to press a button on a computer mouse",
+"ex": "She likes to click on funny videos online.",
+"exKo": "그녀는 온라인에서 재미있는 영상을 클릭하는 것을 좋아한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 8,
+"w": "communicate",
+"ko": "v. 연락을 주고받다, 의사소통을 하다",
+"def": "v. to share or exchange information or ideas",
+"ex": "They use email to communicate.",
+"exKo": "그들은 의사소통을 하기 위해 이메일을 사용한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 9,
+"w": "connect",
+"ko": "v. 연결하다, 이어지다",
+"def": "v. to join or link together",
+"ex": "The phone will connect to the Wi-Fi.",
+"exKo": "전화기가 Wi-Fi에 연결될 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 10,
+"w": "direct",
+"ko": "a. 직접적인",
+"def": "a. happening or done without involving other people, actions, etc. in between",
+"ex": "She gave me a direct answer to my question.",
+"exKo": "그녀는 내 질문에 직접적인 답변을 해 주었다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 11,
+"w": "emoji",
+"ko": "n. 이모지",
+"def": "n. a small digital image or icon used to express an idea or emotion",
+"ex": "She added a smiley emoji at the end of her message.",
+"exKo": "그녀는 메시지 끝에 웃는 이모지를 추가했다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 12,
+"w": "even",
+"ko": "ad. (예상 밖이나 놀라운 일을 나타내어) ~도[조차]",
+"def": "ad. used to emphasize something surprising",
+"ex": "Even the teacher laughed at the joke.",
+"exKo": "심지어 선생님도 그 농담에 웃었다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 13,
+"w": "fever",
+"ko": "n. 열",
+"def": "n. a high body temperature",
+"ex": "The child has a high fever.",
+"exKo": "아이에게 고열이 있다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 14,
+"w": "gesture",
+"ko": "n. 제스처, 몸짓",
+"def": "n. a movement of part of the body to express an idea or feeling",
+"ex": "He made a friendly gesture.",
+"exKo": "그는 친근한 제스처를 했다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 15,
+"w": "ghost",
+"ko": "n. 유령",
+"def": "n. the spirit of a dead person that people think they can see or feel",
+"ex": "People say the old house has a ghost.",
+"exKo": "사람들은 그 오래된 집에 유령이 있다고 말한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 16,
+"w": "health",
+"ko": "n. 건강",
+"def": "n. the condition of the body or mind",
+"ex": "Exercise is good for your health.",
+"exKo": "운동은 건강에 좋다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 17,
+"w": "hear",
+"ko": "v. 듣다, 들리다",
+"def": "v. to be aware of sounds with your ears",
+"ex": "We can hear the music from here.",
+"exKo": "우리는 여기서 음악을 들을 수 있다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 18,
+"w": "maybe",
+"ko": "ad. 어쩌면, 아마",
+"def": "ad. possibly but not certainly",
+"ex": "Maybe we can go to the park.",
+"exKo": "아마도 우리는 공원에 갈 수 있을 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 19,
+"w": "message",
+"ko": "n. 메시지",
+"def": "n. a piece of information sent or received in writing, speech, or signals",
+"ex": "He left a message on my phone.",
+"exKo": "그는 내 전화기에 메시지를 남겼다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 20,
+"w": "photo",
+"ko": "n. 사진",
+"def": "n. a picture taken with a camera",
+"ex": "They took a photo at the beach.",
+"exKo": "그들은 해변에서 사진을 찍었다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 21,
+"w": "planet",
+"ko": "n. 행성",
+"def": "n. a large, round object in space that orbits a star",
+"ex": "Earth is the third planet from the sun.",
+"exKo": "지구는 태양에서 세 번째 행성이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 22,
+"w": "reply",
+"ko": "v. 대답하다, 회신하다",
+"def": "v. to respond to a question or message",
+"ex": "She will reply to your email soon.",
+"exKo": "그녀는 곧 당신의 이메일에 답장할 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 23,
+"w": "rest",
+"ko": "n. 휴식, 수면",
+"def": "n. a period of relaxation or sleep",
+"ex": "After a long walk, he needed some rest.",
+"exKo": "긴 산책 후에 그는 휴식이 필요했다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 24,
+"w": "rude",
+"ko": "a. 무례한, 예의 없는",
+"def": "a. not having or showing concern for others' feelings",
+"ex": "The customer was rude to the waiter.",
+"exKo": "고객은 웨이터에게 무례하게 굴었다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 25,
+"w": "scared",
+"ko": "a. 무서워하는, 겁먹은",
+"def": "a. frightened or worried",
+"ex": "The cat is scared of the noise.",
+"exKo": "고양이는 그 소음을 무서워한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 26,
+"w": "share",
+"ko": "v. 함께 쓰다, 공유하다",
+"def": "v. to have or use something with others",
+"ex": "Can we share this book?",
+"exKo": "우리 이 책을 공유할 수 있니?"
+},
+{
+"g": 1,
+"l": 6,
+"n": 27,
+"w": "simple",
+"ko": "a. 간단한, 단순한",
+"def": "a. easy to understand or do",
+"ex": "The recipe is very simple.",
+"exKo": "그 요리법은 매우 간단하다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 28,
+"w": "situation",
+"ko": "n. 상황",
+"def": "n. a set of circumstances or conditions",
+"ex": "The situation at work is very stressful right now.",
+"exKo": "현재 직장에서의 상황이 매우 스트레스다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 29,
+"w": "smart",
+"ko": "a. 영리한, 약삭빠른",
+"def": "a. intelligent or clever",
+"ex": "The fox is very smart.",
+"exKo": "여우는 매우 영리하다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 30,
+"w": "spend",
+"ko": "v. 보내다, 소비하다",
+"def": "v. to use time or money for a particular purpose",
+"ex": "I spend time reading books.",
+"exKo": "나는 책을 읽으며 시간을 보낸다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 31,
+"w": "still",
+"ko": "ad. 아직도, 여전히",
+"def": "ad. continuing until a particular point in time and not finishing",
+"ex": "He is still waiting outside.",
+"exKo": "그는 여전히 밖에서 기다리고 있다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 32,
+"w": "strange",
+"ko": "a. 이상한, 괴상한",
+"def": "a. unusual or not familiar",
+"ex": "That noise is very strange.",
+"exKo": "그 소음은 매우 이상하다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 33,
+"w": "stressful",
+"ko": "a. 스트레스가 많은, 스트레스를 주는",
+"def": "a. causing a lot of worry",
+"ex": "Moving to a new house is stressful.",
+"exKo": "새 집으로 이사하는 것은 스트레스다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 34,
+"w": "tablet",
+"ko": "n. 태블릿",
+"def": "n. a small, flat computer that is operated by touching a screen",
+"ex": "She uses a tablet for drawing.",
+"exKo": "그녀는 그림 그리기에 태블릿을 사용한다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 35,
+"w": "text",
+"ko": "n. 문자, v. (휴대전화로) 문자를 보내다",
+"def": "n. a written message sent via electronic means; v. to send such a message",
+"ex": "He will text his friend later.",
+"exKo": "그는 나중에 친구에게 문자를 보낼 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 36,
+"w": "until",
+"ko": "conj. ~할 때까지",
+"def": "conj. up to the point in time or event mentioned",
+"ex": "We will wait until you come.",
+"exKo": "우리는 당신이 올 때까지 기다릴 것이다."
+},
+{
+"g": 1,
+"l": 6,
+"n": 37,
+"w": "get along with",
+"ko": "~와 잘 지내다",
+"def": "to have a friendly relationship with someone",
+"ex": "They get along with their neighbors well.",
+"exKo": "그들은 이웃들과 잘 지낸다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 1,
+"w": "almond",
+"ko": "n. 아몬드",
+"def": "n. a small nut with a hard shell that can be eaten",
+"ex": "He ate an almond for a snack.",
+"exKo": "그는 간식으로 아몬드를 먹었다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 2,
+"w": "avoid",
+"ko": "v. 피하다",
+"def": "v. to keep away from something or someone",
+"ex": "The driver avoided the busy road.",
+"exKo": "그 운전자는 붐비는 도로를 피한다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 3,
+"w": "bamboo",
+"ko": "n. 대나무",
+"def": "n. a tall plant with hard, hollow stems that pandas eat",
+"ex": "The panda eats bamboo every day.",
+"exKo": "그 판다는 매일 대나무를 먹는다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 4,
+"w": "bent",
+"ko": "a. 구부러진, 휘어진",
+"def": "a. curved or not straight",
+"ex": "The stick is bent.",
+"exKo": "그 막대기는 구부러져 있다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 5,
+"w": "cafeteria",
+"ko": "n. 구내식당",
+"def": "n. a place in a school or company where people eat",
+"ex": "The students ate lunch in the cafeteria.",
+"exKo": "그 학생들은 구내식당에서 점심을 먹었다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 6,
+"w": "care",
+"ko": "v. 상관하다, 관심을 가지다",
+"def": "v. to have an interest or worry about something or someone",
+"ex": "She cares about her cat.",
+"exKo": "그녀는 그녀의 고양이에게 관심을 가진다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 7,
+"w": "coin",
+"ko": "n. 동전",
+"def": "n. a small, flat, and usually round piece of metal issued by a government as money",
+"ex": "The boy found a coin on the ground.",
+"exKo": "그 소년은 땅에서 동전을 발견했다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 8,
+"w": "eggplant",
+"ko": "n. 가지",
+"def": "n. a somewhat egg-shaped vegetable, usually with purple skin",
+"ex": "They cooked an eggplant for dinner.",
+"exKo": "그들은 저녁으로 가지를 요리했다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 9,
+"w": "fantastic",
+"ko": "a. 기막히게 좋은, 엄청난, 기상천외한",
+"def": "a. very good or wonderful",
+"ex": "The movie was fantastic.",
+"exKo": "그 영화는 기막히게 좋았다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 10,
+"w": "flea market",
+"ko": "벼룩시장",
+"def": "a market where old or used items are sold",
+"ex": "He found a rare book at the flea market.",
+"exKo": "그는 벼룩시장에서 희귀한 책을 발견했다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 11,
+"w": "flowerpot",
+"ko": "n. 화분",
+"def": "n. a container for growing flowers",
+"ex": "There is a flowerpot on the table.",
+"exKo": "탁자 위에 화분이 있다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 12,
+"w": "greet",
+"ko": "v. ~에게 인사하다; 환영하다",
+"def": "v. to say hello to someone",
+"ex": "They greet each other in the morning.",
+"exKo": "그들은 아침에 서로 인사한다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 13,
+"w": "harmful",
+"ko": "a. 해로운",
+"def": "a. causing damage or injury",
+"ex": "Smoking is harmful.",
+"exKo": "흡연은 해롭다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 14,
+"w": "item",
+"ko": "n. 물품, 항목",
+"def": "n. a single thing or object",
+"ex": "She bought many items at the store.",
+"exKo": "그녀는 가게에서 많은 물품을 샀다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 15,
+"w": "lamp",
+"ko": "n. 램프, 등",
+"def": "n. a device for producing light",
+"ex": "The lamp on the desk is very bright.",
+"exKo": "책상 위의 램프는 매우 밝다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 16,
+"w": "mask",
+"ko": "n. 마스크",
+"def": "n. a covering for your face or for part of your face",
+"ex": "He wears a mask when he is sick.",
+"exKo": "그는 아플 때 마스크를 쓴다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 17,
+"w": "pair",
+"ko": "n. 한 쌍[켤레, 벌]",
+"def": "n. two things that are meant to be used together",
+"ex": "I need a new pair of shoes.",
+"exKo": "나는 새 신발 한 켤레가 필요하다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 18,
+"w": "plant",
+"ko": "v. (나무·씨앗 등을) 심다",
+"def": "v. to put seeds or plants in the ground to grow",
+"ex": "They plant flowers in the garden.",
+"exKo": "그들은 정원에 꽃을 심는다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 19,
+"w": "plogging",
+"ko": "n. 플로깅",
+"def": "n. a combination of jogging and picking up trash",
+"ex": "Plogging is good for health and nature.",
+"exKo": "플로깅은 건강과 자연에 좋다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 20,
+"w": "purse",
+"ko": "n. 지갑",
+"def": "n. a small bag for carrying money and personal items",
+"ex": "She puts money in her purse.",
+"exKo": "그녀는 지갑에 돈을 넣는다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 21,
+"w": "recycle",
+"ko": "v. 재활용하다, 다시 이용하다",
+"def": "v. to process used materials so they can be used again",
+"ex": "They recycle bottles and cans.",
+"exKo": "그들은 병과 캔을 재활용한다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 22,
+"w": "reduce",
+"ko": "v. 줄이다",
+"def": "v. to make something smaller or less",
+"ex": "We reduce waste to help the Earth.",
+"exKo": "우리는 지구를 돕기 위해 쓰레기를 줄인다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 23,
+"w": "root",
+"ko": "n. 뿌리",
+"def": "n. the part of a plant that grows underground",
+"ex": "The root of the plant is deep.",
+"exKo": "그 식물의 뿌리는 깊다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 24,
+"w": "round",
+"ko": "a. 둥근",
+"def": "a. having a shape like a circle or ball",
+"ex": "The table in the kitchen is round.",
+"exKo": "주방에 있는 테이블은 둥글다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 25,
+"w": "serious",
+"ko": "a. 심각한",
+"def": "a. important and needing careful thought",
+"ex": "This is a serious problem.",
+"exKo": "이것은 심각한 문제다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 26,
+"w": "shampoo",
+"ko": "n. 샴푸",
+"def": "n. a liquid used for washing hair",
+"ex": "She bought a new bottle of shampoo.",
+"exKo": "그녀는 새 샴푸 한 병을 샀다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 27,
+"w": "shape",
+"ko": "n. 모양, 형태",
+"def": "n. the form or outline of something",
+"ex": "The cookie has a star shape.",
+"exKo": "그 쿠키는 별 모양이다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 28,
+"w": "soap",
+"ko": "n. 비누",
+"def": "n. a substance used for washing and cleaning",
+"ex": "He washed his hands with soap and water.",
+"exKo": "그는 비누와 물로 손을 씻었다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 29,
+"w": "spot",
+"ko": "n. (작은) 점, 반점",
+"def": "n. a small mark or area",
+"ex": "There are spots on the shirt.",
+"exKo": "셔츠에 점이 있다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 30,
+"w": "straight",
+"ko": "a. 곧은, 똑바른",
+"def": "a. not curved or bent",
+"ex": "The line is straight.",
+"exKo": "그 선은 똑바르다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 31,
+"w": "supermarket",
+"ko": "n. 슈퍼마켓",
+"def": "n. a large store that sells food and other goods",
+"ex": "They went to the supermarket to buy groceries.",
+"exKo": "그들은 식료품을 사기 위해 슈퍼마켓에 갔다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 32,
+"w": "tasteless",
+"ko": "a. (아무런) 맛이 없는",
+"def": "a. having no flavor",
+"ex": "The soup was tasteless.",
+"exKo": "그 수프는 맛이 없었다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 33,
+"w": "towel",
+"ko": "n. 수건",
+"def": "n. a piece of cloth used for drying things",
+"ex": "She dried her hair with a towel.",
+"exKo": "그녀는 수건으로 머리를 말렸다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 34,
+"w": "unusual",
+"ko": "a. 특이한, 색다른",
+"def": "a. not normal or usual",
+"ex": "He wore an unusual hat to the party.",
+"exKo": "그는 파티에 특이한 모자를 썼다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 35,
+"w": "useless",
+"ko": "a. 소용없는, 쓸모없는",
+"def": "a. not helpful or effective",
+"ex": "The broken pen is useless.",
+"exKo": "그 부러진 펜은 쓸모없다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 36,
+"w": "waste",
+"ko": "n. 쓰레기",
+"def": "n. unwanted or unusable materials",
+"ex": "We should reduce waste to protect the environment.",
+"exKo": "우리는 환경을 보호하기 위해 쓰레기를 줄여야 한다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 37,
+"w": "which",
+"ko": "pron./det. 어느[어떤]",
+"def": "pron./det. used to ask about a choice between things",
+"ex": "Which color do you like?",
+"exKo": "어떤 색깔을 좋아하나요?"
+},
+{
+"g": 1,
+"l": 7,
+"n": 38,
+"w": "wolf",
+"ko": "n. 늑대",
+"def": "n. a wild animal that looks like a large dog and that often hunts in groups",
+"ex": "The wolf runs in the forest.",
+"exKo": "그 늑대는 숲에서 달린다."
+},
+{
+"g": 1,
+"l": 7,
+"n": 39,
+"w": "zero",
+"ko": "n. 영(0)",
+"def": "n. the number 0; nothing",
+"ex": "The answer is zero.",
+"exKo": "답은 0이다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 1,
+"w": "bakery",
+"ko": "n. 빵집, 제과점",
+"def": "n. a place where bread and cakes are made and sold",
+"ex": "They went to the bakery for bread.",
+"exKo": "그들은 빵을 사러 빵집에 갔다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 2,
+"w": "beak",
+"ko": "n. (새의) 부리",
+"def": "n. the hard usually pointed parts that cover a bird's mouth",
+"ex": "The bird had a worm in its beak.",
+"exKo": "새의 부리에 벌레가 있었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 3,
+"w": "beside",
+"ko": "prep. 옆에",
+"def": "prep. next to something or someone",
+"ex": "The cat is sitting beside the window.",
+"exKo": "그 고양이는 창문 옆에 앉아 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 4,
+"w": "butterfly",
+"ko": "n. 나비",
+"def": "n. an insect with large, colorful wings",
+"ex": "A butterfly landed on the flower.",
+"exKo": "나비가 꽃에 앉았다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 5,
+"w": "carpet",
+"ko": "n. 카페트",
+"def": "n. a thick covering for a floor",
+"ex": "The carpet is soft and clean.",
+"exKo": "그 카페트는 부드럽고 깨끗하다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 6,
+"w": "center",
+"ko": "n. 중앙, 중심",
+"def": "n. the middle point or part of something",
+"ex": "The tree is in the center of the garden.",
+"exKo": "그 나무는 정원의 중앙에 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 7,
+"w": "dot",
+"ko": "n. 점",
+"def": "n. a small, round mark",
+"ex": "There is a dot on the paper.",
+"exKo": "종이에 점이 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 8,
+"w": "empty",
+"ko": "a. 비어 있는, 빈",
+"def": "a. not filled or having nothing inside",
+"ex": "The box is empty.",
+"exKo": "그 상자는 비어 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 9,
+"w": "except",
+"ko": "prep. (누구·무엇을) 제외하고는[외에는]",
+"def": "prep. not including something or someone",
+"ex": "Everyone except Tom went to the party.",
+"exKo": "Tom을 제외한 모두가 파티에 갔다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 10,
+"w": "feather",
+"ko": "n. (새의) 털, 깃털",
+"def": "n. any one of the light growths that make up the outer covering of the body of a bird",
+"ex": "Birds of a feather flock together.",
+"exKo": "같은 깃털을 가진 새끼리 모인다.(유유상종)"
+},
+{
+"g": 1,
+"l": 8,
+"n": 11,
+"w": "frame",
+"ko": "n. 액자, 틀",
+"def": "n. an open structure that holds something (such as glass or a picture)",
+"ex": "He put the picture in a wooden frame.",
+"exKo": "그는 그 그림을 나무 액자에 넣었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 12,
+"w": "hood",
+"ko": "n. (외투 등에 달린) 모자",
+"def": "n. a part of a coat or other garment that covers the head",
+"ex": "She wears a hood in the rain.",
+"exKo": "그녀는 비올 때 모자를 쓴다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 13,
+"w": "hurt",
+"ko": "v. 다치게[아프게] 하다",
+"def": "v. to cause pain or injury",
+"ex": "He hurt his teammate.",
+"exKo": "그는 그의 팀 동료를 다치게 했다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 14,
+"w": "journey",
+"ko": "n. 여행",
+"def": "n. a trip from one place to another",
+"ex": "The journey took three hours.",
+"exKo": "그 여행은 세 시간이 걸렸다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 15,
+"w": "lively",
+"ko": "a. 활기[생기] 넘치는",
+"def": "a. very active and energetic",
+"ex": "She is a lively child and popular with everyone.",
+"exKo": "그녀는 생기발랄하고 모든 사람들에게 인기가 많다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 16,
+"w": "over",
+"ko": "ad. 끝이 난",
+"def": "ad. finished or ended",
+"ex": "The game is over.",
+"exKo": "게임이 끝났다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 17,
+"w": "peaceful",
+"ko": "a. 평화로운",
+"def": "a. calm and quiet, without any disturbance",
+"ex": "The village was very peaceful.",
+"exKo": "그 마을은 매우 평화로웠다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 18,
+"w": "peacock",
+"ko": "n. (수컷) 공작",
+"def": "n. a large male bird that has a very long bright blue and green tail that it can lift up and spread apart like a fan",
+"ex": "The peacock displayed its fine tail feathers.",
+"exKo": "공작새는 고운 꼬리 깃을 드러냈다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 19,
+"w": "poke",
+"ko": "v. 쿡 찌르다",
+"def": "v. to push with a finger or a pointed object",
+"ex": "He poked the balloon with a pin.",
+"exKo": "그는 핀으로 풍선을 쿡 찔렀다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 20,
+"w": "protect",
+"ko": "v. 보호하다",
+"def": "v. to keep someone or something safe from harm",
+"ex": "She protects her eyes with sunglasses.",
+"exKo": "그녀는 선글라스로 눈을 보호한다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 21,
+"w": "sign",
+"ko": "v. 서명하다",
+"def": "v. to write your name on a document",
+"ex": "Please sign the form here.",
+"exKo": "여기에 서명해 주세요."
+},
+{
+"g": 1,
+"l": 8,
+"n": 22,
+"w": "snowstorm",
+"ko": "n. 눈보라",
+"def": "n. a storm with heavy snow and strong winds",
+"ex": "The snowstorm blocked the roads.",
+"exKo": "눈보라가 도로를 막았다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 23,
+"w": "somewhere",
+"ko": "ad. 어딘가에",
+"def": "n. in or to a place that is not known or specified",
+"ex": "He is somewhere in the park.",
+"exKo": "그는 어딘가 공원에 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 24,
+"w": "stormy",
+"ko": "a. 폭풍우가 몰아치는",
+"def": "a. with strong winds and heavy rain or snow",
+"ex": "The weather was stormy last night.",
+"exKo": "어젯밤에 폭풍우가 몰아쳤다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 25,
+"w": "success",
+"ko": "n. 성공",
+"def": "n. the achievement of a goal or purpose",
+"ex": "His project was a success.",
+"exKo": "그의 프로젝트는 성공이었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 26,
+"w": "trick",
+"ko": "n. 속임수, 장난",
+"def": "n. a clever and skillful action that someone performs to entertain or amuse people",
+"ex": "The magician showed a card trick.",
+"exKo": "그 마술사는 카드 속임수를 보여주었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 27,
+"w": "trust",
+"ko": "v. 믿다, 신뢰하다",
+"def": "v. to believe that someone is honest and reliable",
+"ex": "They trust their teacher.",
+"exKo": "그들은 그들의 선생님을 믿는다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 28,
+"w": "watercolor",
+"ko": "n. 수채화 그림물감",
+"def": "n. a type of paint that is mixed with water",
+"ex": "She paints with watercolors.",
+"exKo": "그녀는 수채화 그림물감으로 그린다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 29,
+"w": "while",
+"ko": "conj. ~하는 동안",
+"def": "conj. during the time that something is happening",
+"ex": "He read a book while waiting.",
+"exKo": "그는 기다리는 동안 책을 읽었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 30,
+"w": "whole",
+"ko": "a. 전체의, 모든",
+"def": "a. all of something, complete",
+"ex": "They ate the whole pizza.",
+"exKo": "그들은 피자를 모두 먹었다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 31,
+"w": "without",
+"ko": "prep. ~하지 않고",
+"def": "prep. not doing the action mentioned",
+"ex": "He left without saying goodbye.",
+"exKo": "그는 작별 인사를 하지 않고 떠났다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 32,
+"w": "a few",
+"ko": "어느 정도, 조금",
+"def": "some, but not many",
+"ex": "She has a few friends in the city.",
+"exKo": "그녀는 도시에 몇 명의 친구가 있다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 33,
+"w": "a piece of",
+"ko": "한 장(조각)의",
+"def": "a single part or portion of something",
+"ex": "Can I have a piece of cake?",
+"exKo": "케이크 한 조각을 먹어도 될까요?"
+},
+{
+"g": 1,
+"l": 8,
+"n": 34,
+"w": "for a moment",
+"ko": "잠시동안",
+"def": "for a very short time",
+"ex": "He waited for a moment.",
+"exKo": "그는 잠시 동안 기다렸다."
+},
+{
+"g": 1,
+"l": 8,
+"n": 35,
+"w": "mix A with B",
+"ko": "A를 B와 섞다(혼합하다)",
+"def": "to combine two different things together",
+"ex": "Mix the flour with the water.",
+"exKo": "밀가루를 물과 섞어라."
+},
+{
+"g": 1,
+"l": 8,
+"n": 36,
+"w": "take place",
+"ko": "개최하다, 일어나다",
+"def": "to happen or occur",
+"ex": "The party will take place at 6 PM.",
+"exKo": "그 파티는 오후 6시에 열릴 것이다."
+}
+]
+}

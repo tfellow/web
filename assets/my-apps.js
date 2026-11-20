@@ -27,6 +27,7 @@
     ["writing1/", "📝", "AI 영작문 튜터", "한국어를 영어로 쓰기"],
     ["speaking/", "🎤", "MY Speaking", "대화문 듣고 말하기"],
     ["danuhsup/", "🌳", "단어숲", "단어 외우기"],
+    ["wordarcade/", "🕹️", "MY Word Arcade", "교과서 단어 게임"],
     ["brainup/", "💡", "MY Brain Up", "랜덤 상식 퀴즈"],
     ["quiz/", "👑", "Quiz Queens", "룰렛 상식 퀴즈"]
   ];
