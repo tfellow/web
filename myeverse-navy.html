@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e3768">
+<title>MYeVerse · 나만의 영어 우주</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="MYeVerse 영어 학습 앱 모음: 레벨 테스트, 독서 여권, 지식 여권, 리딩 메트로, 문법, 영작문, 말하기, 단어숲, 상식 퀴즈">
+<link rel="icon" href="assets/myeverse/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="app/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* Layout: a passport cover (navy + gold foil rule) holding the sign-in desk, then a bound "visa page" grid of app stamps. */
+  :root {
+    --navy: #1e3768; --navy-deep: #142649; --gold: #c8962a; --gold-soft: #e9c46a;
+    --bg: #f3f1ec; --paper: #ffffff; --ink: #1b2236; --muted: #636a7d; --line: #e2ddd2;
+    --cover-ink: #eef2fb; --cover-muted: #b9c6e3;
+    --ok: #2e7d4f; --wait: #9a6a12;
+    --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
+    --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
+    --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
+    color-scheme: dark; } }
+  :root[data-theme="dark"] {
+    --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
+    --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
+    color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; word-break: keep-all; overflow-wrap: break-word; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--gold-soft); outline-offset: 2px; border-radius: 6px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  /* ---------- cover ---------- */
+  .cover { background: radial-gradient(120% 140% at 85% -10%, #2d5291 0%, var(--navy) 45%, var(--navy-deep) 100%); color: var(--cover-ink); position: relative; overflow: hidden; }
+  .cover::before { content: ""; position: absolute; inset: 12px; border: 1px solid rgba(233,196,106,.45); border-radius: 22px; pointer-events: none; }
+  .cover::after { content: ""; position: absolute; inset: 18px; border: 1px solid rgba(233,196,106,.18); border-radius: 17px; pointer-events: none; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 30px 0; position: relative; z-index: 2; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
+  .brand img { width: 46px; height: 46px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+  .brand b.wm { font-size: 1.3rem; font-weight: 800; letter-spacing: -.02em; }
+  .wm i { font-style: normal; color: var(--gold-soft); }
+  .foot-brand { display: inline-flex; align-items: center; gap: 8px; }
+  .orbits { position: absolute; right: -140px; top: -120px; width: 620px; height: 620px; pointer-events: none; z-index: 1; opacity: .5; }
+  @media (max-width: 600px) { .orbits { right: -240px; top: -160px; opacity: .35; } }
+  .brand b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; line-height: 1.2; }
+  .brand span { display: block; font-size: .78rem; color: var(--cover-muted); line-height: 1.3; }
+  .admin-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.06); color: var(--gold-soft); border: 1px solid rgba(233,196,106,.55); border-radius: 999px; padding: 8px 16px; font: 700 .88rem var(--body); cursor: pointer; white-space: nowrap; }
+  .admin-btn:hover { background: rgba(233,196,106,.14); }
+  .admin-btn svg { width: 16px; height: 16px; }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 44px 30px; position: relative; z-index: 2; }
+  .kicker { font-family: var(--mono); font-size: .74rem; letter-spacing: .28em; color: var(--gold-soft); text-transform: uppercase; }
+  h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2.4rem, 5.6vw, 4.1rem); line-height: 1.02; letter-spacing: -.035em; margin: 12px 0 16px; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--gold-soft); }
+  .lede { color: var(--cover-muted); font-size: 1.06rem; max-width: 34em; margin: 0; }
+  .lede b { color: var(--cover-ink); font-weight: 700; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .jump a { text-decoration: none; font-size: .86rem; font-weight: 600; padding: 6px 13px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); }
+  .jump a:hover { background: rgba(255,255,255,.16); }
+
+  /* sign-in desk */
+  .desk { background: rgba(9,18,42,.55); border: 1px solid rgba(233,196,106,.35); border-radius: 20px; padding: 22px; backdrop-filter: blur(4px); }
+  .desk h2 { font-family: var(--display); font-size: 1.2rem; margin: 0 0 4px; letter-spacing: -.01em; }
+  .desk p.sub { margin: 0 0 16px; font-size: .9rem; color: var(--cover-muted); }
+  #gbtn { min-height: 44px; display: flex; align-items: center; }
+  .gfallback { font-size: .85rem; color: var(--cover-muted); }
+  .me { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .me .who { min-width: 0; }
+  .me .who b { display: block; font-size: 1rem; overflow-wrap: anywhere; }
+  .me .who span { font-size: .8rem; color: var(--cover-muted); }
+  .btn-ghost { background: transparent; color: var(--cover-ink); border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 6px 14px; font: 600 .84rem var(--body); cursor: pointer; }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
+  .links { list-style: none; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px dashed rgba(233,196,106,.35); display: grid; gap: 7px; }
+  .links li { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: .88rem; }
+  .pill { font-size: .74rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; white-space: nowrap; border: 1px solid currentColor; }
+  .pill.on { color: #7fe0a6; } .pill.off { color: var(--cover-muted); } .pill.free { color: var(--gold-soft); }
+  .desk-note { margin: 12px 0 0; font-size: .76rem; color: var(--cover-muted); }
+
+  .mrz { font-family: var(--mono); font-size: clamp(.62rem, 1.4vw, .82rem); letter-spacing: .18em; color: rgba(233,196,106,.55); padding-block: 4px 34px; white-space: nowrap; overflow: hidden; text-overflow: clip; position: relative; z-index: 2; }
+
+  /* ---------- apps ---------- */
+  .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 46px 18px; }
+  .section-head h2 { font-family: var(--display); font-size: 1.7rem; letter-spacing: -.02em; margin: 0; }
+  .section-head p { margin: 0; color: var(--muted); font-size: .92rem; }
+  /* ---------- showcase rows ---------- */
+  .eyebrow { font-family: var(--mono); font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .app-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .stamp { width: 62px; height: 62px; flex: none; border-radius: 50%; border: 2px dashed var(--c); color: var(--c); display: grid; place-items: center; transform: rotate(-8deg); }
+  .stamp svg { width: 30px; height: 30px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+  .tags.left { justify-content: flex-start; }
+  .tag { font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, transparent); color: var(--c); white-space: nowrap; }
+  .tag.lock { background: color-mix(in srgb, var(--gold) 16%, transparent); color: var(--wait); }
+  [data-app="passport"] { --c: var(--c-passport); } [data-app="knowledge"] { --c: var(--c-knowledge); } [data-app="queens"] { --c: var(--c-queens); }
+  [data-app="cloze"] { --c: var(--c-cloze); } [data-app="forest"] { --c: var(--c-forest); }
+  [data-app="show"] { --c: var(--c-show); } [data-app="grammar"] { --c: var(--c-grammar); }
+  [data-app="class123"] { --c: var(--c-class); } [data-app="writing"] { --c: var(--c-writing); }
+  [data-app="speaking"] { --c: #c2410c; } [data-app="journey"] { --c: #0f766e; } [data-app="hub"] { --c: var(--navy); } [data-app="kahoot"] { --c: #7c3aed; } [data-app="textbook"] { --c: #0369a1; }
+  .more { padding-block: 10px 6px; border-top: 1px dashed var(--line); }
+  .tool.slim { flex-direction: row; align-items: flex-start; gap: 16px; }
+  .tool.slim .stamp { margin-top: 4px; }
+  .tool.slim .tool-body { padding: 0; flex: 1; min-width: 0; }
+  .tools.three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
+  @media (max-width: 980px) { .tools.three { grid-template-columns: minmax(0, 1fr); } }
+  [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); } [data-app="history"] { --c: var(--c-history); } [data-app="arcade"] { --c: var(--c-arcade); }
+  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); }
+  .cat-head { border-top: 2px solid var(--line); margin-top: 30px; }
+
+  .show { padding-block: 34px; }
+  .show + .show { border-top: 1px dashed var(--line); }
+  .show-in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; align-items: center; }
+  .show:nth-of-type(even) .show-text { order: 2; }
+  .show-text { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .show h3, .tool h3 { font-family: var(--display); font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -.025em; line-height: 1.1; margin: 4px 0 0; }
+  .show h3 small, .tool h3 small { display: block; font-family: var(--body); font-size: .9rem; font-weight: 600; color: var(--muted); letter-spacing: 0; margin-top: 5px; }
+  .show p, .tool p { margin: 0; color: var(--muted); font-size: .97rem; max-width: 36em; }
+  .feats { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-size: .92rem; }
+  .feats li { padding-left: 18px; position: relative; }
+  .feats li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+  .go { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: #fff; text-decoration: none; font: 700 .92rem var(--body); padding: 9px 18px; border-radius: 999px; border: 0; cursor: pointer; }
+  :root[data-theme="dark"] .go { color: #0f1628; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .go { color: #0f1628; } }
+  .go:hover { filter: brightness(1.08); }
+  .go.locked { background: transparent; color: var(--muted); border: 1.5px dashed var(--line); font-weight: 600; }
+  .go.locked:hover { filter: none; color: var(--ink); border-color: var(--gold); }
+  .sub-link { display: inline-flex; align-items: center; font-size: .86rem; font-weight: 600; color: var(--muted); text-decoration: none; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); }
+  .sub-link:hover { color: var(--c); border-color: var(--c); }
+
+  /* screenshot frames */
+  .shots { margin: 0; position: relative; padding-bottom: 28px; }
+  .frame { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--paper); cursor: zoom-in; box-shadow: 0 24px 50px -24px rgba(20,38,73,.45), 0 2px 6px rgba(20,38,73,.06); transition: transform .25s ease, box-shadow .25s ease; text-align: left; }
+  .frame:hover { transform: translateY(-4px) rotate(-.3deg); box-shadow: 0 30px 60px -24px rgba(20,38,73,.55); }
+  .frame img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
+  .bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: color-mix(in srgb, var(--c) 9%, var(--paper)); border-bottom: 1px solid var(--line); }
+  .bar i { width: 9px; height: 9px; border-radius: 50%; background: color-mix(in srgb, var(--c) 45%, var(--line)); }
+  .bar span { margin-left: 8px; font-family: var(--mono); font-size: .68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .frame.mini { position: absolute; width: 42%; right: -18px; bottom: 0; border-radius: 10px; border: 3px solid var(--paper); transform: rotate(2.5deg); }
+  .frame.mini:hover { transform: rotate(1deg) translateY(-4px); }
+  .show:nth-of-type(even) .frame.mini { right: auto; left: -18px; transform: rotate(-2.5deg); }
+  .shots figcaption { position: absolute; left: 4px; bottom: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--muted); }
+  .show:nth-of-type(even) .shots figcaption { left: auto; right: 4px; }
+
+  /* teacher tools */
+  .teacher { background: color-mix(in srgb, var(--navy) 6%, var(--bg)); border-top: 1px solid var(--line); margin-top: 30px; padding-bottom: 40px; }
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .tool .frame { box-shadow: none; }
+  .tool-body { display: flex; flex-direction: column; gap: 10px; padding: 0 6px 6px; }
+  .tool .acts { margin-top: auto; }
+  body.is-admin #teacherHint { color: var(--ok); font-weight: 700; }
+
+  /* zoom */
+  dialog.zoom { width: min(1200px, calc(100vw - 32px)); background: transparent; box-shadow: none; overflow: visible; }
+  dialog.zoom figure { margin: 0; }
+  dialog.zoom img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+  dialog.zoom figcaption { color: #fff; text-align: center; margin-top: 10px; font-size: .92rem; }
+  .zoom-x { position: absolute; top: -40px; right: 0; color: #fff; }
+  [hidden] { display: none !important; }
+  /* 퀴즈쇼: 휴대폰에서는 모바일 버전 버튼을 앞에, 강조해서 보여 줘요 */
+  @media (max-width: 700px) and (pointer: coarse) {
+    .show-acts { flex-direction: row-reverse; justify-content: flex-end; }
+    .show-acts [data-ver="mobile"] { background: var(--c); color: #fff; border-color: var(--c); }
+    .show-acts [data-ver="pc"] { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 600; }
+    :root[data-theme="dark"] .show-acts [data-ver="mobile"] { color: #0f1628; }
+  }
+  @media (max-width: 700px) and (pointer: coarse) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .show-acts [data-ver="mobile"] { color: #0f1628; } }
+  .url { font-family: var(--mono); font-size: .72rem; color: var(--muted); opacity: .8; }
+
+  footer { border-top: 1px solid var(--line); margin-top: 26px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding-block: 22px 34px; color: var(--muted); font-size: .84rem; }
+  footer a { color: var(--muted); }
+
+  /* ---------- admin dialog ---------- */
+  dialog { border: none; border-radius: 20px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  dialog::backdrop { background: rgba(10,18,40,.55); }
+  .dlg-head { background: var(--navy); color: var(--cover-ink); padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .dlg-head h2 { margin: 0; font-family: var(--display); font-size: 1.2rem; }
+  .dlg-x { background: none; border: none; color: var(--cover-ink); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 2px 6px; }
+  .dlg-body { padding: 20px 22px 24px; }
+  .dlg-body > p { margin: 0 0 14px; color: var(--muted); font-size: .92rem; }
+  .admin-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .admin-list a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; }
+  .admin-list a:hover { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 8%, transparent); }
+  .admin-list b { display: block; font-size: .95rem; }
+  .admin-list span { font-size: .8rem; color: var(--muted); }
+  .admin-list .arrow { color: var(--gold); font-weight: 800; }
+  .admin-group { font-family: var(--mono); font-size: .7rem; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; margin: 16px 0 8px; }
+  #dlgGbtn { min-height: 44px; }
+  .warn { background: color-mix(in srgb, var(--wait) 12%, transparent); color: var(--ink); border-radius: 12px; padding: 12px 14px; font-size: .9rem; }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .show-in { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+    .show:nth-of-type(even) .show-text { order: 0; }
+    .frame.mini { right: -6px; } .show:nth-of-type(even) .frame.mini { left: auto; right: -6px; transform: rotate(2.5deg); }
+    .show:nth-of-type(even) .shots figcaption { left: 4px; right: auto; }
+  }
+  @media (max-width: 600px) {
+    .tools { grid-template-columns: minmax(0, 1fr); }
+    .frame.mini { width: 46%; }
+    .brand span { display: none; }
+    .hero { padding-block: 32px 22px; }
+    .cover::before { inset: 8px; } .cover::after { inset: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .frame { transition: none; } .frame:hover, .frame.mini:hover { transform: none; } }
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" integrity="sha384-rwykjmWNwVxboyFmvK9OXN0wj9hnMHA2aAHtits54DuACyCq0M2PrSNxhRb+hvXT" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="cover">
+  <svg class="orbits" viewBox="0 0 620 620" aria-hidden="true"><g fill="none" stroke="#e9c46a"><ellipse cx="310" cy="310" rx="300" ry="96" transform="rotate(-18 310 310)" stroke-opacity=".35"/><ellipse cx="310" cy="310" rx="220" ry="70" transform="rotate(-18 310 310)" stroke-opacity=".25"/><circle cx="310" cy="310" r="120" stroke-opacity=".15"/></g><circle cx="88" cy="372" r="6" fill="#e9c46a" fill-opacity=".7"/><circle cx="520" cy="210" r="3.5" fill="#fff" fill-opacity=".6"/><circle cx="440" cy="520" r="2.5" fill="#fff" fill-opacity=".5"/></svg>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="./">
+        <img src="assets/myeverse/logo.svg" width="64" height="64" alt="">
+        <div><b class="wm">MY<i>e</i>Verse</b><span>My English Universe</span></div>
+      </a>
+      <button class="admin-btn" id="adminBtn" type="button" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        관리자 접속
+      </button>
+    </div>
+
+    <div class="hero">
+      <div>
+        <div class="kicker">My English Universe</div>
+        <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>나만의 영어 우주</h1>
+        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 영어 게임, 상식 퀴즈까지. 수업에서 쓰는 영어 앱과 다른 교과 앱을 한곳에 모았어요. <b>구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
+        <nav class="jump" aria-label="앱 바로가기">
+          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#games">영어 게임</a><a href="#subjects">다른 교과</a><a href="#teacher">선생님 도구</a>
+        </nav>
+      </div>
+
+      <section class="desk" aria-labelledby="deskTitle">
+        <div id="deskOut">
+          <h2 id="deskTitle">한 번 로그인, 모든 앱</h2>
+          <p class="sub">학교에서 받은 Google 계정으로 로그인하세요. 선생님은 등록된 계정으로 로그인하면 관리자 메뉴가 열려요.</p>
+          <div id="gbtn"><span class="gfallback">로그인 버튼을 불러오는 중이에요...</span></div>
+        </div>
+        <div id="deskIn" hidden>
+          <div class="me">
+            <div class="who"><span>로그인됨</span><b id="meEmail"></b></div>
+            <button class="btn-ghost" id="logoutBtn" type="button">모든 앱에서 로그아웃</button>
+          </div>
+        </div>
+        <ul class="links" aria-label="앱별 로그인 상태">
+          <li>MY Level Test · 독서 여권 <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>MY Brain Up · Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>MY Speaking · 나의 영어 여정 <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>영어 게임 · 역사 박물관 <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>단어숲 · MY Cloze · 영작문 튜터 <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
+          <li>Class123 · Teacher Hub <span class="pill off" id="teacherPill">교사 전용</span></li>
+        </ul>
+        <p class="desk-note" id="deskNote">공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.</p>
+      </section>
+    </div>
+
+    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;E&lt;VERSE&lt;&lt;LEVEL&lt;READ&lt;GRAMMAR&lt;WRITING&lt;VOCAB&lt;QUIZ&lt;SHOW&lt;CLOZE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+  </div>
+</header>
+
+<main id="apps">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">For Students · 학생 앱</div>
+        <h2>앱 둘러보기</h2>
+      </div>
+      <p>화면을 누르면 크게 볼 수 있어요. 누구나 이용할 수 있어요.</p>
+    </div>
+  </div>
+
+  <article class="show" data-app="level" id="level">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
+          <div class="tags"><span class="tag">레벨 진단</span><span class="tag">약 13분</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Level Test<small>영어 레벨 테스트</small></h3>
+        <p>단어, 문법·어휘, 읽기 세 단계를 풀면 내 영어 레벨을 알려 줘요. 내 답에 따라 다음 문제의 난이도가 바뀌어서 짧은 시간에 정확하게 찾아 줘요.</p>
+        <ul class="feats">
+          <li>CEFR 레벨, 어휘 크기, Lexile·AR 지수를 한 번에</li>
+          <li>영역별 강점과 보완하면 좋은 점</li>
+          <li>결과에 맞춰 독서 여권 레벨 설정과 추천 책 4권</li>
+          <li>결과 보고서 인쇄·PDF 저장</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="level/">레벨 테스트 시작 →</a>
+          <!-- 체험 모드 잠시 끔 (다시 켜려면 이 줄의 주석을 풀고 level/app.js 의 DEMO_ENABLED 를 true 로)
+          <a class="sub-link" href="level/?demo=1">로그인 없이 체험</a> -->
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/level-result.webp" data-cap="결과 보고서: CEFR 레벨, 어휘 크기, Lexile·AR 지수">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/level</span></span>
+          <img src="assets/shots/level-result.webp" width="1280" height="800" loading="lazy" alt="MY Level Test 결과 화면: CEFR A2 상, 어휘 크기, 문법·읽기 레벨, Lexile과 AR 지수">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/level-start.webp" data-cap="단어 → 문법·어휘 → 읽기, 세 단계">
+          <img src="assets/shots/level-start.webp" width="1280" height="800" loading="lazy" alt="레벨 테스트 시작 화면: 단어, 문법·어휘, 읽기 세 단계 안내">
+        </button>
+        <figcaption>결과 보고서 · 시작 화면 (체험 모드)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="passport" id="passport">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></div>
+          <div class="tags"><span class="tag">세계문학 읽기</span><span class="tag">Pre-A1 ~ B2</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Reading Passport<small>세계문학 독서 여권</small></h3>
+        <p>쉬운 영어로 다시 쓴 세계문학 523권 가운데 내 수준에 맞는 책을 골라 읽어요. 퀴즈를 통과하면 메달을 받고, 작품의 나라가 여권 도장과 세계 문학 지도에 찍혀요.</p>
+        <ul class="feats">
+          <li>CEFR 단계별 책장과 주제·장르 검색</li>
+          <li>어려운 단락만 한국어 힌트</li>
+          <li>10문항 퀴즈로 금·은·동메달, 힌트 없이 통과하면 ⭐</li>
+          <li>세계 문학 지도와 대륙 배지, 우리 반 단어 목표</li>
+          <li>책마다 🏛️ 명예의 전당: 최초·올해·이번 달 첫 금메달과 인증서</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="app/">여권 펼치기 →</a>
+          <a class="sub-link" href="app/guide.html">사용 설명서</a>
+          <a class="sub-link" href="passport.html">소개 페이지</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/passport-shelf.webp" data-cap="523권 책장: 수준과 주제로 책 고르기">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/app</span></span>
+          <img src="assets/shots/passport-shelf.webp" width="1280" height="800" loading="lazy" alt="독서 여권 책장 화면: CEFR 단계별로 책을 고르는 모습">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/passport-map.webp" data-cap="세계 문학 지도와 대륙 배지">
+          <img src="assets/shots/passport-map.webp" width="1280" height="800" loading="lazy" alt="세계 문학 지도와 대륙 배지 화면">
+        </button>
+        <figcaption>523권 책장 · 세계 문학 지도</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="knowledge" id="knowledge">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg></div>
+          <div class="tags"><span class="tag">영어 지식 읽기</span><span class="tag">Pre-A1 ~ B2</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Knowledge Passport<small>지식 읽기 여권</small></h3>
+        <p>세상의 상식, 과학과 우주, 역사, 기념일, 음식과 물건의 기원, 위인 이야기를 담은 영어 지식 글 300편을 내 수준에 맞게 골라 읽어요. 퀴즈를 통과하면 메달을 받고, 글에 나온 나라가 여권 도장과 세계 지식 지도에 찍혀요.</p>
+        <ul class="feats">
+          <li>CEFR 5단계 서재: Pre-A1 37 · A1 57 · A2 78 · B1 77 · B2 51편</li>
+          <li>10가지 분야와 6가지 글 종류로 찾기, 분야 배지</li>
+          <li>어려운 단락만 한국어 힌트, 글마다 핵심 사실과 단어장</li>
+          <li>10문항 퀴즈로 금·은·동메달, 힌트 없이 통과하면 ⭐</li>
+          <li>세계 지식 지도와 대륙 배지, 연속 독서와 우리 반 목표</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="reading2/app/">지식 여권 펼치기 →</a>
+          <a class="sub-link" href="reading2/app/guide.html">사용 설명서</a>
+          <a class="sub-link" href="reading2/">소개 페이지</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/knowledge-shelf.webp" data-cap="300편 서재: 수준과 분야로 글 고르기">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/reading2/app</span></span>
+          <img src="assets/shots/knowledge-shelf.webp" width="1280" height="800" loading="lazy" alt="지식 여권 서재 안내 화면: CEFR 단계별 글 수와 글 카드">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/knowledge-cover.webp" data-cap="지식 여권 사용 설명서 표지">
+          <img src="assets/shots/knowledge-cover.webp" width="1280" height="800" loading="lazy" alt="MY Knowledge Passport 사용 설명서 표지: 레벨별 글 수와 지식 여권">
+        </button>
+        <figcaption>300편 서재 · 사용 설명서</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="metro" id="metro">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18M3 16h18"/><circle cx="7" cy="8" r="2"/><circle cx="17" cy="8" r="2"/><circle cx="12" cy="16" r="2"/></svg></div>
+          <div class="tags"><span class="tag">영어 교과서 읽기</span><span class="tag">중1·중2·고1</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Reading Metro<small>교과서 메트로</small></h3>
+        <p>2022 개정 영어 교과서 본문을 지하철 노선도처럼 한 역씩 따라가며 읽어요. 학년과 교과서는 노선, 단원은 역이에요. 역마다 읽기, 분석, 단어, 줄거리, 퀴즈 다섯 개의 출구가 있어요.</p>
+        <ul class="feats">
+          <li>12개 노선 91개 역: YBM, NE능률, 천재교육 중1·중2와 공통영어 1·2</li>
+          <li>문장별 해석·어휘·문법 해설과 원어민 음성</li>
+          <li>단어 플래시카드·짝 맞추기·철자 연습과 복습 일정</li>
+          <li>줄거리 빈칸·순서 드래그 앤 드롭, 10문항 퀴즈</li>
+          <li>단어 수, CEFR, Lexile 추정치 분석은 로그인 없이도 공개</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="metro/">메트로 타기 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/metro-map.webp" data-cap="노선도: 교과서는 노선, 단원은 역">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/metro</span></span>
+          <img src="assets/shots/metro-map.webp" width="1280" height="800" loading="lazy" alt="리딩 메트로 노선도 화면: 학년별 노선과 단원 역">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/metro-stats.webp" data-cap="역마다 본문 분석: 단어 수, CEFR, Lexile 추정">
+          <img src="assets/shots/metro-stats.webp" width="1280" height="800" loading="lazy" alt="리딩 메트로 본문 분석 화면: 단어 수, 문장 수, CEFR, Lexile 추정치">
+        </button>
+        <figcaption>노선도 · 본문 분석</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="grammar" id="grammar">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2"/><path d="M8 7h6M8 11h4"/></svg></div>
+          <div class="tags"><span class="tag">영어 문법</span><span class="tag">18단원</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Grammar<small>영어 문법 학습실</small></h3>
+        <p>개념과 예문을 듣고 읽은 뒤 바로 문제를 풀어요. 틀린 문제는 잊을 때쯤 다시 나오고, 스탬프와 레벨을 모아 Grammar Queen에 도전해요.</p>
+        <ul class="feats">
+          <li>개념 + 예문, 듣기까지 한 번에</li>
+          <li>똑똑한 복습: 잊을 때쯤 다시</li>
+          <li>섞어 풀기 10문제, 60초 타임어택</li>
+          <li>배지·스탬프·순위, 인증서 자동 발급</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="grammar/">문법 공부하기 →</a>
+          <a class="sub-link" href="grammar/guide.html">사용 설명서</a>
+          <!-- 체험 링크 잠시 숨김 (다시 보이게 하려면 주석을 풀어요)
+          <a class="sub-link" href="grammar/?demo=1">로그인 없이 체험</a> -->
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/grammar-home.webp" data-cap="MY Grammar 홈: 오늘의 복습, 이어서 학습, 타임어택">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/grammar</span></span>
+          <img src="assets/shots/grammar-home.webp" width="1280" height="800" loading="lazy" alt="MY Grammar 홈 화면: 레벨, 오늘의 복습, 섞어 풀기, 60초 타임어택">
+        </button>
+        <figcaption>홈 화면 (체험 모드)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="writing" id="writing">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></div>
+          <div class="tags"><span class="tag">영작문</span><span class="tag">AI 채점</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>AI 영작문 튜터<small>한국어 제시문을 영어로 쓰기</small></h3>
+        <p>선생님이 공개한 한국어 문장을 영어로 옮겨 쓰면 바로 채점해 줘요. 점수와 CEFR 등급, 고친 문장과 모범 답안을 보고, 내가 쓴 글과 한 단어씩 비교해요.</p>
+        <ul class="feats">
+          <li>목표 문법(so that, 현재완료 등) 활용 확인</li>
+          <li>의미·어휘, 문법·어순, 대소문자·부호 100점 채점</li>
+          <li>제한 시간과 제출 횟수는 선생님이 정해요</li>
+          <li>자유 주제 영작과 날짜별 내 기록</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="writing1/">영작 시작하기 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/writing-result.webp" data-cap="AI 영작문 튜터: 채점 결과 (예시)">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/writing1</span></span>
+          <img src="assets/shots/writing-result.webp" width="1280" height="800" loading="lazy" alt="AI 영작문 튜터 채점 결과 화면: 종합 점수, 의미 전달력, CEFR 등급, 교정 문장">
+        </button>
+        <figcaption>채점 결과 화면 (예시)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="forest" id="forest">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l5 7h-3l4 6H6l4-6H7z"/><path d="M12 16v5"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>단어숲<small>어휘 학습 · 단원 테스트</small></h3>
+        <p>단어 카드, 6가지 퀴즈, 짝 맞추기 게임으로 교과서 단어를 외워요. 연속 학습일과 배지를 모으고, 홈 화면에 추가하면 앱처럼 써요.</p>
+        <ul class="feats">
+          <li>새 단어 → 객관식 → 철자까지 단계별 학습</li>
+          <li>듣고 고르기, 영영풀이, 예문 빈칸</li>
+          <li>단원 테스트 결과가 선생님께 바로 전달</li>
+          <li>인터넷이 끊겨도 학습 가능</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="danuhsup/">단어 외우기 →</a>
+          <a class="sub-link" href="danuhsup/guide/student.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/forest-home.webp" data-cap="단어숲 홈: 연속 학습, 오늘의 목표, 이어서 학습">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/danuhsup</span></span>
+          <img src="assets/shots/forest-home.webp" width="1280" height="800" loading="lazy" alt="단어숲 홈 화면: 연속 학습일, 오늘의 목표, 오늘의 단어">
+        </button>
+        <figcaption>홈 화면 (체험 모드)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="brainup" id="brainup">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg></div>
+          <div class="tags"><span class="tag">상식 퀴즈</span><span class="tag">쉬운 영어</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Brain Up<small>풀수록 똑똑해지는 랜덤 상식 퀴즈</small></h3>
+        <p>START를 누르면 국어·영어·수학·사회·과학·예체능·경제·IT 8개 분야에서 랜덤으로 문제가 나와요. 객관식과 단답형, 쉬운 영어 문제로 점수를 모아 이번 주 상식 퀸에 도전해요.</p>
+        <ul class="feats">
+          <li>오늘의 10문제와 오답 다시 풀기</li>
+          <li>영어 문제 보너스와 English Day</li>
+          <li>분야 배지 · 주간 순위 · 반 대항전</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="brainup/">시작하기 →</a>
+          <a class="sub-link" href="brainup/guide.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/brainup-home.webp" data-cap="MY Brain Up 시작 화면">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/brainup</span></span>
+          <img src="assets/shots/brainup-home.webp" width="1280" height="800" loading="lazy" alt="MY Brain Up 시작 화면: START 버튼, 오늘의 10문제, 오답 다시 풀기, 분야 배지">
+        </button>
+        <figcaption>시작 화면</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="queens" id="queens">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18l-1.5-10-4.5 4-3-6-3 6-4.5-4z"/><path d="M5 21h14"/></svg></div>
+          <div class="tags"><span class="tag">상식 퀴즈</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>Quiz Queens<small>퀴즈 퀸즈</small></h3>
+        <p>룰렛을 돌려 나온 분야의 상식 문제를 풀어요. 분야별 왕관을 모으고, 레벨이 오르면 인증서를 받고, 학급 랭킹으로 친구들과 겨뤄요.</p>
+        <ul class="feats">
+          <li>룰렛 도전과 왕관 게이지</li>
+          <li>연속 도전일과 레벨별 인증서</li>
+          <li>학급·전체 랭킹</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="quiz/">도전하기 →</a>
+          <a class="sub-link" href="quiz/manual.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/queens-roulette.webp" data-cap="Quiz Queens 룰렛 도전">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/quiz</span></span>
+          <img src="assets/shots/queens-roulette.webp" width="1280" height="800" loading="lazy" alt="Quiz Queens 룰렛 도전 화면: 분야별 색깔 룰렛과 SPIN 버튼">
+        </button>
+        <figcaption>룰렛 도전 화면</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="show" id="quizshow">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg></div>
+          <div class="tags"><span class="tag">전자칠판</span><span class="tag">휴대폰</span><span class="tag">로그인 없음</span></div>
+        </div>
+        <h3>퀴즈쇼<small>예술제 퀴즈쇼</small></h3>
+        <p>퀴즈반이 예술제에서 진행하는 추천 작품·교과서 소설 퀴즈쇼예요. 128개 작품 가운데 하나를 골라 제한 시간 안에 정답을 맞혀요. 전자칠판에서는 PC 버전, 휴대폰에서는 모바일 버전으로 시작해요.</p>
+        <div class="acts show-acts">
+          <a class="go" href="quizshow/" data-ver="pc">🖥️ PC 버전 →</a>
+          <a class="sub-link" href="quizshow/mobile.html" data-ver="mobile">📱 모바일 버전</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/quizshow-question.webp" data-cap="퀴즈쇼 문제 화면">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/quizshow</span></span>
+          <img src="assets/shots/quizshow-question.webp" width="1280" height="800" loading="lazy" alt="퀴즈쇼 문제 화면: 네 개의 보기와 남은 시간">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/quizshow-board.webp" data-cap="퀴즈쇼 작품 고르기">
+          <img src="assets/shots/quizshow-board.webp" width="1280" height="800" loading="lazy" alt="퀴즈쇼 작품 목록 화면">
+        </button>
+        <figcaption>문제 화면 · 작품 고르기</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <div class="wrap" id="games">
+    <div class="section-head cat-head">
+      <div>
+        <div class="eyebrow">Play &amp; Learn · 영어 게임</div>
+        <h2 id="gamesTitle">영어 게임</h2>
+      </div>
+      <p>교과서 단어와 문장을 게임으로 익혀요. 학교 계정으로 로그인해요.</p>
+    </div>
+  </div>
+
+  <article class="show" data-app="myarcade" id="myarcade">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘·예문</span><span class="tag">게임 12종</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY English Arcade<small>영어 놀이터</small></h3>
+        <p>1·2학년 교과서 어휘와 예문 674개로 12가지 게임을 해요. 학년, 단원, 문제 수를 고르고 단어 익히기, 문장 만들기, 퍼즐 가운데 마음에 드는 게임을 골라 도전해요.</p>
+        <ul class="feats">
+          <li>스펠링 챌린지 · 문장 공작소 · 단어 짝꿍 · 리스닝 랩 · 메모리 플립 등 12종</li>
+          <li>결과에서 틀린 문항의 뜻·영영풀이·예문·해석을 바로 복습</li>
+          <li>나의 기록: 게임별 성적과 아직 틀리는 문제, 게임·단원별 복습 버튼</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="my-english-arcade/">놀이터 입장 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/arcade-home.webp" data-cap="MY English Arcade 게임 라운지: 누적 포인트, 첫 풀이 정답률, 학년·단원 고르기">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/my-english-arcade</span></span>
+          <img src="assets/shots/arcade-home.webp" width="1280" height="800" loading="lazy" alt="MY English Arcade 게임 라운지 화면: 오늘의 영어, 어떤 게임으로 만날까 안내와 학년·단원·문제 수 고르기">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/arcade-games.webp" data-cap="게임 고르기: 단어 익히기 · 문장 만들기 · 퍼즐 즐기기">
+          <img src="assets/shots/arcade-games.webp" width="1280" height="800" loading="lazy" alt="MY English Arcade 게임 카드 목록: 스펠링 챌린지, 문장 공작소, 단어 짝꿍">
+        </button>
+        <figcaption>게임 라운지 · 게임 고르기</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="wordrush" id="wordrush">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘·예문</span><span class="tag">게임 8종</span><span class="tag">학교 계정</span></div>
+        </div>
+        <h3>MY Word Rush<small>교과서 단어·문장 챌린지</small></h3>
+        <p>교과서 단어와 예문으로 빈칸 스펠링, 어순 조립, 짝짓기 같은 학습 게임 4종과 RPG 배틀, 암호 해독, 워들 같은 퍼즐 게임 4종을 즐겨요. 랭킹에서 친구들과 기록을 겨뤄요.</p>
+        <ul class="feats">
+          <li>빈칸 스펠링 · 어순 블록 · 스피드 짝짓기 · 영영풀이 퀴즈쇼</li>
+          <li>스펠스파이어 RPG · 크립토그램 · 커넥션즈 · 워들 & 스펠링 비</li>
+          <li>틀린 단어만 모아 🔥 내 오답만 집중, 원어민 음성 듣기</li>
+          <li>내 기록과 게임별 랭킹</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="wordrush/">챌린지 시작 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/wordrush-games.webp" data-cap="MY Word Rush 게임 8종: 학습 게임 4종과 퍼즐·RPG 4종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordrush</span></span>
+          <img src="assets/shots/wordrush-games.webp" width="1280" height="800" loading="lazy" alt="MY Word Rush 게임 목록 화면: 기본 단어·문장 학습 게임 4종과 퍼즐·RPG 챌린지 게임 4종">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/wordrush-home.webp" data-cap="학년·단원·문제 수 고르기 (체험용 화면)">
+          <img src="assets/shots/wordrush-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Rush 첫 화면: 학년, 단원, 출제 문항 수 고르기">
+        </button>
+        <figcaption>게임 8종 · 범위 고르기 (체험용 화면)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="arcade" id="arcade">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="15.5" cy="11.5" r=".8" fill="currentColor"/><circle cx="17.5" cy="13.8" r=".8" fill="currentColor"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘</span><span class="tag">게임 7종</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Word Arcade<small>교과서 단어로 노는 게임</small></h3>
+        <p>1·2학년 교과서 단어와 예문으로 7가지 게임을 해요. 단원을 골라 짝짓기, 빈칸 스펠링, 어순 조립, 듣기, 크로스워드, 스펠 배틀, 암호 해독에 도전하고, 틀린 단어는 오답 노트에서 다시 놀아요.</p>
+        <ul class="feats">
+          <li>짝짓기 타임어택 · 빈칸 스펠링 · 문장 어순 조립 · 듣고 맞히기</li>
+          <li>영영풀이 크로스워드 · 글자 타일 스펠 배틀 · 예문 암호 해독</li>
+          <li>오답 노트로 틀린 단어만 다시, 내 기록과 많이 틀린 단어 TOP 10</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="wordarcade/">게임 시작 →</a>
+          <a class="sub-link" href="wordarcade/guide.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/wordarcade-home.webp" data-cap="MY Word Arcade 홈: 단어장·단원 고르기와 게임 7종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordarcade</span></span>
+          <img src="assets/shots/wordarcade-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Arcade 홈 화면: 단어장과 단원을 고르고 7가지 단어 게임 중 하나를 고르는 화면">
+        </button>
+        <figcaption>홈 화면</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <div class="wrap" id="subjects">
+    <div class="section-head cat-head">
+      <div>
+        <div class="eyebrow">Beyond English · 다른 교과</div>
+        <h2 id="otherTitle">다른 교과도 공부해요</h2>
+      </div>
+      <p>같은 로그인으로 다른 과목도 공부할 수 있어요. 새 과목이 생기면 여기에 더해져요.</p>
+    </div>
+  </div>
+
+  <article class="show" data-app="history" id="history">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></div>
+          <div class="tags"><span class="tag">역사 교과서</span><span class="tag">세계사·한국사</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY History Museum<small>역사 박물관</small></h3>
+        <p>중학교 역사 ①(세계사)과 역사 ②(한국사) 교과서를 한 박물관에서 나란히 관람해요. 대단원은 전시관, 중단원은 전시실이에요. 로비의 두 줄 연표로 같은 시기의 세계와 우리 역사를 한눈에 봐요.</p>
+        <ul class="feats">
+          <li>세계사관 7개·한국사관 6개 전시관, 40개 전시실 (차례로 개관)</li>
+          <li>해설 읽기: 용어·한자 풀이, 필기 노트 빈칸, 생각 질문</li>
+          <li>사료·유물 탐구: 내 답 쓰고 예시 답안과 비교</li>
+          <li>인물·개념 카드 복습, 연표 순서·원인→결과·나란히 짝 퍼즐</li>
+          <li>10문항 확인 퀴즈와 전시실별 관람 도장</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="history/">박물관 입장 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/history-lobby.webp" data-cap="로비: 세계사·한국사 두 줄 연표와 두 전시동">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/history</span></span>
+          <img src="assets/shots/history-lobby.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 로비 화면: 세계사와 한국사 전시관을 나란히 놓은 두 줄 연표">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/history-puzzle.webp" data-cap="연표·인과 코너: 원인 → 사건 → 결과 카드 놓기">
+          <img src="assets/shots/history-puzzle.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 연표·인과 코너 화면: 원인, 사건, 결과 카드를 골라 놓는 퍼즐">
+        </button>
+        <figcaption>두 줄 연표 · 인과 퍼즐</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <section class="more" id="more" aria-labelledby="moreTitle">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Speak &amp; Track · 말하기와 내 기록</div>
+          <h2 id="moreTitle">말하기 연습과 나의 영어 여정</h2>
+        </div>
+        <p>학교 계정으로 로그인해서 써요.</p>
+      </div>
+      <div class="tools">
+        <article class="tool slim" data-app="speaking" id="speaking">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></div>
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">말하기</span><span class="tag">교과서 대화문</span><span class="tag">로그인</span></div>
+            <h3>MY Speaking<small>말하기 연습</small></h3>
+            <p>교과서 대화문을 원어민 목소리로 듣고 따라 말하면, 알아들은 단어를 초록·빨강으로 보여 주고 점수를 매겨요. 역할 연기와 속도 조절도 돼요. 목소리는 저장하지 않아요.</p>
+            <div class="acts"><a class="go" href="speaking/">말하기 연습 →</a></div>
+          </div>
+        </article>
+        <article class="tool slim" data-app="journey" id="journey">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">내 기록</span><span class="tag">모든 앱 한눈에</span><span class="tag">로그인</span></div>
+            <h3>MY English Journey<small>나의 영어 여정</small></h3>
+            <p>독서 여권, 문법, 단어숲, 상식 퀴즈, 말하기까지. 여러 앱에서 내가 한 활동과 이번 주 기록을 한 화면에서 보고, 다음에 할 앱으로 바로 가요.</p>
+            <div class="acts"><a class="go" href="me/">내 기록 보기 →</a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="teacher" id="teacher" aria-labelledby="teacherTitle">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">For Teachers · 교사 전용</div>
+          <h2 id="teacherTitle">선생님 도구</h2>
+        </div>
+        <p id="teacherHint">선생님 계정으로 로그인하면 버튼이 열려요.</p>
+      </div>
+      <div class="tools">
+        <article class="tool" data-app="cloze">
+          <button class="frame" type="button" data-zoom="assets/shots/cloze-live.webp" data-cap="MY Cloze 실시간 순위 (예시 데이터)">
+            <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/cloze</span></span>
+            <img src="assets/shots/cloze-live.webp" width="1280" height="800" loading="lazy" alt="MY Cloze 수업용 실시간 순위 화면 (예시 데이터)">
+          </button>
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">빈칸 채우기</span><span class="tag">문장 순서</span><span class="tag lock">교사 전용</span></div>
+            <h3>MY Cloze<small>빈칸 채우기 · 문장 순서 테스트</small></h3>
+            <p>본문을 붙여 넣고 빈칸이나 문장 순서 테스트를 만들어요. 학생에게는 6자리 코드나 링크로 나눠 주고, 결과 통계와 수업용 실시간 순위를 봐요.</p>
+            <div class="acts">
+              <a class="go" href="cloze/" data-teacher hidden>내 테스트 열기 →</a>
+              <button class="go locked" type="button" data-locked>🔒 교사 로그인 후 열기</button>
+            </div>
+          </div>
+        </article>
+        <article class="tool" data-app="class123">
+          <button class="frame" type="button" data-zoom="assets/shots/class123-room.webp" data-cap="Class123 우리 반 화면 (예시 이름)">
+            <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/class123</span></span>
+            <img src="assets/shots/class123-room.webp" width="1280" height="800" loading="lazy" alt="Class123 우리 반 학생 카드 화면 (예시 이름)">
+          </button>
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">학급 경영</span><span class="tag">수업 도구</span><span class="tag lock">교사 전용</span></div>
+            <h3>Class123 Plus<small>학급 경영 · 수업 관리</small></h3>
+            <p>학생 카드에 으쓱·머쓱 점수를 주고, 황금알과 학급 온도계로 반 목표를 함께 채워요. 뽑기, 뒤집기, 타이머, 진도표, 리포트까지 수업 도구를 한 화면에 모았어요.</p>
+            <div class="acts">
+              <a class="go" href="class123/" data-teacher hidden>학급 열기 →</a>
+              <button class="go locked" type="button" data-locked>🔒 교사 로그인 후 열기</button>
+              <a class="sub-link" href="class123/manual.html">설명서</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="tools three">
+        <article class="tool slim" data-app="hub">
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">통합 현황</span><span class="tag lock">교사 전용</span></div>
+            <h3>MY Teacher Hub<small>모든 앱 학생 현황 한 화면</small></h3>
+            <p>독서·문법·단어·퀴즈·말하기·레벨 테스트 기록을 학생별로 모아 보고, 정한 규칙대로 Class123 으쓱을 줘요.</p>
+            <div class="acts">
+              <a class="go" href="teacher/" data-teacher hidden>허브 열기 →</a>
+              <button class="go locked" type="button" data-locked>🔒 교사 로그인 후 열기</button>
+            </div>
+          </div>
+        </article>
+        <article class="tool slim" data-app="kahoot">
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">실시간 퀴즈</span><span class="tag">과제</span></div>
+            <h3>MY Kahoot<small>실시간 스피드 퀴즈</small></h3>
+            <p>전자칠판에 PIN을 띄우고 반 전체가 스피드 퀴즈를 풀어요. 엑셀로 문제를 올리고, 문항별 통계와 성적표를 받아요.</p>
+            <div class="acts">
+              <a class="go" href="kahoot/" data-teacher hidden>진행 화면 열기 →</a>
+              <button class="go locked" type="button" data-locked>🔒 교사 로그인 후 열기</button>
+              <a class="sub-link" href="kahoot/student.html">학생 입장</a>
+            </div>
+          </div>
+        </article>
+        <article class="tool slim" data-app="textbook">
+          <div class="tool-body">
+            <div class="tags left"><span class="tag">전자칠판</span><span class="tag">1·2학년 16단원</span></div>
+            <h3>영어 교과서 수업실<small>본문 빈칸 공개 수업 자료</small></h3>
+            <p>교과서 본문을 한 장씩 넘기며 빈칸을 채우고 어휘·문법 설명을 보여 줘요. 로그인 없이 바로 열려요.</p>
+            <div class="acts">
+              <a class="go" href="textbook/">수업실 열기 →</a>
+              <a class="sub-link" href="textbook/admin.html" data-teacher hidden>설명 고치기</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="zoomDlg" class="zoom" aria-label="화면 크게 보기">
+  <figure>
+    <img id="zoomImg" alt="">
+    <figcaption id="zoomCap"></figcaption>
+  </figure>
+  <button class="dlg-x zoom-x" id="zoomClose" type="button" aria-label="닫기">×</button>
+</dialog>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand"><img src="assets/myeverse/logo.svg" width="22" height="22" alt=""> MYeVerse · My English Universe</span>
+    <span><a href="privacy.html">개인정보처리방침</a> · 문의 tfellow@gmail.com</span>
+  </div>
+</footer>
+
+<dialog id="adminDlg" aria-labelledby="adminTitle">
+  <div class="dlg-head">
+    <h2 id="adminTitle">관리자 접속</h2>
+    <button class="dlg-x" id="adminClose" type="button" aria-label="닫기">×</button>
+  </div>
+  <div class="dlg-body" id="adminBody"></div>
+</dialog>
+
+<script>
+  /* 공통 설정: 관리자 계정은 각 앱의 교사 목록과 같아요 */
+  window.SMY = {
+    ADMIN_EMAILS: ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@smy.ms.kr", "hist1026@gmail.com"],
+    GOOGLE_CLIENT_ID: "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com",
+    SUPABASE_URL: "https://jkxdhyvnrvsiokbbbjtu.supabase.co",
+    SUPABASE_KEY: "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"
+  };
+</script>
+<script type="module">
+  const C = window.SMY;
+  const $ = (s) => document.querySelector(s);
+  const state = { sbEmail: null };
+  const isAdmin = (e) => !!e && C.ADMIN_EMAILS.includes(e.toLowerCase());
+  const email = () => state.sbEmail;
+
+  /* ---- Supabase: 모든 MY 앱이 같은 로그인을 써요 (2026-11 Cloze·단어숲·영작문도 Firebase 에서 옮겼어요) ---- */
+  let sb = null;
+  try { if (window.supabase) sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_KEY); } catch (e) {}
+
+  if (sb) {
+    try {
+      const { data } = await sb.auth.getSession();
+      state.sbEmail = data && data.session ? data.session.user.email : null;
+      sb.auth.onAuthStateChange((_e, s) => { state.sbEmail = s ? s.user.email : null; render(); });
+    } catch (e) {}
+  }
+
+  /* 구글 로그인 한 번 → 모든 MY 앱에 로그인 */
+  async function onGoogle(resp) {
+    const token = resp.credential;
+    try {
+      if (sb) { const r = await sb.auth.signInWithIdToken({ provider: "google", token }); if (r.error) throw r.error; }
+    } catch (e) { $("#deskNote").textContent = "로그인에 실패했어요: " + (e.message || e) + " 잠시 뒤 다시 시도해 주세요."; }
+    render();
+    if ($("#adminDlg").open) openAdmin();
+  }
+
+  async function logoutAll() {
+    try { if (sb) await sb.auth.signOut(); } catch (e) {}
+    try { localStorage.removeItem("qq_current_user_v14"); } catch (e) {}
+    if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+    state.sbEmail = null;
+    render();
+  }
+
+  function setPills(key, on, offText) {
+    document.querySelectorAll('[data-auth="' + key + '"]').forEach((p) => {
+      p.className = "pill " + (on ? "on" : "off");
+      p.textContent = on ? "연결됨" : offText;
+    });
+  }
+
+  function render() {
+    const e = email();
+    $("#deskOut").hidden = !!e;
+    $("#deskIn").hidden = !e;
+    $("#meEmail").textContent = e || "";
+    setPills("sb", !!state.sbEmail, "로그인 필요");
+    /* 교사 전용 도구: 관리자 계정으로 로그인했을 때만 열려요 */
+    const admin = isAdmin(e);
+    document.body.classList.toggle("is-admin", admin);
+    document.querySelectorAll("[data-teacher]").forEach((a) => { a.hidden = !admin; });
+    document.querySelectorAll("[data-locked]").forEach((b) => { b.hidden = admin; });
+    const tp = $("#teacherPill");
+    tp.className = "pill " + (admin ? "on" : "off");
+    tp.textContent = admin ? "열림" : "교사 전용";
+    $("#teacherHint").textContent = admin ? "선생님 계정으로 로그인했어요. 도구를 바로 열 수 있어요." : (e ? "이 계정은 교사로 등록되어 있지 않아요." : "선생님 계정으로 로그인하면 버튼이 열려요.");
+    $("#deskNote").textContent = "공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.";
+  }
+
+  /* 구글 버튼 */
+  function whenGoogle(cb, tries = 0) {
+    if (window.google && google.accounts && google.accounts.id) return cb();
+    if (tries > 60) { document.querySelectorAll(".gfallback").forEach((x) => x.textContent = "구글 로그인을 불러오지 못했어요. 각 앱에서 로그인해 주세요."); return; }
+    setTimeout(() => whenGoogle(cb, tries + 1), 150);
+  }
+  function drawButton(el) {
+    whenGoogle(() => {
+      google.accounts.id.initialize({ client_id: C.GOOGLE_CLIENT_ID, callback: onGoogle });
+      google.accounts.id.renderButton(el, { theme: "outline", size: "large", text: "signin_with", locale: "ko", shape: "pill", width: 260 });
+    });
+  }
+  drawButton($("#gbtn"));
+
+  /* ---- 관리자 접속 ---- */
+  const ADMIN_LINKS = [
+    ["한눈에 보기", [
+      ["teacher/", "MY Teacher Hub · 통합 교사 현황", "모든 앱의 학생 기록 모아 보기, Class123 으쓱 보상 규칙"]
+    ]],
+    ["앱 관리", [
+      ["level/#/teacher", "MY Level Test · 교사 화면", "응시 열기, 재응시 간격, 학생 결과, 문항 분석"],
+      ["app/#/teacher", "MY Reading Passport · 교사 화면", "학생 기록, 퀴즈 통계, 교사 추가, 반 목표"],
+      ["reading2/app/#/teacher", "MY Knowledge Passport · 교사 화면", "반별 현황, 학생·글별 기록, 문항 분석, 반 목표, 추천 글"],
+      ["metro/#/teacher", "MY Reading Metro · 교사 화면", "학생별 퀴즈 기록과 역별 현황"],
+      ["history/#/teacher", "MY History Museum · 학예실(교사 화면)", "학생별 퀴즈·퍼즐·사료 답, 사료 탐구 답 모아 보기"],
+      ["grammar/admin.html", "MY Grammar · 교사 화면", "단원·문제 관리, 학생 기록, 공지"],
+      ["brainup/#/teacher", "MY Brain Up · 교사 화면", "문제 올리기, 오늘의 10문제 현황, 아침 보너스, QR 포스터"],
+      ["speaking/#/teacher", "MY Speaking · 교사 화면", "대화문 붙여 넣기·공개, 학생별·문장별 결과"],
+      ["quiz/", "Quiz Queens · 관리자 모드", "앱 오른쪽 위 관리자 버튼으로 문제·기록 관리"],
+      ["cloze/", "MY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
+      ["writing1/", "AI 영작문 튜터 · 교사 대시보드", "과제 출제·공개, 제출 현황, 점수 통계, CSV 내보내기"],
+      ["my-english-arcade/", "MY English Arcade · 교사실", "앱 위쪽 교사실 탭: 학년·반·게임·단원별 통계, 취약 문항, CSV"],
+      ["wordrush/", "MY Word Rush · 교사 화면", "앱 위쪽 👩‍🏫 교사 탭: 학생별 기록, 취약 단어, 단어 세트"],
+      ["wordarcade/#/teacher", "MY Word Arcade · 교사 화면", "학생별 게임 기록, 취약 어휘 순위, 단어장 올리기, CSV"],
+      ["danuhsup/#t-dash", "단어숲 · 교사 대시보드", "참여율, 단원별 암기율, 테스트 결과, 단어장 업로드"],
+      ["kahoot/", "MY Kahoot · 진행·통계", "퀴즈 올리기, 실시간 진행, 과제, 성적표 (별도 로그인)"],
+      ["textbook/admin.html", "영어 교과서 수업실 · 설명 고치기", "문장별 어휘·문법 설명 편집"],
+      ["class123/", "Class123 Plus · 학급 경영", "학생 카드, 학급 온도계, 뽑기, 진도표 (별도 로그인)"]
+    ]],
+    ["설명서 · 서버", [
+      ["danuhsup/guide/teacher.html", "단어숲 교사 설명서", "처음 설정과 운영 방법"],
+      ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서·지식 여권 · 메트로 · 레벨 테스트 · 문법 · 단어숲 · MY Cloze · 영작문 · Brain Up · 말하기 · 퀴즈 퀸즈 데이터"],
+      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "MY Cloze·단어숲·영작문 튜터 옛 기록 보관 (읽기 전용)"],
+      ["https://console.firebase.google.com/project/my-kahoot-smy/overview", "Firebase 콘솔 (Kahoot)", "MY Kahoot · Class123 데이터"]
+    ]]
+  ];
+  function openAdmin() {
+    const body = $("#adminBody");
+    const e = email();
+    if (!e) {
+      body.innerHTML = '<p>등록된 선생님 계정으로 로그인하면 관리 메뉴가 열려요.</p><div id="dlgGbtn"></div>';
+      drawButton(document.getElementById("dlgGbtn"));
+    } else if (!isAdmin(e)) {
+      body.innerHTML = '<div class="warn"><b></b> 계정은 관리자로 등록되어 있지 않아요. 선생님 계정으로 다시 로그인해 주세요.</div>';
+      body.querySelector("b").textContent = e;
+    } else {
+      body.innerHTML = "<p>" + "선생님, 어서 오세요. 각 앱의 관리 화면으로 바로 이동해요." + "</p>" + ADMIN_LINKS.map(([g, items]) =>
+        '<div class="admin-group">' + g + '</div><ul class="admin-list">' + items.map(([href, t, d]) =>
+          '<li><a href="' + href + '"' + (href.startsWith("http") ? ' target="_blank" rel="noopener"' : "") + '><div><b>' + t + "</b><span>" + d + '</span></div><span class="arrow">→</span></a></li>').join("") + "</ul>").join("");
+    }
+    const dlg = $("#adminDlg");
+    if (!dlg.open) dlg.showModal();
+  }
+  $("#adminBtn").addEventListener("click", openAdmin);
+  $("#adminClose").addEventListener("click", () => $("#adminDlg").close());
+  $("#adminDlg").addEventListener("click", (ev) => { if (ev.target.id === "adminDlg") ev.target.close(); });
+  $("#logoutBtn").addEventListener("click", logoutAll);
+  document.querySelectorAll("[data-locked]").forEach((b) => b.addEventListener("click", openAdmin));
+
+  /* 화면 크게 보기 */
+  const zoom = $("#zoomDlg");
+  document.querySelectorAll("[data-zoom]").forEach((f) => f.addEventListener("click", () => {
+    $("#zoomImg").src = f.dataset.zoom;
+    $("#zoomImg").alt = f.dataset.cap || "";
+    $("#zoomCap").textContent = f.dataset.cap || "";
+    zoom.showModal();
+  }));
+  $("#zoomClose").addEventListener("click", () => zoom.close());
+  zoom.addEventListener("click", () => zoom.close());
+
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MYeVerse">
+  <defs>
+    <radialGradient id="mvPlanet" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#3a64ad"/>
+      <stop offset=".55" stop-color="#1e3768"/>
+      <stop offset="1" stop-color="#0e1c3a"/>
+    </radialGradient>
+  </defs>
+  <!-- orbit, back half (behind the planet) -->
+  <g transform="rotate(-18 32 33)">
+    <path d="M3 33 A29 9.5 0 0 1 61 33" fill="none" stroke="#c8962a" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <!-- planet -->
+  <circle cx="32" cy="33" r="20" fill="url(#mvPlanet)" stroke="#e9c46a" stroke-width="1.6"/>
+  <text x="32" y="39.6" text-anchor="middle" font-family="'Bricolage Grotesque','Arial Black',Arial,sans-serif" font-weight="800" font-size="17" letter-spacing="-.5" fill="#ffffff">MY</text>
+  <!-- orbit, front half (over the planet) with the little "e" moon -->
+  <g transform="rotate(-18 32 33)">
+    <path d="M3 33 A29 9.5 0 0 0 61 33" fill="none" stroke="#e9c46a" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="12" cy="40" r="5.2" fill="#e9c46a"/>
+    <text x="12" y="42.6" text-anchor="middle" font-family="'Bricolage Grotesque','Arial Black',Arial,sans-serif" font-weight="800" font-size="8" fill="#142649">e</text>
+  </g>
+  <!-- star -->
+  <path d="M52 5 L53.4 9.6 L58 11 L53.4 12.4 L52 17 L50.6 12.4 L46 11 L50.6 9.6 Z" fill="#e9c46a"/>
+</svg>
