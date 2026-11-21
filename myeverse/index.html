@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5644cb">
+<meta name="description" content="MYeVerse — 읽고, 놀고, 표현하며 넓혀 가는 나만의 배움 세계. 읽기, 영어 게임, 말하기, 쓰기, 퀴즈와 학습 기록을 한곳에서 만나세요.">
+<meta property="og:title" content="MYeVerse · 나만의 배움 세계">
+<meta property="og:description" content="작은 호기심이 더 큰 세상이 되는 곳. 읽기부터 게임, 말하기와 퀴즈까지 MYeVerse에서 시작해요.">
+<meta property="og:type" content="website">
+<title>MYeVerse · 나만의 배움 세계</title>
+<link rel="icon" href="./logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+<script defer src="./app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="./" aria-label="MYeVerse 처음 화면"><img src="./logo.svg" alt="" width="44" height="44"><span>MY<span class="brand-e">e</span>Verse</span></a>
+    <nav aria-label="주 메뉴"><a href="#explore">앱 둘러보기</a><a href="#channels">채널</a><a href="https://tfellow.github.io/web/me/">나의 여정</a></nav>
+    <button type="button" class="account-button" id="account-button" aria-haspopup="dialog">로그인</button>
+  </div>
+</header>
+<main id="main">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="mini-star" aria-hidden="true">✦</span> YOUR LEARNING UNIVERSE</p>
+      <h1 id="hero-title">작은 호기심,<br>더 큰 <span>나의 세계.</span></h1>
+      <p class="hero-description">읽고, 놀고, 표현하는 모든 순간이 배움이 되도록.<br class="desktop-break"> 나만의 속도로 MYeVerse를 탐험해 보세요.</p>
+      <div class="hero-actions"><a class="button primary" href="#explore">배움 시작하기</a><a class="button secondary" href="https://tfellow.github.io/web/me/">나의 학습 기록</a></div>
+      <p class="hero-note">한곳에서 만나는 읽기 · 게임 · 표현 · 탐구</p>
+    </div>
+    <div class="universe" aria-hidden="true">
+      <div class="universe-grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+      <div class="planet"><span class="planet-my">MY<span>e</span></span><span class="planet-caption">VERSE</span></div>
+      <span class="orbit-label label-read"><span>▤</span> 읽고</span>
+      <span class="orbit-label label-play"><span>✦</span> 놀고</span>
+      <span class="orbit-label label-create"><span>✎</span> 표현하고</span>
+      <span class="star star-one">✦</span><span class="star star-two">✧</span><span class="dot dot-one"></span><span class="dot dot-two"></span>
+      <span class="universe-caption">A LITTLE CURIOUS. A LITTLE FURTHER.</span>
+    </div>
+  </section>
+  <div class="wrap">
+    <section class="starting-points" aria-label="추천 시작점">
+      <div class="starting-label"><span>오늘의 첫걸음</span><strong>어디서 시작할까요?</strong></div>
+      <a href="https://tfellow.github.io/web/app/"><span class="quick-icon reading" aria-hidden="true">▤</span><span><strong>한 편 읽어 볼까?</strong><small>독서 여권</small></span></a>
+      <a href="https://tfellow.github.io/web/my-english-arcade/"><span class="quick-icon games" aria-hidden="true">✦</span><span><strong>영어 한 판 어때?</strong><small>영어 놀이터</small></span></a>
+      <a href="https://tfellow.github.io/web/level/"><span class="quick-icon progress" aria-hidden="true">◎</span><span><strong>나의 출발점 찾기</strong><small>영어 레벨 테스트</small></span></a>
+    </section>
+  </div>
+  <section class="explore wrap" id="explore" aria-labelledby="explore-title">
+    <div class="section-heading"><div><p class="eyebrow">EXPLORE MYeVERSE</p><h2 id="explore-title">오늘은 어떤 배움을 만날까요?</h2></div>
+      <label class="search-box"><span class="sr-only">앱 이름이나 키워드 검색</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input id="app-search" type="search" placeholder="앱 이름이나 키워드 검색" autocomplete="off"></label>
+    </div>
+    <div class="filter-bar" role="group" aria-label="앱 분야 선택">
+      <button type="button" class="filter active" data-filter="all" aria-pressed="true">전체 <span>21</span></button>
+      <button type="button" class="filter" data-filter="reading" aria-pressed="false">읽기</button>
+      <button type="button" class="filter" data-filter="games" aria-pressed="false">단어·문법 게임</button>
+      <button type="button" class="filter" data-filter="expression" aria-pressed="false">말하기·쓰기</button>
+      <button type="button" class="filter" data-filter="quiz" aria-pressed="false">퀴즈·상식</button>
+      <button type="button" class="filter" data-filter="progress" aria-pressed="false">테스트·현황</button>
+      <button type="button" class="filter" data-filter="classroom" aria-pressed="false">학급 경영</button>
+    </div>
+    <div class="results-meta"><p id="result-count" role="status" aria-live="polite">21개의 배움 공간</p><p>로그인은 각 앱에서도 할 수 있어요.</p></div>
+    <div class="app-grid" id="app-grid"><article class="app-card" data-category="reading">
+  <div class="card-top"><span class="app-icon reading" aria-hidden="true">RP</span><span class="card-tag">독서 · 읽기</span></div>
+  <h3><a href="https://tfellow.github.io/web/app/">MY Reading Passport</a></h3>
+  <p class="app-subtitle">독서 여권</p><p class="app-description">책 한 권에서 시작하는 나만의 읽기 여행.</p>
+  <div class="card-bottom"><span>앱 열기</span><a class="guide-link" href="https://tfellow.github.io/web/app/guide.html">사용 안내</a></div>
+</article>
+<article class="app-card" data-category="reading">
+  <div class="card-top"><span class="app-icon reading" aria-hidden="true">KP</span><span class="card-tag">지식 · 읽기</span></div>
+  <h3><a href="https://tfellow.github.io/web/reading2/">MY Knowledge Passport</a></h3>
+  <p class="app-subtitle">지식 여권</p><p class="app-description">다양한 주제의 글을 읽으며 지식의 폭을 넓혀요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="reading">
+  <div class="card-top"><span class="app-icon reading" aria-hidden="true">RM</span><span class="card-tag">교과서 · 읽기</span></div>
+  <h3><a href="https://tfellow.github.io/web/metro/">MY Reading Metro</a></h3>
+  <p class="app-subtitle">교과서 메트로</p><p class="app-description">교과서 읽기를 역마다 차근차근 이어 가요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="reading">
+  <div class="card-top"><span class="app-icon reading" aria-hidden="true">CL</span><span class="card-tag">읽기 · 수업</span></div>
+  <h3><a href="https://tfellow.github.io/web/cloze/">MY Cloze</a></h3>
+  <p class="app-subtitle">빈칸으로 읽기</p><p class="app-description">빈칸과 문장 순서 활동으로 내용을 확인해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="reading">
+  <div class="card-top"><span class="app-icon reading" aria-hidden="true">TX</span><span class="card-tag">교과서 · 수업</span></div>
+  <h3><a href="https://tfellow.github.io/web/textbook/">영어 교과서 수업실</a></h3>
+  <p class="app-subtitle">교과서 수업</p><p class="app-description">본문과 어휘, 문법을 함께 살펴보는 수업 공간.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="games">
+  <div class="card-top"><span class="app-icon games" aria-hidden="true">WA</span><span class="card-tag">단어 · 게임</span></div>
+  <h3><a href="https://tfellow.github.io/web/wordarcade/">MY Word Arcade</a></h3>
+  <p class="app-subtitle">교과서 단어 게임</p><p class="app-description">교과서 속 단어를 다양한 게임으로 만나요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="games">
+  <div class="card-top"><span class="app-icon games" aria-hidden="true">WR</span><span class="card-tag">단어 · 문장</span></div>
+  <h3><a href="https://tfellow.github.io/web/wordrush/">MY Word Rush</a></h3>
+  <p class="app-subtitle">단어·문장 챌린지</p><p class="app-description">단어와 문장에 도전하며 영어 감각을 깨워요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="games">
+  <div class="card-top"><span class="app-icon games" aria-hidden="true">숲</span><span class="card-tag">단어 · 복습</span></div>
+  <h3><a href="https://tfellow.github.io/web/danuhsup/">단어숲</a></h3>
+  <p class="app-subtitle">차곡차곡 단어 학습</p><p class="app-description">한 단어씩 익히며 나만의 단어숲을 가꿔요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="games">
+  <div class="card-top"><span class="app-icon games" aria-hidden="true">GR</span><span class="card-tag">문법 · 연습</span></div>
+  <h3><a href="https://tfellow.github.io/web/grammar/">MY Grammar</a></h3>
+  <p class="app-subtitle">문법 학습실</p><p class="app-description">문법을 연습하고 헷갈리는 부분을 다시 살펴봐요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="games">
+  <div class="card-top"><span class="app-icon games" aria-hidden="true">EA</span><span class="card-tag">영어 · 게임</span></div>
+  <h3><a href="https://tfellow.github.io/web/my-english-arcade/">MY English Arcade</a></h3>
+  <p class="app-subtitle">영어 놀이터</p><p class="app-description">단어부터 문장까지, 열두 가지 게임으로 연습해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="expression">
+  <div class="card-top"><span class="app-icon expression" aria-hidden="true">SP</span><span class="card-tag">듣기 · 말하기</span></div>
+  <h3><a href="https://tfellow.github.io/web/speaking/">MY Speaking</a></h3>
+  <p class="app-subtitle">말하기 연습</p><p class="app-description">대화문을 듣고 따라 말하며 자신감을 키워요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="expression">
+  <div class="card-top"><span class="app-icon expression" aria-hidden="true">AI</span><span class="card-tag">쓰기 · 피드백</span></div>
+  <h3><a href="https://tfellow.github.io/web/writing1/">AI 영작문 튜터</a></h3>
+  <p class="app-subtitle">영작문과 피드백</p><p class="app-description">내 생각을 영어로 쓰고 피드백으로 다듬어요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="quiz">
+  <div class="card-top"><span class="app-icon quiz" aria-hidden="true">BU</span><span class="card-tag">상식 · 퀴즈</span></div>
+  <h3><a href="https://tfellow.github.io/web/brainup/">MY Brain Up</a></h3>
+  <p class="app-subtitle">랜덤 상식 퀴즈</p><p class="app-description">짧은 퀴즈로 새로운 지식을 하나씩 발견해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="quiz">
+  <div class="card-top"><span class="app-icon quiz" aria-hidden="true">QQ</span><span class="card-tag">상식 · 도전</span></div>
+  <h3><a href="https://tfellow.github.io/web/quiz/">QUIZ QUEENS</a></h3>
+  <p class="app-subtitle">상식 여왕 도전기</p><p class="app-description">알고 있는 것을 펼치고 새로운 상식에 도전해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="quiz">
+  <div class="card-top"><span class="app-icon quiz" aria-hidden="true">QS</span><span class="card-tag">퀴즈 · 함께</span></div>
+  <h3><a href="https://tfellow.github.io/web/quizshow/">MY Quiz Show</a></h3>
+  <p class="app-subtitle">함께하는 퀴즈쇼</p><p class="app-description">함께 풀고 즐기는 퀴즈로 배움의 시간을 채워요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="quiz">
+  <div class="card-top"><span class="app-icon quiz" aria-hidden="true">KH</span><span class="card-tag">퀴즈 · 수업</span></div>
+  <h3><a href="https://tfellow.github.io/web/kahoot/">MY Kahoot</a></h3>
+  <p class="app-subtitle">실시간 스피드 퀴즈</p><p class="app-description">실시간 퀴즈와 과제로 함께 참여해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="quiz">
+  <div class="card-top"><span class="app-icon quiz" aria-hidden="true">HM</span><span class="card-tag">역사 · 탐구</span></div>
+  <h3><a href="https://tfellow.github.io/web/history/">MY History Museum</a></h3>
+  <p class="app-subtitle">역사 박물관</p><p class="app-description">세계사와 한국사를 따라 역사 속으로 떠나요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="progress">
+  <div class="card-top"><span class="app-icon progress" aria-hidden="true">LT</span><span class="card-tag">테스트 · 시작</span></div>
+  <h3><a href="https://tfellow.github.io/web/level/">MY Level Test</a></h3>
+  <p class="app-subtitle">영어 레벨 테스트</p><p class="app-description">지금의 영어 수준을 확인하고 다음 배움을 준비해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="progress">
+  <div class="card-top"><span class="app-icon progress" aria-hidden="true">EJ</span><span class="card-tag">기록 · 성장</span></div>
+  <h3><a href="https://tfellow.github.io/web/me/">MY English Journey</a></h3>
+  <p class="app-subtitle">나의 영어 여정</p><p class="app-description">여러 앱에서 쌓은 나의 학습 기록을 모아 봐요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="progress">
+  <div class="card-top"><span class="app-icon progress" aria-hidden="true">TH</span><span class="card-tag">교사 도구</span></div>
+  <h3><a href="https://tfellow.github.io/web/teacher/">MY Teacher Hub</a></h3>
+  <p class="app-subtitle">교사용 통합 현황</p><p class="app-description">학생들의 학습 기록을 한곳에서 살펴봐요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-category="classroom">
+  <div class="card-top"><span class="app-icon classroom" aria-hidden="true">123</span><span class="card-tag">교사 도구</span></div>
+  <h3><a href="https://tfellow.github.io/web/class123/">Class123</a></h3>
+  <p class="app-subtitle">학급 경영</p><p class="app-description">학급 활동과 수업을 함께 관리하는 공간.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article></div>
+    <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">⌕</span><h3>찾는 앱이 보이지 않아요.</h3><p>다른 검색어를 입력하거나 전체 앱을 살펴보세요.</p><button type="button" class="button secondary" id="reset-search">전체 앱 보기</button></div>
+    <noscript><p>모든 앱 링크를 바로 이용할 수 있어요. 검색과 분야 선택, 공통 로그인은 자바스크립트를 켜면 사용할 수 있어요.</p></noscript>
+  </section>
+  <section class="journey-banner wrap" aria-labelledby="journey-title"><div class="journey-symbol" aria-hidden="true">✧</div><div><p class="eyebrow">EVERY LITTLE STEP COUNTS</p><h2 id="journey-title">오늘의 작은 도전도, 나의 여정에.</h2><p>읽고 풀고 연습한 기록을 모아, 자라나는 나를 만나 보세요.</p></div><a class="button primary" href="https://tfellow.github.io/web/me/">나의 영어 여정</a></section>
+  <section class="channels wrap" id="channels" aria-labelledby="channels-title"><div><p class="eyebrow">STAY CONNECTED</p><h2 id="channels-title">배움의 이야기를 이어 가요.</h2><p>수업 이야기와 다양한 소식을 채널에서 만나세요.</p></div><div class="channel-links"><a href="https://cafe.naver.com/tfellow" target="_blank" rel="noopener noreferrer">네이버 카페<span class="sr-only"> (새 탭)</span></a><a href="https://blog.naver.com/tfellow" target="_blank" rel="noopener noreferrer">네이버 블로그<span class="sr-only"> (새 탭)</span></a><a href="https://www.instagram.com/tfellow/" target="_blank" rel="noopener noreferrer">인스타그램<span class="sr-only"> (새 탭)</span></a></div></section>
+</main>
+<footer class="site-footer"><div class="wrap footer-top"><div><a class="brand" href="./"><img src="./logo.svg" alt="" width="36" height="36"><span>MY<span class="brand-e">e</span>Verse</span></a><p>나만의 속도로, 더 넓은 배움의 세계로.</p></div><div class="footer-links"><a href="../privacy.html">개인정보 처리방침</a><a href="mailto:tfellow@gmail.com">tfellow@gmail.com</a><a href="https://tfellow.github.io/web/">기존 시작 페이지</a></div></div><div class="wrap footer-bottom"><span>© 2026 MYeVerse</span><span>Read. Play. Express. Discover.</span></div></footer>
+<dialog id="account-dialog" aria-labelledby="account-title"><div class="dialog-heading"><h2 id="account-title">MYeVerse 로그인</h2><button class="close-button" id="close-account" type="button" aria-label="로그인 창 닫기">×</button></div><p>등록된 Google 계정으로 로그인해 배움을 이어 가세요. 앱에 따라 별도 로그인이 필요할 수 있어요.</p><div id="google-button"></div><p id="account-status" role="status" aria-live="polite"></p><button type="button" class="button secondary" id="logout-button" hidden>로그아웃</button><p class="account-note">공용 기기에서는 사용 후 로그아웃해 주세요.</p><a class="privacy-link" href="../privacy.html">개인정보 처리방침</a></dialog>
+</body>
+</html>
+
