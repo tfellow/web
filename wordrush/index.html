@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="referrer" content="no-referrer" />
+  <title>MY Word Rush · 교과서 단어·문장 챌린지</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Supabase Auth & Data Layer (ES Module, shared session without custom storageKey) -->
+  <script type="module" src="js/supabase-client.js?v=3"></script>
+
+  <!-- Textbook Vocabulary Dataset (674 words, G1 & G2) -->
+  <script src="data/vocab-data.js?v=3"></script>
+
+  <!-- Core Modules -->
+  <script src="js/tts.js?v=3"></script>
+  <script src="js/storage.js?v=3"></script>
+  <script src="js/data-loader.js?v=3"></script>
+
+  <!-- 8 Mini-Games (4 Core + 4 Puzzle/RPG) -->
+  <script src="js/games/cloze-spelling.js?v=3"></script>
+  <script src="js/games/unscramble.js?v=3"></script>
+  <script src="js/games/speed-match.js?v=3"></script>
+  <script src="js/games/engdef-quiz.js?v=3"></script>
+  <script src="js/games/spellspire.js?v=3"></script>
+  <script src="js/games/cryptogram.js?v=3"></script>
+  <script src="js/games/connections.js?v=3"></script>
+  <script src="js/games/word-puzzle.js?v=3"></script>
+
+  <!-- Main Controller -->
+  <script src="js/app.js?v=3"></script>
+
+  <!-- Shared MOONYOUNG MY Apps Drawer -->
+  <script src="../assets/my-apps.js?v=1" defer></script>
+</body>
+</html>
