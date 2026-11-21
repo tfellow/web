@@ -64,3 +64,10 @@
   .s2-mini td:last-child { width: 18%; text-align: right; }
   .s2-bar { min-width: 0; }
 }
+
+/* 문제 수 선택 (count.js) */
+.s2-count { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.s2-count .selector-label { margin-right: 2px; }
+.cnt-tab { padding: 6px 12px; border-radius: var(--radius-full); border: 1.5px solid var(--border); background: var(--bg-card); font-size: 0.84rem; font-weight: 700; color: var(--text-sub); cursor: pointer; transition: all 0.15s; }
+.cnt-tab:hover { border-color: var(--primary); color: var(--primary); }
+.cnt-tab.active { background: var(--primary-dark, var(--primary)); border-color: var(--primary-dark, var(--primary)); color: #fff; }
