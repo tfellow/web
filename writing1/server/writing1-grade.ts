@@ -12,10 +12,13 @@ import { createRemoteJWKSet, jwtVerify } from "https://deno.land/x/jose@v5.9.6/i
 const FIREBASE_PROJECT = "cloze-a8e6c";
 const ALLOWED_ORIGINS = ["https://tfellow.github.io"];
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@gmail.com", "engwords@smy.ms.kr", "hist1026@gmail.com"];
-// 차례대로 시도해요. 앞 모델이 없거나(404, 은퇴) 한도·권한 문제(403/429)·서버 오류면 다음 모델로 넘어가요.
-// (2026-11: gemini-2.5-flash 는 2026-12-01 종료 예정이라 이미 404 가 났어요. Google 모델 목록이 바뀌면 이 줄만 고치면 돼요)
-const MODELS = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash-lite"];
-const RETRY = new Set([403, 404, 429, 500, 503]);
+// 차례대로 시도해요. 앞 모델이 없거나(404, 은퇴) 한도·권한 문제(403/429)·서버 오류·시간 초과면 다음 모델로 넘어가요.
+// 짧은 중학생 영작 채점이라 가장 빠른 Flash-Lite 를 먼저 써요. (2026-11 기록: 3.8 Flash 503, 3.6 Flash 47초)
+// (gemini-2.5-flash 는 2026-12-01 종료 예정이라 이미 404 가 났어요. Google 모델 목록이 바뀌면 이 줄만 고치면 돼요)
+const MODELS = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-2.5-flash-lite", "gemini-3.8-flash"];
+const RETRY = new Set([403, 404, 408, 429, 500, 502, 503, 504]);
+const PER_MODEL_MS = 10_000;   // 한 모델을 기다리는 최대 시간
+const TOTAL_MS = 22_000;       // 앱은 25초까지 기다려요. 그 안에 답하도록 전체 시간을 제한해요
 const MAX_BODY = 20_000;
 
 const JWKS = createRemoteJWKSet(
@@ -86,19 +89,38 @@ Deno.serve(async (req) => {
   let body: { contents?: unknown; generationConfig?: unknown };
   try { body = JSON.parse(raw); } catch (_) { return Response.json({ error: "bad json" }, { status: 400, headers }); }
 
-  const payload = JSON.stringify({ contents: body.contents, generationConfig: body.generationConfig });
+  // 생각하는 시간을 줄여 빨리 답하게 해요 (지원하지 않는 모델이면 400 → 이 설정 없이 한 번 더)
+  const gen = (body.generationConfig && typeof body.generationConfig === "object") ? body.generationConfig as Record<string, unknown> : {};
+  const fast = JSON.stringify({ contents: body.contents, generationConfig: { ...gen, thinkingConfig: { thinkingLevel: "low" } } });
+  const plain = JSON.stringify({ contents: body.contents, generationConfig: gen });
+  const started = Date.now();
+  const call = async (model: string, payload: string) => {
+    const left = TOTAL_MS - (Date.now() - started);
+    if (left < 1500) return { status: 504, text: JSON.stringify({ error: "time budget used" }) };
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), Math.min(PER_MODEL_MS, left));
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        body: payload,
+        signal: ctl.signal,
+      });
+      return { status: r.status, text: await r.text() };
+    } catch (_) {
+      return { status: 504, text: JSON.stringify({ error: "model timeout" }) };
+    } finally { clearTimeout(timer); }
+  };
   let status = 502, text = JSON.stringify({ error: "no model answered" }), used = "";
   for (const model of MODELS) {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-      body: payload,
-    });
-    status = res.status; text = await res.text(); used = model;
-    if (res.ok || !RETRY.has(res.status)) break;
-    console.log(`model ${model} -> ${res.status}, trying next`);
+    let r = await call(model, fast);
+    if (r.status === 400) r = await call(model, plain);
+    status = r.status; text = r.text; used = model;
+    if ((status >= 200 && status < 300) || !RETRY.has(status)) break;
+    console.log(`model ${model} -> ${status} after ${Date.now() - started}ms, trying next`);
+    if (Date.now() - started > TOTAL_MS - 1500) break;
   }
   // 어느 모델로 채점했는지 기록에 남겨요 (Supabase → Edge Functions → Logs)
-  console.log(`graded by ${used} (${status})`);
+  console.log(`graded by ${used} (${status}) in ${Date.now() - started}ms`);
   return new Response(text, { status, headers: { ...headers, "Content-Type": "application/json", "X-Model": used } });
 });

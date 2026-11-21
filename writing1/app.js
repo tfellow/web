@@ -3539,7 +3539,7 @@ async function callGeminiHybridGrading({
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
             body: geminiBody
           },
-          15000 // 요즘 Gemini 모델은 생각하는 시간이 있어 6초로는 자주 모자라요
+          25000 // 서버가 빠른 모델부터 차례로 시도해요(최대 22초). 요즘 모델은 6초로는 자주 모자라요
         );
       }
     } catch (e) {
@@ -3548,13 +3548,13 @@ async function callGeminiHybridGrading({
     // 2) 교사 화면에서 테스트할 때만: 교사 브라우저에 있는 키로 직접 호출
     if ((!res || !res.ok) && geminiApiKey && currentUser && TEACHER_EMAILS.includes((currentUser.email || "").toLowerCase())) {
       res = await fetchWithTimeout(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", // 2.5-flash 는 2026-12 종료
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent", // 가장 빠른 모델 (2.5-flash 는 2026-12 종료)
         {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": geminiApiKey },
           body: geminiBody
         },
-        10000
+        15000
       );
     }
     if (!res) return null;
