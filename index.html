@@ -24,18 +24,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309; --c-sentence: #0b7a64;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309; --c-sentence: #0b7a64; --c-sentence2: #4338ca;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd; --c-sentence2: #a5b4fc;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd; --c-sentence2: #a5b4fc;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -118,7 +118,7 @@
   .tools.three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
   @media (max-width: 980px) { .tools.three { grid-template-columns: minmax(0, 1fr); } }
   [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); } [data-app="history"] { --c: var(--c-history); } [data-app="arcade"] { --c: var(--c-arcade); }
-  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); } [data-app="sentence"] { --c: var(--c-sentence); }
+  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); } [data-app="sentence"] { --c: var(--c-sentence); } [data-app="sentence2"] { --c: var(--c-sentence2); }
   .cat-head { border-top: 2px solid var(--line); margin-top: 30px; }
 
   .show { padding-block: 34px; }
@@ -734,6 +734,34 @@
     </div>
   </article>
 
+  <article class="show" data-app="sentence2" id="sentence2">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7M4 12h11M4 17h6"/><path d="m15 16 2 2 4-4"/></svg></div>
+          <div class="tags"><span class="tag">교과서 문장</span><span class="tag">게임 6종</span><span class="tag">학습 통계</span></div>
+        </div>
+        <h3>MY Sentence Master<small>교과서 문장 완전 정복</small></h3>
+        <p>교과서 문법·읽기 본문·In Context 대화 문장을 6가지 게임으로 익혀요. 로그인하면 XP, 마스터한 문장, 오답 노트가 계정에 저장돼서 어느 기기에서나 이어서 할 수 있어요.</p>
+        <ul class="feats">
+          <li>어순 배열 · 4단계 블라인드 암기 · 문법 드릴 · 듣기·받아쓰기·쉐도잉 · 오류 탐정 · 대화 롤플레이</li>
+          <li>XP · 콤보 · 단원 마스터리 · 오답 노트가 계정에 저장</li>
+          <li>선생님: 교사 스튜디오로 단원 만들기, 학생별 진도·게임별 정답률·많이 틀린 문장 통계</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="sentence2/">게임 시작 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/sentence2-home.webp" data-cap="MY Sentence Master 학습 허브: 단원·영역 고르기와 게임 6종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/sentence2</span></span>
+          <img src="assets/shots/sentence2-home.webp" width="1280" height="800" loading="lazy" alt="MY Sentence Master 학습 허브 화면: 단원과 영역을 고르고 6가지 문장 게임 중 하나를 고르는 화면">
+        </button>
+        <figcaption>학습 허브</figcaption>
+      </figure>
+    </div>
+  </article>
+
   <div class="wrap" id="subjects">
     <div class="section-head cat-head">
       <div>
@@ -1019,6 +1047,7 @@
       ["my-english-arcade/", "MY English Arcade · 교사실", "앱 위쪽 교사실 탭: 학년·반·게임·단원별 통계, 취약 문항, CSV"],
       ["wordrush/", "MY Word Rush · 교사 화면", "앱 위쪽 👩‍🏫 교사 탭: 학생별 기록, 취약 단어, 단어 세트"],
       ["wordarcade/#/teacher", "MY Word Arcade · 교사 화면", "학생별 게임 기록, 취약 어휘 순위, 단어장 올리기, CSV"],
+      ["sentence2/", "MY Sentence Master · 학습 통계", "앱 위쪽 📊 학습 통계·교사 스튜디오: 학생별 진도, 게임별 정답률, 많이 틀린 문장, 단원 만들기, CSV"],
       ["danuhsup/#t-dash", "단어숲 · 교사 대시보드", "참여율, 단원별 암기율, 테스트 결과, 단어장 업로드"],
       ["kahoot/", "MY Kahoot · 진행·통계", "퀴즈 올리기, 실시간 진행, 과제, 성적표 (별도 로그인)"],
       ["textbook/admin.html", "영어 교과서 수업실 · 설명 고치기", "문장별 어휘·문법 설명 편집"],

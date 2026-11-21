@@ -30,6 +30,7 @@
     ["wordrush/", "⚡", "MY Word Rush", "단어·문장 챌린지 8종"],
     ["wordarcade/", "🕹️", "MY Word Arcade", "교과서 단어 게임"],
     ["sentence/", "🏋️", "MY Sentence Gym", "교과서 문장 게임 9종"],
+    ["sentence2/", "🏆", "MY Sentence Master", "교과서 문장 게임 6종 · 기록 저장"],
     ["brainup/", "💡", "MY Brain Up", "랜덤 상식 퀴즈"],
     ["quiz/", "👑", "Quiz Queens", "룰렛 상식 퀴즈"],
     ["history/", "🏛️", "MY History Museum", "역사 교과서 박물관"]

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY Sentence Master | 중학 영어 문장 게임</title>
+  <link rel="icon" href="../assets/myeverse/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="bridge.css?v=1" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" id="btn-go-home" role="button" tabindex="0" aria-label="홈으로 이동">
+          <div class="brand-logo">SM</div>
+          <div class="brand-text">
+            <h1>Sentence Master</h1>
+            <span>중학 교과서 문장 완전 정복</span>
+          </div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-pill xp-pill" title="누적 학습 경험치">
+            <span class="stat-icon">⭐</span>
+            <span id="stat-xp">0</span>
+            <span class="stat-label">XP</span>
+          </div>
+          <div class="stat-pill streak-pill" title="현재 연속 정답 콤보">
+            <span class="stat-icon">🔥</span>
+            <span id="stat-streak">0</span>
+          </div>
+          <button class="stat-pill wrong-pill" id="btn-open-wrong" title="오답 노트 보기">
+            <span class="stat-icon">📌</span>
+            <span>오답</span>
+            <span id="stat-wrong-count" class="badge-count">0</span>
+          </button>
+          <button class="icon-btn" id="btn-toggle-sfx" title="효과음 켜기/끄기" aria-label="효과음 토글">🔊</button>
+          <button class="btn-teacher" id="btn-open-teacher">
+            <span>👩‍🏫</span> 교사 스튜디오
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Context Selector Bar (Lesson + Category) -->
+    <section class="selector-bar">
+      <div class="selector-inner">
+        <div class="selector-group">
+          <label for="select-lesson" class="selector-label">단원 선택</label>
+          <select id="select-lesson" class="lesson-select"></select>
+        </div>
+
+        <div class="category-tabs" id="category-tabs" role="tablist" aria-label="학습 영역 선택">
+          <button class="cat-tab active" data-cat="all" role="tab">전체 <span class="cat-count" id="count-all">0</span></button>
+          <button class="cat-tab" data-cat="grammar" role="tab">📘 문법 <span class="cat-count" id="count-grammar">0</span></button>
+          <button class="cat-tab" data-cat="reading" role="tab">📖 읽기 본문 <span class="cat-count" id="count-reading">0</span></button>
+          <button class="cat-tab" data-cat="incontext" role="tab">💬 In Context 대화 <span class="cat-count" id="count-incontext">0</span></button>
+        </div>
+      </div>
+
+      <!-- Lesson Grammar Focus Banner -->
+      <div class="lesson-meta-bar" id="lesson-meta-bar"></div>
+    </section>
+
+    <!-- Game Mode Navigation -->
+    <nav class="mode-nav" id="mode-nav" aria-label="게임 모드 선택">
+      <button class="mode-tab active" data-mode="dashboard">
+        <span class="mode-emoji">🏠</span>
+        <span class="mode-name">학습 허브</span>
+      </button>
+      <button class="mode-tab" data-mode="scramble">
+        <span class="mode-emoji">🧩</span>
+        <span class="mode-name">어순 배열</span>
+      </button>
+      <button class="mode-tab" data-mode="blind">
+        <span class="mode-emoji">🙈</span>
+        <span class="mode-name">4단계 암기</span>
+      </button>
+      <button class="mode-tab" data-mode="drill">
+        <span class="mode-emoji">⚡</span>
+        <span class="mode-name">문법 드릴</span>
+      </button>
+      <button class="mode-tab" data-mode="dictation">
+        <span class="mode-emoji">🎧</span>
+        <span class="mode-name">듣기·쉐도잉</span>
+      </button>
+      <button class="mode-tab" data-mode="error">
+        <span class="mode-emoji">🔍</span>
+        <span class="mode-name">오류 탐정</span>
+      </button>
+      <button class="mode-tab" data-mode="chat">
+        <span class="mode-emoji">💬</span>
+        <span class="mode-name">대화 롤플레이</span>
+      </button>
+    </nav>
+
+    <!-- Main Stage -->
+    <main id="main-stage" class="main-stage"></main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Modal: Wrong Answer Notebook -->
+    <div id="modal-wrong" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-wrong-title">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h2 id="modal-wrong-title">📌 나의 오답 노트</h2>
+          <button class="modal-close" data-close="modal-wrong" aria-label="닫기">✕</button>
+        </div>
+        <div class="modal-body" id="wrong-notebook-body"></div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="btn-clear-wrong">오답 노트 비우기</button>
+          <button class="btn btn-primary" data-close="modal-wrong">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Teacher Studio (Auto Parser + JSON Manager) -->
+    <div id="modal-teacher" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-teacher-title">
+      <div class="modal-card modal-xl">
+        <div class="modal-header">
+          <div>
+            <h2 id="modal-teacher-title">👩‍🏫 교사 스튜디오 — AI 규칙 기반 자동 문제 생성기</h2>
+            <p class="modal-subtitle">교과서 본문·문법·대화를 붙여넣으면 어순 청크, 빈칸, 함정 타일, 오류 탐정 문제가 자동 생성됩니다.</p>
+          </div>
+          <button class="modal-close" data-close="modal-teacher" aria-label="닫기">✕</button>
+        </div>
+        <div class="modal-body" id="teacher-studio-body">
+          <div class="teacher-tabs">
+            <button class="t-tab active" data-ttab="create">✨ 새 단원/자료 자동 생성</button>
+            <button class="t-tab" data-ttab="manage">📦 저장된 자료 관리 · JSON 공유</button>
+          </div>
+
+          <div id="teacher-panel-create" class="teacher-panel">
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="t-grade">학년</label>
+                <select id="t-grade">
+                  <option value="중1">중1</option>
+                  <option value="중2">중2</option>
+                  <option value="중3">중3</option>
+                  <option value="기타">기타</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="t-title">단원명</label>
+                <input type="text" id="t-title" placeholder="예: Lesson 2. My Daily Life" />
+              </div>
+              <div class="form-field">
+                <label for="t-category">자료 영역</label>
+                <select id="t-category">
+                  <option value="grammar">문법 (Grammar)</option>
+                  <option value="reading">읽기 본문 (Reading)</option>
+                  <option value="incontext">In Context 대화</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="t-grammar-rule">타깃 문법 자동 감지 규칙</label>
+                <select id="t-grammar-rule">
+                  <option value="auto">자동 감지 (추천)</option>
+                  <option value="be_verb">be동사 현재/과거 (am/is/are/was/were)</option>
+                  <option value="present_simple">일반동사 3인칭 단수 (-s/-es, don't/doesn't)</option>
+                  <option value="progressive">현재/과거 진행형 (be + -ing)</option>
+                  <option value="past_simple">과거시제 (불규칙/-ed, did)</option>
+                  <option value="superlative">최상급/비교급 (the -est / most / -er)</option>
+                  <option value="to_infinitive">to부정사 (to + 동사원형)</option>
+                  <option value="relative">관계대명사 (who / which / that)</option>
+                  <option value="present_perfect">현재완료 (have/has + p.p.)</option>
+                  <option value="passive">수동태 (be + p.p.)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <div class="label-row">
+                <label for="t-raw-input">문장 입력 (<code>영어 문장 | 한국어 해석</code> 형식, 대화는 <code>화자: 영어 문장 | 해석</code>)</label>
+                <button type="button" class="btn-link" id="btn-insert-sample">예시 텍스트 넣기</button>
+              </div>
+              <textarea id="t-raw-input" rows="7" placeholder="She has lived in Seoul for five years. | 그녀는 서울에서 5년 동안 살아왔다.&#10;This is the boy who won the race. | 이 아이가 경주에서 우승한 소년이다."></textarea>
+            </div>
+
+            <div class="teacher-actions">
+              <button type="button" class="btn btn-secondary" id="btn-preview-parse">🔍 자동 변환 미리보기</button>
+              <button type="button" class="btn btn-primary" id="btn-save-parsed">💾 단원에 저장하고 바로 플레이</button>
+            </div>
+
+            <div id="parse-preview-area" class="parse-preview hidden"></div>
+          </div>
+
+          <div id="teacher-panel-manage" class="teacher-panel hidden">
+            <div class="manage-box">
+              <h3>커스텀 단원 목록</h3>
+              <div id="custom-lessons-list" class="custom-list"></div>
+            </div>
+            <div class="manage-box">
+              <h3>JSON 내보내기 / 불러오기</h3>
+              <p class="helper-text">제작한 교과서 데이터를 JSON으로 백업하거나 다른 기기·선생님과 공유할 수 있습니다. (PDF 일괄 추출 스크립트: <code>tools/extract_textbook.py</code>)</p>
+              <div class="teacher-actions">
+                <button type="button" class="btn btn-secondary" id="btn-export-json">📤 현재 커스텀 자료 JSON 다운로드</button>
+                <label class="btn btn-secondary file-label">
+                  📥 JSON 파일 불러오기
+                  <input type="file" id="input-import-json" accept=".json" hidden />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (Classic order for zero-server file:// & http:// compatibility) -->
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/speech.js"></script>
+  <script src="js/utils/diff.js"></script>
+  <script src="js/data/lessons-data.js"></script>
+  <script src="js/data/grammar-parser.js"></script>
+  <script src="js/games/scramble.js"></script>
+  <script src="js/games/blind-memo.js"></script>
+  <script src="js/games/grammar-drill.js"></script>
+  <script src="js/games/dictation.js"></script>
+  <script src="js/games/error-hunter.js"></script>
+  <script src="js/games/dialogue-chat.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- MYeVerse 로그인 · DB · 교사 통계 연동 (게임 파일은 그대로, 브리지만 추가) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="bridge.js?v=1"></script>
+  <script src="../assets/my-apps.js?v=2" defer></script>
+</body>
+</html>

@@ -32,13 +32,14 @@ const APPS = [
   { id: "cloze", name: "Cloze", icon: "🧩", src: "sb", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", src: "sb", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
+  { id: "sentence2", name: "문장 마스터", icon: "📝", src: "sb", url: "../sentence2/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
   { id: "c123", name: "Class123", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 문장 마스터 · 레벨 테스트 · 학생 명단" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
 
@@ -232,7 +233,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "sentence2", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -298,6 +299,16 @@ async function sbLoad() {
     const rows = await sbAll(() => c.from("lt_attempts").select("email,finished_at,overall_cefr,overall_sub,vocab_size,lexile,ar"));
     rows.forEach(a => addEvent({ e: a.email, a: "level", t: toMs(a.finished_at), k: "test", title: "레벨 테스트", cefr: a.overall_cefr, sub: a.overall_sub, lex: a.lexile, ar: a.ar, vsize: a.vocab_size }));
   } catch (e) { if (!/lt_attempts|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("레벨 테스트", e); }
+
+  try { // MY Sentence Master (sentence2) — sms_daily 를 학생×날짜 1개 이벤트로 합쳐요 (그날 정오, 한국 시간)
+    const rows = await sbAll(() => c.from("sms_daily").select("email,day,correct,wrong,xp,mode"));
+    const byDay = new Map();
+    rows.forEach(r => {
+      const k = low(r.email) + "|" + r.day, d = byDay.get(k) || { e: r.email, day: r.day, ok: 0, ng: 0, xp: 0, modes: new Set() };
+      d.ok += num(r.correct); d.ng += num(r.wrong); d.xp += num(r.xp); if (r.mode) d.modes.add(r.mode); byDay.set(k, d);
+    });
+    byDay.forEach(d => { const n = d.ok + d.ng; if (n) addEvent({ e: d.e, a: "sentence2", t: Date.parse(d.day + "T12:00:00+09:00"), k: "day", title: `문장 마스터 ${n}문항`, s: d.ok, n, p: pct(d.ok, n), xp: d.xp, games: d.modes.size }); });
+  } catch (e) { if (!/sms_daily|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("문장 마스터", e); }
 
   try { // MY Brain Up (랜덤 상식 퀴즈) — 학생×날짜 합계 1줄 = 이벤트 1개 (그날 정오, 한국 시간)
     const rows = await sbAll(() => c.from("bu_daily").select("*"));
@@ -652,6 +663,11 @@ function cell(id, email, x) {
       const a = avg(s.ps), lines = new Set(s.items.map(e => e.set + ":" + e.line)).size;
       return { main: s.n, on, html: `<span class="m">${s.n}번${a != null ? " · " + Math.round(a) + "점" : ""}</span><span class="sub">${lines}줄 연습</span>`, csv: `${s.n}번 / 평균 ${a != null ? Math.round(a) : ""} / ${lines}줄` };
     }
+    case "sentence2": {
+      if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
+      const ok = s.items.reduce((t, e) => t + num(e.s), 0), n = s.items.reduce((t, e) => t + num(e.n), 0), xp = s.items.reduce((t, e) => t + num(e.xp), 0);
+      return { main: n, on, html: `<span class="m">${n}문항 · ${pct(ok, n)}%</span><span class="sub">${s.items.length}일 · +${xp} XP</span>`, csv: `${n}문항 / 정답률 ${pct(ok, n)}% / ${s.items.length}일 / XP ${xp}` };
+    }
     case "level": { // 레벨은 기간과 상관없이 가장 최근 결과를 보여 줘요
       const all = evsOf(email).filter(e => e.a === "level");
       if (!all.length) return none;
@@ -816,10 +832,11 @@ function studentSummary(p, Mall, Mweek) {
   const bu = items("brainup"); if (bu.length) { const b = buStats(bu); apps.brainup = { pts: b.pts, n: b.n, acc: b.acc, days: b.days, en: b.en, enN: b.enN, d10: b.d10, last: last("brainup") }; }
   const bq = state.snap.brainup.get(p.email); if (bq && apps.brainup) { apps.brainup.tiers = bq.tiers; apps.brainup.queen = bq.queen; }
   const spk = items("speaking"); if (spk.length) apps.speaking = { n: spk.length, avg: Math.round(avg(spk.map(e => num(e.s)))), lines: new Set(spk.map(e => e.set + ":" + e.line)).size, last: last("speaking") };
+  const s2 = items("sentence2"); if (s2.length) { const ok = s2.reduce((t, e) => t + num(e.s), 0), n = s2.reduce((t, e) => t + num(e.n), 0); apps.sentence2 = { n, acc: pct(ok, n), days: s2.length, xp: s2.reduce((t, e) => t + num(e.xp), 0), last: last("sentence2") }; }
   const lt = items("level").slice().sort((a, b) => b.t - a.t); if (lt.length) apps.level = { n: lt.length, cefr: lt[0].cefr, sub: lt[0].sub, lex: lt[0].lex, ar: lt[0].ar, vsize: lt[0].vsize, last: lt[0].t };
   const kh = items("kahoot"); if (kh.length) { const k = kahootStats(kh); apps.kahoot = { live: k.live, hw: k.hw, acc: k.acc != null ? Math.round(k.acc) : null, top3: k.top3, top10: k.top10, best: k.best, last: last("kahoot") }; }
   const c = state.snap.c123.get(p.email); if (c) apps.c123 = { e: c.e, m: c.m };
-  const week = {}; APPS.forEach(a => { if (isActive(w, a.id)) week[a.id] = a.id === "grammar" ? (w.apps.grammar.attempts || w.apps.grammar.n) : a.id === "brainup" ? buStats(w.apps.brainup.items).n : (w.apps[a.id].n || 1); });
+  const week = {}; APPS.forEach(a => { if (isActive(w, a.id)) week[a.id] = a.id === "grammar" ? (w.apps.grammar.attempts || w.apps.grammar.n) : a.id === "brainup" ? buStats(w.apps.brainup.items).n : a.id === "sentence2" ? w.apps.sentence2.items.reduce((t, e) => t + num(e.n), 0) : (w.apps[a.id].n || 1); });
   const next = [];
   for (const [rid, r] of rulesSorted()) {
     if (!ruleReady(r) || (r.grade && p.grade !== +r.grade)) continue;
@@ -893,7 +910,7 @@ function renderConn() {
   });
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "sentence2", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -1026,6 +1043,7 @@ function evValue(ev) {
   if (ev.k === "stamp") return "🏷️ 스탬프";
   if (ev.a === "speaking") return `🎤 ${ev.s}점`;
   if (ev.a === "metro") return ev.k === "summary" ? "🧩 완성" : `🚇 ${ev.s}/${ev.n}`;
+  if (ev.a === "sentence2") return `📝 ${ev.s}/${ev.n}`;
   if (ev.a === "brainup") return `🧠 ${ev.s}/${ev.n} · +${ev.pts}점`;
   if (ev.a === "level") return `🧭 ${lvTxt(ev)} · ${lexTxt(ev.lex)}`;
   if (ev.a === "writing") return `${ev.s}점${ev.cefr ? " · " + ev.cefr : ""}`;
