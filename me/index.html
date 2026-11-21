@@ -50,7 +50,7 @@ h2 { margin: 0 0 10px; font-size: 18px; color: var(--navy); }
 .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
 .app { border: 1px solid var(--line); border-radius: 16px; padding: 12px; background: var(--paper); display: flex; flex-direction: column; gap: 4px; }
 .app .h { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--navy); }
-.app .h a { font-size: 13px; font-weight: 600; }
+.app .h a { font-size: 13px; font-weight: 600; white-space: nowrap; flex: none; margin-left: 8px; }
 .app .big { font-size: 20px; font-weight: 800; }
 .app .l { font-size: 13px; color: var(--muted); }
 .app.dim { opacity: .6; }
@@ -102,6 +102,10 @@ const APPS = [
   { id: "writing", name: "MY Writing Tutor", icon: "✍️", url: "../writing1/" },
   { id: "speaking", name: "MY Speaking", icon: "🎤", url: "../speaking/" },
   { id: "level", name: "MY Level Test", icon: "🧭", url: "../level/" },
+  { id: "history", name: "MY History Museum", icon: "🏛️", url: "../history/" },
+  { id: "myarcade", name: "MY English Arcade", icon: "🎮", url: "../my-english-arcade/" },
+  { id: "wordrush", name: "MY Word Rush", icon: "🏁", url: "../wordrush/" },
+  { id: "warcade", name: "MY Word Arcade", icon: "🕹️", url: "../wordarcade/" },
   { id: "kahoot", name: "MY Kahoot", icon: "⚡", url: "../kahoot/student.html" },
   { id: "c123", name: "MY Class 으쓱", icon: "⭐", url: "" },
 ];
@@ -121,7 +125,7 @@ const client = () => sb || (sb = window.supabase.createClient(SB_URL, SB_KEY, { 
 function showLogin(msg) {
   $("#main").innerHTML = `<div class="card center">
     <h2>내 영어 기록을 한눈에 👀</h2>
-    <p class="muted">MY Reading Passport, MY Reading Metro, MY Grammar, MY Word Forest, MY Cloze, MY Writing Tutor, MY Kahoot, MY Class 으쓱까지<br>여러 앱에서 쌓은 기록을 한곳에서 볼 수 있어요.</p>
+    <p class="muted">MY Reading Passport, MY Reading Metro, MY History Museum, MY Grammar, MY Word Forest, 영어 게임, MY Writing Tutor, MY Kahoot, MY Class 으쓱까지<br>여러 앱에서 쌓은 기록을 한곳에서 볼 수 있어요.</p>
     ${msg ? `<p class="err">${esc(msg)}</p>` : ""}
     <div id="gsi" style="display:flex;justify-content:center;margin-top:12px"></div>
     <p class="small muted" style="margin-top:14px">학교 구글 계정(@smy.ms.kr)으로 로그인하세요.</p></div>`;
@@ -191,6 +195,8 @@ function show(d, email, updated) {
     appCard("writing", w ? `${w.n}편 · 평균 ${w.avg}점` : "", [w && w.cefr ? `최근 수준 ${w.cefr}` : ""]),
     appCard("speaking", A.speaking ? `${A.speaking.lines}줄 · 평균 ${A.speaking.avg}점` : "", [A.speaking && `말하기 ${A.speaking.n}번`]),
     appCard("level", A.level ? `${A.level.cefr === "A0" ? "Pre-A1" : A.level.cefr} ${A.level.sub || ""}` : "", [A.level && `Lexile ${A.level.lex < 0 ? "BR" + Math.abs(A.level.lex) : A.level.lex}L · AR ${A.level.ar}`, A.level && `어휘 약 ${Number(A.level.vsize || 0).toLocaleString()}단어`]),
+    appCard("history", A.history ? `🏛️ ${A.history.n}실` : "", [A.history && A.history.avg != null ? `퀴즈 평균 ${A.history.avg}%` : "", A.history && (A.history.puzzles || A.history.mastered) ? `퍼즐 ${A.history.puzzles}개 · 카드 ${A.history.mastered}장 익힘` : ""]),
+    ...["myarcade", "wordrush", "warcade"].map(id => { const g = A[id]; return appCard(id, g ? `${g.n}판${g.avg != null ? " · " + g.avg + "%" : ""}` : "", [g && g.q ? `${g.q}문제 풀이` : "", g && g.xp ? `+${g.xp} XP` : ""]); }),
     appCard("kahoot", k ? `${k.live}판 · ${k.acc ?? "-"}%` : "", [k && `🏆 3등 안 ${k.top3}번 · 10등 안 ${k.top10}번`, k && k.hw ? `과제 ${k.hw}개` : "", k && k.best ? `최고 ${k.best}등` : ""]),
   ].join("");
   const goals = (d.next || []).map(n => `<div class="goal"><div class="t"><span>${APP[n.app]?.icon || "🎯"} ${esc(n.label)}</span><span class="muted">${n.have}/${n.need} → ⭐${n.give}</span></div><div class="bar"><i style="width:${Math.round(n.have / n.need * 100)}%"></i></div></div>`).join("");

@@ -33,12 +33,16 @@ const APPS = [
   { id: "writing", name: "영작문", icon: "✍️", src: "sb", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
+  { id: "history", name: "역사 박물관", icon: "🏛️", src: "sb", url: "../history/" },
+  { id: "myarcade", name: "English Arcade", icon: "🎮", src: "sb", url: "../my-english-arcade/" },
+  { id: "wordrush", name: "Word Rush", icon: "🏁", src: "sb", url: "../wordrush/" },
+  { id: "warcade", name: "Word Arcade", icon: "🕹️", src: "sb", url: "../wordarcade/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
   { id: "c123", name: "MY Class", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 역사 박물관 · English Arcade · Word Rush · Word Arcade · 학생 명단" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · MY Class · 보상" },
 };
 
@@ -232,7 +236,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level", "history", "myarcade", "wordrush", "warcade"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -351,6 +355,51 @@ async function sbLoad() {
       addEvent({ e: r.studentEmail, a: "writing", t: toMs(r.createdAtMs || r.ts), k: "essay", title: r.topic || r.koreanPrompt || "영작문", s: num(r.score), cefr: r.cefrLevel });
     });
   } catch (e) { if (!/w1_submissions|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("영작문", e); }
+
+  const GAME_SKIP = /schema cache|does not exist|42P01|PGRST20[25]|admin only/i;
+  try { // MY History Museum — 학생×전시실 요약 1줄 = 이벤트 1개 (마지막 관람 시각)
+    const rooms = {};
+    try { (await sbAll(() => c.from("hm_rooms").select("id,title"))).forEach(r => rooms[r.id] = r.title); } catch {}
+    const rows = await sbAll(() => c.rpc("hm_admin_scores"));
+    rows.forEach(r => {
+      if (!r.last_at) return;
+      person(r.email, { name: r.name, grade: r.grade, cls: r.class_no, no: r.student_no });
+      const qt = num(r.quiz_total);
+      addEvent({ e: r.email, a: "history", t: toMs(r.last_at), k: "room", room: r.room_id, title: rooms[r.room_id] || r.room_id,
+        s: qt ? num(r.quiz_best) : null, n: qt || null, p: qt ? pct(r.quiz_best, qt) : null, puzzles: num(r.puzzles), mastered: num(r.mastered) });
+    });
+  } catch (e) { if (!GAME_SKIP.test((e.message || "") + (e.code || ""))) warn("역사 박물관", e); }
+
+  try { // MY English Arcade — 게임 1판 = 이벤트 1개 (payload 에서 필요한 칸만 읽어요)
+    const MODE = { meaning: "뜻을 찾아라", reverse: "영단어 탐정", definition: "영영풀이 퀘스트", spelling: "스펠링 챌린지", cloze: "빈칸의 비밀", sentence: "문장 공작소", match: "단어 짝꿍", memory: "메모리 플립", listening: "리스닝 랩", anagram: "알파벳 믹서", truefalse: "트루 오어 폴스", crypto: "암호 문장 연구소" };
+    const mail = {};
+    (await sbAll(() => c.from("profiles").select("id,email"))).forEach(x => mail[x.id] = x.email);
+    const rows = await sbAll(() => c.from("myea_sessions").select("id,user_id,created_at,mode:payload->>mode,score:payload->score,accuracy:payload->accuracy,total:payload->total").order("id"));
+    rows.forEach(r => {
+      const e = mail[r.user_id]; if (!e) return;
+      const n = num(r.total), acc = r.accuracy == null ? null : Math.round(num(r.accuracy));
+      addEvent({ e, a: "myarcade", t: toMs(r.created_at), k: "game", title: "English Arcade · " + (MODE[r.mode] || r.mode || "게임"),
+        s: acc == null ? null : Math.round(acc * n / 100), n: n || null, p: acc, xp: num(r.score) });
+    });
+  } catch (e) { if (!GAME_SKIP.test((e.message || "") + (e.code || ""))) warn("English Arcade", e); }
+
+  try { // MY Word Rush — 학생×날짜×게임 합계 1줄 = 이벤트 1개 (그날 정오, 한국 시간)
+    const GAME = { "cloze-spelling": "빈칸 & 스펠링", unscramble: "어순 블록", "speed-match": "스피드 짝짓기", "engdef-quiz": "영영풀이 퀴즈쇼", spellspire: "스펠스파이어", cryptogram: "크립토그램", connections: "커넥션즈", "word-puzzle": "워들 & 스펠링 비" };
+    const rows = await sbAll(() => c.from("wr_daily").select("email,day,game_id,plays,correct,total,best_score").order("day").order("email").order("game_id"));
+    rows.forEach(r => {
+      if (!num(r.plays) && !num(r.total)) return;
+      const n = num(r.total);
+      addEvent({ e: r.email, a: "wordrush", t: Date.parse(r.day + "T12:00:00+09:00"), k: "day", title: "Word Rush · " + (GAME[r.game_id] || r.game_id),
+        s: num(r.correct), n: n || null, p: n ? pct(r.correct, n) : null, plays: num(r.plays) || 1, xp: num(r.best_score) });
+    });
+  } catch (e) { if (!GAME_SKIP.test((e.message || "") + (e.code || ""))) warn("Word Rush", e); }
+
+  try { // MY Word Arcade — 게임 1판 = 이벤트 1개
+    const GAME = { match: "짝 맞추기", spell: "철자", order: "순서", listen: "듣기", cross: "십자말풀이", battle: "배틀", crypto: "암호" };
+    const rows = await sbAll(() => c.from("wa_plays").select("id,email,game,n,ok,score,created_at").order("id"));
+    rows.forEach(r => addEvent({ e: r.email, a: "warcade", t: toMs(r.created_at), k: "game", title: "Word Arcade · " + (GAME[r.game] || r.game),
+      s: num(r.ok), n: num(r.n) || null, p: num(r.n) ? pct(r.ok, r.n) : null, xp: num(r.score) }));
+  } catch (e) { if (!GAME_SKIP.test((e.message || "") + (e.code || ""))) warn("Word Arcade", e); }
 
   try { // Quiz Queens (구글 시트) — Supabase 로그인 토큰으로 선생님임을 확인해요
     const { data } = await c.auth.getSession();
@@ -657,6 +706,14 @@ function cell(id, email, x) {
       const ok = s.items.reduce((t, e) => t + num(e.s), 0), n = s.items.reduce((t, e) => t + num(e.n), 0), xp = s.items.reduce((t, e) => t + num(e.xp), 0);
       return { main: n, on, html: `<span class="m">${n}문항 · ${pct(ok, n)}%</span><span class="sub">${s.items.length}일 · +${xp} XP</span>`, csv: `${n}문항 / 정답률 ${pct(ok, n)}% / ${s.items.length}일 / XP ${xp}` };
     }
+    case "history": case "myarcade": case "wordrush": case "warcade": {
+      if (!s) return x?.lastApp[id] ? { ...none, html: `<span class="sub">${fmtWhen(x.lastApp[id])}</span>`, main: 0 } : none;
+      const a = avg(s.ps), sum = k => s.items.reduce((t, e) => t + num(e[k]), 0);
+      const plays = id === "wordrush" ? sum("plays") : s.n;
+      const head = id === "history" ? `🏛️${s.n}실` : `${plays}판`;
+      const sub = id === "history" ? `퍼즐 ${sum("puzzles")} · 카드 ${sum("mastered")}` : `${sum("n")}문제${sum("xp") ? " · " + sum("xp") + " XP" : ""}`;
+      return { main: plays, on, html: `<span class="m">${head}${a != null ? " · " + Math.round(a) + "%" : ""}</span><span class="sub">${sub}</span>`, csv: `${head} / ${a != null ? Math.round(a) + "%" : ""} / ${sub}` };
+    }
     case "level": { // 레벨은 기간과 상관없이 가장 최근 결과를 보여 줘요
       const all = evsOf(email).filter(e => e.a === "level");
       if (!all.length) return none;
@@ -822,6 +879,12 @@ function studentSummary(p, Mall, Mweek) {
   const bq = state.snap.brainup.get(p.email); if (bq && apps.brainup) { apps.brainup.tiers = bq.tiers; apps.brainup.queen = bq.queen; }
   const spk = items("speaking"); if (spk.length) apps.speaking = { n: spk.length, avg: Math.round(avg(spk.map(e => num(e.s)))), lines: new Set(spk.map(e => e.set + ":" + e.line)).size, last: last("speaking") };
   const s2 = items("sentence2"); if (s2.length) { const ok = s2.reduce((t, e) => t + num(e.s), 0), n = s2.reduce((t, e) => t + num(e.n), 0); apps.sentence2 = { n, acc: pct(ok, n), days: s2.length, xp: s2.reduce((t, e) => t + num(e.xp), 0), last: last("sentence2") }; }
+  for (const id of ["history", "myarcade", "wordrush", "warcade"]) {
+    const it = items(id); if (!it.length) continue;
+    const ps = it.map(e => e.p).filter(v => v != null), sum = k => it.reduce((t, e) => t + num(e[k]), 0);
+    apps[id] = { n: id === "wordrush" ? sum("plays") : it.length, q: sum("n"), avg: ps.length ? Math.round(avg(ps)) : null, xp: sum("xp"), last: last(id) };
+    if (id === "history") Object.assign(apps[id], { puzzles: sum("puzzles"), mastered: sum("mastered") });
+  }
   const lt = items("level").slice().sort((a, b) => b.t - a.t); if (lt.length) apps.level = { n: lt.length, cefr: lt[0].cefr, sub: lt[0].sub, lex: lt[0].lex, ar: lt[0].ar, vsize: lt[0].vsize, last: lt[0].t };
   const kh = items("kahoot"); if (kh.length) { const k = kahootStats(kh); apps.kahoot = { live: k.live, hw: k.hw, acc: k.acc != null ? Math.round(k.acc) : null, top3: k.top3, top10: k.top10, best: k.best, last: last("kahoot") }; }
   const c = state.snap.c123.get(p.email); if (c) apps.c123 = { e: c.e, m: c.m };
@@ -899,7 +962,7 @@ function renderConn() {
   });
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level", "history", "myarcade", "wordrush", "warcade"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -1033,6 +1096,7 @@ function evValue(ev) {
   if (ev.a === "speaking") return `🎤 ${ev.s}점`;
   if (ev.a === "metro") return ev.k === "summary" ? "🧩 완성" : `🚇 ${ev.s}/${ev.n}`;
   if (ev.a === "sentence2") return `📝 ${ev.s}/${ev.n}`;
+  if (ev.a === "history") return ev.n ? `🏛️ ${ev.s}/${ev.n}` : "🏛️ 관람";
   if (ev.a === "brainup") return `🧠 ${ev.s}/${ev.n} · +${ev.pts}점`;
   if (ev.a === "level") return `🧭 ${lvTxt(ev)} · ${lexTxt(ev.lex)}`;
   if (ev.a === "writing") return `${ev.s}점${ev.cefr ? " · " + ev.cefr : ""}`;
