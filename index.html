@@ -5,10 +5,10 @@
   <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1e3768">
-<title>MY English · 문영 영어 앱</title>
+<title>MYeVerse · 나만의 영어 우주</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="서울문영여자중학교 영어 수업 앱 모음: 레벨 테스트, 독서 여권, 지식 여권, 리딩 메트로, 문법, 영작문, 말하기, 단어숲, 상식 퀴즈">
-<link rel="icon" href="app/icon-192.png" type="image/png">
+<meta name="description" content="MYeVerse 영어 학습 앱 모음: 레벨 테스트, 독서 여권, 지식 여권, 리딩 메트로, 문법, 영작문, 말하기, 단어숲, 상식 퀴즈">
+<link rel="icon" href="assets/myeverse/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="app/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +51,12 @@
   .cover::after { content: ""; position: absolute; inset: 18px; border: 1px solid rgba(233,196,106,.18); border-radius: 17px; pointer-events: none; }
   .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 30px 0; position: relative; z-index: 2; }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
-  .brand img { width: 40px; height: auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+  .brand img { width: 46px; height: 46px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+  .brand b.wm { font-size: 1.3rem; font-weight: 800; letter-spacing: -.02em; }
+  .wm i { font-style: normal; color: var(--gold-soft); }
+  .foot-brand { display: inline-flex; align-items: center; gap: 8px; }
+  .orbits { position: absolute; right: -140px; top: -120px; width: 620px; height: 620px; pointer-events: none; z-index: 1; opacity: .5; }
+  @media (max-width: 600px) { .orbits { right: -240px; top: -160px; opacity: .35; } }
   .brand b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; line-height: 1.2; }
   .brand span { display: block; font-size: .78rem; color: var(--cover-muted); line-height: 1.3; }
   .admin-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.06); color: var(--gold-soft); border: 1px solid rgba(233,196,106,.55); border-radius: 999px; padding: 8px 16px; font: 700 .88rem var(--body); cursor: pointer; white-space: nowrap; }
@@ -221,11 +226,12 @@
 <body>
 
 <header class="cover">
+  <svg class="orbits" viewBox="0 0 620 620" aria-hidden="true"><g fill="none" stroke="#e9c46a"><ellipse cx="310" cy="310" rx="300" ry="96" transform="rotate(-18 310 310)" stroke-opacity=".35"/><ellipse cx="310" cy="310" rx="220" ry="70" transform="rotate(-18 310 310)" stroke-opacity=".25"/><circle cx="310" cy="310" r="120" stroke-opacity=".15"/></g><circle cx="88" cy="372" r="6" fill="#e9c46a" fill-opacity=".7"/><circle cx="520" cy="210" r="3.5" fill="#fff" fill-opacity=".6"/><circle cx="440" cy="520" r="2.5" fill="#fff" fill-opacity=".5"/></svg>
   <div class="wrap">
     <div class="topbar">
       <a class="brand" href="./">
-        <img src="app/emblem.png" width="240" height="213" alt="서울문영여자중학교 교표">
-        <div><b>MY English</b><span>서울문영여자중학교 영어과</span></div>
+        <img src="assets/myeverse/logo.svg" width="64" height="64" alt="">
+        <div><b class="wm">MY<i>e</i>Verse</b><span>My English Universe</span></div>
       </a>
       <button class="admin-btn" id="adminBtn" type="button" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
@@ -235,9 +241,9 @@
 
     <div class="hero">
       <div>
-        <div class="kicker">Moonyoung · English Apps</div>
-        <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
-        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 영어 게임, 상식 퀴즈까지. 수업에서 쓰는 영어 앱과 다른 교과 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
+        <div class="kicker">My English Universe</div>
+        <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>나만의 영어 우주</h1>
+        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 영어 게임, 상식 퀴즈까지. 수업에서 쓰는 영어 앱과 다른 교과 앱을 한곳에 모았어요. <b>구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
           <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#games">영어 게임</a><a href="#subjects">다른 교과</a><a href="#teacher">선생님 도구</a>
         </nav>
@@ -246,7 +252,7 @@
       <section class="desk" aria-labelledby="deskTitle">
         <div id="deskOut">
           <h2 id="deskTitle">한 번 로그인, 모든 앱</h2>
-          <p class="sub">학교 계정(@smy.ms.kr)으로 로그인하세요. 선생님은 등록된 계정으로 로그인하면 관리자 메뉴가 열려요.</p>
+          <p class="sub">학교에서 받은 Google 계정으로 로그인하세요. 선생님은 등록된 계정으로 로그인하면 관리자 메뉴가 열려요.</p>
           <div id="gbtn"><span class="gfallback">로그인 버튼을 불러오는 중이에요...</span></div>
         </div>
         <div id="deskIn" hidden>
@@ -269,7 +275,7 @@
       </section>
     </div>
 
-    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;ENGLISH&lt;&lt;LEVEL&lt;READ&lt;GRAMMAR&lt;WRITING&lt;VOCAB&lt;QUIZ&lt;SHOW&lt;CLOZE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+    <div class="mrz" aria-hidden="true">P&lt;KOR&lt;MY&lt;E&lt;VERSE&lt;&lt;LEVEL&lt;READ&lt;GRAMMAR&lt;WRITING&lt;VOCAB&lt;QUIZ&lt;SHOW&lt;CLOZE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
   </div>
 </header>
 
@@ -291,7 +297,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
           <div class="tags"><span class="tag">레벨 진단</span><span class="tag">약 13분</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY Level Test<small>문영 영어 레벨 테스트</small></h3>
+        <h3>MY Level Test<small>영어 레벨 테스트</small></h3>
         <p>단어, 문법·어휘, 읽기 세 단계를 풀면 내 영어 레벨을 알려 줘요. 내 답에 따라 다음 문제의 난이도가 바뀌어서 짧은 시간에 정확하게 찾아 줘요.</p>
         <ul class="feats">
           <li>CEFR 레벨, 어휘 크기, Lexile·AR 지수를 한 번에</li>
@@ -325,7 +331,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></div>
           <div class="tags"><span class="tag">세계문학 읽기</span><span class="tag">Pre-A1 ~ B2</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY Reading Passport<small>문영 독서 여권</small></h3>
+        <h3>MY Reading Passport<small>세계문학 독서 여권</small></h3>
         <p>쉬운 영어로 다시 쓴 세계문학 523권 가운데 내 수준에 맞는 책을 골라 읽어요. 퀴즈를 통과하면 메달을 받고, 작품의 나라가 여권 도장과 세계 문학 지도에 찍혀요.</p>
         <ul class="feats">
           <li>CEFR 단계별 책장과 주제·장르 검색</li>
@@ -360,7 +366,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg></div>
           <div class="tags"><span class="tag">영어 지식 읽기</span><span class="tag">Pre-A1 ~ B2</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY Knowledge Passport<small>문영 지식 여권</small></h3>
+        <h3>MY Knowledge Passport<small>지식 읽기 여권</small></h3>
         <p>세상의 상식, 과학과 우주, 역사, 기념일, 음식과 물건의 기원, 위인 이야기를 담은 영어 지식 글 300편을 내 수준에 맞게 골라 읽어요. 퀴즈를 통과하면 메달을 받고, 글에 나온 나라가 여권 도장과 세계 지식 지도에 찍혀요.</p>
         <ul class="feats">
           <li>CEFR 5단계 서재: Pre-A1 37 · A1 57 · A2 78 · B1 77 · B2 51편</li>
@@ -395,7 +401,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18M3 16h18"/><circle cx="7" cy="8" r="2"/><circle cx="17" cy="8" r="2"/><circle cx="12" cy="16" r="2"/></svg></div>
           <div class="tags"><span class="tag">영어 교과서 읽기</span><span class="tag">중1·중2·고1</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY Reading Metro<small>문영 교과서 메트로</small></h3>
+        <h3>MY Reading Metro<small>교과서 메트로</small></h3>
         <p>2022 개정 영어 교과서 본문을 지하철 노선도처럼 한 역씩 따라가며 읽어요. 학년과 교과서는 노선, 단원은 역이에요. 역마다 읽기, 분석, 단어, 줄거리, 퀴즈 다섯 개의 출구가 있어요.</p>
         <ul class="feats">
           <li>12개 노선 91개 역: YBM, NE능률, 천재교육 중1·중2와 공통영어 1·2</li>
@@ -428,7 +434,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2"/><path d="M8 7h6M8 11h4"/></svg></div>
           <div class="tags"><span class="tag">영어 문법</span><span class="tag">18단원</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY Grammar<small>문영 영어 문법 학습실</small></h3>
+        <h3>MY Grammar<small>영어 문법 학습실</small></h3>
         <p>개념과 예문을 듣고 읽은 뒤 바로 문제를 풀어요. 틀린 문제는 잊을 때쯤 다시 나오고, 스탬프와 레벨을 모아 Grammar Queen에 도전해요.</p>
         <ul class="feats">
           <li>개념 + 예문, 듣기까지 한 번에</li>
@@ -577,7 +583,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg></div>
           <div class="tags"><span class="tag">전자칠판</span><span class="tag">휴대폰</span><span class="tag">로그인 없음</span></div>
         </div>
-        <h3>퀴즈쇼<small>문영 예술제 퀴즈쇼</small></h3>
+        <h3>퀴즈쇼<small>예술제 퀴즈쇼</small></h3>
         <p>퀴즈반이 예술제에서 진행하는 추천 작품·교과서 소설 퀴즈쇼예요. 128개 작품 가운데 하나를 골라 제한 시간 안에 정답을 맞혀요. 전자칠판에서는 PC 버전, 휴대폰에서는 모바일 버전으로 시작해요.</p>
         <div class="acts show-acts">
           <a class="go" href="quizshow/" data-ver="pc">🖥️ PC 버전 →</a>
@@ -614,7 +620,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></div>
           <div class="tags"><span class="tag">교과서 어휘·예문</span><span class="tag">게임 12종</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY English Arcade<small>문영 영어 놀이터</small></h3>
+        <h3>MY English Arcade<small>영어 놀이터</small></h3>
         <p>1·2학년 교과서 어휘와 예문 674개로 12가지 게임을 해요. 학년, 단원, 문제 수를 고르고 단어 익히기, 문장 만들기, 퍼즐 가운데 마음에 드는 게임을 골라 도전해요.</p>
         <ul class="feats">
           <li>스펠링 챌린지 · 문장 공작소 · 단어 짝꿍 · 리스닝 랩 · 메모리 플립 등 12종</li>
@@ -716,7 +722,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></div>
           <div class="tags"><span class="tag">역사 교과서</span><span class="tag">세계사·한국사</span><span class="tag">로그인</span></div>
         </div>
-        <h3>MY History Museum<small>문영 역사 박물관</small></h3>
+        <h3>MY History Museum<small>역사 박물관</small></h3>
         <p>중학교 역사 ①(세계사)과 역사 ②(한국사) 교과서를 한 박물관에서 나란히 관람해요. 대단원은 전시관, 중단원은 전시실이에요. 로비의 두 줄 연표로 같은 시기의 세계와 우리 역사를 한눈에 봐요.</p>
         <ul class="feats">
           <li>세계사관 7개·한국사관 6개 전시관, 40개 전시실 (차례로 개관)</li>
@@ -756,7 +762,7 @@
           <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></div>
           <div class="tool-body">
             <div class="tags left"><span class="tag">말하기</span><span class="tag">교과서 대화문</span><span class="tag">로그인</span></div>
-            <h3>MY Speaking<small>문영 말하기 연습</small></h3>
+            <h3>MY Speaking<small>말하기 연습</small></h3>
             <p>교과서 대화문을 원어민 목소리로 듣고 따라 말하면, 알아들은 단어를 초록·빨강으로 보여 주고 점수를 매겨요. 역할 연기와 속도 조절도 돼요. 목소리는 저장하지 않아요.</p>
             <div class="acts"><a class="go" href="speaking/">말하기 연습 →</a></div>
           </div>
@@ -866,7 +872,7 @@
 
 <footer>
   <div class="wrap">
-    <span>서울문영여자중학교 영어과</span>
+    <span class="foot-brand"><img src="assets/myeverse/logo.svg" width="22" height="22" alt=""> MYeVerse · My English Universe</span>
     <span><a href="privacy.html">개인정보처리방침</a> · 문의 tfellow@gmail.com</span>
   </div>
 </footer>
