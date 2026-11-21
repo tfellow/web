@@ -86,7 +86,7 @@
     ov.innerHTML =
       '<div class="cert-wrap">' +
       '<div class="cert" style="--ca:' + o.a + ";--cb:" + o.b + '">' +
-      '<div class="cert-in"><div class="cert-top"><img src="emblem.png" alt="" width="60" height="53"><div><b>MY READING PASSPORT</b><small>문영 독서 여권 · MOONYOUNG</small></div></div>' +
+      '<div class="cert-in"><div class="cert-top"><img src="../assets/myeverse/logo.svg" alt="" width="60" height="60"><div><b>MY READING PASSPORT</b><small>문영 독서 여권 · MOONYOUNG</small></div></div>' +
       '<div class="cert-kind">' + o.kind + "</div>" +
       '<div class="cert-em">' + o.em + "</div>" +
       '<div class="cert-title">' + esc(o.title) + "</div><div class=\"cert-ko\">" + esc(o.sub) + "</div>" +
@@ -412,7 +412,7 @@
     clearTimer();
     $who.classList.add("hidden");
     $app.innerHTML =
-      '<div class="card login"><img class="emblem" src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"><div class="kicker" style="margin-top:10px">문영 독서 여권</div><h2>MY Reading Passport</h2>' +
+      '<div class="card login"><img class="emblem" src="../assets/myeverse/logo.svg" width="240" height="240" alt="MYeVerse 로고"><div class="kicker" style="margin-top:10px">문영 독서 여권</div><h2>MY Reading Passport</h2>' +
       "<p>세계문학을 영어로 읽고, 퀴즈를 풀고, 메달과 스탬프를 모아 보세요.</p>" +
       '<div id="gbtn"></div>' +
       '<p style="font-size:.88rem">학교 계정(@smy.ms.kr)으로 로그인하세요.</p>' +
@@ -811,7 +811,7 @@
     };
 
     var html =
-      '<section class="passport"><div class="pp-head"><div class="pp-emblem"><img src="emblem.png" width="240" height="213" alt="서울문영여자중학교 교표"></div><div>' +
+      '<section class="passport"><div class="pp-head"><div class="pp-emblem"><img src="../assets/myeverse/logo.svg" width="240" height="240" alt="MYeVerse 로고"></div><div>' +
       '<div class="pp-kicker">MY READING PASSPORT</div><div class="pp-name">' + esc(nick) + "</div>" +
       '<div class="pp-level">' + (rt.cur ? readTitleLabel(rt.cur) : "여행 준비 중 · 첫 메달에 도전해 보세요") + "</div>" +
       (title ? '<div class="pp-sublevel">' + LEVEL_INFO[title.lv].em + " " + lvName(title.lv) + " " + LEVEL_INFO[title.lv].name + "</div>" : "") + "</div></div>" +

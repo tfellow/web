@@ -137,7 +137,7 @@
   function emblemImgHtml(cls) {
     return `
       <div class="${cls}">
-        <img src="../app/emblem.png" alt="MOONYOUNG" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <img src="../assets/myeverse/logo.svg" alt="MYeVerse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <span class="brand-emblem-fallback" style="display:none;">MY</span>
       </div>
     `;

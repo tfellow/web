@@ -24,18 +24,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309; --c-sentence: #0b7a64;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971; --c-sentence: #6fd3bd;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -118,7 +118,7 @@
   .tools.three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
   @media (max-width: 980px) { .tools.three { grid-template-columns: minmax(0, 1fr); } }
   [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); } [data-app="history"] { --c: var(--c-history); } [data-app="arcade"] { --c: var(--c-arcade); }
-  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); }
+  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); } [data-app="sentence"] { --c: var(--c-sentence); }
   .cat-head { border-top: 2px solid var(--line); margin-top: 30px; }
 
   .show { padding-block: 34px; }
@@ -699,6 +699,35 @@
         <button class="frame" type="button" data-zoom="assets/shots/wordarcade-home.webp" data-cap="MY Word Arcade 홈: 단어장·단원 고르기와 게임 7종">
           <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordarcade</span></span>
           <img src="assets/shots/wordarcade-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Arcade 홈 화면: 단어장과 단원을 고르고 7가지 단어 게임 중 하나를 고르는 화면">
+        </button>
+        <figcaption>홈 화면</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="sentence" id="sentence">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9v6M21 9v6M6.5 12h11"/></svg></div>
+          <div class="tags"><span class="tag">교과서 문장</span><span class="tag">게임 9종</span><span class="tag">로그인 없이</span></div>
+        </div>
+        <h3>MY Sentence Gym<small>교과서 문장 체육관</small></h3>
+        <p>1·2학년 교과서의 읽기 본문, In Context 대화, 문법 예문으로 문장 단위 운동을 해요. 틀린 문장은 그 판 마지막에 다시 나오고, 모두 맞혀야 클리어예요. 선생님은 문장 세트를 붙여 넣어 공유 링크로 보낼 수 있어요.</p>
+        <ul class="feats">
+          <li>문장 조립 · 빈칸 4단계 암기 · 어법 고르기 · 틀린 곳 찾기 · 형태 바꾸기</li>
+          <li>받아쓰기(보통·0.7배·3번 듣기) · 대화 이어가기 · 순서 맞추기 · 스피드 매칭</li>
+          <li>오답 노트, 내 문장 세트 공유 링크 (기록은 이 기기에만 저장)</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="sentence/">게임 시작 →</a>
+          <a class="sub-link" href="sentence/guide.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/sentence-home.webp" data-cap="MY Sentence Gym 홈: 학년·단원·자료 고르기와 게임 9종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/sentence</span></span>
+          <img src="assets/shots/sentence-home.webp" width="1280" height="800" loading="lazy" alt="MY Sentence Gym 홈 화면: 학년과 단원, 자료를 고르고 9가지 문장 게임 중 하나를 고르는 화면">
         </button>
         <figcaption>홈 화면</figcaption>
       </figure>

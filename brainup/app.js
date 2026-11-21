@@ -498,7 +498,7 @@
       g.fillStyle = "#fffcf6"; g.fillRect(0, 0, W, H);
       g.strokeStyle = "#1e3768"; g.lineWidth = 18; g.strokeRect(30, 30, W - 60, H - 60);
       g.strokeStyle = "#c8962a"; g.lineWidth = 4; g.strokeRect(62, 62, W - 124, H - 124);
-      if (img) g.drawImage(img, W / 2 - 55, 100, 110, 99);
+      if (img) g.drawImage(img, W / 2 - 55, 95, 110, 110);
       txt("CERTIFICATE OF ACHIEVEMENT", W / 2, 250, 34, "#c8962a", 700, "Georgia, serif");
       txt("MY Brain Up · 풀수록 똑똑해지는 랜덤 상식 퀴즈", W / 2, 300, 26, "#6a6f80", 500);
       txt(Q.icon + " " + Q.en, W / 2, 410, 72, Q.color, 800, "Georgia, serif");
@@ -515,7 +515,7 @@
       a.href = cv.toDataURL("image/png"); a.download = "BrainUp_" + Q.en.replace(/ /g, "_") + "_" + kday() + ".png"; a.click();
       toast("📜 인증서를 내려받았어요!");
     }
-    var img = new Image(); img.onload = function () { draw(img); }; img.onerror = function () { draw(null); }; img.src = "../app/emblem.png";
+    var img = new Image(); img.onload = function () { draw(img); }; img.onerror = function () { draw(null); }; img.src = "../assets/myeverse/logo.svg";
   }
   function useFifty() {
     rpc("bu_fifty").then(function (r) {
@@ -1120,7 +1120,7 @@
   function posterHtml(bg) {
     var M = morning(), showM = PZ.morning && M.on;
     return '<div class="pz' + (bg ? " has-bg" : "") + '"' + (bg ? ' style="background-image:url(' + bg + ')"' : "") + ">" +
-      '<div class="pz-top"><img src="../app/emblem.png" alt=""><div><b>MOONYOUNG</b><span>MY Brain Up 🧠</span></div></div>' +
+      '<div class="pz-top"><img src="../assets/myeverse/logo.svg" alt=""><div><b>MOONYOUNG</b><span>MY Brain Up 🧠</span></div></div>' +
       '<div class="pz-head">' + (PZ.sub ? '<div class="pz-kicker">' + esc(PZ.sub) + "</div>" : "") + "<h1>🧠 " + esc(PZ.title) + '</h1><div class="pz-en">Today\'s Brain Up · 10 Questions a Day</div></div>' +
       '<div class="pz-qrcard"><div class="pz-qr">' + qrSvg(dailyUrl()) + '</div><div class="pz-scan">📱 카메라로 찍고 바로 도전!</div></div>' +
       (showM ? '<div class="pz-bonus">🌅 아침 <b>' + esc(M.from) + "~" + esc(M.to) + "</b>에 끝내면 <b>+" + M.pts + "점</b> 보너스!" + (M.weekdays ? " <small>(평일)</small>" : "") + "</div>" : "") +

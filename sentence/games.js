@@ -144,20 +144,33 @@ G({
       }
       return `<div class="srow">${SG.ttsBar(it.en, true)}<div class="s-main"><div class="s-en">${spk}${body}</div><div class="s-ko muted ${showKo ? "" : "hidden"}">${esc(it.ko)}</div></div></div>`;
     };
+    /* 칸 하나 채점: 빈칸이면 null, 아니면 true/false */
+    const gradeOne = x => {
+      const diff = x.matches("textarea.whole") ? $(`.diff[data-for="${CSS.escape(x.dataset.id)}"]`) : null;
+      if (!x.value.trim()) { x.classList.remove("right", "wrong"); x.title = ""; if (diff) diff.innerHTML = ""; return null; }
+      let ok;
+      if (diff) { const r = SG.diffWords(SG.ITEMS[x.dataset.id].en, x.value); ok = r.ok; diff.innerHTML = r.html; }
+      else { ok = lc(x.value.trim()) === lc(x.dataset.ans); x.title = ok ? "" : x.dataset.ans; }
+      x.classList.toggle("right", ok); x.classList.toggle("wrong", !ok);
+      return ok;
+    };
     const grade = () => {
       let right = 0, total = 0, empty = 0;
-      $$("#sheet input.fill").forEach(x => {
-        if (!x.value.trim()) { empty++; x.classList.toggle("right", false); x.classList.toggle("wrong", false); return; }
-        total++; const ok = lc(x.value.trim()) === lc(x.dataset.ans); if (ok) right++; x.classList.toggle("right", ok); x.classList.toggle("wrong", !ok); if (!ok) x.title = x.dataset.ans;
-      });
-      $$("#sheet textarea.whole").forEach(x => {
-        if (!x.value.trim()) { empty++; return; }
-        total++; const it = SG.ITEMS[x.dataset.id]; const r = SG.diffWords(it.en, x.value);
-        if (r.ok) right++; x.classList.toggle("right", r.ok); x.classList.toggle("wrong", !r.ok);
-        $(`.diff[data-for="${CSS.escape(it.id)}"]`).innerHTML = x.value.trim() ? r.html : "";
-      });
+      $$("#sheet input.fill, #sheet textarea.whole").forEach(x => { const r = gradeOne(x); if (r === null) empty++; else { total++; if (r) right++; } });
       SG.toast(total ? `쓴 ${total}개 중 ${right}개 정답${right === total ? " 🎉" : ""}${empty ? ` · 빈칸 ${empty}개 남음` : ""}` : "빈칸에 먼저 써 보세요", 2800);
     };
+    /* 엔터 → 채점하고 다음 칸으로, 다른 칸으로 넘어가면(change) 바로 채점 */
+    const FILL = "#sheet input.fill, #sheet textarea.whole";
+    if (!main._fillBound && (main._fillBound = true)) {
+      main.addEventListener("keydown", e => {
+        const x = e.target.closest && e.target.closest(FILL);
+        if (!x || e.key !== "Enter" || e.shiftKey || e.isComposing) return;
+        e.preventDefault(); gradeOne(x);
+        const all = $$(FILL), nx = all[all.indexOf(x) + 1];
+        if (nx) nx.focus(); else x.blur();
+      });
+      main.addEventListener("change", e => { const x = e.target.closest && e.target.closest(FILL); if (x) gradeOne(x); });
+    }
     if (!main._blankBound && (main._blankBound = true)) main.addEventListener("click", e => {
       const b = e.target.closest("button.blank"); if (!b || b._open) return;
       const face = b.innerHTML; b._open = true; b.classList.add("open"); b.textContent = b.dataset.ans;
@@ -340,6 +353,10 @@ G({
       $("#dres", stage).innerHTML = `<p class="small muted">초록 = 맞음 · 빨강 = 빠졌거나 틀림 · 회색 줄 = 필요 없는 낱말</p>${r.html}`;
       done(r.ok, { msg: r.ok ? "" : `${r.n}낱말 중 ${r.hit}개 맞음` });
     };
+    $("#dic", stage).addEventListener("keydown", e => {
+      if (e.key !== "Enter" || e.shiftKey || e.isComposing) return;
+      e.preventDefault(); if (!$("#go", stage).disabled) $("#go", stage).click();
+    });
   }
 });
 

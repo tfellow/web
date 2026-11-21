@@ -477,7 +477,7 @@
     var html = '<div class="report">' +
       '<div class="card rep-hero" style="--c:' + info.color + '">' +
       '<div class="rh-top"><div><p class="small muted">' + (meta.date ? fmtDate(meta.date) : "") + (meta.dur ? " · " + mmss(meta.dur) : "") + (meta.name ? " · " + esc(meta.name) : "") + '</p><h2>나의 영어 레벨</h2></div>' +
-      '<img src="../app/emblem.png" alt="" width="44" height="39"></div>' +
+      '<img src="../assets/myeverse/logo.svg" alt="" width="44" height="44"></div>' +
       '<div class="big-lv"><span class="code">' + esc(lvName(o.cefr)) + '</span><span class="sub">' + esc(o.sub === "상+" ? "이상" : o.sub) + '</span><div><b>' + info.name + " · " + info.en + '</b><p class="small">CEFR 기준 · 가능 범위 ' + esc(range) + "</p></div></div>" +
       ladder(o.theta) +
       '<ul class="can">' + info.can.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul></div>" +
