@@ -12,7 +12,10 @@ import { createRemoteJWKSet, jwtVerify } from "https://deno.land/x/jose@v5.9.6/i
 const FIREBASE_PROJECT = "cloze-a8e6c";
 const ALLOWED_ORIGINS = ["https://tfellow.github.io"];
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@gmail.com", "engwords@smy.ms.kr", "hist1026@gmail.com"];
-const MODEL = "gemini-2.5-flash";
+// 차례대로 시도해요. 앞 모델이 없거나(404, 은퇴) 한도·권한 문제(403/429)·서버 오류면 다음 모델로 넘어가요.
+// (2026-11: gemini-2.5-flash 는 2026-12-01 종료 예정이라 이미 404 가 났어요. Google 모델 목록이 바뀌면 이 줄만 고치면 돼요)
+const MODELS = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash-lite"];
+const RETRY = new Set([403, 404, 429, 500, 503]);
 const MAX_BODY = 20_000;
 
 const JWKS = createRemoteJWKSet(
@@ -83,11 +86,19 @@ Deno.serve(async (req) => {
   let body: { contents?: unknown; generationConfig?: unknown };
   try { body = JSON.parse(raw); } catch (_) { return Response.json({ error: "bad json" }, { status: 400, headers }); }
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-    body: JSON.stringify({ contents: body.contents, generationConfig: body.generationConfig }),
-  });
-  const text = await res.text();
-  return new Response(text, { status: res.status, headers: { ...headers, "Content-Type": "application/json" } });
+  const payload = JSON.stringify({ contents: body.contents, generationConfig: body.generationConfig });
+  let status = 502, text = JSON.stringify({ error: "no model answered" }), used = "";
+  for (const model of MODELS) {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+      body: payload,
+    });
+    status = res.status; text = await res.text(); used = model;
+    if (res.ok || !RETRY.has(res.status)) break;
+    console.log(`model ${model} -> ${res.status}, trying next`);
+  }
+  // 어느 모델로 채점했는지 기록에 남겨요 (Supabase → Edge Functions → Logs)
+  console.log(`graded by ${used} (${status})`);
+  return new Response(text, { status, headers: { ...headers, "Content-Type": "application/json", "X-Model": used } });
 });
