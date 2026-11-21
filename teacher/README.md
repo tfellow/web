@@ -18,7 +18,7 @@
 | | 단어숲 | `ds_users`(누적 통계), `ds_results`(단원 테스트) — 2026-11 Firestore 에서 옮김 |
 | | MY Cloze | `cz_users`(학번·실명), `cz_submissions` (관리자는 모든 교사 계정의 테스트 제출을 읽어요) |
 | | MY Brain Up | `bu_daily` 학생×날짜 합계 (하루 1줄 = 기록 1개: 푼 문제·맞힌 문제·점수·영어·오늘의 10문제). 보상 기준: 맞힌 문제, 10문제 완주, 🌅 아침 보너스(아침 시간에 10문제 완주), 도전한 날 |
-| Firebase `cloze-a8e6c` | 영작문 writing1 | `vocab_results` 중 `appTag = writing1_submission` (단어숲·Cloze 옛 기록은 읽기 전용으로 남아 있어요) |
+| | 영작문 writing1 | `w1_submissions` — 2026-11 Firestore 에서 옮김 (Firebase `cloze-a8e6c` 는 옛 기록 보관용, Hub 는 연결 안 함) |
 | Firebase `my-kahoot-smy` (RTDB) | MY Kahoot | `schoolRoster`, `teacherData/quizHistory`, `homework`, `homeworkResults` |
 | | Class123 | `class123_plus/tfellow_workspace/classes` (으쓱·머쓱 누적) |
 

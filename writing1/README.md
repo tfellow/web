@@ -2,7 +2,11 @@
 
 - **서비스 배포 주소 (GitHub Pages):** https://tfellow.github.io/web/writing1/
 - **소스 코드 경로:** [`my_writing/public/`](file:///c:/Users/Rainbow/OneDrive%20-%20%EC%84%9C%EC%9A%B8%EB%AC%B8%EC%98%81%EC%97%AC%EC%9E%90%EC%A4%91%ED%95%99%EA%B5%90/%E2%98%85Antigravity%E2%98%85/my_writing/public) ([`index.html`](file:///c:/Users/Rainbow/OneDrive%20-%20%EC%84%9C%EC%9A%B8%EB%AC%B8%EC%98%81%EC%97%AC%EC%9E%90%EC%A4%91%ED%95%99%EA%B5%90/%E2%98%85Antigravity%E2%98%85/my_writing/public/index.html), [`app.js`](file:///c:/Users/Rainbow/OneDrive%20-%20%EC%84%9C%EC%9A%B8%EB%AC%B8%EC%98%81%EC%97%AC%EC%9E%90%EC%A4%91%ED%95%99%EA%B5%90/%E2%98%85Antigravity%E2%98%85/my_writing/public/app.js), [`styles.css`](file:///c:/Users/Rainbow/OneDrive%20-%20%EC%84%9C%EC%9A%B8%EB%AC%B8%EC%98%81%EC%97%AC%EC%9E%90%EC%A4%91%ED%95%99%EA%B5%90/%E2%98%85Antigravity%E2%98%85/my_writing/public/styles.css))
-- **클라우드 데이터베이스:** Firebase Authentication + Cloud Firestore (`cloze-a8e6c` 프로젝트 공유, 기존 `MY Cloze` 및 `단어숲` 데이터와 100% 분리·호환)
+- **클라우드 데이터베이스:** Supabase `tfellow-web` (2026-11 Firebase `cloze-a8e6c` 에서 이전). 다른 MY 앱과 같은 학교 구글 로그인.
+  - 표: `w1_submissions`(제출), `w1_settings`(`_settings`: 과제 목록·Gemini 사용 여부), `w1_private`(`config`: 명렬표·교사 시험용 키, 교사만), `w1_students`(이메일별 학번·이름). 보안 규칙은 `supabase_writing1.sql`.
+  - `sb.js` 가 예전 Firebase 함수 이름을 그대로 제공해서 `app.js` 의 저장 코드는 거의 그대로예요. uid = 소문자 이메일.
+  - AI 채점: Supabase Edge Function `writing1-grade` (`server/writing1-grade.ts`). Supabase 로그인 표를 먼저 확인하고, 예전 Firebase 로그인 표도 받아요. Gemini 키는 함수 비밀값 `GEMINI_API_KEY` 에만 있어요.
+  - 예전 Firestore 기록은 `cloze/migrate.html` 로 옮겨요.
 
 ---
 

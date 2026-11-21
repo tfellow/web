@@ -1,6 +1,6 @@
 rules_version = '2';
-// ★ 이 Firebase 프로젝트(cloze-a8e6c)는 지금 AI 영작문 튜터(writing1)만 씁니다.
-//   MY Cloze 와 단어숲은 2026-11 Supabase 로 옮겼어요. 두 앱의 옛 기록은 여기 그대로 남아 있지만 "읽기 전용"이에요
+// ★ 이 Firebase 프로젝트(cloze-a8e6c)는 이제 어떤 앱도 쓰지 않아요 (옛 기록 보관용).
+//   MY Cloze·단어숲·AI 영작문 튜터를 2026-11 Supabase 로 옮겼어요. 옛 기록은 여기 그대로 남아 있지만 모두 "읽기 전용"이에요
 //   (cloze/migrate.html 이 읽어서 옮겨요. 옛 앱이 남아 있는 기기에서 새로 쓰려 해도 막혀요).
 // Firebase 콘솔 > Firestore Database > 규칙 탭에 이 파일 내용을 "통째로" 붙여 넣고 [게시]를 누르세요.
 // (cloze/firestore.rules 와 danuhsup/firestore.rules 는 같은 내용입니다.)
@@ -65,28 +65,27 @@ service cloud.firestore {
       allow read: if isSchool();
       allow write: if false;
     }
-    // vocab_books/_settings 에는 영작문 튜터의 과제 목록(writing1_ 로 시작하는 칸)도 들어 있어서, 이 문서만 교사가 계속 고칠 수 있어요.
+    // vocab_books/_settings 에는 영작문 튜터의 옛 과제 목록(writing1_ 칸)도 들어 있어요
     match /vocab_books/{id} {
       allow read: if isSchool();
-      allow write: if vocabTeacher() && id == '_settings';
+      allow write: if false;
     }
-    // vocab_results: 단어숲 옛 결과는 읽기 전용. 영작문 튜터가 같은 컬렉션에 제출을 저장하므로 영작문 제출만 새로 쓸 수 있어요.
+    // vocab_results: 단어숲 옛 결과 + 영작문 옛 제출
     match /vocab_results/{id} {
       allow read: if isSchool() && (resource.data.uid == request.auth.uid || vocabTeacher());
-      allow create: if isSchool() && request.resource.data.uid == request.auth.uid
-        && request.resource.data.appTag == 'writing1_submission';
-      allow update, delete: if vocabTeacher() && resource.data.appTag == 'writing1_submission';
+      allow write: if false;
     }
 
-    // ===================== AI 영작문 튜터 (writing1) =====================
-    // 명렬표와 Gemini 키: 교사만 읽고 쓰기 (학생은 볼 수 없어요)
+    // ===================== AI 영작문 튜터 (writing1, 옛 기록) =====================
+    // 명렬표와 Gemini 키: 교사만 읽기 (학생은 볼 수 없어요)
     match /writing1_private/{id} {
-      allow read, write: if vocabTeacher();
+      allow read: if vocabTeacher();
+      allow write: if false;
     }
-    // 학생 한 명의 학번·이름: 본인과 교사만 읽기, 교사만 쓰기
+    // 학생 한 명의 학번·이름: 본인과 교사만 읽기
     match /writing1_students/{email} {
       allow read: if vocabTeacher() || (isSchool() && myEmail() == email);
-      allow write: if vocabTeacher();
+      allow write: if false;
     }
   }
 }

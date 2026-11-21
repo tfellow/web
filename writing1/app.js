@@ -1,14 +1,10 @@
-// Firebase SDK (CDN 모듈 방식 - 빌드 도구 없이 바로 실행 가능)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// 저장소: Supabase (2026-11 Firebase 에서 이전). sb.js 가 예전 Firebase 함수 이름을 그대로 제공해요.
 import {
   getAuth,
   getIdToken,
-  GoogleAuthProvider,
-  signInWithPopup,
   signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
+  onAuthStateChanged,
+  renderGoogleButton,
   getFirestore,
   collection,
   addDoc,
@@ -24,7 +20,7 @@ import {
   serverTimestamp,
   deleteField,
   writeBatch
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "./sb.js?v=2";
 
 // 서울문영여자중학교 보안 명렬표(무키 AES-256-GCM 금고 & Firestore 서버 보호) 및 헬퍼 함수 불러오기
 import {
@@ -35,17 +31,8 @@ import {
 } from "./students.js?v=2";
 
 // ============================================================================
-// 1. 환경 설정 (서울문영여중 공식 Google 로그인 연동 cloze-a8e6c Firebase 프로젝트)
+// 1. 환경 설정 (Supabase tfellow-web, 다른 MY 앱과 같은 학교 구글 로그인)
 // ============================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE",
-  authDomain: "cloze-a8e6c.firebaseapp.com",
-  projectId: "cloze-a8e6c",
-  storageBucket: "cloze-a8e6c.firebasestorage.app",
-  messagingSenderId: "410570182902",
-  appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7"
-};
-
 // 서울문영여자중학교 공식 도메인 및 교사(관리자) 이메일 목록 설정
 const ALLOWED_DOMAIN = "smy.ms.kr";
 const TEACHER_EMAILS = [
@@ -61,19 +48,13 @@ const TEACHER_EMAILS = [
 // 함수가 아직 없으면 내장 정밀 채점 엔진으로 자동 전환돼요.
 const GEMINI_PROXY_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co/functions/v1/writing1-grade";
 
-// 교사 전용 저장소 (Firestore 보안 규칙으로 교사만 읽고 쓸 수 있어요)
+// 교사 전용 저장소 (Supabase w1_private: 보안 규칙으로 교사만 읽고 쓸 수 있어요)
 const PRIVATE_CONFIG_PATH = ["writing1_private", "config"];
 const STUDENT_DIR_COLLECTION = "writing1_students";
 
-// Firebase 초기화
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-
-googleProvider.setCustomParameters({
-  prompt: "select_account"
-});
+// 저장소·로그인 준비 (sb.js)
+const auth = getAuth();
+const db = getFirestore();
 
 // ============================================================================
 // 2. 교사 출제 한국어 제시문 기본 세트 (1·2·3학년 및 공통 과제)
@@ -2658,17 +2639,12 @@ function updateSelectedKoreanMissionDetail() {
 // ============================================================================
 // 4. 사용자 인증 (Google 로그인 및 @smy.ms.kr 도메인 + 명렬표 자동 매칭)
 // ============================================================================
-async function triggerGoogleLogin() {
-  try {
-    await signInWithPopup(auth, googleProvider);
-  } catch (error) {
-    console.error("Google 로그인 실패:", error);
-    alert("로그인 중 오류가 발생했습니다: " + error.message);
-  }
-}
-
-btnLogin.addEventListener("click", triggerGoogleLogin);
-document.getElementById("btn-hero-login")?.addEventListener("click", triggerGoogleLogin);
+// 로그인 버튼 자리(위쪽·가운데)에 Google 공식 버튼을 그려요
+renderGoogleButton(btnLogin, { size: "medium" }).catch((e) => console.warn(e));
+renderGoogleButton(document.getElementById("btn-hero-login")).catch((e) => {
+  const hero = document.getElementById("btn-hero-login");
+  if (hero) hero.textContent = e.message + " 새로고침해 주세요.";
+});
 
 btnLogout.addEventListener("click", async () => {
   stopMissionTimer();
@@ -2733,7 +2709,15 @@ onAuthStateChanged(auth, async (user) => {
   if (!isRegisteredTeacher && emailDomain !== ALLOWED_DOMAIN) {
     setRuntimeRoster([]);
     alert(`접근 제한: 서울문영여자중학교 계정(@${ALLOWED_DOMAIN}) 또는 등록된 교사 관리자 계정으로만 로그인이 가능합니다.`);
-    await signOut(auth);
+    // 다른 MY 앱(외부 계정 허용 앱)의 로그인까지 끊지 않도록, 이 앱에서만 로그아웃 상태로 보여 줘요
+    currentUser = null;
+    currentStudentInfo = null;
+    userInfoText.textContent = `${email} 계정은 사용할 수 없어요`;
+    btnLogin.classList.add("hidden");
+    btnLogout.classList.remove("hidden");
+    viewLogin.classList.remove("hidden");
+    viewStudent.classList.add("hidden");
+    viewTeacher.classList.add("hidden");
     return;
   }
 
@@ -3146,7 +3130,8 @@ function parseRosterText(text) {
   const out = [];
   const seen = new Set();
   String(text || "").split(/\r?\n/).forEach((line) => {
-    const m = line.match(/(?:2026)?([1-3]\d{4})\D+([가-힣A-Za-z][가-힣A-Za-z ]{0,19})/);
+    // 학번과 이름 사이의 구분(공백·탭·쉼표 등)만 건너뛰어요 (예전 \D+ 는 이름 앞 글자까지 먹어서 마지막 글자만 남았어요)
+    const m = line.match(/(?:2026)?([1-3]\d{4})[^\d가-힣A-Za-z]+([가-힣A-Za-z][가-힣A-Za-z ]{0,19})/);
     if (!m || seen.has(m[1])) return;
     seen.add(m[1]);
     out.push(`${m[1]}:${m[2].trim()}`);

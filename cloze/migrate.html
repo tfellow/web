@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>기록 옮기기 · MY Cloze · 단어숲</title>
+<title>기록 옮기기 · MY Cloze · 단어숲 · 영작문</title>
 <link rel="stylesheet" href="css/style.css?v=3">
 <style>
   [hidden]{display:none!important}
@@ -21,7 +21,7 @@
 <div id="app">
   <div class="card step">
     <h1 style="margin:0 0 4px">기록 옮기기 (Firestore → Supabase)</h1>
-    <p class="muted">MY Cloze와 단어숲의 예전 기록을 새 저장소(Supabase)로 옮기는 교사용 페이지예요. Firestore 기록은 <b>읽기만</b> 하고 지우지 않아요.
+    <p class="muted">MY Cloze, 단어숲, AI 영작문 튜터의 예전 기록을 새 저장소(Supabase)로 옮기는 교사용 페이지예요. Firestore 기록은 <b>읽기만</b> 하고 지우지 않아요.
       같은 기록은 두 번 들어가지 않으므로 여러 번 실행해도 괜찮아요.</p>
   </div>
   <div class="card step">
@@ -142,8 +142,17 @@ $("#readBtn").onclick = async () => {
       if (i % 20 === 19) log(`  암기 상태 ${i + 1}/${vu.length}명`);
     }
     const vb = await all(collection(fdb, "vocab_board"));
-    const vr = (await all(collection(fdb, "vocab_results"))).filter(r => r.appTag !== "writing1_submission" && r.bookId !== "__writing1__");
+    const vrAll = await all(collection(fdb, "vocab_results"));
+    const isW1 = r => r.appTag === "writing1_submission" || r.bookId === "__writing1__";
+    const vr = vrAll.filter(r => !isW1(r));
     const books = await all(collection(fdb, "vocab_books"));
+
+    log("영작문 읽는 중…");
+    const w1subs = vrAll.filter(isW1);
+    let w1priv = [], w1stu = [];
+    try { w1priv = await all(collection(fdb, "writing1_private")); } catch (e) { log("영작문 교사 전용 설정 읽기 실패: " + e.code); }
+    try { w1stu = await all(collection(fdb, "writing1_students")); } catch (e) { log("영작문 학생 명부 읽기 실패: " + e.code); }
+    const setDoc0 = books.find(b => b.id === "_settings");
 
     // ---------- 바꾸기: uid → 이메일 ----------
     const strip = ({ id, _uid, ...d }) => d;
@@ -158,11 +167,17 @@ $("#readBtn").onclick = async () => {
       ds_progress: prog.map(p => { const e = mapUid(p._uid); return e && { id: `${e}|${p.id}`, uid: e, book: p.id, data: strip(p) }; }).filter(Boolean),
       ds_board: vb.map(b => { const e = mapUid(b.uid || b.id); return e && { id: e, data: { ...strip(b), uid: e } }; }).filter(Boolean),
       ds_results: vr.map(r => { const e = mapUid(r.uid); return e && { id: r.id, data: { ...strip(r), uid: e } }; }).filter(Boolean),
-      // _settings 의 writing1_ 칸은 영작문 튜터 것이라(아직 Firestore) 빼고 옮겨요
+      // _settings 의 writing1_ 칸은 영작문 튜터 것이라 단어숲 단어장에서는 빼요 (아래 w1_settings 로 따로 옮겨요)
       ds_books: books.map(b => ({ id: b.id, data: Object.fromEntries(Object.entries(strip(b)).filter(([k]) => !k.startsWith("writing1_"))) })),
+      // 영작문: 제출의 uid 는 학생 이메일로, 과제 목록은 _settings 의 writing1_ 칸만 옮겨요 (예전 키·명렬표 칸은 빼요)
+      w1_submissions: w1subs.filter(r => r.studentEmail).map(r => ({ id: r.id, data: { ...strip(r), uid: low(r.studentEmail), studentEmail: low(r.studentEmail) } })),
+      w1_settings: setDoc0 ? [{ id: "_settings", data: Object.fromEntries(Object.entries(strip(setDoc0)).filter(([k]) => k.startsWith("writing1_") && k !== "writing1_geminiKey" && k !== "writing1_roster")) }] : [],
+      w1_private: w1priv.map(p => ({ id: p.id, data: strip(p) })),
+      w1_students: w1stu.map(x => ({ id: low(x.id), data: strip(x) })),
     };
     const src = { cz_users: users.length, cz_tests: tests.length, cz_submissions: subs.length, cz_board: board.length, cz_assignments: asg.length,
-      ds_users: vu.length, ds_progress: prog.length, ds_board: vb.length, ds_results: vr.length, ds_books: books.length };
+      ds_users: vu.length, ds_progress: prog.length, ds_board: vb.length, ds_results: vr.length, ds_books: books.length,
+      w1_submissions: w1subs.length, w1_settings: setDoc0 ? 1 : 0, w1_private: w1priv.length, w1_students: w1stu.length };
     S.out = out;
 
     // 다른 교사 계정이 만든 테스트 (그 계정으로 다시 로그인해 한 번 더 실행해야 제출 기록까지 옮겨져요)
@@ -170,7 +185,8 @@ $("#readBtn").onclick = async () => {
     tests.forEach(t => { const o = low(t.ownerEmail) || uidMail.get(t.ownerUid); if (o && o !== myEmail) others[o] = (others[o] || 0) + 1; });
 
     const NAME = { cz_users: "Cloze 학생 정보", cz_tests: "Cloze 테스트", cz_submissions: "Cloze 제출 (이 계정의 테스트)", cz_board: "Cloze 순위표", cz_assignments: "Cloze 과제",
-      ds_users: "단어숲 학생·교사", ds_progress: "단어숲 암기 상태 (학생×단어장)", ds_board: "단어숲 랭킹", ds_results: "단어숲 단원 테스트", ds_books: "단어숲 단어장" };
+      ds_users: "단어숲 학생·교사", ds_progress: "단어숲 암기 상태 (학생×단어장)", ds_board: "단어숲 랭킹", ds_results: "단어숲 단원 테스트", ds_books: "단어숲 단어장",
+      w1_submissions: "영작문 제출", w1_settings: "영작문 과제 목록", w1_private: "영작문 교사 전용 (명렬표·키)", w1_students: "영작문 학생 명부" };
     $("#counts").innerHTML = `<table class="cnt"><tr><th>기록</th><th class="r">Firestore</th><th class="r">옮길 것</th></tr>
       ${Object.keys(out).map(k => `<tr><td>${NAME[k]}</td><td class="r">${src[k]}</td><td class="r">${out[k].length}</td></tr>`).join("")}</table>
       ${Object.keys(others).length ? `<p class="alert warn">${Object.entries(others).map(([e, n]) => `${esc(e)} 계정으로 만든 테스트 ${n}개`).join(", ")}가 있어요. 이 계정으로 옮긴 뒤, 1번에서 그 계정으로 바꿔 한 번 더 실행하면 그 테스트의 제출 기록도 옮겨져요.</p>` : ""}
@@ -190,12 +206,13 @@ $("#goBtn").onclick = async () => {
   $("#goBtn").disabled = true; $("#readBtn").disabled = true;
   let ok = true;
   // 테스트를 먼저 넣어야 해요 (제출·과제가 테스트를 확인해요)
-  for (const t of ["cz_users", "cz_tests", "cz_submissions", "cz_board", "cz_assignments", "ds_books", "ds_users", "ds_board", "ds_results", "ds_progress"]) {
+  for (const t of ["cz_users", "cz_tests", "cz_submissions", "cz_board", "cz_assignments", "ds_books", "ds_users", "ds_board", "ds_results", "ds_progress",
+                   "w1_settings", "w1_private", "w1_students", "w1_submissions"]) {
     const rows = S.out[t];
     let done = 0, put = 0, chunk = [], size = 0;
     const send = async () => {
       if (!chunk.length) return;
-      const { data, error } = await sb.rpc("cz_import", { p_table: t, p_rows: chunk });
+      const { data, error } = await sb.rpc(t.startsWith("w1_") ? "w1_import" : "cz_import", { p_table: t, p_rows: chunk });
       if (error) throw new Error(`${t}: ${error.message}`);
       put += data || 0; done += chunk.length; chunk = []; size = 0;
     };

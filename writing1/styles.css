@@ -823,3 +823,8 @@ textarea {
   padding-top: 0.65rem;
   border-top: 1px solid #e2e8f0;
 }
+
+/* Google 로그인 버튼 자리 (2026-11 Supabase 로그인) */
+.gsi-slot { display: inline-flex; align-items: center; min-height: 36px; }
+.gsi-slot.hidden { display: none !important; }
+.gsi-hero { display: flex; justify-content: center; min-height: 44px; }

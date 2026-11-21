@@ -258,8 +258,7 @@
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Brain Up · Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Speaking · 나의 영어 여정 <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>단어숲 · MY Cloze <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>영작문 튜터 <span class="pill off" data-auth="fb">로그인 필요</span></li>
+          <li>단어숲 · MY Cloze · 영작문 튜터 <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
           <li>Class123 · Teacher Hub <span class="pill off" id="teacherPill">교사 전용</span></li>
         </ul>
@@ -806,29 +805,13 @@
 <script type="module">
   const C = window.SMY;
   const $ = (s) => document.querySelector(s);
-  const state = { sbEmail: null, fbEmail: null, fbError: null };
+  const state = { sbEmail: null };
   const isAdmin = (e) => !!e && C.ADMIN_EMAILS.includes(e.toLowerCase());
-  const email = () => state.sbEmail || state.fbEmail;
+  const email = () => state.sbEmail;
 
-  /* ---- Supabase: 독서 여권 · 퀴즈 퀸즈 ---- */
+  /* ---- Supabase: 모든 MY 앱이 같은 로그인을 써요 (2026-11 Cloze·단어숲·영작문도 Firebase 에서 옮겼어요) ---- */
   let sb = null;
   try { if (window.supabase) sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_KEY); } catch (e) {}
-
-  /* ---- Firebase: 영작문 튜터 (cloze-a8e6c). MY Cloze·단어숲은 2026-11 Supabase 로 옮겼어요 ---- */
-  const firebaseConfig = {
-    apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE", authDomain: "cloze-a8e6c.firebaseapp.com", projectId: "cloze-a8e6c",
-    storageBucket: "cloze-a8e6c.firebasestorage.app", messagingSenderId: "410570182902", appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7"
-  };
-  let fb = null;
-  try {
-    const [{ initializeApp }, A] = await Promise.all([
-      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
-      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js")
-    ]);
-    const auth = A.getAuth(initializeApp(firebaseConfig));
-    fb = { auth, A };
-    A.onAuthStateChanged(auth, (u) => { state.fbEmail = u ? u.email : null; render(); });
-  } catch (e) { fb = null; }
 
   if (sb) {
     try {
@@ -838,24 +821,21 @@
     } catch (e) {}
   }
 
-  /* 구글 로그인 한 번 → 두 서비스에 같은 토큰으로 로그인 */
+  /* 구글 로그인 한 번 → 모든 MY 앱에 로그인 */
   async function onGoogle(resp) {
     const token = resp.credential;
-    state.fbError = null;
-    const jobs = [];
-    if (sb) jobs.push(sb.auth.signInWithIdToken({ provider: "google", token }).then((r) => { if (r.error) throw r.error; }));
-    if (fb) jobs.push(fb.A.signInWithCredential(fb.auth, fb.A.GoogleAuthProvider.credential(token)).catch((e) => { state.fbError = e.code || String(e); }));
-    try { await Promise.all(jobs); } catch (e) { $("#deskNote").textContent = "로그인에 실패했어요: " + (e.message || e) + " 잠시 뒤 다시 시도해 주세요."; }
+    try {
+      if (sb) { const r = await sb.auth.signInWithIdToken({ provider: "google", token }); if (r.error) throw r.error; }
+    } catch (e) { $("#deskNote").textContent = "로그인에 실패했어요: " + (e.message || e) + " 잠시 뒤 다시 시도해 주세요."; }
     render();
     if ($("#adminDlg").open) openAdmin();
   }
 
   async function logoutAll() {
     try { if (sb) await sb.auth.signOut(); } catch (e) {}
-    try { if (fb) await fb.A.signOut(fb.auth); } catch (e) {}
     try { localStorage.removeItem("qq_current_user_v14"); } catch (e) {}
     if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
-    state.sbEmail = state.fbEmail = null;
+    state.sbEmail = null;
     render();
   }
 
@@ -872,7 +852,6 @@
     $("#deskIn").hidden = !e;
     $("#meEmail").textContent = e || "";
     setPills("sb", !!state.sbEmail, "로그인 필요");
-    setPills("fb", !!state.fbEmail, e ? "앱에서 한 번 더 로그인" : "로그인 필요");
     /* 교사 전용 도구: 관리자 계정으로 로그인했을 때만 열려요 */
     const admin = isAdmin(e);
     document.body.classList.toggle("is-admin", admin);
@@ -882,11 +861,7 @@
     tp.className = "pill " + (admin ? "on" : "off");
     tp.textContent = admin ? "열림" : "교사 전용";
     $("#teacherHint").textContent = admin ? "선생님 계정으로 로그인했어요. 도구를 바로 열 수 있어요." : (e ? "이 계정은 교사로 등록되어 있지 않아요." : "선생님 계정으로 로그인하면 버튼이 열려요.");
-    if (e && !state.fbEmail && state.fbError) {
-      $("#deskNote").textContent = "영작문 튜터는 아직 통합 설정 전이라 그 앱에서 한 번 더 로그인해야 해요.";
-    } else {
-      $("#deskNote").textContent = "공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.";
-    }
+    $("#deskNote").textContent = "공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.";
   }
 
   /* 구글 버튼 */
@@ -928,8 +903,8 @@
     ]],
     ["설명서 · 서버", [
       ["danuhsup/guide/teacher.html", "단어숲 교사 설명서", "처음 설정과 운영 방법"],
-      ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서·지식 여권 · 메트로 · 레벨 테스트 · 문법 · 단어숲 · MY Cloze · Brain Up · 말하기 · 퀴즈 퀸즈 데이터"],
-      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "영작문 튜터 데이터 (MY Cloze·단어숲 옛 기록 보관)"],
+      ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서·지식 여권 · 메트로 · 레벨 테스트 · 문법 · 단어숲 · MY Cloze · 영작문 · Brain Up · 말하기 · 퀴즈 퀸즈 데이터"],
+      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "MY Cloze·단어숲·영작문 튜터 옛 기록 보관 (읽기 전용)"],
       ["https://console.firebase.google.com/project/my-kahoot-smy/overview", "Firebase 콘솔 (Kahoot)", "MY Kahoot · Class123 데이터"]
     ]]
   ];

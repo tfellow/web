@@ -3,8 +3,8 @@
 //   1) 🎁 보상: 선생님이 [지급]을 누르면 Class123 학생 카드에 으쓱을 더하고, 지급 기록을 class123_plus/hub_rewards 에 남겨요.
 //   2) 📤 학생 페이지: 학생별 요약을 Supabase hub_summary 표에 올려요 (학생은 자기 줄만 읽어요).
 // 저장소
-//   Supabase (tfellow-web)       : 독서 여권, MY Grammar, 단어숲·MY Cloze(2026-11 Firestore 에서 이전), Quiz Queens(구글 시트, Supabase 로그인으로 확인)
-//   Firebase cloze-a8e6c          : AI 영작문(writing1)
+//   Supabase (tfellow-web)       : 독서 여권, MY Grammar, 단어숲·MY Cloze·AI 영작문(2026-11 Firestore 에서 이전), Quiz Queens(구글 시트, Supabase 로그인으로 확인)
+//   (Firebase cloze-a8e6c 는 2026-11 부터 옛 기록 보관용이라 Hub 가 연결하지 않아요)
 //   Firebase my-kahoot-smy (RTDB) : MY Kahoot, Class123 Plus, 보상 규칙·지급 기록
 const FB_VER = "10.12.2";
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@smy.ms.kr", "hist1026@gmail.com"];
@@ -13,10 +13,6 @@ const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.goo
 const SB_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
 const SB_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키
 const QUIZ_GAS = "https://script.google.com/macros/s/AKfycbzem2As4a_5FqOJ5KTF49AiVgT8M4h_cDrOEMMlZZmEvbD-bHZD-RSDDKHOKL3o_copYQ/exec";
-const FB_CLOZE = {
-  apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE", authDomain: "cloze-a8e6c.firebaseapp.com", projectId: "cloze-a8e6c",
-  storageBucket: "cloze-a8e6c.firebasestorage.app", messagingSenderId: "410570182902", appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7",
-};
 const FB_KAHOOT = {
   apiKey: "AIzaSyDE-zsT6njzKpoGLl3Izw0CxPcpDepcO4g", authDomain: "my-kahoot-smy.firebaseapp.com",
   databaseURL: "https://my-kahoot-smy-default-rtdb.firebaseio.com", projectId: "my-kahoot-smy",
@@ -34,7 +30,7 @@ const APPS = [
   { id: "brainup", name: "Brain Up", icon: "🧠", src: "sb", url: "../brainup/" },
   { id: "vocab", name: "단어숲", icon: "🌳", src: "sb", url: "../danuhsup/" },
   { id: "cloze", name: "Cloze", icon: "🧩", src: "sb", url: "../cloze/" },
-  { id: "writing", name: "영작문", icon: "✍️", src: "fc", url: "../writing1/" },
+  { id: "writing", name: "영작문", icon: "✍️", src: "sb", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
@@ -42,8 +38,7 @@ const APPS = [
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
-  fc: { name: "Firebase (영작문)", desc: "영작문" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
 
@@ -237,7 +232,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -349,6 +344,14 @@ async function sbLoad() {
     });
   } catch (e) { if (!/cz_users|cz_submissions|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("Cloze", e); }
 
+  try { // AI 영작문 제출 (w1_submissions) — 표가 아직 없으면(SQL 실행 전) 조용히 넘어가요
+    const subs = await sbAll(() => c.from("w1_submissions").select("id,data").order("id"));
+    subs.forEach(({ data: r }) => {
+      person(r.studentEmail, { name: r.studentName, grade: r.grade, cls: r.classNum, no: r.studentNumber });
+      addEvent({ e: r.studentEmail, a: "writing", t: toMs(r.createdAtMs || r.ts), k: "essay", title: r.topic || r.koreanPrompt || "영작문", s: num(r.score), cefr: r.cefrLevel });
+    });
+  } catch (e) { if (!/w1_submissions|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("영작문", e); }
+
   try { // Quiz Queens (구글 시트) — Supabase 로그인 토큰으로 선생님임을 확인해요
     const { data } = await c.auth.getSession();
     const res = await fetch(QUIZ_GAS, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "getInitialData", token: data.session?.access_token }) });
@@ -399,7 +402,7 @@ async function fbInit(id) {
     import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-auth.js`),
   ]);
   // 영작문 쪽은 기본 이름([DEFAULT])을 써서 같은 주소의 영작문 로그인 상태를 그대로 이어받아요.
-  const app = id === "fc" ? initializeApp(FB_CLOZE) : initializeApp(FB_KAHOOT, "kahoot");
+  const app = initializeApp(FB_KAHOOT, "kahoot");
   const auth = A.getAuth(app);
   const user = await new Promise(res => { const off = A.onAuthStateChanged(auth, u => { off(); res(u); }); });
   return (fbApps[id] = { app, auth, A, user });
@@ -417,7 +420,7 @@ async function fbStart(id, interactive, hint) {
     if (!f.user) { S.st = "off"; renderConn(); return; }
     S.email = f.user.email;
     if (!isTeacher(f.user.email)) { S.st = "err"; S.err = `${f.user.email} 은(는) 교사 계정이 아니에요. 로그아웃 후 다시 연결하세요.`; renderConn(); return; }
-    await (id === "fc" ? fcLoad(f) : fkLoad(f));
+    await fkLoad(f);
   } catch (e) {
     console.warn(id, e);
     S.st = "err"; S.err = e.code === "auth/popup-blocked" ? "팝업이 막혔어요. 주소창 오른쪽에서 팝업을 허용해 주세요." : (e.message || String(e));
@@ -430,27 +433,6 @@ async function fbSignOut(id) {
   clearApps(APPS.filter(a => a.src === id).map(a => a.id));
   if (id === "fk") { state.c123Raw = null; state.hubLoaded = false; }
   renderConn(); render();
-}
-
-// ---------- 영작문 (Firestore) ----------
-// 단어숲·Cloze 는 2026-11 Supabase 로 옮겨서 위의 Supabase 쪽에서 읽어요. 영작문만 아직 Firestore 에 있어요.
-async function fcLoad(f) {
-  const S = state.src.fc;
-  S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["writing"]);
-  const F = await import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-firestore.js`);
-  const db = F.getFirestore(f.app);
-  const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.code || e?.message || e}`); };
-
-  try { // 영작문 제출 (단어숲이 쓰던 vocab_results 컬렉션에 함께 저장돼 있어요)
-    (await F.getDocs(F.query(F.collection(db, "vocab_results"), F.where("appTag", "==", "writing1_submission")))).forEach(d => {
-      const r = d.data();
-      person(r.studentEmail, { name: r.studentName, grade: r.grade, cls: r.classNum, no: r.studentNumber });
-      addEvent({ e: r.studentEmail, a: "writing", t: toMs(r.createdAtMs || r.ts), k: "essay", title: r.topic || r.koreanPrompt || "영작문", s: num(r.score), cefr: r.cefrLevel });
-    });
-  } catch (e) { warn("영작문", e); }
-
-  S.st = "ok"; renderConn(); render(); maybePublish();
 }
 
 // ---------- Kahoot · Class123 · 보상 (Realtime Database) ----------
@@ -811,7 +793,7 @@ async function grant(items, skip) {
 let pubT = null;
 function maybePublish(force) {
   if (DEMO) return;
-  if (["sb", "fc", "fk"].some(id => state.src[id].st !== "ok")) return; // 셋 다 연결됐을 때만
+  if (["sb", "fk"].some(id => state.src[id].st !== "ok")) return; // 둘 다 연결됐을 때만
   if (!force && state.pub.at && Date.now() - state.pub.at < 10 * 60e3) return;
   clearTimeout(pubT); pubT = setTimeout(publishSummaries, 1500);
 }
@@ -879,9 +861,9 @@ function renderPub() {
   const s = state.pub;
   const chip = { ok: `<span class="chip ok">✅ 올림</span>`, load: `<span class="chip load">⏳ 올리는 중</span>`, err: `<span class="chip err">⚠️ 오류</span>` }[s.st] || `<span class="chip off">대기</span>`;
   el.innerHTML = `<div class="src-h"><b>📤 학생 페이지</b>${chip}</div>
-    <div class="apps">학생이 <a href="../me/" target="_blank">MY English Journey</a>에서 자기 기록을 봐요. 세 저장소가 모두 연결되면 자동으로 올려요.</div>
+    <div class="apps">학생이 <a href="../me/" target="_blank">MY English Journey</a>에서 자기 기록을 봐요. 두 저장소(Supabase, Kahoot)가 모두 연결되면 자동으로 올려요.</div>
     ${s.msg ? `<div class="${s.st === "err" ? "err-msg" : "small muted"}">${esc(s.msg)}${s.at && s.st === "ok" ? " · " + fmtWhen(s.at) : ""}</div>` : ""}
-    <div><button class="btn sm navy" id="btnPub" ${["sb", "fc", "fk"].some(id => state.src[id].st !== "ok") ? "disabled" : ""}>지금 올리기</button></div>`;
+    <div><button class="btn sm navy" id="btnPub" ${["sb", "fk"].some(id => state.src[id].st !== "ok") ? "disabled" : ""}>지금 올리기</button></div>`;
   const b = document.getElementById("btnPub"); if (b) b.onclick = () => maybePublish(true);
 }
 
@@ -911,7 +893,7 @@ function renderConn() {
   });
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
@@ -1260,7 +1242,6 @@ function bindTop() {
     if (DEMO) return toast("체험 모드에서는 새로 불러올 기록이 없어요.");
     state.pub.at = 0;
     if (state.src.sb.st === "ok") sbLoad();
-    if (state.src.fc.st === "ok") fcLoad(fbApps.fc);
     if (state.src.fk.st === "ok") fkLoad(fbApps.fk);
     toast("모든 앱의 기록을 다시 불러와요.");
   };
@@ -1277,7 +1258,6 @@ else {
   render();
   // 이미 로그인된 저장소는 바로 불러와요 (팝업 없이)
   sbStart(false).catch(e => { state.src.sb = { st: "err", err: e.message }; renderConn(); });
-  fbStart("fc", false);
   fbStart("fk", false);
 }
 // 앱 바로가기 상자: 접고 펼친 상태를 기억해요
