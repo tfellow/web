@@ -1,31 +1,73 @@
 'use strict';
-
-// This page is an additional entry point. App URLs and their access controls stay in the apps.
 const cards = [...document.querySelectorAll('.app-card')];
 const filters = [...document.querySelectorAll('[data-filter]')];
+const audienceButtons = [...document.querySelectorAll('[data-audience]')];
+const subjectButtons = [...document.querySelectorAll('[data-subject]')];
+const sections = [...document.querySelectorAll('[data-domain-section]')];
 const search = document.getElementById('app-search');
+let audience = 'student';
+let subject = 'english';
 let category = 'all';
+let lastStudentSubject = 'english';
+const domainNames = { english:'영어 학습', subjects:'다른 교과', knowledge:'상식·퀴즈', all:'전체 영역', teacher:'수업·관리 도구' };
 function filterApps() {
   const words = search.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const inScope = card => card.dataset.role === audience && (audience === 'teacher' || subject === 'all' || card.dataset.domain === subject);
   let count = 0;
   cards.forEach(card => {
-    const matches = (category === 'all' || card.dataset.category === category) && words.every(word => card.textContent.toLocaleLowerCase().includes(word));
+    const content = `${card.textContent} ${card.dataset.search}`.toLocaleLowerCase();
+    const matches = inScope(card) && (category === 'all' || card.dataset.topic === category) && words.every(word => content.includes(word));
     card.hidden = !matches;
-    if (matches) count++;
+    if(matches) count++;
   });
-  document.getElementById('result-count').textContent = `${count}개의 배움 공간`;
-  document.getElementById('empty-state').hidden = count !== 0;
+  sections.forEach(section => {
+    section.querySelectorAll('.app-group').forEach(group => {
+      const visible = group.querySelectorAll('.app-card:not([hidden])').length;
+      group.hidden = visible === 0;
+      group.querySelector('.group-count').textContent = visible;
+    });
+    section.hidden = !section.querySelector('.app-card:not([hidden])');
+  });
+  audienceButtons.forEach(button => {
+    const active = button.dataset.audience === audience;
+    button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
+  });
+  subjectButtons.forEach(button => {
+    const active = button.dataset.subject === subject;
+    button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
+  });
   filters.forEach(button => {
-    const active = button.dataset.filter === category;
-    button.classList.toggle('active', active);
-    button.setAttribute('aria-pressed', String(active));
+    const topic = button.dataset.filter;
+    button.hidden = topic !== 'all' && !cards.some(card => inScope(card) && card.dataset.topic === topic);
+    const active = topic === category;
+    button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
   });
+  document.getElementById('subject-bar').hidden = audience === 'teacher';
+  document.getElementById('result-count').textContent = `${audience === 'student' ? '학생용' : '교사용'} · ${domainNames[subject]} · ${count}개 앱`;
+  document.getElementById('scope-note').textContent = audience === 'teacher' ? '관리 기능은 각 앱에서 교사 인증 후 이용해요.' : '로그인은 각 앱에서도 할 수 있어요.';
+  document.getElementById('empty-state').hidden = count !== 0;
+  document.getElementById('reset-search').textContent = audience === 'student' ? '학생용 전체 앱 보기' : '교사용 전체 앱 보기';
 }
-filters.forEach(button => button.addEventListener('click', () => { category = button.dataset.filter; filterApps(); }));
-search.addEventListener('input', filterApps);
-document.getElementById('reset-search').addEventListener('click', () => {
-  search.value = ''; category = 'all'; filterApps(); search.focus();
+audienceButtons.forEach(button => button.addEventListener('click',()=>{
+  if(audience === 'student') lastStudentSubject = subject;
+  audience = button.dataset.audience;
+  subject = audience === 'teacher' ? 'teacher' : lastStudentSubject;
+  category = 'all'; filterApps();
+}));
+subjectButtons.forEach(button => button.addEventListener('click',()=>{
+  subject = button.dataset.subject; category = 'all'; filterApps();
+}));
+filters.forEach(button => button.addEventListener('click',()=>{category = button.dataset.filter; filterApps();}));
+document.querySelectorAll('[data-jump-topic]').forEach(button => button.addEventListener('click',()=>{
+  audience = 'student'; subject = 'english'; category = button.dataset.jumpTopic; search.value = ''; filterApps();
+  document.querySelector(`[data-filter="${category}"]`).focus({preventScroll:true});
+  document.querySelector('.discovery-controls').scrollIntoView({block:'start',behavior:'instant'});
+}));
+search.addEventListener('input',filterApps);
+document.getElementById('reset-search').addEventListener('click',()=>{
+  search.value = ''; category = 'all'; subject = audience === 'teacher' ? 'teacher' : 'all'; filterApps(); search.focus();
 });
+filterApps();
 
 const dialog = document.getElementById('account-dialog');
 const accountButton = document.getElementById('account-button');
