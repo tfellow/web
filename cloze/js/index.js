@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, modeBadge, questionCount, tsNum, editProfileModal, toDate, toLocalInput } from "./common.js";
-import { collection, query, where, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize } from "./core.js";
+import { gate, db, $, $$, esc, toast, fmtDate, fmtSec, copyText, playUrl, uniqueCode, MODE_LABEL, modeBadge, questionCount, tsNum, editProfileModal, toDate, toLocalInput } from "./common.js?v=3";
+import { collection, query, where, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, serverTimestamp, writeBatch } from "./sb.js?v=3";
+import { tokenize } from "./core.js?v=3";
 
 const ctx = await gate({ needProfile: true });
 const app = $("#app");
@@ -203,7 +203,7 @@ async function loadAssignments() {
     assignments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     console.error(e);
-    box.innerHTML = `<p class="alert warn">과제 목록을 불러오지 못했습니다 (${esc(e.code || e.message)}). Firebase 콘솔에 새 firestore.rules 를 게시했는지 확인하세요.</p>`;
+    box.innerHTML = `<p class="alert warn">과제 목록을 불러오지 못했습니다 (${esc(e.code || e.message)}). Supabase에서 supabase_cloze.sql 을 실행했는지 확인하세요.</p>`;
     return;
   }
   if (tests.length) renderGrid();
@@ -305,7 +305,7 @@ function assignModal(t) {
     } catch (e) {
       console.error(e);
       btn.disabled = false;
-      toast("실패: " + (e.code || e.message) + " — Firebase 콘솔에 새 보안 규칙을 게시했는지 확인하세요.", "err");
+      toast("실패: " + (e.code || e.message) + " — Supabase에서 supabase_cloze.sql 을 실행했는지 확인하세요.", "err");
     }
   };
 }
@@ -316,7 +316,7 @@ async function loadTests() {
     tests = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     console.error(e);
-    $("#grid").innerHTML = `<p class="alert err">불러오지 못했습니다: ${esc(e.code || e.message)}<br>Firestore 보안 규칙과 교사 이메일 설정을 확인하세요.</p>`;
+    $("#grid").innerHTML = `<p class="alert err">불러오지 못했습니다: ${esc(e.code || e.message)}<br>Supabase에서 supabase_cloze.sql 을 실행했는지, 교사 계정이 관리자(admins)로 등록됐는지 확인하세요.</p>`;
     return;
   }
   renderFolders();

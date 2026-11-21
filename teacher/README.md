@@ -15,10 +15,10 @@
 | | 리딩 메트로 | `tm_attempts` 퀴즈·줄거리 기록(교사만 읽기), `tm_units` 제목, `profiles` 이메일 |
 | | MY Grammar | `mg_players`, `mg_stamps`, `mg_admin_by_student(기간)` |
 | | Quiz Queens | Apps Script `getInitialData` (Supabase 토큰으로 교사 확인) |
+| | 단어숲 | `ds_users`(누적 통계), `ds_results`(단원 테스트) — 2026-11 Firestore 에서 옮김 |
+| | MY Cloze | `cz_users`(학번·실명), `cz_submissions` (관리자는 모든 교사 계정의 테스트 제출을 읽어요) |
 | | MY Brain Up | `bu_daily` 학생×날짜 합계 (하루 1줄 = 기록 1개: 푼 문제·맞힌 문제·점수·영어·오늘의 10문제). 보상 기준: 맞힌 문제, 10문제 완주, 🌅 아침 보너스(아침 시간에 10문제 완주), 도전한 날 |
-| Firebase `cloze-a8e6c` | 단어숲 | `vocab_users`(누적 통계), `vocab_results`(단원 테스트) |
-| | 영작문 writing1 | `vocab_results` 중 `appTag = writing1_submission` |
-| | MY Cloze | `users`, `submissions` (**로그인한 계정이 만든 테스트만**: 보안 규칙) |
+| Firebase `cloze-a8e6c` | 영작문 writing1 | `vocab_results` 중 `appTag = writing1_submission` (단어숲·Cloze 옛 기록은 읽기 전용으로 남아 있어요) |
 | Firebase `my-kahoot-smy` (RTDB) | MY Kahoot | `schoolRoster`, `teacherData/quizHistory`, `homework`, `homeworkResults` |
 | | Class123 | `class123_plus/tfellow_workspace/classes` (으쓱·머쓱 누적) |
 
@@ -35,7 +35,7 @@
 - CSV 내려받기, 표시할 앱 고르기, 기간(오늘·이번 주·최근 7일·이번 달·최근 30일·전체·직접)
 
 - 학생 수: 독서 여권 명단(roster, 약 180명)에 있는 학생 + 어느 앱이든 실제 기록이 있는 학교 계정만 보여요. Kahoot·writing1 명단의 연습용 가짜 학생은 이름·학번을 채우는 데만 쓰고 화면에는 안 나와요.
-- Cloze: 보안 규칙상 연결한 교사 계정으로 만든 테스트의 제출만 읽어요. 다른 교사 계정으로 만든 테스트가 있으면 (테스트의 ownerEmail로 확인) 그 계정으로 바꾸는 버튼이 나와요.
+- Cloze: Supabase 로 옮긴 뒤로는 관리자 계정이면 모든 교사 계정의 테스트 제출을 함께 읽어요 (예전처럼 계정을 바꿀 필요 없음).
 - Kahoot: 수업 퀴즈 판수, 정답률, 3등 안·10등 안 횟수, 과제 수.
 
 ## 🎁 보상 (2단계)

@@ -1,21 +1,19 @@
 // ===== 설정 파일 =====
-// Firebase 콘솔(https://console.firebase.google.com) → 프로젝트 설정 → 내 앱(웹)의 값을 붙여 넣으세요.
-// (MY Cloze 와 같은 Firebase 프로젝트를 함께 씁니다.) apiKey가 비어 있으면 앱은 "체험 모드"(이 기기 브라우저에만 저장)로 동작합니다.
-export const firebaseConfig = {
-  apiKey: 'AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE',
-  authDomain: 'cloze-a8e6c.firebaseapp.com',
-  projectId: 'cloze-a8e6c',
-  storageBucket: 'cloze-a8e6c.firebasestorage.app',
-  messagingSenderId: '410570182902',
-  appId: '1:410570182902:web:bec24c8663fe35e5e2dcd7',
+// 서버 저장소: Supabase (tfellow-web). 독서 여권 등 다른 MY 앱과 같은 프로젝트·같은 구글 로그인을 써요.
+// 2026-11 Firebase Firestore 에서 옮겼어요 (표: cloze/supabase_cloze.sql 의 ds_ 표). 공개해도 되는 키예요.
+// url 이 비어 있으면 앱은 "체험 모드"(이 기기 브라우저에만 저장)로 동작합니다.
+export const supabaseConfig = {
+  url: 'https://jkxdhyvnrvsiokbbbjtu.supabase.co',
+  key: 'sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF',
+  googleClientId: '359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com',
 };
 
 export const APP = {
   schoolName: '서울문영여자중학교',
   appName: '단어숲',
-  // 교사 계정 이메일 (구글 로그인). firestore.rules 의 목록과 똑같이 맞춰 주세요.
+  // 교사 계정 이메일 (화면 표시용). 실제 권한은 Supabase admins 표(public.is_admin())가 정해요.
   teacherEmails: ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr', 'hist1026@gmail.com'],
-  // 학번+비밀번호 로그인 사용 여부 (기본: 구글 로그인만 사용)
+  // 학번+비밀번호 로그인 (Supabase 판에서는 쓰지 않아요)
   studentIdLogin: false,
   // 학번 로그인용 내부 이메일 도메인 (실제 메일이 오가지 않습니다)
   studentEmailDomain: 'students.vocab-app.local',
@@ -23,10 +21,8 @@ export const APP = {
   allowedGoogleDomain: 'smy.ms.kr',
   grades: [1, 2, 3],
   classesPerGrade: 10,
-  // Gemini(AI 예문/암기법) 사용 여부. Firebase 콘솔에서 AI Logic을 켠 뒤 true로 바꾸세요.
+  // Gemini(AI 예문/암기법): Supabase 판에서는 쓰지 않아요 (Firebase AI Logic 전용이었어요)
   enableGemini: false,
 };
 
-// 바꾸면 index.html 의 modulepreload 주소 3곳도 같은 버전으로 바꿔 주세요.
-export const FIREBASE_VERSION = '10.12.2';
-export const isFirebaseConfigured = () => !!firebaseConfig.apiKey;
+export const isServerConfigured = () => !!supabaseConfig.url;

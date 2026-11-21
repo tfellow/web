@@ -3,21 +3,21 @@
 휴대폰·태블릿에서 쓰는 어휘 학습 + 테스트 웹앱입니다. 설치 없이 브라우저로 접속하고, "홈 화면에 추가"하면 앱처럼 쓸 수 있습니다.
 
 - **체험 모드**: `src/config.js`의 `apiKey`가 비어 있으면 기록이 그 기기 브라우저에만 저장됩니다. 교사 화면에는 가상의 학생 32명 데이터가 들어 있습니다.
-- **운영 모드**: Firebase(구글)를 연결하면 학생 기록이 서버에 저장되고, 선생님이 어느 기기에서든 반 전체 통계를 볼 수 있습니다.
+- **운영 모드**: 서버(Supabase)에 연결되어 학생 기록이 서버에 저장되고, 선생님이 어느 기기에서든 반 전체 통계를 볼 수 있습니다. (2026-11 Firebase 에서 옮김)
 
 ## 현재 설치 상태 (서울문영여자중학교)
 
 - 주소: https://tfellow.github.io/web/danuhsup/
 - GitHub 저장소 `tfellow/web` 의 `danuhsup/` 폴더에 들어 있고, 다른 앱처럼 master 에 올라가면 바로 공개됩니다.
-- Firebase 는 **MY Cloze 와 같은 프로젝트(cloze-a8e6c)** 를 함께 씁니다. 단어숲 데이터는 `vocab_` 로 시작하는 컬렉션에만 저장되어 Cloze 데이터와 섞이지 않습니다.
-- 로그인: 학교 구글 계정(@smy.ms.kr). 교사: tfellow@gmail.com, tfellow@smy.ms.kr
-- **처음 한 번 할 일**: Firebase 콘솔 → Firestore Database → 규칙 탭에 `firestore.rules` 내용을 통째로 붙여 넣고 [게시]. (Cloze 규칙이 포함된 합본이라 Cloze 도 그대로 작동합니다.)
+- 저장소: **Supabase `tfellow-web`** (독서 여권 등 다른 MY 앱과 같은 프로젝트·같은 학교 구글 로그인). 단어숲 표는 `ds_` 로 시작해요 (`ds_users`, `ds_progress`, `ds_board`, `ds_results`, `ds_books`).
+- 표·보안 규칙은 `cloze/supabase_cloze.sql` 에 Cloze 와 함께 들어 있어요. 예전 Firestore 기록은 `cloze/migrate.html` 로 옮겨요 (순서는 `cloze/README.md`).
+- 교사 권한은 Supabase `admins` 표가 정해요. `src/config.js` 의 `teacherEmails` 는 화면 표시용이라 함께 맞춰 두세요.
 
 ### 고치는 방법
 `source/` 폴더가 원본 코드입니다. 고친 뒤 `cd source && npm install && node build.mjs` 를 실행하면 `source/dist/` 가 만들어지고, 그 안의 파일(`sw.js` 포함)을 `danuhsup/` 로 복사하면 됩니다.
 
 ### 오프라인 학습
-`sw.js`(서비스 워커)가 앱 파일과 Firebase 프로그램을 기기에 저장해 두어, 한 번 접속한 기기는 인터넷이 끊겨도 앱이 열리고 학습할 수 있습니다. 학습 기록은 기기에 보관됐다가 인터넷이 다시 연결되면 자동으로 서버에 올라갑니다. 새 버전을 올리면 학생 기기는 다음에 앱을 열 때 자동으로 새 버전을 받습니다.
+`sw.js`(서비스 워커)가 앱 파일과 Supabase 프로그램을 기기에 저장해 두어, 한 번 접속한 기기는 인터넷이 끊겨도 앱이 열리고 학습할 수 있습니다. 학습 기록은 기기(localStorage)에 먼저 적어 두었다가 인터넷이 다시 연결되면 자동으로 서버에 올라갑니다. 새 버전을 올리면 학생 기기는 다음에 앱을 열 때 자동으로 새 버전을 받습니다.
 
 ## 기능 한눈에 보기
 
@@ -40,42 +40,21 @@
 
 품사는 `n. 수족관`처럼 뜻 앞에 쓰면 자동으로 분리됩니다.
 
-## 다른 학교에서 새로 설치할 때 (Firebase, 무료 요금제로 충분)
-
-1. https://console.firebase.google.com 에서 구글 계정으로 **프로젝트 만들기** (애널리틱스는 꺼도 됩니다).
-2. **Authentication → 시작하기 → 로그인 방법**에서 `Google`을 사용 설정합니다.
-   - (선택) 구글 계정이 없는 학생을 위해 학번+비밀번호 로그인을 켜려면 `이메일/비밀번호`도 사용 설정하고 `src/config.js`의 `studentIdLogin`을 `true`로 바꿉니다.
-3. **Firestore Database → 데이터베이스 만들기**: 위치는 `asia-northeast3 (서울)`, 프로덕션 모드로 만듭니다.
-4. **프로젝트 설정(톱니바퀴) → 내 앱 → 웹(</>)** 앱을 추가하고, 나오는 `firebaseConfig` 값을 `src/config.js`에 붙여 넣습니다.
-5. `src/config.js`의 `teacherEmails`와 `firestore.rules`의 `TEACHERS()`에 선생님 구글 이메일을 넣습니다(두 곳 똑같이).
-6. `.firebaserc`의 프로젝트 ID를 바꿉니다.
-7. 컴퓨터에 Node.js(https://nodejs.org)를 설치하고, 이 폴더에서:
-   ```
-   npm install
-   npm run build
-   npx firebase-tools login
-   npx firebase-tools deploy
-   ```
-   끝나면 `https://<프로젝트ID>.web.app` 주소가 나옵니다. 이 주소를 학생들에게 알려 주세요.
-
-학교 구글 계정만 허용하려면 `src/config.js`의 `allowedGoogleDomain`에 학교 도메인을 적습니다.
-
-### 알아 두실 점
-- 학생은 처음 구글 로그인할 때 이름·학년·반·번호를 한 번 입력합니다.
-- 학생은 다른 학생의 상세 기록을 볼 수 없고, 랭킹에는 이름·XP·연속일만 공개됩니다.
-- Gemini(AI 예문/암기 요령): Firebase 콘솔 → AI Logic을 켠 뒤 `enableGemini: true`로 바꾸면 단어 상세 창에 버튼이 나타납니다.
+## 다른 학교에서 새로 설치할 때
+Supabase 프로젝트를 만들고(무료), Google 로그인(클라이언트 ID)을 켠 뒤 `cloze/supabase_cloze.sql` 을 실행하고 `src/config.js` 의 `supabaseConfig` 를 바꿔요. `admins` 표와 `is_admin()` 함수는 독서 여권 설치 SQL 에 있어요.
+학생은 처음 구글 로그인할 때 이름·학년·반·번호를 한 번 입력하고, 다른 학생의 상세 기록은 볼 수 없어요(랭킹에는 이름·XP·연속일만 공개).
 
 ## 폴더 구조
 
 ```
-src/config.js          설정 (Firebase 값, 교사 이메일, 학교 이름)
+src/config.js          설정 (Supabase 값, 교사 이메일, 학교 이름)
 src/data/              단어장 (g2-park.json = 첨부 엑셀 356단어)
 src/lib/game.js        간격 반복, XP·레벨, 연속 학습, 배지 규칙
 src/lib/quiz.js        문제 생성기 (예문 빈칸 자동 생성 포함)
 src/store/local.js     체험 모드 저장소 (+가상 학생 데이터)
-src/store/firebase.js  운영 모드 저장소 (Auth + Firestore)
+src/store/supabase.js  운영 모드 저장소 (구글 로그인 + Supabase, 오프라인 대기열)
 src/views/             화면 (로그인, 학생, 학습 진행, 교사)
-firestore.rules        보안 규칙
+firestore.rules        예전 Firebase 규칙 (옛 기록 읽기 전용)
 build.mjs              빌드 → dist/ (배포용), demo/ (단일 파일 체험판)
 sw.js                  오프라인 지원 서비스 워커 (빌드 때 버전 이름이 붙음)
 src/lib/mascot.js      마스코트 새싹이 그림 (기분: happy, cheer, sad, sleep)

@@ -323,7 +323,7 @@ export async function books(main, params, go) {
         <button class="btn primary" id="save" disabled>단어장 저장</button>
       </form>
     </section>
-    <section class="panel"><h2>계정</h2><p class="muted small">${esc(S.user.email || '')} · ${S.store.mode === 'demo' ? '체험 모드 (이 기기에만 저장)' : 'Firebase 연결됨'}</p><button class="btn danger ghost" id="logout">로그아웃</button></section>`;
+    <section class="panel"><h2>계정</h2><p class="muted small">${esc(S.user.email || '')} · ${S.store.mode === 'demo' ? '체험 모드 (이 기기에만 저장)' : '서버(Supabase) 연결됨'}</p><button class="btn danger ghost" id="logout">로그아웃</button></section>`;
   let parsed = null;
   main.querySelector('#logout').onclick = logout;
   main.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {

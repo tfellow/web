@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, toDate, pickPerStudent, rankSort, modeBadge } from "./common.js";
-import { collection, query, where, getDocs, doc, getDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE, isWordCorrect, wordPrimary, chipText } from "./core.js";
+import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, toDate, pickPerStudent, rankSort, modeBadge } from "./common.js?v=3";
+import { collection, query, where, getDocs, doc, getDoc, addDoc, setDoc, serverTimestamp } from "./sb.js?v=3";
+import { tokenize, isCorrect, shuffle, shuffledPerm, PALETTE, isWordCorrect, wordPrimary, chipText } from "./core.js?v=3";
 
 const ctx = await gate({ needProfile: true });
 const app = $("#app");

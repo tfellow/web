@@ -3,8 +3,8 @@
 //   1) 🎁 보상: 선생님이 [지급]을 누르면 Class123 학생 카드에 으쓱을 더하고, 지급 기록을 class123_plus/hub_rewards 에 남겨요.
 //   2) 📤 학생 페이지: 학생별 요약을 Supabase hub_summary 표에 올려요 (학생은 자기 줄만 읽어요).
 // 저장소
-//   Supabase (tfellow-web)       : 독서 여권, MY Grammar, Quiz Queens(구글 시트, Supabase 로그인으로 확인)
-//   Firebase cloze-a8e6c          : 단어숲, MY Cloze, AI 영작문(writing1)
+//   Supabase (tfellow-web)       : 독서 여권, MY Grammar, 단어숲·MY Cloze(2026-11 Firestore 에서 이전), Quiz Queens(구글 시트, Supabase 로그인으로 확인)
+//   Firebase cloze-a8e6c          : AI 영작문(writing1)
 //   Firebase my-kahoot-smy (RTDB) : MY Kahoot, Class123 Plus, 보상 규칙·지급 기록
 const FB_VER = "10.12.2";
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@smy.ms.kr", "hist1026@gmail.com"];
@@ -32,8 +32,8 @@ const APPS = [
   { id: "grammar", name: "문법", icon: "✏️", src: "sb", url: "../grammar/" },
   { id: "quiz", name: "Quiz Queens", icon: "👑", src: "sb", url: "../quiz/", cumulative: true },
   { id: "brainup", name: "Brain Up", icon: "🧠", src: "sb", url: "../brainup/" },
-  { id: "vocab", name: "단어숲", icon: "🌳", src: "fc", url: "../danuhsup/" },
-  { id: "cloze", name: "Cloze", icon: "🧩", src: "fc", url: "../cloze/" },
+  { id: "vocab", name: "단어숲", icon: "🌳", src: "sb", url: "../danuhsup/" },
+  { id: "cloze", name: "Cloze", icon: "🧩", src: "sb", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", src: "fc", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
@@ -42,8 +42,8 @@ const APPS = [
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
-  fc: { name: "Firebase (Cloze)", desc: "단어숲 · Cloze · 영작문" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
+  fc: { name: "Firebase (영작문)", desc: "영작문" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
 
@@ -193,7 +193,7 @@ function evsOf(email) {
 }
 
 // ======================================================================
-//  Supabase: 독서 여권 · 문법 · Quiz Queens
+//  Supabase: 독서 여권 · 문법 · 단어숲 · Cloze · Quiz Queens
 // ======================================================================
 let sb = null;
 function sbClient() {
@@ -237,7 +237,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "metro", "grammar", "quiz", "brainup", "speaking", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "quiz", "brainup", "speaking", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -323,6 +323,32 @@ async function sbLoad() {
     });
   } catch (e) { if (!/tiers|bu_profile|schema cache|does not exist|42703|42P01|PGRST20[45]/i.test((e.message || "") + (e.code || ""))) warn("Brain Up 배지", e); }
 
+  const no5 = no => /^\d{5}$/.test(String(no || "")) ? { grade: +String(no)[0], cls: +String(no).slice(1, 3), no: +String(no).slice(3) } : {};
+  try { // 단어숲 학생 + 누적 통계 (ds_users, id = 이메일) — 표가 아직 없으면(SQL 실행 전) 조용히 넘어가요
+    const users = await sbAll(() => c.from("ds_users").select("id,data").eq("role", "student").order("id"));
+    users.forEach(({ id, data: u }) => {
+      if (!person(id, { name: u.name, grade: u.grade, cls: u.classNo, no: u.number })) return;
+      const st = u.stats || {};
+      if (!num(st.xp) && !st.lastDay) return;
+      state.snap.vocab.set(low(id), { xp: num(st.xp), streak: num(st.streak), learned: num(st.learned), mastered: num(st.mastered), last: st.lastDay ? kstart(st.lastDay) + 12 * 3600e3 : 0 });
+    });
+    const res = await sbAll(() => c.from("ds_results").select("id,data").order("id"));
+    res.forEach(({ data: r }) => {
+      const p = r.pct ?? pct(r.score, r.total);
+      addEvent({ e: r.uid, a: "vocab", t: toMs(r.ts), k: "test", title: `${r.bookId || "단어장"} ${r.lesson === "mix" ? "섞어서" : (r.lesson ?? "") + "과"}`, s: r.score, n: r.total, p });
+    });
+  } catch (e) { if (!/ds_users|ds_results|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("단어숲", e); }
+
+  try { // MY Cloze 프로필(학번 5자리 · 실명) + 제출 — 관리자는 모든 교사 계정의 테스트 제출을 읽어요
+    const users = await sbAll(() => c.from("cz_users").select("id,data").order("id"));
+    users.forEach(({ id, data: u }) => person(id, { name: u.realName, ...no5(u.studentNo) }));
+    const subs = await sbAll(() => c.from("cz_submissions").select("id,data").order("id"));
+    subs.forEach(({ data: s }) => {
+      person(s.email, { name: s.realName, ...no5(s.studentNo) });
+      addEvent({ e: s.email, a: "cloze", t: toMs(s.submittedAt) || toMs(s.startedAt), k: "test", title: s.testTitle || s.testCode, s: s.score, n: s.total, p: pct(s.score, s.total) });
+    });
+  } catch (e) { if (!/cz_users|cz_submissions|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("Cloze", e); }
+
   try { // Quiz Queens (구글 시트) — Supabase 로그인 토큰으로 선생님임을 확인해요
     const { data } = await c.auth.getSession();
     const res = await fetch(QUIZ_GAS, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "getInitialData", token: data.session?.access_token }) });
@@ -372,7 +398,7 @@ async function fbInit(id) {
     import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-app.js`),
     import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-auth.js`),
   ]);
-  // Cloze 쪽은 기본 이름([DEFAULT])을 써서 같은 주소의 단어숲·Cloze 로그인 상태를 그대로 이어받아요.
+  // 영작문 쪽은 기본 이름([DEFAULT])을 써서 같은 주소의 영작문 로그인 상태를 그대로 이어받아요.
   const app = id === "fc" ? initializeApp(FB_CLOZE) : initializeApp(FB_KAHOOT, "kahoot");
   const auth = A.getAuth(app);
   const user = await new Promise(res => { const off = A.onAuthStateChanged(auth, u => { off(); res(u); }); });
@@ -406,68 +432,23 @@ async function fbSignOut(id) {
   renderConn(); render();
 }
 
-// ---------- 단어숲 · Cloze · 영작문 (Firestore) ----------
+// ---------- 영작문 (Firestore) ----------
+// 단어숲·Cloze 는 2026-11 Supabase 로 옮겨서 위의 Supabase 쪽에서 읽어요. 영작문만 아직 Firestore 에 있어요.
 async function fcLoad(f) {
   const S = state.src.fc;
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["vocab", "cloze", "writing"]);
+  clearApps(["writing"]);
   const F = await import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-firestore.js`);
   const db = F.getFirestore(f.app);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.code || e?.message || e}`); };
-  const uidEmail = new Map();
-  const no5 = no => /^\d{5}$/.test(String(no || "")) ? { grade: +String(no)[0], cls: +String(no).slice(1, 3), no: +String(no).slice(3) } : {};
 
-  try { // Cloze 프로필 (학번 5자리 · 실명)
-    (await F.getDocs(F.collection(db, "users"))).forEach(d => {
-      const u = d.data(); if (!u.email) return;
-      uidEmail.set(d.id, low(u.email));
-      person(u.email, { name: u.realName, ...no5(u.studentNo) });
-    });
-  } catch (e) { warn("Cloze 프로필", e); }
-
-  try { // 단어숲 학생 + 누적 통계
-    (await F.getDocs(F.query(F.collection(db, "vocab_users"), F.where("role", "==", "student")))).forEach(d => {
-      const u = d.data(); if (!u.email) return;
-      uidEmail.set(d.id, low(u.email));
-      if (!person(u.email, { name: u.name, grade: u.grade, cls: u.classNo, no: u.number })) return;
-      const st = u.stats || {};
-      if (!num(st.xp) && !st.lastDay) return;
-      state.snap.vocab.set(low(u.email), { xp: num(st.xp), streak: num(st.streak), learned: num(st.learned), mastered: num(st.mastered), last: st.lastDay ? kstart(st.lastDay) + 12 * 3600e3 : 0 });
-    });
-  } catch (e) { warn("단어숲 학생", e); }
-
-  try { // 단어숲 단원 테스트 + 영작문 제출 (같은 컬렉션)
-    (await F.getDocs(F.collection(db, "vocab_results"))).forEach(d => {
+  try { // 영작문 제출 (단어숲이 쓰던 vocab_results 컬렉션에 함께 저장돼 있어요)
+    (await F.getDocs(F.query(F.collection(db, "vocab_results"), F.where("appTag", "==", "writing1_submission")))).forEach(d => {
       const r = d.data();
-      if (r.appTag === "writing1_submission" || r.bookId === "__writing1__") {
-        person(r.studentEmail, { name: r.studentName, grade: r.grade, cls: r.classNum, no: r.studentNumber });
-        addEvent({ e: r.studentEmail, a: "writing", t: toMs(r.createdAtMs || r.ts), k: "essay", title: r.topic || r.koreanPrompt || "영작문", s: num(r.score), cefr: r.cefrLevel });
-      } else {
-        const email = uidEmail.get(r.uid); if (!email) return;
-        const p = r.pct ?? pct(r.score, r.total);
-        addEvent({ e: email, a: "vocab", t: toMs(r.ts), k: "test", title: `${r.bookId || "단어장"} ${r.lesson === "mix" ? "섞어서" : (r.lesson ?? "") + "과"}`, s: r.score, n: r.total, p });
-      }
+      person(r.studentEmail, { name: r.studentName, grade: r.grade, cls: r.classNum, no: r.studentNumber });
+      addEvent({ e: r.studentEmail, a: "writing", t: toMs(r.createdAtMs || r.ts), k: "essay", title: r.topic || r.koreanPrompt || "영작문", s: num(r.score), cefr: r.cefrLevel });
     });
-  } catch (e) { warn("단어숲 결과", e); }
-
-  // Cloze 제출: 보안 규칙상 "로그인한 계정이 만든 테스트"의 제출만 읽을 수 있어요.
-  // 테스트에는 만든 사람 이메일(ownerEmail)이 있어서, 다른 교사 계정으로 만든 테스트가 있으면 알려 줘요.
-  S.clozeOther = {};
-  try {
-    (await F.getDocs(F.collection(db, "tests"))).forEach(d => {
-      const o = low(d.data().ownerEmail);
-      if (o && o !== low(f.user.email)) S.clozeOther[o] = (S.clozeOther[o] || 0) + 1;
-    });
-  } catch (e) { warn("Cloze 테스트 목록", e); }
-  {
-    try {
-      (await F.getDocs(F.query(F.collection(db, "submissions"), F.where("ownerUid", "==", f.user.uid)))).forEach(d => {
-        const s = d.data();
-        person(s.email, { name: s.realName, ...no5(s.studentNo) });
-        addEvent({ e: s.email, a: "cloze", t: toMs(s.submittedAt) || toMs(s.startedAt), k: "test", title: s.testTitle || s.testCode, s: s.score, n: s.total, p: pct(s.score, s.total) });
-      });
-    } catch (e) { warn("Cloze 제출", e); }
-  }
+  } catch (e) { warn("영작문", e); }
 
   S.st = "ok"; renderConn(); render(); maybePublish();
 }
@@ -917,23 +898,20 @@ function renderConn() {
     if (S.st === "off" || S.st === "err") act = id === "sb" ? `<div id="gsi-sb" class="gsi-slot"></div><button class="btn sm navy" data-conn="sb">Google로 연결</button>`
       : `<button class="btn sm navy" data-conn="${id}">Google로 연결</button>`;
     if (S.st === "ok") act = `<span class="small muted">${esc(S.email || "")}</span> <button class="btn sm" data-out="${id}">로그아웃</button>`;
-    const other = id === "fc" && S.st === "ok" ? Object.entries(S.clozeOther || {}).filter(([e]) => isTeacher(e)) : [];
-    const clozeNote = other.map(([e, n]) => `<div class="err-msg">${esc(e)} 계정으로 만든 Cloze 테스트 ${n}개의 제출은 지금 안 보여요(보안 규칙). <button class="btn sm" data-switch="${esc(e)}">${esc(e)}로 바꾸기</button></div>`).join("");
     return `<div class="card src"><div class="src-h"><b>${d.name}</b>${chip}</div><div class="apps">${d.desc}${id === "sb" && S.roster ? ` · 명단 ${S.roster}명` : ""}</div>
       ${S.err ? `<div class="err-msg">${esc(S.err)}</div>` : ""}
       ${(S.warn || []).map(w => `<div class="err-msg">일부 못 읽음 · ${esc(w)}</div>`).join("")}
-      ${clozeNote}<div>${act}</div></div>`;
+      <div>${act}</div></div>`;
   }).join("") + `<div class="card src" id="pubBox"></div>`;
   renderPub();
   box.querySelectorAll("[data-conn]").forEach(b => b.onclick = () => {
     const id = b.dataset.conn;
     if (id === "sb") { b.remove(); showGsi(); toast("위의 Google 버튼을 눌러 선생님 계정으로 로그인하세요."); }
-    else fbStart(id, true, id === "fc" ? "tfellow@smy.ms.kr" : ""); // Cloze 테스트는 학교 계정으로 로그인해 만들었어요
+    else fbStart(id, true, "");
   });
-  box.querySelectorAll("[data-switch]").forEach(b => b.onclick = () => fbStart("fc", true, b.dataset.switch));
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }

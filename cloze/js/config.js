@@ -1,20 +1,16 @@
-// ===== 1) Firebase 설정값 =====
-// Firebase 콘솔 > 프로젝트 설정 > 내 앱(웹) > SDK 설정 및 구성 > "구성" 값을 그대로 붙여 넣으세요.
-export const firebaseConfig = {
-  apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE",
-  authDomain: "cloze-a8e6c.firebaseapp.com",
-  projectId: "cloze-a8e6c",
-  storageBucket: "cloze-a8e6c.firebasestorage.app",
-  messagingSenderId: "410570182902",
-  appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7"
-};
+// ===== 1) Supabase 설정값 (독서 여권과 같은 프로젝트 tfellow-web) =====
+// 공개해도 되는 키예요. 보안은 supabase_cloze.sql 의 보안 규칙(RLS)이 맡아요.
+// (2026-11 Firebase Firestore 에서 Supabase 로 옮겼어요. 예전 기록은 migrate.html 로 옮겨요.)
+export const SUPABASE_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
+export const SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF";
+export const GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
 
 // ===== 2) 학교 계정 도메인 =====
 export const SCHOOL_DOMAIN = "smy.ms.kr";
 
 // ===== 3) 교사 계정 =====
-// 여기 적힌 계정만 교사로 로그인됩니다. firestore.rules 파일에도 똑같이 적어야 합니다.
-// 학교 계정이 아닌 주소(예: gmail)를 적어도 교사로 로그인할 수 있습니다.
+// 화면 표시용이에요. 실제 권한은 Supabase 의 admins 표(public.is_admin())가 정해요.
+// 교사를 더 추가할 때는 독서 여권 교사 화면 → ⚙️ 설정 → 교사 계정 관리에서 추가하고, 여기에도 적어 주세요.
 export const TEACHER_EMAILS = [
   "tfellow@gmail.com",
   "tfellow@smy.ms.kr",

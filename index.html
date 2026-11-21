@@ -258,9 +258,10 @@
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Brain Up · Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Speaking · 나의 영어 여정 <span class="pill off" data-auth="sb">로그인 필요</span></li>
-          <li>단어숲 · 영작문 튜터 <span class="pill off" data-auth="fb">로그인 필요</span></li>
+          <li>단어숲 · MY Cloze <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>영작문 튜터 <span class="pill off" data-auth="fb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
-          <li>MY Cloze · Class123 · Teacher Hub <span class="pill off" id="teacherPill">교사 전용</span></li>
+          <li>Class123 · Teacher Hub <span class="pill off" id="teacherPill">교사 전용</span></li>
         </ul>
         <p class="desk-note" id="deskNote">공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.</p>
       </section>
@@ -813,13 +814,16 @@
   let sb = null;
   try { if (window.supabase) sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_KEY); } catch (e) {}
 
-  /* ---- Firebase: MY Cloze · 단어숲 (같은 프로젝트) ---- */
+  /* ---- Firebase: 영작문 튜터 (cloze-a8e6c). MY Cloze·단어숲은 2026-11 Supabase 로 옮겼어요 ---- */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBigleCLtdsGEMaDLnBI7A3jq97W8dRcRE", authDomain: "cloze-a8e6c.firebaseapp.com", projectId: "cloze-a8e6c",
+    storageBucket: "cloze-a8e6c.firebasestorage.app", messagingSenderId: "410570182902", appId: "1:410570182902:web:bec24c8663fe35e5e2dcd7"
+  };
   let fb = null;
   try {
-    const [{ initializeApp }, A, { firebaseConfig }] = await Promise.all([
+    const [{ initializeApp }, A] = await Promise.all([
       import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
-      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
-      import("./cloze/js/config.js")
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js")
     ]);
     const auth = A.getAuth(initializeApp(firebaseConfig));
     fb = { auth, A };
@@ -879,7 +883,7 @@
     tp.textContent = admin ? "열림" : "교사 전용";
     $("#teacherHint").textContent = admin ? "선생님 계정으로 로그인했어요. 도구를 바로 열 수 있어요." : (e ? "이 계정은 교사로 등록되어 있지 않아요." : "선생님 계정으로 로그인하면 버튼이 열려요.");
     if (e && !state.fbEmail && state.fbError) {
-      $("#deskNote").textContent = "MY Cloze·단어숲은 아직 통합 설정 전이라 각 앱에서 한 번 더 로그인해야 해요.";
+      $("#deskNote").textContent = "영작문 튜터는 아직 통합 설정 전이라 그 앱에서 한 번 더 로그인해야 해요.";
     } else {
       $("#deskNote").textContent = "공용 컴퓨터에서는 다 쓰고 나서 꼭 로그아웃하세요.";
     }
@@ -924,8 +928,8 @@
     ]],
     ["설명서 · 서버", [
       ["danuhsup/guide/teacher.html", "단어숲 교사 설명서", "처음 설정과 운영 방법"],
-      ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서·지식 여권 · 메트로 · 레벨 테스트 · 문법 · Brain Up · 말하기 · 퀴즈 퀸즈 데이터"],
-      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "MY Cloze · 단어숲 · 영작문 튜터 데이터"],
+      ["https://supabase.com/dashboard/project/jkxdhyvnrvsiokbbbjtu", "Supabase 대시보드", "독서·지식 여권 · 메트로 · 레벨 테스트 · 문법 · 단어숲 · MY Cloze · Brain Up · 말하기 · 퀴즈 퀸즈 데이터"],
+      ["https://console.firebase.google.com/project/cloze-a8e6c/overview", "Firebase 콘솔", "영작문 튜터 데이터 (MY Cloze·단어숲 옛 기록 보관)"],
       ["https://console.firebase.google.com/project/my-kahoot-smy/overview", "Firebase 콘솔 (Kahoot)", "MY Kahoot · Class123 데이터"]
     ]]
   ];

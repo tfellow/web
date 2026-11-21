@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, classOf, pickPerStudent, rankSort, tsNum, copyText, playUrl, modeBadge } from "./common.js";
-import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, contextOf, norm, wordKey, isWordCorrect, fitsChunks, wordPrimary, wordStartOf, splitChunks } from "./core.js";
+import { gate, db, $, $$, esc, toast, fmtSec, fmtDate, classOf, pickPerStudent, rankSort, tsNum, copyText, playUrl, modeBadge } from "./common.js?v=3";
+import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc, updateDoc, serverTimestamp } from "./sb.js?v=3";
+import { tokenize, contextOf, norm, wordKey, isWordCorrect, fitsChunks, wordPrimary, wordStartOf, splitChunks } from "./core.js?v=3";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
@@ -395,7 +395,7 @@ async function regrade(ask) {
   const fail = r.filter(x => x.status === "rejected");
   if (fail.length) {
     console.error(fail);
-    toast(`${fail.length}건을 다시 채점하지 못했습니다. Firebase 보안 규칙을 새로 게시했는지 확인하세요.`, "err");
+    toast(`${fail.length}건을 다시 채점하지 못했습니다. Supabase에서 supabase_cloze.sql 을 실행했는지 확인하세요.`, "err");
   } else toast(jobs.length ? `제출 ${jobs.length}건의 점수를 다시 매겼습니다.` : "점수가 바뀐 제출이 없습니다.");
   renderAll();
 }

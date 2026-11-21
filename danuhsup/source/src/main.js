@@ -1,4 +1,4 @@
-import { isFirebaseConfigured, APP } from './config.js';
+import { isServerConfigured, APP } from './config.js';
 import { S, flush, stats } from './lib/state.js';
 import { setCustomBooks } from './data/books.js';
 import { $, el, esc, toast } from './lib/util.js';
@@ -73,8 +73,8 @@ export const logo = mascot('happy', 38);
 async function boot() {
   root.innerHTML = `<div class="boot">${mascot('happy', 110, 'bob')}<p>숲길을 여는 중…</p></div>`;
   let store;
-  if (isFirebaseConfigured()) {
-    try { store = (await import('./store/firebase.js')).firebaseStore; await store.init(); }
+  if (isServerConfigured()) {
+    try { store = (await import('./store/supabase.js')).supabaseStore; await store.init(); }
     catch (e) { console.error(e); toast('서버 연결에 실패해 체험 모드로 시작합니다.', 'bad'); store = null; }
   }
   if (!store) { store = (await import('./store/local.js')).localStore; await store.init(); }

@@ -1,18 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect,
-  getRedirectResult, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  getFirestore, doc, getDoc, setDoc, serverTimestamp,
-  collection, query, where, getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseConfig, SCHOOL_DOMAIN, TEACHER_EMAILS, APP_NAME } from "./config.js";
+import { sb, db, doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from "./sb.js?v=3";
+import { SCHOOL_DOMAIN, TEACHER_EMAILS, APP_NAME, GOOGLE_CLIENT_ID } from "./config.js?v=3";
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export { SCHOOL_DOMAIN, APP_NAME };
+export { db, sb, SCHOOL_DOMAIN, APP_NAME };
 
 const TEACHERS = TEACHER_EMAILS.map(e => String(e).trim().toLowerCase());
 
@@ -131,26 +120,45 @@ export function profileComplete(p) {
   return !!(p && /^\d{5}$/.test(p.studentNo || "") && p.realName && p.nickname);
 }
 
-// ---------- 로그인 ----------
-export async function login() {
-  const p = new GoogleAuthProvider();
-  p.setCustomParameters({ prompt: "select_account" });
+// ---------- 로그인 (Google Identity Services → Supabase, 다른 MY 앱과 같은 로그인) ----------
+let gisLoading = null;
+function loadGis() {
+  if (window.google?.accounts?.id) return Promise.resolve();
+  return gisLoading || (gisLoading = new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+    s.onload = res; s.onerror = () => { gisLoading = null; rej(new Error("Google 로그인 프로그램을 불러오지 못했습니다.")); };
+    document.head.appendChild(s);
+  }));
+}
+async function renderGoogleButton(box) {
   try {
-    await signInWithPopup(auth, p);
+    await loadGis();
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: async r => {
+        const { error } = await sb.auth.signInWithIdToken({ provider: "google", token: r.credential });
+        if (error) toast("로그인 오류: " + error.message, "err");
+        else location.reload();
+      }
+    });
+    box.innerHTML = "";
+    google.accounts.id.renderButton(box, { theme: "filled_blue", size: "large", text: "signin_with", locale: "ko", shape: "pill" });
   } catch (e) {
-    if (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment") {
-      await signInWithRedirect(auth, p);
-    } else if (e.code !== "auth/popup-closed-by-user" && e.code !== "auth/cancelled-popup-request") {
-      toast("로그인 오류: " + (e.code || e.message), "err");
-    }
+    box.innerHTML = `<p class="alert err">${esc(e.message)} 새로고침해 주세요.</p>`;
   }
 }
+// 다른 MY 앱의 로그인까지 끊지 않도록 이 기기에서만 로그아웃해요.
+async function signOutHere() {
+  try { await sb.auth.signOut({ scope: "local" }); } catch (e) { console.warn(e); }
+  try { window.google?.accounts?.id?.disableAutoSelect(); } catch {}
+}
 export async function logout() {
-  await signOut(auth);
+  await signOutHere();
   location.href = "index.html";
 }
 
-function renderLogin(el, msg = "") {
+function renderLogin(el, msg = "", wrongAccount = false) {
   const inApp = inAppBrowser();
   el.innerHTML = `
   <div class="card narrow center login-card">
@@ -158,10 +166,12 @@ function renderLogin(el, msg = "") {
     <p class="muted">빈칸 채우기 · 문장 순서 맞추기 · 어순 배열</p>
     ${msg ? `<p class="alert err">${esc(msg)}</p>` : ""}
     ${inApp ? `<p class="alert warn">카카오톡·네이버 앱 안에서는 Google 로그인이 되지 않습니다.<br>오른쪽 위 메뉴에서 <b>다른 브라우저로 열기</b>를 눌러 주세요.<br><button class="btn small" id="copyUrl">주소 복사</button></p>` : ""}
-    <button class="btn primary big" id="loginBtn">Google 학교 계정으로 로그인</button>
+    ${wrongAccount ? `<button class="btn primary big" id="switchBtn">다른 계정으로 로그인</button>` : `<div id="gsiBtn" class="gsi-box"><div class="loading">로그인 버튼을 불러오는 중…</div></div>`}
     <p class="muted small">@${esc(SCHOOL_DOMAIN)} 계정만 사용할 수 있습니다.</p>
   </div>`;
-  $("#loginBtn", el).onclick = login;
+  const sw = $("#switchBtn", el);
+  if (sw) sw.onclick = async () => { await signOutHere(); location.reload(); };
+  else renderGoogleButton($("#gsiBtn", el));
   const c = $("#copyUrl", el);
   if (c) c.onclick = () => copyText(location.href);
 }
@@ -236,25 +246,20 @@ function renderHeader(ctx) {
 export function gate(opts = {}) {
   const { needProfile = false, teacherOnly = false, noHeader = false } = opts;
   const el = $("#app");
-  if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
-    el.innerHTML = `<div class="card narrow"><h2>설정이 필요합니다</h2><p>js/config.js 파일에 Firebase 설정값을 넣어 주세요. (README.md 참고)</p></div>`;
-    return new Promise(() => {});
-  }
   el.innerHTML = `<div class="loading">불러오는 중…</div>`;
-  getRedirectResult(auth).catch(e => console.warn(e));
   return new Promise(resolve => {
-    let done = false;
-    onAuthStateChanged(auth, async user => {
-      if (done) return;
-      if (!user) { renderLogin(el); return; }
-      if (!isAllowedEmail(user.email)) {
-        const em = user.email;
-        await signOut(auth);
-        renderLogin(el, `${em} 계정은 사용할 수 없습니다. @${SCHOOL_DOMAIN} 학교 계정으로 로그인하세요.`);
+    (async () => {
+      let su = null;
+      try { su = (await sb.auth.getSession()).data.session?.user || null; } catch (e) { console.warn(e); }
+      if (!su) { renderLogin(el); return; }
+      const email = String(su.email || "").toLowerCase();
+      if (!isAllowedEmail(email)) {
+        renderLogin(el, `${email} 계정은 사용할 수 없습니다. @${SCHOOL_DOMAIN} 학교 계정으로 로그인하세요.`, true);
         return;
       }
-      done = true;
-      const teacher = isTeacherEmail(user.email);
+      // uid = 소문자 이메일 (Firestore 시절 uid 대신. 옮긴 기록도 이메일로 바꿔 두었어요)
+      const user = { uid: email, email, displayName: su.user_metadata?.full_name || su.user_metadata?.name || "" };
+      const teacher = isTeacherEmail(email);
       const ctx = { user, teacher, profile: null };
       if (teacherOnly && !teacher) {
         if (!noHeader) renderHeader(ctx);
@@ -273,6 +278,6 @@ export function gate(opts = {}) {
       if (!noHeader) renderHeader(ctx);
       el.innerHTML = "";
       resolve(ctx);
-    });
+    })();
   });
 }

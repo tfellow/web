@@ -1,5 +1,5 @@
-import { gate, db, $, esc, fmtSec, classOf, pickPerStudent, rankSort, tsNum, playUrl } from "./common.js";
-import { collection, query, where, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { gate, db, $, esc, fmtSec, classOf, pickPerStudent, rankSort, tsNum, playUrl } from "./common.js?v=3";
+import { collection, query, where, onSnapshot, doc, getDoc } from "./sb.js?v=3";
 
 const ctx = await gate({ teacherOnly: true, noHeader: true });
 const app = $("#app");

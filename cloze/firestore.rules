@@ -1,7 +1,9 @@
 rules_version = '2';
-// ★ 이 Firebase 프로젝트(cloze-a8e6c)는 SMY Cloze 와 단어숲이 함께 씁니다.
+// ★ 이 Firebase 프로젝트(cloze-a8e6c)는 지금 AI 영작문 튜터(writing1)만 씁니다.
+//   MY Cloze 와 단어숲은 2026-11 Supabase 로 옮겼어요. 두 앱의 옛 기록은 여기 그대로 남아 있지만 "읽기 전용"이에요
+//   (cloze/migrate.html 이 읽어서 옮겨요. 옛 앱이 남아 있는 기기에서 새로 쓰려 해도 막혀요).
 // Firebase 콘솔 > Firestore Database > 규칙 탭에 이 파일 내용을 "통째로" 붙여 넣고 [게시]를 누르세요.
-// (cloze/firestore.rules 와 danuhsup/firestore.rules 는 같은 내용입니다. 교사를 바꿀 때는 두 파일과 각 앱의 config 를 함께 고치세요.)
+// (cloze/firestore.rules 와 danuhsup/firestore.rules 는 같은 내용입니다.)
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -18,88 +20,62 @@ service cloud.firestore {
       return signedIn() && (myEmail().matches('.*@smy[.]ms[.]kr') || isTeacher());
     }
 
-    // 내 정보 (학번·실명·닉네임): 본인과 교사만 읽기
+    // ---------- MY Cloze (옛 기록, 읽기 전용) ----------
     match /users/{uid} {
       allow read: if isSchool() && (request.auth.uid == uid || isTeacher());
-      allow create, update: if isSchool() && request.auth.uid == uid
-        && request.resource.data.email == request.auth.token.email;
-      allow delete: if false;
+      allow write: if false;
     }
 
-    // 테스트: 로그인한 학교 계정은 읽기, 만든 교사만 수정
     match /tests/{testId} {
       allow read: if isSchool();
-      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid;
-      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.ownerUid == request.auth.uid;
-      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+      allow write: if false;
     }
 
-    // 제출 기록 (실명 포함): 본인과 그 테스트를 만든 교사만 읽기
     match /submissions/{subId} {
       allow read: if isSchool() && (resource.data.uid == request.auth.uid || resource.data.ownerUid == request.auth.uid);
-      allow create: if isSchool()
-        && request.resource.data.uid == request.auth.uid
-        && request.resource.data.email == request.auth.token.email
-        && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.resource.data.ownerUid;
-      // 다시 채점 (어순 배열 '정답으로 인정'): 그 테스트를 만든 교사가 점수·정답 여부만 고칠 수 있음
-      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['correct', 'score', 'regradedAt']);
-      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+      allow write: if false;
     }
 
-    // 학생용 순위표 (닉네임·점수만, 실명 없음)
     match /board/{subId} {
       allow read: if isSchool();
-      allow create: if isSchool() && request.resource.data.uid == request.auth.uid
-        && !('realName' in request.resource.data) && !('email' in request.resource.data);
-      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['score']);
-      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+      allow write: if false;
     }
 
-    // 과제: 학교 계정이면 읽기 (학생 첫 화면에 표시), 그 테스트를 만든 교사만 내기·고치기·취소
     match /assignments/{aid} {
       allow read: if isSchool();
-      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid
-        && get(/databases/$(database)/documents/tests/$(request.resource.data.testId)).data.ownerUid == request.auth.uid;
-      allow update: if isTeacher() && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.ownerUid == request.auth.uid;
-      allow delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+      allow write: if false;
     }
 
-    // ===================== 단어숲 (danuhsup) =====================
+    // ===================== 단어숲 (danuhsup, 옛 기록) =====================
     function vocabTeacher() {
       return isTeacher() && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
     function isMe(uid) { return isSchool() && request.auth.uid == uid; }
 
-    // 학생 정보 + 학습 통계: 본인과 교사만 읽기, 본인만 쓰기
+    // 옛 기록 (읽기 전용): 학생 정보·암기 상태·랭킹·단어장
     match /vocab_users/{uid} {
       allow read: if isMe(uid) || vocabTeacher();
-      allow create, update: if isMe(uid) && (request.resource.data.role == 'student' || vocabTeacher());
-      allow delete: if vocabTeacher();
+      allow write: if false;
       match /progress/{bookId} {
         allow read: if isMe(uid) || vocabTeacher();
-        allow write: if isMe(uid);
+        allow write: if false;
       }
     }
-    // 랭킹용 요약 (이름·XP·연속일만): 학교 계정이면 읽기, 본인만 쓰기
     match /vocab_board/{uid} {
       allow read: if isSchool();
-      allow write: if isMe(uid);
-      allow delete: if vocabTeacher();
+      allow write: if false;
     }
-    // 단원 테스트 결과: 본인 것만 작성, 본인과 교사만 읽기
-    match /vocab_results/{id} {
-      allow read: if isSchool() && (resource.data.uid == request.auth.uid || vocabTeacher());
-      allow create: if isSchool() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if vocabTeacher();
-    }
-    // 단어장: 학교 계정이면 읽기, 교사만 추가·삭제
+    // vocab_books/_settings 에는 영작문 튜터의 과제 목록(writing1_ 로 시작하는 칸)도 들어 있어서, 이 문서만 교사가 계속 고칠 수 있어요.
     match /vocab_books/{id} {
       allow read: if isSchool();
-      allow write: if vocabTeacher();
+      allow write: if vocabTeacher() && id == '_settings';
+    }
+    // vocab_results: 단어숲 옛 결과는 읽기 전용. 영작문 튜터가 같은 컬렉션에 제출을 저장하므로 영작문 제출만 새로 쓸 수 있어요.
+    match /vocab_results/{id} {
+      allow read: if isSchool() && (resource.data.uid == request.auth.uid || vocabTeacher());
+      allow create: if isSchool() && request.resource.data.uid == request.auth.uid
+        && request.resource.data.appTag == 'writing1_submission';
+      allow update, delete: if vocabTeacher() && resource.data.appTag == 'writing1_submission';
     }
 
     // ===================== AI 영작문 튜터 (writing1) =====================

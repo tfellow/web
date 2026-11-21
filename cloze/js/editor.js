@@ -1,6 +1,6 @@
-import { gate, db, $, $$, esc, toast, copyText, playUrl, uniqueCode, toDate, toLocalInput } from "./common.js";
-import { doc, getDoc, addDoc, updateDoc, collection, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, isWord, autoBlanks, splitSentences, remapBlanks, contextOf, shuffle, shuffledPerm, splitChunks, fitsChunks, wordKey, wordPrimary, autoChunks, autoKeepCap, chipText } from "./core.js";
+import { gate, db, $, $$, esc, toast, copyText, playUrl, uniqueCode, toDate, toLocalInput } from "./common.js?v=3";
+import { doc, getDoc, addDoc, updateDoc, collection, serverTimestamp, Timestamp } from "./sb.js?v=3";
+import { tokenize, isWord, autoBlanks, splitSentences, remapBlanks, contextOf, shuffle, shuffledPerm, splitChunks, fitsChunks, wordKey, wordPrimary, autoChunks, autoKeepCap, chipText } from "./core.js?v=3";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");

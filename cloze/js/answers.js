@@ -1,7 +1,7 @@
 // 정답보기 (교사, 전자칠판용) — 빈칸을 그대로 보여 주고, 전체/개별/순서대로 정답 공개
-import { gate, db, $, $$, esc, modeBadge } from "./common.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { tokenize, shuffledPerm, shuffle, wordPrimary, chipText } from "./core.js";
+import { gate, db, $, $$, esc, modeBadge } from "./common.js?v=3";
+import { doc, getDoc } from "./sb.js?v=3";
+import { tokenize, shuffledPerm, shuffle, wordPrimary, chipText } from "./core.js?v=3";
 
 const ctx = await gate({ teacherOnly: true });
 const app = $("#app");
