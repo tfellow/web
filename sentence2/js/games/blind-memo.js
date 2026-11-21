@@ -9,6 +9,21 @@ window.SMS.games = window.SMS.games || {};
     return clean;
   }
 
+  // 2단계는 빈칸(핵심어)만, 나머지 단계는 문장 전체를 채점
+  function blankAnswer(item) {
+    const target = item.target || '';
+    if (!target) return '';
+    const m = new RegExp(target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').exec(item.en);
+    return m ? m[0] : '';
+  }
+
+  const TYPE_GUIDE = {
+    1: { banner: '✍️ 보이는 문장을 보고 영어 문장 전체를 입력해 보세요.', ph: '영어 문장 전체를 입력하세요...' },
+    2: { banner: '✍️ 빈칸에 들어갈 말만 입력하세요. (문장 전체 X)', ph: '빈칸에 들어갈 말만 입력하세요...' },
+    3: { banner: '✍️ 첫 글자 힌트를 보고 영어 문장 전체를 입력하세요.', ph: '힌트를 보고 영어 문장 전체를 입력하세요...' },
+    4: { banner: '✍️ 우리말 해석을 보고 영어 문장 전체를 입력하세요.', ph: '영어 문장 전체를 입력하세요...' }
+  };
+
   function render(container, sentences, ctx) {
     const { diff, speech, storage } = window.SMS;
     if (!sentences.length) {
@@ -79,9 +94,12 @@ window.SMS.games = window.SMS.games || {};
             <button class="stage-btn ${state.stage === 4 ? 'active' : ''}" data-stage="4">4단계: 통문장 암기<span>전체 블라인드</span></button>
           </div>
 
+          ${state.typingMode ? `<div class="memo-type-guide">${TYPE_GUIDE[state.stage].banner}</div>` : ''}
+
           <div class="memo-list">
             ${sentences.map((item, idx) => {
               const checkRes = state.checkedMap[item.id];
+              const blankOnly = state.stage === 2 && !!blankAnswer(item);
               return `
                 <div class="memo-item" data-item-id="${item.id}">
                   <div class="memo-item-head">
@@ -98,12 +116,12 @@ window.SMS.games = window.SMS.games || {};
 
                   ${state.typingMode ? `
                     <div class="memo-type-row">
-                      <input type="text" class="memo-type-input" data-type-id="${item.id}" placeholder="영어 문장을 직접 입력해 확인해 보세요..." value="${checkRes ? diff.escapeHtml(checkRes.input) : ''}" />
+                      <input type="text" class="memo-type-input" data-type-id="${item.id}" placeholder="${blankOnly ? TYPE_GUIDE[2].ph : TYPE_GUIDE[state.stage === 2 ? 1 : state.stage].ph}" value="${checkRes ? diff.escapeHtml(checkRes.input) : ''}" />
                       <button type="button" class="btn btn-primary btn-sm" data-verify-id="${item.id}">채점</button>
                     </div>
                     ${checkRes ? `
                       <div class="diff-result">
-                        ${checkRes.isPerfect ? '✅ 완벽하게 외웠어요! (+10 XP) ' : `일치율 ${checkRes.accuracy}% — `}
+                        ${checkRes.isPerfect ? (checkRes.blankOnly ? '✅ 정답! (+10 XP) ' : '✅ 완벽하게 외웠어요! (+10 XP) ') : `일치율 ${checkRes.accuracy}% — `}
                         ${checkRes.html}
                       </div>
                     ` : ''}
@@ -120,6 +138,7 @@ window.SMS.games = window.SMS.games || {};
       container.querySelectorAll('[data-stage]').forEach((btn) => {
         btn.addEventListener('click', () => {
           state.stage = parseInt(btn.dataset.stage, 10);
+          state.checkedMap = {}; // 단계마다 채점 기준이 다르므로 결과 초기화
           draw();
         });
       });
@@ -161,8 +180,10 @@ window.SMS.games = window.SMS.games || {};
           const item = sentences.find((s) => s.id === id);
           const inputEl = container.querySelector(`[data-type-id="${id}"]`);
           const userVal = inputEl ? inputEl.value : '';
-          const res = diff.compareWords(userVal, item.en);
+          const blank = state.stage === 2 ? blankAnswer(item) : '';
+          const res = diff.compareWords(userVal, blank || item.en);
           res.input = userVal;
+          res.blankOnly = !!blank;
           state.checkedMap[id] = res;
           if (res.isPerfect) {
             storage.addXP(10, item.id);
