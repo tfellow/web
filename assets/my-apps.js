@@ -22,14 +22,16 @@
     ["app/", "📖", "MY Reading Passport", "세계문학 읽고 퀴즈"],
     ["reading2/app/", "🌍", "MY Knowledge Passport", "지식 글 읽고 퀴즈"],
     ["metro/", "🚇", "MY Reading Metro", "교과서 본문 읽기"],
-    ["history/", "🏛️", "MY History Museum", "역사 교과서 박물관"],
     ["grammar/", "✏️", "MY Grammar", "문법 배우고 풀기"],
     ["writing1/", "📝", "AI 영작문 튜터", "한국어를 영어로 쓰기"],
     ["speaking/", "🎤", "MY Speaking", "대화문 듣고 말하기"],
     ["danuhsup/", "🌳", "단어숲", "단어 외우기"],
+    ["my-english-arcade/", "🎮", "MY English Arcade", "교과서 어휘 게임 12종"],
+    ["wordrush/", "⚡", "MY Word Rush", "단어·문장 챌린지 8종"],
     ["wordarcade/", "🕹️", "MY Word Arcade", "교과서 단어 게임"],
     ["brainup/", "💡", "MY Brain Up", "랜덤 상식 퀴즈"],
-    ["quiz/", "👑", "Quiz Queens", "룰렛 상식 퀴즈"]
+    ["quiz/", "👑", "Quiz Queens", "룰렛 상식 퀴즈"],
+    ["history/", "🏛️", "MY History Museum", "역사 교과서 박물관"]
   ];
 
   var hideRe = null;
