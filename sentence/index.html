@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MY Sentence Gym · 교과서 문장 게임</title>
+<meta name="description" content="교과서 본문·대화·문법 예문으로 하는 문장 단위 영어 게임 — 서울문영여자중학교">
+<link rel="icon" href="../app/emblem.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/">
+    <img src="../app/emblem.png" alt="" width="40" height="36">
+    <div><h1>MY Sentence Gym <span>🏋️</span></h1><p>교과서 문장 체육관 · 서울문영여자중학교</p></div>
+  </a>
+  <div class="top-actions">
+    <a class="btn sm" href="guide.html" target="_blank" rel="noopener">📖 설명서</a>
+  </div>
+</header>
+<nav class="nav hidden" id="nav">
+  <a href="#/" data-r="">🏠 게임</a>
+  <a href="#/review" data-r="review">📕 오답 노트</a>
+  <a href="#/sets" data-r="sets">📝 내 문장 세트</a>
+</nav>
+<main id="main"><div class="card center muted">교과서 문장을 불러오는 중…</div></main>
+<div id="toast" class="toast hidden"></div>
+<script src="data/grammar.js?v=1"></script>
+<script src="core.js?v=1"></script>
+<script src="games.js?v=1"></script>
+<script src="pages.js?v=1"></script>
+<script>SG.boot();</script>
+<script src="../assets/my-apps.js?v=1" defer data-hide-hash="^#/(play|review-play)"></script>
+</body>
+</html>
