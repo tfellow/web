@@ -101,7 +101,6 @@ const APPS = [
   { id: "cloze", name: "Cloze", icon: "🧩", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", url: "../speaking/" },
-  { id: "sentence2", name: "문장 마스터", icon: "📝", url: "../sentence2/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", url: "../level/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", url: "../kahoot/student.html" },
   { id: "c123", name: "으쓱", icon: "⭐", url: "" },
@@ -191,7 +190,6 @@ function show(d, email, updated) {
     appCard("cloze", c ? `${c.n}번 · 평균 ${c.avg}%` : "", [c && c.perfect ? `💯 만점 ${c.perfect}번` : ""]),
     appCard("writing", w ? `${w.n}편 · 평균 ${w.avg}점` : "", [w && w.cefr ? `최근 수준 ${w.cefr}` : ""]),
     appCard("speaking", A.speaking ? `${A.speaking.lines}줄 · 평균 ${A.speaking.avg}점` : "", [A.speaking && `말하기 ${A.speaking.n}번`]),
-    appCard("sentence2", A.sentence2 ? `${A.sentence2.n}문항 · ${A.sentence2.acc}%` : "", [A.sentence2 && `${A.sentence2.days}일 연습 · +${A.sentence2.xp} XP`]),
     appCard("level", A.level ? `${A.level.cefr === "A0" ? "Pre-A1" : A.level.cefr} ${A.level.sub || ""}` : "", [A.level && `Lexile ${A.level.lex < 0 ? "BR" + Math.abs(A.level.lex) : A.level.lex}L · AR ${A.level.ar}`, A.level && `어휘 약 ${Number(A.level.vsize || 0).toLocaleString()}단어`]),
     appCard("kahoot", k ? `${k.live}판 · ${k.acc ?? "-"}%` : "", [k && `🏆 3등 안 ${k.top3}번 · 10등 안 ${k.top10}번`, k && k.hw ? `과제 ${k.hw}개` : "", k && k.best ? `최고 ${k.best}등` : ""]),
   ].join("");

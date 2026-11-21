@@ -32,14 +32,13 @@ const APPS = [
   { id: "cloze", name: "Cloze", icon: "🧩", src: "sb", url: "../cloze/" },
   { id: "writing", name: "영작문", icon: "✍️", src: "sb", url: "../writing1/" },
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
-  { id: "sentence2", name: "문장 마스터", icon: "📝", src: "sb", url: "../sentence2/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
   { id: "c123", name: "Class123", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
-  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 문장 마스터 · 레벨 테스트 · 학생 명단" },
+  sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
   fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
 };
 
@@ -233,7 +232,7 @@ function showGsi() {
 async function sbLoad() {
   const S = state.src.sb, c = sbClient();
   S.st = "load"; S.err = ""; S.warn = []; renderConn();
-  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "sentence2", "level"]);
+  clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]);
   const warn = (what, e) => { console.warn(what, e); S.warn.push(`${what}: ${e?.message || e}`); };
 
   try { // 명단 (독서 여권의 roster 표 = 실제 학생 명단)
@@ -299,16 +298,6 @@ async function sbLoad() {
     const rows = await sbAll(() => c.from("lt_attempts").select("email,finished_at,overall_cefr,overall_sub,vocab_size,lexile,ar"));
     rows.forEach(a => addEvent({ e: a.email, a: "level", t: toMs(a.finished_at), k: "test", title: "레벨 테스트", cefr: a.overall_cefr, sub: a.overall_sub, lex: a.lexile, ar: a.ar, vsize: a.vocab_size }));
   } catch (e) { if (!/lt_attempts|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("레벨 테스트", e); }
-
-  try { // MY Sentence Master (sentence2) — sms_daily 를 학생×날짜 1개 이벤트로 합쳐요 (그날 정오, 한국 시간)
-    const rows = await sbAll(() => c.from("sms_daily").select("email,day,correct,wrong,xp,mode"));
-    const byDay = new Map();
-    rows.forEach(r => {
-      const k = low(r.email) + "|" + r.day, d = byDay.get(k) || { e: r.email, day: r.day, ok: 0, ng: 0, xp: 0, modes: new Set() };
-      d.ok += num(r.correct); d.ng += num(r.wrong); d.xp += num(r.xp); if (r.mode) d.modes.add(r.mode); byDay.set(k, d);
-    });
-    byDay.forEach(d => { const n = d.ok + d.ng; if (n) addEvent({ e: d.e, a: "sentence2", t: Date.parse(d.day + "T12:00:00+09:00"), k: "day", title: `문장 마스터 ${n}문항`, s: d.ok, n, p: pct(d.ok, n), xp: d.xp, games: d.modes.size }); });
-  } catch (e) { if (!/sms_daily|schema cache|does not exist|42P01|PGRST205/i.test((e.message || "") + (e.code || ""))) warn("문장 마스터", e); }
 
   try { // MY Brain Up (랜덤 상식 퀴즈) — 학생×날짜 합계 1줄 = 이벤트 1개 (그날 정오, 한국 시간)
     const rows = await sbAll(() => c.from("bu_daily").select("*"));
@@ -910,7 +899,7 @@ function renderConn() {
   });
   box.querySelectorAll("[data-out]").forEach(b => b.onclick = async () => {
     const id = b.dataset.out;
-    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "sentence2", "level"]); renderConn(); render(); }
+    if (id === "sb") { await sbClient().auth.signOut(); state.src.sb = { st: "off" }; clearApps(["passport", "knowledge", "metro", "grammar", "vocab", "cloze", "writing", "quiz", "brainup", "speaking", "level"]); renderConn(); render(); }
     else fbSignOut(id);
   });
 }
