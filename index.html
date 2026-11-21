@@ -24,18 +24,18 @@
     --display: "Bricolage Grotesque", "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
     --body: "Pretendard Variable", Pretendard, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0;
+    --c-passport: #1e3768; --c-knowledge: #17493d; --c-queens: #b4446c; --c-cloze: #2f7a78; --c-forest: #4d7a2f; --c-show: #c46a1c; --c-grammar: #6a4bd8; --c-class: #2f8a4c; --c-writing: #2563eb; --c-level: #0e7490; --c-brain: #b07d12; --c-metro: #2563c9; --c-history: #a8432f; --c-arcade: #7a3fb0; --c-myarcade: #4f46e5; --c-rush: #b45309;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
     color-scheme: dark; } }
   :root[data-theme="dark"] {
     --bg: #0f1628; --paper: #172038; --ink: #e8ecf6; --muted: #9ea8c2; --line: #2a3554;
     --navy: #1a2f5a; --navy-deep: #0b1430; --ok: #6fcf97; --wait: #e9c46a;
-    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0;
+    --c-passport: #8fb0ef; --c-knowledge: #7fc4a8; --c-queens: #ef8fb2; --c-cloze: #73c9c5; --c-forest: #9fd27a; --c-show: #f0a868; --c-grammar: #b7a4ff; --c-class: #7fd49a; --c-writing: #8fb4ff; --c-level: #6cc8db; --c-brain: #e9c46a; --c-metro: #8fb4ff; --c-history: #e0977f; --c-arcade: #c9a3f0; --c-myarcade: #a5b4fc; --c-rush: #f5b971;
     color-scheme: dark; }
 
   * { box-sizing: border-box; }
@@ -113,6 +113,8 @@
   .tools.three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
   @media (max-width: 980px) { .tools.three { grid-template-columns: minmax(0, 1fr); } }
   [data-app="level"] { --c: var(--c-level); } [data-app="brainup"] { --c: var(--c-brain); } [data-app="metro"] { --c: var(--c-metro); } [data-app="history"] { --c: var(--c-history); } [data-app="arcade"] { --c: var(--c-arcade); }
+  [data-app="myarcade"] { --c: var(--c-myarcade); } [data-app="wordrush"] { --c: var(--c-rush); }
+  .cat-head { border-top: 2px solid var(--line); margin-top: 30px; }
 
   .show { padding-block: 34px; }
   .show + .show { border-top: 1px dashed var(--line); }
@@ -235,9 +237,9 @@
       <div>
         <div class="kicker">Moonyoung · English Apps</div>
         <h1>읽고, 풀고,<br>외우고, <em>겨루는</em><br>문영 영어</h1>
-        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 상식 퀴즈까지. 수업에서 쓰는 영어 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
+        <p class="lede">영어 레벨 테스트와 세계문학·지식·교과서 읽기부터 문법, 영작문, 단어 학습, 영어 게임, 상식 퀴즈까지. 수업에서 쓰는 영어 앱과 다른 교과 앱을 한곳에 모았어요. <b>학교 구글 계정으로 한 번만 로그인</b>하면 앱을 오갈 때 다시 로그인하지 않아도 돼요.</p>
         <nav class="jump" aria-label="앱 바로가기">
-          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#history">역사 박물관</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#arcade">단어 게임</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#teacher">선생님 도구</a>
+          <a href="#level">레벨 테스트</a><a href="#passport">독서 여권</a><a href="#knowledge">지식 여권</a><a href="#metro">리딩 메트로</a><a href="#grammar">MY Grammar</a><a href="#writing">영작문 튜터</a><a href="#forest">단어숲</a><a href="#speaking">말하기</a><a href="#journey">내 기록</a><a href="#brainup">MY Brain Up</a><a href="#queens">퀴즈 퀸즈</a><a href="#quizshow">퀴즈쇼</a><a href="#games">영어 게임</a><a href="#subjects">다른 교과</a><a href="#teacher">선생님 도구</a>
         </nav>
       </div>
 
@@ -258,6 +260,7 @@
           <li>MY Grammar <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Brain Up · Quiz Queens <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>MY Speaking · 나의 영어 여정 <span class="pill off" data-auth="sb">로그인 필요</span></li>
+          <li>영어 게임 · 역사 박물관 <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>단어숲 · MY Cloze · 영작문 튜터 <span class="pill off" data-auth="sb">로그인 필요</span></li>
           <li>퀴즈쇼 <span class="pill free">로그인 없이 이용</span></li>
           <li>Class123 · Teacher Hub <span class="pill off" id="teacherPill">교사 전용</span></li>
@@ -418,39 +421,6 @@
     </div>
   </article>
 
-  <article class="show" data-app="history" id="history">
-    <div class="wrap show-in">
-      <div class="show-text">
-        <div class="app-top">
-          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></div>
-          <div class="tags"><span class="tag">역사 교과서</span><span class="tag">세계사·한국사</span><span class="tag">로그인</span></div>
-        </div>
-        <h3>MY History Museum<small>문영 역사 박물관</small></h3>
-        <p>중학교 역사 ①(세계사)과 역사 ②(한국사) 교과서를 한 박물관에서 나란히 관람해요. 대단원은 전시관, 중단원은 전시실이에요. 로비의 두 줄 연표로 같은 시기의 세계와 우리 역사를 한눈에 봐요.</p>
-        <ul class="feats">
-          <li>세계사관 7개·한국사관 6개 전시관, 40개 전시실 (차례로 개관)</li>
-          <li>해설 읽기: 용어·한자 풀이, 필기 노트 빈칸, 생각 질문</li>
-          <li>사료·유물 탐구: 내 답 쓰고 예시 답안과 비교</li>
-          <li>인물·개념 카드 복습, 연표 순서·원인→결과·나란히 짝 퍼즐</li>
-          <li>10문항 확인 퀴즈와 전시실별 관람 도장</li>
-        </ul>
-        <div class="acts">
-          <a class="go" href="history/">박물관 입장 →</a>
-        </div>
-      </div>
-      <figure class="shots">
-        <button class="frame" type="button" data-zoom="assets/shots/history-lobby.webp" data-cap="로비: 세계사·한국사 두 줄 연표와 두 전시동">
-          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/history</span></span>
-          <img src="assets/shots/history-lobby.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 로비 화면: 세계사와 한국사 전시관을 나란히 놓은 두 줄 연표">
-        </button>
-        <button class="frame mini" type="button" data-zoom="assets/shots/history-puzzle.webp" data-cap="연표·인과 코너: 원인 → 사건 → 결과 카드 놓기">
-          <img src="assets/shots/history-puzzle.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 연표·인과 코너 화면: 원인, 사건, 결과 카드를 골라 놓는 퍼즐">
-        </button>
-        <figcaption>두 줄 연표 · 인과 퍼즐</figcaption>
-      </figure>
-    </div>
-  </article>
-
   <article class="show" data-app="grammar" id="grammar">
     <div class="wrap show-in">
       <div class="show-text">
@@ -542,35 +512,6 @@
     </div>
   </article>
 
-  <article class="show" data-app="arcade" id="arcade">
-    <div class="wrap show-in">
-      <div class="show-text">
-        <div class="app-top">
-          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="15.5" cy="11.5" r=".8" fill="currentColor"/><circle cx="17.5" cy="13.8" r=".8" fill="currentColor"/></svg></div>
-          <div class="tags"><span class="tag">교과서 어휘</span><span class="tag">게임 7종</span><span class="tag">로그인</span></div>
-        </div>
-        <h3>MY Word Arcade<small>교과서 단어로 노는 게임</small></h3>
-        <p>1·2학년 교과서 단어와 예문으로 7가지 게임을 해요. 단원을 골라 짝짓기, 빈칸 스펠링, 어순 조립, 듣기, 크로스워드, 스펠 배틀, 암호 해독에 도전하고, 틀린 단어는 오답 노트에서 다시 놀아요.</p>
-        <ul class="feats">
-          <li>짝짓기 타임어택 · 빈칸 스펠링 · 문장 어순 조립 · 듣고 맞히기</li>
-          <li>영영풀이 크로스워드 · 글자 타일 스펠 배틀 · 예문 암호 해독</li>
-          <li>오답 노트로 틀린 단어만 다시, 내 기록과 많이 틀린 단어 TOP 10</li>
-        </ul>
-        <div class="acts">
-          <a class="go" href="wordarcade/">게임 시작 →</a>
-          <a class="sub-link" href="wordarcade/guide.html">설명서</a>
-        </div>
-      </div>
-      <figure class="shots">
-        <button class="frame" type="button" data-zoom="assets/shots/wordarcade-home.webp" data-cap="MY Word Arcade 홈: 단어장·단원 고르기와 게임 7종">
-          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordarcade</span></span>
-          <img src="assets/shots/wordarcade-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Arcade 홈 화면: 단어장과 단원을 고르고 7가지 단어 게임 중 하나를 고르는 화면">
-        </button>
-        <figcaption>홈 화면</figcaption>
-      </figure>
-    </div>
-  </article>
-
   <article class="show" data-app="brainup" id="brainup">
     <div class="wrap show-in">
       <div class="show-text">
@@ -652,6 +593,151 @@
           <img src="assets/shots/quizshow-board.webp" width="1280" height="800" loading="lazy" alt="퀴즈쇼 작품 목록 화면">
         </button>
         <figcaption>문제 화면 · 작품 고르기</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <div class="wrap" id="games">
+    <div class="section-head cat-head">
+      <div>
+        <div class="eyebrow">Play &amp; Learn · 영어 게임</div>
+        <h2 id="gamesTitle">영어 게임</h2>
+      </div>
+      <p>교과서 단어와 문장을 게임으로 익혀요. 학교 계정으로 로그인해요.</p>
+    </div>
+  </div>
+
+  <article class="show" data-app="myarcade" id="myarcade">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘·예문</span><span class="tag">게임 12종</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY English Arcade<small>문영 영어 놀이터</small></h3>
+        <p>1·2학년 교과서 어휘와 예문 674개로 12가지 게임을 해요. 학년, 단원, 문제 수를 고르고 단어 익히기, 문장 만들기, 퍼즐 가운데 마음에 드는 게임을 골라 도전해요.</p>
+        <ul class="feats">
+          <li>스펠링 챌린지 · 문장 공작소 · 단어 짝꿍 · 리스닝 랩 · 메모리 플립 등 12종</li>
+          <li>결과에서 틀린 문항의 뜻·영영풀이·예문·해석을 바로 복습</li>
+          <li>나의 기록: 게임별 성적과 아직 틀리는 문제, 게임·단원별 복습 버튼</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="my-english-arcade/">놀이터 입장 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/arcade-home.webp" data-cap="MY English Arcade 게임 라운지: 누적 포인트, 첫 풀이 정답률, 학년·단원 고르기">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/my-english-arcade</span></span>
+          <img src="assets/shots/arcade-home.webp" width="1280" height="800" loading="lazy" alt="MY English Arcade 게임 라운지 화면: 오늘의 영어, 어떤 게임으로 만날까 안내와 학년·단원·문제 수 고르기">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/arcade-games.webp" data-cap="게임 고르기: 단어 익히기 · 문장 만들기 · 퍼즐 즐기기">
+          <img src="assets/shots/arcade-games.webp" width="1280" height="800" loading="lazy" alt="MY English Arcade 게임 카드 목록: 스펠링 챌린지, 문장 공작소, 단어 짝꿍">
+        </button>
+        <figcaption>게임 라운지 · 게임 고르기</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="wordrush" id="wordrush">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘·예문</span><span class="tag">게임 8종</span><span class="tag">학교 계정</span></div>
+        </div>
+        <h3>MY Word Rush<small>교과서 단어·문장 챌린지</small></h3>
+        <p>교과서 단어와 예문으로 빈칸 스펠링, 어순 조립, 짝짓기 같은 학습 게임 4종과 RPG 배틀, 암호 해독, 워들 같은 퍼즐 게임 4종을 즐겨요. 랭킹에서 친구들과 기록을 겨뤄요.</p>
+        <ul class="feats">
+          <li>빈칸 스펠링 · 어순 블록 · 스피드 짝짓기 · 영영풀이 퀴즈쇼</li>
+          <li>스펠스파이어 RPG · 크립토그램 · 커넥션즈 · 워들 & 스펠링 비</li>
+          <li>틀린 단어만 모아 🔥 내 오답만 집중, 원어민 음성 듣기</li>
+          <li>내 기록과 게임별 랭킹</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="wordrush/">챌린지 시작 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/wordrush-games.webp" data-cap="MY Word Rush 게임 8종: 학습 게임 4종과 퍼즐·RPG 4종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordrush</span></span>
+          <img src="assets/shots/wordrush-games.webp" width="1280" height="800" loading="lazy" alt="MY Word Rush 게임 목록 화면: 기본 단어·문장 학습 게임 4종과 퍼즐·RPG 챌린지 게임 4종">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/wordrush-home.webp" data-cap="학년·단원·문제 수 고르기 (체험용 화면)">
+          <img src="assets/shots/wordrush-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Rush 첫 화면: 학년, 단원, 출제 문항 수 고르기">
+        </button>
+        <figcaption>게임 8종 · 범위 고르기 (체험용 화면)</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="show" data-app="arcade" id="arcade">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="15.5" cy="11.5" r=".8" fill="currentColor"/><circle cx="17.5" cy="13.8" r=".8" fill="currentColor"/></svg></div>
+          <div class="tags"><span class="tag">교과서 어휘</span><span class="tag">게임 7종</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY Word Arcade<small>교과서 단어로 노는 게임</small></h3>
+        <p>1·2학년 교과서 단어와 예문으로 7가지 게임을 해요. 단원을 골라 짝짓기, 빈칸 스펠링, 어순 조립, 듣기, 크로스워드, 스펠 배틀, 암호 해독에 도전하고, 틀린 단어는 오답 노트에서 다시 놀아요.</p>
+        <ul class="feats">
+          <li>짝짓기 타임어택 · 빈칸 스펠링 · 문장 어순 조립 · 듣고 맞히기</li>
+          <li>영영풀이 크로스워드 · 글자 타일 스펠 배틀 · 예문 암호 해독</li>
+          <li>오답 노트로 틀린 단어만 다시, 내 기록과 많이 틀린 단어 TOP 10</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="wordarcade/">게임 시작 →</a>
+          <a class="sub-link" href="wordarcade/guide.html">설명서</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/wordarcade-home.webp" data-cap="MY Word Arcade 홈: 단어장·단원 고르기와 게임 7종">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/wordarcade</span></span>
+          <img src="assets/shots/wordarcade-home.webp" width="1280" height="800" loading="lazy" alt="MY Word Arcade 홈 화면: 단어장과 단원을 고르고 7가지 단어 게임 중 하나를 고르는 화면">
+        </button>
+        <figcaption>홈 화면</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <div class="wrap" id="subjects">
+    <div class="section-head cat-head">
+      <div>
+        <div class="eyebrow">Beyond English · 다른 교과</div>
+        <h2 id="otherTitle">다른 교과도 공부해요</h2>
+      </div>
+      <p>같은 로그인으로 다른 과목도 공부할 수 있어요. 새 과목이 생기면 여기에 더해져요.</p>
+    </div>
+  </div>
+
+  <article class="show" data-app="history" id="history">
+    <div class="wrap show-in">
+      <div class="show-text">
+        <div class="app-top">
+          <div class="stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></div>
+          <div class="tags"><span class="tag">역사 교과서</span><span class="tag">세계사·한국사</span><span class="tag">로그인</span></div>
+        </div>
+        <h3>MY History Museum<small>문영 역사 박물관</small></h3>
+        <p>중학교 역사 ①(세계사)과 역사 ②(한국사) 교과서를 한 박물관에서 나란히 관람해요. 대단원은 전시관, 중단원은 전시실이에요. 로비의 두 줄 연표로 같은 시기의 세계와 우리 역사를 한눈에 봐요.</p>
+        <ul class="feats">
+          <li>세계사관 7개·한국사관 6개 전시관, 40개 전시실 (차례로 개관)</li>
+          <li>해설 읽기: 용어·한자 풀이, 필기 노트 빈칸, 생각 질문</li>
+          <li>사료·유물 탐구: 내 답 쓰고 예시 답안과 비교</li>
+          <li>인물·개념 카드 복습, 연표 순서·원인→결과·나란히 짝 퍼즐</li>
+          <li>10문항 확인 퀴즈와 전시실별 관람 도장</li>
+        </ul>
+        <div class="acts">
+          <a class="go" href="history/">박물관 입장 →</a>
+        </div>
+      </div>
+      <figure class="shots">
+        <button class="frame" type="button" data-zoom="assets/shots/history-lobby.webp" data-cap="로비: 세계사·한국사 두 줄 연표와 두 전시동">
+          <span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>tfellow.github.io/web/history</span></span>
+          <img src="assets/shots/history-lobby.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 로비 화면: 세계사와 한국사 전시관을 나란히 놓은 두 줄 연표">
+        </button>
+        <button class="frame mini" type="button" data-zoom="assets/shots/history-puzzle.webp" data-cap="연표·인과 코너: 원인 → 사건 → 결과 카드 놓기">
+          <img src="assets/shots/history-puzzle.webp" width="1280" height="800" loading="lazy" alt="역사 박물관 연표·인과 코너 화면: 원인, 사건, 결과 카드를 골라 놓는 퍼즐">
+        </button>
+        <figcaption>두 줄 연표 · 인과 퍼즐</figcaption>
       </figure>
     </div>
   </article>
@@ -895,6 +981,8 @@
       ["quiz/", "Quiz Queens · 관리자 모드", "앱 오른쪽 위 관리자 버튼으로 문제·기록 관리"],
       ["cloze/", "MY Cloze · 내 테스트", "테스트 만들기, 결과 통계, 실시간 순위, 정답 보기"],
       ["writing1/", "AI 영작문 튜터 · 교사 대시보드", "과제 출제·공개, 제출 현황, 점수 통계, CSV 내보내기"],
+      ["my-english-arcade/", "MY English Arcade · 교사실", "앱 위쪽 교사실 탭: 학년·반·게임·단원별 통계, 취약 문항, CSV"],
+      ["wordrush/", "MY Word Rush · 교사 화면", "앱 위쪽 👩‍🏫 교사 탭: 학생별 기록, 취약 단어, 단어 세트"],
       ["wordarcade/#/teacher", "MY Word Arcade · 교사 화면", "학생별 게임 기록, 취약 어휘 순위, 단어장 올리기, CSV"],
       ["danuhsup/#t-dash", "단어숲 · 교사 대시보드", "참여율, 단원별 암기율, 테스트 결과, 단어장 업로드"],
       ["kahoot/", "MY Kahoot · 진행·통계", "퀴즈 올리기, 실시간 진행, 과제, 성적표 (별도 로그인)"],
