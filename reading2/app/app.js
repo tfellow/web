@@ -4,8 +4,8 @@
   var SUPABASE_URL = "https://jkxdhyvnrvsiokbbbjtu.supabase.co";
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
-  var SCHOOL_LABEL = "서울문영여자중학교";
-  var ASSET_V = "71"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var SCHOOL_LABEL = "우리 학교";
+  var ASSET_V = "73"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -86,14 +86,14 @@
     ov.innerHTML =
       '<div class="cert-wrap">' +
       '<div class="cert" style="--ca:' + o.a + ";--cb:" + o.b + '">' +
-      '<div class="cert-in"><div class="cert-top"><img src="../../assets/myeverse/logo.svg" alt="" width="60" height="60"><div><b>MY KNOWLEDGE PASSPORT</b><small>문영 지식 여권 · MOONYOUNG</small></div></div>' +
+      '<div class="cert-in"><div class="cert-top"><img src="../../assets/myeverse/logo.svg" alt="" width="60" height="60"><div><b>MY KNOWLEDGE PASSPORT</b><small>지식 여권 · MYeVerse</small></div></div>' +
       '<div class="cert-kind">' + o.kind + "</div>" +
       '<div class="cert-em">' + o.em + "</div>" +
       '<div class="cert-title">' + esc(o.title) + "</div><div class=\"cert-ko\">" + esc(o.sub) + "</div>" +
       '<div class="cert-name" id="certname">' + esc(nick) + "</div>" +
       '<p class="cert-text">' + o.en + "</p>" +
       '<p class="cert-text ko">' + o.ko + "</p>" +
-      '<div class="cert-foot"><span>' + date + '</span><span class="cert-seal">' + (o.seal || o.em) + '<small>MY</small></span><span>서울문영여자중학교<br>MY Knowledge Passport</span></div></div></div>' +
+      '<div class="cert-foot"><span>' + date + '</span><span class="cert-seal">' + (o.seal || o.em) + '<small>MY</small></span><span>MYeVerse<br>MY Knowledge Passport</span></div></div></div>' +
       '<div class="cert-tools"><label>인증서에 넣을 이름 <input id="certin" maxlength="20" value="' + esc(nick) + '" placeholder="이름 또는 닉네임"></label>' +
       '<div class="cert-btns"><button class="btn gold" id="certprint">🖨️ 인쇄 · PDF로 저장</button><button class="btn ghost" id="certclose">닫기</button></div>' +
       '<p class="muted">이름은 저장되지 않고 이 인증서에만 들어가요. 인쇄 창에서 “PDF로 저장”을 고르면 파일로 받을 수 있어요.</p></div></div>';
@@ -420,7 +420,7 @@
     clearTimer();
     $who.classList.add("hidden");
     $app.innerHTML =
-      '<div class="card login"><img class="emblem" src="../../assets/myeverse/logo.svg" width="240" height="240" alt="MYeVerse 로고"><div class="kicker" style="margin-top:10px">문영 지식 여권</div><h2>MY Knowledge Passport</h2>' +
+      '<div class="card login"><img class="emblem" src="../../assets/myeverse/logo.svg" width="240" height="240" alt="MYeVerse 로고"><div class="kicker" style="margin-top:10px">지식 여권</div><h2>MY Knowledge Passport</h2>' +
       "<p>세상의 지식을 영어로 읽고, 퀴즈를 풀고, 메달과 스탬프를 모아 보세요.</p>" +
       '<div id="gbtn"></div>' +
       '<p style="font-size:.88rem">학교 계정(@smy.ms.kr)으로 로그인하세요.</p>' +

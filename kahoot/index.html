@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>MY Kahoot - 서울문영여자중학교 실시간 스피드 퀴즈</title>
+  <title>MY Kahoot - 우리 학교 실시간 스피드 퀴즈</title>
 <link rel="icon" href="../app/icon-192.png" type="image/png">
   <link rel="stylesheet" href="styles.css" />
   <!-- SheetJS for Excel (.xlsx) Template Upload & Report Download -->
@@ -24,7 +24,7 @@
       <div class="brand-logo">MY!</div>
       <div class="brand-title">
         <h1>MY Kahoot <span style="font-size:0.75rem; background:rgba(255,255,255,0.2); padding:2px 7px; border-radius:6px; font-weight:700;" class="app-version">v1.1</span></h1>
-        <span class="brand-subtitle">Seoul Moonyoung Girls' Middle School · 서울문영여자중학교</span>
+        <span class="brand-subtitle">MYeVerse · My English Universe</span>
       </div>
     </div>
 
@@ -51,11 +51,11 @@
       <div class="landing-container">
         <!-- 좌측 소개 영역 -->
         <div>
-          <div class="hero-badge">🏫 서울문영여자중학교 전용 스마트 수업 플랫폼</div>
+          <div class="hero-badge">🏫 우리 학교 전용 스마트 수업 플랫폼</div>
           <h2 class="hero-title">빠르고 정확할수록<br/>더 높은 점수! <span>MY Kahoot</span></h2>
           <p class="hero-desc">
             선생님 전자칠판의 <strong>게임 PIN 번호</strong>를 입력하고, 우리 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인하세요.<br/>
-            사전 등록된 문영여중 학생 명단과 자동 매칭되어 학번과 이름이 바로 연결됩니다!
+            사전 등록된 학생 명단과 자동 매칭되어 학번과 이름이 바로 연결됩니다!
           </p>
           <div class="hero-features">
             <div class="hero-feature-item">⚡ <strong>0.01초 스피드 점수제</strong><br/><span style="font-size:0.8rem; opacity:0.85;">빨리 맞힐수록 최대 1,000점 획득</span></div>
@@ -89,7 +89,7 @@
               <span class="domain-pill" id="allowedDomainBadge">@smy.ms.kr 전용</span>
             </div>
             <p style="font-size:0.82rem; color:var(--my-text-muted); margin-bottom:0.75rem;">
-              선생님께서 사전 등록한 <strong>서울문영여자중학교 학생 명단</strong>에 있는 이메일 주소만 로그인할 수 있습니다.
+              선생님께서 사전 등록한 <strong>우리 학교 학생 명단</strong>에 있는 이메일 주소만 로그인할 수 있습니다.
             </p>
 
             <!-- Google OAuth 버튼 (Firebase 연결 시 팝업 / 로컬 모드 시 이메일 검증) -->
@@ -204,7 +204,7 @@
         <div class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">👩‍🎓 서울문영여자중학교 사전 등록 학생 명단 (로그인 허용 화이트리스트)</div>
+              <div class="card-title">👩‍🎓 우리 학교 사전 등록 학생 명단 (로그인 허용 화이트리스트)</div>
               <p style="font-size:0.86rem; color:var(--my-text-muted); margin-top:0.2rem;">
                 아래 명단에 등록된 <strong>학년 · 반 · 번호 · 이름 · 이메일(@smy.ms.kr)</strong> 학생만 퀴즈에 로그인할 수 있으며, 로그인 즉시 학번과 이름이 자동 부여됩니다.
               </p>
@@ -232,7 +232,7 @@
               <input type="number" id="addStuGrade" placeholder="학년(예:2)" min="1" max="3" value="2" />
               <input type="number" id="addStuClass" placeholder="반(예:7)" min="1" max="20" value="7" />
               <input type="number" id="addStuNum" placeholder="번호(예:21)" min="1" max="40" />
-              <input type="text" id="addStuName" placeholder="이름(예:김문영)" />
+              <input type="text" id="addStuName" placeholder="이름(예:김하늘)" />
               <input type="email" id="addStuEmail" placeholder="학교 이메일 (예: 20721@smy.ms.kr)" />
               <button class="btn btn-primary btn-sm" onclick="MYKahoot.addSingleStudentToRoster()">추가/저장</button>
             </div>
@@ -453,7 +453,7 @@
           <!-- 학교 도메인 & 명단 화이트리스트 정책 -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">🔐 서울문영여자중학교 로그인 보안 정책</div>
+              <div class="card-title">🔐 우리 학교 로그인 보안 정책</div>
             </div>
             <div style="margin-bottom:1rem;">
               <label style="display:block; font-weight:800; margin-bottom:0.4rem;">허용할 학교 구글 도메인 주소</label>
@@ -560,7 +560,7 @@
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
             <div style="font-size:1.5rem; font-weight:900;">
               👩‍🎓 입장 완료 학생: <span id="hostLobbyPlayerCount" style="color:var(--my-gold); font-size:2rem;">0</span>명
-              <span style="font-size:0.95rem; font-weight:600; opacity:0.85;">(서울문영여중 사전등록 명단 자동인증)</span>
+              <span style="font-size:0.95rem; font-weight:600; opacity:0.85;">(사전등록 명단 자동인증)</span>
             </div>
             <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
             </div>
@@ -668,7 +668,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
           <div>
             <h2 style="font-size:2.3rem; font-weight:900; color:var(--my-gold);">🏆 MY Kahoot 명예의 전당 시상식</h2>
-            <p style="font-size:1rem; opacity:0.9;">서울문영여자중학교 스피드 퀴즈 최종 결과</p>
+            <p style="font-size:1rem; opacity:0.9;">우리 학교 스피드 퀴즈 최종 결과</p>
           </div>
           <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
             <button class="btn btn-gold" id="btnShowTop10AfterPodium" onclick="MYKahoot.scrollToTop10Section()">
@@ -858,5 +858,6 @@
   </div>
 
   <script src="app.js?v=8"></script>
+<script src="../assets/myeverse-brand.js?v=3" defer></script>
 </body>
 </html>

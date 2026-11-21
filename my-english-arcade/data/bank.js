@@ -1,6 +1,6 @@
 window.MY_BANK = {
   "version": 1,
-  "title": "문영 중학교 영어 단어",
+  "title": "중학교 영어 단어",
   "items": [
     {
       "id": "g1-u1-r2",

@@ -1,5 +1,5 @@
 // ============================================================================
-// QUIZ QUEENS (퀴즈 퀸즈) - 서울문영여자중학교 상식 여왕 도전기
+// QUIZ QUEENS (퀴즈 퀸즈) - MYeVerse 상식 여왕 도전기
 // 6대 분야 기본 문제은행 (총 120문항)
 // 선생님이 구글 시트([문제은행] 탭)를 연동하면 시트의 문제들이 자동으로 추가/반영됩니다.
 // ============================================================================
@@ -8,13 +8,13 @@ const CATEGORIES = [
   {
     id: 'school',
     name: '우리 학교 상식',
-    shortName: '문영상식',
+    shortName: '학교상식',
     icon: '🏫',
     color: '#FF5E7E',
     lightColor: '#FFF0F3',
     mascotName: '개나리 퀸 나리',
     mascotEmoji: '🌼',
-    mascotDesc: '서울문영여자중학교의 역사와 전통을 사랑하는 개나리 마스코트'
+    mascotDesc: '우리 학교의 역사와 전통을 사랑하는 개나리 마스코트'
   },
   {
     id: 'curriculum',
@@ -115,7 +115,7 @@ const LEVEL_TITLES = [
   { minLevel: 5, maxLevel: 9, title: '✨ 신바람 상식 해결사', badge: '✨', certName: '실버 신바람 퀸 인증서' },
   { minLevel: 10, maxLevel: 14, title: '📚 내보창 지성 리더', badge: '📚', certName: '골드 지성 퀸 인증서' },
   { minLevel: 15, maxLevel: 19, title: '💎 빛나는 프리즘 박사', badge: '💎', certName: '플래티넘 프리즘 퀸 인증서' },
-  { minLevel: 20, maxLevel: 29, title: '👑 서울문영 상식 여왕', badge: '👑', certName: '다이아몬드 문영 여왕 인증서' },
+  { minLevel: 20, maxLevel: 29, title: '👑 MY 상식 여왕', badge: '👑', certName: '다이아몬드 상식 여왕 인증서' },
   { minLevel: 30, maxLevel: 999, title: '🌟 전설의 그랜드 퀴즈 퀸', badge: '🌟', certName: '전설의 그랜드 퀴즈 퀸 인증서' }
 ];
 

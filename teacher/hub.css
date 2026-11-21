@@ -172,3 +172,5 @@ details.note summary { cursor: pointer; }
 .launcher .lk a:hover { text-decoration: underline; }
 .launcher .lk a.sub { font-size: 12px; font-weight: 700; color: var(--navy-2); background: var(--navy-soft); border-radius: 999px; padding: 1px 8px; }
 .launcher .lk .small { flex-basis: 100%; }
+.launcher .lk a.sub.st { background: transparent; border: 1px solid var(--line); }
+.launcher .lk-group { grid-column: 1 / -1; font-size: 12px; font-weight: 800; color: var(--muted); margin: 6px 2px 0; letter-spacing: .02em; }

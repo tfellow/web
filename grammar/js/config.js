@@ -2,8 +2,8 @@
    공개 키만 들어 있어요. 비밀 키(service_role)는 절대 여기에 넣지 마세요. */
 window.MG_CONFIG = {
   APP_NAME: "MY Grammar",
-  SCHOOL_NAME: "서울문영여자중학교",
-  SCHOOL_NAME_EN: "Seoul Moonyoung Girls' Middle School",
+  SCHOOL_NAME: "MYeVerse",
+  SCHOOL_NAME_EN: "MYeVerse",
   SCHOOL_DOMAIN: "smy.ms.kr",
   SUPABASE_URL: "https://jkxdhyvnrvsiokbbbjtu.supabase.co",
   SUPABASE_KEY: "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF",

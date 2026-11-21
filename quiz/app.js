@@ -26,7 +26,7 @@ function getForsythiaSvgHtml(size = 38) {
   `;
 }
 // ============================================================================
-// QUIZ QUEENS (퀴즈 퀸즈) - 서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)
+// QUIZ QUEENS (퀴즈 퀸즈) - MYeVerse
 // Main Application Logic (app.js v1.1.0)
 // ============================================================================
 
@@ -362,8 +362,8 @@ function createUserProfile({ email, name, nickname, classId, studentNo, isAdmin 
   const teacher = isAdmin || isTeacherEmail(cleanEmail);
   return {
     email: cleanEmail,
-    name: (name || (teacher ? '문영 선생님' : '김문영')).trim(),
-    nickname: (nickname || name || (teacher ? '문영선생님' : '개나리퀸')).trim(),
+    name: (name || (teacher ? 'MY 선생님' : '김하늘')).trim(),
+    nickname: (nickname || name || (teacher ? 'MY선생님' : '개나리퀸')).trim(),
     classId: teacher ? '' : normalizeClassId(classId || '1-1'),
     studentNo: teacher ? null : (Number(studentNo) || 1),
     isAdmin: teacher,
@@ -404,7 +404,7 @@ function getDemoDataset() {
     { email: 'smy301@smy.ms.kr', nickname: '그랜드퀸채원', name: '한채원', classId: '3-1', studentNo: 1, xp: 1540, solved: 112, correct: 103, maxCombo: 28, streak: 19, maxStreak: 19, mascots: ['school', 'curriculum', 'economy', 'world', 'science', 'culture'], certs: [3, 5, 10, 15], catBias: 'curriculum' },
     { email: 'smy302@smy.ms.kr', nickname: '오대양탐험대', name: '오지우', classId: '3-2', studentNo: 8, xp: 1020, solved: 79, correct: 70, maxCombo: 17, streak: 9, maxStreak: 12, mascots: ['school', 'curriculum', 'world', 'science'], certs: [3, 5, 10], catBias: 'world' },
     { email: 'smy303@smy.ms.kr', nickname: '미래과학자', name: '서민주', classId: '3-3', studentNo: 6, xp: 890, solved: 68, correct: 59, maxCombo: 15, streak: 6, maxStreak: 10, mascots: ['school', 'economy', 'science'], certs: [3, 5], catBias: 'science' },
-    { email: 'smy304@smy.ms.kr', nickname: '문영보물창고', name: '신유나', classId: '3-4', studentNo: 14, xp: 1280, solved: 95, correct: 86, maxCombo: 21, streak: 15, maxStreak: 15, mascots: ['school', 'curriculum', 'economy', 'world', 'culture'], certs: [3, 5, 10], catBias: 'school' }
+    { email: 'smy304@smy.ms.kr', nickname: 'MY보물창고', name: '신유나', classId: '3-4', studentNo: 14, xp: 1280, solved: 95, correct: 86, maxCombo: 21, streak: 15, maxStreak: 15, mascots: ['school', 'curriculum', 'economy', 'world', 'culture'], certs: [3, 5, 10], catBias: 'school' }
   ];
 
   const usersMap = {};
@@ -685,7 +685,7 @@ function loginFromGoogleIdentity(payload) {
     if (errEl) {
       errEl.innerHTML =
         `⛔ <strong>로그인 실패:</strong> 학교 공식 계정이 아닙니다.<br/>` +
-        `서울문영여자중학교 학생은 반드시 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해야 합니다.<br/>` +
+        `우리 학교 학생은 반드시 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해야 합니다.<br/>` +
         `<span style="font-size:0.75rem; color:#64748B;">(현재 로그인 시도 계정: ${email})</span>`;
     }
     if (window.google && google.accounts && google.accounts.id) {
@@ -698,8 +698,8 @@ function loginFromGoogleIdentity(payload) {
   if (isTeacherAdmin) {
     loginWithProfile({
       email,
-      nickname: googleName || '문영선생님',
-      name: googleName || '문영 선생님',
+      nickname: googleName || 'MY선생님',
+      name: googleName || 'MY 선생님',
       classId: '',
       studentNo: null,
       isAdmin: true,
@@ -711,7 +711,7 @@ function loginFromGoogleIdentity(payload) {
   // 학생 계정: 1) 사전 등록된 명단 실명 확인 -> 2) 구글 계정 프로필 실명(googleName) 확인
   const localId = email.split('@')[0];
   const mappedRealName = (state.rosterMap && (state.rosterMap[email] || state.rosterMap[localId])) || '';
-  const finalRealName = mappedRealName || googleName || '문영인';
+  const finalRealName = mappedRealName || googleName || 'MY 학생';
 
   // 이메일 주소(202610101@smy.ms.kr)에서 학년·반·번호 자동 파싱
   const parsed = parseSchoolEmailPattern(email);
@@ -761,8 +761,8 @@ function showProfileSetupStep({ email, classId, studentNo, nickname, name, canCa
     document.getElementById('loginNumber').value = studentNo || 1;
   }
 
-  document.getElementById('loginNickname').value = nickname || (isTeacher ? '문영선생님' : '');
-  document.getElementById('loginName').value = name || (isTeacher ? '문영 선생님' : '');
+  document.getElementById('loginNickname').value = nickname || (isTeacher ? 'MY선생님' : '');
+  document.getElementById('loginName').value = name || (isTeacher ? 'MY 선생님' : '');
 
   const cancelBtn = document.getElementById('cancelProfileEditBtn');
   if (cancelBtn) cancelBtn.style.display = canCancel ? 'inline-flex' : 'none';
@@ -809,7 +809,7 @@ function handleProfileSaveSubmit(event) {
   loginWithProfile({
     email: emailRaw,
     nickname: nickname || name || '개나리퀸',
-    name: name || '김문영',
+    name: name || '김하늘',
     classId: classId || '1-1',
     studentNo: Number(studentNo) || 1,
     isAdmin: isTeacherAdmin,
@@ -839,7 +839,7 @@ function quickLogin(mode) {
     loginWithProfile({
       email: 'moonyoung07@smy.ms.kr',
       nickname: '개나리퀸',
-      name: '김문영',
+      name: '김하늘',
       classId: '2-2',
       studentNo: 7,
       isAdmin: false,
@@ -848,8 +848,8 @@ function quickLogin(mode) {
   } else if (mode === 'teacher_smy') {
     loginWithProfile({
       email: 'tfellow@smy.ms.kr',
-      nickname: '문영선생님',
-      name: '문영 선생님',
+      nickname: 'MY선생님',
+      name: 'MY 선생님',
       classId: '',
       studentNo: null,
       isAdmin: true,
@@ -859,7 +859,7 @@ function quickLogin(mode) {
     loginWithProfile({
       email: 'tfellow@gmail.com',
       nickname: '관리자선생님',
-      name: '문영 선생님',
+      name: 'MY 선생님',
       classId: '',
       studentNo: null,
       isAdmin: true,
@@ -952,7 +952,7 @@ function formatStudentDisplayName(studentObj, forceTeacherView = false) {
 }
 
 // ============================================================================
-// [신규] 문영 8대 퀸 무한 성급(★) & 무한 티어(회차) 승급 프레스티지 시스템
+// [신규] 8대 퀸 무한 성급(★) & 무한 티어(회차) 승급 프레스티지 시스템
 // ============================================================================
 const MASCOT_TIER_CONFIG = [
   { tier: 1, name: '브론즈 퀸', badge: '🥉', color: '#CD7F32', borderColor: '#EA580C', bgColor: '#FFF7ED', glow: 'rgba(234, 88, 12, 0.35)' },
@@ -1239,7 +1239,7 @@ function refreshAllUI() {
     if (slot) slot.classList.toggle('filled', i <= cGauge);
   }
 
-  // 문영 8대 퀸 무한 성급 & 티어 미니 그리드
+  // 8대 퀸 무한 성급 & 티어 미니 그리드
   const grandTier = getGrandMascotTier(user);
   const mascotCountBadge = document.getElementById('mascotCountBadge');
   if (mascotCountBadge) {
@@ -1690,7 +1690,7 @@ function submitAnswer(selectedNum) {
       const bonusXp = 500 * grandTier.tier;
       user.xp += bonusXp;
       setTimeout(() => {
-        alert(`👑 대기록 달성!\n문영 8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
+        alert(`👑 대기록 달성!\n8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
       }, 900);
     }
 
@@ -1901,7 +1901,7 @@ function claimCrownMascot(categoryId) {
     const bonusXp = 500 * grandTier.tier;
     user.xp += bonusXp;
     setTimeout(() => {
-      alert(`👑 대기록 달성!\n문영 8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
+      alert(`👑 대기록 달성!\n8대 퀸 [${grandTier.name} (${grandTier.tier}회차)]을 올클리어했습니다!\n\n🎖️ 칭호 획득: ${grandTier.badge} ${grandTier.name}\n💰 대형 보너스: +${bonusXp} XP`);
     }, 600);
   }
 
@@ -1912,7 +1912,7 @@ function claimCrownMascot(categoryId) {
 
 
 // ============================================================================
-// 9. 레벨별 디지털 인증서 (서울문영여자중학교 공식 명칭 적용)
+// 9. 레벨별 디지털 인증서 (우리 학교 공식 명칭 적용)
 // ============================================================================
 function openCertificatePreviewModal() {
   if (!state.currentUser) return;
@@ -1928,7 +1928,7 @@ function openCertificateModalForUser(targetUser, certLevel, isAutoUnlock = false
   if (isAutoUnlock) {
     heading.textContent = `🎊 축하합니다! Lv.${certLevel} 달성 디지털 인증서가 발급되었습니다!`;
   } else {
-    heading.textContent = `📜 서울문영여자중학교 QUIZ QUEENS 공식 인증서`;
+    heading.textContent = `📜 우리 학교 QUIZ QUEENS 공식 인증서`;
   }
   sub.textContent = `수여 대상: ${targetUser.classId} ${targetUser.nickname} (${targetUser.name}) | 호칭: ${titleObj.certName}`;
 
@@ -1953,7 +1953,7 @@ function renderCertificateCanvas(user, certLevel) {
   const titleObj = getLevelTitleObj(certLevel);
   const acc = user.totalSolved > 0 ? ((user.totalCorrect / user.totalSolved) * 100).toFixed(1) : '100.0';
   const todayStr = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-  const serialNo = `MOONYOUNG-QQ-${new Date().getFullYear()}-L${String(certLevel).padStart(2, '0')}-${String(user.studentNo || 1).padStart(2, '0')}`;
+  const serialNo = `MYEVERSE-QQ-${new Date().getFullYear()}-L${String(certLevel).padStart(2, '0')}-${String(user.studentNo || 1).padStart(2, '0')}`;
 
   // 1. 배경
   const bgGrad = ctx.createLinearGradient(0, 0, W, H);
@@ -1988,13 +1988,13 @@ function renderCertificateCanvas(user, certLevel) {
 
   ctx.textAlign = 'right';
   ctx.fillStyle = '#7C3AED';
-  ctx.fillText(`교훈: 경애(敬愛)와 신의(信義) · '신바람' 문영`, W - 65, 78);
+  ctx.fillText(`작은 호기심, 더 큰 나의 세계`, W - 65, 78);
 
   // 4. 타이틀 헤더
   ctx.textAlign = 'center';
   ctx.fillStyle = '#B45309';
   ctx.font = '800 19px "Pretendard", sans-serif';
-  ctx.fillText('👑 SEOUL MOONYOUNG GIRLS’ MIDDLE SCHOOL · QUIZ QUEENS 👑', W / 2, 130);
+  ctx.fillText('👑 MYeVerse · MY ENGLISH UNIVERSE · QUIZ QUEENS 👑', W / 2, 130);
 
   ctx.fillStyle = '#1E1B4B';
   ctx.font = '900 44px "Pretendard", sans-serif';
@@ -2030,7 +2030,7 @@ function renderCertificateCanvas(user, certLevel) {
   ctx.fillStyle = '#1E293B';
   ctx.font = '700 21px "Pretendard", sans-serif';
   ctx.fillText(
-    `위 학생은 서울문영여자중학교 『QUIZ QUEENS (퀴즈 퀸즈)』 무한도전에서`,
+    `위 학생은 우리 학교 『QUIZ QUEENS (퀴즈 퀸즈)』 무한도전에서`,
     W / 2,
     405
   );
@@ -2057,7 +2057,7 @@ function renderCertificateCanvas(user, certLevel) {
 
   ctx.fillStyle = '#1E1B4B';
   ctx.font = '900 26px "Pretendard", sans-serif';
-  ctx.fillText('서울문영여자중학교 퀴즈 퀸즈 운영위원회', W / 2, 610);
+  ctx.fillText('MYeVerse 퀴즈 퀸즈 운영위원회', W / 2, 610);
 
   const sealX = W - 150;
   const sealY = 585;
@@ -2071,7 +2071,7 @@ function renderCertificateCanvas(user, certLevel) {
 
   ctx.fillStyle = '#B45309';
   ctx.font = '900 15px "Pretendard", sans-serif';
-  ctx.fillText('서울문영', sealX, sealY - 4);
+  ctx.fillText('MY', sealX, sealY - 4);
   ctx.fillText('퀴즈퀸즈인', sealX, sealY + 16);
 }
 
@@ -2080,7 +2080,7 @@ function downloadCertificatePNG() {
   if (!canvas) return;
   const target = state.activeCertificateTarget || { user: state.currentUser, level: state.currentUser.level };
   const link = document.createElement('a');
-  link.download = `서울문영여자중학교_퀴즈퀸즈_인증서_${target.user.classId}_${target.user.nickname}_Lv${target.level}.png`;
+  link.download = `MYeVerse_퀴즈퀸즈_인증서_${target.user.classId}_${target.user.nickname}_Lv${target.level}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
   showToast('💾 고화질 인증서 이미지(PNG)가 다운로드되었습니다!');
@@ -3088,7 +3088,7 @@ function exportClassStatusCSV() {
     ];
   });
 
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_반별현황_${getLocalDateStr()}.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_반별현황_${getLocalDateStr()}.csv`, headers, rows);
 }
 
 // 2) 주간 리포트 CSV
@@ -3135,7 +3135,7 @@ function exportWeeklyReportCSV() {
     ];
   });
 
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_주간리포트_${todayStr}.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_주간리포트_${todayStr}.csv`, headers, rows);
 }
 
 // 3) 분야별 통계 CSV
@@ -3169,7 +3169,7 @@ function exportCategoryStatsCSV() {
     ];
   });
 
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_분야별통계_${getLocalDateStr()}.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_분야별통계_${getLocalDateStr()}.csv`, headers, rows);
 }
 
 // 4) 일별 추이 CSV
@@ -3179,7 +3179,7 @@ function exportDailyTrendCSV() {
   const rows = rowsData.map(r => [
     r.date, r.dayKor, r.activeStudents, r.solved, r.correct, r.acc.toFixed(1), r.topClassStr, r.topCatStr
   ]);
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_일별추이_최근30일_${getLocalDateStr()}.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_일별추이_최근30일_${getLocalDateStr()}.csv`, headers, rows);
 }
 
 // 5) 학생별 상세 통계 (닉네임 + 실명 + 연속 도전일) CSV
@@ -3235,7 +3235,7 @@ function exportStudentStatsCSV() {
     ];
   });
 
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_학생별통계_${getLocalDateStr()}.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_학생별통계_${getLocalDateStr()}.csv`, headers, rows);
 }
 
 // 6) 전체 문제은행 CSV
@@ -3246,7 +3246,7 @@ function exportQuestionsCSV() {
     q.options[0], q.options[1], q.options[2], q.options[3],
     q.answer, q.explanation
   ]);
-  triggerCsvDownload(`서울문영여자중학교_퀴즈퀸즈_문제은행_${state.questions.length}문항.csv`, headers, rows);
+  triggerCsvDownload(`MYeVerse_퀴즈퀸즈_문제은행_${state.questions.length}문항.csv`, headers, rows);
 }
 
 // ============================================================================
@@ -3746,7 +3746,7 @@ function saveStudentRosterFromText() {
   if (!textarea) return;
   const rawText = textarea.value.trim();
   if (!rawText) {
-    alert('학생 명단을 입력해 주세요!\n(예: 202610101, 김문영 또는 202610101@smy.ms.kr, 김문영)');
+    alert('학생 명단을 입력해 주세요!\n(예: 202610101, 김하늘 또는 202610101@smy.ms.kr, 김하늘)');
     return;
   }
 

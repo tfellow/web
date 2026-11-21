@@ -9,7 +9,7 @@ export const supabaseConfig = {
 };
 
 export const APP = {
-  schoolName: '서울문영여자중학교',
+  schoolName: '우리 학교',
   appName: '단어숲',
   // 교사 계정 이메일 (화면 표시용). 실제 권한은 Supabase admins 표(public.is_admin())가 정해요.
   teacherEmails: ['tfellow@gmail.com', 'tfellow@smy.ms.kr', 'engwords@smy.ms.kr', 'hist1026@gmail.com'],

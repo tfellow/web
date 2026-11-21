@@ -1,11 +1,11 @@
 // MY Teacher Hub — 여러 앱의 학생 기록을 한 화면에 모아 보는 교사용 페이지
 // 각 앱의 기록은 선생님 계정으로 "읽기만" 해요. 쓰는 곳은 딱 두 군데예요:
-//   1) 🎁 보상: 선생님이 [지급]을 누르면 Class123 학생 카드에 으쓱을 더하고, 지급 기록을 class123_plus/hub_rewards 에 남겨요.
+//   1) 🎁 보상: 선생님이 [지급]을 누르면 MY Class 학생 카드에 으쓱을 더하고, 지급 기록을 class123_plus/hub_rewards 에 남겨요.
 //   2) 📤 학생 페이지: 학생별 요약을 Supabase hub_summary 표에 올려요 (학생은 자기 줄만 읽어요).
 // 저장소
 //   Supabase (tfellow-web)       : 독서 여권, MY Grammar, 단어숲·MY Cloze·AI 영작문(2026-11 Firestore 에서 이전), Quiz Queens(구글 시트, Supabase 로그인으로 확인)
 //   (Firebase cloze-a8e6c 는 2026-11 부터 옛 기록 보관용이라 Hub 가 연결하지 않아요)
-//   Firebase my-kahoot-smy (RTDB) : MY Kahoot, Class123 Plus, 보상 규칙·지급 기록
+//   Firebase my-kahoot-smy (RTDB) : MY Kahoot, MY Class Plus, 보상 규칙·지급 기록
 const FB_VER = "10.12.2";
 const TEACHERS = ["tfellow@gmail.com", "tfellow@smy.ms.kr", "engwords@smy.ms.kr", "hist1026@gmail.com"];
 const SCHOOL = "@smy.ms.kr";
@@ -18,8 +18,8 @@ const FB_KAHOOT = {
   databaseURL: "https://my-kahoot-smy-default-rtdb.firebaseio.com", projectId: "my-kahoot-smy",
   storageBucket: "my-kahoot-smy.firebasestorage.app", messagingSenderId: "905782620870", appId: "1:905782620870:web:c8a52bb0ec186ddba71dc7",
 };
-const C123_WS = "tfellow_workspace";        // Class123 자료 (Class123 앱이 통째로 저장하는 곳)
-const HUB_PATH = "class123_plus/hub_rewards"; // 보상 규칙·지급 기록 (Class123 자료와 따로)
+const C123_WS = "tfellow_workspace";        // MY Class 자료 (MY Class 앱이 통째로 저장하는 곳)
+const HUB_PATH = "class123_plus/hub_rewards"; // 보상 규칙·지급 기록 (MY Class 자료와 따로)
 
 const APPS = [
   { id: "passport", name: "독서 여권", icon: "📖", src: "sb", url: "../app/" },
@@ -34,12 +34,12 @@ const APPS = [
   { id: "speaking", name: "말하기", icon: "🎤", src: "sb", url: "../speaking/" },
   { id: "level", name: "레벨 테스트", icon: "🧭", src: "sb", url: "../level/" },
   { id: "kahoot", name: "Kahoot", icon: "⚡", src: "fk", url: "../kahoot/" },
-  { id: "c123", name: "Class123", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
+  { id: "c123", name: "MY Class", icon: "⭐", src: "fk", url: "../class123/", cumulative: true },
 ];
 const APP = Object.fromEntries(APPS.map(a => [a.id, a]));
 const SOURCES = {
   sb: { name: "Supabase", desc: "독서 여권 · 지식 여권 · 리딩 메트로 · 문법 · 단어숲 · Cloze · 영작문 · Quiz Queens · Brain Up · 말하기 · 레벨 테스트 · 학생 명단" },
-  fk: { name: "Firebase (Kahoot)", desc: "Kahoot · Class123 · 보상" },
+  fk: { name: "Firebase (Kahoot)", desc: "Kahoot · MY Class · 보상" },
 };
 
 // 보상 규칙에 쓸 수 있는 기준 (min = 점수 기준이 있는 것)
@@ -435,7 +435,7 @@ async function fbSignOut(id) {
   renderConn(); render();
 }
 
-// ---------- Kahoot · Class123 · 보상 (Realtime Database) ----------
+// ---------- Kahoot · MY Class · 보상 (Realtime Database) ----------
 let RT = null; // { D, db }
 async function fkLoad(f) {
   const S = state.src.fk;
@@ -479,7 +479,7 @@ async function fkLoad(f) {
     });
   } catch (e) { warn("Kahoot 과제", e); }
 
-  try { await readC123(); } catch (e) { warn("Class123", e); }
+  try { await readC123(); } catch (e) { warn("MY Class", e); }
   try { await loadHub(); } catch (e) { warn("보상 설정", e); }
 
   S.st = "ok"; renderConn(); render(); maybePublish();
@@ -490,7 +490,7 @@ async function readC123() {
   // 배열이든 객체든 원래 위치(키)를 기억해 둬요 (지급할 때 그 위치에 써요)
   state.c123Raw = v ? Object.entries(v).filter(([, c]) => c).map(([k, c]) => ({ ...c, _k: k })) : [];
 }
-// Class123 학생은 이메일이 없어서 반 이름(예: "2학년 3반")과 이름(또는 번호)으로 명단과 맞춰요
+// MY Class 학생은 이메일이 없어서 반 이름(예: "2학년 3반")과 이름(또는 번호)으로 명단과 맞춰요
 function matchC123() {
   state.snap.c123 = new Map(); state.c123Map = new Map(); state.c123Unmatched = [];
   const raw = state.c123Raw; if (!raw) return;
@@ -675,7 +675,7 @@ const loadedApps = () => APPS.filter(a => DEMO || state.src[a.src].st === "ok");
 const sortPeople = list => list.sort((a, b) => (a.grade || 99) - (b.grade || 99) || (a.cls || 99) - (b.cls || 99) || (a.no || 999) - (b.no || 999) || a.email.localeCompare(b.email));
 
 // ======================================================================
-//  🎁 보상 규칙 → 지급 대기함 → Class123
+//  🎁 보상 규칙 → 지급 대기함 → MY Class
 // ======================================================================
 async function loadHub() {
   if (DEMO) return;
@@ -740,7 +740,7 @@ function ruleText(r) {
   const m = METRICS[r.metric]; if (!m) return "알 수 없는 기준";
   return `${m.name}${m.min !== undefined && num(r.min) ? ` (${r.min}${m.minUnit})` : ""} ${r.every}${m.unit}마다 → 으쓱 ${r.give}`;
 }
-// 선택한 항목을 Class123 에 지급(또는 건너뛰기)
+// 선택한 항목을 MY Class 에 지급(또는 건너뛰기)
 async function grant(items, skip) {
   if (!items.length) return;
   const ok = [], fail = [];
@@ -788,7 +788,7 @@ async function grant(items, skip) {
     }
   }
   if (!DEMO) { try { await readC123(); } catch {} }
-  toast(skip ? `${ok.length}건을 지급하지 않고 넘겼어요.` : `${ok.length}건 지급 완료${fail.length ? ` · ${fail.length}건은 Class123에서 학생을 못 찾아 남겨 뒀어요` : ""} 🎁`);
+  toast(skip ? `${ok.length}건을 지급하지 않고 넘겼어요.` : `${ok.length}건 지급 완료${fail.length ? ` · ${fail.length}건은 MY Class에서 학생을 못 찾아 남겨 뒀어요` : ""} 🎁`);
   render(); maybePublish(true);
 }
 
@@ -976,7 +976,7 @@ function viewClass(people, M, apps) {
       <td class="c"><div class="pc"><div class="bar gold"><i style="width:${pct(anyAct, n) || 0}%"></i></div><span>${anyAct}/${n}</span></div></td>${cells}</tr>`;
   }).join("");
   return `<div class="card panel"><h2>반별 요약 · ${periodLabel()}</h2>
-    <p class="note">막대는 ${periodLabel()}에 그 앱을 쓴 학생 비율이에요. 반을 누르면 그 반 학생 표로 가요. Class123은 누적 으쓱 합계예요.</p>
+    <p class="note">막대는 ${periodLabel()}에 그 앱을 쓴 학생 비율이에요. 반을 누르면 그 반 학생 표로 가요. MY Class은 누적 으쓱 합계예요.</p>
     <div class="tbl-wrap"><table><thead><tr><th class="sticky-col">반</th><th>인원</th><th>한 앱 이상</th>${apps.map(a => `<th>${a.icon} ${a.name}</th>`).join("")}</tr></thead>
     <tbody>${rows}</tbody></table></div></div>`;
 }
@@ -1051,12 +1051,12 @@ function viewFeed(people) {
   const who = new Set(people.map(p => p.email)), apps = new Set(shownApps().map(x => x.id));
   const list = state.events.filter(e => who.has(e.e) && apps.has(e.a) && e.t >= a && e.t < b).sort((x, y) => y.t - x.t);
   return `<div class="card panel"><h2>최근 활동 · ${periodLabel()} <span class="small muted">${list.length}건${list.length > 300 ? " 중 최근 300건" : ""}</span></h2>
-    <p class="note">문법은 문제 하나하나 대신 스탬프만, Quiz Queens·Class123은 누적 기록이라 여기에 나오지 않아요.</p>
+    <p class="note">문법은 문제 하나하나 대신 스탬프만, Quiz Queens·MY Class은 누적 기록이라 여기에 나오지 않아요.</p>
     ${list.length ? `<ul class="feed">${list.slice(0, 300).map(e => evLine(e, true)).join("")}</ul>` : `<div class="empty">이 기간에는 기록이 없어요.</div>`}</div>`;
 }
 
 function viewReward(pend, M) {
-  if (!DEMO && state.src.fk.st !== "ok") return `<div class="card empty">보상 규칙과 지급 기록은 Kahoot·Class123 저장소에 있어요. 위에서 <b>Firebase (Kahoot)</b>를 먼저 연결해 주세요.</div>`;
+  if (!DEMO && state.src.fk.st !== "ok") return `<div class="card empty">보상 규칙과 지급 기록은 Kahoot·MY Class 저장소에 있어요. 위에서 <b>Firebase (Kahoot)</b>를 먼저 연결해 주세요.</div>`;
   if (!state.hubLoaded && !DEMO) return `<div class="card empty">보상 설정을 불러오는 중…</div>`;
   const f = state.f;
   const show = pend.filter(it => (!f.grade || it.p.grade === +f.grade) && (!f.cls || it.p.cls === +f.cls) && (!f.q || low(it.p.name).includes(low(f.q))));
@@ -1081,20 +1081,20 @@ function viewReward(pend, M) {
       <td class="name">${i ? "" : `<button data-who="${esc(p.email)}">${esc(p.name || p.email)}</button> <span class="small muted">${p.grade ? `${p.grade}-${p.cls}-${p.no}` : ""}</span>`}</td>
       <td>${esc(it.r.label || METRICS[it.r.metric].name)}<span class="sub small muted" style="display:block">${it.count}${METRICS[it.r.metric].unit} 달성 · 이미 ${it.got}개 받음</span></td>
       <td class="num"><b>⭐${it.n}</b></td>
-      <td class="small">${it.target ? esc(it.target.cname) : `<span class="err-msg">Class123에서 못 찾음</span>`}</td></tr>`).join("")).join("");
+      <td class="small">${it.target ? esc(it.target.cname) : `<span class="err-msg">MY Class에서 못 찾음</span>`}</td></tr>`).join("")).join("");
   const logs = Object.values(state.hub.log || {}).sort((a, b) => b.t - a.t).slice(0, 60);
   return `<div class="card panel"><h2>🎁 보상 규칙</h2>
-    <p class="note">켜진 규칙의 기준을 채운 학생이 아래 <b>지급 대기함</b>에 모여요. 선생님이 [지급]을 눌러야 Class123에 으쓱이 들어가요(자동으로 들어가지 않아요).
+    <p class="note">켜진 규칙의 기준을 채운 학생이 아래 <b>지급 대기함</b>에 모여요. 선생님이 [지급]을 눌러야 MY Class에 으쓱이 들어가요(자동으로 들어가지 않아요).
     <b>시작일</b> 이전의 기록은 세지 않아요. 예전 기록까지 인정하려면 시작일을 앞으로 당기세요. 같은 기록으로 두 번 받지 않아요.</p>
-    <div class="tbl-wrap"><table class="rules"><thead><tr><th>켜기</th><th>이름 (Class123 카드 제목)</th><th>기준</th><th>점수 조건</th><th>몇 번마다</th><th>으쓱</th><th>대상</th><th>시작일</th><th></th></tr></thead>
+    <div class="tbl-wrap"><table class="rules"><thead><tr><th>켜기</th><th>이름 (MY Class 카드 제목)</th><th>기준</th><th>점수 조건</th><th>몇 번마다</th><th>으쓱</th><th>대상</th><th>시작일</th><th></th></tr></thead>
     <tbody>${rules}</tbody></table></div>
     <div style="margin-top:8px"><button class="btn sm" id="addRule">＋ 규칙 추가</button></div></div>
   <div class="card panel"><h2>📥 지급 대기함 <span class="small muted">${show.length}건${show.length !== pend.length ? ` (필터 밖 ${pend.length - show.length}건)` : ""}</span></h2>
     ${show.length ? `<div class="pend-actions"><label><input type="checkbox" id="pkAll" checked> 모두 선택</label>
       <button class="btn gold" id="btnGrant">⭐ 선택한 학생에게 지급</button><button class="btn" id="btnSkip">지급하지 않고 넘기기</button></div>
-      <div class="tbl-wrap"><table><thead><tr><th></th><th>학생</th><th>규칙</th><th>으쓱</th><th>Class123 반</th></tr></thead><tbody>${pendRows}</tbody></table></div>`
+      <div class="tbl-wrap"><table><thead><tr><th></th><th>학생</th><th>규칙</th><th>으쓱</th><th>MY Class 반</th></tr></thead><tbody>${pendRows}</tbody></table></div>`
       : `<div class="empty">${Object.values(state.hub.rules).some(r => r.on) ? "지금은 받을 학생이 없어요." : "켜진 규칙이 없어요. 위에서 규칙을 켜 보세요."}</div>`}
-    ${state.c123Unmatched?.length ? `<details class="note"><summary>Class123 학생 중 명단과 못 맞춘 ${state.c123Unmatched.length}명</summary>${state.c123Unmatched.map(esc).join(", ")}<br>Class123의 반 이름을 "1학년 3반"처럼, 학생 이름을 명단과 똑같이 맞추면 연결돼요.</details>` : ""}
+    ${state.c123Unmatched?.length ? `<details class="note"><summary>MY Class 학생 중 명단과 못 맞춘 ${state.c123Unmatched.length}명</summary>${state.c123Unmatched.map(esc).join(", ")}<br>MY Class의 반 이름을 "1학년 3반"처럼, 학생 이름을 명단과 똑같이 맞추면 연결돼요.</details>` : ""}
   </div>
   ${Object.keys(state.hub.hidden || {}).length ? `<div class="card panel"><h2>🙈 숨긴 계정 <span class="small muted">${Object.keys(state.hub.hidden).length}개</span></h2>
     <p class="note">테스트 계정처럼 숨긴 계정은 표, 보상, 학생 페이지에서 빠져요.</p><ul class="feed">${Object.values(state.hub.hidden).map(e => { const p = state.people.get(e); return `<li><span class="t"></span><span class="ic">🙈</span><span><b>${esc(p?.name || "")}</b> ${esc(e)}</span><span><button class="btn sm" data-unhide="${esc(e)}">다시 보이기</button></span></li>`; }).join("")}</ul></div>` : ""}
@@ -1128,9 +1128,9 @@ function bindReward(pend) {
   const picked = () => [...v.querySelectorAll(".pk:checked")].map(c => pend[+c.dataset.i]).filter(Boolean);
   const g = $("#btnGrant"); if (g) g.onclick = async () => {
     const list = picked().filter(it => it.target);
-    if (!list.length) return toast("Class123에 있는 학생을 골라 주세요.");
+    if (!list.length) return toast("MY Class에 있는 학생을 골라 주세요.");
     const total = list.reduce((s, it) => s + it.n, 0);
-    if (!confirm(`${new Set(list.map(it => it.p.email)).size}명에게 으쓱 ${total}개를 Class123에 줄까요?`)) return;
+    if (!confirm(`${new Set(list.map(it => it.p.email)).size}명에게 으쓱 ${total}개를 MY Class에 줄까요?`)) return;
     g.disabled = true; await grant(list, false);
   };
   const s = $("#btnSkip"); if (s) s.onclick = async () => {

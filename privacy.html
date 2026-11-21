@@ -30,8 +30,8 @@
 
   <p>「MYeVerse」(이하 "서비스")는 읽기, 영어 학습, 퀴즈와 수업 활동을 위한 교육용 웹 앱 모음입니다.
   이 방침은 아래 앱 모두에 적용됩니다: MY Level Test, MY Reading Passport(독서 여권), MY Knowledge Passport(지식 여권),
-  MY Reading Metro, MY History Museum, MY Grammar, AI 영작문 튜터, MY Speaking, 단어숲, MY Word Arcade, MY English Arcade, MY Word Rush, MY Brain Up, Quiz Queens, MY Cloze, MY Kahoot, MY English Journey,
-  그리고 교사용 도구(MY Teacher Hub, Class123 Plus).
+  MY Reading Metro, MY History Museum, MY Grammar, MY Writing Tutor, MY Speaking, MY Word Forest(단어숲), MY Word Arcade, MY English Arcade, MY Word Rush, MY Brain Up, Quiz Queens, MY Cloze, MY Kahoot, MY English Journey,
+  그리고 교사용 도구(MY Teacher Hub, MY Class).
   운영자는 이용자의 개인정보를 소중히 여기며, 서비스 운영에 꼭 필요한 정보만 수집·이용합니다.</p>
 
   <h2>1. 운영자</h2>
@@ -47,9 +47,9 @@
     <tr><td>닉네임</td><td>앱에서 자동 생성 또는 이용자가 직접 입력</td><td>순위표 등 화면 표시 (실명 대신 사용)</td></tr>
     <tr><td>학년·반·번호, 실명</td><td>교사가 학급 명단으로 등록 (학교 학생에 한함)</td><td>교사의 학습 지도와 기록 확인</td></tr>
     <tr><td>학습 기록: 읽은 글, 퀴즈·시험 답안과 점수, 응시 시각, 힌트(한국어 번역) 열람, 레벨 테스트 결과, 단어 학습 진도, 배지·연속 기록</td><td>앱 이용 중 자동 기록</td><td>학습 활동 기록, 메달·진행도 표시, 수준에 맞는 자료 추천, 학습 지도</td></tr>
-    <tr><td>영작문 답안 (AI 영작문 튜터)</td><td>학생이 직접 입력</td><td>채점과 피드백, 교사의 지도. AI 채점을 쓸 때는 답안 글이 Google Gemini로 전송되며, 전송 전에 학생 이름을 가립니다.</td></tr>
+    <tr><td>영작문 답안 (MY Writing Tutor)</td><td>학생이 직접 입력</td><td>채점과 피드백, 교사의 지도. AI 채점을 쓸 때는 답안 글이 Google Gemini로 전송되며, 전송 전에 학생 이름을 가립니다.</td></tr>
     <tr><td>말하기 인식 결과 글자와 점수 (MY Speaking)</td><td>학생이 마이크 사용을 허용하고 말할 때</td><td>따라 말하기 점수 표시, 교사의 지도. <b>목소리 녹음은 저장하지 않습니다.</b> 소리는 Chrome 브라우저의 음성 인식 기능(Google)이 글자로 바꾸는 데만 쓰입니다.</td></tr>
-    <tr><td>학급 경영 기록: 으쓱·머쓱 점수와 카드 내역 (Class123 Plus)</td><td>교사가 입력</td><td>학급 운영과 칭찬·보상</td></tr>
+    <tr><td>학급 경영 기록: 으쓱·머쓱 점수와 카드 내역 (MY Class)</td><td>교사가 입력</td><td>학급 운영과 칭찬·보상</td></tr>
   </table></div>
   <p>Google 프로필 사진과 비밀번호는 수집하거나 저장하지 않습니다. 비밀번호는 Google에서만 처리됩니다.</p>
 
@@ -66,10 +66,10 @@
   <h2>4. 처리 위탁 및 저장 위치</h2>
   <div class="scroll"><table>
     <tr><th>업체</th><th>역할</th><th>해당 앱</th></tr>
-    <tr><td>Supabase</td><td>로그인 정보와 학습 기록 데이터베이스 (대한민국 서울 리전)</td><td>레벨 테스트, 독서 여권, 지식 여권, 리딩 메트로, 역사 박물관, MY Grammar, AI 영작문 튜터, MY Speaking, 단어숲, MY Cloze, 영어 게임(Word Arcade, English Arcade, Word Rush), MY Brain Up, Quiz Queens 로그인, MY English Journey</td></tr>
-    <tr><td>Google Firebase (Realtime Database)</td><td>실시간 퀴즈와 학급 경영 기록 데이터베이스 (미국 리전)</td><td>MY Kahoot, Class123 Plus</td></tr>
+    <tr><td>Supabase</td><td>로그인 정보와 학습 기록 데이터베이스 (대한민국 서울 리전)</td><td>레벨 테스트, 독서 여권, 지식 여권, 리딩 메트로, 역사 박물관, MY Grammar, MY Writing Tutor, MY Speaking, 단어숲, MY Cloze, 영어 게임(Word Arcade, English Arcade, Word Rush), MY Brain Up, Quiz Queens 로그인, MY English Journey</td></tr>
+    <tr><td>Google Firebase (Realtime Database)</td><td>실시간 퀴즈와 학급 경영 기록 데이터베이스 (미국 리전)</td><td>MY Kahoot, MY Class</td></tr>
     <tr><td>Google (스프레드시트·Apps Script)</td><td>퀴즈 기록 저장</td><td>Quiz Queens</td></tr>
-    <tr><td>Google</td><td>Google 계정 로그인, Chrome 음성 인식(MY Speaking), Gemini AI 채점(AI 영작문 튜터)</td><td>전체 / 해당 앱</td></tr>
+    <tr><td>Google</td><td>Google 계정 로그인, Chrome 음성 인식(MY Speaking), Gemini AI 채점(MY Writing Tutor)</td><td>전체 / 해당 앱</td></tr>
     <tr><td>GitHub</td><td>웹사이트(화면) 제공. 개인정보는 저장하지 않음</td><td>전체</td></tr>
   </table></div>
 

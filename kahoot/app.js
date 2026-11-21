@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * MY Kahoot (Seoul Moonyoung Girls' Middle School - 서울문영여자중학교)
+ * MY Kahoot (MYeVerse)
  * 실시간 스피드 퀴즈 & 교사용 통계/학생명단 화이트리스트 관리 시스템
  * ============================================================================
  */
@@ -213,7 +213,7 @@ const MYKahoot = (() => {
     return [
       {
         id: 'quiz_moonyoung_sample_1',
-        title: '서울문영여중 2학년 영어·교양 스피드 퀴즈 (Taxes & School)',
+        title: '2학년 영어·교양 스피드 퀴즈 (Taxes & School)',
         createdAt: '2026-10-28',
         questions: [
           {
@@ -688,7 +688,7 @@ const MYKahoot = (() => {
     ws['!cols'] = [{ wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 16 }, { wch: 28 }];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, '학생명단');
-    XLSX.writeFile(wb, 'MY_Kahoot_서울문영여중_학생명단_템플릿.xlsx');
+    XLSX.writeFile(wb, 'MY_Kahoot_MYeVerse_학생명단_템플릿.xlsx');
   }
 
   // 현재 등록된 전체 명단 엑셀로 내보내기
@@ -704,7 +704,7 @@ const MYKahoot = (() => {
     const ws = XLSX.utils.aoa_to_sheet(rows);
     ws['!cols'] = [{ wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 16 }, { wch: 28 }];
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, '서울문영여중_학생명단');
+    XLSX.utils.book_append_sheet(wb, ws, 'MYeVerse_학생명단');
     XLSX.writeFile(wb, `MY_Kahoot_학생명단_${studentRoster.length}명.xlsx`);
   }
 
@@ -784,7 +784,7 @@ const MYKahoot = (() => {
         syncRosterToCloud();
         populateRosterClassFilter();
         renderStudentRosterTable();
-        alert(`성공적으로 ${parsedStudents.length}명의 서울문영여중 학생 명단이 등록되었습니다!`);
+        alert(`성공적으로 ${parsedStudents.length}명의 학생 명단이 등록되었습니다!`);
       } catch (err) {
         console.error(err);
         alert('학생 명단 엑셀 파일 처리 중 오류가 발생했습니다: ' + err.message);
@@ -828,7 +828,7 @@ const MYKahoot = (() => {
   }
 
   function createNewQuizSet() {
-    const title = prompt('새 퀴즈 세트의 제목을 입력하세요:', `서울문영여중 단원 마무리 퀴즈 (${quizSets.length + 1})`);
+    const title = prompt('새 퀴즈 세트의 제목을 입력하세요:', `단원 마무리 퀴즈 (${quizSets.length + 1})`);
     if (!title) return;
     quizSets.push({
       id: 'quiz_' + Date.now(),
@@ -1331,7 +1331,7 @@ const MYKahoot = (() => {
     if (reqDomain && !clean.endsWith(reqDomain)) {
       return {
         ok: false,
-        message: `서울문영여자중학교 전용 계정(${settings.allowedDomain})만 로그인할 수 있습니다.`
+        message: `우리 학교 전용 계정(${settings.allowedDomain})만 로그인할 수 있습니다.`
       };
     }
 

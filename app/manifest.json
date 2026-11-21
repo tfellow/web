@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "MY Reading Passport · 문영 독서 여권",
+  "name": "MY Reading Passport · 독서 여권",
   "short_name": "독서 여권",
-  "description": "세계문학을 영어로 읽고 퀴즈를 풀며 메달과 스탬프를 모으는 서울문영여자중학교 독서 앱",
+  "description": "세계문학을 영어로 읽고 퀴즈를 풀며 메달과 스탬프를 모으는 MYeVerse 독서 앱",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",

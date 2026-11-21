@@ -972,7 +972,7 @@ function ensureLatestUiVersion() {
         iconDiv.innerHTML = '<span>🌱</span>';
         brandLogo.appendChild(iconDiv);
       }
-      brandLogo.appendChild(document.createTextNode(' Class123'));
+      brandLogo.appendChild(document.createTextNode(' MY Class'));
     }
 
     // 2. 좌측 툴바 설명서 아래 버전 뱃지 배치 및 최신 버전 강제 갱신
@@ -3391,7 +3391,7 @@ function downloadBackupJSON() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `Class123_Plus_백업_${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `MY_Class_백업_${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }

@@ -1,5 +1,5 @@
 // MY Word Rush — Supabase Auth & Data Layer (Prefix: wr_)
-// Strictly follows MOONYOUNG MY App rules:
+// Strictly follows MYeVerse MY App rules:
 // - Shared Supabase client (no custom storageKey)
 // - GIS signInWithIdToken (no signInWithOAuth)
 // - Server-side public.is_admin() check

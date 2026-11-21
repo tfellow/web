@@ -22,7 +22,7 @@ import {
   writeBatch
 } from "./sb.js?v=2";
 
-// 서울문영여자중학교 보안 명렬표(무키 AES-256-GCM 금고 & Firestore 서버 보호) 및 헬퍼 함수 불러오기
+// 우리 학교 보안 명렬표(무키 AES-256-GCM 금고 & Firestore 서버 보호) 및 헬퍼 함수 불러오기
 import {
   STUDENT_ROSTER,
   CLASSES_BY_GRADE,
@@ -33,7 +33,7 @@ import {
 // ============================================================================
 // 1. 환경 설정 (Supabase tfellow-web, 다른 MY 앱과 같은 학교 구글 로그인)
 // ============================================================================
-// 서울문영여자중학교 공식 도메인 및 교사(관리자) 이메일 목록 설정
+// 우리 학교 공식 도메인 및 교사(관리자) 이메일 목록 설정
 const ALLOWED_DOMAIN = "smy.ms.kr";
 const TEACHER_EMAILS = [
   "tfellow@smy.ms.kr",
@@ -2708,7 +2708,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!isRegisteredTeacher && emailDomain !== ALLOWED_DOMAIN) {
     setRuntimeRoster([]);
-    alert(`접근 제한: 서울문영여자중학교 계정(@${ALLOWED_DOMAIN}) 또는 등록된 교사 관리자 계정으로만 로그인이 가능합니다.`);
+    alert(`접근 제한: 우리 학교 계정(@${ALLOWED_DOMAIN}) 또는 등록된 교사 관리자 계정으로만 로그인이 가능합니다.`);
     // 다른 MY 앱(외부 계정 허용 앱)의 로그인까지 끊지 않도록, 이 앱에서만 로그아웃 상태로 보여 줘요
     currentUser = null;
     currentStudentInfo = null;
@@ -2867,7 +2867,7 @@ document.getElementById("input-roster-file")?.addEventListener("change", async (
   }
   const compactList = parseRosterText(await file.text());
   if (compactList.length === 0) {
-    return alert("❌ 파일에서 '학번 이름' 줄을 찾지 못했어요. 예: 10101 김문영");
+    return alert("❌ 파일에서 '학번 이름' 줄을 찾지 못했어요. 예: 10101 김하늘");
   }
   if (!confirm(`학생 ${compactList.length}명을 교사 전용 저장소에 올릴까요? (기존 명렬표는 바뀝니다)`)) return;
   try {
@@ -3125,7 +3125,7 @@ async function lookupOwnStudentEntry(email) {
   }
 }
 
-// "10101 김문영", "10101,김문영", "10101:김문영" 같은 줄을 읽어요
+// "10101 김하늘", "10101,김하늘", "10101:김하늘" 같은 줄을 읽어요
 function parseRosterText(text) {
   const out = [];
   const seen = new Set();
@@ -4344,7 +4344,7 @@ document.getElementById("btn-export-csv").addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `서울문영여중_영작문기록_${new Date().toISOString().split("T")[0]}.csv`;
+  link.download = `MYeVerse_영작문기록_${new Date().toISOString().split("T")[0]}.csv`;
   link.click();
   URL.revokeObjectURL(url);
 });

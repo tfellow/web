@@ -293,7 +293,7 @@
             <span class="badge badge-danger" style="margin-bottom:8px;">접근 제한</span>
             <h2 style="margin:0 0 10px;">이 앱에서는 쓸 수 없어요</h2>
             <p style="color:var(--text-muted); font-size:0.94rem; margin:0 0 14px;">
-              현재 로그인된 계정(<strong>${D.escapeHtml(auth.email)}</strong>)은 서울문영여자중학교 계정이 아닙니다.<br>
+              현재 로그인된 계정(<strong>${D.escapeHtml(auth.email)}</strong>)은 우리 학교 계정이 아닙니다.<br>
               <strong>@smy.ms.kr</strong> 학교 구글 계정으로 다시 로그인해 주세요.
             </p>
             <div class="gis-wrap" id="gis-btn-slot"></div>
@@ -310,11 +310,11 @@
       <div class="auth-screen">
         <div class="auth-card">
           ${emblemImgHtml("auth-emblem")}
-          <span class="badge badge-gold" style="margin-bottom:8px;">MOONYOUNG ENGLISH</span>
+          <span class="badge badge-gold" style="margin-bottom:8px;">MYeVerse</span>
           <h1 style="margin:0 0 6px; font-size:1.45rem;">MY Word Rush</h1>
           <p style="margin:0 0 16px; color:var(--text-muted); font-weight:600;">교과서 단어·문장 챌린지 (8종 게임)</p>
           <div class="hint-box" style="text-align:left; font-size:0.88rem; margin-bottom:14px;">
-            • 서울문영여자중학교 <strong>@smy.ms.kr</strong> 구글 계정 또는 교사 계정으로 로그인하세요.<br>
+            • 우리 학교 <strong>@smy.ms.kr</strong> 구글 계정 또는 교사 계정으로 로그인하세요.<br>
             • 중1·중2 교과서 어휘 674개와 예문으로 8가지 단어·문장 게임을 즐길 수 있습니다.
           </div>
           <div class="gis-wrap" id="gis-btn-slot"></div>
@@ -335,7 +335,7 @@
                 MY Word Rush
                 <span class="badge badge-gold">8종 게임</span>
               </div>
-              <span class="brand-sub">서울문영여자중학교 · 교과서 단어·문장 챌린지</span>
+              <span class="brand-sub">MYeVerse · 교과서 단어·문장 챌린지</span>
             </div>
           </div>
 
@@ -642,7 +642,7 @@
     return `
       <div class="card" style="margin-bottom:18px;">
         <div class="section-title">
-          <span>👩‍🏫 교사 관리 대시보드 (MOONYOUNG Admin)</span>
+          <span>👩‍🏫 교사 관리 대시보드 (MYeVerse Admin)</span>
           <div style="display:flex; gap:8px; align-items:center;">
             <span class="badge ${state.dbPingOk ? "badge-success" : "badge-danger"}">
               ${state.dbPingOk ? "✅ Supabase wr_ 정상" : "⚠️ supabase_wr.sql 실행 필요"}

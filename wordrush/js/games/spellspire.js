@@ -79,7 +79,7 @@
           <div class="battle-stage">
             <div class="fighter-card">
               <div class="fighter-emoji">🛡️</div>
-              <strong>문영 용사 (나)</strong>
+              <strong>MY 용사 (나)</strong>
               <div style="font-size:0.86rem; color:var(--text-muted); margin-top:2px;">HP ${playerHp} / 100</div>
               <div class="hp-bar"><div class="hp-fill" style="width:${pPct}%"></div></div>
             </div>

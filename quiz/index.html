@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>QUIZ QUEENS (퀴즈 퀸즈) | 서울문영여자중학교 상식 여왕 도전기</title>
+  <title>QUIZ QUEENS (퀴즈 퀸즈) | 우리 학교 상식 여왕 도전기</title>
 <link rel="icon" href="../app/icon-192.png" type="image/png">
   <link rel="stylesheet" href="styles.css?v=17" />
   <!-- Google Identity Services (실제 구글 로그인) & Supabase 연동 스크립트 -->
@@ -24,7 +24,7 @@
           QUIZ QUEENS
           <span style="font-size:0.7rem; padding:0.12rem 0.48rem; border-radius:999px; background:#EDE9FE; color:#5B21B6; -webkit-text-fill-color:#5B21B6; font-weight:800;">v1.5</span>
         </div>
-        <div class="brand-sub">서울문영여자중학교 (Seoul Moonyoung Girls' Middle School)</div>
+        <div class="brand-sub">MYeVerse</div>
       </div>
     </div>
 
@@ -64,12 +64,12 @@
     <div class="login-card">
       <img src="../assets/myeverse/logo.svg" alt="MYeVerse 로고" style="width:76px; height:auto; margin:0 auto 0.5rem; display:block; filter:drop-shadow(0 6px 12px rgba(0,0,0,0.15));" onerror="this.style.display='none'" />
       <h1 class="login-title">QUIZ QUEENS</h1>
-      <p class="login-subtitle">서울문영여자중학교 상식 여왕 도전기 (MY Quiz Queens)</p>
+      <p class="login-subtitle">우리 학교 상식 여왕 도전기 (MY Quiz Queens)</p>
 
       <!-- [단계 1] Google 공식 로그인 버튼 화면 -->
       <div id="googleSignInStep">
         <div class="school-domain-notice">
-          🏫 <strong>서울문영여자중학교 공식 Google 로그인</strong><br />
+          🏫 <strong>우리 학교 공식 Google 로그인</strong><br />
           • <strong>학생:</strong> 학교 구글 계정(<strong>@smy.ms.kr</strong>)으로 로그인해 주세요.<br />
           • <strong>프라이버시 보호:</strong> 다른 학생들에게는 <strong>닉네임만</strong> 공개되며, 실명은 선생님에게만 표시됩니다.
         </div>
@@ -250,13 +250,13 @@
               <div class="crown-slot" id="crownSlot3"></div>
             </div>
             <p style="font-size:0.74rem; color:#78350F; font-weight:600;">
-              정답 3회를 채우거나 룰렛 <strong>[👑왕관]</strong>에 당첨되면<br />원하는 분야의 문영 퀸 마스코트를 획득합니다!
+              정답 3회를 채우거나 룰렛 <strong>[👑왕관]</strong>에 당첨되면<br />원하는 분야의 퀸 마스코트를 획득합니다!
             </p>
           </div>
 
-          <!-- 문영 8대 퀸 무한 성급 & 티어 도감 -->
+          <!-- 8대 퀸 무한 성급 & 티어 도감 -->
           <div class="mascot-section-title" style="cursor:pointer;" onclick="openMascotBookModal()" title="클릭하여 8대 퀸 마스터리 상세 도감 보기">
-            <span>✨ 문영 8대 퀸 도감</span>
+            <span>✨ 8대 퀸 도감</span>
             <span id="mascotCountBadge" style="font-size:0.76rem; color:var(--primary); font-weight:800;">0 / 8 수집</span>
           </div>
           <div class="mascot-mini-grid" id="mascotMiniGrid"></div>
@@ -270,7 +270,7 @@
           </div>
 
           <h2 style="font-size:1.3rem; font-weight:900; text-align:center; margin-bottom:0.2rem;">
-            룰렛을 돌려 서울문영여자중학교 상식 여왕에 도전하세요!
+            룰렛을 돌려 우리 학교 상식 여왕에 도전하세요!
           </h2>
           <p style="font-size:0.84rem; color:var(--text-sub); font-weight:600; text-align:center; margin-bottom:0.5rem;">
             우리 학교 상식부터 교과 융합, 시사·경제, 세계·지리, 과학·미래, 예술·문화까지!
@@ -350,7 +350,7 @@
       <div class="charts-two-col">
         <div class="glass-card" style="text-align:center;">
           <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:0.35rem;">📐 나의 6대 분야 상식 밸런스 (정육각형 프리즘)</h3>
-          <p style="font-size:0.78rem; color:var(--text-sub); margin-bottom:0.85rem;">고른 분야의 문제를 풀고 정답률을 높여 문영의 정육각형 프리즘을 완성해 보세요!</p>
+          <p style="font-size:0.78rem; color:var(--text-sub); margin-bottom:0.85rem;">고른 분야의 문제를 풀고 정답률을 높여 나만의 정육각형 프리즘을 완성해 보세요!</p>
           <canvas id="radarCanvas" width="380" height="320" style="max-width:100%; height:auto;"></canvas>
         </div>
 
@@ -364,7 +364,7 @@
       <div class="glass-card">
         <div class="filter-bar">
           <div>
-            <h3 style="font-size:1.1rem; font-weight:800;">📜 서울문영여자중학교 레벨별 상식 여왕 인증서 보관함</h3>
+            <h3 style="font-size:1.1rem; font-weight:800;">📜 우리 학교 레벨별 상식 여왕 인증서 보관함</h3>
             <p style="font-size:0.8rem; color:var(--text-sub); font-weight:600;">
               목표 레벨(Lv.3, 5, 10, 15, 20, 25, 30)에 도달할 때마다 인증서가 자동 발급되며, 학교 이메일(<code>@smy.ms.kr</code>)로 발송하거나 고화질 이미지로 저장할 수 있습니다.
             </p>
@@ -387,7 +387,7 @@
       <div class="glass-card" style="margin-bottom:1.25rem;">
         <div class="filter-bar">
           <div>
-            <h3 style="font-size:1.1rem; font-weight:800;">🏫 서울문영여자중학교 학급별 상식 대항전 (1-1 ~ 3-4 총 11학급)</h3>
+            <h3 style="font-size:1.1rem; font-weight:800;">🏫 우리 학교 학급별 상식 대항전 (1-1 ~ 3-4 총 11학급)</h3>
             <p style="font-size:0.8rem; color:var(--text-sub); font-weight:600;">
               우리 반 친구들이 함께 푼 총 문제 수, 학급 평균 정확도(%), 평균 연속 도전일, 최강 분야를 비교해 보세요!
             </p>
@@ -432,7 +432,7 @@
       <div class="glass-card">
         <div class="filter-bar">
           <div>
-            <h3 style="font-size:1.1rem; font-weight:800;">👑 문영 퀴즈 퀸즈 개인별 명예의 전당</h3>
+            <h3 style="font-size:1.1rem; font-weight:800;">👑 퀴즈 퀸즈 개인별 명예의 전당</h3>
             <p style="font-size:0.8rem; color:var(--text-sub); font-weight:600;" id="rankingPrivacyNotice">
               🔒 프라이버시 보호: 학생 화면에서는 친구들의 <strong>닉네임만</strong> 표시됩니다. (선생님 관리자 모드에서는 닉네임과 실명이 함께 표시됩니다.)
             </p>
@@ -480,9 +480,9 @@
         <div class="filter-bar" style="margin-bottom:0.65rem;">
           <div>
             <span style="display:inline-block; background:#F59E0B; color:#fff; font-size:0.72rem; font-weight:800; padding:0.18rem 0.55rem; border-radius:999px; margin-bottom:0.3rem;">
-              MOONYOUNG TEACHER ANALYTICS CENTER
+              MYeVerse TEACHER ANALYTICS CENTER
             </span>
-            <h2 style="font-size:1.22rem; font-weight:900;">👩‍🏫 서울문영여자중학교 교사용 통합 통계 & 리포트 센터</h2>
+            <h2 style="font-size:1.22rem; font-weight:900;">👩‍🏫 우리 학교 교사용 통합 통계 & 리포트 센터</h2>
             <p style="font-size:0.8rem; color:#475569; font-weight:600; margin-top:0.15rem;">
               교사 계정에서는 모든 학생의 <strong>닉네임과 실명</strong>을 함께 열람하며, 기간별(오늘·주간·월간·일별·전체) 통계와 리포트를 CSV(엑셀)로 내려받을 수 있습니다.
             </p>
@@ -583,7 +583,7 @@
                   <th>반 정답률</th>
                   <th>평균 레벨</th>
                   <th>평균 연속일</th>
-                  <th>🏫문영</th>
+                  <th>🏫학교</th>
                   <th>📘교과</th>
                   <th>📈경제</th>
                   <th>🌍세계</th>
@@ -602,7 +602,7 @@
         <div class="glass-card">
           <div class="filter-bar">
             <div>
-              <h3 style="font-size:1.08rem; font-weight:800;">📅 서울문영여자중학교 주간 퀴즈 활동 리포트 (최근 7일 vs 이전 7일 비교)</h3>
+              <h3 style="font-size:1.08rem; font-weight:800;">📅 우리 학교 주간 퀴즈 활동 리포트 (최근 7일 vs 이전 7일 비교)</h3>
               <p style="font-size:0.78rem; color:var(--text-sub); font-weight:600;">
                 이번 주 학급별 참여 현황, 주간 우수 참여 학생(닉네임·실명), 학급별 전주 대비 증감을 한눈에 파악합니다.
               </p>
@@ -746,7 +746,7 @@
                   <th>기간 내 풀이</th>
                   <th>누적 풀이</th>
                   <th>정답률</th>
-                  <th>🏫문영</th>
+                  <th>🏫학교</th>
                   <th>📘교과</th>
                   <th>📈경제</th>
                   <th>🌍세계</th>
@@ -836,7 +836,7 @@
                 class="login-input"
                 rows="4"
                 style="resize:vertical; font-family:monospace; font-size:0.8rem; margin-bottom:0.65rem;"
-                placeholder="예시:&#10;202610101, 김문영&#10;202610102, 이수빈&#10;202610201@smy.ms.kr, 박하은"
+                placeholder="예시:&#10;202610101, 김하늘&#10;202610102, 이수빈&#10;202610201@smy.ms.kr, 박하은"
               ></textarea>
               <div style="display:flex; justify-content:flex-end;">
                 <button type="button" class="btn-primary" onclick="saveStudentRosterFromText()">💾 학생 명단 저장하기</button>
@@ -1070,7 +1070,7 @@
       <div style="font-size:2.8rem; margin-bottom:0.25rem;">👑</div>
       <h2 style="font-size:1.35rem; font-weight:900; color:#92400E;">왕관 찬스 발동! 마스코트를 선택하세요!</h2>
       <p style="font-size:0.84rem; color:var(--text-sub); font-weight:600; margin-top:0.2rem;">
-        원하는 분야의 문영 퀸 마스코트를 선택해 도감에 추가하고 보너스 경험치(<strong>+30 XP</strong>)를 받으세요!
+        원하는 분야의 퀸 마스코트를 선택해 도감에 추가하고 보너스 경험치(<strong>+30 XP</strong>)를 받으세요!
       </p>
 
       <div class="crown-select-grid" id="crownSelectGrid"></div>
@@ -1083,7 +1083,7 @@
   <div id="certificateModal" class="modal-backdrop hidden">
     <div class="cert-modal-card">
       <h2 id="certModalHeading" style="font-size:1.28rem; font-weight:900; color:var(--primary);">
-        🎊 축하합니다! 서울문영여자중학교 상식 여왕 레벨 인증서
+        🎊 축하합니다! 우리 학교 상식 여왕 레벨 인증서
       </h2>
       <p id="certModalSub" style="font-size:0.82rem; color:var(--text-sub); font-weight:600; margin-top:0.2rem;">
         아래 인증서를 이미지 파일(PNG)로 저장하거나 학교 구글 이메일(@smy.ms.kr)로 즉시 발송할 수 있습니다.
@@ -1106,14 +1106,14 @@
   </div>
 
   <!-- ========================================================================
-       [신규] 문영 8대 퀸 마스터리 도감 & 무한 회차 모달
+       [신규] 8대 퀸 마스터리 도감 & 무한 회차 모달
        ======================================================================== -->
   <div id="mascotBookModal" class="modal-backdrop hidden">
     <div class="quiz-modal-card" style="max-width:800px; width:94%; max-height:88vh; display:flex; flex-direction:column; padding:1.5rem; text-align:left;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.75rem;">
         <div>
           <h2 style="font-size:1.35rem; font-weight:900; color:#1E1B4B; margin:0; display:flex; align-items:center; gap:0.4rem;">
-            📖 문영 8대 퀸 마스터리 도감
+            📖 8대 퀸 마스터리 도감
           </h2>
           <div id="mascotBookGrandTitle" style="font-size:0.95rem; font-weight:800; color:#B45309; margin-top:0.25rem;"></div>
           <div id="mascotBookGrandSub" style="font-size:0.78rem; color:#64748B; font-weight:600; margin-top:0.15rem;"></div>
@@ -1138,6 +1138,7 @@
   <!-- 스크립트 로드 -->
   <script src="questions.js?v=17"></script>
   <script src="app.js?v=20"></script>
-<script src="../assets/my-apps.js?v=2" defer></script>
+<script src="../assets/my-apps.js?v=3" defer></script>
+<script src="../assets/myeverse-brand.js?v=3" defer></script>
 </body>
 </html>

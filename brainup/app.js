@@ -303,7 +303,7 @@
   }
   function shareDaily(d10) {
     var okN = d10.filter(function (x) { return x === 1; }).length;
-    var txt = "🧠 MY Brain Up " + kday().slice(5).replace("-", "/") + " 오늘의 10문제 " + okN + "/10\n" + d10.map(function (x) { return x === 1 ? "🟩" : "🟥"; }).join("") + "\n#BrainUp #MOONYOUNG";
+    var txt = "🧠 MY Brain Up " + kday().slice(5).replace("-", "/") + " 오늘의 10문제 " + okN + "/10\n" + d10.map(function (x) { return x === 1 ? "🟩" : "🟥"; }).join("") + "\n#BrainUp #MYeVerse";
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast("복사했어요! 친구에게 붙여 넣어 보세요."); }, function () { prompt("복사해서 쓰세요", txt); });
   }
 
@@ -470,7 +470,7 @@
     window.scrollTo(0, 0);
     $("#again").onclick = function () { startPlay(play.mode, play.qtype); };
     $("#share").onclick = function () {
-      var txt = "🧠 MY Brain Up " + label + " " + s.ok + "/" + s.n + " (" + rate + "%)\n" + row + "\n#BrainUp #MOONYOUNG";
+      var txt = "🧠 MY Brain Up " + label + " " + s.ok + "/" + s.n + " (" + rate + "%)\n" + row + "\n#BrainUp #MYeVerse";
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast("복사했어요! 친구에게 붙여 넣어 보세요."); }, function () { prompt("복사해서 쓰세요", txt); });
     };
   }
@@ -509,8 +509,8 @@
       txt("국어·문학, 영어, 수학, 사회·역사, 과학, 예술·체육, 경제·시사, IT·미래기술", W / 2, 690, 28, "#1c2233", 500);
       txt("8개 분야의 문제를 모두 " + Math.round(TIERS[level].at * 100) + "% 이상 정복하여 이 인증서를 드립니다.", W / 2, 740, 30, "#1c2233", 600);
       txt(kday().replace(/-/g, ". ") + ".", W / 2, 840, 28, "#6a6f80", 500);
-      txt("Seoul MOONYOUNG Girls' Middle School", W / 2, 950, 30, "#1e3768", 700, "Georgia, serif");
-      txt("서울문영여자중학교", W / 2, 995, 26, "#1e3768", 600);
+      txt("MYeVerse · My English Universe", W / 2, 950, 30, "#1e3768", 700, "Georgia, serif");
+      txt("나만의 영어 우주", W / 2, 995, 26, "#1e3768", 600);
       var a = document.createElement("a");
       a.href = cv.toDataURL("image/png"); a.download = "BrainUp_" + Q.en.replace(/ /g, "_") + "_" + kday() + ".png"; a.click();
       toast("📜 인증서를 내려받았어요!");
@@ -1120,7 +1120,7 @@
   function posterHtml(bg) {
     var M = morning(), showM = PZ.morning && M.on;
     return '<div class="pz' + (bg ? " has-bg" : "") + '"' + (bg ? ' style="background-image:url(' + bg + ')"' : "") + ">" +
-      '<div class="pz-top"><img src="../assets/myeverse/logo.svg" alt=""><div><b>MOONYOUNG</b><span>MY Brain Up 🧠</span></div></div>' +
+      '<div class="pz-top"><img src="../assets/myeverse/logo.svg" alt=""><div><b>MYeVerse</b><span>MY Brain Up 🧠</span></div></div>' +
       '<div class="pz-head">' + (PZ.sub ? '<div class="pz-kicker">' + esc(PZ.sub) + "</div>" : "") + "<h1>🧠 " + esc(PZ.title) + '</h1><div class="pz-en">Today\'s Brain Up · 10 Questions a Day</div></div>' +
       '<div class="pz-qrcard"><div class="pz-qr">' + qrSvg(dailyUrl()) + '</div><div class="pz-scan">📱 카메라로 찍고 바로 도전!</div></div>' +
       (showM ? '<div class="pz-bonus">🌅 아침 <b>' + esc(M.from) + "~" + esc(M.to) + "</b>에 끝내면 <b>+" + M.pts + "점</b> 보너스!" + (M.weekdays ? " <small>(평일)</small>" : "") + "</div>" : "") +
