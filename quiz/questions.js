@@ -297,10 +297,10 @@ const DEFAULT_QUESTIONS = [
     id: 'sch_19',
     category: 'school',
     difficulty: '보통',
-    question: '우리 학교 피구반 동아리의 이름은 무엇일까요?',
-    options: ['스파이크', '퉁키스', '피구퀸즈', '썬더볼'],
-    answer: 2,
-    explanation: '피구반 동아리 이름은 만화 피구왕 통키에서 착안한 "퉁키스"입니다. 춘계 스포츠 페스티벌에서도 학년별 피구 리그전이 열립니다!'
+    question: '우리 학교 퀴즈반 동아리의 이름은 무엇일까요?',
+    options: ['스파이크', '퉁키스', '퀴즈퀸즈', '썬더볼'],
+    answer: 3,
+    explanation: '퀴즈반 동아리의 이름은 "퀴즈퀸즈"입니다.'
   },
   {
     id: 'sch_20',
