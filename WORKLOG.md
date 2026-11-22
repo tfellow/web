@@ -27,3 +27,5 @@
 - 2026-11-22 · Claude · myeverse · (선생님 요청) 학생용 기본 탭을 '학생용 전체'로, MY Cloze 카드를 읽기 → 말하기·쓰기로 옮김 · 이 커밋
 
 - 2026-11-22 · Claude · (저장소 전체) · 여러 AI 작업 규칙(`AGENTS.md`), 담당표(`TEAM.md`), 이 기록 파일, Gemini용 `GEMINI.md`를 만듦 · 이 커밋
+
+- 2026-11-22 Claude: class123 header + login 🌱 icon → MYeVerse logo (bae7731), at Rainbow's request.
