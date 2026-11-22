@@ -6,9 +6,9 @@ const subjectButtons = [...document.querySelectorAll('[data-subject]')];
 const sections = [...document.querySelectorAll('[data-domain-section]')];
 const search = document.getElementById('app-search');
 let audience = 'student';
-let subject = 'english';
+let subject = 'all';
 let category = 'all';
-let lastStudentSubject = 'english';
+let lastStudentSubject = 'all';
 const domainNames = { english:'영어 학습', subjects:'다른 교과', knowledge:'상식·퀴즈', all:'전체 영역', teacher:'수업·관리 도구' };
 function filterApps() {
   const words = search.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);

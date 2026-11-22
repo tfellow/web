@@ -11,7 +11,7 @@
 <title>MYeVerse · 나만의 배움 세계</title>
 <link rel="icon" href="./logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css?v=2">
-<script defer src="./app.js?v=2"></script>
+<script defer src="./app.js?v=3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -52,7 +52,7 @@
   <section class="explore wrap" id="explore" aria-labelledby="explore-title">
  <div class="section-heading"><div><p class="eyebrow">FIND YOUR NEXT STEP</p><h2 id="explore-title">누구의 배움을 찾고 있나요?</h2></div><label class="search-box"><span class="sr-only">선택한 영역에서 앱 검색</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input id="app-search" type="search" placeholder="선택한 영역에서 앱 검색" autocomplete="off"></label></div>
  <div class="audience-switch" role="group" aria-label="이용 대상 선택"><button type="button" data-audience="student" class="audience-button active" aria-pressed="true"><strong>학생용</strong><span>배우고 · 연습하고 · 도전하기</span></button><button type="button" data-audience="teacher" class="audience-button" aria-pressed="false"><strong>교사용</strong><span>수업 준비 · 과제 · 학급 관리</span></button></div>
- <div class="discovery-controls"><div class="subject-bar" id="subject-bar" role="group" aria-label="학습 영역 선택"><button type="button" data-subject="english" class="subject-button active" aria-pressed="true">영어 학습</button><button type="button" data-subject="subjects" class="subject-button" aria-pressed="false">다른 교과</button><button type="button" data-subject="knowledge" class="subject-button" aria-pressed="false">상식·퀴즈</button><button type="button" data-subject="all" class="subject-button" aria-pressed="false">학생용 전체</button></div>
+ <div class="discovery-controls"><div class="subject-bar" id="subject-bar" role="group" aria-label="학습 영역 선택"><button type="button" data-subject="english" class="subject-button" aria-pressed="false">영어 학습</button><button type="button" data-subject="subjects" class="subject-button" aria-pressed="false">다른 교과</button><button type="button" data-subject="knowledge" class="subject-button" aria-pressed="false">상식·퀴즈</button><button type="button" data-subject="all" class="subject-button active" aria-pressed="true">학생용 전체</button></div>
  <div class="filter-bar" role="group" aria-label="세부 분야 선택"><button type="button" class="filter active" data-filter="all" aria-pressed="true">전체 분야</button><button type="button" class="filter topic-filter" data-filter="reading" aria-pressed="false">읽기</button>
 <button type="button" class="filter topic-filter" data-filter="vocabulary" aria-pressed="false">어휘 공부</button>
 <button type="button" class="filter topic-filter" data-filter="grammar" aria-pressed="false">문법</button>
@@ -66,10 +66,10 @@
 <button type="button" class="filter topic-filter" data-filter="lessons" aria-pressed="false" hidden>영어 수업·과제</button>
 <button type="button" class="filter topic-filter" data-filter="hosting" aria-pressed="false" hidden>퀴즈·수업 진행</button>
 <button type="button" class="filter topic-filter" data-filter="management" aria-pressed="false" hidden>학습·학급 관리</button></div></div>
- <div class="results-meta"><p id="result-count" role="status" aria-live="polite">학생용 · 영어 학습 · 14개 앱</p><p id="scope-note">로그인은 각 앱에서도 할 수 있어요.</p></div>
+ <div class="results-meta"><p id="result-count" role="status" aria-live="polite">학생용 · 전체 영역 · 19개 앱</p><p id="scope-note">로그인은 각 앱에서도 할 수 있어요.</p></div>
  <div id="app-sections"><section class="domain-section" data-domain-section="english" data-role="student" aria-labelledby="domain-english">
  <div class="domain-heading"><div><span class="domain-eyebrow">ENGLISH</span><h3 id="domain-english">영어 학습</h3></div><p>읽기부터 어휘 공부, 표현과 게임까지. 하고 싶은 활동을 골라 보세요.</p></div>
- <section class="app-group" data-group="reading" aria-labelledby="group-english-reading"><div class="group-heading"><div><h4 id="group-english-reading">읽기 <span class="group-count">4</span></h4><p>책과 글을 읽으며 영어의 맥락을 만나요.</p></div></div><div class="app-grid"><article class="app-card" data-app="reading-passport" data-role="student" data-domain="english" data-topic="reading" data-search="영어 독해 문학 독서">
+ <section class="app-group" data-group="reading" aria-labelledby="group-english-reading"><div class="group-heading"><div><h4 id="group-english-reading">읽기 <span class="group-count">3</span></h4><p>책과 글을 읽으며 영어의 맥락을 만나요.</p></div></div><div class="app-grid"><article class="app-card" data-app="reading-passport" data-role="student" data-domain="english" data-topic="reading" data-search="영어 독해 문학 독서">
   <div class="card-top"><img class="app-art" src="./assets/reading-passport.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">읽기</span></div>
   <h5><a href="https://tfellow.github.io/web/app/">MY Reading Passport</a></h5>
   <p class="app-subtitle">독서 여권</p><p class="app-description">세계문학 523권을 읽고 퀴즈 메달을 모아요. 세계 문학 지도와 명예의 전당도 만나요.</p>
@@ -86,12 +86,6 @@
   <h5><a href="https://tfellow.github.io/web/metro/">MY Reading Metro</a></h5>
   <p class="app-subtitle">교과서 메트로</p><p class="app-description">YBM·NE능률·천재 중1·2, 공통영어 1·2의 본문을 12개 노선·91개 역으로 읽어요.</p>
   <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
-</article>
-<article class="app-card" data-app="cloze" data-role="student" data-domain="english" data-topic="reading" data-search="영어 읽기 빈칸 과제 코드 참여">
-  <div class="card-top"><img class="app-art" src="./assets/cloze.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">읽기</span></div>
-  <h5><a href="https://tfellow.github.io/web/cloze/">MY Cloze</a></h5>
-  <p class="app-subtitle">빈칸·문장 순서 활동</p><p class="app-description">6자리 코드로 참여해 빈칸 채우기·문장 순서 테스트를 풀어요.</p>
-  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
 </article></div></section>
 <section class="app-group" data-group="vocabulary" aria-labelledby="group-english-vocabulary"><div class="group-heading"><div><h4 id="group-english-vocabulary">어휘 공부 <span class="group-count">1</span></h4><p>뜻을 익히고, 기억하고, 다시 복습해요.</p></div><button type="button" class="related-link" data-jump-topic="games">어휘 게임도 함께 보기</button></div><div class="app-grid"><article class="app-card" data-app="word-forest" data-role="student" data-domain="english" data-topic="vocabulary" data-search="영어 어휘 단어 공부 암기 복습">
   <div class="card-top"><img class="app-art" src="./assets/word-forest.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">어휘 공부</span></div>
@@ -105,7 +99,7 @@
   <p class="app-subtitle">문법 학습실</p><p class="app-description">18단원을 학습하고 반복 복습하며 Grammar Queen에 도전해요.</p>
   <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
 </article></div></section>
-<section class="app-group" data-group="expression" aria-labelledby="group-english-expression"><div class="group-heading"><div><h4 id="group-english-expression">말하기·쓰기 <span class="group-count">2</span></h4><p>듣고 말하고 쓰며 내 생각을 표현해요.</p></div></div><div class="app-grid"><article class="app-card" data-app="speaking" data-role="student" data-domain="english" data-topic="expression" data-search="영어 듣기 말하기 발음 대화">
+<section class="app-group" data-group="expression" aria-labelledby="group-english-expression"><div class="group-heading"><div><h4 id="group-english-expression">말하기·쓰기 <span class="group-count">3</span></h4><p>듣고 말하고 쓰며 내 생각을 표현해요.</p></div></div><div class="app-grid"><article class="app-card" data-app="speaking" data-role="student" data-domain="english" data-topic="expression" data-search="영어 듣기 말하기 발음 대화">
   <div class="card-top"><img class="app-art" src="./assets/speaking.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">말하기·쓰기</span></div>
   <h5><a href="https://tfellow.github.io/web/speaking/">MY Speaking</a></h5>
   <p class="app-subtitle">말하기 연습</p><p class="app-description">교과서 대화문을 듣고 따라 말해요. 목소리는 저장하지 않아요.</p>
@@ -115,6 +109,12 @@
   <div class="card-top"><img class="app-art" src="./assets/writing.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">말하기·쓰기</span></div>
   <h5><a href="https://tfellow.github.io/web/writing1/">MY Writing Tutor</a></h5>
   <p class="app-subtitle">영작문과 피드백</p><p class="app-description">한국어 제시문을 영어로 쓰면 Gemini가 채점하고 피드백을 제공해요.</p>
+  <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
+</article>
+<article class="app-card" data-app="cloze" data-role="student" data-domain="english" data-topic="expression" data-search="영어 쓰기 읽기 빈칸 과제 코드 참여">
+  <div class="card-top"><img class="app-art" src="./assets/cloze.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">말하기·쓰기</span></div>
+  <h5><a href="https://tfellow.github.io/web/cloze/">MY Cloze</a></h5>
+  <p class="app-subtitle">빈칸·문장 순서 활동</p><p class="app-description">6자리 코드로 참여해 빈칸 채우기·문장 순서 테스트를 풀어요.</p>
   <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
 </article></div></section>
 <section class="app-group" data-group="games" aria-labelledby="group-english-games"><div class="group-heading"><div><h4 id="group-english-games">영어 게임 <span class="group-count">4</span></h4><p>익힌 어휘와 문장을 게임으로 다시 연습해요.</p></div><button type="button" class="related-link" data-jump-topic="vocabulary">어휘 공부부터 시작하기</button></div><div class="app-grid"><article class="app-card" data-app="word-arcade" data-role="student" data-domain="english" data-topic="games" data-search="영어 어휘 단어 게임 복습">
@@ -154,7 +154,7 @@
   <div class="card-bottom"><span>앱 열기</span><span class="card-spark" aria-hidden="true">✦</span></div>
 </article></div></section>
 </section>
-<section class="domain-section" data-domain-section="subjects" data-role="student" aria-labelledby="domain-subjects" hidden>
+<section class="domain-section" data-domain-section="subjects" data-role="student" aria-labelledby="domain-subjects">
  <div class="domain-heading"><div><span class="domain-eyebrow">SUBJECT EXPLORER</span><h3 id="domain-subjects">다른 교과</h3></div><p>역사와 문학을 만나며 배움의 세계를 넓혀요.</p></div>
  <section class="app-group" data-group="history" aria-labelledby="group-subjects-history"><div class="group-heading"><div><h4 id="group-subjects-history">역사 <span class="group-count">1</span></h4><p>세계사와 한국사를 탐험하는 교과 학습 공간이에요.</p></div></div><div class="app-grid"><article class="app-card" data-app="history" data-role="student" data-domain="subjects" data-topic="history" data-search="역사 교과 한국사 세계사 사회 박물관">
   <div class="card-top"><img class="app-art" src="./assets/history.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">역사</span></div>
@@ -169,7 +169,7 @@
   <div class="card-bottom"><span>앱 열기</span><a class="guide-link" href="https://tfellow.github.io/web/quizshow/mobile.html">모바일용</a></div>
 </article></div></section>
 </section>
-<section class="domain-section" data-domain-section="knowledge" data-role="student" aria-labelledby="domain-knowledge" hidden>
+<section class="domain-section" data-domain-section="knowledge" data-role="student" aria-labelledby="domain-knowledge">
  <div class="domain-heading"><div><span class="domain-eyebrow">CURIOUS MINDS</span><h3 id="domain-knowledge">상식·함께하는 퀴즈</h3></div><p>새로운 상식을 발견하고 수업 퀴즈에 함께 참여해요.</p></div>
  <section class="app-group" data-group="quiz" aria-labelledby="group-knowledge-quiz"><div class="group-heading"><div><h4 id="group-knowledge-quiz">상식 퀴즈 <span class="group-count">2</span></h4><p>분야를 넘나드는 질문으로 호기심을 넓혀요.</p></div></div><div class="app-grid"><article class="app-card" data-app="brain-up" data-role="student" data-domain="knowledge" data-topic="quiz" data-search="상식 지식 퀴즈">
   <div class="card-top"><img class="app-art" src="./assets/brain-up.jpg" width="112" height="112" loading="lazy" decoding="async" alt=""><span class="card-tag">상식 퀴즈</span></div>
