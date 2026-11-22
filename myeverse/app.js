@@ -167,3 +167,8 @@ logoutButton.addEventListener('click', async () => {
 });
 document.getElementById('close-account').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { if (event.target === dialog && (event.clientX < dialog.getBoundingClientRect().left || event.clientX > dialog.getBoundingClientRect().right || event.clientY < dialog.getBoundingClientRect().top || event.clientY > dialog.getBoundingClientRect().bottom)) dialog.close(); });
+
+// On page load, restore an existing shared login so the button shows "내 계정" right away.
+try {
+  if (Object.keys(localStorage).some(k => /^sb-.*-auth-token$/.test(k))) getAuth().catch(() => {});
+} catch (_) {}

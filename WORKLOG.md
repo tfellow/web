@@ -20,6 +20,7 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-22 · Claude · myeverse · 로그인돼 있어도 첫 화면 버튼이 '로그인'으로 나오던 문제 수정(페이지 열 때 저장된 로그인 확인), app.js?v=4 · 이 커밋
 - 2026-11-22 · Claude · wordarcade · 암호 해독에 키보드 타이핑 추가(글자·⌫·Enter·←/→), 설명서 갱신 · 이 커밋
 - 2026-11-22 · Claude · wordarcade · 스펠 배틀에 키보드 타이핑 추가(타일 글자만, Enter=공격), 결과 화면 버튼 글자 안 보이던 문제(.result .big) 수정, 설명서 갱신 · caa50db
 - 2026-11-22 · Claude · wordarcade · SQL에 표 권한(grant to authenticated) 추가 — 빠져서 로그인해도 '준비 중'만 보였음 · 이 커밋
