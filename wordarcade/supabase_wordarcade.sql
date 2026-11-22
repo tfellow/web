@@ -181,6 +181,10 @@ drop policy if exists wa_ws_del  on public.wa_wordstat;
 create policy wa_ws_read on public.wa_wordstat for select to authenticated using (user_id = auth.uid() or public.is_admin());
 create policy wa_ws_del  on public.wa_wordstat for delete to authenticated using (public.is_admin());
 
+-- 이 프로젝트는 새 표에 권한을 자동으로 주지 않아요 → 로그인한 사용자에게 직접 줘요 (실제 허용 범위는 위 RLS 가 정해요)
+grant select, insert, update, delete on public.wa_settings, public.wa_banks to authenticated;
+grant select, delete on public.wa_plays, public.wa_wordstat to authenticated;
+
 revoke all on function public.wa_submit(jsonb) from anon;
 revoke all on function public.wa_roster() from anon;
 revoke all on function public.wa_word_top(text, text[], int) from anon;

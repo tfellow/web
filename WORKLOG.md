@@ -20,6 +20,7 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-22 · Claude · wordarcade · SQL에 표 권한(grant to authenticated) 추가 — 빠져서 로그인해도 '준비 중'만 보였음 · 이 커밋
 - 2026-11-22 · Claude · myeverse · (선생님 요청) 학생용 기본 탭을 '학생용 전체'로, MY Cloze 카드를 읽기 → 말하기·쓰기로 옮김 · 이 커밋
 
 - 2026-11-22 · Claude · (저장소 전체) · 여러 AI 작업 규칙(`AGENTS.md`), 담당표(`TEAM.md`), 이 기록 파일, Gemini용 `GEMINI.md`를 만듦 · 이 커밋
