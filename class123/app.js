@@ -969,7 +969,7 @@ function ensureLatestUiVersion() {
       } else {
         const iconDiv = document.createElement('div');
         iconDiv.className = 'brand-logo-icon';
-        iconDiv.innerHTML = '<span>🌱</span>';
+        iconDiv.innerHTML = '<img src="../assets/myeverse/logo.svg" alt="MYeVerse">';
         brandLogo.appendChild(iconDiv);
       }
       brandLogo.appendChild(document.createTextNode(' MY Class'));
