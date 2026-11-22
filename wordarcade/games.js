@@ -468,12 +468,17 @@
   // 7) 🔐 크립토그램 (교과서 예문 암호 풀기)
   // ======================================================================
   reg("crypto", {
-    icon: "🔐", name: "암호 해독", desc: "알파벳이 바뀐 교과서 예문을 풀어요", min: 3,
+    icon: "🔐", name: "암호 해독", desc: "알파벳이 바뀐 교과서 예문을 풀어요 (자판 · 타이핑)", min: 3,
     filter: function (it) { var n = WA.tokens(it.ex).length; return n >= 4 && n <= 12; },
     start: function (ctx) {
       var g = this, n = ctx.count >= 30 ? 5 : ctx.count >= 20 ? 4 : 3;
       var list = WA.shuffle(ctx.pool).slice(0, n), i = 0, score = 0, t0 = now(), hints = 0, res = [], totalChecks = 0;
       var ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      // 키보드 타이핑: 지금 화면의 처리 함수로 넘겨요
+      var keyHandler = null;
+      function kd(e) { if (keyHandler) keyHandler(e); }
+      document.addEventListener("keydown", kd);
+      WA.onLeave(function () { keyHandler = null; document.removeEventListener("keydown", kd); });
       function show() {
         if (i >= list.length) return end();
         var it = list[i], plain = it.ex.toUpperCase(), key, ok;
@@ -515,6 +520,35 @@
             if (nxt) cur = nxt;
             render();
           }; });
+          // 타이핑: 글자 = 자판 누르기, ⌫ = 지우고 앞 칸으로, Enter = 확인, ←/→ = 칸 이동
+          var cells = plain.replace(/[^A-Z]/g, "").split("").map(function (p) { return enc[p]; }).filter(function (c) { return !fixed[c]; });
+          function moveCur(step) {
+            if (!cells.length) return;
+            var at = cur ? cells.indexOf(cur) : (step > 0 ? -1 : 0);
+            for (var k = 1; k <= cells.length; k++) { var c = cells[(at + step * k + cells.length * k) % cells.length]; if (c !== cur) { cur = c; break; } }
+            render();
+          }
+          keyHandler = function (e) {
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            var chk = $("#chk"); if (!chk || chk.disabled) return;
+            if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+            var k = e.key;
+            if (/^[a-zA-Z]$/.test(k)) {
+              e.preventDefault();
+              if (!cur) { cur = cells.filter(function (c) { return !guess[c]; })[0] || cells[0]; if (!cur) return; }
+              var b = $('.kb button[data-ch="' + k.toUpperCase() + '"]'); if (b) b.click();
+            } else if (k === "Backspace" || k === "Delete") {
+              e.preventDefault();
+              if (!cur) return;
+              if (!guess[cur] && k === "Backspace") {
+                var at = cells.indexOf(cur), prev = at > 0 ? cells[at - 1] : null;
+                if (prev) { cur = prev; delete guess[prev]; }
+              } else delete guess[cur];
+              render();
+            } else if (k === "Enter") { e.preventDefault(); chk.click(); }
+            else if (k === "ArrowRight") { e.preventDefault(); moveCur(1); }
+            else if (k === "ArrowLeft") { e.preventDefault(); moveCur(-1); }
+          };
           $("#hint").onclick = function () {
             if (!cur) return WA.toast("알고 싶은 칸을 먼저 눌러요");
             Object.keys(guess).forEach(function (c) { if (guess[c] === dec[cur] && c !== cur) delete guess[c]; });
@@ -543,7 +577,7 @@
         }
         render();
       }
-      function end() { ctx.done({ score: score, ms: now() - t0, hints: hints, words: res, extra: { checks: totalChecks }, kpis: [["힌트", hints + "번"]] }); }
+      function end() { keyHandler = null; document.removeEventListener("keydown", kd); ctx.done({ score: score, ms: now() - t0, hints: hints, words: res, extra: { checks: totalChecks }, kpis: [["힌트", hints + "번"]] }); }
       show();
     }
   });
