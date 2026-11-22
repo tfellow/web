@@ -20,6 +20,7 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-22 · Claude · wordarcade · 스펠 배틀에 키보드 타이핑 추가(타일 글자만, Enter=공격), 결과 화면 버튼 글자 안 보이던 문제(.result .big) 수정, 설명서 갱신 · 이 커밋
 - 2026-11-22 · Claude · wordarcade · SQL에 표 권한(grant to authenticated) 추가 — 빠져서 로그인해도 '준비 중'만 보였음 · 이 커밋
 - 2026-11-22 · Claude · myeverse · (선생님 요청) 학생용 기본 탭을 '학생용 전체'로, MY Cloze 카드를 읽기 → 말하기·쓰기로 옮김 · 이 커밋
 

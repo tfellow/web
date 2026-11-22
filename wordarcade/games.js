@@ -375,7 +375,7 @@
   // ======================================================================
   var MONS = ["👾", "🐙", "🦖", "👻", "🐉", "🦂", "🧟", "🐲", "🤖", "🦇"];
   reg("battle", {
-    icon: "⚔️", name: "스펠 배틀", desc: "뜻을 보고 글자 타일로 단어를 만들어 몬스터를 물리쳐요", min: 4,
+    icon: "⚔️", name: "스펠 배틀", desc: "뜻을 보고 글자 타일을 누르거나 타이핑해 몬스터를 물리쳐요", min: 4,
     filter: single,
     start: function (ctx) {
       var g = this, list = pick(ctx), i = 0, hearts = 3, stage = 1, hp, maxHp, dmgTotal = 0, kills = 0, t0 = now(), res = [], lenSum = 0, timer = null, combo = 0;
@@ -396,15 +396,28 @@
           '<div class="fighter" style="position:relative"><div class="small muted">STAGE ' + stage + '</div><div class="av" id="mon">' + MONS[(stage - 1) % MONS.length] + '</div><div class="hp"><i id="hp" style="width:' + (100 * hp / maxHp) + '%"></i></div></div></div>' +
           '<div class="timer"><i id="tm" style="width:100%"></i></div>' +
           '<div class="prompt"><div class="ko">' + esc(WA.ko(it)) + '</div><div class="sub" id="df">' + esc(WA.posKo(it)) + " · " + s.length + '글자 · <a href="#" id="hd">영영풀이 보기</a></div></div>' +
-          '<div class="built" id="bu"></div><div class="tiles" id="tl"></div>' +
+          '<input class="built" id="bu" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" maxlength="' + tiles.length + '" placeholder="눌러서 타이핑" aria-label="단어 입력 (타이핑하거나 아래 타일을 눌러요)"><div class="tiles" id="tl"></div>' +
           '<div class="row-btns c"><button class="btn" id="bk">⌫ 지우기</button><button class="btn" id="cl">↺</button><button class="btn big red" id="atk">⚔️ 공격!</button></div><div class="fb" id="fb"></div></div>';
         WA.bindQuit(ctx, end);
         function draw() {
-          $("#bu").textContent = built.map(function (t) { return t.ch; }).join("") || " ";
+          $("#bu").value = built.map(function (t) { return t.ch; }).join("");
           $("#tl").innerHTML = tiles.map(function (t) { return '<button class="tile" data-k="' + t.k + '"' + (built.indexOf(t) >= 0 ? " disabled" : "") + ">" + t.ch + "</button>"; }).join("");
           $$("#tl .tile").forEach(function (b) { b.onclick = function () { built.push(tiles.filter(function (t) { return t.k === +b.dataset.k; })[0]); draw(); }; });
         }
         draw();
+        // 타이핑: 친 글자를 남은 타일에서 하나씩 가져와요 (타일에 없는 글자는 들어가지 않아요)
+        var bu = $("#bu");
+        bu.oninput = function () {
+          var typed = bu.value.toLowerCase().replace(/[^a-z]/g, ""), next = [], bad = false;
+          typed.split("").forEach(function (ch) {
+            var t = tiles.filter(function (x) { return x.ch === ch && next.indexOf(x) < 0; })[0];
+            if (t) next.push(t); else bad = true;
+          });
+          built = next; draw();
+          if (bad) { bu.classList.remove("shake"); void bu.offsetWidth; bu.classList.add("shake"); }
+        };
+        bu.onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); $("#atk").click(); } else if (e.key === "Escape") { built = []; draw(); } };
+        if (window.matchMedia && matchMedia("(pointer: fine)").matches) bu.focus();
         $("#hd").onclick = function (e) { e.preventDefault(); if (!defShown) { defShown = true; $("#df").innerHTML = esc(WA.def(it)); } };
         $("#bk").onclick = function () { built.pop(); draw(); };
         $("#cl").onclick = function () { built = []; draw(); };
@@ -417,7 +430,7 @@
           var left = 1 - (now() - t1) / LIMIT; var el = $("#tm"); if (el) el.style.width = Math.max(0, left * 100) + "%";
           if (left <= 0) miss("시간이 다 됐어요! 정답은 <b>" + esc(s) + "</b>");
         }, 100);
-        function lock() { clearInterval(timer); $$(".stage button").forEach(function (b) { b.disabled = true; }); }
+        function lock() { clearInterval(timer); $$(".stage button, #bu").forEach(function (b) { b.disabled = true; }); }
         function hit() {
           lock(); combo++;
           var fast = (now() - t1) < 8000, d = s.length * 10 + (fast ? 10 : 0) + (combo >= 3 ? 10 : 0) - (defShown ? 5 : 0);
@@ -436,7 +449,7 @@
         function miss(html) {
           lock(); combo = 0; hearts--; res.push({ w: it.w, ok: false });
           $("#fb").className = "fb bad"; $("#fb").innerHTML = "💥 몬스터의 반격! " + html;
-          $("#bu").textContent = s;
+          $("#bu").value = s;
           i++; setTimeout(show, 2300);
         }
       }
