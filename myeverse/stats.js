@@ -7,7 +7,7 @@
   // [이름, 단위, 더할 항목들]. 첫 줄의 늘어난 수가 🆕 로 나와요. 첫 줄이 그대로면 다음 줄을 봐요.
   const LABELS = {
     'reading-passport': [['책', '권', ['books']], q],
-    'knowledge-passport': [['글', '편', ['texts']]],   // 퀴즈 수는 DB와 글 목록이 맞을 때 넣어요
+    'knowledge-passport': [['글', '편', ['texts']], q],
     'reading-metro': [['역', '개', ['stations']], q],
     'word-forest': words, 'word-arcade': words, 'word-rush': words, 'english-arcade': words,
     'grammar': [['문제', '개', ['questions']]],
