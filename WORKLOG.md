@@ -20,6 +20,8 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-26 · Claude · AGENTS.md · (선생님 요청) `deploy.ps1` 사용 금지 규칙 추가, Antigravity에 전달 · 이 커밋
+
 - 2026-11-26 · Claude · app · MY Reading Passport 47편 추가(카페 27편 + 새 20편: Codex 14·Antigravity 6 초안, Claude 검수), 523→570편, v64, 설명서 갱신 · 이 커밋
 - 2026-11-26 · Claude · reading2 · 새 글 20편 추가(Codex 작성, Claude 검수), 356→376편, v=77, 설명서 숫자 갱신 · 이 커밋
 - 2026-11-25 · Claude · myeverse · (선생님 요청) DB가 356편·3,560문항으로 글 목록과 맞아 지식 여권 퀴즈 수 다시 표시, stats.js?v=3, 자료 수 다시 집계 · 이 커밋
