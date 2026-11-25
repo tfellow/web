@@ -20,6 +20,7 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-26 · Claude · reading2 · 새 글 20편 추가(Codex 작성, Claude 검수), 356→376편, v=77, 설명서 숫자 갱신 · 이 커밋
 - 2026-11-25 · Claude · myeverse · (선생님 요청) DB가 356편·3,560문항으로 글 목록과 맞아 지식 여권 퀴즈 수 다시 표시, stats.js?v=3, 자료 수 다시 집계 · 이 커밋
 - 2026-11-25 · Claude · myeverse, AGENTS.md, .github · (선생님 요청) 앱 카드에 자료 수와 최근 7일 증가 표시, 매일 자동 집계(stats.json), 카드 설명의 고정 숫자 제거 · 이 커밋
 - 2026-11-25 · Claude · reading2 · 새 글 36편 추가(Codex·Antigravity 작성, Claude 검수), 320→356편, v=76, 설명서 숫자 갱신 · 이 커밋

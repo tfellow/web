@@ -142,6 +142,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "shadows",
+  "title": "Shadows",
+  "titleKo": "그림자",
+  "emoji": "☀️",
+  "color": "#263B59",
+  "cefr": "A0",
+  "words": 79,
+  "places": []
+ },
+ {
   "id": "some-kinds-of-dinosaurs",
   "title": "Some Kinds of Dinosaurs",
   "titleKo": "공룡의 몇 가지 종류",
@@ -159,6 +169,16 @@ window.BOOKS = [
   "color": "#1f5f8b",
   "cefr": "A0",
   "words": 71,
+  "places": []
+ },
+ {
+  "id": "trees-and-us",
+  "title": "Trees and Us",
+  "titleKo": "나무와 우리",
+  "emoji": "🌳",
+  "color": "#24543D",
+  "cefr": "A0",
+  "words": 82,
   "places": []
  },
  {
@@ -342,6 +362,16 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "robots",
+  "title": "Robots",
+  "titleKo": "로봇",
+  "emoji": "🤖",
+  "color": "#214A63",
+  "cefr": "A0",
+  "words": 85,
+  "places": []
+ },
+ {
   "id": "technology",
   "title": "Technology",
   "titleKo": "기술",
@@ -472,6 +502,19 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "music-of-cuba",
+  "title": "Music of Cuba",
+  "titleKo": "쿠바의 음악",
+  "country": "Cuba",
+  "emoji": "🎵",
+  "color": "#174D48",
+  "cefr": "A0",
+  "words": 75,
+  "places": [
+   "Cuba"
+  ]
+ },
+ {
   "id": "musical-instruments",
   "title": "Musical Instruments",
   "titleKo": "악기",
@@ -560,6 +603,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "elephants-sri-lanka",
+  "title": "Elephants of Sri Lanka",
+  "titleKo": "스리랑카의 코끼리",
+  "country": "Sri Lanka",
+  "emoji": "🐘",
+  "color": "#285447",
+  "cefr": "A1",
+  "words": 118,
+  "places": [
+   "Sri Lanka"
+  ]
+ },
+ {
   "id": "endangered-animals",
   "title": "Endangered Animals",
   "titleKo": "멸종 위기 동물",
@@ -584,6 +640,16 @@ window.BOOKS = [
   "places": [
    "South Korea"
   ]
+ },
+ {
+  "id": "fireflies",
+  "title": "Fireflies",
+  "titleKo": "반딧불이",
+  "emoji": "✨",
+  "color": "#234437",
+  "cefr": "A1",
+  "words": 119,
+  "places": []
  },
  {
   "id": "how-much-can-an-ant-carry",
@@ -1182,6 +1248,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "hanbok",
+  "title": "Hanbok: Korean Traditional Clothes",
+  "titleKo": "한복, 한국의 전통 옷",
+  "country": "South Korea",
+  "emoji": "👘",
+  "color": "#71345F",
+  "cefr": "A1",
+  "words": 113,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "hanok-koreas-traditional-house",
   "title": "Hanok: Korea's Traditional House",
   "titleKo": "한옥: 한국의 전통 집",
@@ -1284,6 +1363,19 @@ window.BOOKS = [
   "words": 115,
   "places": [
    "South Korea"
+  ]
+ },
+ {
+  "id": "talking-drums",
+  "title": "Talking Drums of Nigeria",
+  "titleKo": "나이지리아의 말하는 북",
+  "country": "Nigeria",
+  "emoji": "🥁",
+  "color": "#194D3D",
+  "cefr": "A1",
+  "words": 117,
+  "places": [
+   "Nigeria"
   ]
  },
  {
@@ -1400,6 +1492,19 @@ window.BOOKS = [
    "United Kingdom",
    "United States",
    "South Korea"
+  ]
+ },
+ {
+  "id": "sahara-desert",
+  "title": "Life in the Sahara",
+  "titleKo": "사하라 사막의 삶",
+  "country": "Algeria",
+  "emoji": "🏜️",
+  "color": "#78451F",
+  "cefr": "A2",
+  "words": 159,
+  "places": [
+   "Algeria"
   ]
  },
  {
@@ -2015,6 +2120,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "sticky-notes",
+  "title": "The Story of Sticky Notes",
+  "titleKo": "붙였다 떼는 메모지 이야기",
+  "country": "United States",
+  "emoji": "📝",
+  "color": "#614319",
+  "cefr": "A2",
+  "words": 157,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "text-messaging",
   "title": "Text Messaging",
   "titleKo": "문자 메시지",
@@ -2052,6 +2170,19 @@ window.BOOKS = [
   "color": "#2a4a7a",
   "cefr": "A2",
   "words": 155,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "amelia-earhart",
+  "title": "Amelia Earhart: Pilot",
+  "titleKo": "아멜리아 에어하트: 비행기 조종사",
+  "country": "United States",
+  "emoji": "✈️",
+  "color": "#204563",
+  "cefr": "A2",
+  "words": 156,
   "places": [
    "United States"
   ]
@@ -2341,6 +2472,19 @@ window.BOOKS = [
   "words": 148,
   "places": [
    "Philippines"
+  ]
+ },
+ {
+  "id": "rose-valley",
+  "title": "The Rose Valley of Bulgaria",
+  "titleKo": "불가리아의 장미 계곡",
+  "country": "Bulgaria",
+  "emoji": "🌹",
+  "color": "#8B234D",
+  "cefr": "A2",
+  "words": 162,
+  "places": [
+   "Bulgaria"
   ]
  },
  {
@@ -2688,6 +2832,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "how-memory-works",
+  "title": "How Memory Works",
+  "titleKo": "기억은 어떻게 작동할까요?",
+  "emoji": "🧠",
+  "color": "#25457A",
+  "cefr": "B1",
+  "words": 222,
+  "places": []
+ },
+ {
   "id": "how-tsunamis-are-made",
   "title": "How Tsunamis Are Made",
   "titleKo": "쓰나미는 어떻게 만들어질까요?",
@@ -2926,6 +3080,32 @@ window.BOOKS = [
    "South Korea",
    "France",
    "Germany"
+  ]
+ },
+ {
+  "id": "phoenicians",
+  "title": "The Phoenicians: Sailors of the Mediterranean",
+  "titleKo": "페니키아인: 지중해의 뱃사람들",
+  "country": "Lebanon",
+  "emoji": "⛵",
+  "color": "#17445C",
+  "cefr": "B1",
+  "words": 232,
+  "places": [
+   "Lebanon"
+  ]
+ },
+ {
+  "id": "prague-clock",
+  "title": "Prague's Astronomical Clock",
+  "titleKo": "프라하의 천문시계",
+  "country": "Czechia",
+  "emoji": "🕰️",
+  "color": "#263B54",
+  "cefr": "B1",
+  "words": 229,
+  "places": [
+   "Czechia"
   ]
  },
  {
@@ -3452,6 +3632,19 @@ window.BOOKS = [
   "words": 223,
   "places": [
    "United Kingdom"
+  ]
+ },
+ {
+  "id": "temple-grandin",
+  "title": "Temple Grandin and the Animals",
+  "titleKo": "템플 그랜딘과 동물들",
+  "country": "United States",
+  "emoji": "🐄",
+  "color": "#24564A",
+  "cefr": "B1",
+  "words": 235,
+  "places": [
+   "United States"
   ]
  },
  {
@@ -3985,6 +4178,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "mars-rovers",
+  "title": "Rovers on Mars",
+  "titleKo": "화성 탐사 로버",
+  "country": "United States",
+  "emoji": "🤖",
+  "color": "#873C2B",
+  "cefr": "B2",
+  "words": 399,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "space-colonies",
   "title": "Space Colonies",
   "titleKo": "우주 식민지",
@@ -4111,6 +4317,21 @@ window.BOOKS = [
   "words": 368,
   "places": [
    "Italy"
+  ]
+ },
+ {
+  "id": "rosetta-stone",
+  "title": "The Rosetta Stone",
+  "titleKo": "로제타석",
+  "country": "Egypt",
+  "emoji": "🪨",
+  "color": "#35454C",
+  "cefr": "B2",
+  "words": 386,
+  "places": [
+   "Egypt",
+   "France",
+   "United Kingdom"
   ]
  },
  {
@@ -4278,6 +4499,16 @@ window.BOOKS = [
   "places": [
    "South Korea"
   ]
+ },
+ {
+  "id": "food-waste",
+  "title": "Food Waste: From Farm to Bin",
+  "titleKo": "음식물 쓰레기: 농장에서 쓰레기통까지",
+  "emoji": "🥕",
+  "color": "#245342",
+  "cefr": "B2",
+  "words": 393,
+  "places": []
  },
  {
   "id": "tea-from-china-to-the-world",
@@ -4472,6 +4703,19 @@ window.BOOKS = [
    "United Kingdom",
    "United States",
    "South Korea"
+  ]
+ },
+ {
+  "id": "georgian-singing",
+  "title": "Three Voices: Singing in Georgia",
+  "titleKo": "세 목소리: 조지아의 노래",
+  "country": "Georgia",
+  "emoji": "🎶",
+  "color": "#344563",
+  "cefr": "B2",
+  "words": 384,
+  "places": [
+   "Georgia"
   ]
  },
  {
