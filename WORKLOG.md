@@ -21,6 +21,7 @@
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
 - 2026-11-25 · Claude · myeverse, AGENTS.md, .github · (선생님 요청) 앱 카드에 자료 수와 최근 7일 증가 표시, 매일 자동 집계(stats.json), 카드 설명의 고정 숫자 제거 · 이 커밋
+- 2026-11-25 · Claude · reading2 · 새 글 36편 추가(Codex·Antigravity 작성, Claude 검수), 320→356편, v=76, 설명서 숫자 갱신 · 이 커밋
 - 2026-11-25 · Claude · reading2 · 새 글 8편 추가(Gemini 초안, Codex 교정, Claude 검수), 312→320편, v=75, 설명서 숫자 갱신 · 이 커밋
 - 2026-11-25 · Claude · reading2 · 새 글 12편 추가(Codex 초안, Claude 검수), 300→312편, v=74, 설명서 숫자 갱신 · 이 커밋
 
