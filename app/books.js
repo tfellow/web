@@ -8470,5 +8470,760 @@ window.BOOKS = [
   "places": [
    "Japan"
   ]
+ },
+ {
+  "id": "apollo-and-daphne",
+  "title": "Apollo and Daphne",
+  "titleKo": "아폴론과 다프네",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🌿",
+  "color": "#4f9463",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 128,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "atalantas-race",
+  "title": "Atalanta’s Race",
+  "titleKo": "아탈란테의 달리기",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🍎",
+  "color": "#c98b2b",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 127,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "baba-yaga-and-the-kind-girl",
+  "title": "Baba Yaga and the Kind Girl",
+  "titleKo": "바바 야가와 착한 소녀",
+  "author": "Slavic Folktale",
+  "authorKo": "슬라브 민담",
+  "country": "Russia",
+  "emoji": "🛖",
+  "color": "#6b4f7d",
+  "cefr": "A1",
+  "lexile": "약 470L",
+  "words": 137,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "bellerophon-and-pegasus",
+  "title": "Bellerophon and Pegasus",
+  "titleKo": "벨레로폰과 페가수스",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🐴",
+  "color": "#5b76b5",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 121,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "how-the-robin-got-its-red-chest",
+  "title": "How the Robin Got Its Red Chest",
+  "titleKo": "울새의 붉은 가슴",
+  "author": "Native American Legend",
+  "authorKo": "아메리카 원주민 전설",
+  "country": "United States",
+  "emoji": "🐦",
+  "color": "#b5483a",
+  "cefr": "A0",
+  "lexile": "약 410L",
+  "words": 99,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "jumong-the-archer-king",
+  "title": "Jumong, the Archer King",
+  "titleKo": "활 잘 쏘는 주몽",
+  "author": "Korean Myth",
+  "authorKo": "한국 신화",
+  "country": "South Korea",
+  "emoji": "🏹",
+  "color": "#3f6f8f",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 128,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "ondal-and-princess-pyeonggang",
+  "title": "Ondal and Princess Pyeonggang",
+  "titleKo": "바보 온달과 평강공주",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🏹",
+  "color": "#a8556b",
+  "cefr": "A1",
+  "lexile": "약 470L",
+  "words": 125,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "sisyphus-and-the-rock",
+  "title": "Sisyphus and the Rock",
+  "titleKo": "시시포스와 바위",
+  "author": "Greek Myth",
+  "authorKo": "그리스 로마 신화",
+  "country": "Greece",
+  "emoji": "🪨",
+  "color": "#70757f",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 128,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-boy-and-the-nuts",
+  "title": "The Boy and the Nuts",
+  "titleKo": "견과류 병에 손을 넣은 소년",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🌰",
+  "color": "#9b6a3a",
+  "cefr": "A0",
+  "lexile": "약 380L",
+  "words": 86,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-bundle-of-sticks",
+  "title": "The Bundle of Sticks",
+  "titleKo": "막대기 한 묶음",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🪵",
+  "color": "#9a6b43",
+  "cefr": "A0",
+  "lexile": "약 380L",
+  "words": 96,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-crane-wife",
+  "title": "The Crane Wife",
+  "titleKo": "두루미 아내",
+  "author": "Japanese Folktale",
+  "authorKo": "일본 민담",
+  "country": "Japan",
+  "emoji": "🕊️",
+  "color": "#7a8fb0",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 150,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-farmer-and-the-snake",
+  "title": "The Farmer and the Snake",
+  "titleKo": "농부와 뱀",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐍",
+  "color": "#5f8a4a",
+  "cefr": "A1",
+  "lexile": "약 440L",
+  "words": 124,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fisherman-and-the-little-fish",
+  "title": "The Fisherman and the Little Fish",
+  "titleKo": "어부와 작은 물고기",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐟",
+  "color": "#3f86b5",
+  "cefr": "A0",
+  "lexile": "약 390L",
+  "words": 87,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-fox-and-the-crow",
+  "title": "The Fox and the Crow",
+  "titleKo": "여우와 까마귀",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🧀",
+  "color": "#c79a2b",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 85,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-gnat-and-the-bull",
+  "title": "The Gnat and the Bull",
+  "titleKo": "각다귀와 황소",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐂",
+  "color": "#8a6248",
+  "cefr": "A0",
+  "lexile": "약 390L",
+  "words": 88,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-great-race-of-the-zodiac",
+  "title": "The Great Race of the Zodiac",
+  "titleKo": "십이지 동물의 큰 달리기",
+  "author": "Chinese Folktale",
+  "authorKo": "중국 민담",
+  "country": "China",
+  "emoji": "🐀",
+  "color": "#b03a3a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 134,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "the-milkmaid-and-her-pail",
+  "title": "The Milkmaid and Her Pail",
+  "titleKo": "우유 짜는 아가씨와 양동이",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🥛",
+  "color": "#6fa8c9",
+  "cefr": "A0",
+  "lexile": "약 380L",
+  "words": 86,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-oak-and-the-reeds",
+  "title": "The Oak and the Reeds",
+  "titleKo": "참나무와 갈대",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🌾",
+  "color": "#6f9a4c",
+  "cefr": "A0",
+  "lexile": "약 420L",
+  "words": 83,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-salmon-of-knowledge",
+  "title": "The Salmon of Knowledge",
+  "titleKo": "지혜의 연어",
+  "author": "Celtic Legend",
+  "authorKo": "켈트 전설",
+  "country": "Ireland",
+  "emoji": "🐠",
+  "color": "#c96f5a",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 129,
+  "places": [
+   "Ireland"
+  ]
+ },
+ {
+  "id": "the-sick-lion",
+  "title": "The Sick Lion",
+  "titleKo": "병든 사자",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🦁",
+  "color": "#b9822f",
+  "cefr": "A1",
+  "lexile": "약 440L",
+  "words": 125,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-story-of-dangun",
+  "title": "The Story of Dangun",
+  "titleKo": "단군 신화",
+  "author": "Korean Myth",
+  "authorKo": "한국 신화",
+  "country": "South Korea",
+  "emoji": "🐻",
+  "color": "#8a5a3c",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 124,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-stubborn-ongojip",
+  "title": "The Stubborn Ongojip",
+  "titleKo": "고집 센 옹고집",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "👥",
+  "color": "#8b6f47",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 123,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-two-goats",
+  "title": "The Two Goats",
+  "titleKo": "두 마리 염소",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐐",
+  "color": "#7d8b6a",
+  "cefr": "A0",
+  "lexile": "약 390L",
+  "words": 87,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-wolf-in-sheeps-clothing",
+  "title": "The Wolf in Sheep’s Clothing",
+  "titleKo": "양의 탈을 쓴 늑대",
+  "author": "Aesop",
+  "authorKo": "이솝",
+  "country": "Greece",
+  "emoji": "🐑",
+  "color": "#8a8f99",
+  "cefr": "A1",
+  "lexile": "약 430L",
+  "words": 124,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "the-woodcutter-and-the-fairy",
+  "title": "The Woodcutter and the Fairy",
+  "titleKo": "선녀와 나무꾼",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🦌",
+  "color": "#7a9e7e",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 141,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "thor-and-the-stolen-hammer",
+  "title": "Thor and the Stolen Hammer",
+  "titleKo": "토르의 망치",
+  "author": "Norse Myth",
+  "authorKo": "북유럽 신화",
+  "country": "Iceland",
+  "emoji": "🔨",
+  "color": "#4a5f8f",
+  "cefr": "A1",
+  "lexile": "약 460L",
+  "words": 128,
+  "places": [
+   "Iceland"
+  ]
+ },
+ {
+  "id": "yeonorang-and-seonyeo",
+  "title": "Yeonorang and Seonyeo",
+  "titleKo": "연오랑과 세오녀",
+  "author": "Korean Folktale",
+  "authorKo": "한국 전래동화",
+  "country": "South Korea",
+  "emoji": "🌞",
+  "color": "#d08a3a",
+  "cefr": "A1",
+  "lexile": "약 450L",
+  "words": 144,
+  "places": [
+   "South Korea",
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-tale-of-benjamin-bunny",
+  "title": "The Tale of Benjamin Bunny",
+  "titleKo": "벤저민 버니 이야기",
+  "author": "Beatrix Potter",
+  "authorKo": "베아트릭스 포터",
+  "country": "United Kingdom",
+  "emoji": "🐰",
+  "color": "#6b8e4e",
+  "cefr": "A0",
+  "lexile": "약 400L",
+  "words": 90,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-tale-of-jemima-puddle-duck",
+  "title": "The Tale of Jemima Puddle-Duck",
+  "titleKo": "제미마 퍼들덕 이야기",
+  "author": "Beatrix Potter",
+  "authorKo": "베아트릭스 포터",
+  "country": "United Kingdom",
+  "emoji": "🦆",
+  "color": "#5b8fa8",
+  "cefr": "A0",
+  "lexile": "약 410L",
+  "words": 97,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "gon-the-little-fox",
+  "title": "Gon, the Little Fox",
+  "titleKo": "아기 여우 곤",
+  "author": "Nankichi Niimi",
+  "authorKo": "니이미 난키치",
+  "country": "Japan",
+  "emoji": "🦊",
+  "color": "#c86d3b",
+  "cefr": "A1",
+  "lexile": "약 490L",
+  "words": 153,
+  "places": [
+   "Japan"
+  ]
+ },
+ {
+  "id": "the-little-fir-tree",
+  "title": "The Little Fir Tree",
+  "titleKo": "작은 전나무",
+  "author": "Hans Christian Andersen",
+  "authorKo": "한스 크리스티안 안데르센",
+  "country": "Denmark",
+  "emoji": "🌲",
+  "color": "#2e6f40",
+  "cefr": "A1",
+  "lexile": "약 480L",
+  "words": 167,
+  "places": [
+   "Denmark"
+  ]
+ },
+ {
+  "id": "the-snow-maiden",
+  "title": "The Snow Maiden",
+  "titleKo": "눈 아가씨",
+  "author": "Russian Folktale",
+  "authorKo": "러시아 민담",
+  "country": "Russia",
+  "emoji": "❄️",
+  "color": "#4f86b5",
+  "cefr": "A1",
+  "lexile": "약 470L",
+  "words": 159,
+  "places": [
+   "Russia"
+  ]
+ },
+ {
+  "id": "king-sejong-and-hangeul",
+  "title": "King Sejong and Hangeul",
+  "titleKo": "세종대왕과 한글",
+  "author": "History",
+  "authorKo": "한국 역사",
+  "country": "South Korea",
+  "emoji": "📜",
+  "color": "#8b6338",
+  "cefr": "A2",
+  "lexile": "약 600L",
+  "words": 209,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "rebecca-of-sunnybrook-farm",
+  "title": "Rebecca of Sunnybrook Farm",
+  "titleKo": "서니브룩 농장의 레베카",
+  "author": "Kate Douglas Wiggin",
+  "authorKo": "케이트 더글러스 위긴",
+  "country": "United States",
+  "emoji": "🌻",
+  "color": "#d48c3b",
+  "cefr": "A2",
+  "lexile": "약 580L",
+  "words": 215,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "rikki-tikki-tavi",
+  "title": "Rikki-Tikki-Tavi",
+  "titleKo": "리키티키타비",
+  "author": "Rudyard Kipling",
+  "authorKo": "러디어드 키플링",
+  "country": "United Kingdom",
+  "emoji": "🐍",
+  "color": "#587a48",
+  "cefr": "A2",
+  "lexile": "약 580L",
+  "words": 204,
+  "places": [
+   "United Kingdom",
+   "India"
+  ]
+ },
+ {
+  "id": "run-melos",
+  "title": "Run, Melos!",
+  "titleKo": "달려라 메로스",
+  "author": "Osamu Dazai",
+  "authorKo": "다자이 오사무",
+  "country": "Japan",
+  "emoji": "🏃",
+  "color": "#bb5b3d",
+  "cefr": "A2",
+  "lexile": "약 620L",
+  "words": 213,
+  "places": [
+   "Japan",
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-tale-of-chunhyang",
+  "title": "The Tale of Chunhyang",
+  "titleKo": "춘향전",
+  "author": "Korean Classic",
+  "authorKo": "한국 고전",
+  "country": "South Korea",
+  "emoji": "🌸",
+  "color": "#a65372",
+  "cefr": "A2",
+  "lexile": "약 610L",
+  "words": 209,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-tale-of-hong-gildong",
+  "title": "The Tale of Hong Gildong",
+  "titleKo": "홍길동전",
+  "author": "Heo Gyun",
+  "authorKo": "허균",
+  "country": "South Korea",
+  "emoji": "🏹",
+  "color": "#4a6fa5",
+  "cefr": "A2",
+  "lexile": "약 590L",
+  "words": 209,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "a-retrieved-reformation",
+  "title": "A Retrieved Reformation",
+  "titleKo": "되찾은 삶",
+  "author": "O. Henry",
+  "authorKo": "오 헨리",
+  "country": "United States",
+  "emoji": "🔐",
+  "color": "#6c5c8d",
+  "cefr": "B1",
+  "lexile": "약 800L",
+  "words": 298,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "frederick-douglass",
+  "title": "Narrative of the Life of Frederick Douglass",
+  "titleKo": "프레더릭 더글러스의 삶 이야기",
+  "author": "Frederick Douglass",
+  "authorKo": "프레더릭 더글러스",
+  "country": "United States",
+  "emoji": "📖",
+  "color": "#805f44",
+  "cefr": "B1",
+  "lexile": "약 820L",
+  "words": 274,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "spring-spring",
+  "title": "Spring, Spring",
+  "titleKo": "봄·봄",
+  "author": "Kim Yu-jeong",
+  "authorKo": "김유정",
+  "country": "South Korea",
+  "emoji": "🌱",
+  "color": "#64814f",
+  "cefr": "B1",
+  "lexile": "약 760L",
+  "words": 267,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "the-blue-carbuncle",
+  "title": "The Blue Carbuncle",
+  "titleKo": "푸른 카벙클",
+  "author": "Arthur Conan Doyle",
+  "authorKo": "아서 코넌 도일",
+  "country": "United Kingdom",
+  "emoji": "💎",
+  "color": "#356f9c",
+  "cefr": "B1",
+  "lexile": "약 790L",
+  "words": 290,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "the-invisible-man",
+  "title": "The Invisible Man",
+  "titleKo": "투명 인간",
+  "author": "H. G. Wells",
+  "authorKo": "H. G. 웰스",
+  "country": "United Kingdom",
+  "emoji": "👓",
+  "color": "#4a6fa5",
+  "cefr": "B1",
+  "lexile": "약 790L",
+  "words": 278,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "a-hunger-artist",
+  "title": "A Hunger Artist",
+  "titleKo": "단식 예술가",
+  "author": "Franz Kafka",
+  "authorKo": "프란츠 카프카",
+  "country": "Czechia",
+  "emoji": "🎪",
+  "color": "#575b70",
+  "cefr": "B2",
+  "lexile": "약 970L",
+  "words": 382,
+  "places": [
+   "Czechia"
+  ]
+ },
+ {
+  "id": "dream-of-the-red-chamber",
+  "title": "Dream of the Red Chamber",
+  "titleKo": "홍루몽",
+  "author": "Cao Xueqin",
+  "authorKo": "조설근",
+  "country": "China",
+  "emoji": "🌸",
+  "color": "#a25c68",
+  "cefr": "B2",
+  "lexile": "약 1010L",
+  "words": 391,
+  "places": [
+   "China"
+  ]
+ },
+ {
+  "id": "oedipus-the-king",
+  "title": "Oedipus the King",
+  "titleKo": "오이디푸스 왕",
+  "author": "Sophocles",
+  "authorKo": "소포클레스",
+  "country": "Greece",
+  "emoji": "🏛️",
+  "color": "#76629b",
+  "cefr": "B2",
+  "lexile": "약 990L",
+  "words": 385,
+  "places": [
+   "Greece"
+  ]
+ },
+ {
+  "id": "silas-marner",
+  "title": "Silas Marner",
+  "titleKo": "사일러스 마너",
+  "author": "George Eliot",
+  "authorKo": "조지 엘리엇",
+  "country": "United Kingdom",
+  "emoji": "🧵",
+  "color": "#56776b",
+  "cefr": "B2",
+  "lexile": "약 940L",
+  "words": 384,
+  "places": [
+   "United Kingdom"
+  ]
  }
 ];
