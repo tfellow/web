@@ -49,6 +49,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "animals-of-the-savanna",
+  "title": "Animals of the Savanna",
+  "titleKo": "사바나의 동물들",
+  "country": "Kenya",
+  "emoji": "🦁",
+  "color": "#8B4513",
+  "cefr": "A0",
+  "words": 79,
+  "places": [
+   "Kenya"
+  ]
+ },
+ {
   "id": "butterflies",
   "title": "Butterflies",
   "titleKo": "나비",
@@ -543,6 +556,19 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "iceland-fire-and-ice",
+  "title": "Iceland: Land of Fire and Ice",
+  "titleKo": "아이슬란드: 불과 얼음의 땅",
+  "country": "Iceland",
+  "emoji": "🌋",
+  "color": "#243B63",
+  "cefr": "A1",
+  "words": 111,
+  "places": [
+   "Iceland"
+  ]
+ },
+ {
   "id": "lightning-and-thunder",
   "title": "Lightning and Thunder",
   "titleKo": "번개와 천둥",
@@ -890,6 +916,19 @@ window.BOOKS = [
   "places": [
    "South Korea",
    "Mexico"
+  ]
+ },
+ {
+  "id": "pho-a-bowl-of-vietnam",
+  "title": "Pho: A Bowl of Vietnam",
+  "titleKo": "포: 한 그릇에 담긴 베트남",
+  "country": "Vietnam",
+  "emoji": "🍜",
+  "color": "#8B4513",
+  "cefr": "A1",
+  "words": 115,
+  "places": [
+   "Vietnam"
   ]
  },
  {
@@ -2047,6 +2086,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "rice-terraces-philippines",
+  "title": "The Rice Terraces of the Philippines",
+  "titleKo": "필리핀의 계단식 논",
+  "country": "Philippines",
+  "emoji": "🌾",
+  "color": "#245335",
+  "cefr": "A2",
+  "words": 148,
+  "places": [
+   "Philippines"
+  ]
+ },
+ {
   "id": "taekwondo-belts-and-uniforms",
   "title": "Taekwondo Belts and Uniforms",
   "titleKo": "태권도 띠와 도복",
@@ -2319,6 +2371,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "earworms",
+  "title": "Why Songs Get Stuck in Your Head",
+  "titleKo": "노래는 왜 머릿속에서 맴돌까요?",
+  "emoji": "🎶",
+  "color": "#2c3e50",
+  "cefr": "B1",
+  "words": 230,
+  "places": []
+ },
+ {
   "id": "el-ni-o",
   "title": "El Niño",
   "titleKo": "엘니뇨",
@@ -2431,6 +2493,16 @@ window.BOOKS = [
   "color": "#2f6b3a",
   "cefr": "B1",
   "words": 237,
+  "places": []
+ },
+ {
+  "id": "teenagers-sleep",
+  "title": "Why Do Teenagers Need More Sleep?",
+  "titleKo": "청소년은 왜 잠을 더 많이 자야 할까요?",
+  "emoji": "😴",
+  "color": "#2C3E50",
+  "cefr": "B1",
+  "words": 254,
   "places": []
  },
  {
@@ -3159,6 +3231,19 @@ window.BOOKS = [
   "words": 230,
   "places": [
    "Greece"
+  ]
+ },
+ {
+  "id": "sauna-finland",
+  "title": "Sauna: The Heart of Finland",
+  "titleKo": "사우나, 핀란드 문화의 중심",
+  "country": "Finland",
+  "emoji": "🧖",
+  "color": "#2C3E50",
+  "cefr": "B1",
+  "words": 260,
+  "places": [
+   "Finland"
   ]
  },
  {
@@ -4020,6 +4105,16 @@ window.BOOKS = [
   "color": "#4f8a3c",
   "cefr": "B2",
   "words": 399,
+  "places": []
+ },
+ {
+  "id": "fast-fashion",
+  "title": "Fast Fashion: The True Cost of a T-shirt",
+  "titleKo": "패스트 패션: 티셔츠 한 장의 진짜 대가",
+  "emoji": "👕",
+  "color": "#2E4053",
+  "cefr": "B2",
+  "words": 381,
   "places": []
  }
 ];
