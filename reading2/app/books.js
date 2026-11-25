@@ -422,6 +422,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "tulips-and-windmills",
+  "title": "Tulips and Windmills",
+  "titleKo": "튤립과 풍차",
+  "country": "Netherlands",
+  "emoji": "🌷",
+  "color": "#215B47",
+  "cefr": "A0",
+  "words": 78,
+  "places": [
+   "Netherlands"
+  ]
+ },
+ {
   "id": "recycling",
   "title": "Let's Recycle!",
   "titleKo": "분리배출을 해요!",
@@ -960,6 +973,32 @@ window.BOOKS = [
   "words": 119,
   "places": [
    "United States"
+  ]
+ },
+ {
+  "id": "jane-goodall",
+  "title": "Jane Goodall and the Chimpanzees",
+  "titleKo": "제인 구달과 침팬지들",
+  "country": "United Kingdom",
+  "emoji": "🐵",
+  "color": "#24543C",
+  "cefr": "A1",
+  "words": 120,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
+  "id": "jang-yeong-sil",
+  "title": "Jang Yeong-sil, the Inventor",
+  "titleKo": "발명가 장영실",
+  "country": "South Korea",
+  "emoji": "⏳",
+  "color": "#24465C",
+  "cefr": "A1",
+  "words": 112,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -1907,6 +1946,32 @@ window.BOOKS = [
   "words": 158,
   "places": [
    "Spain"
+  ]
+ },
+ {
+  "id": "wangari-maathai",
+  "title": "Wangari Maathai: The Woman Who Planted Trees",
+  "titleKo": "왕가리 마타이: 나무를 심은 여성",
+  "country": "Kenya",
+  "emoji": "🌳",
+  "color": "#24573B",
+  "cefr": "A2",
+  "words": 158,
+  "places": [
+   "Kenya"
+  ]
+ },
+ {
+  "id": "yu-gwan-sun",
+  "title": "Yu Gwan-sun: A Voice for Independence",
+  "titleKo": "유관순: 독립을 외친 목소리",
+  "country": "South Korea",
+  "emoji": "📣",
+  "color": "#244365",
+  "cefr": "A2",
+  "words": 153,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -2878,6 +2943,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "katherine-johnson",
+  "title": "Hidden Figures: Katherine Johnson",
+  "titleKo": "히든 피겨스: 캐서린 존슨",
+  "country": "United States",
+  "emoji": "🚀",
+  "color": "#243B65",
+  "cefr": "B1",
+  "words": 223,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "malala-yousafzai",
   "title": "Malala Yousafzai",
   "titleKo": "말랄라 유사프자이",
@@ -2998,6 +3076,19 @@ window.BOOKS = [
   "places": [
    "Venezuela",
    "United States",
+   "South Korea"
+  ]
+ },
+ {
+  "id": "haenyeo",
+  "title": "Haenyeo: Women of the Sea",
+  "titleKo": "해녀: 바다의 여인들",
+  "country": "South Korea",
+  "emoji": "🌊",
+  "color": "#14505A",
+  "cefr": "B1",
+  "words": 240,
+  "places": [
    "South Korea"
   ]
  },
@@ -3423,6 +3514,19 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "james-webb-telescope",
+  "title": "The James Webb Space Telescope",
+  "titleKo": "제임스 웹 우주 망원경",
+  "country": "United States",
+  "emoji": "🔭",
+  "color": "#24345B",
+  "cefr": "B2",
+  "words": 372,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "space-colonies",
   "title": "Space Colonies",
   "titleKo": "우주 식민지",
@@ -3487,6 +3591,19 @@ window.BOOKS = [
    "New Zealand",
    "United States",
    "South Korea"
+  ]
+ },
+ {
+  "id": "mansa-musa",
+  "title": "Mansa Musa and the Golden Empire of Mali",
+  "titleKo": "만사 무사와 황금의 말리 제국",
+  "country": "Mali",
+  "emoji": "👑",
+  "color": "#62421F",
+  "cefr": "B2",
+  "words": 371,
+  "places": [
+   "Mali"
   ]
  },
  {
@@ -3612,6 +3729,21 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "lunar-new-year-asia",
+  "title": "Lunar New Year Across Asia",
+  "titleKo": "아시아의 음력 설",
+  "country": "South Korea",
+  "emoji": "🏮",
+  "color": "#8B2332",
+  "cefr": "B2",
+  "words": 394,
+  "places": [
+   "South Korea",
+   "China",
+   "Vietnam"
+  ]
+ },
+ {
   "id": "remembrance-day",
   "title": "Red Poppies: Remembrance Day",
   "titleKo": "붉은 양귀비: 영령 기념일",
@@ -3625,6 +3757,19 @@ window.BOOKS = [
    "Canada",
    "Belgium",
    "Australia"
+  ]
+ },
+ {
+  "id": "columbian-exchange",
+  "title": "The Columbian Exchange",
+  "titleKo": "콜럼버스 교환",
+  "country": "Spain",
+  "emoji": "🌍",
+  "color": "#24534B",
+  "cefr": "B2",
+  "words": 377,
+  "places": [
+   "Spain"
   ]
  },
  {
@@ -3713,6 +3858,16 @@ window.BOOKS = [
    "United States",
    "South Korea"
   ]
+ },
+ {
+  "id": "video-algorithms",
+  "title": "How Do Algorithms Choose Your Videos?",
+  "titleKo": "알고리즘은 내가 볼 영상을 어떻게 고를까요?",
+  "emoji": "📱",
+  "color": "#1E3A5F",
+  "cefr": "B2",
+  "words": 383,
+  "places": []
  },
  {
   "id": "ernest-shackleton",
