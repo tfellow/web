@@ -201,6 +201,10 @@ select { border: 1px solid var(--line); border-radius: 10px; padding: 5px 8px; b
 .book::after { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 45%); pointer-events: none; }
 .book:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,.18); }
 .book.todo { filter: saturate(.25) brightness(1.08); }
+.book.light, .book-hero.light { color: #1c2233; }
+.book.light .lv-tag { background: rgba(0,0,0,.1); }
+.book.light.todo { filter: saturate(.25) brightness(.97); }
+.book-hero.light .btn.ghost { color: #1c2233; border-color: rgba(0,0,0,.3); }
 .book .cover { font-size: 2.3rem; line-height: 1; }
 .book .t { font-weight: 800; line-height: 1.25; font-size: 1rem; letter-spacing: -.01em; }
 .book .a { font-size: .8rem; opacity: .92; }

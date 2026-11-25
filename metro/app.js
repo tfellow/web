@@ -392,6 +392,11 @@
     });
     return html;
   }
+  // 빈칸에 실제로 들어간 낱말(예: records). 없으면 표제어
+  function blankWord(c, v) {
+    var m = /<mark>([^<]*)<\/mark>/.exec(exampleOf(c, v));
+    return m ? m[1] : v.w;
+  }
   function blankOf(c, v) {
     return exampleOf(c, v).replace(/<mark>[^<]*<\/mark>/, "<mark>_____</mark>");
   }
@@ -507,23 +512,25 @@
       (function q() {
         if (i >= list.length) return finish();
         var v = list[i], tries = 0;
+        var target = blankWord(c, v); // 빈칸에 맞는 형태 (records, interested …)
+        var okSet = [v.w, target].concat(v.forms ? v.forms.split("–") : []).map(normWord).filter(Boolean);
         body.innerHTML = shell('<p class="muted">뜻을 보고 영어로 쓰세요</p><h2 style="margin:4px 0">' + esc(v.ko) + "</h2>" +
           '<p class="spell-ex">' + blankOf(c, v) + "</p>" +
-          '<input class="spell-in" id="sp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + esc(v.w.charAt(0)) + '…">' +
+          '<input class="spell-in" id="sp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + esc(target.charAt(0)) + '…">' +
           '<div class="err" id="sperr"></div><div class="actions" style="justify-content:center"><button class="btn line" id="chk">확인</button><button class="btn ghost small" id="hint">힌트</button><button class="btn ghost small" id="say">🔊</button></div>');
         bindQuit();
         var inp = byId("sp"); inp.focus();
         function check() {
-          var ok = normWord(inp.value) === normWord(v.w);
+          var ok = okSet.indexOf(normWord(inp.value)) >= 0;
           if (ok) { inp.style.borderColor = "var(--ok)"; result(v, tries === 0); setTimeout(function () { i++; q(); }, 600); return; }
           tries++;
           inp.classList.add("wrong");
-          byId("sperr").textContent = tries >= 2 ? "정답: " + v.w : "다시 한 번! (" + v.w.length + "글자)";
+          byId("sperr").textContent = tries >= 2 ? "정답: " + target + (normWord(target) !== normWord(v.w) ? " (" + v.w + ")" : "") : "다시 한 번! (" + target.length + "글자)";
           if (tries >= 2) { result(v, false); setTimeout(function () { i++; q(); }, 1600); }
         }
         byId("chk").onclick = check;
         inp.onkeydown = function (e) { if (e.key === "Enter") check(); };
-        byId("hint").onclick = function () { var n = Math.min(v.w.length, (inp.value.length || 0) + 1); inp.value = v.w.slice(0, n); inp.focus(); tries = Math.max(tries, 1); };
+        byId("hint").onclick = function () { var n = Math.min(target.length, (inp.value.length || 0) + 1); inp.value = target.slice(0, n); inp.focus(); tries = Math.max(tries, 1); };
         byId("say").onclick = function () { speak(v.w); };
       })();
     } else if (mode === "match") {

@@ -5,7 +5,7 @@
   var SUPABASE_KEY = "sb_publishable_XVHSc-RymsF_LYq4crnwag_heNOynBF"; // 공개 키 (비밀 키는 절대 넣지 않음)
   var GOOGLE_CLIENT_ID = "359186883636-p0v5hfmvii2b91a4d9cccn5099bbsl0c.apps.googleusercontent.com";
   var SCHOOL_LABEL = "우리 학교";
-  var ASSET_V = "64"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
+  var ASSET_V = "65"; // 파일을 고칠 때마다 index.html 과 여기 숫자를 같이 올려요
   var BASE = window.APP_BASE || ""; // 미리보기용. 실제 사이트에서는 비어 있음
   var LIBS = {
     d3: "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
@@ -290,6 +290,16 @@
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
+  }
+  // 밝은 책 색(예: #fffacd)이면 흰 글자가 안 보이므로 어두운 글자를 쓰도록 "light" 클래스를 붙여요
+  function lightClass(color) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(String(color || "").trim());
+    if (!m) return "";
+    var n = parseInt(m[1], 16), ch = [n >> 16 & 255, n >> 8 & 255, n & 255].map(function (v) {
+      v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    var L = 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+    return L > 0.3 ? " light" : ""; // 흰 글자 대비 3.0 미만
   }
   function findBook(id) { return (window.BOOKS || []).filter(function (b) { return b.id === id; })[0]; }
   function levelOf(b) { var c = String((b && b.cefr) || "").toUpperCase(); return c.indexOf("PRE") === 0 ? "A0" : c.slice(0, 2); }
@@ -725,7 +735,7 @@
       var r = byId[b.id];
       var medal = r && r.medal;
       var c = countryOf(b);
-      return '<div class="book ' + (st(b) === "new" ? "todo" : "") + '" style="background:' + esc(b.color) + '" data-id="' + esc(b.id) + '">' +
+      return '<div class="book ' + (st(b) === "new" ? "todo" : "") + lightClass(b.color) + '" style="background:' + esc(b.color) + '" data-id="' + esc(b.id) + '">' +
         (medal ? '<div class="stamp-corner' + (r.star ? " star" : "") + '">' + MEDALS[medal].em + "</div>" : "") +
         '<div class="cover">' + esc(b.emoji) + "</div>" +
         '<div><div class="t">' + esc(b.title) + '</div><div class="a">' + esc(b.titleKo) + " · " + esc(b.authorKo) + "</div></div>" +
@@ -1214,7 +1224,7 @@
     var cinfo = countryOf(b);
     var scrollY = window.scrollY;
     $app.innerHTML =
-      '<div class="book-hero" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="tohome">← 책장</button>' +
+      '<div class="book-hero' + lightClass(b.color) + '" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="tohome">← 책장</button>' +
       '<div class="cover" style="margin-top:10px">' + esc(b.emoji) + "</div><h2>" + esc(b.title) + "</h2>" +
       '<div class="by">' + esc(b.titleKo) + " · " + esc(b.author) + " (" + esc(b.authorKo) + ")</div>" +
       '<div class="tags"><span>CEFR ' + esc(b.cefrLabel || lvName(levelOf(b))) + "</span>" + (b.lexile ? "<span>Lexile " + esc(b.lexile) + "</span>" : "") + (b.ar ? "<span>AR " + esc(b.ar) + "</span>" : "") + "<span>" + b.words + "단어</span>" +
@@ -1281,7 +1291,7 @@
     var prevMedal = (myRecord(id) || {}).medal || null;
 
     $app.innerHTML =
-      '<div class="book-hero" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="toread">← 읽기로</button>' +
+      '<div class="book-hero' + lightClass(b.color) + '" style="background:' + esc(b.color) + '"><button class="btn ghost small" id="toread">← 읽기로</button>' +
       "<h2 style=\"margin-top:12px\">✏️ " + esc(b.title) + " 퀴즈</h2>" +
       '<div class="by">총 ' + qs.length + "문항 · 문제와 보기 순서는 매번 달라져요 · 제출 후 10분 뒤 재도전" +
       (info.best != null ? " · 내 최고 " + info.best + "/" + info.total : "") + "</div></div>" +

@@ -20,6 +20,8 @@
 
 형식: `- 날짜 · AI · 폴더 · 한 일 · 커밋`
 
+- 2026-11-26 · Claude · app · (학생 제보) 밝은 책 색 카드·상세·퀴즈 머리글 글자가 흰색이라 안 보이던 문제: 배경 밝기로 진한 글자(.light) 자동 적용(76권), v65 · 이 커밋
+- 2026-11-26 · Claude · metro · (학생 제보) 단어 쓰기에서 빈칸 형태(records·interested 등)를 오답 처리하던 문제: 빈칸 낱말·표제어·forms 모두 정답, 글자 수·힌트도 빈칸 기준, app.js?v=2 · 이 커밋
 - 2026-11-26 · Claude · AGENTS.md · (선생님 요청) `deploy.ps1` 사용 금지 규칙 추가, Antigravity에 전달 · 이 커밋
 
 - 2026-11-26 · Claude · app · MY Reading Passport 47편 추가(카페 27편 + 새 20편: Codex 14·Antigravity 6 초안, Claude 검수), 523→570편, v64, 설명서 갱신 · 이 커밋
