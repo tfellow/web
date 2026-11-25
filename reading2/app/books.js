@@ -49,6 +49,16 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "animals-of-the-night",
+  "title": "Animals of the Night",
+  "titleKo": "밤에 활동하는 동물들",
+  "emoji": "🦉",
+  "color": "#253456",
+  "cefr": "A0",
+  "words": 79,
+  "places": []
+ },
+ {
   "id": "animals-of-the-savanna",
   "title": "Animals of the Savanna",
   "titleKo": "사바나의 동물들",
@@ -195,6 +205,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "astronauts",
+  "title": "Astronauts",
+  "titleKo": "우주비행사",
+  "emoji": "🚀",
+  "color": "#1B2A4A",
+  "cefr": "A0",
+  "words": 84,
+  "places": []
+ },
+ {
   "id": "the-moon",
   "title": "The Moon",
   "titleKo": "달",
@@ -266,6 +286,21 @@ window.BOOKS = [
   "places": [
    "South Korea",
    "United States"
+  ]
+ },
+ {
+  "id": "breakfast-around-the-world",
+  "title": "Breakfast Around the World",
+  "titleKo": "세계의 아침 식사",
+  "country": "Japan",
+  "emoji": "🍚",
+  "color": "#245247",
+  "cefr": "A0",
+  "words": 80,
+  "places": [
+   "Japan",
+   "Mexico",
+   "South Korea"
   ]
  },
  {
@@ -378,6 +413,21 @@ window.BOOKS = [
   "cefr": "A0",
   "words": 81,
   "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "dances-around-the-world",
+  "title": "Dances Around the World",
+  "titleKo": "세계 여러 나라의 춤",
+  "country": "Spain",
+  "emoji": "💃",
+  "color": "#8B1E3F",
+  "cefr": "A0",
+  "words": 85,
+  "places": [
+   "Spain",
+   "Argentina",
    "South Korea"
   ]
  },
@@ -586,6 +636,16 @@ window.BOOKS = [
   "color": "#7a2a2a",
   "cefr": "A1",
   "words": 129,
+  "places": []
+ },
+ {
+  "id": "octopuses",
+  "title": "Amazing Octopuses",
+  "titleKo": "놀라운 문어",
+  "emoji": "🐙",
+  "color": "#1B4F72",
+  "cefr": "A1",
+  "words": 121,
   "places": []
  },
  {
@@ -805,6 +865,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "childrens-day-korea",
+  "title": "Children's Day in Korea",
+  "titleKo": "한국의 어린이날",
+  "country": "South Korea",
+  "emoji": "🎈",
+  "color": "#215657",
+  "cefr": "A1",
+  "words": 117,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
   "id": "columbus-day",
   "title": "Columbus Day",
   "titleKo": "콜럼버스의 날",
@@ -905,6 +978,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "colombia-coffee",
+  "title": "Coffee from Colombia",
+  "titleKo": "콜롬비아에서 온 커피",
+  "country": "Colombia",
+  "emoji": "☕",
+  "color": "#5C3A21",
+  "cefr": "A1",
+  "words": 121,
+  "places": [
+   "Colombia"
+  ]
+ },
+ {
   "id": "kimchi",
   "title": "The Story of Kimchi",
   "titleKo": "김치 이야기",
@@ -1002,6 +1088,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "haydn-surprise",
+  "title": "Haydn's Surprise Symphony",
+  "titleKo": "하이든의 놀람 교향곡",
+  "country": "Austria",
+  "emoji": "🎵",
+  "color": "#34456D",
+  "cefr": "A1",
+  "words": 111,
+  "places": [
+   "Austria",
+   "United Kingdom"
+  ]
+ },
+ {
   "id": "helen-keller",
   "title": "Helen Keller",
   "titleKo": "헬렌 켈러",
@@ -1054,6 +1154,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "matisse-scissors",
+  "title": "Matisse: Painting with Scissors",
+  "titleKo": "마티스: 가위로 그림 그리기",
+  "country": "France",
+  "emoji": "✂️",
+  "color": "#254C73",
+  "cefr": "A1",
+  "words": 113,
+  "places": [
+   "France"
+  ]
+ },
+ {
   "id": "cherry-blossoms-in-japan",
   "title": "Cherry Blossoms in Japan",
   "titleKo": "일본의 벚꽃",
@@ -1079,6 +1192,32 @@ window.BOOKS = [
   "words": 120,
   "places": [
    "South Korea"
+  ]
+ },
+ {
+  "id": "hansel-and-gretel-opera",
+  "title": "Hansel and Gretel: A Fairy-Tale Opera",
+  "titleKo": "헨젤과 그레텔: 동화 오페라",
+  "country": "Germany",
+  "emoji": "🎭",
+  "color": "#56347A",
+  "cefr": "A1",
+  "words": 116,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "kente-cloth",
+  "title": "Kente Cloth of Ghana",
+  "titleKo": "가나의 켄테 천",
+  "country": "Ghana",
+  "emoji": "🧵",
+  "color": "#71361E",
+  "cefr": "A1",
+  "words": 115,
+  "places": [
+   "Ghana"
   ]
  },
  {
@@ -1158,6 +1297,19 @@ window.BOOKS = [
   "words": 127,
   "places": [
    "United States"
+  ]
+ },
+ {
+  "id": "the-nutcracker",
+  "title": "The Nutcracker",
+  "titleKo": "호두까기 인형",
+  "country": "Russia",
+  "emoji": "🩰",
+  "color": "#532A49",
+  "cefr": "A1",
+  "words": 115,
+  "places": [
+   "Russia"
   ]
  },
  {
@@ -1628,6 +1780,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "panama-canal",
+  "title": "The Panama Canal",
+  "titleKo": "파나마 운하",
+  "country": "Panama",
+  "emoji": "🚢",
+  "color": "#164B63",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "Panama"
+  ]
+ },
+ {
   "id": "the-ancient-olympics",
   "title": "The Ancient Olympics",
   "titleKo": "고대 올림픽",
@@ -1906,6 +2071,20 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "archimedes-crown",
+  "title": "Archimedes and the Crown",
+  "titleKo": "아르키메데스와 왕관",
+  "country": "Greece",
+  "emoji": "👑",
+  "color": "#503574",
+  "cefr": "A2",
+  "words": 164,
+  "places": [
+   "Greece",
+   "Italy"
+  ]
+ },
+ {
   "id": "florence-nightingale",
   "title": "Florence Nightingale",
   "titleKo": "플로렌스 나이팅게일",
@@ -1930,6 +2109,19 @@ window.BOOKS = [
   "words": 153,
   "places": [
    "United States"
+  ]
+ },
+ {
+  "id": "kim-hong-do",
+  "title": "Kim Hong-do: Painter of Everyday Life",
+  "titleKo": "김홍도: 일상을 그린 화가",
+  "country": "South Korea",
+  "emoji": "🎨",
+  "color": "#354C3E",
+  "cefr": "A2",
+  "words": 163,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -1988,6 +2180,33 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "shin-saimdang",
+  "title": "Shin Saimdang: Artist of Joseon",
+  "titleKo": "신사임당: 조선의 예술가",
+  "country": "South Korea",
+  "emoji": "🎨",
+  "color": "#2E4A3E",
+  "cefr": "A2",
+  "words": 161,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "van-gogh-starry-night",
+  "title": "Van Gogh and The Starry Night",
+  "titleKo": "반 고흐와 별이 빛나는 밤",
+  "country": "Netherlands",
+  "emoji": "🌌",
+  "color": "#243467",
+  "cefr": "A2",
+  "words": 162,
+  "places": [
+   "Netherlands",
+   "France"
+  ]
+ },
+ {
   "id": "wangari-maathai",
   "title": "Wangari Maathai: The Woman Who Planted Trees",
   "titleKo": "왕가리 마타이: 나무를 심은 여성",
@@ -2001,6 +2220,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "william-kamkwamba",
+  "title": "William Kamkwamba and the Windmill",
+  "titleKo": "윌리엄 캄쾀바와 풍차",
+  "country": "Malawi",
+  "emoji": "💡",
+  "color": "#234B5B",
+  "cefr": "A2",
+  "words": 154,
+  "places": [
+   "Malawi"
+  ]
+ },
+ {
   "id": "yu-gwan-sun",
   "title": "Yu Gwan-sun: A Voice for Independence",
   "titleKo": "유관순: 독립을 외친 목소리",
@@ -2009,6 +2241,19 @@ window.BOOKS = [
   "color": "#244365",
   "cefr": "A2",
   "words": 153,
+  "places": [
+   "South Korea"
+  ]
+ },
+ {
+  "id": "chunhyangga",
+  "title": "Chunhyangga: A Pansori Love Story",
+  "titleKo": "춘향가: 판소리로 듣는 사랑 이야기",
+  "country": "South Korea",
+  "emoji": "🥁",
+  "color": "#65374C",
+  "cefr": "A2",
+  "words": 154,
   "places": [
    "South Korea"
   ]
@@ -2151,6 +2396,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "the-magic-flute",
+  "title": "The Magic Flute",
+  "titleKo": "마술피리",
+  "country": "Austria",
+  "emoji": "🎶",
+  "color": "#354064",
+  "cefr": "A2",
+  "words": 154,
+  "places": [
+   "Austria"
+  ]
+ },
+ {
   "id": "the-mona-lisa",
   "title": "The Mona Lisa",
   "titleKo": "모나리자",
@@ -2233,6 +2491,19 @@ window.BOOKS = [
   "words": 152,
   "places": [
    "Austria"
+  ]
+ },
+ {
+  "id": "worry-dolls",
+  "title": "Worry Dolls of Guatemala",
+  "titleKo": "과테말라의 걱정 인형",
+  "country": "Guatemala",
+  "emoji": "🪆",
+  "color": "#7A1F4B",
+  "cefr": "A2",
+  "words": 155,
+  "places": [
+   "Guatemala"
   ]
  },
  {
@@ -2560,6 +2831,16 @@ window.BOOKS = [
   "places": [
    "United Kingdom"
   ]
+ },
+ {
+  "id": "why-we-laugh",
+  "title": "Why Do We Laugh?",
+  "titleKo": "우리는 왜 웃을까요?",
+  "emoji": "😄",
+  "color": "#27536B",
+  "cefr": "B1",
+  "words": 229,
+  "places": []
  },
  {
   "id": "your-amazing-brain",
@@ -2948,6 +3229,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "rubiks-cube",
+  "title": "The Story of the Rubik's Cube",
+  "titleKo": "루빅스 큐브 이야기",
+  "country": "Hungary",
+  "emoji": "🧩",
+  "color": "#23456A",
+  "cefr": "B1",
+  "words": 229,
+  "places": [
+   "Hungary"
+  ]
+ },
+ {
   "id": "taipei-101",
   "title": "Taipei 101",
   "titleKo": "타이베이 101",
@@ -2989,6 +3283,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "ada-lovelace",
+  "title": "Ada Lovelace and the Idea of Programming",
+  "titleKo": "에이다 러브레이스와 프로그래밍의 발상",
+  "country": "United Kingdom",
+  "emoji": "💻",
+  "color": "#2E3A59",
+  "cefr": "B1",
+  "words": 261,
+  "places": [
+   "United Kingdom"
+  ]
+ },
+ {
   "id": "charles-darwin",
   "title": "Charles Darwin",
   "titleKo": "찰스 다윈",
@@ -2999,6 +3306,32 @@ window.BOOKS = [
   "words": 218,
   "places": [
    "United Kingdom"
+  ]
+ },
+ {
+  "id": "clara-schumann",
+  "title": "Clara Schumann: A Life at the Piano",
+  "titleKo": "클라라 슈만: 피아노와 함께한 삶",
+  "country": "Germany",
+  "emoji": "🎹",
+  "color": "#43305E",
+  "cefr": "B1",
+  "words": 226,
+  "places": [
+   "Germany"
+  ]
+ },
+ {
+  "id": "heo-jun",
+  "title": "Heo Jun and the Dongui Bogam",
+  "titleKo": "허준과 동의보감",
+  "country": "South Korea",
+  "emoji": "📖",
+  "color": "#23443F",
+  "cefr": "B1",
+  "words": 234,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -3023,6 +3356,19 @@ window.BOOKS = [
   "color": "#243B65",
   "cefr": "B1",
   "words": 223,
+  "places": [
+   "United States"
+  ]
+ },
+ {
+  "id": "mae-jemison",
+  "title": "Mae Jemison: Doctor and Astronaut",
+  "titleKo": "메이 제미슨, 의사이자 우주비행사",
+  "country": "United States",
+  "emoji": "🚀",
+  "color": "#243B64",
+  "cefr": "B1",
+  "words": 240,
   "places": [
    "United States"
   ]
@@ -3066,6 +3412,19 @@ window.BOOKS = [
   "words": 226,
   "places": [
    "United States"
+  ]
+ },
+ {
+  "id": "michelangelo-sistine",
+  "title": "Michelangelo and the Sistine Ceiling",
+  "titleKo": "미켈란젤로와 시스티나 성당의 천장",
+  "country": "Italy",
+  "emoji": "🎨",
+  "color": "#514075",
+  "cefr": "B1",
+  "words": 225,
+  "places": [
+   "Italy"
   ]
  },
  {
@@ -3274,6 +3633,20 @@ window.BOOKS = [
   "places": [
    "South Korea",
    "Japan",
+   "Italy"
+  ]
+ },
+ {
+  "id": "the-barber-of-seville",
+  "title": "The Barber of Seville",
+  "titleKo": "세비야의 이발사",
+  "country": "Spain",
+  "emoji": "💈",
+  "color": "#224C54",
+  "cefr": "B1",
+  "words": 249,
+  "places": [
+   "Spain",
    "Italy"
   ]
  },
@@ -3622,6 +3995,16 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "space-junk",
+  "title": "Space Junk: Trouble Above Earth",
+  "titleKo": "우주 쓰레기: 지구 위의 골칫거리",
+  "emoji": "🛰️",
+  "color": "#24365C",
+  "cefr": "B2",
+  "words": 370,
+  "places": []
+ },
+ {
   "id": "conquistadors",
   "title": "Conquistadors",
   "titleKo": "콘키스타도르",
@@ -3689,6 +4072,19 @@ window.BOOKS = [
   "words": 371,
   "places": [
    "Mali"
+  ]
+ },
+ {
+  "id": "mesopotamia-writing",
+  "title": "How Writing Began in Mesopotamia",
+  "titleKo": "메소포타미아에서 문자는 어떻게 시작되었을까?",
+  "country": "Iraq",
+  "emoji": "📝",
+  "color": "#5B3A29",
+  "cefr": "B2",
+  "words": 389,
+  "places": [
+   "Iraq"
   ]
  },
  {
@@ -3829,6 +4225,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "pysanky",
+  "title": "Pysanky: The Painted Eggs of Ukraine",
+  "titleKo": "피산키, 우크라이나의 채색 달걀",
+  "country": "Ukraine",
+  "emoji": "🥚",
+  "color": "#24466B",
+  "cefr": "B2",
+  "words": 385,
+  "places": [
+   "Ukraine"
+  ]
+ },
+ {
   "id": "remembrance-day",
   "title": "Red Poppies: Remembrance Day",
   "titleKo": "붉은 양귀비: 영령 기념일",
@@ -3855,6 +4264,19 @@ window.BOOKS = [
   "words": 377,
   "places": [
    "Spain"
+  ]
+ },
+ {
+  "id": "fermentation",
+  "title": "Fermentation: Tiny Life, Big Flavor",
+  "titleKo": "발효: 작은 생명이 만드는 깊은 맛",
+  "country": "South Korea",
+  "emoji": "🫙",
+  "color": "#23544A",
+  "cefr": "B2",
+  "words": 381,
+  "places": [
+   "South Korea"
   ]
  },
  {
@@ -3955,6 +4377,19 @@ window.BOOKS = [
   "places": []
  },
  {
+  "id": "anne-sullivan",
+  "title": "Anne Sullivan: The Teacher Behind Helen Keller",
+  "titleKo": "앤 설리번, 헬렌 켈러의 스승",
+  "country": "United States",
+  "emoji": "📚",
+  "color": "#29465B",
+  "cefr": "B2",
+  "words": 359,
+  "places": [
+   "United States"
+  ]
+ },
+ {
   "id": "ernest-shackleton",
   "title": "Ernest Shackleton",
   "titleKo": "어니스트 섀클턴",
@@ -3968,6 +4403,19 @@ window.BOOKS = [
   ]
  },
  {
+  "id": "frida-kahlo",
+  "title": "Frida Kahlo: Painting Through Pain",
+  "titleKo": "프리다 칼로: 고통 속에서 그림을 그리다",
+  "country": "Mexico",
+  "emoji": "🎨",
+  "color": "#6B2946",
+  "cefr": "B2",
+  "words": 390,
+  "places": [
+   "Mexico"
+  ]
+ },
+ {
   "id": "nelson-mandela",
   "title": "Nelson Mandela: The Long Walk to Freedom",
   "titleKo": "넬슨 만델라: 자유를 향한 긴 여정",
@@ -3978,6 +4426,20 @@ window.BOOKS = [
   "words": 395,
   "places": [
    "South Africa"
+  ]
+ },
+ {
+  "id": "aida-opera",
+  "title": "Aida: Love and War in Egypt",
+  "titleKo": "아이다: 이집트의 사랑과 전쟁",
+  "country": "Egypt",
+  "emoji": "🎭",
+  "color": "#56325F",
+  "cefr": "B2",
+  "words": 375,
+  "places": [
+   "Egypt",
+   "Italy"
   ]
  },
  {
