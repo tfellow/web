@@ -1,0 +1,38 @@
+# 첫 페이지 앱 카드의 자료 수(myeverse/stats.json)를 매일 한 번 다시 세요.
+# 숫자가 바뀐 날만 커밋해요. 바로 갱신하려면 Actions → "Content stats" → "Run workflow".
+name: Content stats
+
+on:
+  schedule:
+    - cron: "43 20 * * *"   # 매일 한국 시간 오전 5시 43분
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency: content-stats
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node myeverse/tools/count-content.mjs
+      - name: Commit when numbers changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add myeverse/stats.json
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "[Bot] myeverse: content stats"
+          git pull --rebase
+          git push
+          # 이 방식의 커밋은 Pages 를 저절로 다시 만들지 않아서 직접 요청해요
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds"
